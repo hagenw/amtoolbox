@@ -46,7 +46,7 @@ plotdefaults = {'rectify',...
 % becase old versions of Matlab does not have "mfilename('fullpath')"
 basepath=which('amtstart');
 % Kill the function name from the path.
-basepath=basepath(1:end-12);
+basepath=basepath(1:end-11);
 
 % add the base path
 if exist('addpath')>0

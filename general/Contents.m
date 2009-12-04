@@ -1,6 +1,6 @@
-% AM Toolbox - General functions
+% AMT - General functions
 %
-%  The AM team, 2009.
+%  The AMT team, 2009.
 %
 %  Plots
 %     SEMIAUDPLOT      - 2D plot on auditory scale.
