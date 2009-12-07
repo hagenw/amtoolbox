@@ -1,0 +1,260 @@
+#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Directory/module structure of AMT
+\end_layout
+
+\begin_layout Section
+Directory structure of AMT
+\end_layout
+
+\begin_layout Itemize
+Each directory must contain a 
+\family typewriter
+Contents.m
+\family default
+ file parsable by 
+\family typewriter
+mat2doc
+\family default
+.
+\end_layout
+
+\begin_layout Itemize
+Each directory must contain a 
+\family typewriter
+directoryinit.m
+\family default
+ file (so the 
+\family typewriter
+general
+\family default
+ directory contains the 
+\family typewriter
+generalinit.m
+\family default
+) file.
+\end_layout
+
+\begin_layout Itemize
+Matlab 
+\family typewriter
+.mex
+\family default
+ files are kept in the 
+\family typewriter
+mex
+\family default
+ directory.
+\end_layout
+
+\begin_layout Itemize
+Octave 
+\family typewriter
+.cc
+\family default
+ files are kept in the 
+\family typewriter
+oct
+\family default
+ directory.
+\end_layout
+
+\begin_layout Itemize
+Computational routines are kept in the 
+\family typewriter
+comp
+\family default
+ directory.
+ They are all prefixed by 
+\family typewriter
+comp_
+\family default
+ Computational subroutines does not need to check input arguments, they
+ never take a variable number of input arguments, and in many cases they
+ are shadowed by a C/Mex/Oct implementation.
+\end_layout
+
+\begin_layout Itemize
+C code is kept in the 
+\family typewriter
+src
+\family default
+ directory.
+\end_layout
+
+\begin_layout Itemize
+Demos are kept in the 
+\family typewriter
+demos
+\family default
+ directory.
+ They are all prefixed by 
+\family typewriter
+demo_
+\end_layout
+
+\begin_layout Itemize
+Test scripts are kept in the 
+\family typewriter
+testing
+\family default
+ directory.
+ Each test function is prefixed by 
+\family typewriter
+test
+\family default
+_ A test function takes no input, and returns a single variable indicating
+ how many tests failed.
+\end_layout
+
+\begin_layout Itemize
+The 
+\family typewriter
+reference
+\family default
+ directory are used to keep old, unmodified code that is known to work or
+ simple (but slow) implementations of algorithms.
+ They are used to compare other functions against.
+ Reference function are all prefixed by 
+\family typewriter
+ref_
+\family default
+ 
+\end_layout
+
+\begin_layout Section
+The init file
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+mydirinit.m
+\family default
+ gets executed when the main upstart routine 
+\family typewriter
+amtstart
+\family default
+ is run.
+ The upstart routine adds the directory 
+\family typewriter
+mydir
+\family default
+ to Matlab's search path before executing the routine.
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+mydirinit
+\family default
+ script must define a variable called 
+\family typewriter
+status
+\family default
+ and set it to 1 (one) if the toolbox should be loaded.
+ Any other value of status will case the 
+\family typewriter
+mydir
+\family default
+ directory to be removed again from the search path.
+\end_layout
+
+\begin_layout Standard
+This simple mechanism enables you to check if everything it correct, and
+ refuse loading the directory if something is not.
+\end_layout
+
+\begin_layout Standard
+Similarly, it is possible to set a variable 
+\family typewriter
+module_version
+\family default
+ to any number, and this will be the version number of the module.
+ Otherwise, the global version number will be used.
+\end_layout
+
+\begin_layout Standard
+So in the most common case, the 
+\family typewriter
+mytoolboxinit.m
+\family default
+ file will contain just a single line:
+\end_layout
+
+\begin_layout LyX-Code
+
+\family typewriter
+status=1;
+\end_layout
+
+\begin_layout Section
+External modules
+\end_layout
+
+\begin_layout Standard
+It is easy to make an external module that plugs into AMT.
+ All that is needed is an init file and a Contents.m file, and then the directory
+ will be picked up by the 
+\family typewriter
+amtstart
+\family default
+ script.
+\end_layout
+
+\begin_layout Standard
+For external modules, C code should be in a 
+\family typewriter
+src
+\family default
+ subdirectory and mex/octave interfaces should be placed in the 
+\family typewriter
+private
+\family default
+ subdirectory.
+\end_layout
+
+\end_body
+\end_document
