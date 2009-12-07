@@ -18,8 +18,7 @@ function inoutsig = adaptloop(inoutsig,fs,varargin);
 %   ADAPTLOOP(insig,fs,limit) does as above with a minimum threshhold minlvl
 %   equal to 1e-5.
 %
-%   ADAPTLOOP(insig,fs) does as above with an overshoot limit of
-%   limit=10.
+%   ADAPTLOOP(insig,fs) does as above with an overshoot limit of limit=10.
 %
 %   ADAPTLOOP takes the following flags at the end of the line of input
 %   arguments:
@@ -45,9 +44,11 @@ if nargin<2
 end;
 
 defnopos.flags.model={'dau96','breebart'};
+defnopos.keyvals.limit=10;
+defnopos.keyvals.minlvl=1e-5;
+defnopos.keyvals.tau=[0.005 0.050 0.129 0.253 0.500];
 
-[flags,keyvals,limit,minlvl,tau]  = amtarghelper(3,{10,1e-5,[0.005 0.050 ...
-                    0.129 0.253 0.500]}, defnopos,varargin,upper(mfilename));
+[flags,keyvals,limit,minlvl,tau]  = ltfatarghelper({'limit','minlvl','tau'},defnopos,varargin);
 
 if ~isnumeric(tau) || ~isvector(tau) || any(tau<=0)
   error('%s: tau must be a vector with positive values.',upper(mfilename));
