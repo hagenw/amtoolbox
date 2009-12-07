@@ -98,34 +98,16 @@ master
 any
 \emph default
  new development work on this branch, use it only to fix bugs.
- Development are done in other branches, which are then merged into master
- when the development is finished.
+ 
 \end_layout
 
 \begin_layout Itemize
-Another branch is called 
+Development is done in other branches, and when the development is finished
+ you ask on the mailling list to have it merged into 
 \emph on
-devel
+master
 \emph default
 .
- This branch should contains all files necessary for developing on AMT.
- Don't do any work on this branch, merge branches into it.
- Since this branch is a superset of 
-\emph on
-master
-\emph default
-, then 
-\emph on
-master
-\emph default
- will be merged into this when ever the documentation needs to be upgraded
- etc.
-\end_layout
-
-\begin_layout Itemize
-All development work takes place on separate branches.
- Create a branch for your work, push it to sorceforge for backup and for
- other people's comments, and then merge it into master when you are done.
 \end_layout
 
 \begin_layout Standard
@@ -161,7 +143,6 @@ target "http://code.google.com/p/msysgit/"
 
 
 \family default
-\lang english
  and 
 \family typewriter
 
@@ -244,7 +225,7 @@ To get the code from any of the remote branches, type
 \end_layout
 
 \begin_layout LyX-Code
-git branch --track devel origin/devel
+git branch --track devel origin/sti
 \end_layout
 
 \begin_layout Standard
@@ -282,7 +263,7 @@ To switch to this branch use
 \end_layout
 
 \begin_layout LyX-Code
-git checkout devel
+git checkout sti
 \end_layout
 
 \begin_layout Standard
