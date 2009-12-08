@@ -1,16 +1,17 @@
 function y = rms(x)
 %RMS RMS value of signal
-%   Usage: y = rms(x)
+%   Usage: y = rms(x);
 %
 %   RMS(x) computes the RMS (Root Mean Square) value of a finite sampled
 %   signal sampled at a uniform sampling rate.
 %
 %   The RMS value of a signal x of length N is computed by
-%M
+%
 %C                    1  M
 %C     rms(x) = sqrt( - sum x(n)^2 )
 %C                    N n=1
-%M
+%
+%   See also: rms
 
 %   AUTHOR : Peter L. Soendergaard
   

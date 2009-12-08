@@ -1,20 +1,21 @@
 function y = rmsdb(x)
 %RMSDB RMS value of signal (in dB)
-%   Usage: y = rms(x)
+%   Usage: y = rmsdb(x);
 %
 %   RMSDB(x) computes the RMS (Root Mean Square) value in dB of a finite 
 %   sampled signal sampled at a uniform sampling rate.
 %
 %   The RMS value of a signal x of length N is computed by
-%M
+%
 %C                    1  M
 %C     rms(x) = sqrt( - sum x(n)^2 )
 %C                    N n=1
-%M
-% 	The level in dB is calculated by
-%M
+%
+%   The level in dB is calculated by
+%
 %C 	level(x) = 20*log10( sqrt( rms(x).^2 - mean(x).^2 ) )
-%M
+%
+%   See also: rmsdb
 
 %   AUTHOR : Hagen Wierstorf
   

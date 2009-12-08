@@ -20,6 +20,7 @@
 %
 %  General signal processing
 %     RMS              - RMS value of a signal.
+%     RMSDB            - RMS value in Db.
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
