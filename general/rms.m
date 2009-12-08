@@ -11,7 +11,7 @@ function y = rms(x)
 %C     rms(x) = sqrt( - sum x(n)^2 )
 %C                    N n=1
 %
-%   See also: rms
+%   See also: rmsdb
 
 %   AUTHOR : Peter L. Soendergaard
   

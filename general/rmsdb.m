@@ -15,7 +15,7 @@ function y = rmsdb(x)
 %
 %C 	level(x) = 20*log10( sqrt( rms(x).^2 - mean(x).^2 ) )
 %
-%   See also: rmsdb
+%   See also: rms
 
 %   AUTHOR : Hagen Wierstorf
   
