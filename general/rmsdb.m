@@ -11,11 +11,12 @@ function y = rmsdb(x)
 %C     rms(x) = sqrt( - sum x(n)^2 )
 %C                    N n=1
 %
-%   The level in dB (0 db for rms(x) = 1) is calculated by
+%   The level in dB (100 dB for rms(x) = 1) is calculated by
 %
-%C 	level(x) = 20*log10( sqrt( rms(x).^2 - mean(x).^2 ) )
+%C 	level(x) = 20*log10( sqrt( rms(x).^2 - mean(x).^2 ) * 10^5 )
 %
-%		Note: this level is only for the AC component of your signal.
+%   Note: this level is only for the AC component of your signal and the 
+%   scaling factor is due to 20*log10(10^5) = 100*log10(10) = 100.
 %
 %   See also: rms
 
@@ -31,6 +32,7 @@ end;
 
 % ------ Computation --------------------------
 
-% With var(x).^2 = rms(x).^2 - mean(x).^2 we can compute the RMS value in dB 
-% with the following formula:
-y = 10*log10( var(x) );
+% With var(x) = rms(x).^2 - mean(x).^2 we can compute the RMS value in dB with 
+% the following formula:
+% y = 20*log10( sqrt(var(x))*10^5 )
+y = 10*log10( var(x)*10^10 );
