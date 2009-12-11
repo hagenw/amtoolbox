@@ -45,3 +45,6 @@ for ii = 1:n
   % Add the carrier*modulator to the transposed tone
   outsig = outsig+(carrier.*hrsine)';
 end;
+
+% Normalize the output
+outsig = outsig/rms(outsig);
