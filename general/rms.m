@@ -1,25 +1,26 @@
-function y = rms(x)
+function y = rms(insig)
 %RMS RMS value of signal
-%   Usage: y = rms(x);
+%   Usage: y = rms(insig)
 %
 %   RMS(x) computes the RMS (Root Mean Square) value of a finite sampled
 %   signal sampled at a uniform sampling rate.
 %
 %   The RMS value of a signal x of length N is computed by
-%
-%C                    1  M
+%M
+%C                    1  N
 %C     rms(x) = sqrt( - sum x(n)^2 )
 %C                    N n=1
+%M
 %
-%   See also: rmsdb
+%R  moore2003introduction
 
 %   AUTHOR : Peter L. Soendergaard
   
 % ------ Checking of input parameters ---------
-
+  
 error(nargchk(1,1,nargin));
 
-if ~isnumeric(x) || ~isvector(x)
+if ~isnumeric(insig) || ~isvector(insig)
   error('RMS: Input must be a vector.');
 end;
 
@@ -28,4 +29,4 @@ end;
 % It is better to use 'norm' instead of explicitly summing the squares, as
 % norm (hopefully) attempts to avoid numerical overflow. Matlab does not
 % have 'sumsq'.
-y = norm(x)/sqrt(length(x));
+y = norm(insig)/sqrt(length(insig));
