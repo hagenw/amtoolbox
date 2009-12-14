@@ -2,6 +2,9 @@
 %
 %  The AMT team, 2009.
 %
+%  General routines
+%     FILTERBANK       - Apply multiple filters
+%
 %  Auditory filters
 %     GAMMATONE        - Gammatone filter coefficients
 %
