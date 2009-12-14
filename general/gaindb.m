@@ -5,6 +5,8 @@ function inoutsig = gaindb(inoutsig,gn)
 %   GAINDB(insig,gn) changes the level of the signal by gn Db.
 %
 %   See also: rms, rmsdb, setleveldb
+%
+%R  moore2003introduction
 
 %   Author: Peter L. Soendergaard, 2009
 
