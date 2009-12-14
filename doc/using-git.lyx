@@ -161,7 +161,6 @@ target "http://code.google.com/p/msysgit/"
 
 
 \family default
-\lang english
  and 
 \family typewriter
 
@@ -309,6 +308,27 @@ git push
 git pull
 \family default
 .
+\end_layout
+
+\begin_layout Section
+Getting more help
+\end_layout
+
+\begin_layout Standard
+More help on 
+\family typewriter
+git
+\family default
+ can be found online, e.g.
+ 
+\begin_inset CommandInset href
+LatexCommand href
+name "git book"
+target "http://progit.org/book"
+
+\end_inset
+
+
 \end_layout
 
 \end_body
