@@ -2,13 +2,13 @@ function y = rms(insig)
 %RMS RMS value of signal
 %   Usage: y = rms(insig)
 %
-%   RMS(x) computes the RMS (Root Mean Square) value of a finite sampled
+%   RMS(insig) computes the RMS (Root Mean Square) value of a finite sampled
 %   signal sampled at a uniform sampling rate.
 %
-%   The RMS value of a signal x of length N is computed by
+%   The RMS value of a signal insig of length N is computed by
 %M
 %C                    1  N
-%C     rms(x) = sqrt( - sum x(n)^2 )
+%C     rms(insig) = sqrt( - sum insig(n)^2 )
 %C                    N n=1
 %M
 %
