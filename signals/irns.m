@@ -18,6 +18,8 @@ function outsig = irns(delay,iterations,gn,siglen,fs);
 % signal = irns(4,6,1,fs,fs);
 % sound(signal,fs)
 %
+%R	yost1996irn
+%
 % See also: irno
 
 % AUTHOR: Hagen Wierstorf, Daniel Pressnitzer, Stefan Uppenkamp
