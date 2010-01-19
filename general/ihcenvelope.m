@@ -12,7 +12,7 @@ function inoutsig = ihcenvelope(inoutsig,fs,methodname)
 %   use. The name refers to a set of papers where in this particular
 %   method has been utilized or studied. The options are
 %
-%-    'dau'     - Use a 2nd order butterworth filter with a cut-off
+%-    'dau'     - Use a 2nd order Butterworth filter with a cut-off
 %                 frequency of 1000 Hz. This method has been used in all
 %                 models deriving from the original 1996 model by 
 %                 Dau et. al. These models are mostly monaural in nature.
@@ -20,9 +20,13 @@ function inoutsig = ihcenvelope(inoutsig,fs,methodname)
 %-    'hilbert' - Use the Hilbert envelope instead of the half-wave
 %                 rectification and low pass filtering. This is not a
 %                 releastic model of the inner hair envelope extraction
-%                 process, but the option is included for completeness.  
+%                 process, but the option is included for completeness.
 %
-%R  dau1996qmeI
+%-    'lindemann' - Use a 1st order Butterworth filter with a cut-off frequency
+%                 of 800 Hz. This method is defined in the paper
+%                 Lindemann 1986a. Mostly used for binaural models.
+%
+%R  lindemann1986a dau1996qmeI
   
 % FIXME: Which paper did this idea originally appear in?
 
@@ -56,6 +60,10 @@ switch(lower(methodname))
    inoutsig = filter(b,a, inoutsig);
  case 'hilbert'
   inoutsig = abs(hilbert(inoutsig));
+ case 'lindemann'
+   cutofffreq=800;
+   [b, a] = butter(1, cutofffreq*2/fs);
+   inoutsig = filter(b,a, inoutsig);
  otherwise
   error('%s: Unknown method name: %s.',upper(mfilename),methodname);
 end;
