@@ -44,7 +44,7 @@ function [b,a]=gammatone(fc,fs,n,betamul);
 %   To create the filter coefficients of a 1-erb spaced filter bank using
 %   gammatone filters use the following construction
 %
-%C    [b,a] = gammatone(fs,erbspacebw(flow,fhigh));
+%C    [b,a] = gammatone(erbspacebw(flow,fhigh),fs);
 %  
 %R  aertsen1980strI glasberg1990daf
   
