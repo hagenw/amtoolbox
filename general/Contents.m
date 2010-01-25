@@ -17,6 +17,7 @@
 %
 %  Properties of the auditory system
 %     AUDFILTBW        - Bandwidth of audiory filters.
+%     IHCENVELOPE      - Inner hair cell envelope extration.
 %
 %  General signal processing
 %     RMS              - RMS value of a signal.
