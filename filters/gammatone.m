@@ -65,7 +65,7 @@ if ~isnumeric(fc) || ~isvector(fc) || any(fc<0) || any(fc>fs/2)
          'the sampling rate.'],upper(mfilename));
 end;
 
-[optargs,n,betamul]  = amt_arghelper(2,{4,[]},varargin{:});
+[optargs,n,betamul]  = amtarghelper(2,{4,[]},varargin{:});
 
 if ~isnumeric(n) || ~isscalar(n) || n<=0 || fix(n)~=n
   error('%s: n must be a positive, integer scalar.',upper(mfilename));
