@@ -11,9 +11,9 @@ function y = rms(insig,options)
 %
 %   The RMS value of a signal x of length N is computed by
 %
-%C                    1  N
-%C     rms(insig) = sqrt( - sum insig(n)^2 )
-%C                    N n=1
+%C                             N
+%C     rms(insig) = 1/sqrt(N) sum insig(n)^2
+%C                            n=1
 %
 %R  moore2003introduction
 
