@@ -1,5 +1,5 @@
 function outsig = bmsin(f,mf,fs)
-%AMSIN Generate a binaural modulated sinus
+%BMSIN Generate a binaural modulated sinus
 %   Usage: outsig = bmsin(f,mf,fs)
 %
 %   Input parameters:
@@ -11,10 +11,10 @@ function outsig = bmsin(f,mf,fs)
 %       outsig  - two channel 1 s long sinusoid
 %
 %   BMSIN(f,mf,fs) generates an binaural modulated sinusoid with a
-%   freuqnecy of f and a frequency moving around the two ears of mf.
+%   carrier frequency of f and a frequency moving around the two ears of mf.
 
 % Create a one second time 
-t = 1/fs:1/fs:1;
+t = (1:fs)/fs;
 % Left signal
 sigl = sin(2*pi*f.*t);
 % Right signal with amplitude modulation
