@@ -75,9 +75,12 @@ fhigh = erbtofreq(40);
 % with a range from flow to fhigh.
 % NOTE: Lindemann uses a bandpass filterbank after Duifhuis (1972) and
 % Blauert and Cobben (1978).
-[b,a] = gammatone(erbspacebw(flow,fhigh),fs);
+%
+% XXX There is currently an error in the gammatone function for real valued
+% filters, so use complex valued filters instead.
+[b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 % Applying the erb filterbank to the signal
-inoutsig = filterbank(b,a,insig);
+inoutsig = real(filterbank(b,a,insig));
 
 
 %% ------ Cross-correlation computation ---------------------------------
