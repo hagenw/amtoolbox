@@ -32,7 +32,7 @@ function [optargs,varargout]  = amtarghelper(nargs,defaults,varargin)
   % Determine the position of the first optional argument.
   % If no optional argument is given, return nargs+1
   first_str_pos = 1;
-  while first_str_pos<=total_args && ~isstr(varargin{first_str_pos}) 
+  while first_str_pos<=total_args && ~ischar(varargin{first_str_pos}) 
     first_str_pos = first_str_pos +1;    
   end;
   
