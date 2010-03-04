@@ -18,9 +18,11 @@ function crosscorr = bincorr(insig,w_f,c_s,fs)
 %   algorithm to simulate a binaural delay line.
 %
 %   The cross-correlation is calculated using:
+%
 %C              t
 %C CC(tau,t) = int R(l-tau/2) * L(k+tau/2) exp(-(t-k)/T) dk
 %C            -inf
+%
 %   where T denotes an integration time constant and R, L the right and 
 %   left input signal.
 %
