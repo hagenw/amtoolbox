@@ -172,14 +172,9 @@ for n = 1:siglen
     % Calculate running cross-correlation (e.g. Lindemann 1986a, p.1608,
     % 1611).
     % kk(m,n) = sum_{n=-inf}^{nn} R(m,n) * L(m,n) * exp( -(nn-n) / T_int )
-    % NOTE:
-    % To simplify the algorithm the integration window is not used. Instead
-    % every millisecond a snapshot of the running crosscorrelation is taken
-    % and kk is resetted to zero.
-    % This means our results are less influenced by the past as in
-    % Lindemann 1986a, because he uses an integration constant T_int = 5ms.
     kk = kk + R.*L .* exp( -(kk_memory-nn) / T_int );
-    
+   
+		% Store the result in crosscorr
     if nn==kk_memory
         ii = ii+1;
         crosscorr(ii,:,:) = kk;
