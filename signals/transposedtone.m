@@ -1,12 +1,12 @@
-function outsig = transposedtone(fc,fm,dur,ear,tslevel)
+function outsig = transposedtone(fc,fm,dur,fs)
 %TRANSPOSEDTONE  Transposed tone test stimuli
-%   Usage:  ts = transposedtone(fc,fm,dur,ear,tslevel);
+%   Usage:  ts = transposedtone(fc,fm,dur,fs);
 %
 %   Input parameters:
 %     fc      : Vector of carrier frequencies (Hz)
-%     fs      : Sampling frequency
 %     fm      : Vector of modulation frequencies (Hz)
 %     dur     : Stimulus duration (s)
+%     fs      : Sampling frequency
 % 
 %   Output parameters:
 %     outsig  : transposed tone (column vector)
@@ -16,7 +16,7 @@ function outsig = transposedtone(fc,fm,dur,ear,tslevel)
 % Author: Sébastien Santurette  2009
 
 % time vector
-t = (0:dur-1)/fs;
+t = (0:dur*fs-1)/fs;
 
 % number of samples
 ns = dur*fs;
@@ -27,10 +27,10 @@ n = length(fc);
 outsig = zeros(ns,1);
 for ii = 1:n
   % carrier tone
-  carrier = cos(2*pi*fc(i)*t);        
+  carrier = cos(2*pi*fc(ii)*t);        
 
   % "modulator"   
-  hrsine = sin(2*pi*fm(i)*t);         
+  hrsine = sin(2*pi*fm(ii)*t);         
 
   % half-wave rectify the modulator
   hrsine = max(0,hrsine);             
