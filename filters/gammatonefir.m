@@ -1,4 +1,4 @@
-function [b,a]=gammatone(fc,fs,varargin);
+function [b]=gammatonefir(fc,fs,n,betamul);
 %GAMMATONE  Gammatone filter coefficients
 %   Usage: [b,a] = gammatone(fc,fs,n,betamul);
 %          [b,a] = gammatone(fc,fs,n);
@@ -36,9 +36,10 @@ function [b,a]=gammatone(fc,fs,varargin);
 %M    g(t) = a*t^(n-1)*cos(2*pi*fc*t)*exp(-2*pi*beta*t)
 %F  \[g(t) = at^{n-1}cos(2\pi\cdot fc\cdot t)e^{-2\pi \beta \cdot t}\]
 %
-%   GAMMATONE( ..., 'complex') will generate filter coefficients
-%   corresponding to a complex valued filterbank modulated by exponential
-%   functions. This is usefull for envelope extration purposes.
+%   The gammatone filters as implemented by this function generate
+%   complex valued output, because the filters are modulated by the
+%   exponential function. Using REAL on the output will give the
+%   coefficients of the corresponding cosine modulated filters.
 %
 %   To create the filter coefficients of a 1-erb spaced filter bank using
 %   gammatone filters use the following construction
@@ -51,77 +52,36 @@ function [b,a]=gammatone(fc,fs,varargin);
 
 % ------ Checking of input parameters ---------
   
+  
+betamul = 1.0183;
 
-if nargin<2
-  error('Too few input arguments.');
-end;
-
-if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
-  error('%s: fs must be a positive scalar.',upper(mfilename));
-end;
-
-if ~isnumeric(fc) || ~isvector(fc) || any(fc<0) || any(fc>fs/2)
-  error(['%s: fc must be a vector of positive values that are less than half ' ...
-         'the sampling rate.'],upper(mfilename));
-end;
-
-defnopos.flags.real={'real','complex'};
-
-[flags,keyvals,n,betamul]  = amtarghelper(2,{4,[]},defnopos,varargin,'GAMMATONE');
-
-if ~isnumeric(n) || ~isscalar(n) || n<=0 || fix(n)~=n
-  error('%s: n must be a positive, integer scalar.',upper(mfilename));
-end;
-
-if isempty(betamul)
-  switch(n)
-   case 2
-    betamul =  0.637;
-   case 4
-    betamul = 1.0183;
-   otherwise
-    error(['GAMMATONE: Default value for beta can only be computed for 2nd ' ...
-           'and 4th order filters.']);
-  end;
-else
-  if ~isnumeric(betamul) || ~isscalar(betamul) || betamul<=0
-    error('%s: beta must be a positive scalar.',upper(mfilename));
-  end;
-end;
-
-
-% ------ Computation --------------------------
 
 nchannels = length(fc);
 
-b=zeros(nchannels,1);
-a=zeros(nchannels,n+1);
+b=zeros(n,nchannels);
+d=zeros(n,nchannels);
+
 
 % ourbeta is used in order not to mask the beta function.
 
 ourbeta = betamul*audfiltbw(fc);
   
+
+
 for ii = 1:nchannels
   
-  btmp=1-exp(-2*pi*ourbeta(ii)/fs);
-  atmp=[1, -exp(-(2*pi*ourbeta(ii) + i*2*pi*fc(ii))/fs)];
-  
-  b2=1;
-  a2=1;
-  
-  for jj=1:n
-    b2=conv(btmp,b2);
-    a2=conv(atmp,a2);
-  end
-  
-  % Place the result (a row vector) in the output matrices.
-  b(ii,:)=b2;
-  a(ii,:)=a2;
+  delay = 3/(2*pi*ourbeta(ii));
+
+  % number of samples to allocate for this rising slope
+  nfirst = ceil(fs*delay);
+  nlast = n-nfirst;
+
+  nfirst
+  nlast
+
+  t=[(0:nlast-1)/fs+delay,...
+     (0:nfirst-1)/fs-nfirst/fs+delay];  
+
+  b(:,ii) = t.^(4-1).*exp(2*pi*i*fc(ii)*t).*exp(-2*pi*ourbeta(ii)*t);
 
 end;
-
-if flags.do_real
-  b=real(b);
-  a=real(a);
-end;
-
