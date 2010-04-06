@@ -24,7 +24,7 @@ function y = rms(insig,options)
 error(nargchk(1,2,nargin));
 
 if ~isnumeric(insig) || ~isvector(insig)
-  error('RMS: Input must be a vector.');
+  error('%s: Input must be a vector.',upper(mfilename));
 end;
 
 if (nargin==1) || (~ischar(options))
