@@ -16,9 +16,9 @@ tau = linspace(-1,1,size(crosscorr,2));
 t = 0:size(crosscorr,1)-1;
 % Calculate mean binaural activation pattern
 if nargin==1 || ~isscalar(fc)
-    binpattern = mean(crosscorr(1:end,:,:),3);
+    binpattern = mean(crosscorr,3);
 else
-    binpattern = crosscorr(1:end,:,fc);
+    binpattern = crosscorr(:,:,fc);
 end
 
 % plot result

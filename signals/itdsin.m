@@ -4,7 +4,7 @@ function outsig = itdsin(f,itd,fs)
 %
 %   Input parameters:
 %       f       - carrier frequency of the sinusoid (Hz)
-%       itd     - interaural time difference of the right signal, this can be
+%       itd     - interaural time difference of the left signal, this can be
 %                 positive or negative (ms)
 %       fs      - sampling rate (Hz)
 %
@@ -40,12 +40,12 @@ end
 
 % Create a one second time 
 t = (1:fs)/fs;
-% Left signal
-sigl = sin(2*pi*f.*t);
+% Right signal
+sigr = sin(2*pi*f.*t);
 % Time shift in samples
 itdsamples = ceil(fs * abs(itd)/1000);
-% Right signal with ITD shift
-sigr = [zeros(1,itdsamples) sin(2*pi*f.*t(1:end-itdsamples))];
+% Left signal with ITD shift
+sigl = [zeros(1,itdsamples) sin(2*pi*f.*t(1:end-itdsamples))];
 % Combine left and right signal to outsig
 % Check if we have a positive or negative ITD and switch left and right signal
 % for negative ITD
