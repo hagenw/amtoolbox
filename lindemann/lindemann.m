@@ -57,8 +57,8 @@ function crosscorr = lindemann(insig,w_f,c_s,fs)
 
 error(nargchk(4,4,nargin));
 
-if ~isnumeric(insig)
-    error('%s: insig has to be numeric!',upper(mfilename));
+if ~isnumeric(insig) || min(size(insig))~=2
+    error('%s: insig has to be a numeric two channel signal!',upper(mfilename));
 end
 
 
