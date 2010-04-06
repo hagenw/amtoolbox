@@ -26,9 +26,9 @@ for itd = linspace(0,1,21);
     % fig. 6 (a)
     cc_a(ii,:) = mean(lindemann(sig,0,0,fs),3);
     % fig. 6 (b)
-    cc_b(ii,:) = mean(lindemann(sig,0,0.3,fs),3);
+    cc_b(ii,:) = mean(lindemann(sig,0.3,0,fs),3);
     % fig. 6 (c)
-    cc_c(ii,:) = mean(lindemann(sig,0,1,fs),3);
+    cc_c(ii,:) = mean(lindemann(sig,1,0,fs),3);
     
     ii = ii+1;
 end

@@ -14,7 +14,7 @@ mf = 2;
 sig = bmsin(f,mf,fs);
 
 % Model paramter
-w_f = 0.035; c_s = 1;
+c_s=1; w_f=0.035; M_f=6; T_int=5;
 
-crosscorr = lindemann(sig,0.035,1,fs);
+crosscorr = lindemann(sig,fs,c_s,w_f,M_f,T_int);
 plotlindemann(crosscorr);

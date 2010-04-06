@@ -1,15 +1,25 @@
-function crosscorr = lindemann(insig,w_f,c_s,fs)
+function crosscorr = lindemann(insig,fs,c_s=0.3,w_f,M_f,T_int)
 % LINDEMANN Calculates a binaural activation pattern
-%   Usage: outsig = lindemann(insig,w_f,c_s,fs)
+%   Usage: crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int)
+%          crosscorr = lindemann(insig,fs,c_s,w_f,M_f)
+%          crosscorr = lindemann(insig,fs,c_s,w_f)
+%          crosscorr = lindemann(insig,fs,c_s)
+%          crosscorr = lindemann(insig,fs)
 %
 %   Input parameters:
 %       insig       - binaural signal for which the cross-correlation
 %                     should be calculated
-%       w_f         - monaural sensitivity at the end of the delay line, 
-%                     0 <= w_f < 1
+%       fs          - sampling rate (Hz)
 %       c_s         - constant inhibition factor, 0 <= c_s <= 1 
-%                     (0.0 = no inhibition)
-%       fs          - sampling rate
+%                     (0.0 = no inhibition). Default: 0.3
+%       w_f         - monaural sensitivity at the end of the delay line, 
+%                     0 <= w_f < 1. Default: 0.035
+%       M_f         - determines the decrease of the monaural sensitivity along 
+%                     the delay line. Default: 6
+%       T_int       - integration time window (only needed for non stationary
+%                     signals), yields to the memory of the correlation process
+%                     with exp(-1/T). You can set T_int = inf if you wouldn't
+%                     any memory. (ms) Default: T_int = 5~ms
 %
 %   Output parameters:
 %       crosscorr   - A matrix containing the cross-correlation signal
@@ -17,8 +27,8 @@ function crosscorr = lindemann(insig,w_f,c_s,fs)
 %                     The format of this matrix is output(n,m,fc), where m
 %                     denotes the correlation (delay line) time step.
 %
-%   LINDEMANN(insig,w_f,c_s,fs) calculates a binaural activity map for the
-%   given insig using a cross-correlation (delay-line) mechanism. The
+%   LINDEMANN(insig,fs,c_s,w_f,M_f,T_int) calculates a binaural activity map
+%   for the given insig using a cross-correlation (delay-line) mechanism. The
 %   calculation is done for every frequency band in the range 5-40 Erb.
 %
 %   The steps of the binaural model to calculate the result are the
@@ -55,10 +65,41 @@ function crosscorr = lindemann(insig,w_f,c_s,fs)
 
 %% ------ Checking of input  parameters ---------------------------------
 
-error(nargchk(4,4,nargin));
+error(nargchk(2,6,nargin));
+
+% For default values see lindemann1986a page 1613
+% NOTE: I modified the default value for T_int from 10 to 5.
 
 if ~isnumeric(insig) || min(size(insig))~=2
     error('%s: insig has to be a numeric two channel signal!',upper(mfilename));
+end
+
+if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
+    error('%s: fs has to be a positive scalar!',upper(mfilename));
+end
+
+if nargin>2 && ( ~isnumeric(c_s) || ~isscalar(c_s) || c_s<0 || c_s>1 )
+    error('%s: 0 <= c_s <= 1, but c_s = %.1f',upper(mfilename),c_s);
+elseif nargin<=2
+    c_s = 0.3;
+end
+
+if nargin>3 && ( ~isnumeric(w_f) || ~isscalar(w_f) || w_f<0 || w_f>=1 )
+    error('%s: 0 <= w_f < 1, but w_f = %.1f',upper(mfilename),w_f);
+elseif nargin<=3
+    w_f = 0.035;
+end
+
+if nargin>4 && ( ~isnumeric(M_f) || ~isscalar(M_f) || M_f<=0 )
+    error('%s: M_f has to be a positive scalar!',upper(mfilename));
+elseif nargin<=4
+    M_f = 6;
+end
+
+if nargin>5 && ( ~isnumeric(T_int) || ~isscalar(T_int) || T_int<=0 )
+    error('%s: T_int has to be a positive scalar!',upper(mfilename));
+elseif nargin<=5
+    T_int = 5;
 end
 
 
@@ -94,6 +135,6 @@ inoutsig = ihcenvelope(inoutsig,fs,'lindemann');
 
 % ------ cross-correlation ------
 % Calculate the cross-correlation after Lindemann (1986a).
-crosscorr = bincorr(inoutsig,w_f,c_s,fs);
+crosscorr = bincorr(inoutsig,fs,c_s,w_f,M_f,T_int);
 
 

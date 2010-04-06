@@ -1,29 +1,35 @@
-function crosscorr = bincorr(insig,w_f,c_s,fs)
+function crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int)
 %BINCORR Cross-correlation between two input signals
-%   Usage: crosscorr = bincorr(insig,w_f,c_s,fs)
+%   Usage: crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int)
 %
 %	Input parameters:
 %       insig      - signal with t x nfcs x 2 (right, left channel)
-%       w_f        - monaural sensitivity at the end of the delay line, 
-%                    0 <= w_f < 1
+%       fs         - sampling rate
 %       c_s        - constant inhibition factor, 0 <= c_s <= 1 
 %                    (0.0 = no inhibition)
-%       fs         - sampling rate
+%       w_f        - monaural sensitivity at the end of the delay line, 
+%                    0 <= w_f < 1
+%       M_f         - determines the decrease of the monaural sensitivity along 
+%                     the delay line.
+%       T_int       - integration time window (only needed for non stationary
+%                     signals), yields to the memory of the correlation process
+%                     with exp(-1/T). You can set T_int = inf if you wouldn't
+%                     any memory. (ms)
 %
 %   Output parameters:
 %       crosscorr  - output matrix containing the correlations
 %                    (n x m x amplitude), where length(n) = length(t)/fs
 %
-%   BINCORR(insig,w_f,c_s,fs) is an implementation of the cross-correlation
-%   algorithm to simulate a binaural delay line.
+%   BINCORR(insig,fs,c_s,w_f,M_f,T_int) is an implementation of the
+%   cross-correlation algorithm to simulate a binaural delay line.
 %
 %   The cross-correlation is calculated using:
 %
 %C              t
-%C CC(tau,t) = int R(l-tau/2) * L(k+tau/2) exp(-(t-k)/T) dk
+%C CC(tau,t) = int R(l-tau/2) * L(k+tau/2) exp(-(t-k)/T_int) dk
 %C            -inf
 %
-%   where T denotes an integration time constant and R, L the right and 
+%   where T_int denotes an integration time constant and R, L the right and 
 %   left input signal.
 %
 %R  lindemann1986a lindemann1986b
@@ -42,33 +48,41 @@ function crosscorr = bincorr(insig,w_f,c_s,fs)
 % n         - discrete time (t)
 % M         - number of discrete steps on the delay line, 
 %             length(delay line) = length(-M:M)
-% k         -
 % w_r       - monaural sensitivity in dependence of l
 % w_l       - monaural sensitivity in dependence of r
 % c_s       - constant inhibition factor
 % w_f       - monaural sensitivity at the end of the delay line
-% M_f       - 
+% M_f       - decrease of monaural sensitivity along the delay line 
 % 
 
 %% ------ Checking of input parameters -----------------------------------
   
-error(nargchk(4,4,nargin));
+error(nargchk(6,6,nargin));
 
-if ~isnumeric(insig)
-    error('%s: insig has to be numeric.',upper(mfilename));
+if ~isnumeric(insig) || min(size(insig))~=2
+    error('%s: insig has to be a numeric two channel signal!',upper(mfilename));
 end
 
-if ~isnumeric(w_f) || ~isscalar(w_f)
-    error('%s: w_f has to be a scalar.',upper(mfilename));
+if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
+    error('%s: fs has to be a positive scalar!',upper(mfilename));
 end
 
-if ~isnumeric(c_s) || ~isscalar(c_s)
-    error('%s: c_s has to be a scalar.',upper(mfilename));
+if ~isnumeric(c_s) || ~isscalar(c_s) || c_s<0 || c_s>1
+    error('%s: 0 <= c_s <= 1',upper(mfilename));
 end
 
-if ~isnumeric(fs) || ~isscalar(fs)
-    error('%s: fs has to be a scalar.',upper(mfilename));
+if ~isnumeric(w_f) || ~isscalar(w_f) || w_f<0 || w_f>=1
+    error('%s: 0 <= w_f < 1',upper(mfilename));
 end
+
+if ~isnumeric(M_f) || ~isscalar(M_f) || M_f<=0
+    error('%s: M_f has to be a positive scalar!',upper(mfilename));
+end
+
+if ~isnumeric(T_int) || ~isscalar(T_int) || T_int<=0
+    error('%s: T_int has to be a positive scalar!',upper(mfilename));
+end
+
 
 
 %% ------ Computation ---------------------------------------------------- 
@@ -80,7 +94,7 @@ nfcs = size(insig,2);
 insig = insig ./ (max(insig(:))+eps);
 
 % Integration time of summing cross-correlation
-T_int = round(5/1000 * fs);
+T_int = round(T_int/1000 * fs);
 
 
 % ------ Time steps on the delay line ------------------------------------
@@ -101,9 +115,6 @@ dlinelen = length(-M:M);
 % The following equations are from Lindemann (1986a) equation 9 on page
 %>1611. Obviously is w_r(m) = w_l(-m).
 %
-% M_f determines the decrease of the monaural sensitivities along the delay 
-% line 
-M_f = 6;
 % Monaural sensitivities for the left ear
 w_r = w_f .* exp(-(2*M:-1:0)./M_f);
 w_r = w_r';
@@ -124,11 +135,11 @@ r = zeros(dlinelen,nfcs);
 
 % Time to look in the past for every entry in crosscorr
 % See lindemann1986a, eq. 10
-kk_memory = T_int;
+cc_memory = T_int;
 
 % Memory preallocation
-crosscorr = zeros( floor( siglen/kk_memory-1 ),dlinelen,nfcs );
-kk = zeros(dlinelen,nfcs);
+crosscorr = zeros( floor( siglen/cc_memory-1 ),dlinelen,nfcs );
+cc = zeros(dlinelen,nfcs);
 
 ii = 0; % crosscorr index
 nn = 1; % integration window index
@@ -171,15 +182,15 @@ for n = 1:siglen
     % ------ Cross-correlation -------------------------------------------
     % Calculate running cross-correlation (e.g. Lindemann 1986a, p.1608,
     % 1611).
-    % kk(m,n) = sum_{n=-inf}^{nn} R(m,n) * L(m,n) * exp( -(nn-n) / T_int )
-    kk = kk + R.*L .* exp( -(kk_memory-nn) / T_int );
+    % cc(m,n) = sum_{n=-inf}^{nn} R(m,n) * L(m,n) * exp( -(nn-n) / T_int )
+    cc = cc + R.*L .* exp( -(cc_memory-nn) / T_int );
    
 		% Store the result in crosscorr
-    if nn==kk_memory
+    if nn==cc_memory
         ii = ii+1;
-        crosscorr(ii,:,:) = kk;
+        crosscorr(ii,:,:) = cc;
         % Initialize a new running cross-correlation
-        kk = zeros(dlinelen,nfcs);
+        cc = zeros(dlinelen,nfcs);
         nn = 0;
     end
     
