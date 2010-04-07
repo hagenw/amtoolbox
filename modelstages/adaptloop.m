@@ -1,4 +1,4 @@
-function inoutsig = adaptloop(inoutsig,fs,limit,minlvl,tau);
+function inoutsig = adaptloop(inoutsig,fs,varargin);
 %ADAPTLOOP   Adaptation loops.
 %   Usage: outsig = adaptloop(insig,fs,limit,minlvl,tau);
 %          outsig = adaptloop(insig,fs,limit,minlvl);
@@ -18,8 +18,20 @@ function inoutsig = adaptloop(inoutsig,fs,limit,minlvl,tau);
 %   ADAPTLOOP(insig,fs,limit) does as above with a minimum threshhold minlvl
 %   equal to 1e-5.
 %
-%   ADAPTLOOP(insig,fs) does as above with an overshoot limit of limit=10.
-%M
+%   ADAPTLOOP(insig,fs) does as above with an overshoot limit of
+%   limit=10.
+%
+%   ADAPTLOOP takes the following flags at the end of the line of input
+%   arguments:
+%
+%      dau - Choose the parameters as in the Dau 1996 and 1997 models. This
+%           consists of 5 adaptation loops with an overshoot limiting of 10
+%           and a minimum level of 1e-5. This is a correction in regard to
+%           the published version of Dau 96, which did not use overshoot
+%           limiting. This flag is the default.
+%
+%      breebart - Not done yet.
+%
 %R  dau1996qmeI puschel1988pza
 
 % Copyright (c) 1999 - 2004 Stephan Ewert. All rights reserved.
@@ -28,32 +40,26 @@ function inoutsig = adaptloop(inoutsig,fs,limit,minlvl,tau);
 
 % ------ Checking of input parameters and default parameters ---------
 
-error(nargchk(2,5,nargin));
-  
-% Default parameters for tau measured in seconds.
-if nargin<5
-  tau=[0.005 0.050 0.129 0.253 0.500];
-else
-  if ~isnumeric(tau) || ~isvector(tau) || tau<=0
-    error('%s: tau must be a vector with positive values.',upper(mfilename));
-  end;
+if nargin<2
+  error('Too few input parameters.');
 end;
 
-if nargin<4
-  minlvl =1e-5;
-else
-  if ~isnumeric(minlvl) || ~isscalar(minlvl) || minlvl<=0
-    error('%s: minlvl must be a positive scalar.',upper(mfilename));
-  end;
+defnopos.flags.model={'dau96','breebart'};
+
+[flags,keyvals,limit,minlvl,tau]  = amtarghelper(3,{10,1e-5,[0.005 0.050 ...
+                    0.129 0.253 0.500]}, defnopos,varargin,upper(mfilename));
+
+if ~isnumeric(tau) || ~isvector(tau) || any(tau<=0)
+  error('%s: tau must be a vector with positive values.',upper(mfilename));
 end;
 
-if nargin<3
-  limit = 10;
-else
-  if ~isnumeric(limit) || ~isscalar(limit) 
-    error('%s: "limit" must be a scalar.',upper(mfilename));
-  end;  
+if ~isnumeric(minlvl) || ~isscalar(minlvl) || minlvl<=0
+  error('%s: minlvl must be a positive scalar.',upper(mfilename));
 end;
+
+if ~isnumeric(limit) || ~isscalar(limit) 
+  error('%s: "limit" must be a scalar.',upper(mfilename));
+end;  
 
 % -------- Computation ------------------
 

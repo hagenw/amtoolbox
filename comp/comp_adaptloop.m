@@ -4,7 +4,7 @@ function inoutsig = comp_adaptloop(inoutsig,fs,limit,minlvl,tau);
 %
 %   This is a computational routine. DO NOT call it directly. Call
 %   ADAPTLOOP instead.
-%M
+%
 %   See also: adaptloop
 
 % Copyright (c) 1999 - 2004 Stephan Ewert. All rights reserved.
