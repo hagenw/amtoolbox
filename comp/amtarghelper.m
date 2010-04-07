@@ -1,19 +1,19 @@
-function [flags,keyvals,varargout]  = amtarghelper(nposdep,defposdep,defnopos,varargin,callfun)
+function [flags,keyvals,varargout]  = amtarghelper(nposdep,defposdep,defnopos,arglist,callfun)
 %AMTARGHELPER  Parse arguments for AMT
-%   Usage: [flags,varargout]  = amtarghelper(nposdep,defposdep,varargin);
+%   Usage: [flags,varargout]  = amtarghelper(nposdep,defposdep,arglist);
 %
 %   Input parameters:
 %      nposdep   : Number of position dependant parameters
 %      defposdep : Default values for pos. dep. pars. (cell array)
 %      defnopos  : Definitions of the pos. independent pars (cell array)
-%      varargin  : Commandline of the calling function
+%      arglist  : Commandline of the calling function
 %      callfun   : Name of calling function
 %
 %   Output parameters:
 %      nopos     : Cell array containing parsed pos. independent pars.
 %      varargout : The position dependant pars. properly initialized
 %
-%   [nopos,varargout]=AMTARGHELPER(nposdep,defposdep,varargin) assist in
+%   [nopos,varargout]=AMTARGHELPER(nposdep,defposdep,arglist) assist in
 %   parsing input parameters for a function in AMT. Parameters come in
 %   two categories:
 %  
@@ -26,7 +26,7 @@ function [flags,keyvals,varargout]  = amtarghelper(nposdep,defposdep,defnopos,va
 %
 %   The typical way of calling AMTARGHELPER is as follows:
 %  
-%C     [nopos,n,betamul] = amtarghelper(2,{4,[]},varargin{:});
+%C     [nopos,n,betamul] = amtarghelper(2,{4,[]},arglist{:});
 %
 %   This will pass any (or a number) of the input arguments from the calling
 %   function onto AMTARGHELPER. In this case, there are 2 position
@@ -47,12 +47,12 @@ function [flags,keyvals,varargout]  = amtarghelper(nposdep,defposdep,defnopos,va
 
   
   
-  total_args = numel(varargin);
+  total_args = numel(arglist);
     
   % Determine the position of the first optional argument.
   % If no optional argument is given, return nposdep+1
   first_str_pos = 1;
-  while first_str_pos<=total_args && ~ischar(varargin{first_str_pos}) 
+  while first_str_pos<=total_args && ~ischar(arglist{first_str_pos}) 
     first_str_pos = first_str_pos +1;    
   end;
     
@@ -66,7 +66,7 @@ function [flags,keyvals,varargout]  = amtarghelper(nposdep,defposdep,defnopos,va
   
   % Copy the given first arguments
   for ii=1:n_first_args
-    varargout(ii)=varargin(ii);
+    varargout(ii)=arglist(ii);
   end;
 
   % Copy the default values for the rest
@@ -94,7 +94,7 @@ function [flags,keyvals,varargout]  = amtarghelper(nposdep,defposdep,defnopos,va
       
   ii=first_str_pos;
   while ii<=total_args
-    argname=varargin{ii};
+    argname=arglist{ii};
     found=0;
     % Is this name a flag? If so, set it
     if isfield(flagsreverse,argname)
@@ -111,7 +111,7 @@ function [flags,keyvals,varargout]  = amtarghelper(nposdep,defposdep,defnopos,va
       
     % Is this name the key of a key/value pair? If so, set the value.
     if isfield(defkeyvals,argname)      
-      keyvals.(argname)=varargin{ii+1};
+      keyvals.(argname)=arglist{ii+1};
       ii=ii+1;
       found=1;
     end;
