@@ -1,14 +1,14 @@
 function amtstart()
-%AMTSTART   Start the CASP toolbox.
+%AMTSTART   Start the Auditory Modulling Toolbox.
 %   Usage:  amtstart;
 %
-%   AMTSTART starts the Auditory Modellingd toolbox. This command must be
+%   AMTSTART starts the Auditory Modelling toolbox. This command must be
 %   run before using any of the function in the toolbox. If you issue a
 %   CLEAR ALL command then you must run AMTSTART again.
 %
 %   You may manually edit this function to configure the toolbox to your
 %   taste. This includes default settings for the plotting functions.
-%M
+%
 %   See also:  amthelp
 
 %   AUTHOR : Peter L. Soendergaard.  

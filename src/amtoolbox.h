@@ -1,5 +1,5 @@
-#ifndef CASP_H
-#define CASP_H
+#ifndef AMTOOLBOX_H
+#define AMTOOLBOX_H
 
 typedef struct adaptloopstatevar
 {
@@ -15,4 +15,4 @@ typedef struct adaptloopstatevar
 } adaptloopstate;
 
 
-#endif /* CASP_H */
+#endif /* AMTOOLBOX_H */
