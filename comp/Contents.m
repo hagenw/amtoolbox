@@ -1,14 +1,9 @@
-% AMT Comp - Computational subroutines.
+% AMT - Computational functions
 %
-%   This page documents the computational subroutines.
+%  The AMT team, 2010.
 %
-%   The subroutines are not meant to be called directly.
-%   They do not verify the input parameters in any way,
-%   and may require you to supply them with precomputed
-%   input from other routines.
+%  Input arguments
+%     AMTARGHELPER     - Help parse input arguments.
 %
-%   Computational subroutines
-%     COMP_ADAPTLOOP       - Adaptation loops.
-%
-%   For help, bug reports, suggestions etc. please send email to
-%   amtoolbox-help@lists.sourceforge.net
+%  For help, bug reports, suggestions etc. please send email to
+%  amtoolbox-help@lists.sourceforge.net

@@ -1,5 +1,5 @@
 function [y,n] = audspacebw(scale,flow,fhigh,bw,hitme)
-%AUDSPACE  Auditory scale points specified by bandwidth
+%AUDSPACEBW  Auditory scale points specified by bandwidth
 %   Usage: y=audspacebw(scale,flow,fhigh,bw,hitme);
 %          y=audspacebw(scale,flow,fhigh,bw);
 %          y=audspacebw(scale,flow,fhigh);

@@ -17,9 +17,13 @@
 %
 %  Properties of the auditory system
 %     AUDFILTBW        - Bandwidth of audiory filters.
+%     IHCENVELOPE      - Inner hair cell envelope extration.
 %
 %  General signal processing
 %     RMS              - RMS value of a signal.
+%     RMSDB            - RMS value in Db.
+%     GAINDB           - Increase/descrease level of signal.
+%     SETLEVELDB       - Specify level of signal.
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
