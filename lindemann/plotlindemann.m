@@ -1,4 +1,24 @@
 function plotlindemann(crosscorr,t,fc)
+%PLOTLINDEMANN Plots the binaural output pattern of the lindemann model
+%   Usage: plotlindemann(crosscorr,t,fc)
+%
+%   Input parameters:
+%       crosscorr   - cross-correlation matrix, output from the lindemann
+%                     function
+%       t           - time of the analysed stimuli (used for t axis)
+%       fc          - frequency channel to plot. Default: mean about all
+%                     channels
+%
+%   PLOTLINDEMANN(crosscorr,t,fc) plots the cross-correlation output from the
+%   lindemann function as a so called binaural activity map. This mean the
+%   correlation value is plotted dependend on time of the stimulus and the
+%   correlation-time delay.
+%
+%   see also: lindemann, bincorr
+%
+
+%   AUTHOR: Hagen Wierstorf
+
 
 % ------ Checking of input  parameters -----------------------------------
 

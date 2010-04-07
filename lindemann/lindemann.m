@@ -1,4 +1,4 @@
-function crosscorr = lindemann(insig,fs,c_s=0.3,w_f,M_f,T_int)
+function crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int)
 % LINDEMANN Calculates a binaural activation pattern
 %   Usage: crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int)
 %          crosscorr = lindemann(insig,fs,c_s,w_f,M_f)
@@ -10,16 +10,20 @@ function crosscorr = lindemann(insig,fs,c_s=0.3,w_f,M_f,T_int)
 %       insig       - binaural signal for which the cross-correlation
 %                     should be calculated
 %       fs          - sampling rate (Hz)
-%       c_s         - constant inhibition factor, 0 <= c_s <= 1 
+%       c_s         - stationary inhibition factor, 0 <= c_s <= 1 
 %                     (0.0 = no inhibition). Default: 0.3
 %       w_f         - monaural sensitivity at the end of the delay line, 
 %                     0 <= w_f < 1. Default: 0.035
 %       M_f         - determines the decrease of the monaural sensitivity along 
 %                     the delay line. Default: 6
-%       T_int       - integration time window (only needed for non stationary
-%                     signals), yields to the memory of the correlation process
-%                     with exp(-1/T). You can set T_int = inf if you wouldn't
-%                     any memory. (ms) Default: T_int = 5~ms
+%       T_int       - integration time window (ms). This is the memory of the 
+%                     correlation process with exp(-1/T_int). Also this
+%                     determines the time steps in the binaural activity map,
+%                     because every time step T_int a new running
+%                     cross-correlation is started, so every T_int we have a new
+%                     result in crosscorr. You can set T_int = inf if you like
+%                     to have no memory effects, than you will get only one
+%                     time step in crosscorr. Default: T_int = 5~ms
 %
 %   Output parameters:
 %       crosscorr   - A matrix containing the cross-correlation signal
@@ -43,15 +47,20 @@ function crosscorr = lindemann(insig,fs,c_s=0.3,w_f,M_f,T_int)
 %
 %     3) Calculation of the cross-correlation between the left and right
 %        channel.  This is done using the model described in Lindemann
-%        (1986a). These are extensions to the delay line model of Jeffres (1948).
+%        (1986a) and Hess (2007). These are extensions to the delay line model 
+%        of Jeffres (1948).
+%
 %        Lindemann has extended the delay line model of Jeffres (1948) by a
 %        contralateral inhibition, which introduce the ILD to the model.  Also
 %        monaural detectors were extended, to handle monaural signals (and some
-%        stimuli with a split off of the lateralization image).  A detailed
-%        description of these cross-correlation steps is given in the
-%        binaural_correlation function.
+%        stimuli with a split off of the lateralization image). Hess has
+%        extented the output from the lindemann model to a binaural activity map
+%        dependend on time, by using a running cross-correlation function.
+%        This has been done here by starting a new running cross-correlation 
+%        every time step T_int.  A detailed description of these cross-
+%        correlation steps is given in the bincorr function.
 %
-%   See also: binncorr, plotlindemann, gammatone, filterbank
+%   See also: bincorr, plotlindemann, gammatone, filterbank
 %
 %   Demos: demo_lindemann
 %
@@ -117,7 +126,7 @@ fhigh = erbtofreq(40);
 % NOTE: Lindemann uses a bandpass filterbank after Duifhuis (1972) and
 % Blauert and Cobben (1978).
 %
-% XXX There is currently an error in the gammatone function for real valued
+% FIXME: There is currently an error in the gammatone function for real valued
 % filters, so use complex valued filters instead.
 [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 % Applying the erb filterbank to the signal
@@ -133,7 +142,7 @@ inoutsig = real(filterbank(b,a,insig));
 % Half-wave rectification and envelope extraction
 inoutsig = ihcenvelope(inoutsig,fs,'lindemann');
 
-% ------ cross-correlation ------
+% ------ Cross-correlation ------
 % Calculate the cross-correlation after Lindemann (1986a).
 crosscorr = bincorr(inoutsig,fs,c_s,w_f,M_f,T_int);
 
