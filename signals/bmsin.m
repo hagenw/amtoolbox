@@ -24,8 +24,8 @@ if ~isnumeric(f) || ~isscalar(f) || f<0
     error('%s: f must be a positive scalar.',upper(mfilename));
 end
 
-if ~isnumeric(itd) || ~isscalar(itd)
-    error('%s: itd must be a scalar.',upper(mfilename));
+if ~isnumeric(mf) || ~isscalar(mf) || mf<=0
+    error('%s: mf must be a positive scalar.',upper(mfilename));
 end
 
 if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
