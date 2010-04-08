@@ -67,7 +67,8 @@ end;
 
 defnopos.flags.real={'real','complex'};
 
-[flags,keyvals,n,betamul]  = amtarghelper(2,{4,[]},defnopos,varargin,'GAMMATONE');
+[flags,keyvals,n,betamul]  = amtarghelper(2,{4,[]},defnopos,varargin,...
+    upper(mfilename));
 
 if ~isnumeric(n) || ~isscalar(n) || n<=0 || fix(n)~=n
   error('%s: n must be a positive, integer scalar.',upper(mfilename));
