@@ -65,7 +65,9 @@ if ~isnumeric(fc) || ~isvector(fc) || any(fc<0) || any(fc>fs/2)
          'the sampling rate.'],upper(mfilename));
 end;
 
-[optargs,n,betamul]  = amtarghelper(2,{4,[]},varargin{:});
+defnopos.flags.real={'real','complex'};
+
+[flags,keyvals,n,betamul]  = amtarghelper(2,{4,[]},defnopos,varargin,'GAMMATONE');
 
 if ~isnumeric(n) || ~isscalar(n) || n<=0 || fix(n)~=n
   error('%s: n must be a positive, integer scalar.',upper(mfilename));
@@ -118,14 +120,7 @@ for ii = 1:nchannels
 
 end;
 
-doreal=1;
-if ~isempty(optargs)
-  if strcmp(lower(optargs{1}),'complex')
-    doreal=0;
-  end;
-end;
-
-if doreal
+if flags.do_real
   b=real(b);
   a=real(a);
 end;

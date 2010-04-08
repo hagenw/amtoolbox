@@ -1,65 +1,124 @@
-function [optargs,varargout]  = amtarghelper(nargs,defaults,varargin)
+function [flags,keyvals,varargout]  = amtarghelper(nposdep,defposdep,defnopos,arglist,callfun)
 %AMTARGHELPER  Parse arguments for AMT
-%   Usage: [flags,varargout]  = amt_arghelper(nargs,defaults,varargin);
+%   Usage: [flags,varargout]  = amtarghelper(nposdep,defposdep,arglist);
 %
 %   Input parameters:
-%      nargs     : Number of required parameters
-%      defaults  : Cell array with default values
-%      varargin  : Supply the commandline of the calling function
+%      nposdep   : Number of position dependant parameters
+%      defposdep : Default values for pos. dep. pars. (cell array)
+%      defnopos  : Definitions of the pos. independent pars (cell array)
+%      arglist  : Commandline of the calling function
+%      callfun   : Name of calling function
 %
 %   Output parameters:
-%      optargs   : Cell array of optional arguments
-%      varargout : The required paramers properly initialized
+%      nopos     : Cell array containing parsed pos. independent pars.
+%      varargout : The position dependant pars. properly initialized
 %
-%   [optargs,varargout]=AMTARGHELP(nargs,defaults,varargin) assist in
+%   [nopos,varargout]=AMTARGHELPER(nposdep,defposdep,arglist) assist in
 %   parsing input parameters for a function in AMT. Parameters come in
-%   two categories: the first given parameters must be numers of some
-%   kind (not string, and if they are absent a default value is
-%   given. The second category are optional parameters that come in
-%   key,value pairs.
-%
-%   The typical way of calling AMTARGHELP is as follows:
+%   two categories:
 %  
-%C     [optargs,n,betamul] = amtarghelper(2,{4,[]},varargin{:});
+%      * Position dependant parameters. These must not be strings. These are
+%      the first parameters passed to a function. If they are not present a
+%      default value is given.
 %
-%   This will pass any (or a number) of the input arguments from the
-%   calling function onto AMTARGHELPER. In this case, there are 2
-%   required arguments (n and betamul), which will have default values 4
+%      * Position independant parameters. These come in key,value pairs
+%      at the end of the parameter list of the calling function.
+%
+%   The typical way of calling AMTARGHELPER is as follows:
+%  
+%C     [nopos,n,betamul] = amtarghelper(2,{4,[]},arglist{:});
+%
+%   This will pass any (or a number) of the input arguments from the calling
+%   function onto AMTARGHELPER. In this case, there are 2 position
+%   dependant parameters (n and betamul), which will have default values 4
 %   and [] if they are not present.
-  
-  total_args = numel(varargin);
-    
-  % Determine the position of the first optional argument.
-  % If no optional argument is given, return nargs+1
-  first_str_pos = 1;
-  while first_str_pos<=total_args && ~ischar(varargin{first_str_pos}) 
-    first_str_pos = first_str_pos +1;    
-  end;
-  
-  % If more than nargs arguments are given, the first additional one must
-  % be a string
-  if (first_str_pos>nargs+1)
-    error('Too many input arguments');
+
+  if isfield(defnopos,'flags')
+    defflags=defnopos.flags;
+  else
+    defflags=struct;
   end;
 
-  n_first_args=min(nargs,first_str_pos-1);
+  if isfield(defnopos,'keyvals')
+    defkeyvals=defnopos.keyvals;
+  else
+    defkeyvals=struct;
+  end;
+
+  
+  
+  total_args = numel(arglist);
+    
+  % Determine the position of the first optional argument.
+  % If no optional argument is given, return nposdep+1
+  first_str_pos = 1;
+  while first_str_pos<=total_args && ~ischar(arglist{first_str_pos}) 
+    first_str_pos = first_str_pos +1;    
+  end;
+    
+  % If more than nposdep arguments are given, the first additional one must
+  % be a string
+  if (first_str_pos>nposdep+1)
+    error('%s: Too many input arguments',callfun);
+  end;
+
+  n_first_args=min(nposdep,first_str_pos-1);
   
   % Copy the given first arguments
   for ii=1:n_first_args
-    varargout(ii)=varargin(ii);
+    varargout(ii)=arglist(ii);
   end;
 
   % Copy the default values for the rest
-  for ii=n_first_args+1:nargs
-    varargout(ii)=defaults(ii);
+  for ii=n_first_args+1:nposdep
+    varargout(ii)=defposdep(ii);
   end;
   
-  % Copy the optional arguments
-  optargs={};
-  for ii=0:total_args-first_str_pos
-    optargs(ii+1)=varargin(first_str_pos+ii);
+  % Initialize the position independent parameters.
+  % and create reverse mapping of flag -> group
+  flagnames=fieldnames(defflags);
+  flags=struct;
+  flagsreverse=struct;
+  for ii=1:numel(flagnames)
+    name=flagnames{ii};
+    flaggroup=defflags.(name);
+    flags.(name)=flaggroup{1};
+    for jj=1:numel(flaggroup)
+      flagsreverse.(flaggroup{jj})=name;
+      flags.(['do_',flaggroup{jj}])=0;
+    end;
+    flags.(['do_',flaggroup{1}])=1;
   end;
   
-  
-  
-  
+  keyvals=defkeyvals;
+      
+  ii=first_str_pos;
+  while ii<=total_args
+    argname=arglist{ii};
+    found=0;
+    % Is this name a flag? If so, set it
+    if isfield(flagsreverse,argname)
+      % Unset all other flags in this group
+      flaggroup=defflags.(flagsreverse.(argname));
+      for jj=1:numel(flaggroup)
+        flags.(['do_',flaggroup{jj}])=0;
+      end;
+      
+      flags.(flagsreverse.(argname))=argname;
+      flags.(['do_',argname])=1;
+      found=1;
+    end;
+      
+    % Is this name the key of a key/value pair? If so, set the value.
+    if isfield(defkeyvals,argname)      
+      keyvals.(argname)=arglist{ii+1};
+      ii=ii+1;
+      found=1;
+    end;
+    
+    if found==0
+      error('%s: Unknown parameter: %s',callfun,argname);
+    end;
+
+    ii=ii+1;
+  end;
