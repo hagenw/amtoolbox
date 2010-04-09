@@ -22,6 +22,6 @@ c_s=1; w_f=0.035; M_f=6; T_int=5;
 crosscorr = lindemann(sig,fs,c_s,w_f,M_f,T_int);
 
 % Set title string for the plot
-tstr = sprintf('f = 500 Hz\nf_m = 2 Hz\n');
-% Plot mean about all frequency channels
-plotlindemann(crosscorr,t,tstr);
+tstr = sprintf('f = 500 Hz\nf_m = 2 Hz\nfc = 11\n');
+% Plot frequency channel 11, due to round(freqtoerb(500))==11
+plotlindemann(crosscorr,t,tstr,500);
