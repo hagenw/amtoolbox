@@ -1,12 +1,13 @@
-function cen = lindemann1986a_fig7()
+function lindemann1986a_fig7()
 %LINDEMANN1986a_FIG7 Reproduces fig. 7 from lindemann1986a
 %
-%   LINDEMANN1986a_FIG6() reproduces fig.7 from lindemann1986a. Therefore the
+%   LINDEMANN1986a_FIG7() reproduces fig.7 from lindemann1986a. Therefore the
 %   cross-correlation of pure tone sinusoids with different ITDs is calculated. 
 %   Because of the stationary character of the input signals T_int = inf is used
 %   to produce only one time step in the crosscorr output from lindemann.
 %   This is calculated for different ITDs and different inhibition factors c_s
-%   (0:0.2:1). Afterwards for every c_s the centroid of the auditory image is
+%   (0:0.2:1). Afterwards for every c_s the centroid (for formula see the bottom
+%   line of this function9 of the auditory image is
 %   calculated and plotted dependend opn the ITD.
 %
 %R lindemann1986a
