@@ -100,6 +100,16 @@ insig = insig ./ (max(insig(:))+eps);
 % Integration time of summing cross-correlation
 T_int = round(T_int/1000 * fs);
 
+% Start of integration (see lindemann1986a p. 1614)
+N_1 = 17640;    % 200/f * fs
+% Check if the given signal length is long enough to provide an output
+if T_int<Inf && siglen<=N_1+T_int
+    error('%s: siglen has to be longer than N_1+T_int==%i', ...
+        upper(mfilename),N_1+T_int);
+elseif T_int==Inf && siglen<=N_1
+    error('%s: siglen has to be longer than N_1==%i for T_int==Inf', ...
+        upper(mfilename),N_1);
+end
 
 % ------ Time steps on the delay line ------------------------------------
 % -M:M are the time steps of the delay.
@@ -150,7 +160,7 @@ else
 end
 
 % Memory preallocation
-crosscorr = zeros( ceil( siglen/cc_memory-1 ),dlinelen,nfcs );
+crosscorr = zeros( ceil( (siglen-N_1)/cc_memory-1 ),dlinelen,nfcs );
 cc = zeros(dlinelen,nfcs);
 
 ii = 0; % crosscorr index
@@ -202,8 +212,9 @@ for n = 1:siglen
     % cc = cc + R.*L;
     cc = cc + R.*L .* exp( -(cc_memory-nn) / T_int );
    
-    % Store the result in crosscorr
-    if nn==cc_memory
+    % Store the result in crosscorr (only if the signal is presented at least
+    % for N_1 samples
+    if nn==cc_memory && nn>N_1
         ii = ii+1;
         crosscorr(ii,:,:) = cc;
         % Initialize a new running cross-correlation
