@@ -49,8 +49,6 @@ for ii = 1:nilds
     % results depends much on the length of the used signal. I think Lindemann 
     % has not stated this fact nor calculated the fading time, so we have to do
     % this.
-    % This also leads to a asymmetrie for ITD = T/2 which is not the case by
-    % Lindemann!!!
     sig = sig(1:ceil(0.01*fs),:);
     % Calculate cross-correlation for different inhibition factor c_s 
     for jj = 1:length(c_s)
