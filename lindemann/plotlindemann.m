@@ -21,7 +21,7 @@ function plotlindemann(crosscorr,t,varargin)
 %   plot and tstr the title of the plot. f determines the frequency channel to
 %   plot by using the channel in which the frequency f belongs.
 %
-%   see also: lindemann, bincorr
+%   See also: lindemann, bincorr
 %
 
 %   AUTHOR: Hagen Wierstorf
