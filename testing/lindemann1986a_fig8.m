@@ -3,8 +3,8 @@ function cc = lindemann1986a_fig8()
 %   Usage: cc = lindemann1986a_fig8;
 %
 %   Output parameters:
-%       cc  - cross-correlation result of the to figures.
-%             Dim: figure x nilds x delay line length
+%       cc  - cross-correlation result of the to figure.
+%             Dim: number of c_s conditions x nilds x delay line length
 %
 %   LINDEMANN1986a_FIG8() reproduces fig.8 from lindemann1986a. Therefore the
 %   cross-correlation of pure tone sinusoids with different ILDs is calculated. 
