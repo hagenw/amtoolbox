@@ -1,5 +1,5 @@
 function cc = lindemann1986a_fig10()
-%LINDEMANN1986a_FIG( Reproduces fig. 10 from lindemann1986a
+%LINDEMANN1986a_FIG Reproduces fig. 10 from lindemann1986a
 %   Usage: cc = lindemann1986a_fig10;
 %
 %   Output parameters:
@@ -39,7 +39,7 @@ c_s = 0.3;
 nilds = 26; % number of used ILDs
 ndl = 45;   % length of the delay line
 ild = linspace(0,25,nilds);
-cc = zeros(2,nilds,ndl);
+cc = zeros(length(cs),nilds,ndl);
 for ii = 1:nilds 
     % Generate sinusoid with given ILD
     sig = ildsin(f,ild(ii),fs);
