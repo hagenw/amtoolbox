@@ -11,9 +11,8 @@ function cen = lindemann1986a_fig7()
 %   Because of the stationary character of the input signals T_int = inf is used
 %   to produce only one time step in the crosscorr output from lindemann.
 %   This is calculated for different ITDs and different inhibition factors c_s
-%   (0:0.2:1). Afterwards for every c_s the centroid (for formula see the bottom
-%   line of this function9 of the auditory image is calculated and plotted
-%   dependend on the ITD.
+%   (0:0.2:1). Afterwards for every c_s the centroid of the auditory image is
+%   calculated and plotted dependend on the ITD.
 %
 %   See also: lindemann, itdsin
 %
@@ -75,12 +74,4 @@ xlabel('interaural time difference (ms)');
 ylabel('displacement of the centroid d');
 tstr = sprintf('w_f = 0\nf = 500 Hz\n');
 title(tstr);
-
-
-% ------ Subfunctions ----------------------------------------------------
-% Function to calculate the centroid for a given cross-correlation (see
-% lindemann1986a, page 1613, eq. 22) 
-function d = centroid(cc)
-    M = fix(length(cc)/2);
-    d = sum((-M:M)'.*cc)/sum(cc);
 
