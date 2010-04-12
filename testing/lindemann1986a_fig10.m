@@ -49,6 +49,8 @@ for ii = 1:nilds
     % results depends much on the length of the used signal. I think Lindemann 
     % has not stated this fact nor calculated the fading time, so we have to do
     % this.
+    % I have chosen here 0.02 instead of 0.01, because w_f depends on signal
+    % length for shorter signals. Why?
     sig = sig(1:ceil(0.02*fs),:);
     % Calculate cross-correlation for different inhibition factor c_s 
     for jj = 1:length(c_s)
