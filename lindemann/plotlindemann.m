@@ -74,9 +74,9 @@ if ~exist('f')
 else
     % Calculate the frequency channel to plot
     % NOTE: it starts with the fifth channel in the lindemann model, so we have
-    % to subtract 5 to index the binpattern correctly.
+    % to subtract 4 to index the binpattern correctly.
     fc = round(freqtoerb(f));
-    binpattern = crosscorr(:,:,fc-5);
+    binpattern = crosscorr(:,:,fc-4);
 end
 
 % ------ Plotting --------------------------------------------------------

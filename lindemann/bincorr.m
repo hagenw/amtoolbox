@@ -103,12 +103,12 @@ T_int = round(T_int/1000 * fs);
 % Start of integration (see lindemann1986a p. 1614)
 N_1 = 17640;    % 200/f * fs
 % Check if the given signal length is long enough to provide an output
-if T_int<Inf && siglen<(N_1+T_int)
-    error('%s: siglen has to be longer than N_1+T_int==%i!', ...
+if T_int<Inf && siglen<=N_1+T_int
+    error('%s: siglen has to be longer than N_1+T_int==%i', ...
         upper(mfilename),N_1+T_int);
-elseif T_int==Inf && siglen(2*N_1)
-    error('%s: siglen has to be 2*N_1==%i for T_int==Inf!', ...
-        upper(mfilename),2*N_1);
+elseif T_int==Inf && siglen<=N_1
+    error('%s: siglen has to be longer than N_1==%i for T_int==Inf', ...
+        upper(mfilename),N_1);
 end
 
 % ------ Time steps on the delay line ------------------------------------

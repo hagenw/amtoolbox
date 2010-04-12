@@ -45,11 +45,9 @@ for ii = 1:nilds
     sig = ildsin(f,ild(ii),fs);
     % Use only the beginning of the signal to generate only one time instance of
     % the cross-correlation
-    % FIXME: also we use only stationary inhibition here by varying c_s the
-    % results depends much on the length of the used signal. I think Lindemann 
-    % has not stated this fact nor calculated the fading time, so we have to do
-    % this.
-    sig = sig(1:ceil(0.01*fs),:);
+    % NOTE: the signal has to be longer than N_1, which is 0.4*fs in this case
+    % (see lindemann1986a p. 1614)
+    sig = sig(1:ceil(0.41*fs),:);
     % Calculate cross-correlation for different inhibition factor c_s 
     for jj = 1:length(c_s)
         % Calculate cross-correlation (and squeeze due to T_int==inf)
