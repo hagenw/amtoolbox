@@ -1,6 +1,6 @@
-function outsig = pinknoise(nsamples)
-% PINKNOISE Generates a pink noise signal
-%   Usage: outsig = pinknoise
+function outsig = noise(nsamples)
+% PINKNOISE Generates a white noise signal
+%   Usage: outsig = noise(nsamples)
 %
 %   Input parameters:
 %       nsamples    - length of the noise (samples)
@@ -8,12 +8,12 @@ function outsig = pinknoise(nsamples)
 %   Output parameters:
 %       outsig      - nsamples x 1 signal vector
 %
-%   PINKNOISE(samplesn) generates an one channel output signal containing pink 
-%   noise (1/f spectrum) with the length of nsamples.
+%   NOISE(samplesn) generates an one channel output signal containing white 
+%   noise with the length of nsamples.
 %
 %   See also:
 %
-%R FIXME wikipedia (script after little2007)
+%R FIXME wikipedia
 %
 
 %   AUTHOR: Hagen Wierstorf
@@ -30,9 +30,8 @@ end
 
 % ------ Computation -----------------------------------------------------
 fmax = floor(nsamples/2)-1;
-f = 2:(fmax+1);
-% 1/f amplitude factor
-a = 1./sqrt(f');
+% Amplitude factor
+a = 1;
 % Random phase
 p = randn(fmax,1) + 1i * randn(fmax,1);
 sig = a .* p;
