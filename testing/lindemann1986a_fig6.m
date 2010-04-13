@@ -31,9 +31,16 @@ fc = round(freqtoerb(f));   % corresponding frequency channel
 
 % Model parameter
 T_int = inf;
+N_1 = ceil(0.05*fs);
 w_f = 0;
 M_f = 6; % not used, if w_f==0
 c_s = [0,0.3,1];
+
+% NOTE: the longer the signal, the more time we need for computation. On the
+% other side N_1 needs to be long enough to eliminate any onset effects.
+% Lindemann uses N_1 = 17640. Here I uses only N_1 = 2205 which gives the same
+% results for this demo.
+siglen = ceil(0.06*fs);
 
 % Calculate crosscorrelations for 21 ITD points between 0~ms and 1~ms
 nitds = 21; % number of used ITDs
@@ -45,13 +52,16 @@ for ii = 1:nitds;
     sig = itdsin(f,itd(ii),fs);
     % Use only the beginning of the signal to generate only one time instance of
     % the cross-correlation
-    % NOTE: the signal has to be longer than N_1, which is 0.4*fs in this case
+    sig = sig(1:siglen,:);
+    % Apply a linear onset window with length N_1/2 to minimize onset effects
     % (see lindemann1986a p. 1614)
-    sig = sig(1:ceil(0.41*fs),:);
+    win = [ linspace(0,1,ceil(N_1/2)) zeros(1,siglen-ceil(N_1/2)) ]';
+    sig(:,1) = win .* sig(:,1);
+    sig(:,2) = win .* sig(:,2);
     % Calculate cross-correlation for different inhibition factor c_s
     for jj = 1:length(c_s)
         % Calculate cross-correlation (and squeeze due to T_int==inf)
-        tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int));
+        tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
         % Store the needed frequency channel. NOTE: the cross-correlation
         % calculation starts with channel 5, so we have to subtract 4.
         cc(jj,ii,:) =  tmp(:,fc-4);
