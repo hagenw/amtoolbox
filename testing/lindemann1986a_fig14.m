@@ -46,7 +46,7 @@ siglen = ceil(0.06*fs);
 % Calculate crosscorrelations for 21 ITD points between 0~ms and 1~ms
 nilds = 21; % number of used ITDs
 ndl = 45;   % length of the delay line
-ild = linspace(-3,3,nitds);
+ild = linspace(-3,3,nilds);
 itd = 2000/f;
 for ii = 1:nilds 
     % Generate ITD shifted sinusoid
