@@ -3,14 +3,14 @@ function outsig = bmsin(f,mf,fs)
 %   Usage: outsig = bmsin(f,mf,fs)
 %
 %   Input parameters:
-%       f       - carrier frequency of the sinus (Hz)
-%       mf      - binaural modulation frequency (Hz)
-%       fs      - sampling rate (Hz)
+%       f   - carrier frequency of the sinus (Hz)
+%       mf  - binaural modulation frequency (Hz)
+%       fs  - sampling rate (Hz)
 %
 %   Output parameters:
-%       outsig  - two channel 1 s long sinusoid
+%       outsig  - fs x 2 sinusoid signal
 %
-%   BMSIN(f,mf,fs) generates an binaural modulated sinusoid with a
+%   BMSIN(f,mf,nsamples) generates an binaural modulated sinusoid with a
 %   carrier frequency of f and a frequency moving around the two ears of mf.
 %
 
@@ -21,15 +21,15 @@ function outsig = bmsin(f,mf,fs)
 error(nargchk(3,3,nargin));
 
 if ~isnumeric(f) || ~isscalar(f) || f<0
-    error('%s: f must be a positive scalar.',upper(mfilename));
+    error('%s: f has to be a positive scalar.',upper(mfilename));
 end
 
 if ~isnumeric(mf) || ~isscalar(mf) || mf<=0
-    error('%s: mf must be a positive scalar.',upper(mfilename));
+    error('%s: mf has to be a positive scalar.',upper(mfilename));
 end
 
 if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
-    error('%s: fs must be a positive scalar!',upper(mfilename));
+    error('%s: fs has to be a positive scalar!',upper(mfilename));
 end
 
 
