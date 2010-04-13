@@ -1,12 +1,12 @@
-function cc = lindemann1986a_fig10()
-%LINDEMANN1986a_FIG Reproduces fig. 10 from lindemann1986a
-%   Usage: cc = lindemann1986a_fig10;
+function cc = lindemann1986a_fig15()
+%LINDEMANN1986a_FIG Reproduces fig. 15 from lindemann1986a
+%   Usage: cc = lindemann1986a_fig15;
 %
 %   Output parameters:
 %       cc  - cross-correlation result of the to figure.
 %             Dim: number of c_s conditions x nilds x delay line length
 %
-%   LINDEMANN1986a_FIG10() reproduces fig.10 from lindemann1986a. Therefore the
+%   LINDEMANN1986a_FIG15() reproduces fig.15 from lindemann1986a. Therefore the
 %   cross-correlation of pure tone sinusoids with different ILDs is calculated. 
 %   Because of the stationary character of the input signals T_int = inf is used
 %   to produce only one time step in the crosscorr output from lindemann.
@@ -47,7 +47,7 @@ nilds = 26; % number of used ILDs
 ndl = 45;   % length of the delay line
 ild = linspace(0,25,nilds);
 itd = -0.5;
-cc = zeros(length(cs),nilds,ndl);
+cc = zeros(length(c_s),nilds,ndl);
 for ii = 1:nilds 
     % Generate sinusoid with given ILD
     sig = itdildsin(f,itd,ild(ii),fs);
