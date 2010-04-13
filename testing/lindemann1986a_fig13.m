@@ -61,8 +61,9 @@ for ii = 1:nilds_p
     % Generate sinusoid with given ILD
     sig = ildsin(f,ild_p(ii),fs);
     % Use only the beginning of the signal to generate only one time instance of
-    % the cross-correlation
+    % the cross-correlation and apply a linear onset window
     sig = sig(1:siglen,:);
+    sig = lindemannwin(sig,N_1);
     % Calculate cross-correlation (and squeeze due to T_int==inf)
     tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
     % Store the needed frequency channel
