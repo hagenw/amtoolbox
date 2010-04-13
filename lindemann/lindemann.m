@@ -1,4 +1,4 @@
-function crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int,N_1)
+function crosscorr = lindemann(insig,fs,varargin)
 % LINDEMANN Calculates a binaural activation pattern
 %   Usage: crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %          crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int)
@@ -23,7 +23,7 @@ function crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %                     because every time step T_int a new running
 %                     cross-correlation is started, so every T_int we have a new
 %                     result in crosscorr. You can set T_int = inf if you like
-%                     to have no memory effects, than you will get only one
+%                     to have no memory effects, then you will get only one
 %                     time step in crosscorr. Default: T_int = 5~ms
 %       N_1         - Sample at which the first running cross-correlation should
 %                     be started to avoid onset effects (see lindemann1986a p.
@@ -35,7 +35,7 @@ function crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %                     The format of this matrix is output(n,m,fc), where m
 %                     denotes the correlation (delay line) time step.
 %
-%   LINDEMANN(insig,fs,c_s,w_f,M_f,T_int) calculates a binaural activity map
+%   LINDEMANN(insig,fs,c_s,w_f,M_f,T_int,N_1) calculates a binaural activity map
 %   for the given insig using a cross-correlation (delay-line) mechanism. The
 %   calculation is done for every frequency band in the range 5-40 Erb.
 %
@@ -78,10 +78,12 @@ function crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int,N_1)
 
 %% ------ Checking of input  parameters ---------------------------------
 
-error(nargchk(2,7,nargin));
 
 % For default values see lindemann1986a page 1613
 % NOTE: I modified the default value for T_int from 10 to 5.
+if nargin<2
+  error('%s: Too few input parameters.',upper(mfilename));
+end;
 
 if ~isnumeric(insig) || min(size(insig))~=2
     error('%s: insig has to be a numeric two channel signal!',upper(mfilename));
@@ -91,34 +93,30 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
     error('%s: fs has to be a positive scalar!',upper(mfilename));
 end
 
-if nargin>2 && ( ~isnumeric(c_s) || ~isscalar(c_s) || c_s<0 || c_s>1 )
+% For default values see lindemann1986a page 1613
+% NOTE: I modified the default value for T_int from 10 to 5.
+
+[flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
+ amtarghelper(5,{0.3,0.035,6,5,17640},struct,varargin,upper(mfilename));
+
+if ( ~isnumeric(c_s) || ~isscalar(c_s) || c_s<0 || c_s>1 )
     error('%s: 0 <= c_s <= 1, but c_s = %.1f',upper(mfilename),c_s);
-elseif nargin<=2
-    c_s = 0.3;
 end
 
-if nargin>3 && ( ~isnumeric(w_f) || ~isscalar(w_f) || w_f<0 || w_f>=1 )
+if ( ~isnumeric(w_f) || ~isscalar(w_f) || w_f<0 || w_f>=1 )
     error('%s: 0 <= w_f < 1, but w_f = %.1f',upper(mfilename),w_f);
-elseif nargin<=3
-    w_f = 0.035;
 end
 
-if nargin>4 && ( ~isnumeric(M_f) || ~isscalar(M_f) || M_f<=0 )
+if ( ~isnumeric(M_f) || ~isscalar(M_f) || M_f<=0 )
     error('%s: M_f has to be a positive scalar!',upper(mfilename));
-elseif nargin<=4
-    M_f = 6;
 end
 
-if nargin>5 && ( ~isnumeric(T_int) || ~isscalar(T_int) || T_int<=0 )
+if ( ~isnumeric(T_int) || ~isscalar(T_int) || T_int<=0 )
     error('%s: T_int has to be a positive scalar!',upper(mfilename));
-elseif nargin<=5
-    T_int = 5;
 end
 
-if nargin>6 && ( ~isnumeric(N_1) || ~isscalar(N_1) || N_1<=0 )
+if ( ~isnumeric(N_1) || ~isscalar(N_1) || N_1<=0 )
     error('%s: N_1 has to be a positive scalar!',upper(mfilename));
-elseif nargin<=6
-    N_1 = 17640;    % 200/f * fs, for f=500 Hz anf fs=44100 Hz
 end
 
 
