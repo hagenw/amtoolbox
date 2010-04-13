@@ -5,6 +5,9 @@ function d = centroid(cc)
 %   Input parameters:
 %       cc  - Lindemann cross-correlation. Dim: 1 x delay line length
 %
+%   Output parameters:
+%       d   - centroid in the range -1..1~ms
+%
 %   CENTROID(cc) calculates the centroid for a given cross-correlation from the
 %   Lindemann model.
 %
@@ -37,4 +40,4 @@ end
 % Calculate the length of the delay line as -M:M
 M = fix(length(cc)/2);
 % Calculate the centroid using the -M:M delay line
-d = sum((-M:M)'.*cc)/sum(cc);
+d = sum((-M:M)'/M.*cc)/sum(cc);

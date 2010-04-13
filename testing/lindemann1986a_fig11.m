@@ -31,6 +31,7 @@ fc = round(freqtoerb(f));   % corresponding frequency channel
 
 % Model parameter
 T_int = inf;
+N_1 = 1;
 w_f = [0,0,0.035];
 M_f = 6; % not used, if w_f==0
 c_s = [0.3,1,0.3];
@@ -47,25 +48,13 @@ for ii = 1:nilds
     % the cross-correlation
     % NOTE: the signal has to be longer than N_1, which is 0.4*fs in this case
     % (see lindemann1986a p. 1614)
-    sig = sig(1:ceil(0.41*fs),:);
-    % Generate signal for normalization calculation
-    if max(sig(:,1))>max(sig(:,2))
-        sig0 = [sig(:,1) sig(:,1)];
-    else
-        sig0 = [sig(:,2) sig(:,2)];
-    end
-    % Calculate Psi_0 for normalization (see lindemann1986a p. 1614, eq. 25)
-    tmp = squeeze(lindemann(sig,fs,0,0,M_f,T_int));
-    % Store the needed frequency channel. NOTE: the cross-correlation
-    % calculation starts with channel 5, so we have to subtract 5.
-    cc_0 = tmp(:,fc-5);
-    cc_0(ceil(ndl/2))
+    sig = sig(1:ceil(0.01*fs),:);
     % Calculate cross-correlation for different inhibition factor c_s 
     for jj = 1:length(c_s)
         % Calculate cross-correlation (and squeeze due to T_int==inf)
-        tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f(jj),M_f,T_int));
-        % Store the needed frequency channel and normalize it
-        cc = tmp(:,fc-5)/cc_0(ceil(ndl/2));
+        tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f(jj),M_f,T_int,N_1));
+        % Store the needed frequency channel
+        cc = tmp(:,fc-4);
         % Calculate the position of the centroid
         cen(jj,ii) = centroid(cc);
     end

@@ -31,7 +31,6 @@ fc = round(freqtoerb(f));   % corresponding frequency channel
 
 % Model parameter
 T_int = inf;
-N_1 = ceil(0.05*fs);
 w_f = 0;
 M_f = 6; % not used, if w_f==0
 c_s = [0,0.3,1];
@@ -40,6 +39,7 @@ c_s = [0,0.3,1];
 % other side N_1 needs to be long enough to eliminate any onset effects.
 % Lindemann uses N_1 = 17640. Here I uses only N_1 = 2205 which gives the same
 % results for this demo.
+N_1 = ceil(0.05*fs);
 siglen = ceil(0.06*fs);
 
 % Calculate crosscorrelations for 21 ITD points between 0~ms and 1~ms
@@ -51,13 +51,9 @@ for ii = 1:nitds;
     % Generate ITD shifted sinusoid
     sig = itdsin(f,itd(ii),fs);
     % Use only the beginning of the signal to generate only one time instance of
-    % the cross-correlation
+    % the cross-correlation and apply onset window
     sig = sig(1:siglen,:);
-    % Apply a linear onset window with length N_1/2 to minimize onset effects
-    % (see lindemann1986a p. 1614)
-    win = [ linspace(0,1,ceil(N_1/2)) zeros(1,siglen-ceil(N_1/2)) ]';
-    sig(:,1) = win .* sig(:,1);
-    sig(:,2) = win .* sig(:,2);
+    sig = lindemannwin(sig,N_1);
     % Calculate cross-correlation for different inhibition factor c_s
     for jj = 1:length(c_s)
         % Calculate cross-correlation (and squeeze due to T_int==inf)

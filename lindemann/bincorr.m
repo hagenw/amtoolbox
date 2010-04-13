@@ -1,6 +1,6 @@
-function crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int)
+function crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %BINCORR Cross-correlation between two input signals
-%   Usage: crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int)
+%   Usage: crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %
 %	Input parameters:
 %       insig       - signal with t x nfcs x 2 (right, left channel)
@@ -19,6 +19,9 @@ function crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int)
 %                     result in crosscorr. You can set T_int = inf if you like
 %                     to have no memory effects, than you will get only one
 %                     time step in crosscorr. Default: T_int = 5~ms
+%       N_1         - Sample at which the first running cross-correlation should
+%                     be started to avoid onset effects (see lindemann1986a p.
+%                     1614).
 %
 %   Output parameters:
 %       crosscorr  - output matrix containing the correlations
@@ -61,7 +64,7 @@ function crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int)
 
 %% ------ Checking of input parameters -----------------------------------
   
-error(nargchk(6,6,nargin));
+error(nargchk(7,7,nargin));
 
 if ~isnumeric(insig) || min(size(insig))~=2
     error('%s: insig has to be a numeric two channel signal!',upper(mfilename));
@@ -87,6 +90,9 @@ if ~isnumeric(T_int) || ~isscalar(T_int) || T_int<=0
     error('%s: T_int has to be a positive scalar!',upper(mfilename));
 end
 
+if ~isnumeric(N_1) || ~isscalar(N_1) || N_1<=0
+    error('%s: N_1 has to be a positive scalar!',upper(mfilename));
+end
 
 
 %% ------ Computation ---------------------------------------------------- 
@@ -100,9 +106,8 @@ insig = insig ./ (max(insig(:))+eps);
 % Integration time of summing cross-correlation
 T_int = round(T_int/1000 * fs);
 
-% Start of integration (see lindemann1986a p. 1614)
-N_1 = 17640;    % 200/f * fs
-% Check if the given signal length is long enough to provide an output
+% Check if the given signal length is long enough to provide an output for the
+% given start N_1 of the running cross-correlation (see lindemann1986a, p. 1614)
 if T_int<Inf && siglen<=N_1+T_int
     error('%s: siglen has to be longer than N_1+T_int==%i', ...
         upper(mfilename),N_1+T_int);
@@ -155,15 +160,18 @@ r = zeros(dlinelen,nfcs);
 % time steps n in the crosscorr output
 if T_int==inf
     cc_memory = siglen-1;
+    N_2 = siglen;
 else
     cc_memory = T_int;
+    N_2 = N_1+cc_memory;
 end
 
 % Memory preallocation
-crosscorr = zeros( ceil( (siglen-N_1)/cc_memory-1 ),dlinelen,nfcs );
+%crosscorr = zeros( ceil( (siglen-N_1)/cc_memory-1 ),dlinelen,nfcs );
+crosscorr = zeros( ceil( siglen/cc_memory-1 ),dlinelen,nfcs );
 cc = zeros(dlinelen,nfcs);
 
-ii = 0; % crosscorr index
+ii = 1; % crosscorr index
 nn = 1; % integration window index
 for n = 1:siglen
     
@@ -171,22 +179,26 @@ for n = 1:siglen
     % Stationary inhibition after Lindemann (1986a, p. 1612 eq. 13):
     % r(m+1,n+1) = r(m,n) * [1 - c_s l(m,n)]
     % l(m+1,n+1) = l(m,n) * [1 - c_s r(m,n)]
-    % The normalization with max([r l]+eps) is done, to avoid a
-    % dependence on the amplitude for the inhibition mechanism (see Gaik
-    % 1993, p. 109). This preserves the spectral shape across frequency
-    % channels. Therefore the inhibition depends now only on its stationary 
-    % inhibition factor c_s.
     % The length of r and l are the same as the length of the delay line
     % (dlinelen = length(-M:M)). Also the signals are mirror-inverted, 
     % because of their different directions passing the delay line. l starts
     % on the right sight and r on the left side of the delay line. If you 
     % want to mirror the axes of the delay line, you have to exchange the
     % input direction of r and l into the delay line.
-    l = [ l(2:dlinelen,:) .* (1 - (c_s .* r(2:dlinelen,:) ./ ...
-		      max(max([l r]+eps)) ) ); insig(n,:,1) ];
-    r = [ insig(n,:,2);   r(1:dlinelen-1,:) .* ...
-		      (1 - (c_s .* l(1:dlinelen-1,:) ./ max(max([l r]+eps))) ) ];
-    
+    l = [ l(2:dlinelen,:) .* (1 - c_s .* r(2:dlinelen,:)); insig(n,:,1) ];
+    r = [ insig(n,:,2); r(1:dlinelen-1,:) .* (1 - c_s .* l(1:dlinelen-1,:)) ];
+    % TODO: the spectral shape is also needed for some application, so we should
+    % check if the following solution can be fixed to work as it should.
+    % The normalization with max([r l]+eps) is done, to avoid a
+    % dependence on the amplitude for the inhibition mechanism (see Gaik
+    % 1993, p. 109). This preserves the spectral shape across frequency
+    % channels. Therefore the inhibition depends now only on its stationary 
+    % inhibition factor c_s.
+    %l = [ l(2:dlinelen,:) .* (1 - (c_s .* r(2:dlinelen,:) ./ ...
+	%	      max(max([l r]+eps)) ) ); insig(n,:,1) ];
+    %r = [ insig(n,:,2);   r(1:dlinelen-1,:) .* ...
+	%	      (1 - (c_s .* l(1:dlinelen-1,:) ./ max(max([l r]+eps))) ) ];
+ 
     % ------ Monaural sensitivity and trading ----------------------------
     %
     % Monaural sensitivities after Lindemann (1986a, p. 1611 eq. 6a + 6b):
@@ -208,22 +220,29 @@ for n = 1:siglen
     % 1611).
     % cc(m,n) = sum_{n=-inf}^{nn} R(m,n) * L(m,n) * exp( -(nn-n) / T_int )
     % NOTE: For simplicity with stationary signals Lindemann uses only this
-    % formula:
+    % formula which can be managed by setting T_int=Inf:
     % cc = cc + R.*L;
-    cc = cc + R.*L .* exp( -(cc_memory-nn) / T_int );
-   
-    % Store the result in crosscorr (only if the signal is presented at least
-    % for N_1 samples
-    if nn==cc_memory && nn>N_1
-        ii = ii+1;
-        crosscorr(ii,:,:) = cc;
-        % Initialize a new running cross-correlation
-        cc = zeros(dlinelen,nfcs);
-        nn = 0;
+    if n>N_1 && n<=N_2
+        cc = cc + R.*L .* exp( -(cc_memory-(n-N_1)) / T_int );
     end
-    
-    nn = nn+1;
+    if n==N_2
+        crosscorr(ii,:,:) = cc;
+        cc = zeros(dlinelen,nfcs);
+        ii = ii+1;
+        N_1 = N_2;
+    end
    
+    % Store the result in crosscorr
+    %if nn==cc_memory %&& nn>N_1
+    %    crosscorr(ii,:,:) = cc;
+    %    % Initialize a new running cross-correlation
+    %    cc = zeros(dlinelen,nfcs);
+    %    nn = 0;
+    %    %
+    %    ii = ii+1;
+    %end
+    %
+    %nn = nn+1;
 end
 
 

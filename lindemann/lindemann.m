@@ -1,6 +1,7 @@
-function crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int)
+function crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int,N_1)
 % LINDEMANN Calculates a binaural activation pattern
-%   Usage: crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int)
+%   Usage: crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int,N_1)
+%          crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int)
 %          crosscorr = lindemann(insig,fs,c_s,w_f,M_f)
 %          crosscorr = lindemann(insig,fs,c_s,w_f)
 %          crosscorr = lindemann(insig,fs,c_s)
@@ -24,6 +25,9 @@ function crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int)
 %                     result in crosscorr. You can set T_int = inf if you like
 %                     to have no memory effects, than you will get only one
 %                     time step in crosscorr. Default: T_int = 5~ms
+%       N_1         - Sample at which the first running cross-correlation should
+%                     be started to avoid onset effects (see lindemann1986a p.
+%                     1614). Default: 17640 (200/f*fs with f=500 and fs=44100)
 %
 %   Output parameters:
 %       crosscorr   - A matrix containing the cross-correlation signal
@@ -74,7 +78,7 @@ function crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int)
 
 %% ------ Checking of input  parameters ---------------------------------
 
-error(nargchk(2,6,nargin));
+error(nargchk(2,7,nargin));
 
 % For default values see lindemann1986a page 1613
 % NOTE: I modified the default value for T_int from 10 to 5.
@@ -111,13 +115,18 @@ elseif nargin<=5
     T_int = 5;
 end
 
+if nargin>6 && ( ~isnumeric(N_1) || ~isscalar(N_1) || N_1<=0 )
+    error('%s: N_1 has to be a positive scalar!',upper(mfilename));
+elseif nargin<=6
+    N_1 = 17640;    % 200/f * fs, for f=500 Hz anf fs=44100 Hz
+end
+
 
 %% ------ Variables -----------------------------------------------------
 % Highest and lowest frequency to use for the erbfilterbank (this gives us 
 % 36 frequency channels, channel 5-40)
 flow = erbtofreq(5);
 fhigh = erbtofreq(40); 
-
 
 % ------ Erb Bank -------------------------------------------------------
 % Generate an erb filterbank for simulation of the frequncy -> place
@@ -144,6 +153,6 @@ inoutsig = ihcenvelope(inoutsig,fs,'lindemann');
 
 % ------ Cross-correlation ------
 % Calculate the cross-correlation after Lindemann (1986a).
-crosscorr = bincorr(inoutsig,fs,c_s,w_f,M_f,T_int);
+crosscorr = bincorr(inoutsig,fs,c_s,w_f,M_f,T_int,N_1);
 
 

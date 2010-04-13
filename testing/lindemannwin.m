@@ -25,7 +25,7 @@ function sig = lindemannwin(sig,N_1)
 
 error(nargchk(2,2,nargin));
 
-if ~isnumeric(sig) || ~isscalar(sig) || size(sig,2)~=2
+if ~isnumeric(sig) || size(sig,2)~=2
     error('%s: sig has to be a signal vector of size n x 2.',upper(mfilename));
 end
 
