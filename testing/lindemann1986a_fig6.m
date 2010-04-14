@@ -27,6 +27,7 @@ function cc = lindemann1986a_fig6()
 fs = 44100;
 % Frequency of the sinusoid
 f = 500;
+T = 1/f;
 fc = round(freqtoerb(f));   % corresponding frequency channel
 
 % Model parameter
@@ -39,12 +40,12 @@ c_s = [0,0.3,1];
 % other side N_1 needs to be long enough to eliminate any onset effects.
 % Lindemann uses N_1 = 17640. Here I uses only N_1 = 2205 which gives the same
 % results for this demo.
-N_1 = ceil(0.05*fs);
-siglen = ceil(0.06*fs);
+N_1 = ceil(25*T*fs);
+siglen = ceil(30*T*fs);
 
 % Calculate crosscorrelations for 21 ITD points between 0~ms and 1~ms
 nitds = 21; % number of used ITDs
-ndl = 45;   % length of the delay line
+ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
 itd = linspace(0,1,nitds);
 cc = zeros(length(c_s),nitds,ndl);
 for ii = 1:nitds; 
@@ -76,7 +77,7 @@ for jj = 1:length(c_s)
     xlabel('correlation-time tau (ms)');
     ylabel('interaural time difference (ms)');
     tics('y',[0,0.2,0.4,0.6,0.8,1],['1';'0.8';'0.6';'0.4';'0.2';'0']);
-    tstr = sprintf('c_s = %.1f\nw_f = 0\nf = 500 Hz\n',c_s(jj));
+    tstr = sprintf('c_s = %.1f\nw_f = 0\nf = %i Hz\n',c_s(jj),f);
     title(tstr);
 end
 

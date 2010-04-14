@@ -27,6 +27,7 @@ function cc = lindemann1986a_fig11()
 fs = 44100;
 % Frequency of the sinusoid
 f = 500;
+T = 1/f;
 fc = round(freqtoerb(f));   % corresponding frequency channel
 
 % Model parameter
@@ -36,19 +37,25 @@ w_f = [0,0,0.035];
 M_f = 6; % not used, if w_f==0
 c_s = [0.3,1,0.3];
 
+% NOTE: the longer the signal, the more time we need for computation. On the
+% other side N_1 needs to be long enough to eliminate any onset effects.
+% Lindemann uses N_1 = 17640. Here I uses only N_1 = 2205 which gives the same
+% results for this demo.
+N_1 = ceil(25*T*fs);
+siglen = ceil(30*T*fs);
+
 % Calculate crosscorrelations for 26 ILD points between 0~dB and 25~dB
 nilds = 26; % number of used ILDs
-ndl = 45;   % length of the delay line
+ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
 ild = linspace(0,25,nilds);
 cen = zeros(length(c_s),nilds);
 for ii = 1:nilds 
     % Generate sinusoid with given ILD
     sig = ildsin(f,ild(ii),fs);
     % Use only the beginning of the signal to generate only one time instance of
-    % the cross-correlation
-    % NOTE: the signal has to be longer than N_1, which is 0.4*fs in this case
-    % (see lindemann1986a p. 1614)
-    sig = sig(1:ceil(0.01*fs),:);
+    % the cross-correlation and apply onset window
+    sig = sig(1:siglen,:);
+    sig = lindemannwin(sig,N_1);
     % Calculate cross-correlation for different inhibition factor c_s 
     for jj = 1:length(c_s)
         % Calculate cross-correlation (and squeeze due to T_int==inf)

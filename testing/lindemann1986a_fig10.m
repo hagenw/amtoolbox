@@ -27,6 +27,7 @@ function cc = lindemann1986a_fig10()
 fs = 44100;
 % Frequency of the sinusoid
 f = 500;
+T = 1/f;
 fc = round(freqtoerb(f));   % corresponding frequency channel
 
 % Model parameter
@@ -39,20 +40,21 @@ c_s = 0.3;
 % other side N_1 needs to be long enough to eliminate any onset effects.
 % Lindemann uses N_1 = 17640. Here I uses only N_1 = 2205 which gives the same
 % results for this demo.
-N_1 = ceil(0.05*fs);
-siglen = ceil(0.06*fs);
+N_1 = ceil(25*T*fs);
+siglen = ceil(30*T*fs);
 
 % Calculate crosscorrelations for 26 ILD points between 0~dB and 25~dB
 nilds = 26; % number of used ILDs
-ndl = 45;   % length of the delay line
+ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
 ild = linspace(0,25,nilds);
-cc = zeros(length(cs),nilds,ndl);
+cc = zeros(length(c_s),nilds,ndl);
 for ii = 1:nilds 
     % Generate sinusoid with given ILD
     sig = ildsin(f,ild(ii),fs);
     % Use only the beginning of the signal to generate only one time instance of
-    % the cross-correlation
+    % the cross-correlation and apply onset window
     sig = sig(1:siglen,:);
+    sig = lindemannwin(sig,N_1);
     % Calculate cross-correlation for different inhibition factor c_s 
     for jj = 1:length(c_s)
         % Calculate cross-correlation (and squeeze due to T_int==inf)
@@ -75,7 +77,7 @@ for jj = 1:length(c_s)
     xlabel('correlation-time delay (ms)');
     ylabel('interaural level difference (dB)');
     tics('y',[0,5,10,15,20,25],['25';'20';'15';'10';'5';'0']);
-    tstr = sprintf('c_{inh} = %.1f\nw_f = 0.035\nf = 500 Hz\n',c_s(jj));
+    tstr = sprintf('c_{inh} = %.1f\nw_f = 0.035\nf = %i Hz\n',c_s(jj),f);
     title(tstr);
 end
 

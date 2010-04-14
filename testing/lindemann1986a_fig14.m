@@ -28,6 +28,7 @@ function cen = lindemann1986a_fig14()
 fs = 44100;
 % Frequency of the sinusoid
 f = 500;
+T = 1/f;
 fc = round(freqtoerb(f));   % corresponding frequency channel
 
 % Model parameter
@@ -40,12 +41,12 @@ c_s = [0.0,0.2,0.4,0.6,1.0];
 % other side N_1 needs to be long enough to eliminate any onset effects.
 % Lindemann uses N_1 = 17640. Here I uses only N_1 = 2205 which gives the same
 % results for this demo.
-N_1 = ceil(0.05*fs);
-siglen = ceil(0.06*fs);
+N_1 = ceil(25*T*fs);
+siglen = ceil(30*T*fs);
 
 % Calculate crosscorrelations for 21 ITD points between 0~ms and 1~ms
 nilds = 21; % number of used ITDs
-ndl = 45;   % length of the delay line
+ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
 ild = linspace(-3,3,nilds);
 itd = 2000/f;
 for ii = 1:nilds 
@@ -62,8 +63,8 @@ for ii = 1:nilds
         % Calculate cross-correlation (and squeeze due to T_int==inf)
         tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
         % Store the needed frequency channel. NOTE: the cross-correlation
-        % calculation starts with channel 5, so we have to subtract 5.
-        cc = tmp(:,fc-5);
+        % calculation starts with channel 5, so we have to subtract 4.
+        cc = tmp(:,fc-4);
         % Calculate the position of the centroid
         cen(jj,ii) = centroid(cc);
     end
@@ -78,6 +79,6 @@ for jj = 1:length(c_s)
 end
 xlabel('interaural level difference (dB)');
 ylabel('displacement of the centroid d');
-tstr = sprintf('w_f = 0\nf = 500 Hz\n');
+tstr = sprintf('w_f = 0\nf = %i Hz\n',f);
 title(tstr);
 

@@ -27,6 +27,7 @@ function cc = lindemann1986a_fig8()
 fs = 44100;
 % Frequency of the sinusoid
 f = 500;
+T = 1/f;
 fc = round(freqtoerb(f));   % corresponding frequency channel
 
 % Model parameter
@@ -39,12 +40,12 @@ c_s = [0.3,1];
 % other side N_1 needs to be long enough to eliminate any onset effects.
 % Lindemann uses N_1 = 17640. Here I uses only N_1 = 2205 which gives the same
 % results for this demo.
-N_1 = ceil(0.05*fs);
-siglen = ceil(0.06*fs);
+N_1 = ceil(25*T*fs);
+siglen = ceil(30*T*fs);
 
 % Calculate crosscorrelations for 26 ILD points between 0~dB and 25~dB
 nilds = 26; % number of used ILDs
-ndl = 45;   % length of the delay line
+ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
 ild = linspace(0,25,nilds);
 cc = zeros(2,nilds,ndl);
 for ii = 1:nilds 
@@ -59,8 +60,8 @@ for ii = 1:nilds
         % Calculate cross-correlation (and squeeze due to T_int==inf)
         tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
         % Store the needed frequency channel. NOTE: the cross-correlation
-        % calculation starts with channel 5, so we have to subtract 5.
-        cc(jj,ii,:) = tmp(:,fc-5);
+        % calculation starts with channel 5, so we have to subtract 4.
+        cc(jj,ii,:) = tmp(:,fc-4);
     end
 end
 

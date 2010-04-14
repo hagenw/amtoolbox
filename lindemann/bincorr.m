@@ -3,7 +3,7 @@ function [crosscorr,t] = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %   Usage: crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %
 %	Input parameters:
-%       insig       - signal with t x nfcs x 2 (right, left channel)
+%       insig       - signal with t x nfc x 2 (right, left channel)
 %       fs          - sampling rate
 %       c_s         - stationary inhibition factor, 0 <= c_s <= 1 
 %                     (0.0 = no inhibition)
@@ -103,7 +103,7 @@ end
 %% ------ Computation ---------------------------------------------------- 
 
 siglen = size(insig,1);
-nfcs = size(insig,2);   % number of frequency channels
+nfc = size(insig,2);   % number of frequency channels
 
 % Ensure 0 <= insig <= 1, so that 0 <= r,l <= 1 (see lindemann1986a, eq. 4)
 insig = insig ./ (max(insig(:))+eps);
@@ -123,16 +123,17 @@ end
 
 % ------ Time steps on the delay line ------------------------------------
 % -M:M are the time steps of the delay.
-% Maximum delay (in samples): 1ms (this is for 500 Hz pure tones. In common
-% this should be different for every frequency band, see Lindemann (1986a) 
-% S. 1613, eq. 21.)
-% NOTE:
+% Maximum delay (in samples): 1ms (this is for 500 Hz pure tones (T/2). In 
+% common this should be different for every frequency band, see 
+% Lindemann (1986a) S. 1613, eq. 21.)
+% FIXME:
 % The delay-line needs a sampling rate of fs*2. Therefore the signals are
 % not doubled and filled with 0 as in Lindemann (1986a), page 1610 and 
 % 1611, but the delay line time is halfed.
+% Has this any negative effects?
 M = round(fs/2 / 1000);
 % Length of the delay line
-dlinelen = length(-M:M);
+ndl = length(-M:M);
 
 
 % ------ Monaural sensitives of the correlator ---------------------------
@@ -143,48 +144,49 @@ dlinelen = length(-M:M);
 w_r = w_f .* exp(-(2*M:-1:0)./M_f);
 w_r = w_r';
 % Duplicate columns of w_r for every band
-w_r = w_r(:,ones(1,nfcs));
+w_r = w_r(:,ones(1,nfc));
 
 % Monaural sensitivities for the right ear
 w_l = w_f .* exp(-(0:2*M)./M_f);
 w_l = w_l';
 % Duplicate columns of w_l for every band
-w_l = w_l(:,ones(1,nfcs));
+w_l = w_l(:,ones(1,nfc));
 
 
 % ------ Calculate the cross-correlation ---------------------------------
 
 % Prepare the left and right delay line signal
-l = zeros(dlinelen,nfcs);
-r = zeros(dlinelen,nfcs);
+l = zeros(ndl,nfc);
+r = zeros(ndl,nfc);
 
 
 % Set upper summation index for running cross-correaltion
 % See lindemann1986a, eq. 24
 N_2 = setN_2(N_1,T_int,siglen);
 
-% generate time axis
+% Generate time axis
 t = (N_2:(N_2-N_1):siglen)'/fs; 
 
 % Memory preallocation
-crosscorr = zeros( floor( (siglen-N_1)/(N_2-N_1) ),dlinelen,nfcs );
-cc = zeros(dlinelen,nfcs);
+crosscorr = zeros( floor( (siglen-N_1)/(N_2-N_1) ),ndl,nfc );
+cc = zeros(ndl,nfc);
 
 ii = 1; % crosscorr index
 for n = 1:siglen
     
     % ------ Inhibition --------------------------------------------------
-    % Stationary inhibition after Lindemann (1986a, p. 1612 eq. 13):
+    % Stationary inhibition after Lindemann (198
+    % 6a, p. 1612 eq. 13):
     % r(m+1,n+1) = r(m,n) * [1 - c_s l(m,n)]
     % l(m+1,n+1) = l(m,n) * [1 - c_s r(m,n)]
     % The length of r and l are the same as the length of the delay line
-    % (dlinelen = length(-M:M)). Also the signals are mirror-inverted, 
+    % (ndl = length(-M:M)). Also the signals are mirror-inverted, 
     % because of their different directions passing the delay line. l starts
     % on the right sight and r on the left side of the delay line. If you 
     % want to mirror the axes of the delay line, you have to exchange the
     % input direction of r and l into the delay line.
-    l = [ l(2:dlinelen,:) .* (1 - c_s .* r(2:dlinelen,:)); insig(n,:,1) ];
-    r = [ insig(n,:,2); r(1:dlinelen-1,:) .* (1 - c_s .* l(1:dlinelen-1,:)) ];
+    l = [ l(2:ndl,:) .* (1 - c_s .* r(2:ndl,:)); insig(n,:,1) ];
+    r = [ insig(n,:,2); r(1:ndl-1,:) .* (1 - c_s .* l(1:ndl-1,:)) ];
     % TODO: the spectral shape is also needed for some application, so we should
     % check if the following solution can be fixed to work as it should.
     % The normalization with max([r l]+eps) is done, to avoid a
@@ -192,10 +194,10 @@ for n = 1:siglen
     % 1993, p. 109). This preserves the spectral shape across frequency
     % channels. Therefore the inhibition depends now only on its stationary 
     % inhibition factor c_s.
-    %l = [ l(2:dlinelen,:) .* (1 - (c_s .* r(2:dlinelen,:) ./ ...
+    %l = [ l(2:ndl,:) .* (1 - (c_s .* r(2:ndl,:) ./ ...
 	%	      max(max([l r]+eps)) ) ); insig(n,:,1) ];
-    %r = [ insig(n,:,2);   r(1:dlinelen-1,:) .* ...
-	%	      (1 - (c_s .* l(1:dlinelen-1,:) ./ max(max([l r]+eps))) ) ];
+    %r = [ insig(n,:,2);   r(1:ndl-1,:) .* ...
+	%	      (1 - (c_s .* l(1:ndl-1,:) ./ max(max([l r]+eps))) ) ];
  
     % ------ Monaural sensitivity and trading ----------------------------
     %
@@ -222,10 +224,10 @@ for n = 1:siglen
     %
     % NOTE: For simplicity with stationary signals Lindemann uses only this
     % formula which can be managed by setting T_int=Inf:
-    %              __
-    %             \   N_2
-    %   cc(m,n) = /__ n=N_1  R(m,n) * L(m,n)
-    %
+    %              __                           
+    %             \   N_2                       
+    %   cc(m,n) = /__ n=N_1  R(m,n) * L(m,n)    
+    %                                          
     if n>=N_1 && n<=N_2
         cc = cc + R.*L .* exp( -(N_2-n) / T_int );
     end
@@ -233,7 +235,7 @@ for n = 1:siglen
     % crosscorr and start a new summation
     if n==N_2
         crosscorr(ii,:,:) = cc;
-        cc = zeros(dlinelen,nfcs);
+        cc = zeros(ndl,nfc);
         ii = ii+1;
         N_1 = N_2+1;
         N_2 = setN_2(N_1,T_int,siglen);
@@ -249,5 +251,5 @@ function N_2 = setN_2(N_1,T_int,siglen)
 if T_int==Inf
     N_2 = siglen;
 else
-    N_2 = N_1 + T_int - 1;
+    N_2 = N_1 + T_int;
 end
