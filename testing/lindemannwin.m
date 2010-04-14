@@ -41,7 +41,7 @@ if siglen<ceil(N_1/2)
         upper(mfilename));
 end
 % Generate window
-win = [ linspace(0,1,ceil(N_1/2)) zeros(1,siglen-ceil(N_1/2)) ]';
+win = [ linspace(0,1,ceil(N_1/2)) ones(1,siglen-ceil(N_1/2)) ]';
 % Apply window
 sig(:,1) = win .* sig(:,1);
 sig(:,2) = win .* sig(:,2);
