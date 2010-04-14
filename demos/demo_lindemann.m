@@ -17,9 +17,12 @@ t = 1;
 
 % Model paramter (Note: T_int (ms) should be a multiple of 1000/f == 2)
 c_s=1; w_f=0.035; M_f=6; T_int=6;
+% Begin of the storage of the cross-correlation is set to 1, because we have a
+% non-stationary signal
+N_1=1;
 
 % Calculate binaural cross-correlation
-crosscorr = lindemann(sig,fs,c_s,w_f,M_f,T_int);
+crosscorr = lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1);
 
 % Set title string for the plot
 tstr = sprintf('f = 500 Hz\nf_m = 2 Hz\nfc = 11\n');

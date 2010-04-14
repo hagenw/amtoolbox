@@ -5,6 +5,8 @@
 %  General routines
 %     LINDEMANN         - Calculate a binaural activity map
 %     PLOTLINDEMANN     - Plot the binaural activity map
+%     CENTROID          - Calculate the centroid of the cross-correlation
+%                         activation
 %
 %  Cross-correlation
 %     BINCORR           - Running cross-correlation between two signals

@@ -49,17 +49,21 @@ function crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %
 % --- Used abbreviations ---
 % 
-% l,L       - left signal
-% r,R       - right signal
-% m         - discrete time steps on the delay line (tau)
-% n         - discrete time (t)
-% M         - number of discrete steps on the delay line, 
+%   l,L     - left signal
+%   r,R     - right signal
+%   m       - discrete time steps on the delay line (tau)
+%   n       - discrete time (t)
+%   M       - number of discrete steps on the delay line, 
 %             length(delay line) = length(-M:M)
-% w_r       - monaural sensitivity in dependence of l
-% w_l       - monaural sensitivity in dependence of r
-% c_s       - constant inhibition factor
-% w_f       - monaural sensitivity at the end of the delay line
-% M_f       - decrease of monaural sensitivity along the delay line 
+%   w_r     - monaural sensitivity in dependence of l
+%   w_l     - monaural sensitivity in dependence of r
+%   c_s     - stationary inhibition factor
+%   w_f     - monaural sensitivity at the end of the delay line
+%   M_f     - decrease of monaural sensitivity along the delay line
+%   T_int   - integration time window (see above)
+%   N_1     - lower summation boundary for the running cross-correlation
+%   N_2     - upper summation boundary for the running cross-correlation
+%   cc      - running cross-correlation
 % 
 
 %% ------ Checking of input parameters -----------------------------------
@@ -98,7 +102,7 @@ end
 %% ------ Computation ---------------------------------------------------- 
 
 siglen = size(insig,1);
-nfcs = size(insig,2);
+nfcs = size(insig,2);   % number of frequency channels
 
 % Ensure 0 <= insig <= 1, so that 0 <= r,l <= 1 (see lindemann1986a, eq. 4)
 insig = insig ./ (max(insig(:))+eps);
@@ -154,25 +158,15 @@ l = zeros(dlinelen,nfcs);
 r = zeros(dlinelen,nfcs);
 
 
-% Time to look in the past for every entry in crosscorr
-% See lindemann1986a, eq. 10
-% => time step between two running cross-correlations and therefore between to
-% time steps n in the crosscorr output
-if T_int==inf
-    cc_memory = siglen-1;
-    N_2 = siglen;
-else
-    cc_memory = T_int;
-    N_2 = N_1+cc_memory;
-end
+% Set upper summation index for running cross-correaltion
+% See lindemann1986a, eq. 24
+N_2 = setN_2(N_1,T_int,siglen);
 
 % Memory preallocation
-%crosscorr = zeros( ceil( (siglen-N_1)/cc_memory-1 ),dlinelen,nfcs );
-crosscorr = zeros( ceil( siglen/cc_memory-1 ),dlinelen,nfcs );
+crosscorr = zeros( floor( (siglen-N_1)/(N_2-N_1) ),dlinelen,nfcs );
 cc = zeros(dlinelen,nfcs);
 
 ii = 1; % crosscorr index
-nn = 1; % integration window index
 for n = 1:siglen
     
     % ------ Inhibition --------------------------------------------------
@@ -216,33 +210,40 @@ for n = 1:siglen
     L = l .* (1-w_r)  +  w_r;
     
     % ------ Cross-correlation -------------------------------------------
-    % Calculate running cross-correlation (e.g. Lindemann 1986a, p.1608,
-    % 1611).
-    % cc(m,n) = sum_{n=-inf}^{nn} R(m,n) * L(m,n) * exp( -(nn-n) / T_int )
+    % Calculate running cross-correlation (e.g. Lindemann 1986a, eq. 10 + 
+    % eq. 24). 
+    %              __
+    %             \   N_2
+    %   cc(m,n) = /__ n=N_1  R(m,n) * L(m,n) * exp(-(N_2-n)/T_int)
+    %
     % NOTE: For simplicity with stationary signals Lindemann uses only this
     % formula which can be managed by setting T_int=Inf:
-    % cc = cc + R.*L;
-    if n>N_1 && n<=N_2
-        cc = cc + R.*L .* exp( -(cc_memory-(n-N_1)) / T_int );
+    %              __
+    %             \   N_2
+    %   cc(m,n) = /__ n=N_1  R(m,n) * L(m,n)
+    %
+    if n>=N_1 && n<=N_2
+        cc = cc + R.*L .* exp( -(N_2-n) / T_int );
     end
+    % If we have reached the upper summation index, store the result in
+    % crosscorr and start a new summation
     if n==N_2
         crosscorr(ii,:,:) = cc;
         cc = zeros(dlinelen,nfcs);
         ii = ii+1;
-        N_1 = N_2;
+        N_1 = N_2+1;
+        N_2 = setN_2(N_1,T_int,siglen);
     end
-   
-    % Store the result in crosscorr
-    %if nn==cc_memory %&& nn>N_1
-    %    crosscorr(ii,:,:) = cc;
-    %    % Initialize a new running cross-correlation
-    %    cc = zeros(dlinelen,nfcs);
-    %    nn = 0;
-    %    %
-    %    ii = ii+1;
-    %end
-    %
-    %nn = nn+1;
+
 end
 
 
+% ------ Subfunctions ----------------------------------------------------
+function N_2 = setN_2(N_1,T_int,siglen)
+% SETN_2 Sets the summation boundary N_2 to a new value
+%
+if T_int==Inf
+    N_2 = siglen;
+else
+    N_2 = N_1 + T_int - 1;
+end

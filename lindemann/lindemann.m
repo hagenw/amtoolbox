@@ -78,9 +78,6 @@ function crosscorr = lindemann(insig,fs,varargin)
 
 %% ------ Checking of input  parameters ---------------------------------
 
-
-% For default values see lindemann1986a page 1613
-% NOTE: I modified the default value for T_int from 10 to 5.
 if nargin<2
   error('%s: Too few input parameters.',upper(mfilename));
 end;
@@ -95,7 +92,6 @@ end
 
 % For default values see lindemann1986a page 1613
 % NOTE: I modified the default value for T_int from 10 to 5.
-
 [flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
  amtarghelper(5,{0.3,0.035,6,5,17640},struct,varargin,upper(mfilename));
 
