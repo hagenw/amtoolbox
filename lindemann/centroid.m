@@ -38,8 +38,6 @@ end
 
 % ------ Computation -----------------------------------------------------
 % Calculate the length of the delay line as -M:M
-%M = fix(length(cc)/2);
 m = linspace(-1,1,length(cc))';
 % Calculate the centroid using the -M:M delay line
-%d = sum((-M:M)'/M.*cc)/sum(cc);
 d = sum(m.*cc) / sum(cc);
