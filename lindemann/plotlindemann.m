@@ -8,7 +8,7 @@ function plotlindemann(crosscorr,t,varargin)
 %   Input parameters:
 %       crosscorr   - cross-correlation matrix, output from the lindemann
 %                     function
-%       t           - time of the analysed stimuli (used for t axis)
+%       t           - time vector of the analysed stimuli (used for t axis)
 %       f           - plot only the frequency channel with its center frequency
 %                     is nearest to the frequency f. Default: mean about all
 %                     frequency channels
@@ -35,8 +35,8 @@ if ~isnumeric(crosscorr)
     error('%s: crosscorr has to be numeric!',upper(mfilename));
 end
 
-if ~isnumeric(t) || ~isscalar(t) || t<=0
-    error('%s: t has to be a positive scalar!',upper(mfilename));
+if ( ~isnumeric(t) || ~isvector(t) )
+    error('%s: t has to be a vector!',upper(mfilename));
 end
 
 % Parsing of varargin (fc, tstr)
@@ -66,8 +66,6 @@ end
     
 % Calculate tau (delay line time) axes
 tau = linspace(-1,1,size(crosscorr,2));
-% Calculate t axes
-t = linspace(0,t,size(crosscorr,1));
 % Calculate mean binaural activation pattern
 if ~exist('f')
     binpattern = mean(crosscorr,3);

@@ -1,11 +1,11 @@
-function crosscorr = lindemann(insig,fs,varargin)
+function [crosscorr,t] = lindemann(insig,fs,varargin)
 % LINDEMANN Calculates a binaural activation pattern
-%   Usage: crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int,N_1)
-%          crosscorr = lindemann(insig,fs,c_s,w_f,M_f,T_int)
-%          crosscorr = lindemann(insig,fs,c_s,w_f,M_f)
-%          crosscorr = lindemann(insig,fs,c_s,w_f)
-%          crosscorr = lindemann(insig,fs,c_s)
-%          crosscorr = lindemann(insig,fs)
+%   Usage: [crosscorr,t] = lindemann(insig,fs,c_s,w_f,M_f,T_int,N_1)
+%          [crosscorr,t] = lindemann(insig,fs,c_s,w_f,M_f,T_int)
+%          [crosscorr,t] = lindemann(insig,fs,c_s,w_f,M_f)
+%          [crosscorr,t] = lindemann(insig,fs,c_s,w_f)
+%          [crosscorr,t] = lindemann(insig,fs,c_s)
+%          [crosscorr,t] = lindemann(insig,fs)
 %
 %   Input parameters:
 %       insig       - binaural signal for which the cross-correlation
@@ -34,6 +34,7 @@ function crosscorr = lindemann(insig,fs,varargin)
 %                     for every frequency channel fc and every time step n. 
 %                     The format of this matrix is output(n,m,fc), where m
 %                     denotes the correlation (delay line) time step.
+%       t           - time axis for the time steps n in crosscorr
 %
 %   LINDEMANN(insig,fs,c_s,w_f,M_f,T_int,N_1) calculates a binaural activity map
 %   for the given insig using a cross-correlation (delay-line) mechanism. The
@@ -147,6 +148,6 @@ inoutsig = ihcenvelope(inoutsig,fs,'lindemann');
 
 % ------ Cross-correlation ------
 % Calculate the cross-correlation after Lindemann (1986a).
-crosscorr = bincorr(inoutsig,fs,c_s,w_f,M_f,T_int,N_1);
+[crosscorr,t] = bincorr(inoutsig,fs,c_s,w_f,M_f,T_int,N_1);
 
 

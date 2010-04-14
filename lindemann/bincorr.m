@@ -1,4 +1,4 @@
-function crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
+function [crosscorr,t] = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %BINCORR Cross-correlation between two input signals
 %   Usage: crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %
@@ -24,8 +24,9 @@ function crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %                     1614).
 %
 %   Output parameters:
-%       crosscorr  - output matrix containing the correlations
-%                    (n x m x amplitude), where length(n) = length(t)/fs
+%       crosscorr   - output matrix containing the correlations
+%                     (n x m x amplitude), where length(n) = length(t)/fs
+%       t           - time axis corresponding to the n time samples in crosscorr
 %
 %   BINCORR(insig,fs,c_s,w_f,M_f,T_int) is an implementation of the
 %   cross-correlation algorithm to simulate a binaural delay line.
@@ -161,6 +162,9 @@ r = zeros(dlinelen,nfcs);
 % Set upper summation index for running cross-correaltion
 % See lindemann1986a, eq. 24
 N_2 = setN_2(N_1,T_int,siglen);
+
+% generate time axis
+t = (N_2:(N_2-N_1):siglen)'/fs; 
 
 % Memory preallocation
 crosscorr = zeros( floor( (siglen-N_1)/(N_2-N_1) ),dlinelen,nfcs );
