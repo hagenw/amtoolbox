@@ -5,6 +5,7 @@
 %  General routines
 %     LINDEMANN         - Calculate a binaural activity map
 %     PLOTLINDEMANN     - Plot the binaural activity map
+%     LINDEMANNWIN      - Apply a N_1/2 onset window to the signal
 %     CENTROID          - Calculate the centroid of the cross-correlation
 %                         activation
 %

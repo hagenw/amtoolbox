@@ -76,7 +76,8 @@ for jj = 1:length(c_s)
     view(0,57);
     xlabel('correlation-time tau (ms)');
     ylabel('interaural time difference (ms)');
-    tics('y',[0,0.2,0.4,0.6,0.8,1],['1';'0.8';'0.6';'0.4';'0.2';'0']);
+    set(gca,'YTick',0:0.2:1);
+    set(gca,'YTickLabel',{'1','0.8','0.6','0.4','0.2','0'});
     tstr = sprintf('c_s = %.1f\nw_f = 0\nf = %i Hz\n',c_s(jj),f);
     title(tstr);
 end

@@ -77,7 +77,8 @@ for jj = 1:length(c_s)
     view(0,57);
     xlabel('correlation-time delay (ms)');
     ylabel('interaural level difference (dB)');
-    tics('y',[0,5,10,15,20,25],['25';'20';'15';'10';'5';'0']);
+    set(gca,'YTick',0:5:25);
+    set(gca,'YTickLabel',{'25','20','15','10','5','0'});
     tstr = sprintf('c_{inh} = %.1f\nw_f = 0.035\nf = %i Hz\n',c_s(jj),f);
     title(tstr);
 end
