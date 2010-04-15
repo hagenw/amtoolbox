@@ -1,6 +1,6 @@
 function cc = lindemann1986a_fig11()
-%LINDEMANN1986a_FIG Reproduces fig. 11 from lindemann1986a
-%   Usage: cc = lindemann1986a_fig11;
+%LINDEMANN1986a_FIG11 Reproduces fig. 11 from lindemann1986a
+%   Usage: cc = lindemann1986a_fig11()
 %
 %   Output parameters:
 %       cc  - cross-correlation result of the to figure.
@@ -72,13 +72,17 @@ end
 % Generate time axis
 tau = linspace(-1,1,ndl);
 figure;
+% Plot data from experiments
+data = lindemann1986a_data(11,'yost');
+plot(data(:,1),data(:,2)*0.058,'+'); hold on;
+data = lindemann1986a_data(11,'sayers');
+plot(data(:,1),data(:,2)*0.058,'*');
 % Plot line for every condition
 for jj = 1:length(c_s) 
     plot(ild,cen(jj,:));
-    hold on;
 end
+axis([0 25 0 0.8]);
+legend('500 Hz, Yost','600 Hz, Sayers','500 Hz, model');
 xlabel('interaural level difference (dB)');
 ylabel('displacement of the centroid d');
-%tstr = sprintf('c_{inh} = %.1f\nw_f = 0.035\nf = 500 Hz\n',c_s(jj));
-%title(tstr);
 
