@@ -1,6 +1,6 @@
 function cc = lindemann1986a_fig8()
-%LINDEMANN1986a_FIG( Reproduces fig. 8 from lindemann1986a
-%   Usage: cc = lindemann1986a_fig8;
+%LINDEMANN1986a_FIG8 Reproduces fig. 8 from lindemann1986a
+%   Usage: cc = lindemann1986a_fig8()
 %
 %   Output parameters:
 %       cc  - cross-correlation result of the to figure.

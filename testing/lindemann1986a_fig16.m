@@ -77,7 +77,7 @@ end
 r = zeros(nitds,1);
 for ii = 1:nitds
     % Find two peaks of same height
-    idx = findpeaks(cc(ii,:,:));
+    idx = findpeaks(squeeze(cc(ii,:,:)));
     r(ii) = ild(idx);
 end
 
@@ -95,10 +95,10 @@ ylabel('interaural level difference (dB)');
 % ------ Subfunctions ----------------------------------------------------
 function idx = findpeaks(cc)
 % FINDPEAKS Finds two peaks of the same height in a given cross-correlation
-h = zeros(size(cc,1))
+h = zeros(size(cc,1),1);
 for ii = 1:size(cc,1)
     % Find a peak in the two halfes of the cross-correlation and subtract them
-    h(ii) = max(cc(ii,1:ceil(end/2))) - max(cc(ii,ceil(end/2)+1:end));
+    h(ii) = max(cc(ii,1:30)) - max(cc(ii,31:end));
 end
 % Find the index with the smallest distance between the two peaks
 [val,idx] = min(abs(h));

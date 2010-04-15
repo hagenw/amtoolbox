@@ -1,6 +1,6 @@
 function cen = lindemann1986a_fig7()
 %LINDEMANN1986a_FIG7 Reproduces fig. 7 from lindemann1986a
-%   Usage: cen = lindemann1986a_fig7;
+%   Usage: cen = lindemann1986a_fig7()
 %
 %   Output parameters:
 %       cen - Displacement of the centroid for different c_s values.

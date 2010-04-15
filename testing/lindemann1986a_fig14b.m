@@ -89,3 +89,8 @@ for nn = 1:length(ild_std)+1
     plot(itd,cen(nn,:)); hold on;
 end
 axis([0 1 0 1]);
+xlabel('interaural level difference (dB)');
+ylabel('displacement of the centroid d');
+tstr = sprintf('w_f = 0\nc_{inh} = 1\nf = %i Hz\n',f);
+title(tstr);
+
