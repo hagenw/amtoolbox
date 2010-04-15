@@ -1,6 +1,6 @@
 function r = lindemann1986a_fig13()
-%LINDEMANN1986a_FIG Reproduces fig. 13 from lindemann1986a
-%   Usage: cc = lindemann1986a_fig13;
+%LINDEMANN1986a_FIG13 Reproduces fig. 13 from lindemann1986a
+%   Usage: cc = lindemann1986a_fig13()
 %
 %   Output parameters:
 %       r   - ILD value for getting the same lateralization with an ILD only
@@ -86,7 +86,7 @@ for ii = 1:nitds_t
     end
 end
 
-% ------ Fitting ---------------------------------------------------------
+% ------ Fiting ---------------------------------------------------------
 % For the results for the combined centroids find the nearest centroid for the
 % ILD only stimuli
 r = zeros(nilds_t,nitds_t);
@@ -101,12 +101,28 @@ end
 % ------ Plotting --------------------------------------------------------
 % Generate time axis
 tau = linspace(-1,1,ndl);
+% First plot the only data from experiments
+figure;
+d = lindemann1986a_data(13);
+plot(d(:,1),d(:,2),'x-r', ...   % -3dB
+     d(:,1),d(:,3),'x-b', ...   %  3dB
+     d(:,1),d(:,4),'x-g', ...   %  9dB
+     d(:,1),d(:,5),'x-b', ...   % 15dB
+     d(:,1),d(:,6),'x-r')       % 25dB
+legend('25dB','15dB','9dB','3dB','-3dB');
+axis([-1 1 -10 40]);
+set(gca,'XTick',-1:0.4:1);
+xlabel('interaural time difference (ms)');
+ylabel('interaural level difference (dB)');
+% Then plot model results
 figure;
 % Plot line for every condition
 for jj = 1:nilds_t
     plot(itd_t,r(jj,:));
     hold on;
 end
+axis([-1 1 -10 40]);
+set(gca,'XTick',-1:0.4:1);
 xlabel('interaural time difference (ms)');
 ylabel('interaural level difference (dB)');
 
