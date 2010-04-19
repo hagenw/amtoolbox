@@ -1,6 +1,6 @@
 function r = lindemann1986a_fig16()
 %LINDEMANN1986a_FIG16 Reproduces fig. 16 from lindemann1986a
-%   Usage: cc = lindemann1986a_fig16()
+%   Usage: r = lindemann1986a_fig16()
 %
 %   Output parameters:
 %       r   - The ILD value for which the cross-correlation for a combined ITD,

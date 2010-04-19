@@ -1,6 +1,6 @@
 function r = lindemann1986a_fig12()
 %LINDEMANN1986a_FIG12 Reproduces fig. 12 from lindemann1986a
-%   Usage: cc = lindemann1986a_fig12()
+%   Usage: r = lindemann1986a_fig12()
 %
 %   Output parameters:
 %       r   - simulated results for a trading experiment. The ILD value for

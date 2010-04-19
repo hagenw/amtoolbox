@@ -1,6 +1,6 @@
 function r = lindemann1986a_fig13()
 %LINDEMANN1986a_FIG13 Reproduces fig. 13 from lindemann1986a
-%   Usage: cc = lindemann1986a_fig13()
+%   Usage: r = lindemann1986a_fig13()
 %
 %   Output parameters:
 %       r   - ILD value for getting the same lateralization with an ILD only

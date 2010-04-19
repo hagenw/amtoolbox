@@ -15,6 +15,8 @@
 %       LINDEMANN1986a_FIG13    - plot fig. 13 from lindemann1986a
 %       LINDEMANN1986a_FIG14    - plot fig. 14 from lindemann1986a
 %       LINDEMANN1986a_FIG15    - plot fig. 15 from lindemann1986a
+%       LINDEMANN1986a_FIG16    - plot fig. 16 from lindemann1986a
+%       LINDEMANN1986a_FIG17    - plot fig. 17 from lindemann1986a
 %       
 %R lindemann1986a
 %

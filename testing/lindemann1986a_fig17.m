@@ -1,23 +1,28 @@
 function [rcen rmax] = lindemann1986a_fig17()
 %LINDEMANN1986a_FIG17 Reproduces fig. 17 from lindemann1986a
-%   Usage: r = lindemann1986a_fig17()
+%   Usage: [rcen rmax] = lindemann1986a_fig17()
 %
 %   Output parameters:
-%       r   - ILD value for getting the same lateralization with an ILD only
-%             stimulus compared to a stimulus with both ITD and ILD.
-%             Dim: number of ILDs x number of ITDs
+%       rcen    - ITD value for getting the same lateralization with an ITD only
+%                 stimulus compared to a stimulus with both ITD and ILD using
+%                 the centroid of the cross-correlation.
+%                 Dim: number of ITDs x number of ILDs
+%       rmax    - ITD value for getting the same lateralization with an ITD only
+%                 stimulus compared to a stimulus with both ITD and ILD using
+%                 the maximum of the cross-correlation.
+%                 Dim: number of ITDs x number of ILDs
 %
 %   LINDEMANN1986a_FIG17() reproduces fig.17 from lindemann1986a. Therefore the
-%   cross-correlation of pure tone sinusoids with f=500 Hz with different ILDs
+%   cross-correlation of pure tone sinusoids with f=500 Hz with different ITDs
 %   and with different combinations from ITDs and ILDs is calculated. 
 %   Because of the stationary character of the input signals T_int = inf is used
 %   to produce only one time step in the crosscorr output from lindemann.
-%   After the calculation the values for the centroids of the ILD only stimuli
-%   are searched to find the nearest value to the centroid of a given combined
-%   stimulus. The resulting ILD value is stored for different combinaition
-%   values.
+%   After the calculation the values for the centroids and maxima of the ITD only
+%   stimuli are searched to find the nearest value to the centroid and maxima of 
+%   a given combined stimulus. The resulting ITD value is stored for different 
+%   combinaition values.
 %
-%   See also: lindemann, ildsin, itdildsin
+%   See also: lindemann, itdsin, itdildsin
 %
 %R lindemann1986a
 %
