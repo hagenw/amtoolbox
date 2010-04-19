@@ -123,6 +123,20 @@ elseif fignum==16
                  -0.125  9.5
                   0.000  11.1 ];
     end
+% --- FIG17 ---
+elseif fignum==17
+    if nargin>2
+        error('%s: fig. 17 has no specific data flag.',upper(mfilename));
+    else
+        data = [ -9 -0.18 -0.09  0.00  0.09
+                 -6 -0.14 -0.05  0.05  0.14
+                 -3 -0.09  0.00  0.10  0.18
+                  0  0.00  0.09  0.17  0.27
+                  3  0.08  0.17  0.23  0.35
+                  6  0.10  0.23  0.28  0.37
+                  9  0.17  0.25  0.34  0.42 ];
+    end
 else
     error('%s: no data are avaiable for fig. %i!',upper(mfilename),fignum);
 end
+
