@@ -42,11 +42,10 @@ if nsig1~=nsig2
 end
 
 % Calculate the coherence after lindemann1986a, eq. 26
-% FIXME: this should be done by matrix multiplication
-coher = zeros(nsig1,1);
+coherence = zeros(nsig1,1);
+div = sqrt(sum(insig1.^2) * sum(insig2.^2));
 for tau=1:nsig1
-    coherence(tau) = max( sum(insig1.*[insig2(tau:end); insig2(1:tau-1)]) / ...
-        sqrt(sum(insig1.^2) * sum(insig2.^2)) );
+    coherence(tau) = max( sum(insig1.*[insig2(tau:end); insig2(1:tau-1)]) / div );
 end
 coher = max(coherence);
 

@@ -126,11 +126,12 @@ end
 % Maximum delay (in samples): 1ms (this is for 500 Hz pure tones (T/2). In 
 % common this should be different for every frequency band, see 
 % Lindemann (1986a) S. 1613, eq. 21.)
-% FIXME:
+% NOTE:
 % The delay-line needs a sampling rate of fs*2. Therefore the signals are
 % not doubled and filled with 0 as in Lindemann (1986a), page 1610 and 
-% 1611, but the delay line time is halfed.
-% Has this any negative effects?
+% 1611, but the delay line time is halfed. If the signals are really filled with
+% zeros instead of doubling every entry Lindemanns inhibition process won't work
+% anymore!
 M = round(fs/2 / 1000);
 % Length of the delay line
 ndl = length(-M:M);

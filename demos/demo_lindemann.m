@@ -25,6 +25,7 @@ N_1=1;
 [crosscorr,t] = lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1);
 
 % Set title string for the plot
-tstr = sprintf('f = %i Hz\nf_m = %i Hz\nfc = %i\n',f,mf,round(freqtoerb(f)));
+tstr = sprintf(['Binaural modulated sinusoid\nf = %i Hz\nf_m = %i Hz\n',...
+    'fc = %i\n'],f,mf,round(freqtoerb(f)));
 % Plot frequency channel 11, due to round(freqtoerb(500))==11
 plotlindemann(crosscorr,t,tstr,f);
