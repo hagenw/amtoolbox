@@ -20,7 +20,7 @@ if ( ~isnumeric(nsamples) || ~isscalar(nsamples) || nsamples<0 )
     error('%s: nsamples has to be a positive scalar.',upper(mfilename));
 end
 
-if ( ~isnumeric(coher) || ~isscalar(coher) || coher<0 )
+if ( ~isnumeric(coher) || ~isscalar(coher) || coher<0)
     error('%s: coher has to be a positive scalar.',upper(mfilename));
 end
 
