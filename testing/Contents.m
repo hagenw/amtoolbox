@@ -13,10 +13,12 @@
 %       LINDEMANN1986a_FIG10    - plot fig. 10 from lindemann1986a
 %       LINDEMANN1986a_FIG11    - plot fig. 11 from lindemann1986a
 %       LINDEMANN1986a_FIG13    - plot fig. 13 from lindemann1986a
-%       LINDEMANN1986a_FIG14    - plot fig. 14 from lindemann1986a
+%       LINDEMANN1986a_FIG14a   - plot fig. 14 (a) from lindemann1986a
+%       LINDEMANN1986a_FIG14b   - plot fig. 14 (b) from lindemann1986a
 %       LINDEMANN1986a_FIG15    - plot fig. 15 from lindemann1986a
 %       LINDEMANN1986a_FIG16    - plot fig. 16 from lindemann1986a
 %       LINDEMANN1986a_FIG17    - plot fig. 17 from lindemann1986a
+%       LINDEMANN1986a_FIG18    - plot fig. 18 from lindemann1986a
 %       
 %R lindemann1986a
 %
