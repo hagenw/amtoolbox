@@ -45,15 +45,19 @@ c_s = 1.0;
 N_1 = ceil(25*T*fs);
 siglen = ceil(30*T*fs);
 
+fprintf(1,'NOTE: this test function will need a lot of time!\n\n');
+
 % Calculate crosscorrelations for 21 ITD points between 0~ms and 1~ms
 nitds = 21; % number of used ITDS
-nilds = 21; % number of used ILDs
+nilds = 201; % number of used ILDs
 ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
 itd = linspace(0,1,nitds);
 ild_std = [1,2,3,4,5];
 cen = zeros(length(ild_std)+1,nitds);
 centmp = zeros(nilds,nitds);
 for ii = 1:nitds
+    % Show progress
+    progressbar(ii,nitds);
     % First generate the result for std(ILD) == 0
     sig = itdsin(f,itd(ii),fs);
     sig = sig(1:siglen,:);
