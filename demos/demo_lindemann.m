@@ -46,7 +46,7 @@ sig = sig(1:fs/2,:);
 [cc,t] = lindemann(sig,fs,'stationary');
 
 % Set title string for the plot
-tstr = sprintf('Sinusoid with an ITD\nf = %i Hz\nitd = %.1f\nfc = %i\n',...
+tstr = sprintf('Sinusoid with an ITD\nf = %i Hz\nitd = %.1f ms\nfc = %i\n',...
     f,itd,round(freqtoerb(f)));
 % Plot frequency channel 11, due to round(freqtoerb(500))==11
 plotlindemann(cc,t,tstr,f);
