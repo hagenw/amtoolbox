@@ -11,6 +11,10 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %       insig       - binaural signal for which the cross-correlation
 %                     should be calculated
 %       fs          - sampling rate (Hz)
+%       'stationary'- will set the default values of N_1=17640 and T_int=Inf, use
+%                     this for stationary input signals
+%       'dynamic'   - will set the default values of N_1=1 and T_int=5, use this
+%                     for non-stationary input signals
 %       c_s         - stationary inhibition factor, 0 <= c_s <= 1 
 %                     (0.0 = no inhibition). Default: 0.3
 %       w_f         - monaural sensitivity at the end of the delay line, 
@@ -24,10 +28,12 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %                     cross-correlation is started, so every T_int we have a new
 %                     result in crosscorr. You can set T_int = inf if you like
 %                     to have no memory effects, then you will get only one
-%                     time step in crosscorr. Default: T_int = 5~ms
+%                     time step in crosscorr. Default: T_int = 5~ms, T_int = Inf
+%                     for 'stationary' (see above)
 %       N_1         - Sample at which the first running cross-correlation should
 %                     be started to avoid onset effects (see lindemann1986a p.
-%                     1614). Default: 17640 (200/f*fs with f=500 and fs=44100)
+%                     1614). Default: 1, 17640 (200/f*fs with f=500 and fs=44100) 
+%                     for 'stationary' (see above)
 %
 %   Output parameters:
 %       crosscorr   - A matrix containing the cross-correlation signal
@@ -93,8 +99,20 @@ end
 
 % For default values see lindemann1986a page 1613
 % NOTE: I modified the default value for T_int from 10 to 5.
+defnopos.flags.modus={'dynamic','stationary'};
+% Check first what flag is given
 [flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
- amtarghelper(5,{0.3,0.035,6,5,17640},struct,varargin,upper(mfilename));
+ amtarghelper(5,{0,0,0,0,0},defnopos,varargin,upper(mfilename));
+% 'stationary' case
+if strcmp(flags.modus,'stationary')
+    [flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
+        amtarghelper(5,{0.3,0.035,6,Inf,17640},defnopos,varargin,...
+        upper(mfilename));
+else
+    % 'dynamic' case
+    [flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
+        amtarghelper(5,{0.3,0.035,6,5,1},defnopos,varargin,upper(mfilename));
+end
 
 if ( ~isnumeric(c_s) || ~isscalar(c_s) || c_s<0 || c_s>1 )
     error('%s: 0 <= c_s <= 1, but c_s = %.1f',upper(mfilename),c_s);

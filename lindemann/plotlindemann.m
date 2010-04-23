@@ -17,9 +17,11 @@ function plotlindemann(crosscorr,t,varargin)
 %   PLOTLINDEMANN(crosscorr,t,f,tstr) plots the cross-correlation output 
 %   from the lindemann function as a so called binaural activity map. This
 %   means the correlation value is plotted dependend on time of the stimulus
-%   and the correlation-time delay. t is the max value of the time axis of the
-%   plot and tstr the title of the plot. f determines the frequency channel to
-%   plot by using the channel in which the frequency f belongs.
+%   and the correlation-time delay. t is the time axis of the  plot and tstr 
+%   the title of the plot. f determines the frequency channel to plot by using
+%   the channel in which the frequency f belongs.
+%   If crosscorr has more than one time step a 3D activity map is plotted, else
+%   a 2D plot of the cross-correlation is done.
 %
 %   See also: lindemann, bincorr
 %
@@ -79,9 +81,14 @@ end
 
 % ------ Plotting --------------------------------------------------------
 figure;
-mesh(tau,t,binpattern);
+if size(crosscorr,1)==1
+    % If we have only one time step (stationary case) plot 2D
+    plot(tau,binpattern);
+else
+    mesh(tau,t,binpattern);
+    ylabel('t (ms)');
+end
 xlabel('correlation-time delay (ms)');
-ylabel('t (ms)');
 % Create title, if fc is given but not tstr
 if ~exist('tstr') && exist('fc')
     tstr = sprintf('fc = %i',fc);
