@@ -1,4 +1,4 @@
-#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -100,26 +100,6 @@ any
  new development work on this branch, use it only to fix bugs.
  Development are done in other branches, which are then merged into master
  when the development is finished.
-\end_layout
-
-\begin_layout Itemize
-Another branch is called 
-\emph on
-devel
-\emph default
-.
- This branch should contains all files necessary for developing on AMT.
- Don't do any work on this branch, merge branches into it.
- Since this branch is a superset of 
-\emph on
-master
-\emph default
-, then 
-\emph on
-master
-\emph default
- will be merged into this when ever the documentation needs to be upgraded
- etc.
 \end_layout
 
 \begin_layout Itemize
@@ -299,7 +279,19 @@ git commit
 \family default
 , this is similar to SVN or CVS, only difference is that you only commit
  to your local tree, and not to Sourceforge.
- To upload your changes, use 
+ You must 
+\emph on
+add
+\emph default
+ your changes before they can be commited, then command 
+\family typewriter
+git commit -a
+\family default
+ is very usefull for this.
+\end_layout
+
+\begin_layout Standard
+To upload your changes, use 
 \family typewriter
 git push
 \family default
