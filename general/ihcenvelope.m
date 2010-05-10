@@ -68,7 +68,6 @@ if nargin==4
   end;
 end;
 
-end;
 % ------ Computation -------------------------------------------------
 
 switch(lower(methodname))

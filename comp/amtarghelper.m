@@ -1,21 +1,21 @@
 function [flags,keyvals,varargout]  = amtarghelper(nposdep,defposdep,defnopos,arglist,callfun)
 %AMTARGHELPER  Parse arguments for AMT
-%   Usage: [flags,varargout]  = amtarghelper(nposdep,defposdep,arglist);
+%   Usage: [flags,varargout]  = amtarghelper(nposdep,defposdep,defnopos,arglist,callfun);
 %
 %   Input parameters:
 %      nposdep   : Number of position dependant parameters
 %      defposdep : Default values for pos. dep. pars. (cell array)
 %      defnopos  : Definitions of the pos. independent pars (cell array)
-%      arglist  : Commandline of the calling function
+%      arglist   : Commandline of the calling function
 %      callfun   : Name of calling function
 %
 %   Output parameters:
 %      nopos     : Cell array containing parsed pos. independent pars.
 %      varargout : The position dependant pars. properly initialized
 %
-%   [nopos,varargout]=AMTARGHELPER(nposdep,defposdep,arglist) assist in
-%   parsing input parameters for a function in AMT. Parameters come in
-%   two categories:
+%   [nopos,varargout]=AMTARGHELPER(nposdep,defposdep,defnopos,arglist,callfun) 
+%   assist in parsing input parameters for a function in AMT. Parameters come 
+%   in two categories:
 %  
 %      * Position dependant parameters. These must not be strings. These are
 %      the first parameters passed to a function. If they are not present a
@@ -26,12 +26,14 @@ function [flags,keyvals,varargout]  = amtarghelper(nposdep,defposdep,defnopos,ar
 %
 %   The typical way of calling AMTARGHELPER is as follows:
 %  
-%C     [nopos,n,betamul] = amtarghelper(2,{4,[]},arglist{:});
+%C     [nopos,n,betamul] = amtarghelper(2,{4,[]},defnopos,arglist{:},...
+%           upper(mfilename));
 %
 %   This will pass any (or a number) of the input arguments from the calling
 %   function onto AMTARGHELPER. In this case, there are 2 position
 %   dependant parameters (n and betamul), which will have default values 4
 %   and [] if they are not present.
+%   defnopos is a struct and can have the fields flags and keyvals.
 
   if isfield(defnopos,'flags')
     defflags=defnopos.flags;

@@ -1,10 +1,10 @@
-function [test_failed,fail]=caspdiditfail(res,test_failed);
-%CASPDIDITFAIL  Did a test fail
+function [test_failed,fail]=amtdiditfail(res,test_failed);
+%AMTDIDITFAIL  Did a test fail
 %
-%  [test_fail,fail]=CASPDIDITFAIL(res,test_fail) updates test_fail if
+%  [test_fail,fail]=AMTDIDITFAIL(res,test_fail) updates test_fail if
 %  res is above threshhold and outputs the word FAIL in the variable
 %  fail. Use only in testing scripts.
-  
+ 
 fail='';
 if res>10e-10
   fail='FAILED';

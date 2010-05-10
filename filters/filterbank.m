@@ -28,6 +28,9 @@ if nargin==3
   hopsize=1;
 end;
 
+
+% ------ Computation --------------------------
+
 nchannels=size(b,1);
 
 siglen=size(insig,1);
