@@ -303,6 +303,56 @@ git pull
 \end_layout
 
 \begin_layout Section
+Tricks for the master
+\end_layout
+
+\begin_layout Standard
+To update a development branch with the latest changes in master:
+\end_layout
+
+\begin_layout LyX-Code
+git rebase master
+\end_layout
+
+\begin_layout Standard
+To push a locally created branch to the Sourceforge repository for the first
+ time
+\end_layout
+
+\begin_layout LyX-Code
+git push origin branch-name
+\end_layout
+
+\begin_layout Standard
+After that, you must edit your local configuration file .git/config.
+ Copy the 
+\begin_inset Quotes eld
+\end_inset
+
+master
+\begin_inset Quotes erd
+\end_inset
+
+ section and change the name 
+\begin_inset Quotes eld
+\end_inset
+
+master
+\begin_inset Quotes erd
+\end_inset
+
+ -> 
+\begin_inset Quotes eld
+\end_inset
+
+branch-name
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
 Getting more help
 \end_layout
 
