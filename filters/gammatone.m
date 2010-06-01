@@ -65,10 +65,11 @@ if ~isnumeric(fc) || ~isvector(fc) || any(fc<0) || any(fc>fs/2)
          'the sampling rate.'],upper(mfilename));
 end;
 
+defnopos.keyvals.n=4;
+defnopos.keyvals.betamul=[];
 defnopos.flags.real={'real','complex'};
 
-[flags,keyvals,n,betamul]  = amtarghelper(2,{4,[]},defnopos,varargin,...
-    upper(mfilename));
+[flags,keyvals,n,betamul]  = ltfatarghelper({'n','betamul'},defnopos,varargin);
 
 if ~isnumeric(n) || ~isscalar(n) || n<=0 || fix(n)~=n
   error('%s: n must be a positive, integer scalar.',upper(mfilename));

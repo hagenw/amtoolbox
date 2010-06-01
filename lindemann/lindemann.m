@@ -14,7 +14,7 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %       'stationary'- will set the default values of N_1=17640 and T_int=Inf, use
 %                     this for stationary input signals
 %       'dynamic'   - will set the default values of N_1=1 and T_int=5, use this
-%                     for non-stationary input signals
+%                     for non-stationary input signals. This is the default.
 %       c_s         - stationary inhibition factor, 0 <= c_s <= 1 
 %                     (0.0 = no inhibition). Default: 0.3
 %       w_f         - monaural sensitivity at the end of the delay line, 
@@ -53,7 +53,7 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %        get 36 frequency bands containing a stimulus waveform.
 %
 %     2) In a second step the auditory nerve is siumulated by extracting the
-%        envelpoe using a first order low pass filter with a cutoff frequency
+%        envelope using a first order low pass filter with a cutoff frequency
 %        of 800 Hz and half-wave rectification.
 %
 %     3) Calculation of the cross-correlation between the left and right
@@ -99,20 +99,23 @@ end
 
 % For default values see lindemann1986a page 1613
 % NOTE: I modified the default value for T_int from 10 to 5.
+
 defnopos.flags.modus={'dynamic','stationary'};
-% Check first what flag is given
+
+defnopos.keyvals.c_s   = 0.3;
+defnopos.keyvals.w_f   = 0.035;
+defnopos.keyvals.M_f   = 6;
+defnopos.keyvals.T_int = 5;
+defnopos.keyvals.N_1   = 1;
+
+% Parse the command line
 [flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
- amtarghelper(5,{0,0,0,0,0},defnopos,varargin,upper(mfilename));
-% 'stationary' case
-if strcmp(flags.modus,'stationary')
-    [flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
-        amtarghelper(5,{0.3,0.035,6,Inf,17640},defnopos,varargin,...
-        upper(mfilename));
-else
-    % 'dynamic' case
-    [flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
-        amtarghelper(5,{0.3,0.035,6,5,1},defnopos,varargin,upper(mfilename));
-end
+    ltfatarghelper({'c_s','w_f','M_f','T_int','N_1'},defnopos,varargin);
+
+if flags.do_stationary
+  keyvals.T_int = Inf;
+  keyvals.N_1   = 17640;  
+end;
 
 if ( ~isnumeric(c_s) || ~isscalar(c_s) || c_s<0 || c_s>1 )
     error('%s: 0 <= c_s <= 1, but c_s = %.1f',upper(mfilename),c_s);
