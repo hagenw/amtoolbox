@@ -1,4 +1,4 @@
-#LyX 1.6.4 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -108,7 +108,7 @@ reference
 \end_layout
 
 \begin_layout Standard
-There are genrally two categories of files that go here:
+There are generally two categories of files that go here:
 \end_layout
 
 \begin_layout Enumerate
@@ -408,6 +408,15 @@ fs
 siglen
 \family default
  Length of signal
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+
+\family typewriter
+nsigs
+\family default
+ Number of signals
 \end_layout
 
 \begin_layout List
