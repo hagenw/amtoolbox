@@ -5,8 +5,7 @@ function data = lindemann1986a_data(fignum,flag)
 %
 %   Input parameters:
 %       fignum  - number of the figure for which the data should be provided
-%       flag    - optinal flag to specify which data from the given figure
-%                 should be returned
+%       flag    - optinal flag to specify which data from the given figure should be returned
 %
 %   Output parameters:
 %       data    - the data points from the given figure as a matrix with x and y
@@ -17,11 +16,8 @@ function data = lindemann1986a_data(fignum,flag)
 %   number from his 1986a paper.
 %
 %R  lindemann1986a
-%
-%   See also: testlindemann, lindemanndata1986b
-%
 
-%   AUTHOR: Hagen Wierstorf
+%   AUTHOR: Hagen Wierstorfa
 
 
 %% ------ Checking of input  parameters ---------------------------------

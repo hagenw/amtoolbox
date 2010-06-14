@@ -1,18 +1,17 @@
-function outsig = bmsin(f,mf,fs)
+function outsig = bmsin(fc,mf,fs)
 %BMSIN Generate a binaural modulated sinus
-%   Usage: outsig = bmsin(f,mf,fs)
+%   Usage: outsig = bmsin(fc,mf,fs)
 %
 %   Input parameters:
-%       f   - carrier frequency of the sinus (Hz)
+%       fc  - carrier frequency of the sinus (Hz)
 %       mf  - binaural modulation frequency (Hz)
 %       fs  - sampling rate (Hz)
 %
 %   Output parameters:
 %       outsig  - fs x 2 sinusoid signal
 %
-%   BMSIN(f,mf,nsamples) generates an binaural modulated sinusoid with a
+%   BMSIN(fc,mf,fs) generates an binaural modulated sinusoid with a
 %   carrier frequency of f and a frequency moving around the two ears of mf.
-%
 
 % AUTHOR: Hagen Wierstorf
 
@@ -20,7 +19,7 @@ function outsig = bmsin(f,mf,fs)
 
 error(nargchk(3,3,nargin));
 
-if ~isnumeric(f) || ~isscalar(f) || f<0
+if ~isnumeric(fc) || ~isscalar(fc) || fc<0
     error('%s: f has to be a positive scalar.',upper(mfilename));
 end
 
@@ -37,9 +36,9 @@ end
 % Create a one second time 
 t = (1:fs)/fs;
 % Left signal
-sigl = sin(2*pi*f.*t);
+sigl = sin(2*pi*fc.*t);
 % Right signal with amplitude modulation
-sigr = sin(2*pi*f.*t + sin(2*pi*mf.*t));
+sigr = sin(2*pi*fc.*t + sin(2*pi*mf.*t));
 outsig = [sigl' sigr'];
 % Scale outsig
 outsig = outsig / (max(abs(outsig(:)))+eps);

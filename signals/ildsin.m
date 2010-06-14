@@ -1,21 +1,21 @@
-function outsig = ildsin(f,ild,fs)
-%ILDSIN Generate a sinusoid with a interaural level difference (ILD)
-%   Usage: outsig = itdsin(f,ild,fs)
+function outsig = ildsin(fc,ild,fs)
+%ILDSIN Sinusoid with a interaural level difference (ILD)
+%   Usage: outsig = itdsin(fc,ild,fs)
 %
 %   Input parameters:
-%       f       - carrier frequency of the sinusoid (Hz)
-%       ild     - interaural level difference of the right signal, this can be
-%                 positive or negative (dB)
+%       fc      - carrier frequency of the sinusoid (Hz)
+%       ild     - ILD of the right signal, positive or negative (dB)
 %       fs      - sampling rate (Hz)
 %
 %   Output parameters:
-%       outsig  - two channel 1 s long sinusoid (scaled to max(outsig)==1-eps)
+%       outsig  - two channel 1 s long sinusoid 
 %
-%   ILDSIN(f,ild,fs) generates a sinusoid with a interaural level difference
-%   of ild and a frequency of f.
+%   ILDSIN(fc,ild,fs) generates a sinusoid with a interaural level difference
+%   of ild and a frequency of fc.
+%
+%   The output is scaled to have a maximum value of 1-eps.
 %
 %R moore2003introduction
-%
 
 % AUTHOR: Hagen Wierstorf
 
@@ -23,8 +23,8 @@ function outsig = ildsin(f,ild,fs)
 
 error(nargchk(3,3,nargin));
 
-if ~isnumeric(f) || ~isscalar(f) || f<0
-    error('%s: f must be a positive scalar.',upper(mfilename));
+if ~isnumeric(fc) || ~isscalar(fc) || fc<0
+    error('%s: fc must be a positive scalar.',upper(mfilename));
 end
 
 if ~isnumeric(ild) || ~isscalar(ild)
@@ -41,7 +41,7 @@ end
 % Create a one second time 
 t = (1:fs)/fs;
 % Left signal
-sigl = sin(2*pi*f.*t);
+sigl = sin(2*pi*fc.*t);
 % Right signal with level difference of ILD
 sigr = gaindb(sigl,ild);
 % Combine left and right channel

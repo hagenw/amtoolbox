@@ -1,9 +1,9 @@
-function outsig = corpinknoise(nsamples,coher)
+function outsig = corpinknoise(siglen,coher)
 % CORPINKNOISE Generates pink noise with interaural correlation
-%   Usage: outsig = corpinknoise(coher)
+%   Usage: outsig = corpinknoise(siglen,coher)
 %
 %   Input parameters:
-%       nsamples    - Number of samples of outsig
+%       siglen    - Number of samples of outsig
 %       coher       - Interaural coherence of the produced outsig
 %
 %   Output parameters:
@@ -16,8 +16,8 @@ function outsig = corpinknoise(nsamples,coher)
 
 error(nargchk(2,2,nargin));
 
-if ( ~isnumeric(nsamples) || ~isscalar(nsamples) || nsamples<0 )
-    error('%s: nsamples has to be a positive scalar.',upper(mfilename));
+if ( ~isnumeric(siglen) || ~isscalar(siglen) || siglen<0 )
+    error('%s: siglen has to be a positive scalar.',upper(mfilename));
 end
 
 if ( ~isnumeric(coher) || ~isscalar(coher) || coher<0)
@@ -36,7 +36,7 @@ R = [1 coher; coher 1];
 W = V*sqrt(D);
 
 % Generate pink noise signal
-n = pinknoise(nsamples,2);
+n = pinknoise(siglen,2);
 
 % Generate correlated noise
 outsig = n * W';

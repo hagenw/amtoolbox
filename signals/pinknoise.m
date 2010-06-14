@@ -1,6 +1,6 @@
 function outsig = pinknoise(siglen,nsigs)
 % PINKNOISE Generates a pink noise signal
-%   Usage: outsig = pinknoise
+%   Usage: outsig = pinknoise(siglen,nsigs);
 %
 %   Input parameters:
 %       siglen    - Length of the noise (samples)

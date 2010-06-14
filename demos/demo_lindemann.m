@@ -1,4 +1,4 @@
-%DEMO_LINDEMANN
+%DEMO_LINDEMANN Demo of the Lindemann binaural model
 %
 %   This script generate a figure showing the result of the lindemann
 %   binaural model for a 2 Hz binaural modulated sinusoid with a frequency of
@@ -11,6 +11,8 @@ f = 500;
 
 
 % ------ Fig 1. ----------------------------------------------------------
+
+figure(1);
 
 % Binaural modulation frequency
 mf = 2;
@@ -35,6 +37,8 @@ plotlindemann(cc,t,tstr,f);
 
 
 % ------ Fig 2. ----------------------------------------------------------
+
+figure(2);
 
 % Generate an sinusoid with a ITD
 itd = 0.3; % (ms)

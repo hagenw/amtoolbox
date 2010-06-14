@@ -80,7 +80,6 @@ else
 end
 
 % ------ Plotting --------------------------------------------------------
-figure;
 if size(crosscorr,1)==1
     % If we have only one time step (stationary case) plot 2D
     plot(tau,binpattern);
