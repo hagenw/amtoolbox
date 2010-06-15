@@ -11,22 +11,29 @@ function data = data_lindemann1986a(varargin)
 %   1986a paper. The flag may be one of:
 %
 %-    fig11_yost - Return data from Fig. 11. with condition 'yost'. The data is
-%                  ILD | lateral displacement (10 is max
+%                  ILD vs. lateral displacement (10 is max
 %                  displacement). If no flag is given, this is the
 %                  default.
 %
-%-    fig11_sayers - Return data from Fig. 11. with condition 'sayers'.
+%-    fig11_sayers - Return data from Fig. 11. with condition 'sayers'. The
+%                    data is ILD vs. lateral displacement (10 is max
+%                    displacement).
 %
-%-    fig12_400  - Return data from Fig. 12. where XXX is 400.
+%-    fig12_400  - Return data from Fig. 12. for the 400 Hz pure tone. The
+%                  data is ILD vs. ITD.
 %
-%-    fig12_600  - Return data from Fig. 12. where XXX is 600.
+%-    fig12_600  - Return data from Fig. 12. for the 600 Hz pure tone. The
+%                  data is ILD vs. ITD. 
 %
 %-    fig13      - Return data from Fig. 13. The output data format is
-%                  x-axis, -3dB, 3dB, 9dB, 15dB, 25dB
+%                  x-axis, -3dB, 3dB, 9dB, 15dB, 25dB. The data is ILD vs.
+%                  ITD.
 %
-%-    fig16      - Return data from Fig. 16.
+%-    fig16      - Return data from Fig. 16. The data is ILD vs. ITD.
 %
-%-    fig17      - Return data from Fig. 17. XXX what is the data format?
+%-    fig17      - Return data from Fig. 17. The output data format is
+%                  x-axis, 0ms, 0.09ms, 0.18ms, 0.27ms. The data is ITD vs.
+%                  ILD.
 %
 %R  lindemann1986a
 
@@ -58,7 +65,7 @@ if flags.do_fig11_yost
            9  6.4
            12  8.6
            15  9.2
-           18 10.0 ];
+           18 10.0 ]; 
 end;
 
 if flags.do_fig11_sayers
@@ -116,6 +123,7 @@ if flags.do_fig16
 end
 
 if flags.do_fig17
+  % data format: x-axis, 0ms, 0.09ms, 0.18ms, 0.27ms
   data = [ -9 -0.18 -0.09  0.00  0.09
            -6 -0.14 -0.05  0.05  0.14
            -3 -0.09  0.00  0.10  0.18
