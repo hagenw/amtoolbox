@@ -114,6 +114,27 @@ defnopos.keyvals.dynrange=100;
 defnopos.keyvals.thr=0;
 defnopos.keyvals.clim=[0,1];
 defnopos.keyvals.fmax=0;
+defnopos.keyvals.ytick=[0,50,100,200,500,1000,2000,4000,8000];
+defnopos.keyvals.mlp=50;
+
+
+[flags,keyvals,fs]=ltfatarghelper(1,{[]},defnopos,varargin,upper(mfilename));
+
+if ~doxres
+  xres=floor(yres/displayratio);
+end;
+
+if ~doyres
+  yres=ceil(xres*displayratio);
+end;
+
+siglen=length(insig);
+
+fhigh=frange(2);
+flow =frange(1);
+
+audlimits=freqtoaud('erb',frange);
+=======
 defnopos.keyvals.ytick=[0,100,250,500,1000,2000,4000,8000];
 defnopos.keyvals.mlp=50;
 defnopos.keyvals.frange=[0,8000];
@@ -129,6 +150,7 @@ fhigh=keyvals.frange(2);
 flow =keyvals.frange(1);
 
 audlimits=freqtoaud('erb',keyvals.frange);
+>>>>>>> 9f63bd7c5881ac4ebca75ef0b1771fe120adb588
 
 % fhigh can at most be the Nyquest frequency
 fhigh=min(fhigh,fs/2);

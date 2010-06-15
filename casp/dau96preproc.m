@@ -11,22 +11,31 @@ function [inoutsig, fc] = dau96preproc(inoutsig, fs, flow, fhigh,subfs,basef)
 %     fhigh  : highest filter center frequency.
 %     basef  : Always include this frequency in the filter bank (optional).
 %  
-%   DAU96PREPROC(insig,fs,flow,fhigh) computes the internal representation of
-%   the signal insig sampled with a frequency of fs Hz as described in Dau,
-%   Puschel and Kohlrausch (1996a). The parameters flow and fhigh
-%   determine the lowest and highest frequencies in the filter bank. The
-%   filters are spaced 1 Erb apart. 
-%
-%   DAU96PREPROC(insig,fs,flow,fhigh,basef) does the same, but ensures that the
-%   frequency basef is one of the frequencies in the filter bank.
-%
-%   DAU96PREPROC(insig,fs) chooses the lowest frequency to be 80 and the highest
-%   to be 8000.
-%
-%   [outsig,fc]=DAU96PREPROC(...) additionally returns the center frequencies of
+%   DAU96PREPROC(insig,fs) computes the internal representation of the signal insig
+%   sampled with a frequency of fs Hz as described in Dau, Puschel and
+%   Kohlrausch (1996a).
+%  
+%   [outsig,fc]=DAU96(...) additionally returns the center frequencies of
 %   the filter bank.
 %
-%   The model assumes than an input signal with an RMS value of 1
+%   The following parameters may be passed at the end of the line of
+%   input arguments:
+%
+%      'flow',flow - Set the lowest frequency in the filterbank to
+%                    flow. Default value is 80 Hz.
+%
+%      'fhigh',fhigh - Set the highest frequency in the filterbank to
+%                    fhigh. Default value is 8000 Hz.
+%
+%      'basef',basef - Ensure that the frequency basef is a center frequency
+%                    in the filterbank. The default value of [] means
+%                    no default.
+% 
+%      'subfs',subfs - Apply a final downsampling of the subband signals
+%                    to subfs Hz to avoid excessive data. The default value
+%                    of [] means no downsampling.
+%
+%   The model assumes than a pure tone input signal with an RMS value of 1
 %   corresponds to an acoustic signal of 100 db SPL.
 %  
 %   The dau96 model consists of the following stages:
@@ -34,13 +43,12 @@ function [inoutsig, fc] = dau96preproc(inoutsig, fs, flow, fhigh,subfs,basef)
 %     * a gammatone filter bank with 1-erb spaced filtes.
 %
 %     * an envelope extraction stage done by half-wave rectification
-%          followed by low-pass filtering to 1000 Hz.
+%        followed by low-pass filtering to 1000 Hz.
 %
 %     * an adaptation stage modelling nerve adaptation by a cascade of 5
-%          loops.
+%        loops.
 %
 %     * a modulation low pass filter liming modulations to below 50 Hz.
-%-
 %
 %   The model implemented in this file is not identical to the model
 %   published in Dau et. al. (1996a). An overshoot limit has been added to
@@ -48,27 +56,14 @@ function [inoutsig, fc] = dau96preproc(inoutsig, fs, flow, fhigh,subfs,basef)
 %   input signal would cause unnaturally big responses. This is described
 %   in Dau et. al. (1997a).
 %
-%   See also: dau97, jepsen08
-%
 %R  dau1996qmeI dau1996qmeII dau1997mapI
 
 %   AUTHOR : Torsten Dau, Morten, Løve Jepsen, Peter L. Soendergaard
   
 % ------ Checking of input parameters ------------
 
-error(nargchk(2,6,nargin));
-
-if nargin<6
-  basef=-1
-end;
-
-if nargin<5
-  subfs=100;
-end;
-
-if nargin==2
-  flow=80;
-  fhigh=8000;
+if nargin<2
+  error('%s: Too few input arguments.',upper(mfilename));
 end;
 
 if ~isnumeric(inoutsig) 
@@ -79,23 +74,17 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-if ~isnumeric(flow) || ~isscalar(flow) || flow<0
-  error('%s: flow must be a non-negative scalar.',upper(mfilename));
-end;
+definput.keyvals.flow=80;
+definput.keyvals.fhigh=8000;
+definput.keyvals.basef=-1;
+definput.keyvals.subfs=[];
 
-if ~isnumeric(fhigh) || ~isscalar(fhigh) || fhigh<0
-  error('%s: fhigh must be a non-negative scalar.',upper(mfilename));
-end;
-
-if flow>fhigh
-  error('%s: flow must be less than or equal to fhigh.',upper(mfilename));
-end;
-
+[flags,keyvals]  = ltfatarghelper({},defnopos,varargin);
 
 % ------ do the computation -------------------------
 
 % find the center frequencies used in the filterbank, 1 ERB spacing
-fc = erbspacebw(flow, fhigh, 1, basef);
+fc = erbspacebw(flags.flow, flags.fhigh, 1, flags.basef);
 
 % Calculate filter coefficients for the gammatone filter bank.
 [gt_b, gt_a]=gammatone(fc, fs);
@@ -119,5 +108,8 @@ mlp_a = [1, -mlp_a];
 inoutsig = filter(mlp_b,mlp_a,inoutsig);
 
 % Apply final resampling to avoid excessive data
-inoutsig = fftresample(inoutsig,round(length(inoutsig)/fs*subfs));
+if ~isempty(flags.subfs)
+  inoutsig = fftresample(inoutsig,round(length(inoutsig)/fs*subfs));
+end;
+
 
