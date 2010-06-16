@@ -53,7 +53,7 @@ function [b,a]=gammatone(fc,fs,varargin);
   
 
 if nargin<2
-  error('Too few input arguments.');
+  error('%s: Too few input arguments.',upper(mfilename));
 end;
 
 if ~isnumeric(fs) || ~isscalar(fs) || fs<=0

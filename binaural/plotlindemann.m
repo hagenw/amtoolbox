@@ -9,20 +9,29 @@ function plotlindemann(crosscorr,t,varargin)
 %       crosscorr   - cross-correlation matrix, output from the lindemann
 %                     function
 %       t           - time vector of the analysed stimuli (used for t axis)
-%       f           - plot only the frequency channel with its center frequency
-%                     is nearest to the frequency f. Default: mean about all
-%                     frequency channels
-%       tstr        - title string for the plot. Default: ''
 %
-%   PLOTLINDEMANN(crosscorr,t,f,tstr) plots the cross-correlation output 
-%   from the lindemann function as a so called binaural activity map. This
-%   means the correlation value is plotted dependend on time of the stimulus
-%   and the correlation-time delay. t is the time axis of the  plot and tstr 
-%   the title of the plot. f determines the frequency channel to plot by using
-%   the channel in which the frequency f belongs.
+%   PLOTLINDEMANN(crosscorr,t) plots the cross-correlation output from the
+%   lindemann function as a so called binaural activity map. This means the
+%   correlation value is plotted dependending on time of the stimulus and
+%   the correlation-time delay. t is the time axis of the plot. f determines
+%   the frequency channel to plot by using the channel in which the
+%   frequency f belongs.
+%
 %   If crosscorr has more than one time step a 3D activity map is plotted, else
 %   a 2D plot of the cross-correlation is done.
 %
+%   The function takes the following flags at the end of the line of
+%   input arguments:
+%
+%       'fc',fc - plot only the frequency channel with its center frequency
+%                   is nearest to the frequency f. The default value of []
+%                   means to plot the mean about all frequency channels
+%
+%-      'title',t - display t as the title overriding the default.
+%
+%   You may also supply the parameters in the input arguments in the
+%   following order: PLOTLINDEMANN(crosscorr,t,fc);
+%  
 %   See also: lindemann, bincorr
 %
 
@@ -31,7 +40,9 @@ function plotlindemann(crosscorr,t,varargin)
 
 % ------ Checking of input  parameters -----------------------------------
 
-error(nargchk(2,4,nargin));
+if nargin<2
+  error('%s: Too few input arguments.',upper(mfilename));
+end;
 
 if ~isnumeric(crosscorr)
     error('%s: crosscorr has to be numeric!',upper(mfilename));
@@ -41,43 +52,36 @@ if ( ~isnumeric(t) || ~isvector(t) )
     error('%s: t has to be a vector!',upper(mfilename));
 end
 
-% Parsing of varargin (fc, tstr)
-% FIXME: can this be done nicer? Can I also use amtarghelper?
-for ii = 1:nargin-2
-    if isnumeric(varargin{ii}) && ~exist('f')
-        f = varargin{ii};
-        % Minimum and maximum frequency in the lindemann model (see lindemann.m)
-        flow = erbtofreq(5);
-        fhigh = erbtofreq(40);
-        if ~isscalar(f)
-            error('%s: f has to be a scalar!',upper(mfilename));
-        elseif f<flow || f>fhigh
-            error('%s: f has to be between %.0f Hz and %.0f Hz!',...
-                upper(mfilename),flow,fhigh);
-        end
-    elseif ischar(varargin{ii}) && ~exist('tstr')
-        tstr = varargin{ii};
-    else
-        error(['%s: the optional parameters have to be numeric (f) or/and ',...
-            'a string (tstr)!'],upper(mfilename));
-    end
-end
+definput.keyvals.title=[];
+definput.keyvals.fc=[];
 
+[flags,keyvals]  = ltfatarghelper({'fc','title'},definput,varargin);
+
+if isempty(keyvals.fc)
+  binpattern = mean(crosscorr,3);
+else
+  % Minimum and maximum frequency in the lindemann model (see lindemann.m)
+  flow = erbtofreq(5);
+  fhigh = erbtofreq(40);
+  if ~isscalar(keyvals.fc)
+    error('%s: fc has to be a scalar!',upper(mfilename));
+  elseif keyvals.fc<flow || keyvals.fc>fhigh
+    error('%s: fc has to be between %.0f Hz and %.0f Hz.',...
+          upper(mfilename),flow,fhigh);
+  end  
+
+  % Calculate the frequency channel to plot
+  % NOTE: it starts with the fifth channel in the lindemann model, so we have
+  % to subtract 4 to index the binpattern correctly.
+  fc = round(freqtoerb(keyvals.fc));
+  binpattern = crosscorr(:,:,fc-4);
+
+end;
 
 % ------ Computation -----------------------------------------------------
     
 % Calculate tau (delay line time) axes
 tau = linspace(-1,1,size(crosscorr,2));
-% Calculate mean binaural activation pattern
-if ~exist('f')
-    binpattern = mean(crosscorr,3);
-else
-    % Calculate the frequency channel to plot
-    % NOTE: it starts with the fifth channel in the lindemann model, so we have
-    % to subtract 4 to index the binpattern correctly.
-    fc = round(freqtoerb(f));
-    binpattern = crosscorr(:,:,fc-4);
-end
 
 % ------ Plotting --------------------------------------------------------
 if size(crosscorr,1)==1
@@ -87,12 +91,14 @@ else
     mesh(tau,t,binpattern);
     ylabel('t (ms)');
 end
+
 xlabel('correlation-time delay (ms)');
 % Create title, if fc is given but not tstr
-if ~exist('tstr') && exist('fc')
-    tstr = sprintf('fc = %i',fc);
+if isempty(keyvals.title) && ~isempty(keyvals.fc)
+    keyvals.title = sprintf('fc = %i',fc);
 end
+
 % Plot title
-if exist('tstr')
-    title(tstr);
+if ~isempty(keyvals.title)  
+    title(keyvals.title);
 end
