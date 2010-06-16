@@ -2,10 +2,6 @@ function output = exp_lindemann1986a(varargin)
 %EXP_LINDEMANN1986a Reproduces figures from lindemann1986a
 %   Usage: output = exp_lindemann1986a(flag)
 %
-%   Output parameters:
-%       output - The data for the given figure. The format of output
-%       depends on the chosen figure and will be explained below.
-%
 %   EXP_LINDEMANN1986a(flag) reproduces the results for the figure given by
 %   flag from the Lindemann (1986a) paper. It will also plot the results.
 %   The format of its output depends on the chosen figure. If not other
@@ -16,158 +12,128 @@ function output = exp_lindemann1986a(varargin)
 %   
 %   flag can be one of the following:
 %
-%   'fig6'
-%       output - cross-correlation result of the figure.
-%                Dim: number of c_s conditions x nitds x delay line length
+%-    'plot' - plot the output of the experiment. This is the default.
 %
-%       EXP_LINDEMANN1986a('fig6') reproduces fig.6 from lindemann1986a. 
-%       The cross-correlation is calculated for different ITDs and different
-%       inhibition factors c_s (0,0.3,1). Afterwards for every c_s the
-%       correlation is plotted for every used ITD dependend on the
-%       correlation-time delay.
+%-    'noplot' - don't plot, only return data.
 %
-%   'fig7'
-%       output - Displacement of the centroid for different c_s values.
-%                Dim: c_s x nitds
+%-    'fig6' - reproduces fig.6 from lindemann1986a.  The cross-correlation is
+%       calculated for different ITDs and different inhibition factors c_s
+%       (0,0.3,1). Afterwards for every c_s the correlation is plotted for
+%       every used ITD dependend on the correlation-time delay. The output
+%       is cross-correlation result of the figure.  Dim: number of c_s
+%       conditions x nitds x delay line length
 %
-%       EXP_LINDEMANN1986a('fig7') reproduces fig.7 from lindemann1986a. 
-%       The cross-correlation is calculated for different ITDs and different
-%       inhibition factors c_s (0:0.2:1). Afterwards for every c_s the
-%       displacement of the centroid of the auditory image is calculated
-%       and plotted dependend on the ITD.
+%-     'fig7' - reproduces fig.7 from lindemann1986a.  The cross-correlation
+%       is calculated for different ITDs and different inhibition factors
+%       c_s (0:0.2:1). Afterwards for every c_s the displacement of the
+%       centroid of the auditory image is calculated and plotted dependend
+%       on the ITD. The output is the displacement of the centroid for
+%       different c_s values.  Dim: c_s x nitds
 %
-%   'fig8'
-%       output - cross-correlation result of the to figure.
-%                Dim: number of c_s conditions x nilds x delay line length
+%-     'fig8' - reproduces fig.8 from lindemann1986a.  The cross-correlation is
+%       calculated for different ILDs and different inhibition factors c_s =
+%       0.3, 1. Afterwards for every c_s the ILD is plotted dependend on the
+%       correaltion time. The output is the cross-correlation result of the
+%       to figure.  Dim: number of c_s conditions x nilds x delay line
+%       length.
 %
-%       EXP_LINDEMANN1986a('fig8') reproduces fig.8 from lindemann1986a. 
-%       The cross-correlation is calculated for different ILDs and different
-%       inhibition factors c_s = 0.3, 1. Afterwards for every c_s the ILD
-%       is plotted dependend on the correaltion time.
+%-     'fig10' - reproduces fig.10 from lindemann1986a. The cross-correlation is
+%       calculated for different ILDs, an inhibition factor c_s = 0.3 and a
+%       monaural detector factor w_f = 0.035. Afterwards for every c_s the
+%       ILD is plotted dependend on the correaltion time.  The output is the
+%       cross-correlation result of the to figure.  Dim: number of c_s
+%       conditions x nilds x delay line length
 %
-%   'fig10'
-%       output - cross-correlation result of the to figure.
-%                Dim: number of c_s conditions x nilds x delay line length
+%-     'fig11' - reproduces fig.11 from lindemann1986a.  The centroid position
+%       is calculated for different ILDs, an inhibition factor c_s = 0.3 and
+%       a monaural detector factor w_f = 0.035. Afterwards for every c_s the
+%       displacement of the centroid is plotted dependend on the ILD. The
+%       output is the cross-correlation result of the to figure.  Dim:
+%       number of c_s conditions x nilds x delay line length
 %
-%       EXP_LINDEMANN1986a('fig10') reproduces fig.10 from lindemann1986a. 
-%       The cross-correlation is calculated for different ILDs, an
-%       inhibition factor c_s = 0.3 and a monaural detector factor
-%       w_f = 0.035. Afterwards for every c_s the ILD is plotted dependend
-%       on the correaltion time.
+%-      'fig12' - reproduces fig.12 from lindemann1986a.  The centroids are
+%       calculated for combinations of ITDs and ILDs.  After the calculation
+%       the values for the centroids of the stimuli are searched to find the
+%       nearest value to 0. The corresponding ILD value is stored in output
+%       and plotted depnenden on the ITD. The output is the simulated
+%       results for a trading experiment. The ILD value for getting a
+%       centroid near the center for an combined ITD, ILD stimulus with a
+%       given ITD value.  Dim: number of ITDs x 1
 %
-%   'fig11'
-%       output - cross-correlation result of the to figure.
-%                Dim: number of c_s conditions x nilds x delay line length
+%-      'fig13' - reproduces fig.13 from lindemann1986a.  The centroids are
+%       calculated for ILD only and ITD/ILD combination stimuli.After the
+%       calculation the values for the centroids of the ILD only stimuli are
+%       searched to find the nearest value to the centroid of a given
+%       combined stimulus. The resulting ILD value is stored for different
+%       combinaition values and plotted dependend on ITD. The output is the
+%       ILD value for getting the same lateralization with an ILD only
+%       stimulus compared to a stimulus with both ITD and ILD.  Dim: number
+%       of ILDs x number of ITDs
 %
-%       EXP_LINDEMANN1986a('fig11') reproduces fig.11 from lindemann1986a. 
-%       The centroid position is calculated for different ILDs, an
-%       inhibition factor c_s = 0.3 and a monaural detector factor
-%       w_f = 0.035. Afterwards for every c_s the displacement of the
-%       centroid is plotted dependend on the ILD.
-%
-%   'fig12'
-%       output - simulated results for a trading experiment. The ILD value for
-%                getting a centroid near the center for an combined ITD, ILD
-%                stimulus with a given ITD value.
-%                Dim: number of ITDs x 1
-%
-%       EXP_LINDEMANN1986a('fig12') reproduces fig.12 from lindemann1986a. 
-%       The centroids are calculated for combinations of ITDs and ILDs.
-%       After the calculation the values for the centroids of the stimuli
-%       are searched to find the nearest value to 0. The corresponding ILD
-%       value is stored in output and plotted depnenden on the ITD.
-%
-%   'fig13'
-%       output - ILD value for getting the same lateralization with an ILD only
-%                stimulus compared to a stimulus with both ITD and ILD.
-%                Dim: number of ILDs x number of ITDs
-%
-%       EXP_LINDEMANN1986a('fig13') reproduces fig.13 from lindemann1986a. 
-%       The centroids are calculated for ILD only and ITD/ILD combination
-%       stimuli.After the calculation the values for the centroids of the
-%       ILD only stimuli are searched to find the nearest value to the
-%       centroid of a given combined stimulus. The resulting ILD value is
-%       stored for different combinaition values and plotted dependend on
-%       ITD.
-%
-%   'fig14a'
-%       output - Displacement of the centroid for different c_s values and ILDs.
-%                Dim: c_s x nilds
-%
-%       EXP_LINDEMANN1986a('fig14a') reproduces fig.14 (a) from lindemann1986a.
-%       The cross-correlations for a combination of ILDs and a ITD of ~1ms are
+%-     'fig14a' - reproduces fig.14 (a) from lindemann1986a.  The
+%       cross-correlations for a combination of ILDs and a ITD of ~1ms are
 %       calculated. This is done for different ILDs and different inhibition
 %       factors c_s = [0,0.2,0.4,0.6,1]. Afterwards for every c_s the
 %       centroid of the auditory image is calculated and plotted dependend
-%       on the ILD.
+%       on the ILD. The output is the displacement of the centroid for
+%       different c_s values and ILDs.  Dim: c_s x nilds
 %
-%   'fig14b'
-%       output - Displacement of the centroid as a function of the ITD averaged
-%                over different small ILD with a standard deviation of 0,1,2,3,4,5.
-%                Dim: nilds x nitds
-%
-%       EXP_LINDEMANN1986a('fig14b') reproduces fig.14 (b) from lindemann1986a.
-%       The cross-correlations for a combination of ILDs and a ITD of ~1ms are
+%-     'fig14b' - reproduces fig.14 (b) from lindemann1986a. The
+%       cross-correlations for a combination of ILDs and a ITD of ~1ms are
 %       calculated. This is done for different small ILDs with a standard
 %       deviation of 0-5. Afterwards for every standard deviation the mean
 %       centroid displacement is calculated and plotted dependend on the ITD.
+%       output - Displacement of the centroid as a function of the ITD averaged
+%       over different small ILD with a standard deviation of 0,1,2,3,4,5.  Dim:
+%       nilds x nitds
 %
-%   'fig15'
-%       output - cross-correlation result of the to figure.
-%                Dim: number of c_s conditions x nilds x delay line length
+%-   'fig15' - reproduces fig.15 from lindemann1986a.  The cross-correlation
+%       for an ITD of -0.5ms is calculated. This is done for different ILDs,
+%       an inhibition factor c_s = 0.3 and a monaural detector factor w_f =
+%       0.035. Afterwards for every c_s the ILD is plotted dependend on the
+%       correaltion time. The output is the cross-correlation result of the
+%       to figure.  Dim: number of c_s conditions x nilds x delay line
+%       length
 %
-%       EXP_LINDEMANN1986a('fig15') reproduces fig.15 from lindemann1986a.
-%       The cross-correlation for an ITD of -0.5ms is calculated. This is
-%       done for different ILDs, an inhibition factor c_s = 0.3 and a
-%       monaural detector factor w_f = 0.035. Afterwards for every c_s the
-%       ILD is plotted dependend on the correaltion time.
+%-   'fig16' - reproduces fig.16 from lindemann1986a.  The cross-correlations
+%       for combinations of ITDs and ILDs are calculated. Afterwards the
+%       combinations of ILD and ITD are looked for the ones that have two
+%       peaks in its cross-correlation which have the nearly same
+%       height. The corresponding ILD value is than stored in output and
+%       plotted dependend on the ITD. The output is the ILD value for which
+%       the cross-correlation for a combined ITD, ILD stimulus has two peaks
+%       with the same (nearest) height, dependend on the ITD Dim: number of
+%       ITDs x 1
 %
-%   'fig16'
-%       output - The ILD value for which the cross-correlation for a combined ITD,
-%                ILD stimulus has two peaks with the same (nearest) height,
-%                dependend on the ITD
-%                Dim: number of ITDs x 1
+%-   'fig17' - reproduces fig.17 from lindemann1986a. The cross-correlation for
+%       ITD/ILD combination and ITD only stimuli is calculated. Afterwards
+%       the values for the centroids and maxima of the ITD only stimuli are
+%       searched to find the nearest value to the centroid and maxima of a
+%       given combined stimulus. The resulting ITD value is stored for
+%       different combinaition values. The output.rcen is the ITD value for
+%       getting the same lateralization with an ITD only stimulus compared
+%       to a stimulus with both ITD and ILD using the centroid of the
+%       cross-correlation.  Dim: number of ITDs x number of ILDs. The output.rmax
+%       is the ITD value for getting the same lateralization with an ITD only
+%       stimulus compared to a stimulus with both ITD and ILD using the
+%       maximum of the cross-correlation.  Dim: number of ITDs x number of
+%       ILDs.
 %
-%       EXP_LINDEMANN1986a('fig16') reproduces fig.16 from lindemann1986a. 
-%       The cross-correlations for combinations of ITDs and ILDs are
-%       calculated. Afterwards the combinations of ILD and ITD are looked for
-%       the ones that have two peaks in its cross-correlation which have the
-%       nearly same height. The corresponding ILD value is than stored in
-%       output and plotted dependend on the ITD.
+%-     'fig18' - reproduces fig.18 from lindemann1986a. The cross-correlation of
+%       pink noise with different interaural coherence values is calculated.
+%       Afterwards for every interaural coherence value the correlation is
+%       plotted dependend on the correlation-time delay.  The output is the
+%       cross-correlation result of the figure.  Dim: number of interaural
+%       coherences x delay line length
 %
-%   'fig17'
-%       output.rcen - ITD value for getting the same lateralization with an ITD only
-%                     stimulus compared to a stimulus with both ITD and ILD using
-%                     the centroid of the cross-correlation.
-%                     Dim: number of ITDs x number of ILDs
-%       output.rmax - ITD value for getting the same lateralization with an ITD only
-%                     stimulus compared to a stimulus with both ITD and ILD using
-%                     the maximum of the cross-correlation.
-%                     Dim: number of ITDs x number of ILDs
-%
-%       EXP_LINDEMANN1986a('fig17') reproduces fig.17 from lindemann1986a.
-%       The cross-correlation for ITD/ILD combination and ITD only stimuli is
-%       calculated. Afterwards the values for the centroids and maxima of
-%       the ITD only stimuli are searched to find the nearest value to the
-%       centroid and maxima of a given combined stimulus. The resulting ITD
-%       value is stored for different combinaition values.
-%
-%   'fig18'
-%       output - cross-correlation result of the figure.
-%                Dim: number of interaural coherences x delay line length
-%
-%       EXP_LINDEMANN1986a('fig18') reproduces fig.18 from lindemann1986a.
-%       The cross-correlation of pink noise with different interaural
-%       coherence values is calculated. 
-%       Afterwards for every interaural coherence value the correlation is plotted 
-%       dependend on the correlation-time delay.
+%    If no flag is given, the function will print the list of valid flags.
 %
 %R lindemann1986a
 %
 
 %   AUTHOR: Hagen Wierstorf
 
-definput.flags.type={'fig6','fig7','fig8','fig10','fig11',...
+definput.flags.type={'missingflag','fig6','fig7','fig8','fig10','fig11',...
                     'fig12','fig13','fig14a','fig14b','fig15',...
                     'fig16','fig17','fig18'};
 
@@ -175,6 +141,12 @@ definput.flags.plot={'plot','noplot'};
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
+
+if flags.do_missingflag
+  flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+             sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end;
 
 %% ------ FIG 6 -----------------------------------------------------------
 if flags.do_fig6
@@ -221,12 +193,12 @@ if flags.do_fig6
         end
     end
 
-
-    % ------ Plotting ------
-    % Generate time axis
-    tau = linspace(-1,1,ndl);
-    % Plot figure for every c_s condition
-    for jj = 1:length(c_s)
+    if flags.do_plot
+      % ------ Plotting ------
+      % Generate time axis
+      tau = linspace(-1,1,ndl);
+      % Plot figure for every c_s condition
+      for jj = 1:length(c_s)
         figure;
         mesh(tau,itd(end:-1:1),squeeze(output(jj,:,:)));
         view(0,57);
@@ -236,7 +208,8 @@ if flags.do_fig6
         set(gca,'YTickLabel',{'1','0.8','0.6','0.4','0.2','0'});
         tstr = sprintf('c_s = %.1f\nw_f = 0\nf = %i Hz\n',c_s(jj),f);
         title(tstr);
-    end
+      end
+    end;
 
 end;
 
@@ -286,18 +259,18 @@ if flags.do_fig7
             output(jj,ii) = centroid(cc);
         end
     end
-
-
-    % ------ Plotting ------
-    figure;
-    for jj = 1:length(c_s)
+    
+    if flags.do_plot
+      % ------ Plotting ------
+      for jj = 1:length(c_s)
         plot(itd,output(jj,:));
         hold on;
-    end
-    xlabel('interaural time difference (ms)');
-    ylabel('displacement of the centroid d');
-    tstr = sprintf('w_f = 0\nf = %i Hz\n',f);
-    title(tstr);
+      end
+      xlabel('interaural time difference (ms)');
+      ylabel('displacement of the centroid d');
+      tstr = sprintf('w_f = 0\nf = %i Hz\n',f);
+      title(tstr);
+    end;
   
 end;
 
@@ -348,11 +321,12 @@ if flags.do_fig8
     end
 
 
-    % ------ Plotting ------
-    % Generate time axis
-    tau = linspace(-1,1,ndl);
-    % Plot figure for every c_s condition
-    for jj = 1:length(c_s) 
+    if flags.do_plot
+      % ------ Plotting ------
+      % Generate time axis
+      tau = linspace(-1,1,ndl);
+      % Plot figure for every c_s condition
+      for jj = 1:length(c_s) 
         figure;
         mesh(tau,ild(end:-1:1),squeeze(output(jj,:,:)));
         view(0,57);
@@ -362,7 +336,8 @@ if flags.do_fig8
         set(gca,'YTickLabel',{'25','20','15','10','5','0'});
         tstr = sprintf('c_{inh} = %.1f\nw_f = 0\nf = %i Hz\n',c_s(jj),f);
         title(tstr);
-    end
+      end
+    end;
 
 end;
 
@@ -418,7 +393,8 @@ if flags.do_fig10
     % Generate time axis
     tau = linspace(-1,1,ndl);
     % Plot figure for every c_s condition
-    for jj = 1:length(c_s) 
+    for jj = 1:length(c_s)
+      figure;
       mesh(tau,ild(end:-1:1),squeeze(output(jj,:,:)));
       view(0,57);
       xlabel('correlation-time delay (ms)');
@@ -479,21 +455,24 @@ if flags.do_fig11
     end
 
 
-    % ------ Plotting ------
-    figure;
-    % Plot data from experiments
-    data = data_lindemann1986a('fig11_yost');
-    plot(data(:,1),data(:,2)*0.058,'+'); hold on;
-    data = data_lindemann1986a('fig11_sayers');
-    plot(data(:,1),data(:,2)*0.058,'*');
-    % Plot line for every condition
-    for jj = 1:length(c_s) 
+    if flags.do_plot
+      % ------ Plotting ------
+      figure;
+      % Plot data from experiments
+      data = data_lindemann1986a('fig11_yost');
+      plot(data(:,1),data(:,2)*0.058,'+');
+      hold on;
+      data = data_lindemann1986a('fig11_sayers');
+      plot(data(:,1),data(:,2)*0.058,'*');
+      % Plot line for every condition
+      for jj = 1:length(c_s) 
         plot(ild,output(jj,:));
-    end
-    axis([0 25 0 0.8]);
-    legend('500 Hz, Yost','600 Hz, Sayers','500 Hz, model');
-    xlabel('interaural level difference (dB)');
-    ylabel('displacement of the centroid d');
+      end
+      axis([0 25 0 0.8]);
+      legend('500 Hz, Yost','600 Hz, Sayers','500 Hz, model');
+      xlabel('interaural level difference (dB)');
+      ylabel('displacement of the centroid d');
+    end;
 
 end;
 
@@ -556,18 +535,19 @@ if flags.do_fig12
         output(ii) = ild(idx);
     end
 
-
-    % ------ Plotting ------
-    figure;
-    data = data_lindemann1986a('fig12_400');
-    plot(data(:,1),data(:,2),'+'); hold on;
-    data = data_lindemann1986a('fig12_600');
-    plot(data(:,1),data(:,2),'*');
-    plot(itd,output);
-    axis([-1 0 0 10]);
-    legend('400 Hz','600 Hz','500 Hz, model');
-    xlabel('interaural time difference (ms)');
-    ylabel('interaural level difference (dB)');
+    if flags.do_plot
+      % ------ Plotting ------
+      data = data_lindemann1986a('fig12_400');
+      plot(data(:,1),data(:,2),'+');
+      hold on;
+      data = data_lindemann1986a('fig12_600');
+      plot(data(:,1),data(:,2),'*');
+      plot(itd,output);
+      axis([-1 0 0 10]);
+      legend('400 Hz','600 Hz','500 Hz, model');
+      xlabel('interaural time difference (ms)');
+      ylabel('interaural level difference (dB)');
+    end;
 
 end;
 
@@ -635,7 +615,7 @@ if flags.do_fig13
         end
     end
 
-    % ------ Fiting ------
+    % ------ Fitting ------
     % For the results for the combined centroids find the nearest centroid for the
     % ILD only stimuli
     output = zeros(nilds_t,nitds_t);
@@ -646,32 +626,33 @@ if flags.do_fig13
         end
     end
 
-
-    % ------ Plotting ------
-    % First plot the only data from experiments
-    figure;
-    d = data_lindemann1986a('fig13');
-    plot(d(:,1),d(:,2),'x-r', ...   % -3dB
-         d(:,1),d(:,3),'x-b', ...   %  3dB
-         d(:,1),d(:,4),'x-g', ...   %  9dB
-         d(:,1),d(:,5),'x-b', ...   % 15dB
-         d(:,1),d(:,6),'x-r')       % 25dB
-    legend('25dB','15dB','9dB','3dB','-3dB');
-    axis([-1 1 -10 40]);
-    set(gca,'XTick',-1:0.4:1);
-    xlabel('interaural time difference (ms)');
-    ylabel('interaural level difference (dB)');
-    % Then plot model results
-    figure;
-    % Plot line for every condition
-    for jj = 1:nilds_t
+    if flags.do_plot
+      % ------ Plotting ------
+      % First plot the only data from experiments
+      figure;
+      d = data_lindemann1986a('fig13');
+      plot(d(:,1),d(:,2),'x-r', ...   % -3dB
+           d(:,1),d(:,3),'x-b', ...   %  3dB
+           d(:,1),d(:,4),'x-g', ...   %  9dB
+           d(:,1),d(:,5),'x-b', ...   % 15dB
+           d(:,1),d(:,6),'x-r')       % 25dB
+      legend('25dB','15dB','9dB','3dB','-3dB');
+      axis([-1 1 -10 40]);
+      set(gca,'XTick',-1:0.4:1);
+      xlabel('interaural time difference (ms)');
+      ylabel('interaural level difference (dB)');
+      % Then plot model results
+      figure;
+      % Plot line for every condition
+      for jj = 1:nilds_t
         plot(itd_t,output(jj,:));
         hold on;
-    end
-    axis([-1 1 -10 40]);
-    set(gca,'XTick',-1:0.4:1);
-    xlabel('interaural time difference (ms)');
-    ylabel('interaural level difference (dB)');
+      end
+      axis([-1 1 -10 40]);
+      set(gca,'XTick',-1:0.4:1);
+      xlabel('interaural time difference (ms)');
+      ylabel('interaural level difference (dB)');
+    end;
 
 end;
 
@@ -727,16 +708,17 @@ if flags.do_fig14a
     end
 
 
-    % ------ Plotting ------
-    figure;
-    for jj = 1:length(c_s)
+    if flags.do_plot
+      % ------ Plotting ------
+      for jj = 1:length(c_s)
         plot(ild,output(jj,:));
         hold on;
-    end
-    xlabel('interaural level difference (dB)');
-    ylabel('displacement of the centroid d');
-    tstr = sprintf('w_f = 0\nf = %i Hz\n',f);
-    title(tstr);
+      end
+      xlabel('interaural level difference (dB)');
+      ylabel('displacement of the centroid d');
+      tstr = sprintf('w_f = 0\nf = %i Hz\n',f);
+      title(tstr);
+    end;
 
 end;
 
@@ -805,16 +787,16 @@ if flags.do_fig14b
     end
 
 
-    % ------ Ploting ------
-    figure
-    for nn = 1:length(ild_std)+1
+    if flags.do_plot
+      for nn = 1:length(ild_std)+1
         plot(itd,output(nn,:)); hold on;
-    end
-    axis([0 1 0 1]);
-    xlabel('interaural level difference (dB)');
-    ylabel('displacement of the centroid d');
-    tstr = sprintf('w_f = 0\nc_{inh} = 1\nf = %i Hz\n',f);
-    title(tstr);
+      end
+      axis([0 1 0 1]);
+      xlabel('interaural level difference (dB)');
+      ylabel('displacement of the centroid d');
+      tstr = sprintf('w_f = 0\nc_{inh} = 1\nf = %i Hz\n',f);
+      title(tstr);
+    end;
 
 end;
 
@@ -865,12 +847,12 @@ if flags.do_fig15
         end
     end
 
-
-    % ------ Plotting --------------------------------------------------------
-    % Generate time axis
-    tau = linspace(-1,1,ndl);
-    % Plot figure for every c_s condition
-    for jj = 1:length(c_s) 
+    if flags.do_plot
+      % ------ Plottinqg --------------------------------------------------------
+      % Generate time axis
+      tau = linspace(-1,1,ndl);
+      % Plot figure for every c_s condition
+      for jj = 1:length(c_s)
         figure;
         mesh(tau,ild(end:-1:1),squeeze(output(jj,:,:)));
         view(0,57);
@@ -880,7 +862,8 @@ if flags.do_fig15
         set(gca,'YTickLabel',{'25','20','15','10','5','0'});
         tstr = sprintf('c_{inh} = %.1f\nw_f = 0.035\nf = %i Hz\n',c_s(jj),f);
         title(tstr);
-    end
+      end
+    end;
 
 end;
 
@@ -942,15 +925,16 @@ if flags.do_fig16
         output(ii) = ild(idx);
     end
 
-
-    % ------ Plotting ------
-    figure;
-    data = data_lindemann1986a('fig16');
-    plot(data(:,1),data(:,2),'+'); hold on;
-    plot(itd,output);
-    axis([-1 0 0 15]);
-    xlabel('interaural time difference (ms)');
-    ylabel('interaural level difference (dB)');
+    if flags.do_plot
+      % ------ Plotting ------
+      data = data_lindemann1986a('fig16');
+      plot(data(:,1),data(:,2),'+');
+      hold on;
+      plot(itd,output);
+      axis([-1 0 0 15]);
+      xlabel('interaural time difference (ms)');
+      ylabel('interaural level difference (dB)');
+    end;
 
 end;
 
@@ -1035,41 +1019,42 @@ if flags.do_fig17
         end
     end
 
-
-    % ------ Plotting ------
-    % First plot the only data from experiments
-    figure; % fig 17 (a)
-    d = data_lindemann1986a('fig17');
-    plot(d(:,1),d(:,5),'x-r', ...   %  0 ms
-         d(:,1),d(:,4),'x-b', ...   %  0.09 ms
-         d(:,1),d(:,3),'x-g', ...   %  0.18 ms
-         d(:,1),d(:,2),'x-b')       %  0.27 ms
-    legend('0.27 ms','0.18 ms','0.09 ms','0 ms');
-    axis([-9 9 -0.36 0.72]);
-    set(gca,'XTick',-9:3:9);
-    xlabel('interaural level difference (dB)');
-    ylabel('interaural time difference (ms)');
-    % Then plot model results
-    figure; % fig 17 (b)
-    % Plot line for every condition
-    for jj = 1:nitds_t
+    if flags.do_plot
+      % ------ Plotting ------
+      % First plot the only data from experiments
+      figure; % fig 17 (a)
+      d = data_lindemann1986a('fig17');
+      plot(d(:,1),d(:,5),'x-r', ...   %  0 ms
+           d(:,1),d(:,4),'x-b', ...   %  0.09 ms
+           d(:,1),d(:,3),'x-g', ...   %  0.18 ms
+           d(:,1),d(:,2),'x-b')       %  0.27 ms
+      legend('0.27 ms','0.18 ms','0.09 ms','0 ms');
+      axis([-9 9 -0.36 0.72]);
+      set(gca,'XTick',-9:3:9);
+      xlabel('interaural level difference (dB)');
+      ylabel('interaural time difference (ms)');
+      % Then plot model results
+      figure; % fig 17 (b)
+              % Plot line for every condition
+      for jj = 1:nitds_t
         plot(ild_t,output.rcen(jj,:));
         hold on;
-    end
-    axis([-9 9 -0.36 0.72]);
-    set(gca,'XTick',-9:3:9);
-    xlabel('interaural level difference (dB)');
-    ylabel('interaural time difference (ms)');
-    %
-    figure; % fig 17 (c)
-    for jj = 1:nitds_t
+      end
+      axis([-9 9 -0.36 0.72]);
+      set(gca,'XTick',-9:3:9);
+      xlabel('interaural level difference (dB)');
+      ylabel('interaural time difference (ms)');
+      %
+      figure; % fig 17 (c)
+      for jj = 1:nitds_t
         plot(ild_t,output.rmax(jj,:));
         hold on;
-    end
-    axis([-9 9 -0.36 0.72]);
-    set(gca,'XTick',-9:3:9);
-    xlabel('interaural level difference (dB)');
-    ylabel('interaural time difference (ms)');
+      end
+      axis([-9 9 -0.36 0.72]);
+      set(gca,'XTick',-9:3:9);
+      xlabel('interaural level difference (dB)');
+      ylabel('interaural time difference (ms)');
+    end;
 
 end;
 
@@ -1113,16 +1098,17 @@ if flags.do_fig18
         output(ii,:) =  tmp(:,fc-4);
     end
 
-
-    % ------ Plotting ------
-    % Generate time axis
-    tau = linspace(-1,1,ndl);
-    % Plot figure for every c_s condition
-    figure;
-    mesh(tau,iac,output);
-    view(0,57);
-    xlabel('correlation-time tau (ms)');
-    ylabel('degree of interaural coherence');
+    if flags.do_plot
+      % ------ Plotting ------
+      % Generate time axis
+      tau = linspace(-1,1,ndl);
+      % Plot figure for every c_s condition
+      figure;
+      mesh(tau,iac,output);
+      view(0,57);
+      xlabel('correlation-time tau (ms)');
+      ylabel('degree of interaural coherence');
+    end;
 
 end;
 
