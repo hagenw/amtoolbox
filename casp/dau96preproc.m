@@ -1,7 +1,8 @@
-function [inoutsig, fc] = dau96(inoutsig, fs, flow)
-%DAU96   Auditory model from Dau et. al. 1996.
-%   Usage: [outsig, fc] = dau96(insig,fs);
-%          [outsig, fc] = dau96(insig,fs,...);
+function [inoutsig, fc] = dau96preproc(inoutsig, fs, flow, fhigh,subfs,basef)
+%DAU96PREPROC   Auditory model from Dau et. al. 1996.
+%   Usage: [outsig, fc] = dau96preproc(insig,fs,flow,fhigh);
+%          [outsig, fc] = dau96preproc(insig,fs,flow,fhigh,subfs);
+%          [outsig, fc] = dau96preproc(insig,fs,flow,fhigh,subfs,basef);
 %
 %   Input parameters:
 %     insig  : input acoustic signal.
@@ -10,7 +11,7 @@ function [inoutsig, fc] = dau96(inoutsig, fs, flow)
 %     fhigh  : highest filter center frequency.
 %     basef  : Always include this frequency in the filter bank (optional).
 %  
-%   DAU96(insig,fs) computes the internal representation of the signal insig
+%   DAU96PREPROC(insig,fs) computes the internal representation of the signal insig
 %   sampled with a frequency of fs Hz as described in Dau, Puschel and
 %   Kohlrausch (1996a).
 %  
@@ -65,19 +66,6 @@ if nargin<2
   error('%s: Too few input arguments.',upper(mfilename));
 end;
 
-if nargin<6
-  basef=-1
-end;
-
-if nargin<5
-  subfs=100;
-end;
-
-if nargin==2
-  flow=80;
-  fhigh=8000;
-end;
-
 if ~isnumeric(inoutsig) 
   error('%s: insig must be numeric.',upper(mfilename));
 end;
@@ -93,7 +81,6 @@ definput.keyvals.subfs=[];
 
 [flags,keyvals]  = ltfatarghelper({},defnopos,varargin);
 
-
 % ------ do the computation -------------------------
 
 % find the center frequencies used in the filterbank, 1 ERB spacing
@@ -106,10 +93,10 @@ fc = erbspacebw(flags.flow, flags.fhigh, 1, flags.basef);
 inoutsig = 2*real(filterbank(gt_b,gt_a,inoutsig));
 
 % 'haircell' envelope extraction
-inoutsig = envextract(inoutsig,fs);
+inoutsig = ihcenvelope(inoutsig,fs,'dau');
 
 % non-linear adaptation loops
-inoutsig = adaptloop(inoutsig, fs,10);
+inoutsig = adaptloop(inoutsig,fs,'dau');
 
 % Calculate filter coefficients for the 20 ms (approx.eq to 8 Hz) modulation
 % lowpass filter.
@@ -124,4 +111,5 @@ inoutsig = filter(mlp_b,mlp_a,inoutsig);
 if ~isempty(flags.subfs)
   inoutsig = fftresample(inoutsig,round(length(inoutsig)/fs*subfs));
 end;
+
 

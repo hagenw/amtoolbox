@@ -47,9 +47,9 @@ function varargout=audspecgram(insig,fs,varargin)
 %               values are passed to IMAGESC. See the help on IMAGESC.
 %
 %-   'dynrange',r - Limit the displayed dynamic range to r. This option
-%                is especially usefull when displaying on a log/Db scale.
+%                is especially usefull when displaying on a dB scale (no adaptation).
 %
-%-   'fullrange' - Use the full dynamic range.
+%-   'fullrange' - Use the full dynamic range. This is the default.
 %
 %-   'ytick'   - A vector containing the frequency in Hz of the yticks.
 %
@@ -73,8 +73,6 @@ function varargout=audspecgram(insig,fs,varargin)
 %-   'surf'    - Do a surf plot to display the spectrogram.
 %
 %-   'mesh'    - Do a mesh plot to display the spectrogram.
-%
-%-
 %
 %   See also:  erbtofreq, dau96
 %
@@ -102,19 +100,11 @@ end;
 % Get the default values.
 defaults=AMT_CONF.plotdefaults;
 
-% Approximate resolution along time-axis.
-xres=TF_CONF.xres;
-
-% Ratio of frequency resolution versus time resolution
-displayratio=TF_CONF.displayratio;
-
-yres=ceil(xres*displayratio);
-
 % Define initial value for flags and key/value pairs.
 defnopos.flags.adapt={'adapt','noadapt'};
 defnopos.flags.thr={'nothr','thr'};
 defnopos.flags.dynrange={'fullrange','dynrange'};
-defnopos.flags.plottype={'image','contour','mesh'};
+defnopos.flags.plottype={'image','contour','mesh','surf'};
 defnopos.flags.clim={'noclim','clim'};
 defnopos.flags.fmax={'nofmax','fmax'};
 defnopos.flags.mlp={'mlp','nomf'};
@@ -144,6 +134,23 @@ fhigh=frange(2);
 flow =frange(1);
 
 audlimits=freqtoaud('erb',frange);
+=======
+defnopos.keyvals.ytick=[0,100,250,500,1000,2000,4000,8000];
+defnopos.keyvals.mlp=50;
+defnopos.keyvals.frange=[0,8000];
+defnopos.keyvals.xres=800;
+defnopos.keyvals.yres=600;
+
+
+[flags,keyvals]=ltfatarghelper(0,{},defnopos,varargin,upper(mfilename));
+
+siglen=length(insig);
+
+fhigh=keyvals.frange(2);
+flow =keyvals.frange(1);
+
+audlimits=freqtoaud('erb',keyvals.frange);
+>>>>>>> 9f63bd7c5881ac4ebca75ef0b1771fe120adb588
 
 % fhigh can at most be the Nyquest frequency
 fhigh=min(fhigh,fs/2);
@@ -174,32 +181,28 @@ end;
 hopsize=1;
 
 % find the center frequencies used in the filterbank
-fc = erbspace(flow,fhigh,yres);
+fc = erbspace(flow,fhigh,keyvals.yres);
 
 % Calculate filter coefficients for the gammatone filter bank.
-[gt_b, gt_a]=gammatone(fc, fs);
+[gt_b, gt_a]=gammatone(fc, fs, 'complex');
 
 % Apply the Gammatone filterbank
-outsig = filterbank(gt_b,gt_a,insig,hopsize);
+outsig = 2*real(filterbank(gt_b,gt_a,insig,hopsize));
 
 % The subband are now (possibly) sampled at a lower frequency than the
 % original signal.
 fssubband=round(fs/hopsize);
 
-if dorectify && (fssubband>2000)
-  outsig = ihcenvelope(2*real(outsig),fssubband,'dau');
-else
-  outsig = abs(outsig);
-end;
+outsig = ihcenvelope(outsig,fssubband,keyvals.ihc);
 
-if doadapt
+if flags.do_adapt
   % non-linear adaptation loops
   outsig = adaptloop(outsig, fssubband);
 end;
   
-if domlp
+if flags.do_mlp
   % Calculate filter coefficients for the 50 Hz modulation lowpass filter.
-  mlp_a = exp(-mlp/fssubband);
+  mlp_a = exp(-keyvals.mlp/fssubband);
   mlp_b = 1 - mlp_a;
   mlp_a = [1, -mlp_a];
   
@@ -207,24 +210,23 @@ if domlp
   outsig = filter(mlp_b,mlp_a,outsig);
 end;
   
-if domask
+if flags.do_thr
   % keep only the largest coefficients.
-  outsig=largestr(outsig,mask_val);
+  outsig=largestr(outsig,keyvals.thr);
 end
   
 % Apply transformation to coefficients.
-if dolog
-  % This is a safety measure to avoid log of negative numbers if the
-  % users chooses an incorrect combination of options (e.g. 'adapt' and 'log').
-  outsig(:)=max(outsig(:),realmin);
+if flags.do_noadapt
+  % This is a safety measure to avoid log of negative numbers.
+  outsig(:)=max(outsig(:),eps);
 
   outsig=20*log10(outsig);
 end;
 
 % 'dynrange' parameter is handled by threshholding the coefficients.
-if dorange
+if flags.do_dynrange
   maxclim=max(outsig(:));
-  outsig(outsig<maxclim-range)=maxclim-range;
+  outsig(outsig<maxclim-keyvals.dynrange)=maxclim-keyvals.dynrange;
 end;
 
 % Set the range for plotting
@@ -232,27 +234,35 @@ xr=(0:hopsize:siglen-1)/fs;
 yr=linspace(audlimits(1),audlimits(2),length(fc));
 
 % Determine the labels and position for the y-label.
-ytickpos=freqtoerb(ytick);
+ytickpos=freqtoerb(keyvals.ytick);
 
 % Flip the output correctly. Each column is a subband signal, and should
 % be display as the rows.
 outsig=outsig.';
 
-switch(plottype)
-  case 'image'
-    if doclim
-      imagesc(xr,yr,outsig,clim);
-    else
-      imagesc(xr,yr,outsig);
-    end;
-  case 'contour'
-    contour(xr,yr,outsig);
-  case 'surf'
-    surf(xr,yr,outsig);
+if flags.do_image
+  if flags.do_clim
+    imagesc(xr,yr,outsig,clim);
+  else
+    imagesc(xr,yr,outsig);
+  end;
 end;
+
+if flags.do_contour
+  contour(xr,yr,outsig);
+end;
+
+if flags.do_surf
+  surf(xr,yr,outsig);
+end;
+
+if flags.do_mesh
+  mesh(xr,yr,outsig);
+end;
+
 set(gca,'YTick',ytickpos);
 % Use num2str here explicitly for Octave compatibility.
-set(gca,'YTickLabel',num2str(ytick(:)));
+set(gca,'YTickLabel',num2str(keyvals.ytick(:)));
 
 axis('xy');
 xlabel('Time (s)')
