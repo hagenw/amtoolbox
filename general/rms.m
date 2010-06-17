@@ -15,6 +15,8 @@ function y = rms(insig,options)
 %C     rms(insig) = 1/sqrt(N) sum insig(n)^2
 %C                            n=1
 %
+%   See also: rmsdb, gaindb, crestfactor, setleveldb
+%
 %R  moore2003introduction
 
 %   AUTHOR : Peter L. Soendergaard

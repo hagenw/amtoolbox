@@ -4,7 +4,8 @@ function inoutsig = setleveldb(inoutsig,lvl,options);
 %          outsig = setlevel(insig,lvl,'ac');
 %
 %   SETLEVELDB(insig,lvl) sets the level of the signal insig to lvl dB SPL,
-%   using the convention that an RMS value of 1 corresponds to 100 dB SPL.
+%   using the convention that a pure tone with an RMS value of 1 corresponds
+%   to 100 dB SPL.
 %
 %   If the input is a matrix, it is assumed that each column is a signal.
 %
@@ -36,10 +37,10 @@ end;
 % ------ Computation --------------------------
 
 if isvector(inoutsig)
-  inoutsig = gaindb(inoutsig/rms(inoutsig,options),lvl-100);
+  inoutsig = gaindb(inoutsig/rms(inoutsig,options),lvl-100-10*log10(2));
 else
 	% If we have a matrix, set the level for every column.
   for ii=1:size(inoutsig,2);
-    inoutsig(:,ii) = gaindb(inoutsig(:,ii)/rms(inoutsig(:,ii),options),lvl-100);
+    inoutsig(:,ii) = gaindb(inoutsig(:,ii)/rms(inoutsig(:,ii),options),lvl-100-10*log10(2));
   end;
 end;

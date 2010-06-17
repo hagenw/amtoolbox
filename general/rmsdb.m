@@ -3,15 +3,15 @@ function y = rmsdb(insig,options)
 %   Usage: y = rmsdb(insig);
 %          y = rmsdb(insig,'ac');
 %
-%   RMSDB(insig) computes the RMS (Root Mean Square) value in dB SPL of a 
-%   finite sampled signal sampled at a uniform sampling rate. The dB value is
-%   computed from the convention that 100 dB SPL corresponds to an RMS
-%   value of 1.
+%   RMSDB(insig) computes the RMS (Root Mean Square) value in dB SPL of a
+%   finite sampled signal sampled at a uniform sampling rate. The dB value
+%   is computed from the convention that a pure tone at 100 dB SPL has an
+%   RMS value of 1.
 %
 %   RMSDB(x,'ac') does the same, but considers only the AC component of the
 %   signal (i.e. the mean is removed).
 %
-%   See also: rms, gaindb, setleveldb
+%   See also: rms, gaindb, crestfactor, setleveldb
 %
 %R  moore2003introduction
 
@@ -33,4 +33,6 @@ end;
 
 % The level of a signal in dB SPL is given by the following formula:
 % level = 20*log10(p/p_0)
-y = 20*log10( rms(insig,options) )+100;
+% To get to the standard used in the toolbox we must add the crest factor
+% of a sine wave.
+y = 20*log10( rms(insig,options) )+100+10*log10(2);
