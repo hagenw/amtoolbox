@@ -307,14 +307,6 @@ Tricks for the master
 \end_layout
 
 \begin_layout Standard
-To update a development branch with the latest changes in master:
-\end_layout
-
-\begin_layout LyX-Code
-git rebase master
-\end_layout
-
-\begin_layout Standard
 To push a locally created branch to the Sourceforge repository for the first
  time
 \end_layout
@@ -350,6 +342,40 @@ branch-name
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+Cleanup:
+\end_layout
+
+\begin_layout LyX-Code
+git gc
+\end_layout
+
+\begin_layout Subsection
+Rebasing
+\end_layout
+
+\begin_layout Standard
+To update a development branch with the latest changes in master:
+\end_layout
+
+\begin_layout LyX-Code
+git rebase master
+\end_layout
+
+\begin_layout Standard
+This will always create a conflict between the local branch and the remote
+ branch.
+ Use 
+\end_layout
+
+\begin_layout LyX-Code
+git pull --rebase
+\end_layout
+
+\begin_layout Standard
+to fix this conflict, and then push again.
 \end_layout
 
 \begin_layout Section
