@@ -33,6 +33,5 @@ end;
 
 % The level of a signal in dB SPL is given by the following formula:
 % level = 20*log10(p/p_0)
-% To get to the standard used in the toolbox we must add the crest factor
-% of a sine wave.
-y = 20*log10( rms(insig,options) )+100+10*log10(2);
+% To get to the standard used in the toolbox.
+y = 20*log10( rms(insig,options) )+100;

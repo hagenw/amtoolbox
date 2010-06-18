@@ -1,5 +1,5 @@
 function y = peakspl(insig,options)
-%PEAKSPL RMS value of signal (in dB)
+%PEAKSPL Peak value of signal (in dB)
 %   Usage: y = peakspl(insig);
 %          y = peakspl(insig,'ac');
 %
