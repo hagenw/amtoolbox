@@ -151,19 +151,19 @@ void adaptloop_free(adaptloopstate *s)
 
 
 void adaptloop_set(adaptloopstate *s, const int fs, const double limit,
-		   const double minlvl)
+		   const double minlvl, const double *tau)
 {
-   double tau[5];
+  //double tau[5];
 
    double *pstate;
    double maxvalue;
    int jj, w, loops;
       
-   tau[0]=0.005;
-   tau[1]=0.050;
-   tau[2]=0.129;
-   tau[3]=0.253;
-   tau[4]=0.500;
+   /* tau[0]=0.005; */
+   /* tau[1]=0.050; */
+   /* tau[2]=0.129; */
+   /* tau[3]=0.253; */
+   /* tau[4]=0.500; */
    
    pstate = s->state;
    loops = s->loops;

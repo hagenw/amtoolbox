@@ -11,10 +11,6 @@ function inoutsig = comp_adaptloop(inoutsig,fs,limit,minlvl,tau);
 
 %   AUTHOR : Stephan Ewert, Morten L. Jepsen, Peter L. Soendergaard
 
-if nargin<5
-  tau=[0.005 0.050 0.129 0.253 0.500];
-end;
-
 % -------- Computation ------------------
 
 % Determine the signal length and width
