@@ -153,7 +153,7 @@ void adaptloop_free(adaptloopstate *s)
 void adaptloop_set(adaptloopstate *s, const int fs, const double limit,
 		   const double minlvl, const double *tau)
 {
-  //double tau[5];
+  /*double tau[5];*/
 
    double *pstate;
    double maxvalue;

@@ -15,13 +15,16 @@ DEFUN_DLD (comp_adaptloop, args, ,
    const int fs     = args(1).int_value();
    const double limit  = args(2).double_value();
    const double minlvl = args(3).double_value();
+   const Matrix tau    = args(4).matrix_value();
+
+   const int nloops = tau.rows()*tau.columns();
    
    adaptloopstate s;
 
    Matrix outsig(siglen,nsigs);  
    
-   adaptloop_init(&s, nsigs, 5);
-   adaptloop_set(&s, fs, limit, minlvl);
+   adaptloop_init(&s, nsigs, nloops);
+   adaptloop_set(&s, fs, limit, minlvl, (const double*)tau.data());
    adaptloop_run(&s, (double*)insig.data(), siglen, (double*)outsig.data());
    adaptloop_free(&s);
 

@@ -20,7 +20,7 @@ error(nargchk(2,5,nargin));
 if nargin<5
   tau=[0.005 0.050 0.129 0.253 0.500];
 else
-  if ~isnumeric(tau) || ~isvector(tau) || tau<=0
+  if ~isnumeric(tau) || ~isvector(tau) || any(tau<=0)
     error('%s: tau must be a vector with positive values.',upper(mfilename));
   end;
 end;

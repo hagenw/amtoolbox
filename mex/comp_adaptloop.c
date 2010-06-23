@@ -7,7 +7,7 @@
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
    double *insig, *outsig, limit, minlvl;
-   doule *tau;
+   double *tau;
    int siglen, nsigs, fs, taulen, nloops;
    adaptloopstate s;
    
@@ -27,7 +27,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
    /* The input must be a noncomplex double column vector*/
    siglen = mxGetM(prhs[0]);
    nsigs  = mxGetN(prhs[0]);
-   nloops = mxGetM(prhs[4])*mxGetN(prhs[4])
+   nloops = mxGetM(prhs[4])*mxGetN(prhs[4]);
    if (!mxIsDouble(prhs[0]) || mxIsComplex(prhs[0]))
    {
       mexErrMsgTxt("Input vector must be a noncomplex double column vector.");
