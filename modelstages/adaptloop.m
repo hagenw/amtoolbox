@@ -46,16 +46,16 @@ if nargin<2
   error('Too few input parameters.');
 end;
 
-defnopos.keyvals.limit=10;
-defnopos.keyvals.minlvl=1e-5;
-defnopos.keyvals.tau=[0.005 0.050 0.129 0.253 0.500];
+definput.keyvals.limit=10;
+definput.keyvals.minlvl=1e-5;
+definput.keyvals.tau=[0.005 0.050 0.129 0.253 0.500];
 
-defnopos.groups.dau     ={'limit',10,'minlvl',1e-5, ...
+definput.groups.dau     ={'limit',10,'minlvl',1e-5, ...
                     'tau',[0.005 0.050 0.129 0.253 0.500]};
-defnopos.groups.breebart={'limit',10,'minlvl',1e-5,...
+definput.groups.breebart={'limit',10,'minlvl',1e-5,...
                     'tau',linspace(0.005,0.5,5)};
 
-[flags,keyvals,limit,minlvl,tau]  = ltfatarghelper({'limit','minlvl','tau'},defnopos,varargin);
+[flags,keyvals,limit,minlvl,tau]  = ltfatarghelper({'limit','minlvl','tau'},definput,varargin);
 
 if ~isnumeric(tau) || ~isvector(tau) || any(tau<=0)
   error('%s: tau must be a vector with positive values.',upper(mfilename));
@@ -70,5 +70,6 @@ if ~isnumeric(limit) || ~isscalar(limit)
 end;  
 
 % -------- Computation ------------------
+
 
 inoutsig=comp_adaptloop(inoutsig,fs,limit,minlvl,tau);

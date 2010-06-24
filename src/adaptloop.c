@@ -1,10 +1,10 @@
 /* Copyright (c) 1999 - 2004 Stephan Ewert. All rights reserved. */
 #include <stdlib.h>
 #include "math.h"
-#include "casp.h"
+#include "amtoolbox.h"
 
 
-void adaptloop(double *insig, const int fs, const int siglen, const int nsigs,
+void adaptloop_notused(double *insig, const int fs, const int siglen, const int nsigs,
 	       const double limit, const double minlvl, double *outsig)
 {
    double tau[5], corr, mult, tmp1;
@@ -153,18 +153,11 @@ void adaptloop_free(adaptloopstate *s)
 void adaptloop_set(adaptloopstate *s, const int fs, const double limit,
 		   const double minlvl, const double *tau)
 {
-  /*double tau[5];*/
 
    double *pstate;
    double maxvalue;
    int jj, w, loops;
-      
-   /* tau[0]=0.005; */
-   /* tau[1]=0.050; */
-   /* tau[2]=0.129; */
-   /* tau[3]=0.253; */
-   /* tau[4]=0.500; */
-   
+         
    pstate = s->state;
    loops = s->loops;
 
@@ -207,8 +200,7 @@ void adaptloop_set(adaptloopstate *s, const int fs, const double limit,
    s->corr  = pstate[loops-1];
    s->mult  = 100.0/(1-s->corr);
    s->limit = limit;
-   s->minlvl = minlvl;
-   
+   s->minlvl = minlvl;   
 }
 
 
@@ -229,7 +221,6 @@ void adaptloop_run(adaptloopstate *s, double *insig, const int siglen,
    {
       b0[jj]=1-s->a1[jj];
    }
-
 
    if (s->limit<=1.0)
    {

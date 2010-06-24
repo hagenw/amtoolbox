@@ -1,7 +1,7 @@
 function [inoutsig,s] = adaptloop_run(s,inoutsig);
 %COMP_ADAPTLOOP   Computation of adaptation loops.
 %   Usage: [outsig,s] = adaptloop_run(s,insig);
-%M
+%
 %   See also: adaptloop
 
 %   AUTHOR : Peter L. Soendergaard

@@ -19,7 +19,7 @@ function s = adaptloop_init(nsigs,fs,limit,minlvl,tau);
 %   equal to 1e-5.
 %
 %   ADAPTLOOP(nsigs,fs) does as above with an overshoot limit of limit=10.
-%M
+%
 %R  dau1996qmeI puschel1988pza
 
 %   AUTHOR: Peter L. Soendergaard
@@ -32,7 +32,7 @@ error(nargchk(2,5,nargin));
 if nargin<5
   tau=[0.005 0.050 0.129 0.253 0.500];
 else
-  if ~isnumeric(tau) || ~isvector(tau) || tau<=0
+  if ~isnumeric(tau) || ~isvector(tau) || any(tau<=0)
     error('%s: tau must be a vector with positive values.',upper(mfilename));
   end;
 end;
@@ -70,7 +70,7 @@ s.loops=length(tau);
 a1=exp(-1./(tau*fs));
 
 % To get a range from 0 to 100 model units
-s.corr = minlvl^(1/32);
+s.corr = minlvl^(1/(2^s.loops));
 s.mult = 100/(1-s.corr); 
 
 % Determine steady-state levels. The values are repeated to fit the

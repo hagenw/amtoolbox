@@ -57,7 +57,7 @@ a1=exp(-b0);
 b0=1-a1;
 
 % To get a range from 0 to 100 model units
-corr = minlvl^(1/32);
+corr = minlvl^(1/(2^nloops));
 mult = 100/(1-corr); 
 
 % Apply minimum level to the input
