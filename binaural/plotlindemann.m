@@ -89,7 +89,7 @@ if size(crosscorr,1)==1
     plot(tau,binpattern);
 else
     mesh(tau,t,binpattern);
-    ylabel('t (ms)');
+    ylabel('t (s)');
 end
 
 xlabel('correlation-time delay (ms)');

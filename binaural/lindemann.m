@@ -113,8 +113,8 @@ defnopos.keyvals.N_1   = 1;
     ltfatarghelper({'c_s','w_f','M_f','T_int','N_1'},defnopos,varargin);
 
 if flags.do_stationary
-  keyvals.T_int = Inf;
-  keyvals.N_1   = 17640;  
+  T_int = Inf;
+  N_1   = 17640;  
 end;
 
 if ( ~isnumeric(c_s) || ~isscalar(c_s) || c_s<0 || c_s>1 )
