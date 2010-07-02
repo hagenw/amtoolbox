@@ -155,7 +155,7 @@ fhigh = erbtofreq(40);
 % filters, so use complex valued filters instead.
 [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 % Applying the erb filterbank to the signal
-inoutsig = real(filterbank(b,a,insig));
+inoutsig = 2*real(filterbank(b,a,insig));
 
 
 %% ------ Cross-correlation computation ---------------------------------
