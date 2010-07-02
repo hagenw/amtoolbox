@@ -23,35 +23,35 @@ function output = exp_lindemann1986a(varargin)
 %       is cross-correlation result of the figure.  Dim: number of c_s
 %       conditions x nitds x delay line length
 %
-%-     'fig7' - reproduces fig.7 from lindemann1986a.  The cross-correlation
+%-    'fig7' - reproduces fig.7 from lindemann1986a.  The cross-correlation
 %       is calculated for different ITDs and different inhibition factors
 %       c_s (0:0.2:1). Afterwards for every c_s the displacement of the
 %       centroid of the auditory image is calculated and plotted dependend
 %       on the ITD. The output is the displacement of the centroid for
 %       different c_s values.  Dim: c_s x nitds
 %
-%-     'fig8' - reproduces fig.8 from lindemann1986a.  The cross-correlation is
+%-    'fig8' - reproduces fig.8 from lindemann1986a.  The cross-correlation is
 %       calculated for different ILDs and different inhibition factors c_s =
 %       0.3, 1. Afterwards for every c_s the ILD is plotted dependend on the
 %       correaltion time. The output is the cross-correlation result of the
 %       to figure.  Dim: number of c_s conditions x nilds x delay line
 %       length.
 %
-%-     'fig10' - reproduces fig.10 from lindemann1986a. The cross-correlation is
+%-    'fig10' - reproduces fig.10 from lindemann1986a. The cross-correlation is
 %       calculated for different ILDs, an inhibition factor c_s = 0.3 and a
 %       monaural detector factor w_f = 0.035. Afterwards for every c_s the
 %       ILD is plotted dependend on the correaltion time.  The output is the
 %       cross-correlation result of the to figure.  Dim: number of c_s
 %       conditions x nilds x delay line length
 %
-%-     'fig11' - reproduces fig.11 from lindemann1986a.  The centroid position
+%-    'fig11' - reproduces fig.11 from lindemann1986a.  The centroid position
 %       is calculated for different ILDs, an inhibition factor c_s = 0.3 and
 %       a monaural detector factor w_f = 0.035. Afterwards for every c_s the
 %       displacement of the centroid is plotted dependend on the ILD. The
 %       output is the cross-correlation result of the to figure.  Dim:
 %       number of c_s conditions x nilds x delay line length
 %
-%-      'fig12' - reproduces fig.12 from lindemann1986a.  The centroids are
+%-    'fig12' - reproduces fig.12 from lindemann1986a.  The centroids are
 %       calculated for combinations of ITDs and ILDs.  After the calculation
 %       the values for the centroids of the stimuli are searched to find the
 %       nearest value to 0. The corresponding ILD value is stored in output
@@ -60,7 +60,7 @@ function output = exp_lindemann1986a(varargin)
 %       centroid near the center for an combined ITD, ILD stimulus with a
 %       given ITD value.  Dim: number of ITDs x 1
 %
-%-      'fig13' - reproduces fig.13 from lindemann1986a.  The centroids are
+%-    'fig13' - reproduces fig.13 from lindemann1986a.  The centroids are
 %       calculated for ILD only and ITD/ILD combination stimuli.After the
 %       calculation the values for the centroids of the ILD only stimuli are
 %       searched to find the nearest value to the centroid of a given
@@ -70,7 +70,7 @@ function output = exp_lindemann1986a(varargin)
 %       stimulus compared to a stimulus with both ITD and ILD.  Dim: number
 %       of ILDs x number of ITDs
 %
-%-     'fig14a' - reproduces fig.14 (a) from lindemann1986a.  The
+%-   'fig14a' - reproduces fig.14 (a) from lindemann1986a.  The
 %       cross-correlations for a combination of ILDs and a ITD of ~1ms are
 %       calculated. This is done for different ILDs and different inhibition
 %       factors c_s = [0,0.2,0.4,0.6,1]. Afterwards for every c_s the
@@ -78,7 +78,7 @@ function output = exp_lindemann1986a(varargin)
 %       on the ILD. The output is the displacement of the centroid for
 %       different c_s values and ILDs.  Dim: c_s x nilds
 %
-%-     'fig14b' - reproduces fig.14 (b) from lindemann1986a. The
+%-   'fig14b' - reproduces fig.14 (b) from lindemann1986a. The
 %       cross-correlations for a combination of ILDs and a ITD of ~1ms are
 %       calculated. This is done for different small ILDs with a standard
 %       deviation of 0-5. Afterwards for every standard deviation the mean
