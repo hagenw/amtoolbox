@@ -6,7 +6,7 @@
 %     LINDEMANN         - Calculate a binaural activity map
 %     PLOTLINDEMANN     - Plot the binaural activity map
 %     LINDEMANNWIN      - Apply a N_1/2 onset window to the signal
-%     CENTROID          - Centroid of the cross-correlation activation
+%     LINDCENTROID      - Centroid of the cross-correlation activation
 %     INTAURALCOH       - Calculates the interaural coherence
 %     BINCORR           - Running cross-correlation between two signals
 %

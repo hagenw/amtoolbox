@@ -78,7 +78,7 @@ for ii = 1:nitds_p
     % Find the maximum position
     max_p(ii) = findmax(cc);
     % Calculate the position of the centroid
-    cen_p(ii) = centroid(cc);
+    cen_p(ii) = lindcentroid(cc);
 end
 
 % Calculate the centroids for the combined stimuli
@@ -92,7 +92,7 @@ for ii = 1:nilds_t
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         cc = tmp(:,fc-4);
         max_t(jj,ii) = findmax(cc);
-        cen_t(jj,ii) = centroid(cc);
+        cen_t(jj,ii) = lindcentroid(cc);
     end
 end
 

@@ -68,7 +68,7 @@ for ii = 1:nilds
         % calculation starts with channel 5, so we have to subtract 4.
         cc = tmp(:,fc-4);
         % Calculate the position of the centroid
-        cen(jj,ii) = centroid(cc);
+        cen(jj,ii) = lindcentroid(cc);
     end
 end
 

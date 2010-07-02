@@ -64,7 +64,7 @@ for ii = 1:nitds
     sig = lindemannwin(sig,N_1);
     tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
     cc = tmp(:,fc-4);
-    cen(1,ii) = centroid(cc);
+    cen(1,ii) = lindcentroid(cc);
     % Generate results for std(ILD) ~= 0
     for nn = 1:length(ild_std)
         % Generate normal distributed ILDs with mean ~ 0 and std = 1
@@ -79,7 +79,7 @@ for ii = 1:nitds
             sig = lindemannwin(sig,N_1);
             tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
             cc = tmp(:,fc-4);
-            centmp(jj,ii) = centroid(cc);
+            centmp(jj,ii) = lindcentroid(cc);
         end
         % Calculate the mean centroid above the ILD distribution
         cen(nn+1,ii) = mean(centmp(:,ii));

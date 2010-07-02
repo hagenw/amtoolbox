@@ -70,7 +70,7 @@ for ii = 1:nilds_p
     % Store the needed frequency channel
     cc = tmp(:,fc-4);
     % Calculate the position of the centroid
-    cen_p(ii) = centroid(cc);
+    cen_p(ii) = lindcentroid(cc);
 end
 
 % Calculate the centroids for the combined stimuli
@@ -82,7 +82,7 @@ for ii = 1:nitds_t
         sig = lindemannwin(sig,N_1);
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         cc = tmp(:,fc-4);
-        cen_t(jj,ii) = centroid(cc);
+        cen_t(jj,ii) = lindcentroid(cc);
     end
 end
 

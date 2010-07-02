@@ -63,7 +63,7 @@ for ii = 1:nilds
         % Store the needed frequency channel
         cc = tmp(:,fc-4);
         % Calculate the position of the centroid
-        cen(jj,ii) = centroid(cc);
+        cen(jj,ii) = lindcentroid(cc);
     end
 end
 
