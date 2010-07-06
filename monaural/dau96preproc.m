@@ -87,7 +87,7 @@ definput.keyvals.subfs=[];
 fc = erbspacebw(flags.flow, flags.fhigh, 1, flags.basef);
 
 % Calculate filter coefficients for the gammatone filter bank.
-[gt_b, gt_a]=gammatone(fc, fs);
+[gt_b, gt_a]=gammatone(fc, fs, 'complex');
 
 % Apply the Gammatone filterbank
 inoutsig = 2*real(filterbank(gt_b,gt_a,inoutsig));

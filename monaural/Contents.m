@@ -1,4 +1,4 @@
-% AMT - CASP Models by Dau and collaborators
+% AMT - Monaural models
 %
 %  The AMT team, 2010.
 %
