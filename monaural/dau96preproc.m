@@ -21,17 +21,17 @@ function [inoutsig, fc] = dau96preproc(inoutsig, fs, flow, fhigh,subfs,basef)
 %   The following parameters may be passed at the end of the line of
 %   input arguments:
 %
-%      'flow',flow - Set the lowest frequency in the filterbank to
+%-     'flow',flow - Set the lowest frequency in the filterbank to
 %                    flow. Default value is 80 Hz.
 %
-%      'fhigh',fhigh - Set the highest frequency in the filterbank to
+%-     'fhigh',fhigh - Set the highest frequency in the filterbank to
 %                    fhigh. Default value is 8000 Hz.
 %
-%      'basef',basef - Ensure that the frequency basef is a center frequency
+%-     'basef',basef - Ensure that the frequency basef is a center frequency
 %                    in the filterbank. The default value of [] means
 %                    no default.
 % 
-%      'subfs',subfs - Apply a final downsampling of the subband signals
+%-     'subfs',subfs - Apply a final downsampling of the subband signals
 %                    to subfs Hz to avoid excessive data. The default value
 %                    of [] means no downsampling.
 %

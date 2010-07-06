@@ -61,12 +61,12 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-defnopos.flags.model={'nodefault','bernstein','breebart','dau','hilbert', ...
+definput.flags.model={'nodefault','bernstein','breebart','dau','hilbert', ...
                     'lindemann'};
 
-defnopos.flags.nonneg={'full','nonneg'};
+definput.flags.nonneg={'full','nonneg'};
 
-[flags,keyvals]  = amtarghelper(0,{},defnopos,varargin,upper(mfilename));
+[flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
 % ------ Computation -------------------------------------------------
 

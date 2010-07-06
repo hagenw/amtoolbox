@@ -23,14 +23,14 @@ function inoutsig = adaptloop(inoutsig,fs,varargin);
 %   ADAPTLOOP takes the following flags at the end of the line of input
 %   arguments:
 %
-%      dau - Choose the parameters as in the Dau 1996 and 1997 models. This
+%-     dau - Choose the parameters as in the Dau 1996 and 1997 models. This
 %           consists of 5 adaptation loops with an overshoot limiting of 10
 %           and a minimum level of 1e-5. This is a correction in regard to
 %           the published version of Dau 96, which did not use overshoot
 %           limiting. The adaptation loops have an exponential spacing.This
 %           flag is the default.
 %
-%      breebart - Choose the parameters as in the Breebart 2001 model. This
+%-     breebart - Choose the parameters as in the Breebart 2001 model. This
 %           consists of 5 adaptation loops without overshoot limiting and a
 %           minimum level of XXX. The adapation loops have a linear spacing.
 %
