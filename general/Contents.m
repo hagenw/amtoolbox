@@ -14,10 +14,7 @@
 %     FREQTOERB        - Frequency to erb scale conversion.
 %     ERBSPACE         - Equidistant points on the erb scale.
 %     ERBSPACEBW       - Equidistant points by equal bandwidth.
-%
-%  Properties of the auditory system
 %     AUDFILTBW        - Bandwidth of audiory filters.
-%     IHCENVELOPE      - Inner hair cell envelope extration.
 %
 %  Signal levels
 %     RMS              - RMS value of a signal.
