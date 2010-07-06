@@ -354,8 +354,30 @@ Cleanup:
 git gc
 \end_layout
 
+\begin_layout Standard
+To delete a local branch
+\end_layout
+
+\begin_layout LyX-Code
+git remove branch -D local-branch-name
+\end_layout
+
+\begin_layout Standard
+To delete a remote branch
+\end_layout
+
+\begin_layout LyX-Code
+git push origin :remote-branch-name
+\end_layout
+
 \begin_layout Subsection
 Rebasing
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Don't rebase!
 \end_layout
 
 \begin_layout Standard
