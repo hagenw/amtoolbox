@@ -1,4 +1,4 @@
-function inoutsig = ihcenvelope(inoutsig,fs,methodname,nonneg)
+function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %IHCENVELOPE   Inner hair cell envelope extration
 %   Usage:  outsig=ihcenvelope(insig,fs,methodname);
 %
@@ -39,8 +39,8 @@ function inoutsig = ihcenvelope(inoutsig,fs,methodname,nonneg)
 %                 of 800 Hz. This method is defined in the paper
 %                 Lindemann 1986a.
 %
-%   IHCENVELOPE(insig,fs,methodname,'nonneg') ensures that the output is
-%   non-negative by setting negative values to zero.
+%-    'nonneg'  - ensures that the output is non-negative by setting negative
+%                 values to zero. 
 %
 %R  bernstein1999normalized breebaart2001binaural gabor1946 lindemann1986a dau1996qmeI
   
@@ -48,7 +48,10 @@ function inoutsig = ihcenvelope(inoutsig,fs,methodname,nonneg)
 
 % ------ Checking of input parameters --------------------------------
 
-error(nargchk(3,4,nargin));
+if nargin<2
+  error('Too few input parameters.');
+end;
+
 
 if ~isnumeric(inoutsig)
   error('%s: The input signal must be numeric.',upper(mfilename));
@@ -58,20 +61,21 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-if ~ischar(methodname) 
-  error('%s: methodname must be a string.',upper(mfilename));
-end;
+defnopos.flags.model={'nodefault','bernstein','breebart','dau','hilbert', ...
+                    'lindemann'};
 
-if nargin==4
-  if ~ischar(nonneg) 
-    error('%s: last argument must be a string.',upper(mfilename));
-  end;
-end;
+defnopos.flags.nonneg={'full','nonneg'};
+
+[flags,keyvals]  = amtarghelper(0,{},defnopos,varargin,upper(mfilename));
 
 % ------ Computation -------------------------------------------------
 
-switch(lower(methodname))
- case 'bernstein'
+if flags.do_nodefault
+  error(['%s: you must supply a flag to designate the IHC model to ' ...
+         'use.'],upper(mfilename));
+end;
+
+if flags.do_bernstein
   % The computational trick mentioned in the Bernstein paper is used
   % here: Instead of raising the envelope to power .23 and combine with its
   % TFS, we raise it to power -.77, and combine with the original
@@ -80,39 +84,36 @@ switch(lower(methodname))
   cutofffreq=425;
   [b, a] = butter(2, cutofffreq*2/fs);
   inoutsig = filter(b,a, inoutsig);
- case 'breebart'
+end;
+
+if flags.do_breebart
   inoutsig = max( inoutsig, 0 );
   cutofffreq=2000;
   [b, a] = butter(1, cutofffreq*2/fs);
   for ii=1:5
     inoutsig = filter(b,a, inoutsig);
   end;
- case 'dau'
+end;
+
+if flags.do_dau
   inoutsig = max( inoutsig, 0 );
   cutofffreq=1000;
   [b, a] = butter(2, cutofffreq*2/fs);
   inoutsig = filter(b,a, inoutsig);
- case 'hilbert'
+end;
+
+if flags.do_hilbert
   inoutsig = abs(hilbert(inoutsig));
- case 'lindemann'
+end;
+
+if flags.do_lindemann
   inoutsig = max( inoutsig, 0 );
   cutofffreq=800;
   [b, a] = butter(1, cutofffreq*2/fs);
   inoutsig = filter(b,a, inoutsig);
- otherwise
-  error('%s: Unknown method name: %s.',upper(mfilename),methodname);
 end;
 
-if nargin==4
-  switch(lower(nonneg))
-   case 'nonneg'
-    switch(lower(methodname))
-     case {'bernstein','breebart','dau','lindemann'}
-      inoutsig = max( inoutsig, 0 );
-    end;    
-   case ''
-   otherwise
-    error(['Unknown argument.']);
-  end;  
+if flags.do_nonneg
+  inoutsig = max( inoutsig, 0 );
 end;
 
