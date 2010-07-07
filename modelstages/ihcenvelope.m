@@ -39,8 +39,10 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %                 of 800 Hz. This method is defined in the paper
 %                 Lindemann 1986a.
 %
-%-    'nonneg'  - ensures that the output is non-negative by setting negative
-%                 values to zero. 
+%-    'minlvl' - Set all values in the output equal to minlvl. The ensures that
+%                the output is non-negative and that further processing
+%                is not affected by unnaturally small values. The default
+%                value of [] means to not do this.
 %
 %R  bernstein1999normalized breebaart2001binaural gabor1946 lindemann1986a dau1996qmeI
   
@@ -64,7 +66,7 @@ end;
 definput.flags.model={'nodefault','bernstein','breebart','dau','hilbert', ...
                     'lindemann'};
 
-definput.flags.nonneg={'full','nonneg'};
+definput.flags.keyvals.minlvl=[];
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
@@ -113,7 +115,7 @@ if flags.do_lindemann
   inoutsig = filter(b,a, inoutsig);
 end;
 
-if flags.do_nonneg
-  inoutsig = max( inoutsig, 0 );
+if ~isempty(keyvals.minlvl)
+  inoutsig = max( inoutsig, keyvals.minlvl );
 end;
 
