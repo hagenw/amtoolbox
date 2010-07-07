@@ -16,8 +16,7 @@ function data = data_lindemann1986a(varargin)
 %
 %-    'fig11_yost'   - return data from Fig. 11. with condition 'yost'.
 %                      The data is ILD vs. lateral displacement (10 is max
-%                      displacement). If no flag is given, this is the
-%                      default.
+%                      displacement).
 %
 %-    'fig11_sayers' - return data from Fig. 11. with condition 'sayers'. The
 %                      data is ILD vs. lateral displacement (10 is max
@@ -39,6 +38,8 @@ function data = data_lindemann1986a(varargin)
 %                      x-axis, 0ms, 0.09ms, 0.18ms, 0.27ms. The data is ITD vs.
 %                      ILD.
 %
+%    If no flag is given, the function will print the list of valid flags.
+%
 %R  lindemann1986a
 
 %   AUTHOR: Hagen Wierstorf
@@ -47,7 +48,7 @@ function data = data_lindemann1986a(varargin)
 %% ------ Check input options --------------------------------------------
 
 % Define input flags
-definput.flags.type={...
+definput.flags.type={'missingflag',...
     'fig11_yost','fig11_sayers',...
     'fig12_400','fig12_600',...
     'fig13',...
@@ -59,6 +60,12 @@ definput.flags.plot = {'noplot','plot'};
 % Parse input options
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
+
+if flags.do_missingflag
+  flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+             sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end;
 
 %% ------ Data points from the paper ------------------------------------
 % The following data points are guessed after the plots in the paper from

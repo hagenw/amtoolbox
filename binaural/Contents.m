@@ -1,4 +1,4 @@
-% AMT binaural - Binaural models
+% AMT - Binaural models
 %
 %  The AMT team, 2010.
 %

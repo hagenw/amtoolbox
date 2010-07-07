@@ -1,4 +1,4 @@
-% AMT - Filter function
+% AMT - Filter functions
 %
 %  The AMT team, 2009.
 %

@@ -1,4 +1,4 @@
-% AMT Experiments - Recreate experiments
+% AMT - Recreate experiments
 %
 %   The AMT team, 2010.
 %
