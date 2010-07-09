@@ -12,9 +12,6 @@ function outsig = pinknoise(siglen,nsigs)
 %   PINKNOISE(siglen,nsigs) generates nsigs channels containing pink noise
 %   (1/f spectrum) with the length of siglen. The signals are arranged as
 %   columns in the output.
-%
-%R FIXME wikipedia (script after little2007)
-%
 
 %   AUTHOR: Hagen Wierstorf
 

@@ -3,6 +3,17 @@
 %   This script generate a figure showing the result of the lindemann
 %   binaural model for a 2 Hz binaural modulated sinusoid with a frequency of
 %   500 Hz.
+%
+%   FIGURE 1 Binaural modulated sinusoid
+%
+%     This figure shows the result of the lindemann binaural model.
+%
+%   FIGURE 2 Sinusoid with ITD
+%
+%     This figure shows the result of the lindemann binaural model.
+%
+%   See also: lindemann, bincorr, plotlindemann
+
 
 % Sampling rate
 fs = 44100;
@@ -12,7 +23,7 @@ f = 500;
 
 % ------ Fig 1. ----------------------------------------------------------
 
-figure(1);
+figure(1)
 
 % Binaural modulation frequency
 mf = 2;
@@ -38,7 +49,7 @@ plotlindemann(cc,t,f,'title',tstr);
 
 % ------ Fig 2. ----------------------------------------------------------
 
-figure(2);
+figure(2)
 
 % Generate an sinusoid with a ITD
 itd = 0.3; % (ms)

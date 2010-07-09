@@ -8,12 +8,12 @@
 %
 %   FIGURE 1 Clean test signal
 %
-%     This show the effect of adaptation on the clean test signal with and
+%     This figure shows the effect of adaptation on the clean test signal with and
 %     without overshoot limiting.
 %
 %   FIGURE 2 Noisy test signal
 %
-%     This show the effect of adaptation on the noisy test signal with and
+%     This figure shows the effect of adaptation on the noisy test signal with and
 %     without overshoot limiting.
 %
 %   See also: adaptloop

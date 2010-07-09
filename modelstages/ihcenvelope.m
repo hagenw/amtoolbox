@@ -66,7 +66,7 @@ end;
 definput.flags.model={'nodefault','bernstein','breebart','dau','hilbert', ...
                     'lindemann'};
 
-definput.flags.keyvals.minlvl=[];
+definput.keyvals.minlvl=[];
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 

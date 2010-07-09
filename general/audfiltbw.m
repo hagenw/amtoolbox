@@ -5,13 +5,13 @@ function bw = audfiltbw(fc)
 %   AUDFILTBW(fc) returns the equivalent rectangular bandwidth of the
 %   auditory filter at center frequency fc. The function uses the
 %   relation
-%M
+%
 %C     bw = 24.7 + fc/9.265
-%M     
+%     
 %   as estimated in Glasberg and Moore (1990)
-%M
+%
 %   See also: freqtoerb, erbspace
-%M
+%
 %R  glasberg1990daf
   
 %   AUTHOR : Peter L. Soendergaard
