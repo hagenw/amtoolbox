@@ -204,7 +204,7 @@ void adaptloop_set(adaptloopstate *s, const int fs, const double limit,
 }
 
 
-void adaptloop_run(adaptloopstate *s, double *insig, const int siglen,
+void adaptloop_run(adaptloopstate *s, const double *insig, const int siglen,
 		   double *outsig)
 {
    double tmp1;

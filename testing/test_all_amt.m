@@ -1,5 +1,5 @@
 
-tests_todo={ };
+tests_todo={ 'adaptloop' };
 
 
 total_tests_failed=0;
