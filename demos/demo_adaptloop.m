@@ -1,6 +1,6 @@
-%EXAMP_ADAPTLOOP  Show the effect of adaptation.
+%DEMO_ADAPTLOOP  Show the effect of adaptation.
 %
-%   This demo demonstrate the effect of adaptation applied to a test
+%   This script demonstrates the effect of adaptation applied to a test
 %   signal with and without noise.
 %
 %   The test signal is made of a sinosoidal ramp up and down between 0

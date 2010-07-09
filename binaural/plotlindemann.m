@@ -1,9 +1,9 @@
 function plotlindemann(crosscorr,t,varargin)
 %PLOTLINDEMANN Plots the binaural output pattern of the lindemann model
-%   Usage: plotlindemann(crosscorr,t,f,tstr)
-%          plotlindemann(crosscorr,t,f)
-%          plotlindemann(crosscorr,t,tstr)
-%          plotlindemann(crosscorr,t)
+%   Usage: plotlindemann(crosscorr,t,f,tstr);
+%          plotlindemann(crosscorr,t,f);
+%          plotlindemann(crosscorr,t,tstr);
+%          plotlindemann(crosscorr,t);
 %
 %   Input parameters:
 %       crosscorr   - cross-correlation matrix, output from the lindemann
@@ -23,7 +23,7 @@ function plotlindemann(crosscorr,t,varargin)
 %   The function takes the following flags at the end of the line of
 %   input arguments:
 %
-%       'fc',fc - plot only the frequency channel with its center frequency
+%-      'fc',fc - plot only the frequency channel with its center frequency
 %                   is nearest to the frequency f. The default value of []
 %                   means to plot the mean about all frequency channels
 %

@@ -40,10 +40,9 @@ function [crosscorr,t] = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %   where T_int denotes an integration time constant and R, L the right and 
 %   left input signal.
 %
+%   See also: lindemann
+%
 %R  lindemann1986a lindemann1986b
-%
-% see also: lindemann
-%
 
 % AUTHOR: Hagen Wierstorf
 
