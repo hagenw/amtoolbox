@@ -43,7 +43,7 @@ function [b,a]=gammatone(fc,fs,varargin);
 %   To create the filter coefficients of a 1-erb spaced filter bank using
 %   gammatone filters use the following construction
 %
-%C    [b,a] = gammatone(erbspacebw(flow,fhigh),fs);
+%C    [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 %  
 %R  aertsen1980strI glasberg1990daf
   
@@ -93,6 +93,12 @@ end;
 
 
 % ------ Computation --------------------------
+
+if flags.do_real
+  error(['GAMMATONE: It is currently not possible to generate coefficients for a real-valued ', ...
+         'filterbank. Please add the "complex" flag, and use 2*real(filterbank(', ...
+         '...)) to process your signal.']);
+end;      
 
 nchannels = length(fc);
 

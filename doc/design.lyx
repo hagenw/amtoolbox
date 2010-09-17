@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.6.1 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -70,15 +70,14 @@ Simplicity: Eliminate unneccesary configuration options.
 Directory structure
 \end_layout
 
-\begin_layout Subsection
-general
-\end_layout
-
-\begin_layout Standard
-This directory contains general functions that cannot be placed elsewhere.
+\begin_layout List
+\labelwidthstring 00.00.0000
+general This directory contains general functions that cannot be placed
+ elsewhere.
  Example contents
 \end_layout
 
+\begin_deeper
 \begin_layout Itemize
 Conversion between auditory scales: ERB, Mel, Bark
 \end_layout
@@ -87,30 +86,23 @@ Conversion between auditory scales: ERB, Mel, Bark
 RMS
 \end_layout
 
-\begin_layout Subsection
-humandata
+\end_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+humandata Function returning recorded (and published) human data
 \end_layout
 
-\begin_layout Standard
-Function returning recorded (and published) human data
+\begin_layout List
+\labelwidthstring 00.00.0000
+testing Test scripts
 \end_layout
 
-\begin_layout Subsection
-testing
+\begin_layout List
+\labelwidthstring 00.00.0000
+reference There are generally two categories of files that go here:
 \end_layout
 
-\begin_layout Standard
-Test scripts
-\end_layout
-
-\begin_layout Subsection
-reference
-\end_layout
-
-\begin_layout Standard
-There are generally two categories of files that go here:
-\end_layout
-
+\begin_deeper
 \begin_layout Enumerate
 Very simple implementations of concepts that are easy to read, but perhaps
  very slow or not general enough etc.
@@ -120,20 +112,15 @@ Very simple implementations of concepts that are easy to read, but perhaps
 Old code that is trusted but not necessarily easy to read or efficient.
 \end_layout
 
-\begin_layout Subsection
-experiments
+\end_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+experiments Descriptions of experiments.
 \end_layout
 
-\begin_layout Standard
-Descriptions of experiments.
-\end_layout
-
-\begin_layout Subsection
-demos
-\end_layout
-
-\begin_layout Standard
-Simple demos describing how to use the toolbox.
+\begin_layout List
+\labelwidthstring 00.00.0000
+demos Simple demos describing how to use the toolbox.
  The demos usually generates some plot, which are automatically put on the
  homepage.
 \end_layout
@@ -241,10 +228,6 @@ function names in Matlab should be lowercase.
 \end_layout
 
 \begin_layout Itemize
-All variable names should be lower case.
-\end_layout
-
-\begin_layout Itemize
 It is not allowed to use underscores in variable or function names.
  They are reserved for structural purposes, i.e.
  as in 
@@ -279,15 +262,6 @@ No global variables.
  Global variables makes it harder to debug, and the code cannot be parallized.
 \end_layout
 
-\begin_layout Itemize
-Global configurations switches must not alter the output of functions.
- This introduces bugs if people give the code to each other and they forget
- to tell what options was used.
- Such bugs can be very hard to find.
- They should only be used for harmless things like altering the apperaence
- of plots.
-\end_layout
-
 \begin_layout Subsection
 C specific coding standards
 \end_layout
@@ -307,7 +281,9 @@ target "http://en.wikipedia.org/wiki/CamelCase"
 \end_inset
 
 .
- This should be used with extreme care:
+ The general rule is that the word starts with a lower case letter, and
+ then the following words are starts will upper case letters.
+ Used with care:
 \end_layout
 
 \begin_deeper

@@ -34,7 +34,7 @@ function varargout=audspecgram(insig,fs,varargin)
 %                use the 'dau' model.
 %
 %-   'classic' - Display a classic spectrogram. This option is equal to
-%               'hilbert', 'noadapt', 'nomf'
+%               {'ihc','hilbert', 'noadapt', 'nomf'}
 %
 %-   'mlp',f   - Modulation low-pass filter to frequency f. Default is to
 %                low-pass filter to 50 Hz.
@@ -74,6 +74,10 @@ function varargout=audspecgram(insig,fs,varargin)
 %
 %-   'mesh'    - Do a mesh plot to display the spectrogram.
 %
+%-  'colorbar' - Display the colorbar. This is the default.
+%
+%-  'nocolorbar' - Do not display the colorbar.
+%
 %   See also:  erbtofreq, dau96
 %
 %   Demos:  demo_audspecgram
@@ -101,27 +105,31 @@ end;
 defaults=AMT_CONF.plotdefaults;
 
 % Define initial value for flags and key/value pairs.
-defnopos.flags.adapt={'adapt','noadapt'};
-defnopos.flags.thr={'nothr','thr'};
-defnopos.flags.dynrange={'fullrange','dynrange'};
-defnopos.flags.plottype={'image','contour','mesh','surf'};
-defnopos.flags.clim={'noclim','clim'};
-defnopos.flags.fmax={'nofmax','fmax'};
-defnopos.flags.mlp={'mlp','nomf'};
+definput.flags.adapt={'adapt','noadapt'};
+definput.flags.thr={'nothr','thr'};
+definput.flags.dynrange={'fullrange','dynrange'};
+definput.flags.plottype={'image','contour','mesh','surf'};
+definput.flags.clim={'noclim','clim'};
+definput.flags.fmax={'nofmax','fmax'};
+definput.flags.mlp={'mlp','nomf'};
 
-defnopos.keyvals.ihc='dau';
-defnopos.keyvals.dynrange=100;
-defnopos.keyvals.thr=0;
-defnopos.keyvals.clim=[0,1];
-defnopos.keyvals.fmax=0;
-defnopos.keyvals.ytick=[0,100,250,500,1000,2000,4000,8000];
-defnopos.keyvals.mlp=50;
-defnopos.keyvals.frange=[0,8000];
-defnopos.keyvals.xres=800;
-defnopos.keyvals.yres=600;
+definput.keyvals.ihc='dau';
+definput.keyvals.dynrange=100;
+definput.keyvals.thr=0;
+definput.keyvals.clim=[0,1];
+definput.keyvals.fmax=0;
+definput.keyvals.ytick=[0,100,250,500,1000,2000,4000,8000];
+definput.keyvals.mlp=50;
+definput.keyvals.frange=[0,8000];
+definput.keyvals.xres=800;
+definput.keyvals.yres=600;
+
+definput.flags.colorbar={'colorbar','nocolorbar'};
+
+definput.groups.classic={'ihc','hilbert', 'noadapt', 'nomf'};
 
 
-[flags,keyvals]=ltfatarghelper(0,{},defnopos,varargin,upper(mfilename));
+[flags,keyvals]=ltfatarghelper({},definput,varargin);
 
 siglen=length(insig);
 
@@ -245,6 +253,10 @@ set(gca,'YTickLabel',num2str(keyvals.ytick(:)));
 axis('xy');
 xlabel('Time (s)')
 ylabel('Frequency (Hz)')
+
+if flags.do_colorbar
+  colorbar;
+end;
 
 if nargout>0
   varargout={outsig,fc};

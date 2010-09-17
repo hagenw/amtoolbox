@@ -17,10 +17,12 @@
 disp('Type "help demo_audspecgram" to see a description of how this demo works.');
 
 figure(1);
-audspecgram(greasy,16000,'classic');
+audspecgram(greasy,16000,'classic','dynrange',50);
+title('Classic spectrogram using the erb scale.');
 
 figure(2);
 audspecgram(greasy,16000);
+title('Dau style spectrogram.');
 
 
 
