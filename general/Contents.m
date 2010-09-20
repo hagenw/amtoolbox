@@ -1,6 +1,6 @@
 % AMT - General functions
 %
-%  The AMT team, 2009.
+%  The AMT team, 2010.
 %
 %  Plots
 %     SEMIAUDPLOT      - 2D plot on auditory scale.
