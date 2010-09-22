@@ -139,8 +139,6 @@ nfbin = size(c,1);   % Number of frequency bins
 % Get the log-spectrogram
 s=log(abs(c)+eps);
 
-fi=fftreal(s);
-
 % Convert to spectro-temporal modulation domain
 % Use regular fft along time and fftreal along frequency.
 st = fft(fftreal(s),[],2);
@@ -149,7 +147,7 @@ st = fft(fftreal(s),[],2);
 % values. Perhaps a proper scaling is needed.
 
 % Go to dB. XXX Use 20 or 10? How do we interpret this?
-st = 10*log10(abs(st)+eps);
+st = 20*log10(abs(st)+eps);
 
 if flags.do_interp
   st=fftresample(st,kv.xres,2);
