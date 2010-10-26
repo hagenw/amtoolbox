@@ -15,11 +15,6 @@ function stmodspecgram(f,fs,varargin)
 %               possiblities. Default is to use a Gaussian window
 %               controlled by the 'thr' or 'wlen' parameters listed below.
 %
-%-  'tfr',v   - Set the ratio of frequency resolution to time resolution.
-%               A value v=1 is the default. Setting v>1 will give better
-%               frequency resolution at the expense of a worse time
-%               resolution. A value of 0<v<1 will do the opposite.
-%
 %-  'wlen',s  - Window length. Specifies the length of the window
 %               measured in samples. See help of PGAUSS on the exact
 %               details of the window length.
@@ -70,7 +65,6 @@ end;
 
 
 % Define initial value for flags and key/value pairs.
-definput.flags.wlen={'nowlen','wlen'};
 definput.flags.plottype={'image','contour','mesh','pcolor'};
 
 definput.flags.clim={'noclim','clim'};
@@ -78,9 +72,8 @@ definput.flags.log={'db','lin'};
 definput.flags.colorbar={'colorbar','nocolorbar'};
 definput.flags.interp={'interp','nointerp'};
 
-definput.keyvals.tfr=1;
 definput.keyvals.win=[];
-definput.keyvals.wlen=0;
+definput.keyvals.wlen=fs*.01; % Default window, 10 ms.
 definput.keyvals.thr=0;
 definput.keyvals.clim=[0,1];
 definput.keyvals.climsym=1;
@@ -116,16 +109,11 @@ else
 end;
 
 % Set an explicit window length, if this was specified.
-if flags.do_wlen
-  kv.tfr=kv.wlen^2/L;
-end;
 
 if isempty(kv.win)
   % Authors use a Gaussian with a width in time of 10 ms and 16 Hz in
   % frequency.
-  g={'gauss','width',fs/1000*10};
-
-  %g={'gauss',kv.tfr};  
+  g={'gauss','width',kv.wlen};
 end;
 
 % Discrete Gabor transform, use the complex version, so we avoid having to deal with

@@ -20,10 +20,11 @@ function [b,a]=gammatone(fc,fs,varargin);
 %   determined as betamul times AUDFILTBW of the center frequency of
 %   corresponding filter.
 %
+%   The returned filter coefficients comes from the all-pole
+%   approximation described in Hohmann (2002).
+%
 %   GAMMATONE(fc,fs,n) will do the same but choose a filter bandwidth
-%   according to Glasberg and Moore (1990). The order n can only be 2 or
-%   4. If the order is 4 then betamul is choosen to be 1.0183 and if the
-%   order is 2 then betamul is choosen to be 0.637.
+%   according to Glasberg and Moore (1990).
 %
 %   GAMMATONE(fc,fs) will do as above for a 4th order filter.
 %
@@ -45,7 +46,7 @@ function [b,a]=gammatone(fc,fs,varargin);
 %
 %C    [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 %  
-%R  aertsen1980strI glasberg1990daf
+%R  aertsen1980strI patterson1988efficient glasberg1990daf hohmann2002frequency
   
 %   AUTHOR : Stephan Ewert, Peter L. Soendergaard
 
@@ -76,15 +77,9 @@ if ~isnumeric(n) || ~isscalar(n) || n<=0 || fix(n)~=n
 end;
 
 if isempty(betamul)
-  switch(n)
-   case 2
-    betamul =  0.637;
-   case 4
-    betamul = 1.0183;
-   otherwise
-    error(['GAMMATONE: Default value for beta can only be computed for 2nd ' ...
-           'and 4th order filters.']);
-  end;
+  % This formula comes from patterson1988efficient
+  betamul = (factorial(n-1))^2/(pi*factorial(2*n-2)*2^(-(2*n-2)));
+
 else
   if ~isnumeric(betamul) || ~isscalar(betamul) || betamul<=0
     error('%s: beta must be a positive scalar.',upper(mfilename));
@@ -108,8 +103,15 @@ a=zeros(nchannels,n+1);
 % ourbeta is used in order not to mask the beta function.
 
 ourbeta = betamul*audfiltbw(fc);
-  
+
 for ii = 1:nchannels
+
+  % It should be possible to replace the code in this loop by the
+  % following two lines, but zp2tf only seams to handle real-valued
+  % filters, so the code does not work.
+  %atilde = exp(-2*pi*ourbeta(ii)/fs + i*2*pi*fc(ii)/fs);
+  %[bnew,anew]=zp2tf([],atilde*ones(1,n),1);
+
   
   btmp=1-exp(-2*pi*ourbeta(ii)/fs);
   atmp=[1, -exp(-(2*pi*ourbeta(ii) + i*2*pi*fc(ii))/fs)];

@@ -1,15 +1,11 @@
-function [inoutsig, fc] = dau96preproc(inoutsig, fs, flow, fhigh,subfs,basef)
+function [outsig, fc] = dau96preproc(insig, fs, varargin);
 %DAU96PREPROC   Auditory model from Dau et. al. 1996.
-%   Usage: [outsig, fc] = dau96preproc(insig,fs,flow,fhigh);
-%          [outsig, fc] = dau96preproc(insig,fs,flow,fhigh,subfs);
-%          [outsig, fc] = dau96preproc(insig,fs,flow,fhigh,subfs,basef);
+%   Usage: [outsig, fc] = dau96preproc(insig,fs);
+%          [outsig, fc] = dau96preproc(insig,fs,...);
 %
 %   Input parameters:
 %     insig  : input acoustic signal.
 %     fs     : sampling rate.
-%     flow   : lowest filter center frequency. 
-%     fhigh  : highest filter center frequency.
-%     basef  : Always include this frequency in the filter bank (optional).
 %  
 %   DAU96PREPROC(insig,fs) computes the internal representation of the signal insig
 %   sampled with a frequency of fs Hz as described in Dau, Puschel and
@@ -76,10 +72,11 @@ end;
 
 definput.keyvals.flow=80;
 definput.keyvals.fhigh=8000;
-definput.keyvals.basef=-1;
+definput.keyvals.basef=[];
 definput.keyvals.subfs=[];
 
-[flags,keyvals]  = ltfatarghelper({},defnopos,varargin);
+[flags,keyvals,flow,fhigh,basef,subfs]  = ltfatarghelper({'flow', ...
+                    'fhigh','basef',subfs'},definput,varargin);
 
 % ------ do the computation -------------------------
 
@@ -90,7 +87,7 @@ fc = erbspacebw(flags.flow, flags.fhigh, 1, flags.basef);
 [gt_b, gt_a]=gammatone(fc, fs, 'complex');
 
 % Apply the Gammatone filterbank
-inoutsig = 2*real(filterbank(gt_b,gt_a,inoutsig));
+outsig = 2*real(filterbank(gt_b,gt_a,insig));
 
 % 'haircell' envelope extraction
 inoutsig = ihcenvelope(inoutsig,fs,'dau');
