@@ -178,7 +178,7 @@ fc = erbspace(flow,fhigh,keyvals.yres);
 [gt_b, gt_a, delay]=gammatone(fc, fs, 'complex');
 
 % Apply the Gammatone filterbank
-outsig = 2*real(filterbank(gt_b,gt_a,insig,hopsize));
+outsig = 2*real(filterbankz(gt_b,gt_a,insig,hopsize));
 
 % The subband are now (possibly) sampled at a lower frequency than the
 % original signal.

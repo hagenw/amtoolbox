@@ -1,12 +1,12 @@
-function outsig=filterbank(b,a,insig,hopsize)
-%FILTERBANK  Wrapper around filter to multiple filters
+function outsig=filterbankz(b,a,insig,hopsize)
+%FILTERBANKZ  Filter bank with zero boundary condition
 %   Usage: outsig=filterbank(b,a,insig);
 %          outsig=filterbank(b,a,insig,hopsize);
 %
-%   FILTERBANK(b,a,insig) filters the input signal with the filters
+%   FILTERBANKZ(b,a,insig) filters the input signal with the filters
 %   described in _a and b.
 %
-%   FILTERBANK(b,a,insig,hopsize) does the same, but only outputs every
+%   FILTERBANKZ(b,a,insig,hopsize) does the same, but only outputs every
 %   hopsize sample in the time domain.
 %
 %   If _a and b are matrices then each row corresponds to a subband

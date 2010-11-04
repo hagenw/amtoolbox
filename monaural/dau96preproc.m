@@ -87,7 +87,7 @@ fc = erbspacebw(flags.flow, flags.fhigh, 1, flags.basef);
 [gt_b, gt_a]=gammatone(fc, fs, 'complex');
 
 % Apply the Gammatone filterbank
-outsig = 2*real(filterbank(gt_b,gt_a,insig));
+outsig = 2*real(filterbankz(gt_b,gt_a,insig));
 
 % 'haircell' envelope extraction
 inoutsig = ihcenvelope(inoutsig,fs,'dau');
