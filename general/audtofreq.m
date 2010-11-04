@@ -7,7 +7,7 @@ function freq = audtofreq(scale,aud);
 %
 %   See the help on FREQTOAUD to get a list of the supported values of the
 %   scale parameter. 
-%M
+%
 %   See also: freqtoaud, audspace, audfiltbw
 
 %   AUTHOR: Peter L. Soendergaard

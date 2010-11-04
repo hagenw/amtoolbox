@@ -6,7 +6,7 @@ function [y,n] = erbspacebw(varargin)
 %
 %   This is a wrapper around audspacebw that selects the erb-scale. Please
 %   see the help on AUDSPACEBW for more information.
-%M
+%
 %   See also: audspacebw, freqtoaud
   
 %   AUTHOR : Peter L. Soendergaard

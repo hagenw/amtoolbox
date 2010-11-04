@@ -23,7 +23,7 @@ function [y,n] = audspacebw(scale,flow,fhigh,bw,hitme)
 %
 %   [y,n]=AUDSPACEBW( ... ) additionally returns the number of points n in
 %   the output vector y.
-%M
+%
 %   See also: freqtoaud, audspace, audfiltbw
   
 %   AUTHOR : Peter L. Soendergaard

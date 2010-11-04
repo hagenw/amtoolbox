@@ -41,6 +41,10 @@ function varargout=audspecgram(insig,fs,varargin)
 %
 %-   'nomf'    - No modulation filtering of any kind.
 %
+%-   'gammatonedelay' - Default
+%
+%-   'zerodelay' - New.
+%
 %-   'image'   - Use 'imagesc' to display the spectrogram. This is the default.
 %
 %-   'clim',[clow,chigh] - Use a colormap ranging from clow to chigh. These
@@ -112,6 +116,7 @@ definput.flags.plottype={'image','contour','mesh','surf'};
 definput.flags.clim={'noclim','clim'};
 definput.flags.fmax={'nofmax','fmax'};
 definput.flags.mlp={'mlp','nomf'};
+definput.flags.delay={'gammatonedelay','zerodelay'};
 
 definput.keyvals.ihc='dau';
 definput.keyvals.dynrange=100;
@@ -170,7 +175,7 @@ hopsize=1;
 fc = erbspace(flow,fhigh,keyvals.yres);
 
 % Calculate filter coefficients for the gammatone filter bank.
-[gt_b, gt_a]=gammatone(fc, fs, 'complex');
+[gt_b, gt_a, delay]=gammatone(fc, fs, 'complex');
 
 % Apply the Gammatone filterbank
 outsig = 2*real(filterbank(gt_b,gt_a,insig,hopsize));
@@ -216,11 +221,24 @@ if flags.do_dynrange
 end;
 
 % Set the range for plotting
+xsamples=siglen/hopsize;
 xr=(0:hopsize:siglen-1)/fs;
-yr=linspace(audlimits(1),audlimits(2),length(fc));
+yr=linspace(audlimits(1),audlimits(2),keyvals.yres);
 
 % Determine the labels and position for the y-label.
 ytickpos=freqtoerb(keyvals.ytick);
+
+if flags.do_zerodelay
+  % Correct the delays
+  for n=1:keyvals.yres
+    cut=round(delay(n)*fssubband);
+    %size(outsig(:,n))
+    %xsamples
+    %cut
+    %size([outsig(cut:end,n);zeros(cut-1,1)])
+    outsig(:,n)=[outsig(cut:end,n);zeros(cut-1,1)];
+  end;
+end;
 
 % Flip the output correctly. Each column is a subband signal, and should
 % be display as the rows.

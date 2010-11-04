@@ -12,9 +12,9 @@ function [y,bw] = audspace(scale,flow,fhigh,n)
 %   [y,bw]=AUDSPACE(...) does the same but outputs the bandwidth between
 %   each sample measured on the selected scale.
 %  
-%M
+%
 %   See also: freqtoaud, audspacebw, audfiltbw
-%M
+%
 %R  glasberg1990daf
   
 %   AUTHOR : Peter L. Soendergaard

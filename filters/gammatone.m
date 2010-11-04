@@ -1,4 +1,4 @@
-function [b,a]=gammatone(fc,fs,varargin);
+function [b,a,delay]=gammatone(fc,fs,varargin);
 %GAMMATONE  Gammatone filter coefficients
 %   Usage: [b,a] = gammatone(fc,fs,n,betamul);
 %          [b,a] = gammatone(fc,fs,n);
@@ -52,6 +52,11 @@ function [b,a]=gammatone(fc,fs,varargin);
 
 % ------ Checking of input parameters ---------
   
+  
+% TODO: The phases of the filters all start at zero. This means that the
+% real value of the impulse response of the filters does peak at the same
+% time as the absolute value does. Include option to shift the phases so
+% all filters have a distinct peak.
 
 if nargin<2
   error('%s: Too few input arguments.',upper(mfilename));
@@ -69,6 +74,7 @@ end;
 definput.keyvals.n=4;
 definput.keyvals.betamul=[];
 definput.flags.real={'real','complex'};
+definput.flags.phase={'causalphase','peakphase'};
 
 [flags,keyvals,n,betamul]  = ltfatarghelper({'n','betamul'},definput,varargin);
 
@@ -77,7 +83,8 @@ if ~isnumeric(n) || ~isscalar(n) || n<=0 || fix(n)~=n
 end;
 
 if isempty(betamul)
-  % This formula comes from patterson1988efficient
+  % This formula comes from patterson1988efficient, but it is easier to
+  % find in the Hohmann paper.
   betamul = (factorial(n-1))^2/(pi*factorial(2*n-2)*2^(-(2*n-2)));
 
 else
@@ -104,6 +111,9 @@ a=zeros(nchannels,n+1);
 
 ourbeta = betamul*audfiltbw(fc);
 
+% This is when the function peaks.
+delay = 3./(2*pi*ourbeta);
+
 for ii = 1:nchannels
 
   % It should be possible to replace the code in this loop by the
@@ -111,7 +121,6 @@ for ii = 1:nchannels
   % filters, so the code does not work.
   %atilde = exp(-2*pi*ourbeta(ii)/fs + i*2*pi*fc(ii)/fs);
   %[bnew,anew]=zp2tf([],atilde*ones(1,n),1);
-
   
   btmp=1-exp(-2*pi*ourbeta(ii)/fs);
   atmp=[1, -exp(-(2*pi*ourbeta(ii) + i*2*pi*fc(ii))/fs)];
@@ -130,6 +139,11 @@ for ii = 1:nchannels
 
 end;
 
+if flags.do_peakphase
+  b=b.*exp(-2*pi*i*fc.*delay)
+  %b=2*b;
+end;
+  
 if flags.do_real
   b=real(b);
   a=real(a);

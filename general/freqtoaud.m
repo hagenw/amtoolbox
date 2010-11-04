@@ -27,10 +27,9 @@ function aud = freqtoaud(scale,freq);
 %
 %-    'erb83' - This is the original defintion of the erb scale given in
 %               Moore. et al. (1983).
-%-
-%M
+%
 %   See also: freqtoaud, audspace, audfiltbw
-%M
+%
 %R  stevens1937smp zwicker1961saf glasberg1990daf traunmuller1990aet moore1983sfc
   
 %   AUTHOR: Peter L. Soendergaard

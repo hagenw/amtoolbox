@@ -4,7 +4,7 @@ function freq = erbtofreq(erb);
 %  
 %   This is a wrapper around audtofreq that selects the erb-scale. Please
 %   see the help on AUDTOFREQ for more information.
-%M
+%
 %   See also: audtofreq, freqtoaud
 
 %   AUTHOR: Peter L. Soendergaard

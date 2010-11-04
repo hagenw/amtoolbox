@@ -4,7 +4,7 @@ function [y,bw] = erbspace(flow,fhigh,n)
 %
 %   This is a wrapper around AUDSPACE that selects the erb-scale. Please
 %   see the help on AUDSPACE for more information.
-%M
+%
 %   See also: audspace, freqtoaud
 
 %   AUTHOR : Peter L. Soendergaard
