@@ -174,12 +174,29 @@ hopsize=1;
 % find the center frequencies used in the filterbank
 fc = erbspace(flow,fhigh,keyvals.yres);
 
-% Calculate filter coefficients for the gammatone filter bank.
-[gt_b, gt_a, delay]=gammatone(fc, fs, 'complex');
+if 0
+  % Calculate filter coefficients for the gammatone filter bank.
+  [gt_b, gt_a, delay]=gammatone(fc, fs, 'complex');
+  
+  % Apply the Gammatone filterbank
+  outsig = 2*real(filterbankz(gt_b,gt_a,insig,hopsize));
+  
+else
+  L=siglen;
+  bw_gauss=audfiltbw(fc)/fs*L/0.79;
 
-% Apply the Gammatone filterbank
-outsig = 2*real(filterbankz(gt_b,gt_a,insig,hopsize));
+  fc_gauss=round(fc/fs*L);
+  g=cell(1,keyvals.yres);
 
+  for m=1:keyvals.yres
+    g{m}=real(pgauss(L,'bandwidth',bw_gauss(m)).*expwave(L,fc_gauss(m)));
+  end;
+  
+  outsig=filterbank(insig,g,hopsize);
+end;
+
+
+  
 % The subband are now (possibly) sampled at a lower frequency than the
 % original signal.
 fssubband=round(fs/hopsize);
