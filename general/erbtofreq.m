@@ -9,6 +9,6 @@ function freq = erbtofreq(erb);
 
 %   AUTHOR: Peter L. Soendergaard
   
-freq = audtofreq('erb',erb);
+freq = audtofreq(erb,'erb');
 
 

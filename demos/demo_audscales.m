@@ -28,7 +28,7 @@ symbols = {'r.' ,'go'  ,'bx' ,'y+'};
 
 hold on;
 for ii=1:numel(types)
-  curve = freqtoaud(types{ii},xrange);
+  curve = freqtoaud(xrange,types{ii});
   % Normalize the frequency to a maximum of 1.
   curve=curve/curve(end);
   plot(xrange,curve,symbols{ii});

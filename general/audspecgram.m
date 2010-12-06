@@ -141,7 +141,7 @@ siglen=length(insig);
 fhigh=keyvals.frange(2);
 flow =keyvals.frange(1);
 
-audlimits=freqtoaud('erb',keyvals.frange);
+audlimits=freqtoerb(keyvals.frange);
 
 % fhigh can at most be the Nyquest frequency
 fhigh=min(fhigh,fs/2);

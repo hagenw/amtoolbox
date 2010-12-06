@@ -11,4 +11,4 @@ function [y,n] = erbspacebw(varargin)
   
 %   AUTHOR : Peter L. Soendergaard
   
-[y,n] = audspacebw('erb',varargin{:});
+[y,n] = audspacebw(varargin{:},'erb');

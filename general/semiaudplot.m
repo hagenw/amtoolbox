@@ -40,15 +40,15 @@ definput.keyvals.opts = {};
   
 tick=[0,100,250,500,1000,2000,4000,8000];
 n=500;
-tickpos=freqtoaud(flags.scale,keyvals.tick);
+tickpos=freqtoaud(keyvals.tick,flags.scale);
   
   
 if flags.do_x
   xmin=min(x);
   xmax=max(x);
-  audminmax=freqtoaud(flags.scale,[xmin,xmax]);
+  audminmax=freqtoaud([xmin,xmax],flags.scale);
   
-  plotval=spline(x,y,audspace(flags.scale,xmin,xmax,n));
+  plotval=spline(x,y,audspace(xmin,xmax,n,flags.scale));
   plot(linspace(audminmax(1),audminmax(2),n),plotval,keyvals.opts{:});
   set(gca,'XTick',tickpos);
   set(gca,'XTickLabel',num2str(tick(:)));
@@ -58,7 +58,7 @@ end;
 if flags.do_y
   ymin=min(y);
   ymax=max(y);
-  audminmax=freqtoaud(flags.scale,[ymin,ymax]);
+  audminmax=freqtoaud([ymin,ymax],flags.scale);
   
   plot(x,freqtoerb(y),keyvals.opts{:});
   set(gca,'YTick',tickpos);

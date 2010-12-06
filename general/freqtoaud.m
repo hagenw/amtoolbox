@@ -1,8 +1,8 @@
-function aud = freqtoaud(scale,freq);
+function aud = freqtoaud(freq,varargin);
 %FREQTOAUD  Converts frequencies (Hz) to auditory scale units.
 %   Usage: aud = freqtoaud(scale,freq);
 %
-%   FREQTOAUD(scale,freq) converts values on frequency scale (measured in Hz) to
+%   FREQTOAUD(freq,scale) converts values on frequency scale (measured in Hz) to
 %   values on the selected auditory scale. The value of the parameter
 %   scale determines the auditory scale:
 %
@@ -28,42 +28,56 @@ function aud = freqtoaud(scale,freq);
 %-    'erb83' - This is the original defintion of the erb scale given in
 %               Moore. et al. (1983).
 %
+%   If no flag is given, the function will print the list of valid flags.
+%
 %   See also: freqtoaud, audspace, audfiltbw
 %
 %R  stevens1937smp zwicker1961saf glasberg1990daf traunmuller1990aet moore1983sfc
   
 %   AUTHOR: Peter L. Soendergaard
 
-% ------ Checking of input parameters ---------
+%% ------ Checking of input parameters ---------
 
-error(nargchk(2,2,nargin));
+if nargin<1
+  error('%s: Too few input parameters.',upper(mfilename));
+end;
 
 if ~isnumeric(freq) ||  all(freq(:)<0)
   error('%s: freq must be a non-negative number.',upper(mfilename));
 end;
 
-if ~ischar(scale)
-  error('%s: the scale must be denoted by a character string.',upper(mfilename))
+definput.flags.scale={'missingflag','mel','bark','erb','erb83'};
+[flags,kv]=ltfatarghelper({},definput,varargin);
+
+if flags.do_missingflag
+  flagnames=[sprintf('%s, ',definput.flags.scale{2:end-2}),...
+             sprintf('%s or %s',definput.flags.scale{end-1},...
+                     definput.flags.scale{end})];
+  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
 
-% ------ Computation --------------------------
 
-switch(lower(scale))
- case 'mel'
+%% ------ Computation --------------------------
+
+
+if flags.do_mel
   aud = 1127.01048*log(1+freq/700);
- case 'erb'
+end;
+
+if flags.do_erb
   aud = 9.265*log(1+freq/228.8455);
- case 'bark'
+end;
+
+if flags.do_bark
   % The bark scale seems to have several different approximations available.
   
   % This one was found through http://www.ling.su.se/STAFF/hartmut/bark.htm
   aud = (26.81./(1+1960./freq))-0.53;
   
   % The one below was found on Wikipedia.
-  %aud = 13*atan(0.00076*freq)+3.5*atan((freq/7500).^2);  
- case 'erb83'
+  %aud = 13*atan(0.00076*freq)+3.5*atan((freq/7500).^2);
+end;
+
+if flags.do_erb83
   aud = 11.17*log((freq+312)./(freq+14675))+43.0;
- otherwise
-  error(['%s: unknown auditory scale: %s. Please see the help for a list ' ...
-         'of supported scales.'],upper(mfilename),scale);
 end;
