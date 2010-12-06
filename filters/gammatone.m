@@ -117,7 +117,7 @@ delay = 3./(2*pi*ourbeta);
 for ii = 1:nchannels
 
   % It should be possible to replace the code in this loop by the
-  % following two lines, but zp2tf only seams to handle real-valued
+  % following two lines, but zp2tf only seems to handle real-valued
   % filters, so the code does not work.
   %atilde = exp(-2*pi*ourbeta(ii)/fs + i*2*pi*fc(ii)/fs);
   %[bnew,anew]=zp2tf([],atilde*ones(1,n),1);
