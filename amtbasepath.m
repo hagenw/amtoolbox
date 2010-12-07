@@ -7,6 +7,6 @@ function bp = amtbasepath;
 %
 %   See also: amtstart
   
-global AMT_CONF
+f=mfilename('fullpath');
 
-bp = AMT_CONF.basepath;
+bp = f(1:end-11);

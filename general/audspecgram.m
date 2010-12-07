@@ -98,16 +98,6 @@ if ~isnumeric(insig) || ~isvector(insig)
   error('%s: Input must be a vector.',upper(mfilename));
 end;
 
-global AMT_CONF;
-
-if isempty(AMT_CONF)
-  error(['You need to run AMTSTART. This could be because you have used a ', ...
-        'CLEAR ALL statement.']);
-end;
-
-% Get the default values.
-defaults=AMT_CONF.plotdefaults;
-
 % Define initial value for flags and key/value pairs.
 definput.flags.adapt={'adapt','noadapt'};
 definput.flags.thr={'nothr','thr'};
@@ -189,7 +179,7 @@ else
   g=cell(1,keyvals.yres);
 
   for m=1:keyvals.yres
-    g{m}=real(pgauss(L,'bandwidth',bw_gauss(m)).*expwave(L,fc_gauss(m)));
+    g{m}=real(pgauss(L,'bw',bw_gauss(m),'cf',fc_gauss(m)));
   end;
   
   outsig=filterbank(insig,g,hopsize);
