@@ -17,7 +17,6 @@
 %     AUDFILTBW        - Bandwidth of audiory filters.
 %
 %  Signal levels
-%     RMS              - RMS value of a signal.
 %     RMSDB            - RMS value in dB.
 %     PEAKSPL          - Peak SPL value in dB.
 %     GAINDB           - Increase/descrease level of signal.
