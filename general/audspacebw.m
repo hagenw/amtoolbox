@@ -1,8 +1,8 @@
-function [y,n] = audspacebw(flow,fhigh,bw,varargin)
+function [y,n] = audspacebw(flow,fhigh,varargin)
 %AUDSPACEBW  Auditory scale points specified by bandwidth
-%   Usage: y=audspacebw(scale,flow,fhigh,bw,hitme);
-%          y=audspacebw(scale,flow,fhigh,bw);
-%          y=audspacebw(scale,flow,fhigh);
+%   Usage: y=audspacebw(flow,fhigh,bw,hitme);
+%          y=audspacebw(flow,fhigh,bw);
+%          y=audspacebw(flow,fhigh);
 %          [y,n]=audspacebw(...);
 %
 %   AUDSPACEBW(flow,fhigh,bw,scale) computes a vector containing
@@ -10,7 +10,7 @@ function [y,n] = audspacebw(flow,fhigh,bw,varargin)
 %   auditory scale.  All frequencies are specified in Hz.The distance
 %   between two consecutive values are given by a value of bw the
 %   scale, and the points will be centered on the scale between flow
-%   and fhigh
+%   and fhigh.
 %
 %   See the help on FREQTOAUD to get a list of the supported values of the
 %   scale parameter.
@@ -27,7 +27,7 @@ function [y,n] = audspacebw(flow,fhigh,bw,varargin)
   
 % ------ Checking of input parameters ---------
   
-if nargin<3
+if nargin<2
   error('%s: Too few input parameters.',upper(mfilename));
 end;
 
@@ -43,14 +43,17 @@ if flow>fhigh
   error('%s: flow must be less than or equal to fhigh.',upper(mfilename));
 end;
 
+
+definput.flags.scale={'missingflag','mel','bark','erb','erb83'};
+definput.keyvals.hitme=[];
+definput.keyvals.bw=1;
+
+[flags,kv,bw]=ltfatarghelper({'bw','hitme'},definput,varargin);
+
 if ~isnumeric(bw) || ~isscalar(bw) || bw<=0 
   error('%s: bw must be a positive scalar.',upper(mfilename));
 end;
 
-definput.flags.scale={'missingflag','mel','bark','erb','erb83'};
-definput.keyvals.hitme=[];
-
-[flags,kv]=ltfatarghelper({'hitme'},definput,varargin);
   
 %% ------ Computation --------------------------
 
@@ -69,12 +72,12 @@ if isempty(kv.hitme)
   audpoints = audlimits(1)+(0:n)*bw+remainder/2;
   
   % Add the final point
-  n=n+1;
+  n=n+1;  
   
 else
     
   % Convert the frequency limits to auds.
-  audlimits    = freqtoaud([flow,fhigh,flags.hitme],flags.scale);
+  audlimits    = freqtoaud([flow,fhigh,kv.hitme],flags.scale);
   audrangelow  = audlimits(3)-audlimits(1);
   audrangehigh = audlimits(2)-audlimits(3);
 
