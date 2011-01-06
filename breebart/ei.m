@@ -52,6 +52,6 @@ y= filtfilt(B,A,x);% / ( (1-exp(-1/(fs*tc)))/2 );
 
 % compressive I/O: Scale signal by 200. This approximately
 % results in JNDs of 1 in the output
-z = 200 * exp(-tau/ptau) * a * log( b * y + 1);
+z = exp(-tau/ptau) * a * log( b * y + 1);
 
 
