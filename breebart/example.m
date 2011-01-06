@@ -23,8 +23,11 @@ x2      = 10^(Spl2/20) * ( n1*sqrt((1+rho)/2) - n2*sqrt((1-rho)/2) );
 %x2      = sinusoid(1000*T, 1000, Spl1, fs, 0);
 
 % feed signals through gammatone filterbank:
-x1g     = real( gtfbank(x1, fs, ERBnum, ERBspce) );
-x2g     = real( gtfbank(x2, fs, ERBnum, ERBspce) );
+[b,a]   = gammatone(erbspacebw(0,erbtofreq(ERBnum),ERBspce),fs,'complex')
+x1g = 2*real(filterbankz(b,a,x1));
+x2g = 2*real(filterbankz(b,a,x2));
+%x1g     = real( gtfbank(x1, fs, ERBnum, ERBspce) );
+%x2g     = real( gtfbank(x2, fs, ERBnum, ERBspce) );
 
 % feed signals through inner haircell model:
 
