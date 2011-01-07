@@ -62,7 +62,7 @@ if nargin<2
   error('%s: Too few input arguments.',upper(mfilename));
 end;
 
-if ~isnumeric(inoutsig) 
+if ~isnumeric(insig) 
   error('%s: insig must be numeric.',upper(mfilename));
 end;
 
@@ -76,12 +76,12 @@ definput.keyvals.basef=[];
 definput.keyvals.subfs=[];
 
 [flags,keyvals,flow,fhigh,basef,subfs]  = ltfatarghelper({'flow', ...
-                    'fhigh','basef',subfs'},definput,varargin);
+                    'fhigh','basef','subfs'},definput,varargin);
 
 % ------ do the computation -------------------------
 
 % find the center frequencies used in the filterbank, 1 ERB spacing
-fc = erbspacebw(flags.flow, flags.fhigh, 1, flags.basef);
+fc = erbspacebw(flow, fhigh, 1, basef);
 
 % Calculate filter coefficients for the gammatone filter bank.
 [gt_b, gt_a]=gammatone(fc, fs, 'complex');
@@ -90,10 +90,10 @@ fc = erbspacebw(flags.flow, flags.fhigh, 1, flags.basef);
 outsig = 2*real(filterbankz(gt_b,gt_a,insig));
 
 % 'haircell' envelope extraction
-inoutsig = ihcenvelope(inoutsig,fs,'dau');
+outsig = ihcenvelope(outsig,fs,'dau');
 
 % non-linear adaptation loops
-inoutsig = adaptloop(inoutsig,fs,'dau');
+outsig = adaptloop(outsig,fs,'dau');
 
 % Calculate filter coefficients for the 20 ms (approx.eq to 8 Hz) modulation
 % lowpass filter.
@@ -102,11 +102,11 @@ mlp_b = 1 - mlp_a;
 mlp_a = [1, -mlp_a];
 
 % Apply the low-pass modulation filter.
-inoutsig = filter(mlp_b,mlp_a,inoutsig);
+outsig = filter(mlp_b,mlp_a,outsig);
 
 % Apply final resampling to avoid excessive data
-if ~isempty(flags.subfs)
-  inoutsig = fftresample(inoutsig,round(length(inoutsig)/fs*subfs));
+if ~isempty(subfs)
+  outsig = fftresample(outsig,round(length(outsig)/fs*subfs));
 end;
 
 
