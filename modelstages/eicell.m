@@ -1,6 +1,6 @@
-function z = ei( l, r , fs , tau , IID )
-%EI  XXX
-%   Usage: y = ei( l , r, fs, tau, IID)
+function z = eicell( l, r , fs , tau , IID )
+%EICELL  XXX
+%   Usage: y = eicell( l , r, fs, tau, IID)
 %
 %   Input parameters:
 %        l,r	    : input signals, these must be a [n by 1] matrix
