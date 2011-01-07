@@ -1,12 +1,12 @@
-function z = eicell( l, r , fs , tau , IID )
+function z = eicell(insig,fs,tau,ild)
 %EICELL  XXX
-%   Usage: y = eicell( l , r, fs, tau, IID)
+%   Usage: y = eicell(insig,fs,tau,ild)
 %
 %   Input parameters:
 %        l,r	    : input signals, these must be a [n by 1] matrix
 %        fs        : sampling rate of input signals
 %        tau       : characteristic delay in seconds (positive: left is leading)
-%        IID       : characteristic IID in dB (positive: left is louder)
+%        ild       : characteristic ILD in dB (positive: left is louder)
 %
 %   Output parameters:
 %        y	   : EI-type cell output as a function of time
@@ -26,21 +26,18 @@ ptau        = 2.2e-3;           % time constant for p(tau) function
 % apply characteristic delay:
 n = round( abs(tau) * fs );
 
+l=insig(:,1);
+r=insig(:,2);
+
 if tau > 0,
     l = [zeros(n,1) ; l(1:end-n)];
 else
     r = [zeros(n,1) ; r(1:end-n)];
 end
 
-% Old code, harder to read.
-%c1 = 10^( +IID/40 );
-%c2 = 10^( -IID/40 );
-%l = l * c1;
-%r = r * c2;
-
-% apply characteristic IID:
-l=gaindb(l, IID/2);
-r=gaindb(l,-IID/2);
+% apply characteristic ILD:
+l=gaindb(l, ild/2);
+r=gaindb(l,-ild/2);
 
 % compute instanteneous EI output:
 x = (l - r).^2;
