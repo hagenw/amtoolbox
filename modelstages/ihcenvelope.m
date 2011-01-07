@@ -44,6 +44,8 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %                is not affected by unnaturally small values. The default
 %                value of [] means to not do this.
 %
+%-    'dim',d  - Work along dimension d.
+%
 %R  bernstein1999normalized breebaart2001binaural gabor1946 lindemann1986a dau1996qmeI
   
 % FIXME: Which paper did this idea originally appear in?
@@ -67,10 +69,14 @@ definput.flags.model={'nodefault','bernstein','breebart','dau','hilbert', ...
                     'lindemann'};
 
 definput.keyvals.minlvl=[];
+definput.keyvals.dim=[];
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
 % ------ Computation -------------------------------------------------
+
+[inoutsig,siglen,dummy,nsigs,dim,permutedsize,order]=assert_sigreshape_pre(inoutsig,[],keyvals.dim, ...
+                                                  upper(mfilename));
 
 if flags.do_nodefault
   error(['%s: you must supply a flag to designate the IHC model to ' ...
@@ -119,3 +125,4 @@ if ~isempty(keyvals.minlvl)
   inoutsig = max( inoutsig, keyvals.minlvl );
 end;
 
+inoutsig=assert_sigreshape_post(inoutsig,dim,permutedsize,order);

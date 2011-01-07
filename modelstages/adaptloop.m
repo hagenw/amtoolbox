@@ -23,16 +23,19 @@ function inoutsig = adaptloop(inoutsig,fs,varargin);
 %   ADAPTLOOP takes the following flags at the end of the line of input
 %   arguments:
 %
-%-     dau - Choose the parameters as in the Dau 1996 and 1997 models. This
+%-     'dau' - Choose the parameters as in the Dau 1996 and 1997 models. This
 %           consists of 5 adaptation loops with an overshoot limiting of 10
 %           and a minimum level of 1e-5. This is a correction in regard to
 %           the published version of Dau 96, which did not use overshoot
 %           limiting. The adaptation loops have an exponential spacing.This
 %           flag is the default.
 %
-%-     breebart - Choose the parameters as in the Breebart 2001 model. This
+%-     'breebart' - Choose the parameters as in the Breebart 2001 model. This
 %           consists of 5 adaptation loops without overshoot limiting and a
-%           minimum level of XXX. The adapation loops have a linear spacing.
+%           minimum level of XXX. The adapation loops have a linear
+%           spacing.
+%
+%-     'dim',d - Do the computation along dimension d of the input. 
 %
 %R  dau1996qmeI puschel1988pza breebaart2001binaural
 
@@ -46,6 +49,7 @@ if nargin<2
   error('Too few input parameters.');
 end;
 
+definput.keyvals.dim=[];
 definput.keyvals.limit=10;
 definput.keyvals.minlvl=1e-5;
 definput.keyvals.tau=[0.005 0.050 0.129 0.253 0.500];
@@ -71,5 +75,9 @@ end;
 
 % -------- Computation ------------------
 
+[inoutsig,siglen,dummy,nsigs,dim,permutedsize,order]=assert_sigreshape_pre(inoutsig,[],keyvals.dim, ...
+                                                  upper(mfilename));
 
 inoutsig=comp_adaptloop(inoutsig,fs,limit,minlvl,tau);
+
+inoutsig=assert_sigreshape_post(inoutsig,dim,permutedsize,order);

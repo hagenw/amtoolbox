@@ -20,7 +20,7 @@ function outsig=filterbankz(b,a,insig,hopsize)
 
 %   AUTHOR : Peter L. Soendergaard
 
-% ------ Checking of input parameters ---------  
+%% ------ Checking of input parameters ---------  
 
 error(nargchk(3,4,nargin));
 
@@ -29,12 +29,11 @@ if nargin==3
 end;
 
 
-% ------ Computation --------------------------
+%% ------ Computation --------------------------
 
+[insig,siglen,dummy,nsigs,dim,permutedsize,order]=assert_sigreshape_pre(insig,[],[], ...
+                                                  upper(mfilename));
 nchannels=size(b,1);
-
-siglen=size(insig,1);
-nsigs=size(insig,2);
 
 outlen=ceil(siglen/hopsize);
 
@@ -45,3 +44,10 @@ for ii=1:nchannels
   res = res(1:hopsize:siglen,:);  
   outsig(:,ii,:) = reshape(res,outlen,1,nsigs);
 end;
+
+% Modify permutedsize and order to reflect that first dimension has split
+% in two
+permutedsize=[outlen,nchannels,permutedsize(2:end)];
+order=assert_groworder(order);
+
+outsig=assert_sigreshape_post(outsig,dim,permutedsize,order);
