@@ -65,7 +65,10 @@ if flags.do_mel
 end;
 
 if flags.do_erb
-  aud = 9.265*log(1+freq/228.8455);
+  % There is a round-off error in the Glasberg & Moore paper, as
+  % 1000/(24.7*4.37)*log(10) = 21.332 and not 21.4 as they state.
+  % The error is tiny, but may be confusing.
+  aud = 9.2645*log(1+freq*0.00437);
 end;
 
 if flags.do_bark

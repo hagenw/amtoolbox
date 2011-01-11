@@ -40,7 +40,7 @@ if flags.do_mel
 end;
 
 if flags.do_erb
-  freq = 228.8455*(exp(aud/9.265)-1);
+freq = (1/0.00437)*(exp(aud/9.2645)-1);
 end;
 
 if flags.do_bark
