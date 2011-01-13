@@ -164,7 +164,7 @@ hopsize=1;
 % find the center frequencies used in the filterbank
 fc = erbspace(flow,fhigh,keyvals.yres);
 
-if 0
+if 1
   % Calculate filter coefficients for the gammatone filter bank.
   [gt_b, gt_a, delay]=gammatone(fc, fs, 'complex');
   
