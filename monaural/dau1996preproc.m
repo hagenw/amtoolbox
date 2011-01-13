@@ -1,17 +1,17 @@
-function [outsig, fc] = dau96preproc(insig, fs, varargin);
-%DAU96PREPROC   Auditory model from Dau et. al. 1996.
-%   Usage: [outsig, fc] = dau96preproc(insig,fs);
-%          [outsig, fc] = dau96preproc(insig,fs,...);
+function [outsig, fc] = dau1996preproc(insig, fs, varargin);
+%DAU1996PREPROC   Auditory model from Dau et. al. 1996.
+%   Usage: [outsig, fc] = dau1996preproc(insig,fs);
+%          [outsig, fc] = dau1996preproc(insig,fs,...);
 %
 %   Input parameters:
 %     insig  : input acoustic signal.
 %     fs     : sampling rate.
 %  
-%   DAU96PREPROC(insig,fs) computes the internal representation of the signal insig
+%   DAU1996PREPROC(insig,fs) computes the internal representation of the signal insig
 %   sampled with a frequency of fs Hz as described in Dau, Puschel and
 %   Kohlrausch (1996a).
 %  
-%   [outsig,fc]=DAU96(...) additionally returns the center frequencies of
+%   [outsig,fc]=DAU1996(...) additionally returns the center frequencies of
 %   the filter bank.
 %
 %   The following parameters may be passed at the end of the line of
@@ -34,7 +34,7 @@ function [outsig, fc] = dau96preproc(insig, fs, varargin);
 %   The model assumes than a pure tone input signal with an RMS value of 1
 %   corresponds to an acoustic signal of 100 db SPL.
 %  
-%   The dau96 model consists of the following stages:
+%   The Dau1996 model consists of the following stages:
 %   
 %     * a gammatone filter bank with 1-erb spaced filtes.
 %
@@ -54,7 +54,7 @@ function [outsig, fc] = dau96preproc(insig, fs, varargin);
 %
 %R  dau1996qmeI dau1996qmeII dau1997mapI
 
-%   AUTHOR : Torsten Dau, Morten, Løve Jepsen, Peter L. Soendergaard
+%   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Soendergaard
   
 % ------ Checking of input parameters ------------
 

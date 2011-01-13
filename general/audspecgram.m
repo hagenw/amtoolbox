@@ -82,7 +82,7 @@ function varargout=audspecgram(insig,fs,varargin)
 %
 %-  'nocolorbar' - Do not display the colorbar.
 %
-%   See also:  erbtofreq, dau96
+%   See also:  erbtofreq, dau1996preproc
 %
 %   Demos:  demo_audspecgram
   
