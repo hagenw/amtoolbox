@@ -42,15 +42,14 @@ if flow>fhigh
   error('%s: flow must be less than or equal to fhigh.',upper(mfilename));
 end;
 
-definput.flags.scale={'missingflag','mel','bark','erb','erb83'};
-
+definput.import={'freqtoaud'};
 [flags,kv]=ltfatarghelper({},definput,varargin);
 
 
 %% ------ Computation --------------------------
 
-audlimits = freqtoaud([flow,fhigh],flags.scale);
+audlimits = freqtoaud([flow,fhigh],flags.audscale);
 
-y = audtofreq(linspace(audlimits(1),audlimits(2),n),flags.scale);  
+y = audtofreq(linspace(audlimits(1),audlimits(2),n),flags.audscale);
 
 bw=(audlimits(2)-audlimits(1))/(n-1);

@@ -1,10 +1,17 @@
 function aud = freqtoaud(freq,varargin);
 %FREQTOAUD  Converts frequencies (Hz) to auditory scale units.
-%   Usage: aud = freqtoaud(scale,freq);
+%   Usage: aud = freqtoaud(freq,scale);
 %
 %   FREQTOAUD(freq,scale) converts values on frequency scale (measured in Hz) to
 %   values on the selected auditory scale. The value of the parameter
 %   scale determines the auditory scale:
+%
+%-    'erb'   - A distance of 1 erb is equal to the equivalent rectangular
+%               bandwidth of the auditory filters at that point on the
+%               frequency scale. The scale is normalized such that 0 erbs
+%               corresponds to 0 Hz. The width of the auditory filters were
+%               determined by a notched-noise experiment. The erb scale is
+%               defined in Glasberg and Moore (1990). This is the default.
 %
 %-    'mel'  -  The mel scale is a perceptual scale of pitches judged by
 %               listeners to be equal in distance from one another. The
@@ -18,17 +25,12 @@ function aud = freqtoaud(freq,varargin);
 %               band. The implementation provided in this function is
 %               described in Traunmuller (1990).
 %
-%-    'erb'   - A distance of 1 erb is equal to the equivalent rectangular
-%               bandwidth of the auditory filters at that point on the
-%               frequency scale. The scale is normalized such that 0 erbs
-%               corresponds to 0 Hz. The width of the auditory filters were
-%               determined by a notched-noise experiment. The erb scale is
-%               defined in Glasberg and Moore (1990).
-%
 %-    'erb83' - This is the original defintion of the erb scale given in
 %               Moore. et al. (1983).
 %
-%   If no flag is given, the function will print the list of valid flags.
+%-    'freq'  - Return the frequency in Hz. 
+%
+%   If no flag is given, the erb-scale will be selected.
 %
 %   See also: freqtoaud, audspace, audfiltbw
 %
@@ -46,16 +48,8 @@ if ~isnumeric(freq) ||  all(freq(:)<0)
   error('%s: freq must be a non-negative number.',upper(mfilename));
 end;
 
-definput.flags.scale={'missingflag','mel','bark','erb','erb83'};
+definput.import={'freqtoaud'};
 [flags,kv]=ltfatarghelper({},definput,varargin);
-
-if flags.do_missingflag
-  flagnames=[sprintf('%s, ',definput.flags.scale{2:end-2}),...
-             sprintf('%s or %s',definput.flags.scale{end-1},...
-                     definput.flags.scale{end})];
-  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
-end;
-
 
 %% ------ Computation --------------------------
 
@@ -86,4 +80,8 @@ end;
 
 if flags.do_erb83
   aud = 11.17*log((freq+312)./(freq+14675))+43.0;
+end;
+
+if flags.do_freq
+  aud = freq;
 end;

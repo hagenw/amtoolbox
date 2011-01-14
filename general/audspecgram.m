@@ -40,11 +40,7 @@ function varargout=audspecgram(insig,fs,varargin)
 %                low-pass filter to 50 Hz.
 %
 %-   'nomf'    - No modulation filtering of any kind.
-%
-%-   'gammatonedelay' - Default
-%
-%-   'zerodelay' - New.
-%
+%%
 %-   'image'   - Use 'imagesc' to display the spectrogram. This is the default.
 %
 %-   'clim',[clow,chigh] - Use a colormap ranging from clow to chigh. These
@@ -106,7 +102,7 @@ definput.flags.plottype={'image','contour','mesh','surf'};
 definput.flags.clim={'noclim','clim'};
 definput.flags.fmax={'nofmax','fmax'};
 definput.flags.mlp={'mlp','nomf'};
-definput.flags.delay={'gammatonedelay','zerodelay'};
+%definput.flags.delay={'gammatonedelay','zerodelay'};
 
 definput.keyvals.ihc='dau';
 definput.keyvals.dynrange=100;
