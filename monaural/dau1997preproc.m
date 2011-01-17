@@ -1,17 +1,17 @@
-function [outsig, fc] = dau1996preproc(insig, fs, varargin);
-%DAU1996PREPROC   Auditory model from Dau et. al. 1996.
-%   Usage: [outsig, fc] = dau1996preproc(insig,fs);
-%          [outsig, fc] = dau1996preproc(insig,fs,...);
+function [outsig, fc] = dau1997preproc(insig, fs, varargin);
+%DAU1997PREPROC   Auditory model from Dau et. al. 1997.
+%   Usage: [outsig, fc] = dau1997preproc(insig,fs);
+%          [outsig, fc] = dau1997preproc(insig,fs,...);
 %
 %   Input parameters:
 %     insig  : input acoustic signal.
 %     fs     : sampling rate.
 %  
-%   DAU1996PREPROC(insig,fs) computes the internal representation of the signal insig
+%   DAU1997PREPROC(insig,fs) computes the internal representation of the signal insig
 %   sampled with a frequency of fs Hz as described in Dau, Puschel and
 %   Kohlrausch (1996a).
 %  
-%   [outsig,fc]=DAU1996(...) additionally returns the center frequencies of
+%   [outsig,fc]=DAU1997(...) additionally returns the center frequencies of
 %   the filter bank.
 %
 %   The following parameters may be passed at the end of the line of
@@ -30,8 +30,11 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %-     'subfs',subfs - Apply a final downsampling of the subband signals
 %                    to subfs Hz to avoid excessive data. The default value
 %                    of [] means no downsampling.
+%
+%   The model assumes than a pure tone input signal with an RMS value of 1
+%   corresponds to an acoustic signal of 100 db SPL.
 %  
-%   The Dau1996 model consists of the following stages:
+%   The Dau1997 model consists of the following stages:
 %   
 %     * a gammatone filter bank with 1-erb spaced filtes.
 %
@@ -41,15 +44,9 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %     * an adaptation stage modelling nerve adaptation by a cascade of 5
 %        loops.
 %
-%     * a modulation low pass filter liming modulations to below 50 Hz.
+%     * a modulation filterbank
 %
-%   The model implemented in this file is not identical to the model
-%   published in Dau et. al. (1996a). An overshoot limit has been added to
-%   the adaptation stage to fix a problem where abrupt changes in the
-%   input signal would cause unnaturally big responses. This is described
-%   in Dau et. al. (1997a).
-%
-%R  dau1996qmeI dau1996qmeII dau1997mapI
+%R  dau1997mapI dau1997mapII
 
 %   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Soendergaard
   
@@ -79,6 +76,7 @@ definput.keyvals.subfs=[];
 
 % find the center frequencies used in the filterbank, 1 ERB spacing
 fc = erbspacebw(flow, fhigh, 1, basef);
+nfreqchannels = length(fc);
 
 % Calculate filter coefficients for the gammatone filter bank.
 [gt_b, gt_a]=gammatone(fc, fs, 'complex');
@@ -92,18 +90,27 @@ outsig = ihcenvelope(outsig,fs,'dau');
 % non-linear adaptation loops
 outsig = adaptloop(outsig,fs,'dau');
 
-% Calculate filter coefficients for the 20 ms (approx.eq to 8 Hz) modulation
-% lowpass filter.
-mlp_a = exp(-(1/0.02)/fs);
-mlp_b = 1 - mlp_a;
-mlp_a = [1, -mlp_a];
+% lowest and highest CFs of the MFB as function of CF
+MFlow = fc .* 0;                        % set lowest mf as constant value
+MFhigh = min(fc .* 0.25, 1000);         % set highest mf as proportion of CF
+[MF_CFs,out] = mfbtd(1,min(MFlow),max(MFhigh),1,fs); % to find the number of MF's
 
-% Apply the low-pass modulation filter.
-outsig = filter(mlp_b,mlp_a,outsig);
+NrMFChannels = size(MF_CFs,2);                  % maximum number of modulation filters
 
-% Apply final resampling to avoid excessive data
-if ~isempty(subfs)
-  outsig = fftresample(outsig,round(length(outsig)/fs*subfs));
-end;
+out = zeros(siglen,nfreqchannels,NrMFChannels); % define output array
+
+for ChannelNr = 1:nfreqchannels
+    
+   % Modulation filterbank
+   [infpar,y] = mfbtd(y,MFlow(ChannelNr),MFhigh(ChannelNr),1,fs);	% MFB incl 150 LP
+   y = mfbtdpp(y,infpar,fs);
+    
+   % Fill 'y' into output array 
+   out(:,ChannelNr,1:length(infpar)) = y;
+            
+end
+
+
+
 
 
