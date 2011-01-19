@@ -23,9 +23,5 @@
 %     SETLEVELDB       - Specify level of signal.
 %     CRESTFACTOR      - Crest factor of signal     
 %
-%  Ramping of signals
-%     RAMPUP           - Rising ramp.
-%     RAMPDOWN         - Falling ramp.
-%
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
