@@ -2,14 +2,7 @@ function [outsig,mfc] = modfilterbank(insig,fs,fc,varargin)
 %MODFILTERBANK  Modulation filter bank
 %   Usage: [outsig, mfc] = modfilterbank(insig,fs,fc);
 %
-% lmf   = lowest modulation-filter center frequency,
-%         if 0 the output of a 2nd-order
-%         Butterworth lowpass filter is additionally computed.
-% umf   = highest modulation-filter center frequency,
-%         for typical applications choose umf = 1500.
-%         If lmf = umf only the output of a single filter
-%       	 at lmf is computed.
-% style = determines fc of the lowpass filter: 1 = 2.5 Hz, 2 = 7.5 Hz.
+
 % fs    = sampling rate in Hz,
 %         should be greater than 8000 Hz to avoid aliasing errors.
 % 
@@ -20,124 +13,85 @@ function [outsig,mfc] = modfilterbank(insig,fs,fc,varargin)
 % copyright (c) 1999 Stephan Ewert and Torsten Dau, Universitaet Oldenburg
 
 
-MFlow = CenterFreq .* 0;                        % set lowest mf as constant value
-MFhigh = min(CenterFreq .* 0.25, 1000);         % set highest mf as proportion of CF
-
-
-definout.keyvals.lmf = 
-definout.keyvals.umf = 
-definout.keyvals.style = 1;
+nfreqchannels=length(fc);
 
 Q = 2;
 bw = 5;
 ex=(1+1/(2*Q))/(1-1/(2*Q));
 
-if lmf == 0
-  sw = 1;
-  switch style
-    case 1
-      startmf = 5;
-      b2lpcut = 2.5;
-      wb2lp = 2*pi*b2lpcut/fs;
-      [b2,a2] = solp(wb2lp,1/sqrt(2));
-    case 2
-      startmf = 10;
-      b2lpcut = 7.5;
-      wb2lp = 2*pi*b2lpcut/fs;
-      [b2,a2] = solp(wb2lp,1/sqrt(2));
+outsig=cell(nfreqchannels,1);
+
+startmf = 5;
+
+% second order modulation Butterworth lowpass filter with a cut-off frequency of 2.5
+% Hz. This is used 
+
+[b_lowpass,a_lowpass] = solp(2*pi*2.5/fs,1/sqrt(2));
+
+% first order modulation Butterworth lowpass filter with a cut-off
+% frequency of 150 Hz. This is to remove all modulation frequencies
+% above 150 Hz.
+[b_highest,a_highest] = butter(1,150/(fs/2));
+
+% Set the highest modulation frequency as proportion of the corresponding
+% center frequency.
+umf = min(fc.*0.25, 1000);  
+
+for freqchannel=1:nfreqchannels
+        
+  if umf(freqchannel)==0
+    mf = startmf;
+  else                
+    tmp = fix((min(umf(freqchannel),10) - startmf)/bw);
+    tmp = 0:tmp;
+    mf = startmf + 5*tmp;
+    tmp2 = (mf(end)+bw/2)/(1-1/(2*Q));
+    tmp = fix(log(umf(freqchannel)/tmp2)/log(ex));
+    tmp = 0:tmp;
+    tmp = ex.^tmp;
+    mf=[mf tmp2*tmp];
   end;
-elseif lmf > 0
-  startmf = lmf;
-  sw = 2;
-end
   
-if lmf == umf
-  mf = startmf;
-  sw = 0;
-  if lmf == 0
-    sw =3;
-    end
-  else
-    if startmf >= 10
-      tmp = fix(log(umf/startmf)/log(ex));
-      mf = 0:tmp;
-      mf = ex.^mf;
-      mf = startmf*mf;
-    else
-      tmp = fix((min(umf,10) - startmf)/bw); %changed
-      tmp = 0:tmp;
-      mf = startmf + 5*tmp;
-      tmp2 = (mf(end)+bw/2)/(1-1/(2*Q));
-      tmp = fix(log(umf/tmp2)/log(ex));
-      tmp = 0:tmp;
-      tmp = ex.^tmp;
-      mf=[mf tmp2*tmp];
-    end;
- end;
-
-% 150 Hz LP
-[b1,a1] = butter(1,150/(fs/2));
-outtmp = filter(b1,a1,insig);
-
-% No LP
-% outtmp=insig; % no LP
-
-switch sw
-  case 0									
-    % -------- only one modulation filter ----------
-    w0 = 2*pi*mf/fs;
-    if mf < 10
-      [b3,a3] = efilt(w0,2*pi*bw/fs);
-    else
-      [b3,a3] = efilt(w0,w0/Q);
-    end
-    outsig = 2*filter(b3,a3,outtmp);
-    coef = mf;
-  case 1									
+  % Cut away highest modulation frequencies
+  outtmp = filter(b_highest,a_highest,insig(:,freqchannel));
+  
+  % Compute the low-pass filter.
+  
+  if umf(freqchannel)>0
     % --------- lowpass and modulation filter(s) ---
-    outsig = zeros(length(insig),length(mf)+1);
-    outsig(:,1) = filter(b2,a2,outtmp);
-    for i=1:length(mf)
-      w0 = 2*pi*mf(i)/fs;
-      if mf(i) < 10
+    outsigblock = zeros(length(insig),length(mf)+1);
+    outsigblock(:,1) = filter(b_lowpass,a_lowpass,outtmp);
+    for ii=1:length(mf)
+      w0 = 2*pi*mf(ii)/fs;
+      if mf(ii) < 10
    	[b3,a3] = efilt(w0,2*pi*bw/fs);
       else
         [b3,a3] = efilt(w0,w0/Q);
       end
       
-      outsig(:,i+1) = 2*filter(b3,a3,outtmp);
+      outsigblock(:,i+1) = 2*filter(b3,a3,outtmp);
     end
     coef = [0 mf];
-  case 2
-    % ---------- only modulation filters ------------
-    outsig = zeros(length(insig),length(mf));
-    for i=1:length(mf)
-      w0 = 2*pi*mf(i)/fs;
-      if mf(i) < 10
-   	[b3,a3] = efilt(w0,2*pi*bw/fs);
-      else
-        [b3,a3] = efilt(w0,w0/Q);
-      end
-      outsig(:,i) = 2*filter(b3,a3,outtmp);
-    end
-    coef = mf;
-  case 3									
+  else
     % ----------- only lowpass ---------------------
-    outsig = filter(b2,a2,outtmp);
+    outsigblock = filter(b_lowpass,a_lowpass,outtmp);
     coef = 0;
- end
+  end
+  
+  %% ------------ post-processing --------------------
+  
+  for ii=1:length(coef) % v2 MJ 17. oct 2006
+    if coef(ii) <= 10
+      outsigblock(:,ii) = 1*real(outsigblock(:,ii));
+    else
+      outsigblock(:,ii) = 1/sqrt(2)*abs(outsigblock(:,ii));
+    end
+  end
+  
 
-%% ------------ post-processing --------------------
+  outsig{freqchannel}=outsigblock;
+end;
 
-for ii=1:length(coef) % v2 MJ 17. oct 2006
-   if coef(ii) <= 10
-      outsig(:,ii) = 1*real(outsig(:,ii));
-   else
-      outsig(:,ii) = 1/sqrt(2)*abs(outsig(:,ii));
-   end
-end
-
-    
 %% ------------ subfunctions ------------------------
 
 
