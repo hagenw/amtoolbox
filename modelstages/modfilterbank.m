@@ -1,7 +1,7 @@
-function [coef] = modfiltbankcoef(insig,lmf,umf,style,fs)
-% Usage: 
+function [outsig,mfc] = modfilterbank(insig,fs,fc,varargin)
+%MODFILTERBANK  Modulation filter bank
+%   Usage: [outsig, mfc] = modfilterbank(insig,fs,fc);
 %
-% insig    = input column vector.
 % lmf   = lowest modulation-filter center frequency,
 %         if 0 the output of a 2nd-order
 %         Butterworth lowpass filter is additionally computed.
@@ -18,6 +18,15 @@ function [coef] = modfiltbankcoef(insig,lmf,umf,style,fs)
 %         a single modulation filter.
 %
 % copyright (c) 1999 Stephan Ewert and Torsten Dau, Universitaet Oldenburg
+
+
+MFlow = CenterFreq .* 0;                        % set lowest mf as constant value
+MFhigh = min(CenterFreq .* 0.25, 1000);         % set highest mf as proportion of CF
+
+
+definout.keyvals.lmf = 
+definout.keyvals.umf = 
+definout.keyvals.style = 1;
 
 Q = 2;
 bw = 5;
@@ -75,19 +84,19 @@ outtmp = filter(b1,a1,insig);
 
 switch sw
   case 0									
-    % only one modulation filter
+    % -------- only one modulation filter ----------
     w0 = 2*pi*mf/fs;
     if mf < 10
       [b3,a3] = efilt(w0,2*pi*bw/fs);
     else
       [b3,a3] = efilt(w0,w0/Q);
     end
-    out = 2*filter(b3,a3,outtmp);
+    outsig = 2*filter(b3,a3,outtmp);
     coef = mf;
   case 1									
-    % lowpass and modulation filter(s)
-    out = zeros(length(insig),length(mf)+1);
-    out(:,1) = filter(b2,a2,outtmp);
+    % --------- lowpass and modulation filter(s) ---
+    outsig = zeros(length(insig),length(mf)+1);
+    outsig(:,1) = filter(b2,a2,outtmp);
     for i=1:length(mf)
       w0 = 2*pi*mf(i)/fs;
       if mf(i) < 10
@@ -96,12 +105,12 @@ switch sw
         [b3,a3] = efilt(w0,w0/Q);
       end
       
-      out(:,i+1) = 2*filter(b3,a3,outtmp);
+      outsig(:,i+1) = 2*filter(b3,a3,outtmp);
     end
     coef = [0 mf];
   case 2
-    % only modulation filters
-    out = zeros(length(insig),length(mf));
+    % ---------- only modulation filters ------------
+    outsig = zeros(length(insig),length(mf));
     for i=1:length(mf)
       w0 = 2*pi*mf(i)/fs;
       if mf(i) < 10
@@ -109,16 +118,28 @@ switch sw
       else
         [b3,a3] = efilt(w0,w0/Q);
       end
-      out(:,i) = 2*filter(b3,a3,outtmp);
+      outsig(:,i) = 2*filter(b3,a3,outtmp);
     end
     coef = mf;
   case 3									
-    % only lowpass
-    out = filter(b2,a2,outtmp);
+    % ----------- only lowpass ---------------------
+    outsig = filter(b2,a2,outtmp);
     coef = 0;
  end
+
+%% ------------ post-processing --------------------
+
+for ii=1:length(coef) % v2 MJ 17. oct 2006
+   if coef(ii) <= 10
+      outsig(:,ii) = 1*real(outsig(:,ii));
+   else
+      outsig(:,ii) = 1/sqrt(2)*abs(outsig(:,ii));
+   end
+end
+
     
-% subfunctions
+%% ------------ subfunctions ------------------------
+
 
 % complex frequency shifted first order lowpass
 function [b,a] = efilt(w0,bw);

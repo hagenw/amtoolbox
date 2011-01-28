@@ -3,11 +3,9 @@ function outsig=filterbankz(b,a,insig,hopsize)
 %   Usage: outsig=filterbank(b,a,insig);
 %          outsig=filterbank(b,a,insig,hopsize);
 %
-%   FILTERBANKZ(b,a,insig) filters the input signal with the filters
-%   described in _a and b.
-%
-%   FILTERBANKZ(b,a,insig,hopsize) does the same, but only outputs every
-%   hopsize sample in the time domain.
+%   FILTERBANKZ(b,a,insig,hopsize) filters the input signal with the filters
+%   described in _a and b. hopsize is a vector with a length equal to the number
+%   of filters. Each channel is sub-sampled by the correcsponding hopsize.
 %
 %   If _a and b are matrices then each row corresponds to a subband
 %   channel.
@@ -22,11 +20,7 @@ function outsig=filterbankz(b,a,insig,hopsize)
 
 %% ------ Checking of input parameters ---------  
 
-error(nargchk(3,4,nargin));
-
-if nargin==3
-  hopsize=1;
-end;
+error(nargchk(4,4,nargin));
 
 
 %% ------ Computation --------------------------
@@ -35,19 +29,18 @@ end;
                                                   upper(mfilename));
 nchannels=size(b,1);
 
-outlen=ceil(siglen/hopsize);
 
-outsig=zeros(outlen,nchannels,nsigs);
+outsig=cell(nchannel,1);
 
 for ii=1:nchannels
+  % Calculate the new length in the time domain of this channel
+  outlen=ceil(siglen/hopsize);
+
+  % Do the actual filtering.
   res = filter(b(ii,:),a(ii,:),insig);
-  res = res(1:hopsize:siglen,:);  
-  outsig(:,ii,:) = reshape(res,outlen,1,nsigs);
+
+  % Subsample the output, reshape a multidimensional array to the correct size and store.
+  permutedsize(1)=outlen;
+  outsig{ii} = assert_sigreshape_post(res(1:hopsize:siglen,:),dim,permutedsize,order);  
 end;
 
-% Modify permutedsize and order to reflect that first dimension has split
-% in two
-permutedsize=[outlen,nchannels,permutedsize(2:end)];
-order=assert_groworder(order);
-
-outsig=assert_sigreshape_post(outsig,dim,permutedsize,order);

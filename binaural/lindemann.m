@@ -71,7 +71,7 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %        every time step T_int.  A detailed description of these cross-
 %        correlation steps is given in the bincorr function.
 %
-%   See also: bincorr, plotlindemann, gammatone, filterbankz
+%   See also: bincorr, plotlindemann, gammatone, ufilterbankz
 %
 %   Demos: demo_lindemann
 %
@@ -155,7 +155,7 @@ fhigh = erbtofreq(40);
 % filters, so use complex valued filters instead.
 [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 % Applying the erb filterbank to the signal
-inoutsig = 2*real(filterbankz(b,a,insig));
+inoutsig = 2*real(ufilterbankz(b,a,insig));
 
 
 %% ------ Cross-correlation computation ---------------------------------
