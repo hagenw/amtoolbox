@@ -1,3 +1,3 @@
-function definput=args_freqtoaud(definput)
+function definput=arg_freqtoaud(definput)
   
   definput.flags.audscale={'erb','mel','bark','erb83','freq'};

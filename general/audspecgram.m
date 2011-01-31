@@ -40,7 +40,7 @@ function varargout=audspecgram(insig,fs,varargin)
 %                low-pass filter to 50 Hz.
 %
 %-   'nomf'    - No modulation filtering of any kind.
-%%
+%
 %-   'image'   - Use 'imagesc' to display the spectrogram. This is the default.
 %
 %-   'clim',[clow,chigh] - Use a colormap ranging from clow to chigh. These
@@ -57,7 +57,7 @@ function varargout=audspecgram(insig,fs,varargin)
 %                set the rest to zero.
 %
 %-   'frange',[flow,fhigh] - Choose a frequency scale ranging from flow to
-%                fhigh, values are eneterd in Hz. Default is to display from
+%                fhigh, values are entered in Hz. Default is to display from
 %                0 to 8000 Hz.
 %
 %-   'xres',xres - Approximate number of pixels along x-axis / time.
@@ -165,7 +165,7 @@ if 1
   [gt_b, gt_a, delay]=gammatone(fc, fs, 'complex');
   
   % Apply the Gammatone filterbank
-  outsig = 2*real(filterbankz(gt_b,gt_a,insig,hopsize));
+  outsig = 2*real(ufilterbankz(gt_b,gt_a,insig,hopsize));
   
 else
   L=siglen;
@@ -231,17 +231,17 @@ yr=linspace(audlimits(1),audlimits(2),keyvals.yres);
 % Determine the labels and position for the y-label.
 ytickpos=freqtoerb(keyvals.ytick);
 
-if flags.do_zerodelay
+%if flags.do_zerodelay
   % Correct the delays
-  for n=1:keyvals.yres
-    cut=round(delay(n)*fssubband);
+%  for n=1:keyvals.yres
+%    cut=round(delay(n)*fssubband);
     %size(outsig(:,n))
     %xsamples
     %cut
     %size([outsig(cut:end,n);zeros(cut-1,1)])
-    outsig(:,n)=[outsig(cut:end,n);zeros(cut-1,1)];
-  end;
-end;
+%    outsig(:,n)=[outsig(cut:end,n);zeros(cut-1,1)];
+%  end;
+%end;
 
 % Flip the output correctly. Each column is a subband signal, and should
 % be display as the rows.

@@ -30,7 +30,7 @@ error(nargchk(4,4,nargin));
 nchannels=size(b,1);
 
 
-outsig=cell(nchannel,1);
+outsig=cell(nchannels,1);
 
 for ii=1:nchannels
   % Calculate the new length in the time domain of this channel

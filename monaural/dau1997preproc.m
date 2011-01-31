@@ -14,23 +14,6 @@ function [outsig, fc] = dau1997preproc(insig, fs, varargin);
 %   [outsig,fc]=DAU1997(...) additionally returns the center frequencies of
 %   the filter bank.
 %
-%   The following parameters may be passed at the end of the line of
-%   input arguments:
-%
-%-     'flow',flow - Set the lowest frequency in the filterbank to
-%                    flow. Default value is 80 Hz.
-%
-%-     'fhigh',fhigh - Set the highest frequency in the filterbank to
-%                    fhigh. Default value is 8000 Hz.
-%
-%-     'basef',basef - Ensure that the frequency basef is a center frequency
-%                    in the filterbank. The default value of [] means
-%                    no default.
-% 
-%-     'subfs',subfs - Apply a final downsampling of the subband signals
-%                    to subfs Hz to avoid excessive data. The default value
-%                    of [] means no downsampling.
-%
 %   The model assumes than a pure tone input signal with an RMS value of 1
 %   corresponds to an acoustic signal of 100 db SPL.
 %  
@@ -64,25 +47,15 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-definput.keyvals.flow=80;
-definput.keyvals.fhigh=8000;
-definput.keyvals.basef=[];
+definput.import={'auditoryfilterbank'};
 definput.keyvals.subfs=[];
 
-[flags,keyvals,flow,fhigh,basef,subfs]  = ltfatarghelper({'flow', ...
-                    'fhigh','basef','subfs'},definput,varargin);
+[flags,keyvals]  = ltfatarghelper({'flow','fhigh'},definput,varargin);
 
 % ------ do the computation -------------------------
 
-% find the center frequencies used in the filterbank, 1 ERB spacing
-fc = erbspacebw(flow, fhigh, 1, basef);
-nfreqchannels = length(fc);
-
-% Calculate filter coefficients for the gammatone filter bank.
-[gt_b, gt_a]=gammatone(fc, fs, 'complex');
-
-% Apply the Gammatone filterbank
-outsig = 2*real(ufilterbankz(gt_b,gt_a,insig));
+% Apply the auditory filterbank
+[outsig, fc] = auditoryfilterbank(insig, fs, 'argimport',flags,keyvals);
 
 % 'haircell' envelope extraction
 outsig = ihcenvelope(outsig,fs,'dau');

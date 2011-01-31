@@ -14,23 +14,6 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %   [outsig,fc]=DAU1996(...) additionally returns the center frequencies of
 %   the filter bank.
 %
-%   The following parameters may be passed at the end of the line of
-%   input arguments:
-%
-%-     'flow',flow - Set the lowest frequency in the filterbank to
-%                    flow. Default value is 80 Hz.
-%
-%-     'fhigh',fhigh - Set the highest frequency in the filterbank to
-%                    fhigh. Default value is 8000 Hz.
-%
-%-     'basef',basef - Ensure that the frequency basef is a center frequency
-%                    in the filterbank. The default value of [] means
-%                    no default.
-% 
-%-     'subfs',subfs - Apply a final downsampling of the subband signals
-%                    to subfs Hz to avoid excessive data. The default value
-%                    of [] means no downsampling.
-%  
 %   The Dau1996 model consists of the following stages:
 %   
 %     * a gammatone filter bank with 1-erb spaced filtes.
@@ -42,6 +25,9 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %        loops.
 %
 %     * a modulation low pass filter liming modulations to below 50 Hz.
+%
+%   The following parameters may be passed at the end of the line of
+%   input arguments:
 %
 %   The model implemented in this file is not identical to the model
 %   published in Dau et. al. (1996a). An overshoot limit has been added to
@@ -67,24 +53,15 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-definput.keyvals.flow=80;
-definput.keyvals.fhigh=8000;
-definput.keyvals.basef=[];
+definput.import={'auditoryfilterbank'};
 definput.keyvals.subfs=[];
 
-[flags,keyvals,flow,fhigh,basef,subfs]  = ltfatarghelper({'flow', ...
-                    'fhigh','basef','subfs'},definput,varargin);
+[flags,keyvals]  = ltfatarghelper({'flow','fhigh'},definput,varargin);
 
 % ------ do the computation -------------------------
 
-% find the center frequencies used in the filterbank, 1 ERB spacing
-fc = erbspacebw(flow, fhigh, 1, basef);
-
-% Calculate filter coefficients for the gammatone filter bank.
-[gt_b, gt_a]=gammatone(fc, fs, 'complex');
-
-% Apply the Gammatone filterbank
-outsig = 2*real(ufilterbankz(gt_b,gt_a,insig));
+% Apply the auditory filterbank
+[outsig, fc] = auditoryfilterbank(insig, fs, 'argimport',flags,keyvals);
 
 % 'haircell' envelope extraction
 outsig = ihcenvelope(outsig,fs,'dau');
@@ -102,7 +79,7 @@ mlp_a = [1, -mlp_a];
 outsig = filter(mlp_b,mlp_a,outsig);
 
 % Apply final resampling to avoid excessive data
-if ~isempty(subfs)
+if ~isempty(keyvals.subfs)
   outsig = fftresample(outsig,round(length(outsig)/fs*subfs));
 end;
 
