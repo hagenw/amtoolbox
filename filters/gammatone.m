@@ -132,17 +132,18 @@ for ii = 1:nchannels
     b2=conv(btmp,b2);
     a2=conv(atmp,a2);
   end
-  
+
+  if flags.do_peakphase
+    b2=b2*exp(2*pi*i*fc(ii)*delay(ii));
+    %b=2*b;
+  end;
+
   % Place the result (a row vector) in the output matrices.
   b(ii,:)=b2;
   a(ii,:)=a2;
 
 end;
 
-if flags.do_peakphase
-  b=b.*exp(-2*pi*i*fc.*delay)
-  %b=2*b;
-end;
   
 if flags.do_real
   b=real(b);
