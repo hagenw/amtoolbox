@@ -37,9 +37,22 @@ function [b,a,delay]=gammatone(fc,fs,varargin);
 %M    g(t) = a*t^(n-1)*cos(2*pi*fc*t)*exp(-2*pi*beta*t)
 %F  \[g(t) = at^{n-1}cos(2\pi\cdot fc\cdot t)e^{-2\pi \beta \cdot t}\]
 %
-%   GAMMATONE( ..., 'complex') will generate filter coefficients
-%   corresponding to a complex valued filterbank modulated by exponential
-%   functions. This is usefull for envelope extration purposes.
+%   GAMMATONE takes the following flags at the end of the line of input
+%   arguments:
+%
+%-     'complex' - Generate filter coefficients corresponding to a
+%                  complex valued filterbank modulated by exponential
+%                  functions. This is useful for envelope extration
+%                  purposes.
+%
+%-     'real'    - Generate real-valued filters. This does currently not
+%                  work, please supply the 'complex' flag.
+%
+%-     'casualphase' - This makes the phase of each filter start at zero.
+%                  This is the default.
+%
+%-     'peakphase' - This makes the phase of each filter be zero when the
+%                  envelope of the impulse response of the filter peaks.
 %
 %   To create the filter coefficients of a 1-erb spaced filter bank using
 %   gammatone filters use the following construction
