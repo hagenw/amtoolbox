@@ -12,7 +12,6 @@ function [outsig,mfc] = modfilterbank(insig,fs,fc,varargin)
 %
 % copyright (c) 1999 Stephan Ewert and Torsten Dau, Universitaet Oldenburg
 
-
 nfreqchannels=length(fc);
 
 Q = 2;
@@ -24,8 +23,7 @@ outsig=cell(nfreqchannels,1);
 startmf = 5;
 
 % second order modulation Butterworth lowpass filter with a cut-off frequency of 2.5
-% Hz. This is used 
-
+% Hz.
 [b_lowpass,a_lowpass] = solp(2*pi*2.5/fs,1/sqrt(2));
 
 % first order modulation Butterworth lowpass filter with a cut-off
@@ -38,53 +36,50 @@ startmf = 5;
 umf = min(fc.*0.25, 1000);  
 
 for freqchannel=1:nfreqchannels
-        
+
+  % Cut away highest modulation frequencies
+  outtmp = filter(b_highest,a_highest,insig(:,freqchannel));
+
   if umf(freqchannel)==0
-    mf = startmf;
+    % ----------- only lowpass ---------------------
+    outsigblock = filter(b_lowpass,a_lowpass,outtmp);
+    mfc = 0;
+
   else                
     tmp = fix((min(umf(freqchannel),10) - startmf)/bw);
     tmp = 0:tmp;
-    mf = startmf + 5*tmp;
-    tmp2 = (mf(end)+bw/2)/(1-1/(2*Q));
+    mfc = startmf + 5*tmp;
+    tmp2 = (mfc(end)+bw/2)/(1-1/(2*Q));
     tmp = fix(log(umf(freqchannel)/tmp2)/log(ex));
     tmp = 0:tmp;
     tmp = ex.^tmp;
-    mf=[mf tmp2*tmp];
-  end;
-  
-  % Cut away highest modulation frequencies
-  outtmp = filter(b_highest,a_highest,insig(:,freqchannel));
-  
-  % Compute the low-pass filter.
-  
-  if umf(freqchannel)>0
+    mfc=[mfc tmp2*tmp];
+
     % --------- lowpass and modulation filter(s) ---
-    outsigblock = zeros(length(insig),length(mf)+1);
+    outsigblock = zeros(length(insig),length(mfc)+1);
     outsigblock(:,1) = filter(b_lowpass,a_lowpass,outtmp);
-    for ii=1:length(mf)
-      w0 = 2*pi*mf(ii)/fs;
-      if mf(ii) < 10
+    mfc = [0 mfc];
+
+    for nmfc=2:length(mfc)
+      w0 = 2*pi*mfc(nmfc)/fs;
+      if mfc(nmfc) < 10
    	[b3,a3] = efilt(w0,2*pi*bw/fs);
       else
         [b3,a3] = efilt(w0,w0/Q);
       end
       
-      outsigblock(:,i+1) = 2*filter(b3,a3,outtmp);
+      outsigblock(:,nmfc) = 2*filter(b3,a3,outtmp);
     end
-    coef = [0 mf];
-  else
-    % ----------- only lowpass ---------------------
-    outsigblock = filter(b_lowpass,a_lowpass,outtmp);
-    coef = 0;
+    
   end
   
   %% ------------ post-processing --------------------
   
-  for ii=1:length(coef) % v2 MJ 17. oct 2006
-    if coef(ii) <= 10
-      outsigblock(:,ii) = 1*real(outsigblock(:,ii));
+  for nmfc=1:length(mfc) % v2 MJ 17. oct 2006
+    if mfc(nmfc) <= 10
+      outsigblock(:,nmfc) = 1*real(outsigblock(:,nmfc));
     else
-      outsigblock(:,ii) = 1/sqrt(2)*abs(outsigblock(:,ii));
+      outsigblock(:,nmfc) = 1/sqrt(2)*abs(outsigblock(:,nmfc));
     end
   end
   

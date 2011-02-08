@@ -1,4 +1,4 @@
-function [outsig, fc] = dau1997preproc(insig, fs, varargin);
+function [outsig, fc, mfc] = dau1997preproc(insig, fs, varargin);
 %DAU1997PREPROC   Auditory model from Dau et. al. 1997.
 %   Usage: [outsig, fc] = dau1997preproc(insig,fs);
 %          [outsig, fc] = dau1997preproc(insig,fs,...);
@@ -63,26 +63,8 @@ outsig = ihcenvelope(outsig,fs,'dau');
 % non-linear adaptation loops
 outsig = adaptloop(outsig,fs,'dau');
 
-% lowest and highest CFs of the MFB as function of CF
-MFlow = fc .* 0;                        % set lowest mf as constant value
-MFhigh = min(fc .* 0.25, 1000);         % set highest mf as proportion of CF
-[MF_CFs,out] = mfbtd(1,min(MFlow),max(MFhigh),1,fs); % to find the number of MF's
-
-NrMFChannels = size(MF_CFs,2);                  % maximum number of modulation filters
-
-out = zeros(siglen,nfreqchannels,NrMFChannels); % define output array
-
-for ChannelNr = 1:nfreqchannels
-    
-   % Modulation filterbank
-   [infpar,y] = mfbtd(y,MFlow(ChannelNr),MFhigh(ChannelNr),1,fs);	% MFB incl 150 LP
-   y = mfbtdpp(y,infpar,fs);
-    
-   % Fill 'y' into output array 
-   out(:,ChannelNr,1:length(infpar)) = y;
-            
-end
-
+% Modulation filterbank
+[outsig,mfc] = modfilterbank(outsig,fs,fc);
 
 
 
