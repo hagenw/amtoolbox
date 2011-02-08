@@ -8,7 +8,7 @@ function [ out ] = halfconv( ir1,stim )
 % Output argument:
 %     out:      convolution of stimulus with DTFs in frequency domain
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Robert Baumgartner, OEAW
+% AUTHOR : Robert Baumgartner, OEAW
 % latest update: 2010-07-19
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
