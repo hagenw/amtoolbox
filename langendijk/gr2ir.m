@@ -15,7 +15,7 @@ function [medir]=gr2ir(med,cond,fs)
 % Output arguments:
 %       medir:   	impulse responses
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Robert Baumgartner, OEAW Acoustical Research Institute
+% AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 % latest update: 2010-08-16
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

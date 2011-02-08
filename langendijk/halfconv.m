@@ -1,14 +1,14 @@
-function [ out ] = halfconv( ir1,stim )
+function [ outsig ] = halfconv( ir1,stim )
 % HALFCONV calculates the fast convolution with fft but without ifft
-% Usage:        [ out ] = halfconv( ir1,stim )
+% Usage:        [ outsig ] = halfconv( ir1,stim )
 % Input arguments:
 %     ir1:      (modified) impulse responses of DFTs for all positions and
 %               both ears
 %     stim:     stimulus (time domain)
 % Output argument:
-%     out:      convolution of stimulus with DTFs in frequency domain
+%     outsig:   convolution of stimulus with DTFs in frequency domain
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Robert Baumgartner, OEAW
+% AUTHOR : Robert Baumgartner, OEAW
 % latest update: 2010-07-19
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -21,7 +21,7 @@ for ch=1:size(ir1,3)
         temp(:,ind,ch) = ir1f(:,ind,ch).* stimf;
     end
 end
-out=temp;
+outsig=temp;
 
 end
 

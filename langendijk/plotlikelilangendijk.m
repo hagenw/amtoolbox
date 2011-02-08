@@ -9,7 +9,7 @@ function plotlikelilangendijk(la,le,ci,tit)
 %     ci:          confidence interval for expected likelihood
 %     [tit:]       set to 'spatstrat' optionally
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Robert Baumgartner, OEAW Acoustical Research Institute
+% AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 % latest update: 2010-08-25
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

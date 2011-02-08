@@ -48,7 +48,7 @@ function data = data_langendijk2002(flag)
 %
 %R  langendijk et al. 2002
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Robert Baumgartner, OEAW Acoustical Research Institute
+% AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 % latest update: 2010-08-19
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -1,7 +1,38 @@
+%DEMO_LANGENDIJK  Demo of the localization model of Langendijk & Bronkhorst 2002
+%
+%   This script generates figures showing the results of the localization 
+%   model based on the simulation shown in the related paper of Langendijk &
+%   Bronkhorst 2002. 
+%   You can choose between two of his listeners P3 and P6. The required
+%   data (DTF data and response patterns) will be provided by precalculated
+%   mat-files due to high computing time (optionally data can be calculated
+%   by using the data_langendijk2002 function). 
+%
+%
+%   FIGURE 1 Baseline condition
+%   FIGURE 2 2-octave condition (4-16kHz)
+%   FIGURE 3 1-octave condition (low 4-8kHz)
+%   FIGURE 4 1-octave condition (middle 5.7-11.3kHz)
+%   FIGURE 5 1-octave condition (high 8-16kHz)
+%
+%     Above-named figures are showing the probability density function (pdf) 
+%     and actual responses(°) for chosen listener as a function of target 
+%     position for different conditions. The shading of each cell codes the 
+%     probability density (light/dark is high/low probability)
+%
+%   FIGURE 6 Likelihood statistics
+%
+%     Figure 6 shows the likelihood statistics for the actual responses
+%     (bars), the average and the 99% confidence interval of the expected
+%     likelihood (dots and bars). See the paper for further details.
+%
+%   See also: langendijk, likelilangendijk, plotlangendijk, plotlikelilangendijk
+
+
 % Validation of Langendijk et al. (2002)
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Robert Baumgartner, OEAW Acoustical Research Institute
+% AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 % latest update: 2010-08-16
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

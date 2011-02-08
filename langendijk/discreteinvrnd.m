@@ -3,7 +3,7 @@ function [ X ] = discreteinvrnd(p,m,n)
 % with probability mass vector p and dimensions m,n
 % Usage:    [ X ] = discreteinvrnd(p,m,n)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Robert Baumgartner, OEAW
+% AUTHOR : Robert Baumgartner, OEAW
 % latest update: 2010-07-21
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

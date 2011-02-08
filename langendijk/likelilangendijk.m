@@ -13,7 +13,7 @@ function [ la,le,ci ] = likelilangendijk( p,rang,tang,target,response )
 %     le:          expected likelihood
 %     ci:          99% confidence interval for expected likelihood
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Robert Baumgartner, OEAW Acoustical Research Institute
+% AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 % latest update: 2010-08-25
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
