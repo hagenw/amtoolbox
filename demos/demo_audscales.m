@@ -24,7 +24,7 @@ xrange=linspace(flow,fhigh,plotpoints);
 figure(1)
 
 types   = {'erb','bark','mel','erb83'};
-symbols = {'r.' ,'go'  ,'bx' ,'y+'};
+symbols = {'k-' ,'ro'  ,'gx' ,'b+'};
 
 hold on;
 for ii=1:numel(types)
@@ -35,4 +35,6 @@ for ii=1:numel(types)
 end;
 hold off;
 legend(types{:},'Location','SouthEast');
+xlabel('Frequency (Hz)');
+ylabel('Auditory unit (normalized)');
 

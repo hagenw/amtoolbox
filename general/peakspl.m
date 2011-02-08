@@ -10,7 +10,7 @@ function y = peakspl(insig,options)
 %   PEAKSPL(x,'ac') does the same, but considers only the AC component of the
 %   signal (i.e. the mean is removed).
 %
-%   See also: rms, gaindb, crestfactor, setleveldb, rmsdb
+%   See also: gaindb, crestfactor, setleveldb, rmsdb
 %
 %R  moore2003introduction
 

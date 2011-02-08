@@ -148,7 +148,6 @@ for ii = 1:nchannels
 
   if flags.do_peakphase
     b2=b2*exp(2*pi*i*fc(ii)*delay(ii));
-    %b=2*b;
   end;
 
   % Place the result (a row vector) in the output matrices.
