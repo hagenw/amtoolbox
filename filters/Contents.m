@@ -1,6 +1,6 @@
 % AMT - Filter functions
 %
-%  The AMT team, 2010.
+%  The AMT team, 2011.
 %
 %  General routines
 %     UFILTERBANKZ     - Apply multiple filters
@@ -9,6 +9,10 @@
 %
 %  Auditory filters
 %     GAMMATONE        - Gammatone filter coefficients
+%
+%  Outer and middle ear
+%     HEADPHONEFILTER  - FIR filter to model headphones
+%     MIDDLEREARFILTER - FIR filter to model the middle ear
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

@@ -1,6 +1,6 @@
 % AMT - Monaural models
 %
-%  The AMT team, 2010.
+%  The AMT team, 2011.
 %
 %  Models
 %     dau1996preproc - Dau et. al. (1996a) peripheral processor

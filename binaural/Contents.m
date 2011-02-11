@@ -1,6 +1,6 @@
 % AMT - Binaural models
 %
-%  The AMT team, 2010.
+%  The AMT team, 2011.
 %
 %  The Lindemann model
 %     LINDEMANN         - Calculate a binaural activity map

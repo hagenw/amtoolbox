@@ -1,6 +1,6 @@
 % AMT - Demos
 %
-%   Peter L. Soendergaard, 2010.
+%   Peter L. Soendergaard, 2011.
 %
 %   This page documents the demos.
 %
