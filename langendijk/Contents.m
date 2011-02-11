@@ -11,7 +11,6 @@
 %
 %  General routines
 %     langecomp        - Comparison process used in Langendijk's model
-%     averagingfb      - Averaging rectangular filter bank
 %     discreteinvrnd   - Invert a discrete distribution with probability p
 %     halfconv         - Fast convolution, one way (fft but without ifft)
 %     bmp2gr           - Convert a bitmap to gain response data (in dB)

@@ -6,6 +6,8 @@
 %     FILTERBANKZ      - Apply multiple filters
 %     FILTERBANK_INIT  - Create control structure for FILTERBANK_BLOCK
 %     FILTERBANK_BLOCK - Filterbank block processing
+%     averagingfb      - Averaging rectangular filter bank acc. to
+%                        Langendijk & Bronkhorst 2002
 %
 %  Auditory filters
 %     GAMMATONE        - Gammatone filter coefficients
