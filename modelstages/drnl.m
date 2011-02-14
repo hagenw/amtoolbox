@@ -1,4 +1,4 @@
-function outsig = drnl(insig,fc,fs)
+function outsig = drnl(insig,fc,fs,varargin)
 %DRNL  Dual Resonance Nonlinear Filterbank
 %   Usage: outsig = drnl(insig,fc,fs);
 %
@@ -23,16 +23,31 @@ function outsig = drnl(insig,fc,fs)
   
 %DRNL for normal hearing, Morten 2007
 
-n_lin_gt = 2; % number of cascaded gammatone filters 
-n_lin_lp = 4; % no. of cascaded LP filters, orig 4
 
-n_nlin_gt_before = 2; % number of cascaded gammatone filters 
-n_nlin_gt_after = 2; % number of cascaded gammatone filters 
-n_nlin_lp = 1; % no. of cascaded LP filters in nlin path
+definput.keyvals.lin_ngt = 2; % number of cascaded gammatone filters 
+definput.keyvals.lin_nlp = 4; % no. of cascaded LP filters, orig 4
+definput.keyvals.lin_fc = [1.01679 -0.06762];
+definput.keyvals.lin_bw = [ .75      .03728];
+definput.keyvals.lin_gain = [-.47909 4.20405];
+definput.keyvals.lin_lp_cutoff = [1.01 -0.06762];
 
-nlin_c = 10^(-.60206); % c, compression coeff
+definput.keyvals.nlin_ngt_before = 2; % number of cascaded gammatone filters 
+definput.keyvals.nlin_ngt_after = 2; % number of cascaded gammatone filters 
+definput.keyvals.nlin_nlp = 1; % no. of cascaded LP filters in nlin path
+definput.keyvals.nlin_fc_before = [1.01650 -0.05252];
+definput.keyvals.nlin_fc_after  = [1.01650 -0.05252];
+definput.keyvals.nlin_bw_before = [.7 -0.03193];
+definput.keyvals.nlin_bw_after  = [.7 -0.03193];
+definput.keyvals.nlin_lp_cutoff = [1.01 -0.05252];
 
-nlin_d = 1;
+definput.keyvals.nlin_a = [ .81916 1.40298];
+definput.keyvals.nlin_b = [-.81867 1.61912];
+definput.keyvals.nlin_c = 10^(-.60206); % c, compression coeff
+definput.keyvals.nlin_d = 1;
+
+
+[flags,kv]=ltfatarghelper({},definput,varargin);
+
 
 % ---------------- main loop over center frequencies
 
@@ -46,41 +61,34 @@ outsig=zeros(siglen,nfc,nsigs,nsigs);
 for ii=1:nfc
 
   % -------- Setup channel dependant definitions -----------------
-  fc_lin = 10^(-0.06762+1.01679*log10(fc(ii))); % Hz.
-  bw_lin = 10^(.03728+.75*log10(fc(ii))); % Hz
-  lp_lin_cutoff = 10^(-0.06762+1.01*log10(fc(ii)));
-  
-  lin_gain = 10^(4.20405 -.47909*log10(fc(ii)));
-    
-  fc_nlin_before = 10^(-0.05252+1.01650*log10(fc(ii))); % Hz
-  fc_nlin_after  = 10^(-0.05252+1.01650*log10(fc(ii))); % Hz  
-    
-  bw_nlin_before = 10^(-0.03193+.7*log10(fc(ii))); % Hz  
-  bw_nlin_after  = 10^(-0.03193+.7*log10(fc(ii))); % Hz  
-  
-  lp_nlin_cutoff = 10^(-0.05252+1.01*log10(fc(ii))); 
-  
-  if fc(ii)<=1000
-    % a, the 1500 assumption is no good for compressionat low freq filters
-    nlin_a = 10^(1.40298+.81916*log10(fc(ii))); 
-    
-    % b [(m/s)^(1-c)]
-    nlin_b = 10^(1.61912-.81867*log10(fc(ii))); 
-  else
-    % a, the 1500 assumption is no good for compressionat low freq filters
-    nlin_a = 10^(1.40298+.81916*log10(1500));
-    
-    % b [(m/s)^(1-c)]
-    nlin_b = 10^(1.61912-.81867*log10(1500)); 
-  end
-  
-  
-  [GTlin_b,GTlin_a] = coefGtDRNL(fc_lin,bw_lin,n_lin_gt,fs);
-  [LPlin_b,LPlin_a] = coefLPDRNL(lp_lin_cutoff,fs);
 
-  [GTnlin_b_before,GTnlin_a_before] = coefGtDRNL(fc_nlin_before,bw_nlin_before,n_nlin_gt_before,fs);
-  [GTnlin_b_after, GTnlin_a_after]  = coefGtDRNL(fc_nlin_after, bw_nlin_after,n_nlin_gt_after,fs);
-  [LPnlin_b,LPnlin_a] = coefLPDRNL(lp_nlin_cutoff,fs);
+  lin_fc        = polfun(kv.lin_fc,fc(ii));
+  lin_bw        = polfun(kv.lin_bw,fc(ii));
+  lin_lp_cutoff = polfun(kv.lin_lp_cutoff,fc(ii));
+  lin_gain      = polfun(kv.lin_gain,fc(ii));
+  
+  nlin_fc_before = polfun(kv.nlin_fc_before,fc(ii));
+  nlin_fc_after  = polfun(kv.nlin_fc_after,fc(ii));
+  
+  nlin_bw_before = polfun(kv.nlin_bw_before,fc(ii));
+  nlin_bw_after  = polfun(kv.nlin_bw_after,fc(ii));
+  
+  nlin_lp_cutoff = polfun(kv.nlin_lp_cutoff,fc(ii));
+  
+  % a, the 1500 assumption is no good for compressionat low freq filters
+  nlin_a = polfun(kv.nlin_a,min(fc(ii),1500));
+
+  % b [(m/s)^(1-c)]
+  nlin_b = polfun(kv.nlin_b,min(fc(ii),1500));
+      
+  [GTlin_b,GTlin_a] = coefGtDRNL(lin_fc,lin_bw,kv.lin_ngt,fs);
+  [LPlin_b,LPlin_a] = coefLPDRNL(lin_lp_cutoff,fs);
+
+  [GTnlin_b_before,GTnlin_a_before] = coefGtDRNL(nlin_fc_before,nlin_bw_before,...
+						 kv.nlin_ngt_before,fs);
+  [GTnlin_b_after, GTnlin_a_after]  = coefGtDRNL(nlin_fc_after, nlin_bw_after,...
+						 kv.nlin_ngt_after,fs);
+  [LPnlin_b,LPnlin_a] = coefLPDRNL(nlin_lp_cutoff,fs);
 
   % -------------- linear part --------------------------------
 
@@ -90,11 +98,10 @@ for ii=1:nfc
   % Now filtering.
   % Instead of actually perform multiply filtering, just convolve the
   % coefficients.      
-  %[blong,along]=convolveba(GTlin_b,GTlin_a,n_lin_gt);
   y_lin = real(filter(GTlin_b,GTlin_a,y_lin));
 
   % Same story: convolve the coefficients.
-  [blong,along]=convolveba(LPlin_b,LPlin_a,n_lin_lp);
+  [blong,along]=convolveba(LPlin_b,LPlin_a,kv.lin_nlp);
   y_lin = filter(blong,along,y_lin);
   
   % -------------- Non-linear part ------------------------------
@@ -103,13 +110,13 @@ for ii=1:nfc
   y_nlin = real(filter(GTnlin_b_before,GTnlin_a_before,insig));
   
   % Broken stick nonlinearity
-  if nlin_d~=1
+  if kv.nlin_d~=1
     % Just to save some flops, make this optional.
-    y_decide = [nlin_a*abs(y_nlin).^nlin_d; ...
-                nlin_b*(abs(y_nlin)).^nlin_c];
+    y_decide = [nlin_a*abs(y_nlin).^kv.nlin_d; ...
+                nlin_b*(abs(y_nlin)).^kv.nlin_c];
   else
     y_decide = [nlin_a*abs(y_nlin); ...
-                nlin_b*(abs(y_nlin)).^nlin_c];    
+                nlin_b*(abs(y_nlin)).^kv.nlin_c];    
   end;
   y_nlin = sign(y_nlin).* min(y_decide);
   
@@ -117,7 +124,7 @@ for ii=1:nfc
   y_nlin = real(filter(GTnlin_b_after,GTnlin_a_after,insig));
   
   % then LP filtering
-  [blong,along]=convolveba(LPnlin_b,LPnlin_a,n_nlin_lp);
+  [blong,along]=convolveba(LPnlin_b,LPnlin_a,kv.nlin_nlp);
   y_nlin = real(filter(blong,along,y_nlin));
   
   outsig(:,ii,:) = reshape(y_lin + y_nlin,siglen,1,nsigs);    
@@ -125,3 +132,5 @@ for ii=1:nfc
 end;
   
  
+function outpar=polfun(par,fc)
+  outpar=10^(par(2)+par(1)*log10(fc));
