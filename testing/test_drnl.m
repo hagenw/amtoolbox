@@ -1,6 +1,6 @@
-if 0
+if 1
   siglen=10000;
-  fs=16000;  
+  fs=20000;  
   insig=randn(siglen,1);
 
 else
@@ -25,4 +25,5 @@ res=outsig-outsig_ref;
 
 % There is a deviation. This deviation happends because we convolve the
 % filter coefficients, instead of cascading the filters.
-norm(res(:))/norm(outsig)
+fprintf('Relative l^2-norm: %f\n',norm(res(:))/norm(outsig));
+fprintf('Peak SNR: %f\n',20*log10(norm(res(:),inf)/norm(outsig,inf)));
