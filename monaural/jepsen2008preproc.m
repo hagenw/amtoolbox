@@ -55,23 +55,31 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-definput.import={'auditoryfilterbank'};
+definput.import={'drnl'};
 definput.keyvals.subfs=[];
 
 [flags,keyvals]  = ltfatarghelper({'flow','fhigh'},definput,varargin);
 
 % ------ do the computation -------------------------
 
-% Apply the auditory filterbank
-[outsig, fc] = auditoryfilterbank(insig, fs, 'argimport',flags,keyvals);
+%% Headphone filter
+hp_fir = headphonefilter(fs);
+outsig = filter(hp_fir,1,insig);
 
-% 'haircell' envelope extraction
+%% DRNL and compensation for middle-ear
+[outsig, fc] = drnl(outsig, fs, 'argimport',flags,keyvals);
+outsig = gaindb(outsig,50);
+
+%% 'haircell' envelope extraction
 outsig = ihcenvelope(outsig,fs,'dau');
 
-% non-linear adaptation loops
+%% Expansion stage
+outsig = outsig.^2;
+
+%% non-linear adaptation loops
 outsig = adaptloop(outsig,fs,'dau');
 
-% Modulation filterbank
+%% Modulation filterbank
 [outsig,mfc] = modfilterbank(outsig,fs,fc);
 
 

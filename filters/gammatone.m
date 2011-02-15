@@ -114,8 +114,8 @@ nchannels = length(fc);
 
 if flags.do_allpole
   if flags.do_real
-    error(['GAMMATONE: It is currently not possible to generate coefficients for a real-valued ', ...
-           'filterbank. Please add the "complex" flag, and use 2*real(filterbank(', ...
+    error(['GAMMATONE: It is currently not possible to generate all-pole real-valued gammatone-filters.', ...
+           'Please add the "complex" flag, and use 2*real(ufilterbankz(', ...
            '...)) to process your signal.']);
   end;      
   
@@ -135,7 +135,8 @@ if flags.do_allpole
     % It should be possible to replace the code in this loop by the
     % following two lines, but zp2tf only seems to handle real-valued
     % filters, so the code does not work.
-    %atilde = exp(-2*pi*ourbeta(ii)/fs + i*2*pi*fc(ii)/fs);
+    atilde = exp(-2*pi*ourbeta(ii)/fs - i*2*pi*fc(ii)/fs);
+    poly(atilde*ones(1,n))
     %[bnew,anew]=zp2tf([],atilde*ones(1,n),1);
     
     btmp=1-exp(-2*pi*ourbeta(ii)/fs);
@@ -160,6 +161,11 @@ if flags.do_allpole
   end;
   
 else
+
+  if flags.do_complex
+    error(['The complex valued mixed pole/zero gammatone filters has not ' ...
+           'yet been implemented.']);
+  end;
   
   b=zeros(nchannels,n+1);
   a=zeros(nchannels,2*n+1);

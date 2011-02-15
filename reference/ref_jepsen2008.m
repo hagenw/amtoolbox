@@ -62,9 +62,7 @@ for ChannelNr = 1:NrFBChannels
   y = y.^2;                           %expansion
            
   % non-linear adaptation loops
-  [CFdiff,lookupnum] = min(abs(minlim(:,1) - CenterFreq(ChannelNr)));
-  y = max(y,minlim(lookupnum,2));
-  %             y = max(y,8e-5);
+  y = max(y,8e-5);
   y = nlal_lim(y, fs,15);             % AD loops, 15 is overshoot limit factor
 
   % Modulation filterbank

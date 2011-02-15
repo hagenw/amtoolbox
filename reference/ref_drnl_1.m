@@ -1,12 +1,19 @@
-function outsig = drnl(insig,fs,varargin)
-%DRNL  Dual Resonance Nonlinear Filterbank
+function outsig = drnl_1(insig,fs,varargin)
+%DRNL_1  Dual Resonance Nonlinear Filterbank
 %   Usage: outsig = drnl(insig,fc,fs);
+%
+%   This version contains the old way of computing the filter by doing
+%   multiple runs through filter.
 %
 %   DRNL(insig,fc,fs) computes the Dual Resonance Non-Linear filterbank of
 %   the input signal insig sampled at fs Hz with channels specified by the
 %   center frequencies in fc. The DRNL is described in the paper
 %   Lopez-Poveda and Meddis (2001). The DRNL models the basilar membrane
 %   non-linearity.
+%
+%   The input to DRNL must be measured in stapes movement. The function
+%   MIDDLEEARFILTER will do this, so this function must be called before
+%   invoking DRNL.
 %
 %   The DRNL takes a lot of parameters which vary over frequency. Such a
 %   parameter is described by a 1x2 vector [b a] and indicates that the
@@ -26,15 +33,6 @@ function outsig = drnl(insig,fs,varargin)
 %                    in the filterbank. The default value of [] means
 %                    no default.
 %
-%-     'middleear'  - Perform middleear filtering before the actual DRNL
-%                     is applied using the middleear filter specified in
-%                     Lopez-Poveda and Meddis (2001). This is the
-%                     default.
-%
-%-     'nomiddleear' - No middle-ear filtering. Be carefull with this setting,
-%                     as another scaling must then be perform to convert the
-%                     input to stapes movement.
-%
 %-     'lin_ngt',n  - Number of cascaded gammatone filter in the linear
 %                    part, default value is 2.
 %
@@ -48,10 +46,10 @@ function outsig = drnl(insig,fs,varargin)
 %                    linear part. Default value is [-0.06762 1.01679].
 %
 %-     'lin_bw',bw - Bandwidth of the gammatone filters in the linear
-%                    part. Default value is [.03728  .78563]
+%                    part. Default value is [.03728  .75]
 %
 %-     'lin_lp_cutoff',c - Cutoff frequency of the lowpass filters in the
-%                    linear part. Default value is [-0.06762 1.01679 ]
+%                    linear part. Default value is [-0.06762 1.01 ]
 %
 %-     'nlin_ngt_before',n - Number of cascaded gammatone filters in the
 %                    non-linear part before the broken stick
@@ -74,11 +72,11 @@ function outsig = drnl(insig,fs,varargin)
 %
 %-     'nlin_bw_before',bw - Bandwidth of the gammatone filters in the
 %                    non-linear part before the broken stick
-%                    non-linearity. Default value is [-0.03193 .77426 ].
+%                    non-linearity. Default value is [-0.03193 .7 ].
 %
 %-     'nlin_bw_after',w - Bandwidth of the gammatone filters in the
 %                    non-linear part before the broken stick
-%                    non-linearity. Default value is [-0.03193 .77426 ].
+%                    non-linearity. Default value is [-0.03193 .7 ].
 %
 %-     'nlin_lp_cutoff',c - Cutoff frequency of the lowpass filters in the
 %                    non-linear part. Default value is [-0.05252 1.01 ].
@@ -122,7 +120,7 @@ if flags.do_middleear
 
 end;
 
-%% ---------------- main loop over center frequencies
+% ---------------- main loop over center frequencies
 
 % Code will fail for a row vector, FIXME
 siglen = size(insig,1);
@@ -130,17 +128,6 @@ nsigs  = size(insig,2);
 nfc    = length(fc);
 
 outsig=zeros(siglen,nfc,nsigs,nsigs);
-
-% Handle the compression limiting in the broken-stick non-linearity
-if ~isempty(kv.compresslimit)
-  fclimit=min(fc,kv.compresslimit);
-else
-  fclimit=fc;
-end;
-
-% Sanity checking, some center frequencies may go above the Nyquest
-% frequency
-% Happens for lin_lp_cutoff
 
 for ii=1:nfc
 
@@ -159,29 +146,28 @@ for ii=1:nfc
   
   nlin_lp_cutoff = polfun(kv.nlin_lp_cutoff,fc(ii));
   
-  % Expand a and b using the (possibly) limited fc
-  nlin_a = polfun(kv.nlin_a,fclimit(ii));
+  % a, the 1500 assumption is no good for compressionat low freq filters
+  nlin_a = polfun(kv.nlin_a,min(fc(ii),1500));
 
   % b [(m/s)^(1-c)]
-  nlin_b = polfun(kv.nlin_b,fclimit(ii));
+  nlin_b = polfun(kv.nlin_b,min(fc(ii),1500));
       
   nlin_c = polfun(kv.nlin_c,fc(ii));
-  
-  [GTlin_b,GTlin_a] = coefGtDRNL(lin_fc,lin_bw,kv.lin_ngt,fs);
-  
+  [GTlin_b,GTlin_a] = coefGtDRNL(lin_fc,lin_bw,1,fs);
+    
   % Compute coefficients for the linear stage lowpass, use 2nd order
   % Butterworth.
-  [LPlin_b,LPlin_a] = butter(2,lin_lp_cutoff/(fs/2));
-
+  [LPlin_b,LPlin_a] = coefLPDRNL(lin_lp_cutoff,fs);
+  
   [GTnlin_b_before,GTnlin_a_before] = coefGtDRNL(nlin_fc_before,nlin_bw_before,...
-                                                 kv.nlin_ngt_before,fs);
+                                                 1,fs);
   [GTnlin_b_after, GTnlin_a_after]  = coefGtDRNL(nlin_fc_after, nlin_bw_after,...
-                                                   kv.nlin_ngt_after,fs);    
+                                                   1,fs);
 
   % Compute coefficients for the non-linear stage lowpass, use 2nd order
   % Butterworth.
-  [LPnlin_b,LPnlin_a] = butter(2,nlin_lp_cutoff/(fs/2));
-
+  [LPnlin_b,LPnlin_a] = coefLPDRNL(nlin_lp_cutoff,fs);
+  
   % -------------- linear part --------------------------------
 
   % Apply linear gain
@@ -190,14 +176,21 @@ for ii=1:nfc
   % Now filtering.
   % Instead of actually perform multiply filtering, just convolve the
   % coefficients.      
-  [blong,along]=convolveba(LPlin_b,LPlin_a,kv.lin_nlp);
-  y_lin = filter(GTlin_b,GTlin_a,y_lin);    
-  y_lin = filter(blong,along,y_lin);
-    
+  for jj=1:kv.lin_ngt
+    y_lin = filter(GTlin_b,GTlin_a,y_lin);
+  end;
+  
+  for jj=1:kv.lin_nlp
+    y_lin = filter(LPlin_b,LPlin_a,y_lin);
+  end;
+  
   % -------------- Non-linear part ------------------------------
       
   % GT filtering before
-  y_nlin = filter(GTnlin_b_before,GTnlin_a_before,insig);
+  y_nlin=insig;
+  for jj=1:kv.nlin_ngt_before
+    y_nlin = filter(GTnlin_b_before,GTnlin_a_before,y_nlin);
+  end;
   
   % Broken stick nonlinearity
   if kv.nlin_d~=1
@@ -211,11 +204,14 @@ for ii=1:nfc
   y_nlin = sign(y_nlin).* min(y_decide);
   
   % GT filtering after
-  y_nlin = filter(GTnlin_b_after,GTnlin_a_after,y_nlin);
+  for jj=1:kv.nlin_ngt_after
+    y_nlin = filter(GTnlin_b_after,GTnlin_a_after,y_nlin);
+  end;
   
-  % then LP filtering
-  [blong,along]=convolveba(LPnlin_b,LPnlin_a,kv.nlin_nlp);
-  y_nlin = filter(blong,along,y_nlin);
+  % then LP filtering  
+  for jj=1:kv.nlin_nlp
+    y_nlin = filter(LPnlin_b,LPnlin_a,y_nlin);
+  end;
   
   outsig(:,ii,:) = reshape(y_lin + y_nlin,siglen,1,nsigs);    
   
