@@ -10,7 +10,7 @@ function output = exp_lindemann1986a(varargin)
 %   the stationary character of the input signals T_int = inf is used to
 %   produce only one time step in the crosscorr output.
 %   
-%   flag can be one of the following:
+%   The following flags can be specified;
 %
 %-    'plot' - plot the output of the experiment. This is the default.
 %
