@@ -59,7 +59,7 @@ function [b,a,delay]=gammatone(fc,fs,varargin);
 %
 %C    [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 %  
-%R  aertsen1980strI patterson1988efficient glasberg1990daf hohmann2002frequency
+%R  aertsen1980strI patterson1988efficient glasberg1990daf hohmann2002frequency lyon2010history
   
 %   AUTHOR : Stephan Ewert, Peter L. Soendergaard
 
@@ -88,6 +88,7 @@ definput.keyvals.n=4;
 definput.keyvals.betamul=[];
 definput.flags.real={'real','complex'};
 definput.flags.phase={'causalphase','peakphase'};
+definput.flags.filtertype={'allpole','mixed'};
 
 [flags,keyvals,n,betamul]  = ltfatarghelper({'n','betamul'},definput,varargin);
 
@@ -109,56 +110,98 @@ end;
 
 % ------ Computation --------------------------
 
-if flags.do_real
-  error(['GAMMATONE: It is currently not possible to generate coefficients for a real-valued ', ...
-         'filterbank. Please add the "complex" flag, and use 2*real(filterbank(', ...
-         '...)) to process your signal.']);
-end;      
-
 nchannels = length(fc);
 
-b=zeros(nchannels,1);
-a=zeros(nchannels,n+1);
-
-% ourbeta is used in order not to mask the beta function.
-
-ourbeta = betamul*audfiltbw(fc);
-
-% This is when the function peaks.
-delay = 3./(2*pi*ourbeta);
-
-for ii = 1:nchannels
-
-  % It should be possible to replace the code in this loop by the
-  % following two lines, but zp2tf only seems to handle real-valued
-  % filters, so the code does not work.
-  %atilde = exp(-2*pi*ourbeta(ii)/fs + i*2*pi*fc(ii)/fs);
-  %[bnew,anew]=zp2tf([],atilde*ones(1,n),1);
+if flags.do_allpole
+  if flags.do_real
+    error(['GAMMATONE: It is currently not possible to generate all-pole real-valued gammatone-filters.', ...
+           'Please add the "complex" flag, and use 2*real(ufilterbankz(', ...
+           '...)) to process your signal.']);
+  end;      
   
-  btmp=1-exp(-2*pi*ourbeta(ii)/fs);
-  atmp=[1, -exp(-(2*pi*ourbeta(ii) + i*2*pi*fc(ii))/fs)];
   
-  b2=1;
-  a2=1;
+  b=zeros(nchannels,1);
+  a=zeros(nchannels,n+1);
   
-  for jj=1:n
-    b2=conv(btmp,b2);
-    a2=conv(atmp,a2);
-  end
-
-  if flags.do_peakphase
-    b2=b2*exp(2*pi*i*fc(ii)*delay(ii));
+  % ourbeta is used in order not to mask the beta function.
+  
+  ourbeta = betamul*audfiltbw(fc);
+  
+  % This is when the function peaks.
+  delay = 3./(2*pi*ourbeta);
+  
+  for ii = 1:nchannels
+    
+    % It should be possible to replace the code in this loop by the
+    % following two lines, but zp2tf only seems to handle real-valued
+    % filters, so the code does not work.
+    atilde = exp(-2*pi*ourbeta(ii)/fs - i*2*pi*fc(ii)/fs);
+    poly(atilde*ones(1,n))
+    %[bnew,anew]=zp2tf([],atilde*ones(1,n),1);
+    
+    btmp=1-exp(-2*pi*ourbeta(ii)/fs);
+    atmp=[1, -exp(-(2*pi*ourbeta(ii) + i*2*pi*fc(ii))/fs)];
+    
+    [b2,a2] = convolveba(btmp,atmp,n);
+        
+    if flags.do_peakphase
+      b2=b2*exp(2*pi*i*fc(ii)*delay(ii));
+    end;
+    
+    % Place the result (a row vector) in the output matrices.
+    b(ii,:)=b2;
+    a(ii,:)=a2;
+    
   end;
-
-  % Place the result (a row vector) in the output matrices.
-  b(ii,:)=b2;
-  a(ii,:)=a2;
-
-end;
-
   
-if flags.do_real
-  b=real(b);
-  a=real(a);
+  
+  if flags.do_real
+    b=real(b);
+    a=real(a);
+  end;
+  
+else
+
+  if flags.do_complex
+    error(['The complex valued mixed pole/zero gammatone filters has not ' ...
+           'yet been implemented.']);
+  end;
+  
+  b=zeros(nchannels,n+1);
+  a=zeros(nchannels,2*n+1);
+  
+  % ourbeta is used in order not to mask the beta function.
+  
+  ourbeta = betamul*audfiltbw(fc);
+  
+  % This is when the function peaks.
+  delay = 3./(2*pi*ourbeta);
+
+  for ii = 1:nchannels
+    
+    theta = 2*pi*fc(ii)/fs;
+    phi   = 2*pi*ourbeta(ii)/fs;
+    alpha = -exp(-phi)*cos(theta);
+    
+    b1 = 2*alpha;
+    b2 = exp(-2*phi);
+    a0 = abs( (1+b1*cos(theta)-i*b1*sin(theta)+b2*cos(2*theta)-i*b2*sin(2*theta)) / (1+alpha*cos(theta)-i*alpha*sin(theta))  );
+    a1 = alpha*a0;
+    
+    % adapt to matlab filter terminology
+    btmp=[a0, a1];
+    atmp=[1, b1, b2];
+    
+    [b2,a2] = convolveba(btmp,atmp,n);
+    
+    if flags.do_peakphase
+      b2=b2*exp(2*pi*i*fc(ii)*delay(ii));
+    end;
+    
+    % Place the result (a row vector) in the output matrices.
+    b(ii,:)=b2;
+    a(ii,:)=a2;
+
+  end;
 end;
 

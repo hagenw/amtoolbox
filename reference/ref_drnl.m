@@ -6,10 +6,16 @@ function out = ref_drnl(x,CF,fs)
 %
 % usage: out = drnl(x,CF,fs)
 
- [linDRNLpar,nlinDRNLpar] = getDRNLparam(CF);
+[linDRNLpar,nlinDRNLpar] = getDRNLparam(CF);
 
 [GTlin_b,GTlin_a] = coefGtDRNL(linDRNLpar(1).vals,linDRNLpar(3).vals,1,fs); %get GT filter coeffs
 [LPlin_b,LPlin_a] = coefLPDRNL(linDRNLpar(5).vals,fs); % get LP filter coeffs
+
+
+
+%% Apply the middle-ear filter
+me_fir = middleearfilter(fs);
+x = filter(me_fir,1,x);
 
 % linDRNLpar(4).vals
 % pause
