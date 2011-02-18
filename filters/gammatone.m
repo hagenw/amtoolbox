@@ -136,7 +136,7 @@ if flags.do_allpole
     % following two lines, but zp2tf only seems to handle real-valued
     % filters, so the code does not work.
     atilde = exp(-2*pi*ourbeta(ii)/fs - i*2*pi*fc(ii)/fs);
-    poly(atilde*ones(1,n))
+
     %[bnew,anew]=zp2tf([],atilde*ones(1,n),1);
     
     btmp=1-exp(-2*pi*ourbeta(ii)/fs);

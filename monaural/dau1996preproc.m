@@ -71,6 +71,7 @@ outsig = adaptloop(outsig,fs,'dau');
 
 % Calculate filter coefficients for the 20 ms (approx.eq to 8 Hz) modulation
 % lowpass filter.
+% FIXME: This filter places a pole /very/ close to the unit circle.
 mlp_a = exp(-(1/0.02)/fs);
 mlp_b = 1 - mlp_a;
 mlp_a = [1, -mlp_a];

@@ -15,8 +15,19 @@ function [outsig,mfc] = modfilterbank(insig,fs,fc,varargin)
 %   signals insig which are sampled with a frequency of fs Hz. Each column in
 %   insig is assumed to be bandpass filtered with a center frequency stored in fc.
 %
+%   By default, the modulation filters will have bandwidth
+%   0,5,10,16.6,27.77,... where each next center frequency is 5/3 times the
+%   previous one. For modulation frequencies below (and including) 10 Hz,
+%   the real value of the filters are returned, and for higher modulation
+%   center frequencies, the absolute value (the envelope) is returned.
+%  
 
-% copyright (c) 1999 Stephan Ewert and Torsten Dau, Universitaet Oldenburg
+% AUTHOR: Stephan Ewert
+%
+% Modifications by Morten L. Jepsen and Peter L. Soendergaard.
+
+definput.keyvals.mfc=[];
+[flags,kv]=ltfatarghelper({},definput,varargin);
 
 nfreqchannels=length(fc);
 
@@ -30,7 +41,7 @@ startmf = 5;
 
 % second order modulation Butterworth lowpass filter with a cut-off frequency of 2.5
 % Hz.
-[b_lowpass,a_lowpass] = solp(2*pi*2.5/fs,1/sqrt(2));
+[b_lowpass,a_lowpass] = butter(2,2.5/(fs/2));
 
 % first order modulation Butterworth lowpass filter with a cut-off
 % frequency of 150 Hz. This is to remove all modulation frequencies
@@ -103,14 +114,4 @@ e0 = exp(-bw/2);
 b = 1 - e0;
 a = [1, -e0*exp(1i*w0)];
 
-% second order Butterworth lowpass filter
-function [b,a] = solp(w0,Q)
-
-W0 = tan(w0/2);
-
-b = [1; 2; 1];
-a = [1 + 1/(Q*W0) + 1/W0^2; -2/W0^2 + 2; 1 - 1/(Q*W0) + 1/W0^2];
-
-b = b/a(1);
-a = a/a(1);
 

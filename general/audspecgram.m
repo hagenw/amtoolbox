@@ -39,6 +39,8 @@ function varargout=audspecgram(insig,fs,varargin)
 %-   'mlp',f   - Modulation low-pass filter to frequency f. Default is to
 %                low-pass filter to 50 Hz.
 %
+%-   'mf',f    - Modulation filter with specified center frequency.
+%
 %-   'nomf'    - No modulation filtering of any kind.
 %
 %-   'image'   - Use 'imagesc' to display the spectrogram. This is the default.
@@ -101,7 +103,7 @@ definput.flags.dynrange={'fullrange','dynrange'};
 definput.flags.plottype={'image','contour','mesh','surf'};
 definput.flags.clim={'noclim','clim'};
 definput.flags.fmax={'nofmax','fmax'};
-definput.flags.mlp={'mlp','nomf'};
+definput.flags.mlp={'mlp','mf','nomf'};
 %definput.flags.delay={'gammatonedelay','zerodelay'};
 
 definput.keyvals.ihc='dau';
@@ -111,6 +113,7 @@ definput.keyvals.clim=[0,1];
 definput.keyvals.fmax=0;
 definput.keyvals.ytick=[0,100,250,500,1000,2000,4000,8000];
 definput.keyvals.mlp=50;
+definput.keyvals.mf=[0 5 10 16.6 27.7];
 definput.keyvals.frange=[0,8000];
 definput.keyvals.xres=800;
 definput.keyvals.yres=600;
@@ -120,14 +123,14 @@ definput.flags.colorbar={'colorbar','nocolorbar'};
 definput.groups.classic={'ihc','hilbert', 'noadapt', 'nomf'};
 
 
-[flags,keyvals]=ltfatarghelper({},definput,varargin);
+[flags,kv]=ltfatarghelper({},definput,varargin);
 
 siglen=length(insig);
 
-fhigh=keyvals.frange(2);
-flow =keyvals.frange(1);
+fhigh=kv.frange(2);
+flow =kv.frange(1);
 
-audlimits=freqtoerb(keyvals.frange);
+audlimits=freqtoerb(kv.frange);
 
 % fhigh can at most be the Nyquest frequency
 fhigh=min(fhigh,fs/2);
@@ -158,7 +161,7 @@ end;
 hopsize=1;
 
 % find the center frequencies used in the filterbank
-fc = erbspace(flow,fhigh,keyvals.yres);
+fc = erbspace(flow,fhigh,kv.yres);
 
 if 1
   % Calculate filter coefficients for the gammatone filter bank.
@@ -172,9 +175,9 @@ else
   bw_gauss=audfiltbw(fc)/fs*L/0.79;
 
   fc_gauss=round(fc/fs*L);
-  g=cell(1,keyvals.yres);
+  g=cell(1,kv.yres);
 
-  for m=1:keyvals.yres
+  for m=1:kv.yres
     g{m}=real(pgauss(L,'bw',bw_gauss(m),'cf',fc_gauss(m)));
   end;
   
@@ -187,98 +190,142 @@ end;
 % original signal.
 fssubband=round(fs/hopsize);
 
-outsig = ihcenvelope(outsig,fssubband,keyvals.ihc);
+outsig = ihcenvelope(outsig,fssubband,kv.ihc);
 
 if flags.do_adapt
   % non-linear adaptation loops
   outsig = adaptloop(outsig, fssubband);
 end;
+
+if flags.do_nomf
+  modfilt_outsig=outsig;
+end;
   
 if flags.do_mlp
-  % Calculate filter coefficients for the 50 Hz modulation lowpass filter.
-  mlp_a = exp(-keyvals.mlp/fssubband);
+  % Calculate filter coefficients for the 50 Hz modulation lowpass
+  % filter. Just use a 2nd order Butterworth for this.
+  
+  % FIXME: This filter places a pole /very/ close to the unit circle.
+  mlp_a = exp(-(1/0.02)/fs);
   mlp_b = 1 - mlp_a;
   mlp_a = [1, -mlp_a];
-  
+
   % Apply the low-pass modulation filter.
-  outsig = filter(mlp_b,mlp_a,outsig);
-end;
-  
-if flags.do_thr
-  % keep only the largest coefficients.
-  outsig=largestr(outsig,keyvals.thr);
-end
-  
-% Apply transformation to coefficients.
-if flags.do_noadapt
-  % This is a safety measure to avoid log of negative numbers.
-  outsig(:)=max(outsig(:),eps);
-
-  outsig=20*log10(outsig);
+  modfilt_outsig = filter(mlp_b,mlp_a,outsig);
 end;
 
-% 'dynrange' parameter is handled by threshholding the coefficients.
-if flags.do_dynrange
-  maxclim=max(outsig(:));
-  outsig(outsig<maxclim-keyvals.dynrange)=maxclim-keyvals.dynrange;
+if flags.do_mf
+  nreps=length(kv.mf)-1;
+else
+  nreps=1;    
 end;
 
-% Set the range for plotting
-xsamples=siglen/hopsize;
-xr=(0:hopsize:siglen-1)/fs;
-yr=linspace(audlimits(1),audlimits(2),keyvals.yres);
+% Loop over the number of modulation frequency channels
+for jj=1:nreps
 
-% Determine the labels and position for the y-label.
-ytickpos=freqtoerb(keyvals.ytick);
+  if flags.do_mf
+    % Calculate filter coefficients for the 50 Hz modulation lowpass
+    % filter. Just use a 2nd order Butterworth for this.
+    [mf_b,mf_a] = butter(2,[kv.mf(jj),kv.mf(jj+1)]/(subbandfs/2));
+    
+    % Apply the modulation filter.
+    modfilt_outsig = filter(mf_b,mf_a,outsig);
+    
+    if mfc(nmfc) <= 10
+      modfilt_outsig = 1*real(modfilt_outsig);
+    else
+      modfilt_outsig = 1/sqrt(2)*abs(modfilt_outsig);
+    end
 
-%if flags.do_zerodelay
-  % Correct the delays
-%  for n=1:keyvals.yres
-%    cut=round(delay(n)*fssubband);
-    %size(outsig(:,n))
-    %xsamples
-    %cut
-    %size([outsig(cut:end,n);zeros(cut-1,1)])
-%    outsig(:,n)=[outsig(cut:end,n);zeros(cut-1,1)];
-%  end;
-%end;
-
-% Flip the output correctly. Each column is a subband signal, and should
-% be display as the rows.
-outsig=outsig.';
-
-if flags.do_image
-  if flags.do_clim
-    imagesc(xr,yr,outsig,clim);
-  else
-    imagesc(xr,yr,outsig);
   end;
+
+  
+  if flags.do_thr
+    % keep only the largest coefficients.
+    modfilt_outsig=largestr(modfilt_outsig,kv.thr);
+  end
+  
+  % Apply transformation to coefficients.
+  if flags.do_noadapt
+    % This is a safety measure to avoid log of negative numbers.
+    modfilt_outsig(:)=max(modfilt_outsig(:),eps);
+    
+    modfilt_outsig=20*log10(modfilt_outsig);
+  end;
+  
+  % 'dynrange' parameter is handled by threshholding the coefficients.
+  if flags.do_dynrange
+    maxclim=max(modfilt_outsig(:));
+    modfilt_outsig(modfilt_outsig<maxclim-kv.dynrange)=maxclim-kv.dynrange;
+  end;
+  
+  % Set the range for plotting
+  xsamples=siglen/hopsize;
+  xr=(0:hopsize:siglen-1)/fs;
+  yr=linspace(audlimits(1),audlimits(2),kv.yres);
+  
+  % Determine the labels and position for the y-label.
+  ytickpos=freqtoerb(kv.ytick);
+  
+  %if flags.do_zerodelay
+  % Correct the delays
+  %  for n=1:kv.yres
+  %    cut=round(delay(n)*fssubband);
+  %size(outsig(:,n))
+  %xsamples
+  %cut
+  %size([outsig(cut:end,n);zeros(cut-1,1)])
+  %    outsig(:,n)=[outsig(cut:end,n);zeros(cut-1,1)];
+  %  end;
+  %end;
+  
+  % Flip the output correctly. Each column is a subband signal, and should
+  % be display as the rows.
+  modfilt_outsig=modfilt_outsig.';
+  
+  if flags.do_image
+    if flags.do_clim
+      imagesc(xr,yr,modfilt_outsig,clim);
+    else
+    imagesc(xr,yr,modfilt_outsig);
+    end;
+  end;
+  
+  if flags.do_contour
+    contour(xr,yr,modfilt_outsig);
+  end;
+  
+  if flags.do_surf
+    surf(xr,yr,modfilt_outsig);
+  end;
+  
+  if flags.do_mesh
+    mesh(xr,yr,modfilt_outsig);
+  end;
+  
+  set(gca,'YTick',ytickpos);
+  % Use num2str here explicitly for Octave compatibility.
+  set(gca,'YTickLabel',num2str(kv.ytick(:)));
+  
+  axis('xy');
+  xlabel('Time (s)')
+  ylabel('Frequency (Hz)')
+  
+  if flags.do_colorbar
+    colorbar;
+  end;
+  
 end;
+  
+  if nargout>0
+    varargout={modfilt_outsig,fc};
+  end;
+  
+  
+% complex frequency shifted first order lowpass
+function [b,a] = efilt(w0,bw);
 
-if flags.do_contour
-  contour(xr,yr,outsig);
-end;
+e0 = exp(-bw/2);
 
-if flags.do_surf
-  surf(xr,yr,outsig);
-end;
-
-if flags.do_mesh
-  mesh(xr,yr,outsig);
-end;
-
-set(gca,'YTick',ytickpos);
-% Use num2str here explicitly for Octave compatibility.
-set(gca,'YTickLabel',num2str(keyvals.ytick(:)));
-
-axis('xy');
-xlabel('Time (s)')
-ylabel('Frequency (Hz)')
-
-if flags.do_colorbar
-  colorbar;
-end;
-
-if nargout>0
-  varargout={outsig,fc};
-end;
+b = 1 - e0;
+a = [1, -e0*exp(1i*w0)];

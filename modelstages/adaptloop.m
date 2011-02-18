@@ -27,17 +27,19 @@ function inoutsig = adaptloop(inoutsig,fs,varargin);
 %           consists of 5 adaptation loops with an overshoot limiting of 10
 %           and a minimum level of 1e-5. This is a correction in regard to
 %           the published version of Dau 96, which did not use overshoot
-%           limiting. The adaptation loops have an exponential spacing.This
+%           limiting. The adaptation loops have an exponential spacing. This
 %           flag is the default.
 %
-%-     'breebart' - Choose the parameters as in the Breebart 2001 model. This
+%-     'puschel' - Choose the parameters as in the original Puschel 1988 model. This
 %           consists of 5 adaptation loops without overshoot limiting and a
 %           minimum level of XXX. The adapation loops have a linear
 %           spacing.
 %
+%-     'breebaart' - As 'puschel'     
+%
 %-     'dim',d - Do the computation along dimension d of the input. 
 %
-%R  dau1996qmeI puschel1988pza breebaart2001binaural
+%R  puschel1988pza dau1996qmeI  breebaart2001binaural
 
 % Copyright (c) 1999 - 2004 Stephan Ewert. All rights reserved.
 
@@ -54,10 +56,15 @@ definput.keyvals.limit=10;
 definput.keyvals.minlvl=1e-5;
 definput.keyvals.tau=[0.005 0.050 0.129 0.253 0.500];
 
-definput.groups.dau     ={'limit',10,'minlvl',1e-5, ...
+definput.groups.dau     = {'limit',10,'minlvl',1e-5, ...
                     'tau',[0.005 0.050 0.129 0.253 0.500]};
-definput.groups.breebart={'limit',10,'minlvl',1e-5,...
+
+definput.groups.puschel = {'limit',10,'minlvl',1e-5,...
                     'tau',linspace(0.005,0.5,5)};
+
+definput.groups.breebaart = {'limit',10,'minlvl',1e-5,...
+                    'tau',linspace(0.005,0.5,5)};
+
 
 [flags,keyvals,limit,minlvl,tau]  = ltfatarghelper({'limit','minlvl','tau'},definput,varargin);
 

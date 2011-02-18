@@ -103,9 +103,13 @@ function outsig = drnl(insig,fs,varargin)
   
 % Bugfix by Marton Marschall 9/2008
 % Cleanup by Peter L. Soendergaard.
+%
+% In comparison to the oroginal code, the gammatone filter are computed
+% by convolving the filter coefficients, instead of performing multiple
+% runs of 'filter'. The lowpass filtering is still performed by mutliple
+% runs through 'filter', as the linear-part lowpass filter turned out to
+% be unstable when the coefficients was convolved.
   
-%DRNL for normal hearing, Morten 2007
-
 % Import the parameters from the arg_drnl.m function.
 definput.import={'drnl'};
 
@@ -187,13 +191,14 @@ for ii=1:nfc
   % Apply linear gain
   y_lin = insig.*lin_gain; 
   
-  % Now filtering.
-  % Instead of actually perform multiply filtering, just convolve the
-  % coefficients.      
-  [blong,along]=convolveba(LPlin_b,LPlin_a,kv.lin_nlp);
+  % Gammatone filtering
   y_lin = filter(GTlin_b,GTlin_a,y_lin);    
-  y_lin = filter(blong,along,y_lin);
-    
+
+  % Multiple LP filtering
+  for jj=1:kv.lin_nlp
+    y_lin = filter(LPlin_b,LPlin_a,y_lin);
+  end;
+
   % -------------- Non-linear part ------------------------------
       
   % GT filtering before
@@ -212,10 +217,11 @@ for ii=1:nfc
   
   % GT filtering after
   y_nlin = filter(GTnlin_b_after,GTnlin_a_after,y_nlin);
-  
+
   % then LP filtering
-  [blong,along]=convolveba(LPnlin_b,LPnlin_a,kv.nlin_nlp);
-  y_nlin = filter(blong,along,y_nlin);
+  for jj=1:kv.nlin_nlp
+    y_nlin = filter(LPnlin_b,LPnlin_a,y_nlin);
+  end;
   
   outsig(:,ii,:) = reshape(y_lin + y_nlin,siglen,1,nsigs);    
   
