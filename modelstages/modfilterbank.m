@@ -2,14 +2,20 @@ function [outsig,mfc] = modfilterbank(insig,fs,fc,varargin)
 %MODFILTERBANK  Modulation filter bank
 %   Usage: [outsig, mfc] = modfilterbank(insig,fs,fc);
 %
-
-% fs    = sampling rate in Hz,
-%         should be greater than 8000 Hz to avoid aliasing errors.
-% 
-% coef	= center frequencies of the modulation filters.
-% [out1,out2, ...,outn] = each column of martrix out contains the output of
-%         a single modulation filter.
+%   Input parameters:
+%      insig  : Input signal(s)
+%      fs     : Sampling rate in Hz,
+%      fc     : Center frequencies of the input signals
 %
+%   Output parameters:
+%      outsig : Modulation filtered signals
+%      mfc    : Center frequencies of the modulation filters.
+%
+%   MODFILTERBANK(insig,fs,fc) applies a modulation filterbank to the input
+%   signals insig which are sampled with a frequency of fs Hz. Each column in
+%   insig is assumed to be bandpass filtered with a center frequency stored in fc.
+%
+
 % copyright (c) 1999 Stephan Ewert and Torsten Dau, Universitaet Oldenburg
 
 nfreqchannels=length(fc);
@@ -53,12 +59,11 @@ for freqchannel=1:nfreqchannels
     tmp = fix(log(umf(freqchannel)/tmp2)/log(ex));
     tmp = 0:tmp;
     tmp = ex.^tmp;
-    mfc=[mfc tmp2*tmp];
+    mfc=[0 mfc tmp2*tmp];
 
     % --------- lowpass and modulation filter(s) ---
-    outsigblock = zeros(length(insig),length(mfc)+1);
+    outsigblock = zeros(length(insig),length(mfc));
     outsigblock(:,1) = filter(b_lowpass,a_lowpass,outtmp);
-    mfc = [0 mfc];
 
     for nmfc=2:length(mfc)
       w0 = 2*pi*mfc(nmfc)/fs;
@@ -108,20 +113,4 @@ a = [1 + 1/(Q*W0) + 1/W0^2; -2/W0^2 + 2; 1 - 1/(Q*W0) + 1/W0^2];
 
 b = b/a(1);
 a = a/a(1);
-
-% first order lowpass filter (from mfb2.m - MJ)
-function [b,a] = folp(w0);
-
-W0 = tan(w0/2);
-
-b = [W0, W0]/(1 + W0);
-a = [1,(W0 - 1)/(1 + W0)];
-
-% end of mfbtd.m
-
-
-
-
-
-
 
