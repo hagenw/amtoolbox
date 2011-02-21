@@ -100,43 +100,18 @@ end
 % For default values see lindemann1986a page 1613
 % NOTE: I modified the default value for T_int from 10 to 5.
 
-defnopos.flags.modus={'dynamic','stationary'};
-
-defnopos.keyvals.c_s   = 0.3;
-defnopos.keyvals.w_f   = 0.035;
-defnopos.keyvals.M_f   = 6;
-defnopos.keyvals.T_int = 5;
-defnopos.keyvals.N_1   = 1;
 
 % Parse the command line
+definput.import={'lindemannbincorr'};
+definput.flags.modus={'dynamic','stationary'};
+
 [flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
-    ltfatarghelper({'c_s','w_f','M_f','T_int','N_1'},defnopos,varargin);
+    ltfatarghelper({'c_s','w_f','M_f','T_int','N_1'},definput,varargin);
 
 if flags.do_stationary
   T_int = Inf;
   N_1   = 17640;  
 end;
-
-if ( ~isnumeric(c_s) || ~isscalar(c_s) || c_s<0 || c_s>1 )
-    error('%s: 0 <= c_s <= 1, but c_s = %.1f',upper(mfilename),c_s);
-end
-
-if ( ~isnumeric(w_f) || ~isscalar(w_f) || w_f<0 || w_f>=1 )
-    error('%s: 0 <= w_f < 1, but w_f = %.1f',upper(mfilename),w_f);
-end
-
-if ( ~isnumeric(M_f) || ~isscalar(M_f) || M_f<=0 )
-    error('%s: M_f has to be a positive scalar!',upper(mfilename));
-end
-
-if ( ~isnumeric(T_int) || ~isscalar(T_int) || T_int<=0 )
-    error('%s: T_int has to be a positive scalar!',upper(mfilename));
-end
-
-if ( ~isnumeric(N_1) || ~isscalar(N_1) || N_1<=0 )
-    error('%s: N_1 has to be a positive scalar!',upper(mfilename));
-end
-
 
 %% ------ Variables -----------------------------------------------------
 % Highest and lowest frequency to use for the erbfilterbank (this gives us 

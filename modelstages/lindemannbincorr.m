@@ -1,4 +1,4 @@
-function [crosscorr,t] = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
+function [crosscorr,t] = bincorr(insig,fs,varargin)
 %BINCORR Cross-correlation between two input signals
 %   Usage: crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %
@@ -68,7 +68,14 @@ function [crosscorr,t] = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 
 %% ------ Checking of input parameters -----------------------------------
   
-error(nargchk(7,7,nargin));
+if nargin<2
+  error('%s: Too few input parameters.',upper(mfilename));
+end;
+
+definput.import={'lindemannbincorr'};
+[flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
+    ltfatarghelper({'c_s','w_f','M_f','T_int','N_1'},definput,varargin);
+
 
 if ~isnumeric(insig) || min(size(insig))~=2
     error('%s: insig has to be a numeric two channel signal!',upper(mfilename));
