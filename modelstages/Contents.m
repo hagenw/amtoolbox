@@ -8,5 +8,8 @@
 %     ADAPTLOOP          - Adaptation loops.
 %     DRNL               - Dual resonance non-linear filterbank.
 %
+%  Correlation
+%     LINDEMANNBINCORR   - Running cross-correlation between two signals.
+%
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

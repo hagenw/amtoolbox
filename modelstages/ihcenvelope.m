@@ -65,10 +65,7 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-definput.flags.model={'nodefault','bernstein','breebaart','dau','hilbert', ...
-                    'lindemann'};
-
-definput.keyvals.minlvl=[];
+definput.import = {'ihcenvelope'};
 definput.keyvals.dim=[];
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);

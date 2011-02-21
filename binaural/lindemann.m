@@ -11,29 +11,6 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %       insig       - binaural signal for which the cross-correlation
 %                     should be calculated
 %       fs          - sampling rate (Hz)
-%       'stationary'- will set the default values of N_1=17640 and T_int=Inf, use
-%                     this for stationary input signals
-%       'dynamic'   - will set the default values of N_1=1 and T_int=5, use this
-%                     for non-stationary input signals. This is the default.
-%       c_s         - stationary inhibition factor, 0 <= c_s <= 1 
-%                     (0.0 = no inhibition). Default: 0.3
-%       w_f         - monaural sensitivity at the end of the delay line, 
-%                     0 <= w_f < 1. Default: 0.035
-%       M_f         - determines the decrease of the monaural sensitivity along 
-%                     the delay line. Default: 6
-%       T_int       - integration time window (ms). This is the memory of the 
-%                     correlation process with exp(-1/T_int). Also this
-%                     determines the time steps in the binaural activity map,
-%                     because every time step T_int a new running
-%                     cross-correlation is started, so every T_int we have a new
-%                     result in crosscorr. You can set T_int = inf if you like
-%                     to have no memory effects, then you will get only one
-%                     time step in crosscorr. Default: T_int = 5~ms, T_int = Inf
-%                     for 'stationary' (see above)
-%       N_1         - Sample at which the first running cross-correlation should
-%                     be started to avoid onset effects (see lindemann1986a p.
-%                     1614). Default: 1, 17640 (200/f*fs with f=500 and fs=44100) 
-%                     for 'stationary' (see above)
 %
 %   Output parameters:
 %       crosscorr   - A matrix containing the cross-correlation signal
@@ -42,9 +19,9 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %                     denotes the correlation (delay line) time step.
 %       t           - time axis for the time steps n in crosscorr
 %
-%   LINDEMANN(insig,fs,c_s,w_f,M_f,T_int,N_1) calculates a binaural activity map
-%   for the given insig using a cross-correlation (delay-line) mechanism. The
-%   calculation is done for every frequency band in the range 5-40 Erb.
+%   LINDEMANN(insig,fs) calculates a binaural activity map for the given
+%   insig using a cross-correlation (delay-line) mechanism. The calculation
+%   is done for every frequency band in the range 5-40 Erb.
 %
 %   The steps of the binaural model to calculate the result are the
 %   following:
@@ -69,9 +46,13 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %        dependend on time, by using a running cross-correlation function.
 %        This has been done here by starting a new running cross-correlation 
 %        every time step T_int.  A detailed description of these cross-
-%        correlation steps is given in the bincorr function.
+%        correlation steps is given in the lindemannbincorr function.
 %
-%   See also: bincorr, plotlindemann, gammatone, ufilterbankz
+%   You may supply any flags or key/value pairs of the AUDIORYFILTERBANK,
+%   IHCENVELOPE or LINDEMANNBINCORR at the end of the line of input
+%   arguments.
+%
+%   See also: lindemannbincorr, plotlindemann, gammatone, ufilterbankz
 %
 %   Demos: demo_lindemann
 %
@@ -102,37 +83,21 @@ end
 
 
 % Parse the command line
-definput.import={'lindemannbincorr'};
-definput.flags.modus={'dynamic','stationary'};
+definput.import={'auditoryfilterbank','ihcenvelope','lindemannbincorr'};
+
+% Highest and lowest frequency to use for the erbfilterbank (this gives us 
+% 36 frequency channels, channel 5-40)
+definput.importdefaults = {'flow',erbtofreq(5),'fhigh',erbtofreq(40),'lindemann'};
 
 [flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
     ltfatarghelper({'c_s','w_f','M_f','T_int','N_1'},definput,varargin);
 
-if flags.do_stationary
-  T_int = Inf;
-  N_1   = 17640;  
-end;
-
-%% ------ Variables -----------------------------------------------------
-% Highest and lowest frequency to use for the erbfilterbank (this gives us 
-% 36 frequency channels, channel 5-40)
-flow = erbtofreq(5);
-fhigh = erbtofreq(40); 
-
 % ------ Erb Bank -------------------------------------------------------
-% Generate an erb filterbank for simulation of the frequncy -> place
-% transformation of the cochlea. This generates erb filterbank coefficients
-% with a range from flow to fhigh.
+% Apply the auditory filterbank
 % NOTE: Lindemann uses a bandpass filterbank after Duifhuis (1972) and
 % Blauert and Cobben (1978).
+[outsig, fc] = auditoryfilterbank(insig, fs, 'argimport',flags,keyvals);
 %
-% FIXME: There is currently an error in the gammatone function for real valued
-% filters, so use complex valued filters instead.
-[b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
-% Applying the erb filterbank to the signal
-inoutsig = 2*real(ufilterbankz(b,a,insig));
-
-
 %% ------ Cross-correlation computation ---------------------------------
 
 % Extract the envelope, apply a half-wave rectification and calculate a
@@ -140,10 +105,10 @@ inoutsig = 2*real(ufilterbankz(b,a,insig));
 	
 % ------ Haircell simulation -------
 % Half-wave rectification and envelope extraction
-inoutsig = ihcenvelope(inoutsig,fs,'lindemann');
+outsig = ihcenvelope(outsig,fs,'argimport',flags,keyvals);
 
 % ------ Cross-correlation ------
 % Calculate the cross-correlation after Lindemann (1986a).
-[crosscorr,t] = bincorr(inoutsig,fs,c_s,w_f,M_f,T_int,N_1);
+[crosscorr,t] = lindemannbincorr(outsig,fs,c_s,w_f,M_f,T_int,N_1);
 
 

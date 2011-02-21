@@ -16,15 +16,15 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %
 %   The Dau1996 model consists of the following stages:
 %   
-%     * a gammatone filter bank with 1-erb spaced filtes.
+%     1) a gammatone filter bank with 1-erb spaced filtes.
 %
-%     * an envelope extraction stage done by half-wave rectification
+%     2) an envelope extraction stage done by half-wave rectification
 %        followed by low-pass filtering to 1000 Hz.
 %
-%     * an adaptation stage modelling nerve adaptation by a cascade of 5
+%     3) an adaptation stage modelling nerve adaptation by a cascade of 5
 %        loops.
 %
-%     * a modulation low pass filter liming modulations to below 50 Hz.
+%     4) a modulation low pass filter liming modulations to below 50 Hz.
 %
 %   The following parameters may be passed at the end of the line of
 %   input arguments:
