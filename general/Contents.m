@@ -17,11 +17,8 @@
 %     AUDFILTBW        - Bandwidth of audiory filters.
 %
 %  Signal levels
-%     RMSDB            - RMS value in dB.
-%     PEAKSPL          - Peak SPL value in dB.
-%     GAINDB           - Increase/descrease level of signal.
-%     SETLEVELDB       - Specify level of signal.
-%     CRESTFACTOR      - Crest factor of signal     
+%     DBSPL            - SPL of signal measured in dB.
+%     SETDBSPL         - Specify SPL of signal.
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
