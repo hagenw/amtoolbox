@@ -1,8 +1,8 @@
-function [y,bw] = audspace(scale,flow,fhigh,n)
+function [y,bw] = audspace(flow,fhigh,n,varargin)
 %AUDSPACE  Equidistantly spaced points on auditory scale
 %   Usage: y=audspace(scale,flow,fhigh,n);
 %
-%   AUDSPACE(scale,flow,fhigh,n) computes a vector of length n containing values
+%   AUDSPACE(flow,fhigh,n,scale) computes a vector of length n containing values
 %   equistantly scaled on the selected auditory scale between flow and fhigh. All
 %   frequencies are specified in Hz.
 %
@@ -12,16 +12,17 @@ function [y,bw] = audspace(scale,flow,fhigh,n)
 %   [y,bw]=AUDSPACE(...) does the same but outputs the bandwidth between
 %   each sample measured on the selected scale.
 %  
-%
 %   See also: freqtoaud, audspacebw, audfiltbw
 %
 %R  glasberg1990daf
   
 %   AUTHOR : Peter L. Soendergaard
   
-% ------ Checking of input parameters ---------
-  
-error(nargchk(4,4,nargin));
+%% ------ Checking of input parameters ---------
+
+if nargin<3
+  error('%s: Too few input parameters.',upper(mfilename));
+end;
   
 % Default parameters.
 
@@ -41,11 +42,14 @@ if flow>fhigh
   error('%s: flow must be less than or equal to fhigh.',upper(mfilename));
 end;
 
+definput.import={'freqtoaud'};
+[flags,kv]=ltfatarghelper({},definput,varargin);
 
-% ------ Computation --------------------------
 
-audlimits = freqtoaud(scale,[flow,fhigh]);
+%% ------ Computation --------------------------
 
-y = audtofreq(scale,linspace(audlimits(1),audlimits(2),n));  
+audlimits = freqtoaud([flow,fhigh],flags.audscale);
+
+y = audtofreq(linspace(audlimits(1),audlimits(2),n),flags.audscale);
 
 bw=(audlimits(2)-audlimits(1))/(n-1);

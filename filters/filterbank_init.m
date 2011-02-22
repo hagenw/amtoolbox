@@ -10,7 +10,7 @@ function fb=filterbank_init(b,a,varargin);
 %   fb=FILTERBANK_INIT(b,a,nsigs) does the same assuming that the input
 %   to FILTERBANK_BLOCK will consist of nsigs signal at once.
 %
-%   See also: filterbank, filterbank_block
+%   See also: ufilterbankz, filterbank_block
 
 %   AUTHOR : Peter L. Soendergaard
 

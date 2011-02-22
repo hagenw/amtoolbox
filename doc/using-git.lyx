@@ -312,6 +312,82 @@ git pull
 .
 \end_layout
 
+\begin_layout Subsection
+Windows tips
+\end_layout
+
+\begin_layout Itemize
+Use 
+\family typewriter
+sync
+\family default
+, not 
+\family typewriter
+push
+\family default
+, it is easier to handle.
+ If you can not push: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://code.google.com/p/tortoisegit/issues/detail?id=593
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+If you don't see the overlay icons in the Explorer: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://abdullin.com/journal/2009/10/26/fixing-icon-overlays-for-dropbox-tortoises
+vn.html
+\end_layout
+
+\end_inset
+
+ and then restart Explorer 
+\end_layout
+
+\begin_layout Section
+End-of-line conversions
+\end_layout
+
+\begin_layout Standard
+Unix and Windows uses different standards to terminate the end of lines
+ in text files.
+ This creates a mess in a version control system.
+\end_layout
+
+\begin_layout Standard
+Good editors like notepad++ or emacs can handle this, so don't bother to
+ 
+\begin_inset Quotes eld
+\end_inset
+
+correct
+\begin_inset Quotes erd
+\end_inset
+
+ this problem, as it will just make uneccesary changes to files.
+\end_layout
+
+\begin_layout Itemize
+In Git-Bash, "git global --site --list" must result in core.autocrlf=false
+\end_layout
+
+\begin_layout Itemize
+TortoiseGit/Settings/Git/Config: uncheck "AutoCRLF" 
+\end_layout
+
 \begin_layout Section
 Tricks for the master
 \end_layout

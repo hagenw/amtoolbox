@@ -5,6 +5,6 @@ function c=crestfactor(insig)
 %   CRESTFACTOR(insig) computes the crest factor of the input signal
 %   insig. The output is measured in dB.
 %
-%   See also: rms, rmsdb, gaindb
+%   See also: rmsdb, gaindb
 
 c=20*log10(norm(insig,Inf)/rms(insig));

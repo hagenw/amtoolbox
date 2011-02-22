@@ -8,17 +8,16 @@ function h=semiaudplot(x,y,varargin)
 %   SEMIAUDPLOT takes the following parameters at the end of the line of input
 %   arguments:
 %
-%      'x'    - Make the x-axis use the auditory scale. This is the default.
+%-     'x'    - Make the x-axis use the auditory scale. This is the default.
 %
-%      'y'    - Make the y-axis use the auditory scale.
+%-      'y'    - Make the y-axis use the auditory scale.
 %
-%      'erb'  - Use the Erb-scale. This is the default.
+%-      'opts',c - Pass options stored in a cell array onto the plot
+%                  function.
 %
-%      'bark' - Use the bark-scale.
-%
-%      'mel'  - Use the mel-scale.
-%
-%      'opts',c - Pass options stored in a cell array onto the plot function.
+%   In addition to these parameters, the auditory scale can be
+%   specified. All scales supported by FREQTOAUD are supported. Default
+%   is to use the erb-scale. 
 %    
 %
 %   See also: freqtoaud
@@ -28,8 +27,8 @@ if nargin<2
 end;
 
 
+definput.import       = {'freqtoaud'};
 definput.flags.plotdir= {'x','y'};
-definput.flags.scale  = {'erb','bark','mel'};
 definput.keyvals.tick = [0,100,250,500,1000,2000,4000,8000];
 definput.keyvals.res  = 500;
 definput.keyvals.opts = {};
@@ -40,15 +39,14 @@ definput.keyvals.opts = {};
   
 tick=[0,100,250,500,1000,2000,4000,8000];
 n=500;
-tickpos=freqtoaud(flags.scale,keyvals.tick);
-  
-  
+tickpos=freqtoaud(keyvals.tick,flags.audscale);
+    
 if flags.do_x
   xmin=min(x);
   xmax=max(x);
-  audminmax=freqtoaud(flags.scale,[xmin,xmax]);
+  audminmax=freqtoaud([xmin,xmax],flags.audscale);
   
-  plotval=spline(x,y,audspace(flags.scale,xmin,xmax,n));
+  plotval=spline(x,y,audspace(xmin,xmax,n,flags.audscale));
   plot(linspace(audminmax(1),audminmax(2),n),plotval,keyvals.opts{:});
   set(gca,'XTick',tickpos);
   set(gca,'XTickLabel',num2str(tick(:)));
@@ -58,7 +56,7 @@ end;
 if flags.do_y
   ymin=min(y);
   ymax=max(y);
-  audminmax=freqtoaud(flags.scale,[ymin,ymax]);
+  audminmax=freqtoaud([ymin,ymax],flags.audscale);
   
   plot(x,freqtoerb(y),keyvals.opts{:});
   set(gca,'YTick',tickpos);

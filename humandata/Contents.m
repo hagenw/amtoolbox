@@ -1,6 +1,6 @@
 % AMT - Experimentally recorded human data
 %
-%   The AMT team, 2010.
+%   The AMT team, 2011.
 %
 %   Data routines
 %       DATA_LINDEMANN1986A  - Data from the lindemann1986a paper.

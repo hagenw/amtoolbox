@@ -5,7 +5,6 @@
 %    ITDSIN         -  Sinusoid with interaural time difference
 %    ILDSIN         -  Sinusoid with interaural level difference
 %    ITDILDSIN      -  Sinusoid with interaural time and level difference
-%    PINKNOISE      -  Pink noise
 %    CORPINKNOISE   -  Interaural correlated pink noise
 %
 %  Other test signals are available from:

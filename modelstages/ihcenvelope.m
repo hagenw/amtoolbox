@@ -20,8 +20,8 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %                 Bernstein 1999. Note that this method includes both a
 %                 compression and an expansion stage.
 %
-%-    'breebart' - Use a 5th order filter with a cut-off frequency of 770
-%                 Hz. This method is given in Breebart 2001. Page 94 in thesis.
+%-    'breebaart' - Use a 5th order filter with a cut-off frequency of 770
+%                 Hz. This method is given in Breebaart 2001. Page 94 in thesis.
 %
 %-    'dau'     - Use a 2nd order Butterworth filter with a cut-off
 %                 frequency of 1000 Hz. This method has been used in all
@@ -44,6 +44,8 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %                is not affected by unnaturally small values. The default
 %                value of [] means to not do this.
 %
+%-    'dim',d  - Work along dimension d.
+%
 %R  bernstein1999normalized breebaart2001binaural gabor1946 lindemann1986a dau1996qmeI
   
 % FIXME: Which paper did this idea originally appear in?
@@ -63,14 +65,15 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-definput.flags.model={'nodefault','bernstein','breebart','dau','hilbert', ...
-                    'lindemann'};
-
-definput.keyvals.minlvl=[];
+definput.import = {'ihcenvelope'};
+definput.keyvals.dim=[];
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
 % ------ Computation -------------------------------------------------
+
+[inoutsig,siglen,dummy,nsigs,dim,permutedsize,order]=assert_sigreshape_pre(inoutsig,[],keyvals.dim, ...
+                                                  upper(mfilename));
 
 if flags.do_nodefault
   error(['%s: you must supply a flag to designate the IHC model to ' ...
@@ -88,7 +91,7 @@ if flags.do_bernstein
   inoutsig = filter(b,a, inoutsig);
 end;
 
-if flags.do_breebart
+if flags.do_breebaart
   inoutsig = max( inoutsig, 0 );
   cutofffreq=2000;
   [b, a] = butter(1, cutofffreq*2/fs);
@@ -119,3 +122,4 @@ if ~isempty(keyvals.minlvl)
   inoutsig = max( inoutsig, keyvals.minlvl );
 end;
 
+inoutsig=assert_sigreshape_post(inoutsig,dim,permutedsize,order);

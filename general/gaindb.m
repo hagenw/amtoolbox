@@ -4,7 +4,7 @@ function inoutsig = gaindb(inoutsig,gn)
 %
 %   GAINDB(insig,gn) changes the level of the signal by gn dB.
 %
-%   See also: rms, rmsdb, setleveldb
+%   See also: rmsdb, setleveldb
 %
 %R  moore2003introduction
 

@@ -28,7 +28,7 @@ for ii=0:nblocks
 
 end;
 
-outsig_ref=filterbankz(b,a,insig,hopsize);
+outsig_ref=ufilterbankz(b,a,insig,hopsize);
 
 norm(outsig(:)-outsig_ref(:))
 

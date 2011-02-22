@@ -11,7 +11,7 @@ function y = rmsdb(insig,options)
 %   RMSDB(x,'ac') does the same, but considers only the AC component of the
 %   signal (i.e. the mean is removed).
 %
-%   See also: rms, gaindb, crestfactor, setleveldb
+%   See also: gaindb, crestfactor, setleveldb
 %
 %R  moore2003introduction
 

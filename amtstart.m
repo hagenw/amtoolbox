@@ -27,10 +27,8 @@ function amtstart()
 
 %   AUTHOR : Peter L. Soendergaard.  
 
-global TF_CONF;
-
 % Verify that LTFAT has been installed
-if isempty(TF_CONF)
+if ~exist('ltfatarghelper','file')  
     disp('');
     disp('--- AMTOOLBOX - The Auditory Modelling toolbox. ---');
     disp('')

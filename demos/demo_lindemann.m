@@ -31,14 +31,11 @@ mf = 2;
 sig = bmsin(f,mf,fs);
 
 % Model paramter (Note: T_int (ms) should be a multiple of 1000/f == 2)
-c_s=0.3; w_f=0.035; M_f=6; T_int=6;
 % Begin of the storage of the cross-correlation is set to 1, because we have a
 % non-stationary signal
-% NOTE: you can also use the 'dynamic' option to achieve this
-N_1=1;
 
 % Calculate binaural cross-correlation
-[cc,t] = lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1);
+[cc,t] = lindemann(sig,fs,'T_int',6);
 
 % Set title string for the plot
 tstr = sprintf(['Binaural modulated sinusoid\nf = %i Hz\nf_m = %i Hz\n',...
