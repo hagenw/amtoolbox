@@ -182,7 +182,7 @@ if flags.do_fig6
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply onset window
         sig = sig(1:siglen,:);
-        sig = lindemannwin(sig,N_1);
+        sig = rampsignal(sig,[N_1/2-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s
         for jj = 1:length(c_s)
             % Calculate cross-correlation (and squeeze due to T_int==inf)
@@ -247,7 +247,7 @@ if flags.do_fig7
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply an onset window
         sig = sig(1:siglen,:);
-        sig = lindemannwin(sig,N_1);
+        sig = rampsignal(sig,[N_1/2-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
             % Calculate cross-correlation (and squeeze due to T_int==inf)
@@ -309,7 +309,7 @@ if flags.do_fig8
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply onset window
         sig = sig(1:siglen,:);
-        sig = lindemannwin(sig,N_1);
+        sig = rampsignal(sig,[N_1/2-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
             % Calculate cross-correlation (and squeeze due to T_int==inf)
@@ -376,7 +376,7 @@ if flags.do_fig10
     % Use only the beginning of the signal to generate only one time instance of
     % the cross-correlation and apply onset window
     sig = sig(1:siglen,:);
-    sig = lindemannwin(sig,N_1);
+    sig = rampsignal(sig,[N_1/2-1 0],'tria');
     % Calculate cross-correlation for different inhibition factor c_s 
     for jj = 1:length(c_s)
       % Calculate cross-correlation (and squeeze due to T_int==inf)
@@ -442,7 +442,7 @@ if flags.do_fig11
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply onset window
         sig = sig(1:siglen,:);
-        sig = lindemannwin(sig,N_1);
+        sig = rampsignal(sig,[N_1/2-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
             % Calculate cross-correlation (and squeeze due to T_int==inf)
@@ -515,7 +515,7 @@ if flags.do_fig12
             % Use only the beginning of the signal to generate only one time 
             % instance of the cross-correlation and apply a linear onset window
             sig = sig(1:siglen,:);
-            sig = lindemannwin(sig,N_1);
+            sig = rampsignal(sig,[N_1/2-1 0],'tria');
             % Calculate cross-correlation (and squeeze due to T_int==inf)
             tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
             % Store the needed frequency channel
@@ -593,7 +593,7 @@ if flags.do_fig13
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply a linear onset window
         sig = sig(1:siglen,:);
-        sig = lindemannwin(sig,N_1);
+        sig = rampsignal(sig,[N_1/2-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         % Store the needed frequency channel
@@ -608,7 +608,7 @@ if flags.do_fig13
         for jj = 1:nilds_t
             sig = itdildsin(f,itd_t(ii),ild_t(jj),fs);
             sig = sig(1:siglen,:);
-            sig = lindemannwin(sig,N_1);
+            sig = rampsignal(sig,[N_1/2-1 0],'tria');
             tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
             cc = tmp(:,fc-4);
             cen_t(jj,ii) = lindcentroid(cc);
@@ -694,7 +694,7 @@ if flags.do_fig14a
         sig = sig(1:siglen,:);
         % Apply a linear onset window with length N_1/2 to minimize onset effects
         % (see lindemann1986a p. 1614)
-        sig = lindemannwin(sig,N_1);
+        sig = rampsignal(sig,[N_1/2-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
             % Calculate cross-correlation (and squeeze due to T_int==inf)
@@ -761,7 +761,7 @@ if flags.do_fig14b
         % First generate the result for std(ILD) == 0
         sig = itdsin(f,itd(ii),fs);
         sig = sig(1:siglen,:);
-        sig = lindemannwin(sig,N_1);
+        sig = rampsignal(sig,[N_1/2-1 0],'tria');
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         cc = tmp(:,fc-4);
         cen(1,ii) = lindcentroid(cc);
@@ -776,7 +776,7 @@ if flags.do_fig14b
             for jj = 1:nilds
                 sig = itdildsin(f,itd(ii),ild(jj),fs);
                 sig = sig(1:siglen,:);
-                sig = lindemannwin(sig,N_1);
+                sig = rampsignal(sig,[N_1/2-1 0],'tria');
                 tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
                 cc = tmp(:,fc-4);
                 centmp(jj,ii) = lindcentroid(cc);
@@ -836,7 +836,7 @@ if flags.do_fig15
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply onset window
         sig = sig(1:siglen,:);
-        sig = lindemannwin(sig,N_1);
+        sig = rampsignal(sig,[N_1/2-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
             % Calculate cross-correlation (and squeeze due to T_int==inf)
@@ -907,7 +907,7 @@ if flags.do_fig16
             % Use only the beginning of the signal to generate only one time 
             % instance of the cross-correlation and apply a linear onset window
             sig = sig(1:siglen,:);
-            sig = lindemannwin(sig,N_1);
+            sig = rampsignal(sig,[N_1/2-1 0],'tria');
             % Calculate cross-correlation (and squeeze due to T_int==inf)
             tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
             % Store the needed frequency channel
@@ -979,7 +979,7 @@ if flags.do_fig17
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply a linear onset window
         sig = sig(1:siglen,:);
-        sig = lindemannwin(sig,N_1);
+        sig = rampsignal(sig,[N_1/2-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         % Store the needed frequency channel
@@ -997,7 +997,7 @@ if flags.do_fig17
         for jj = 1:nitds_t
             sig = itdildsin(f,itd_t(jj),ild_t(ii),fs);
             sig = sig(1:siglen,:);
-            sig = lindemannwin(sig,N_1);
+            sig = rampsignal(sig,[N_1/2-1 0],'tria');
             tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
             cc = tmp(:,fc-4);
             max_t(jj,ii) = findmax(cc);
@@ -1090,7 +1090,7 @@ if flags.do_fig18
         % Generate ITD shifted sinusoid
         sig = corpinknoise(fs,iac(ii));
         % Aplly onset window
-        sig = lindemannwin(sig,N_1);
+        sig = rampsignal(sig,[N_1/2-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         % Store the needed frequency channel. NOTE: the cross-correlation
@@ -1132,49 +1132,3 @@ function m = findmax(list)
 d = linspace(-1,1,length(list));
 m = d(idx);
 
-function sig = lindemannwin(sig,N_1)
-%LINDEMANNWIN Applies a linear onset window
-%   Usage: outsig = lindemannwin(sig,N_1)
-%
-%   Input parameters:
-%       sig - two channel signal to which the window should be apllied
-%       N_1 - start time for the binaural cross-correlation (samples)
-%
-%   Output parameters:
-%       sig - the given input signal but with the applied window
-%
-%   LINDEMANNWIN(sig,N_1) applies a linear onset window of length N_1/2 to the
-%   given signal and returns the signal. Lindemann has applied this window to
-%   the signals he used in his paper (see lindemann1986a, p. 1614).
-%
-%   See also: lindemann
-%
-%R lindemann1986a
-%
-
-%   AUTHOR: Hagen Wierstorf
-
-
-% ------ Checking of input parameters ------------------------------------
-
-error(nargchk(2,2,nargin));
-
-if ~isnumeric(sig) || size(sig,2)~=2
-    error('%s: sig has to be a signal vector of size n x 2.',upper(mfilename));
-end
-
-if ~isnumeric(N_1) || ~isscalar(N_1) || N_1<=0
-    error('%s: N_1 has to be a positive scalar.',upper(mfilename));
-end
-
-% ------ Computation -----------------------------------------------------
-siglen = size(sig,1);
-if siglen<ceil(N_1/2)
-    error('%s: the length of sig has to be longer than ceil(N_1/2).',...
-        upper(mfilename));
-end
-% Generate window
-win = [ linspace(0,1,ceil(N_1/2)) ones(1,siglen-ceil(N_1/2)) ]';
-% Apply window
-sig(:,1) = win .* sig(:,1);
-sig(:,2) = win .* sig(:,2);
