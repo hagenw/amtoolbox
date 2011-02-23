@@ -122,16 +122,54 @@ nchannels = length(fc);
 if flags.do_allpole
 
   if flags.do_real
+    if mod(n,2)>0
+      error('Real-valued gammatone filters require the order to be even.');
+    end;    
+    
+    nr=n/2+1;
+    
     b=zeros(nchannels,1);
-    a=zeros(nchannels,n+1);
+    a=zeros(nchannels,2*nr+1);
     
-    % ourbeta is used in order not to mask the beta function.
-    
+    % ourbeta is used in order not to mask the beta function.  
     ourbeta = betamul*audfiltbw(fc);
     
     % This is when the function peaks.
     delay = 3./(2*pi*ourbeta);
+
+    for ii = 1:nchannels
+      % Compute the position of the pole
+      atilde = exp(-2*pi*ourbeta(ii)/fs - i*2*pi*fc(ii)/fs);
+      
+      % Repeat the pole n times, and expand the polynomial
+      a2=poly([atilde*ones(1,nr),conj(atilde)*ones(1,nr)]);
+      
+      btmp=1-exp(-2*pi*ourbeta(ii)/fs);
+      b2=btmp.^(nr);
+      
+      if flags.do_peakphase
+        b2=b2*exp(2*pi*i*fc(ii)*delay(ii));
+      end;
+      
+      % Place the result (a row vector) in the output matrices.
+      b(ii,:)=b2;
+      a(ii,:)=a2;
+      
+    end;
+
+  end;      
+  
+  if flags.do_complex
+
+    b=zeros(nchannels,1);
+    a=zeros(nchannels,n+1);
     
+    % ourbeta is used in order not to mask the beta function.  
+    ourbeta = betamul*audfiltbw(fc);
+    
+    % This is when the function peaks.
+    delay = 3./(2*pi*ourbeta);
+
     for ii = 1:nchannels
       % Compute the position of the pole
       atilde = exp(-2*pi*ourbeta(ii)/fs - i*2*pi*fc(ii)/fs);
@@ -151,37 +189,6 @@ if flags.do_allpole
       a(ii,:)=a2;
       
     end;
-
-  end;      
-  
-  
-  b=zeros(nchannels,1);
-  a=zeros(nchannels,n+1);
-  
-  % ourbeta is used in order not to mask the beta function.
-  
-  ourbeta = betamul*audfiltbw(fc);
-  
-  % This is when the function peaks.
-  delay = 3./(2*pi*ourbeta);
-  
-  for ii = 1:nchannels
-    % Compute the position of the pole
-    atilde = exp(-2*pi*ourbeta(ii)/fs - i*2*pi*fc(ii)/fs);
-
-    % Repeat the pole n times, and expand the polynomial
-    a2=poly(atilde*ones(1,n));
-    
-    btmp=1-exp(-2*pi*ourbeta(ii)/fs);
-    b2=btmp.^n;
-        
-    if flags.do_peakphase
-      b2=b2*exp(2*pi*i*fc(ii)*delay(ii));
-    end;
-    
-    % Place the result (a row vector) in the output matrices.
-    b(ii,:)=b2;
-    a(ii,:)=a2;
     
   end;
   
