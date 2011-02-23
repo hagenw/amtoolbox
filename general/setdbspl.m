@@ -1,4 +1,4 @@
-function inoutsig = setdbspl(inoutsig,lvl,options);
+function inoutsig = setdbspl(inoutsig,lvl,varargin);
 %SETDBSPL  Set level of signal in dB
 %   Usage: outsig = setlevel(insig,lvl);
 %          outsig = setlevel(insig,lvl,'ac');
@@ -37,10 +37,10 @@ end;
 % ------ Computation --------------------------
 
 if isvector(inoutsig)
-  inoutsig = gaindb(inoutsig/rms(inoutsig,options),lvl-100);
+  inoutsig = gaindb(inoutsig/rms(inoutsig,varargin{:}),lvl-100);
 else
-	% If we have a matrix, set the level for every column.
+  % If we have a matrix, set the level for every column.
   for ii=1:size(inoutsig,2);
-    inoutsig(:,ii) = gaindb(inoutsig(:,ii)/rms(inoutsig(:,ii),options),lvl-100);
+    inoutsig(:,ii) = gaindb(inoutsig(:,ii)/rms(inoutsig(:,ii),varargin{:}),lvl-100);
   end;
 end;
