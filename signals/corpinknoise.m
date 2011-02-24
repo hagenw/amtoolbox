@@ -36,7 +36,7 @@ R = [1 coher; coher 1];
 W = V*sqrt(D);
 
 % Generate pink noise signal
-n = pinknoise(siglen,2);
+n = noise(siglen,2,'pink');
 
 % Generate correlated noise
 outsig = n * W';
