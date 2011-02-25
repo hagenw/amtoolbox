@@ -32,7 +32,7 @@ function plotlindemann(crosscorr,t,varargin)
 %   You may also supply the parameters in the input arguments in the
 %   following order: PLOTLINDEMANN(crosscorr,t,fc);
 %  
-%   See also: lindemann, bincorr
+%   See also: lindemann, lindemannbincorr
 %
 
 %   AUTHOR: Hagen Wierstorf

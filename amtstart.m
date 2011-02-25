@@ -49,13 +49,13 @@ s=ltfathelp('version');
 
 % Split into major, minor and bugfix version.
 stops=find(s=='.');
-major_no  = str2num(s(1:stops(1)))
+major_no  = str2num(s(1:stops(1)));
 if numel(stops)==1
-  minor_no  = str2num(s(stops(1)+1:end))
-  bugfix_no = 0
+  minor_no  = str2num(s(stops(1)+1:end));
+  bugfix_no = 0;
 else
-  minor_no  = str2num(s(stops(1)+1:stops(2)))
-  bugfix_no = str2num(s(stops(2)+1:end))  
+  minor_no  = str2num(s(stops(1)+1:stops(2)));
+  bugfix_no = str2num(s(stops(2)+1:end));
 end;
 
 % Do the check, multiply by some big number to make the check easy

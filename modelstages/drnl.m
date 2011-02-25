@@ -95,7 +95,7 @@ function outsig = drnl(insig,fs,varargin)
 %-     'nlin_d',d = 'd' coefficient for the broken-stick non-linearity. Default
 %                    value is 1.
 %
-%   See also: middlerearfilter, jepsen2008preproc
+%   See also: middleearfilter, jepsen2008preproc
 % 
 %R   lopezpoveda2001hnc jepsen2008cmh
 
