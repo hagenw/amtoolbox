@@ -53,3 +53,8 @@ audlimits = freqtoaud([flow,fhigh],flags.audscale);
 y = audtofreq(linspace(audlimits(1),audlimits(2),n),flags.audscale);
 
 bw=(audlimits(2)-audlimits(1))/(n-1);
+
+% Set the endpoints to be exactly what the user specified, instead of the
+% calculated values
+y(1)=flow;
+y(end)=fhigh;
