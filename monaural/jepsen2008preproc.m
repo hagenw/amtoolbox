@@ -37,7 +37,7 @@ function [outsig, fc, mfc] = jepsen2008preproc(insig, fs, varargin);
 %
 %     * a modulation filterbank
 %
-%R  jepsen2008mapI jepsen2008mapII
+%R  jepsen2008cmh
 
 %   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Soendergaard
   
