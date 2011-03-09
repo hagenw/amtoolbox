@@ -1,4 +1,4 @@
-function [b,a,delay]=gammatone(fc,fs,varargin);
+function [b,a,delay]=gammatone(fc,fs,varargin)
 %GAMMATONE  Gammatone filter coefficients
 %   Usage: [b,a] = gammatone(fc,fs,n,betamul);
 %          [b,a] = gammatone(fc,fs,n);
@@ -117,33 +117,48 @@ end;
 
 % ------ Computation --------------------------
 
+% ourbeta is used in order not to mask the beta function.  
+ourbeta = betamul*audfiltbw(fc);
+
 nchannels = length(fc);
 
 if flags.do_allpole
 
   if flags.do_real
+
+    warning(['FIXME: The real-valued allpole filters are not scaled ' ...
+             'correctly.']);
+    
+    
     b=zeros(nchannels,1);
-    a=zeros(nchannels,n+1);
-    
-    % ourbeta is used in order not to mask the beta function.
-    
-    ourbeta = betamul*audfiltbw(fc);
-    
+    a=zeros(nchannels,2*n+1);
+        
     % This is when the function peaks.
     delay = 3./(2*pi*ourbeta);
-    
+
     for ii = 1:nchannels
+      % convert to radians
+      theta = 2*pi*fc(ii)/fs;
+      phi   = 2*pi*ourbeta(ii)/fs;
+
+      alpha = -exp(-phi)*cos(theta);
+      
+      b1 = 2*alpha;
+      b2 = exp(-2*phi);
+      a0 = abs( (1+b1*cos(theta)-1i*b1*sin(theta)+b2*cos(2*theta)-1i*b2*sin(2*theta)) / (1+alpha*cos(theta)-1i*alpha*sin(theta))  );
+      
       % Compute the position of the pole
-      atilde = exp(-2*pi*ourbeta(ii)/fs - i*2*pi*fc(ii)/fs);
+      atilde = exp(-phi - 1i*theta);
       
       % Repeat the pole n times, and expand the polynomial
-      a2=poly(atilde*ones(1,n));
-      
-      btmp=1-exp(-2*pi*ourbeta(ii)/fs);
-      b2=btmp.^n;
+      a2=poly([atilde*ones(1,n),conj(atilde)*ones(1,n)]);
+
+      % Scale to get 0 dB attenuation, FIXME: Does not work, works only
+      % for fc=fs/4
+      b2=a0^n;
       
       if flags.do_peakphase
-        b2=b2*exp(2*pi*i*fc(ii)*delay(ii));
+        b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
       end;
       
       % Place the result (a row vector) in the output matrices.
@@ -154,91 +169,135 @@ if flags.do_allpole
 
   end;      
   
-  
-  b=zeros(nchannels,1);
-  a=zeros(nchannels,n+1);
-  
-  % ourbeta is used in order not to mask the beta function.
-  
-  ourbeta = betamul*audfiltbw(fc);
-  
-  % This is when the function peaks.
-  delay = 3./(2*pi*ourbeta);
-  
-  for ii = 1:nchannels
-    % Compute the position of the pole
-    atilde = exp(-2*pi*ourbeta(ii)/fs - i*2*pi*fc(ii)/fs);
+  if flags.do_complex
 
-    % Repeat the pole n times, and expand the polynomial
-    a2=poly(atilde*ones(1,n));
-    
-    btmp=1-exp(-2*pi*ourbeta(ii)/fs);
-    b2=btmp.^n;
+    b=zeros(nchannels,1);
+    a=zeros(nchannels,n+1);
         
-    if flags.do_peakphase
-      b2=b2*exp(2*pi*i*fc(ii)*delay(ii));
+    % This is when the function peaks.
+    delay = 3./(2*pi*ourbeta);
+
+    for ii = 1:nchannels
+      % convert to radians
+      theta = 2*pi*fc(ii)/fs;
+      phi   = 2*pi*ourbeta(ii)/fs;
+      
+      % Compute the position of the pole
+      atilde = exp(-2*pi*ourbeta(ii)/fs - 1i*2*pi*fc(ii)/fs);
+      
+      % Repeat the pole n times, and expand the polynomial
+      a2=poly(atilde*ones(1,n));
+      
+      btmp=1-exp(-2*pi*ourbeta(ii)/fs);
+      b2=btmp.^n;
+      
+      if flags.do_peakphase
+        b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
+      end;
+      
+      % Place the result (a row vector) in the output matrices.
+      b(ii,:)=b2;
+      a(ii,:)=a2;
+      
     end;
-    
-    % Place the result (a row vector) in the output matrices.
-    b(ii,:)=b2;
-    a(ii,:)=a2;
     
   end;
   
 else
 
-  if flags.do_complex
-    error(['The complex valued mixed pole/zero gammatone filters has not ' ...
-           'yet been implemented.']);
-  end;
-  
-  b=zeros(nchannels,n+1);
-  a=zeros(nchannels,2*n+1);
-  
-  % ourbeta is used in order not to mask the beta function.
-  
-  ourbeta = betamul*audfiltbw(fc);
-  
-  % This is when the function peaks.
-  delay = 3./(2*pi*ourbeta);
-
-  for ii = 1:nchannels
+  if flags.do_real
+    b=zeros(nchannels,n+1);
+    a=zeros(nchannels,2*n+1);
+        
+    % This is when the function peaks.
+    delay = 3./(2*pi*ourbeta);
     
-    theta = 2*pi*fc(ii)/fs;
-    phi   = 2*pi*ourbeta(ii)/fs;
-    alpha = -exp(-phi)*cos(theta);
-    
-    b1 = 2*alpha;
-    b2 = exp(-2*phi);
-    a0 = abs( (1+b1*cos(theta)-i*b1*sin(theta)+b2*cos(2*theta)-i*b2*sin(2*theta)) / (1+alpha*cos(theta)-i*alpha*sin(theta))  );
-    a1 = alpha*a0;
-    
-    % adapt to matlab filter terminology
-    btmp=[a0, a1];
-    atmp=[1, b1, b2];
-    
-    [b2,a2] = convolveba(btmp,atmp,n);
+    for ii = 1:nchannels      
+      % convert to radians
+      theta = 2*pi*fc(ii)/fs;
+      phi   = 2*pi*ourbeta(ii)/fs;
 
-    % Compute the position of the pole
-    atilde = exp(-2*pi*ourbeta(ii)/fs - i*2*pi*fc(ii)/fs);
-
-    % Repeat the conjugate pair n times, and expand the polynomial
-    a2 = poly([atilde*ones(1,n),conj(atilde)*ones(1,n)]);
-
-    % Compute the position of the zero, just the real value of the pole
-    btilde = real(atilde);
-
-    % Repeat the zero n times, and expand the polynomial
-    bnew = poly(btilde*ones(1,n));
-
-    if flags.do_peakphase
-      b2=b2*exp(2*pi*i*fc(ii)*delay(ii));
+      alpha = -exp(-phi)*cos(theta);
+      
+      b1 = 2*alpha;
+      b2 = exp(-2*phi);
+      a0 = abs( (1+b1*cos(theta)-1i*b1*sin(theta)+b2*cos(2*theta)-1i*b2*sin(2*theta)) / (1+alpha*cos(theta)-1i*alpha*sin(theta))  );
+      
+      % Compute the position of the pole
+      atilde = exp(-phi-1i*theta);
+      
+      % Repeat the conjugate pair n times, and expand the polynomial
+      a2 = poly([atilde*ones(1,n),conj(atilde)*ones(1,n)]);
+      
+      % Compute the position of the zero, just the real value of the pole
+      btilde = real(atilde);
+      
+      % Repeat the zero n times, and expand the polynomial
+      b2 = poly(btilde*ones(1,n));
+      
+      % Scale to get 0 dB attenuation
+      b2=b2*(a0^n);
+      
+      if flags.do_peakphase
+        b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
+      end;
+      
+      % Place the result (a row vector) in the output matrices.
+      b(ii,:)=b2;
+      a(ii,:)=a2;
+      
     end;
-    
-    % Place the result (a row vector) in the output matrices.
-    b(ii,:)=b2;
-    a(ii,:)=a2;
-
   end;
+  
+  
+  if flags.do_complex
+
+    warning(['FIXME: The complex-valued mixed pole-zero filters are not scaled ' ...
+             'correctly.']);
+
+    b=zeros(nchannels,n+1);
+    a=zeros(nchannels,n+1);
+    
+    
+    % This is when the function peaks.
+    delay = 3./(2*pi*ourbeta);
+
+    for ii = 1:nchannels
+      % convert to radians
+      theta = 2*pi*fc(ii)/fs;
+      phi   = 2*pi*ourbeta(ii)/fs;
+
+      alpha = -exp(-phi)*cos(theta);
+      b1 = 2*alpha;
+      b2 = exp(-2*phi);
+      a0 = abs( (1+b1*cos(theta)-1i*b1*sin(theta)+b2*cos(2*theta)-1i*b2*sin(2*theta)) / (1+alpha*cos(theta)-1i*alpha*sin(theta))  );
+      
+      % Compute the position of the pole
+      atilde = exp(-2*pi*ourbeta(ii)/fs - 1i*2*pi*fc(ii)/fs);
+      
+      % Repeat the pole n times, and expand the polynomial
+      a2=poly(atilde*ones(1,n));
+
+      % Compute the position of the zero, just the real value of the pole
+      btilde = real(atilde);
+      
+      % Repeat the zero n times, and expand the polynomial
+      b2 = poly(btilde*ones(1,n));
+
+      % Scale to get 0 dB attenuation
+      b2=b2*(a0^n);
+
+      if flags.do_peakphase
+        b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
+      end;
+      
+      % Place the result (a row vector) in the output matrices.
+      b(ii,:)=b2;
+      a(ii,:)=a2;
+  
+    end;  
+  
+  end;
+
 end;
 

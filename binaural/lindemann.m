@@ -14,7 +14,7 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %
 %   Output parameters:
 %       crosscorr   - A matrix containing the cross-correlation signal
-%                     for every frequency channel fc and every time step n. 
+%                     for every frequency channel fc and every time step n.
 %                     The format of this matrix is output(n,m,fc), where m
 %                     denotes the correlation (delay line) time step.
 %       t           - time axis for the time steps n in crosscorr
@@ -35,7 +35,7 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %
 %     3) Calculation of the cross-correlation between the left and right
 %        channel.  This is done using the model described in Lindemann
-%        (1986a) and Hess (2007). These are extensions to the delay line model 
+%        (1986a) and Hess (2007). These are extensions to the delay line model
 %        of Jeffres (1948).
 %
 %        Lindemann has extended the delay line model of Jeffres (1948) by a
@@ -44,7 +44,7 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %        stimuli with a split off of the lateralization image). Hess has
 %        extented the output from the lindemann model to a binaural activity map
 %        dependend on time, by using a running cross-correlation function.
-%        This has been done here by starting a new running cross-correlation 
+%        This has been done here by starting a new running cross-correlation
 %        every time step T_int.  A detailed description of these cross-
 %        correlation steps is given in the lindemannbincorr function.
 %
@@ -85,7 +85,7 @@ end
 % Parse the command line
 definput.import={'auditoryfilterbank','ihcenvelope','lindemannbincorr'};
 
-% Highest and lowest frequency to use for the erbfilterbank (this gives us 
+% Highest and lowest frequency to use for the erbfilterbank (this gives us
 % 36 frequency channels, channel 5-40)
 definput.importdefaults = {'flow',erbtofreq(5),'fhigh',erbtofreq(40),'lindemann'};
 
@@ -96,19 +96,19 @@ definput.importdefaults = {'flow',erbtofreq(5),'fhigh',erbtofreq(40),'lindemann'
 % Apply the auditory filterbank
 % NOTE: Lindemann uses a bandpass filterbank after Duifhuis (1972) and
 % Blauert and Cobben (1978).
-[outsig, fc] = auditoryfilterbank(insig, fs, 'argimport',flags,keyvals);
+[inoutsig,fc] = auditoryfilterbank(insig,fs,'argimport',flags,keyvals);
 %
 %% ------ Cross-correlation computation ---------------------------------
 
 % Extract the envelope, apply a half-wave rectification and calculate a
 % running cross-correlation for every given frequency band
-	
+
 % ------ Haircell simulation -------
 % Half-wave rectification and envelope extraction
-outsig = ihcenvelope(outsig,fs,'argimport',flags,keyvals);
+inoutsig = ihcenvelope(inoutsig,fs,'argimport',flags,keyvals);
 
 % ------ Cross-correlation ------
 % Calculate the cross-correlation after Lindemann (1986a).
-[crosscorr,t] = lindemannbincorr(outsig,fs,c_s,w_f,M_f,T_int,N_1);
+[crosscorr,t] = lindemannbincorr(inoutsig,fs,c_s,w_f,M_f,T_int,N_1);
 
 

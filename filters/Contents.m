@@ -14,7 +14,7 @@
 %
 %  Outer and middle ear
 %     HEADPHONEFILTER  - FIR filter to model headphones
-%     MIDDLEREARFILTER - FIR filter to model the middle ear
+%     MIDDLEEARFILTER  - FIR filter to model the middle ear
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

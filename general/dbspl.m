@@ -10,7 +10,7 @@ function y = dbspl(insig,options)
 %   DBSPL(x,'ac') does the same, but considers only the AC component of the
 %   signal (i.e. the mean is removed).
 %
-%   See also: setleveldb
+%   See also: setdbspl
 %
 %R  moore2003introduction
 
