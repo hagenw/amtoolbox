@@ -109,6 +109,11 @@ function outsig = drnl(insig,fs,varargin)
 % runs of 'filter'. The lowpass filtering is still performed by mutliple
 % runs through 'filter', as the linear-part lowpass filter turned out to
 % be unstable when the coefficients was convolved.
+
+if nargin<3
+  error('%s: Too few input parameters.',upper(mfilename));
+end;
+
   
 % Import the parameters from the arg_drnl.m function.
 definput.import={'drnl'};
@@ -133,7 +138,7 @@ siglen = size(insig,1);
 nsigs  = size(insig,2);
 nfc    = length(fc);
 
-outsig=zeros(siglen,nfc,nsigs,nsigs);
+outsig=zeros(siglen,nfc,nsigs);
 
 % Handle the compression limiting in the broken-stick non-linearity
 if ~isempty(kv.compresslimit)
@@ -207,13 +212,12 @@ for ii=1:nfc
   % Broken stick nonlinearity
   if kv.nlin_d~=1
     % Just to save some flops, make this optional.
-    y_decide = [nlin_a*abs(y_nlin).^kv.nlin_d, ...
-                nlin_b*(abs(y_nlin)).^nlin_c];
+    y_nlin = sign(y_nlin).*min(nlin_a*abs(y_nlin).^kv.nlin_d, ...
+                               nlin_b*(abs(y_nlin)).^nlin_c);
   else
-    y_decide = [nlin_a*abs(y_nlin), ...
-                nlin_b*(abs(y_nlin)).^nlin_c];    
+    y_nlin = sign(y_nlin).*min(nlin_a*abs(y_nlin), ...
+                               nlin_b*(abs(y_nlin)).^nlin_c);
   end;
-  y_nlin = sign(y_nlin).* min(y_decide,[],2);
   
   % GT filtering after
   y_nlin = filter(GTnlin_b_after,GTnlin_a_after,y_nlin);

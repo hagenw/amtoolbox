@@ -44,3 +44,9 @@ disp('REF_DRNL_1 vs. REF_DRNL')
 res=outsig_ref-outsig_ref_1;
 fprintf('Relative l^2-norm: %f\n',norm(res(:))/norm(outsig_ref(:)));
 fprintf('Peak SNR: %f\n',20*log10(norm(res(:),inf)/norm(outsig_ref(:),inf)));
+
+% Test binaural
+binoutsig=drnl([insig,insig],fs,'jepsen2008');
+res=2*outsig-binoutsig(:,:,1)-binoutsig(:,:,2);
+fprintf('Binaural: %f\n',norm(res(:)));
+
