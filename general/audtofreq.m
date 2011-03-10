@@ -29,7 +29,11 @@ definput.import={'freqtoaud'};
 %% ------ Computation --------------------------
   
 if flags.do_mel
-  freq = 700*(exp(aud/1127.01048)-1);
+  freq = 700*(exp(aud*log(17/7)/1000)-1);
+end;
+
+if flags.do_mel1000
+  freq = 1000*(exp(aud*log(2)/1000)-1);
 end;
 
 if flags.do_erb

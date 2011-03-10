@@ -20,6 +20,9 @@ function aud = freqtoaud(freq,varargin);
 %               the listener's threshold, with a pitch of 1000 mels.
 %               The mel-scale is defined in Stevens et. al (1937).
 %
+%-    'mel1000' - Alternative definition of the mel scale using a break
+%               frequency of 1000 Hz. This scale was reported in Fant (1968). 
+%
 %-    'bark'  - The bark-scale is originally defined in Zwicker (1961). A
 %               distance of 1 on the bark scale is known as a critical
 %               band. The implementation provided in this function is
@@ -34,7 +37,7 @@ function aud = freqtoaud(freq,varargin);
 %
 %   See also: freqtoaud, audspace, audfiltbw
 %
-%R  stevens1937smp zwicker1961saf glasberg1990daf traunmuller1990aet moore1983sfc
+%R  stevens1937smp zwicker1961saf fant1968 glasberg1990daf traunmuller1990aet moore1983sfc
   
 %   AUTHOR: Peter L. Soendergaard
 
@@ -55,7 +58,11 @@ definput.import={'freqtoaud'};
 
 
 if flags.do_mel
-  aud = 1127.01048*log(1+freq/700);
+  aud = 1000/log(17/7)*log(1+freq/700);
+end;
+
+if flags.do_mel1000
+  aud = 1000/log(2)*log(1+freq/1000);
 end;
 
 if flags.do_erb

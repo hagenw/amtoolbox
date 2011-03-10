@@ -1,4 +1,4 @@
-%EXAMP_AUDSPECGRAM  Some auditory spectrograms.
+%DEMO_AUDSPECGRAM  Some auditory spectrograms.
 %
 %  Display some auditory spectrograms of the word 'greasy' sampled at 16
 %  kHz.
