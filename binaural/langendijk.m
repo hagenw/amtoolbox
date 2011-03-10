@@ -20,60 +20,58 @@ function p = langendijk(ir1,ir2,varargin)
 %
 %   LANGENDIJK accepts the following optional parameters.
 %  
-%-     'bw',bw : Bandwidth of filter bands as partial of an octave. The
+%-     'bw',bw   : Bandwidth of filter bands as partial of an octave. The
 %                default value is 6.
 %
-%-     'do',do : Differential order. The default value is 0.
+%-     'do',do   : Differential order. The default value is 0.
 %
-%-     'cp':cp : Comparison process; 'std' (default) or 'xcorr'.
+%-     'std'     : Use 'std' for comparison. This is the default.
+%  
+%-     'corr'    : Use 'corr' for comparison.
 %
-%-     's',s   : Standard deviation of transforming Gaussian function; default: 2
+%-     's',s     : Standard deviation of transforming Gaussian function; default: 2
 %
 %-     'bal',bal : Balance of left to right channel (not included in 
 %                langendijk's original comparison process); default: 1
 %
-%-     'flow',flow : Start frequency of filter bank. min: 0,5kHz; default: 2kHz
+%-     'flow',flow   : Start frequency of filter bank. min: 0,5kHz; default: 2kHz
 %
 %-     'fhigh',fhigh : End frequency of filter bank; default: 16kHz
 %
-%-     stim:     applied stimulus for localization test (optional)
+%-     'stim',stim   : Applied stimulus for localization test (optional)
 %
 %   See also: plotlangendijk
 
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
+
+  definput.import={'langendijkcomp'};
+  definput.keyvals.bw=6;
+  definput.keyvals.flow=2000;
+  definput.keyvals.fhigh=16000;
+  definput.keyvals.stim=[];
   
-definput.keyvals.bw=6;
-definput.keyvals.do=0;
-definput.keyvals.cp='std';
-definput.keyvals.s=2;
-definput.keyvals.bal=1;
-definput.keyvals.flow=2000;
-definput.keyvals.fhigh=16000;
-definput.keyvals.stim=[];
-
-[flags,kv]=ltfatarghelper({'bw','do','cp','s','bal','flow','fhigh','stim'},definput,varargin);
-
-if ~isempty(kv.stim)
-  ir1=halfconv( ir1,stim );
-end
-
-% model calculations
-p=zeros(size(ir2,2),size(ir1,2)); % initialisation
-
-% filter bank
-% response pdf for every target position
-for ind2=1:size(ir1,2) 
-  x=averagingfb(ir1(:,ind2,:),kv.bw,kv.flow,kv.fhigh);
-  y=zeros(length(x),size(ir2,2),size(ir2,3)); % initialisation
-  for ind=1:size(y,2) % response pdf for one target position
-    y(:,ind,:)=averagingfb(ir2(:,ind,:),kv.bw,kv.flow,kv.fhigh);
+  [flags,kv]=ltfatarghelper({'bw','do','s','bal','flow','fhigh','stim'},definput,varargin);
+  
+  if ~isempty(kv.stim)
+    ir1=halfconv( ir1,stim );
   end
-
-  % comparison process for one target position
-  p(:,ind2)=langecomp( kv.x,kv.y,kv.s,kv.do,kv.cp,kv.bal );
-end
-
-
+  
+  % model calculations
+  p=zeros(size(ir2,2),size(ir1,2)); % initialisation
+  
+  % filter bank
+  % response pdf for every target position
+  for ind2=1:size(ir1,2) 
+    x=averagingfb(ir1(:,ind2,:),kv.bw,kv.flow,kv.fhigh);
+    y=zeros(length(x),size(ir2,2),size(ir2,3)); % initialisation
+    for ind=1:size(y,2) % response pdf for one target position
+      y(:,ind,:)=averagingfb(ir2(:,ind,:),kv.bw,kv.flow,kv.fhigh);
+    end
+    
+    % comparison process for one target position
+    p(:,ind2)=langendijkcomp(x,y,'argimport',flags,kv);
+  end
+  
 
 function [ outsig ] = halfconv( ir1,stim )
 % HALFCONV calculates the fast convolution with fft but without ifft
@@ -89,15 +87,15 @@ function [ outsig ] = halfconv( ir1,stim )
 % latest update: 2010-07-19
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-nfft = 2^nextpow2(max([size(ir1,1) length(stim)]));
-stimf=fft(stim(:),nfft);
-ir1f = fft(ir1,nfft,1);
-temp=zeros(nfft,size(ir1,2),size(ir1,3));
-for ch=1:size(ir1,3)
+  nfft = 2^nextpow2(max([size(ir1,1) length(stim)]));
+  stimf=fft(stim(:),nfft);
+  ir1f = fft(ir1,nfft,1);
+  temp=zeros(nfft,size(ir1,2),size(ir1,3));
+  for ch=1:size(ir1,3)
     for ind=1:size(ir1,2)
-        temp(:,ind,ch) = ir1f(:,ind,ch).* stimf;
+      temp(:,ind,ch) = ir1f(:,ind,ch).* stimf;
     end
-end
-outsig=temp;
-
-end
+  end
+  outsig=temp;
+  
+  

@@ -41,13 +41,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 listener='P6';  % ID of listener (P3 or P6)
 fs = 48000;     % sampling frequency
-bw = 06;        % bandwidth of averagingfb as partial of an octave
-do = 0;         % differential order
-cp = 'std';     % comparison process; 'std' (default) or 'xcorr' 
-s  = 2;         % standard deviation of transforming Gaussian function
-bal= 1;         % balance of left to right channel;   default: 1
-fstart =2000;   % start frequency; minimum: 0,5kHz;   default: 2kHz
-fend   =16000;  % end frequency;                      default: 16kHz
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 load(['langendijk2002-' listener]); 
@@ -72,17 +66,16 @@ load(['langendijk2002-' listener]);
 % medir1oh=gr2ir(med,'1oh',fs);
 
 % pdf calcualtion
-h = waitbar(0,'Please wait...');
-pb  = langendijk( medir   ,medir,bw,do,cp,s,bal,fstart,fend); % baseline
-waitbar(1/5)
-p2o = langendijk( medir2o ,medir,bw,do,cp,s,bal,fstart,fend); % 2-oct (4-16kHz)
-waitbar(2/5)
-p1ol= langendijk( medir1ol,medir,bw,do,cp,s,bal,fstart,fend); % 1-oct (low:4-8kHz)
-waitbar(3/5)
-p1om= langendijk( medir1om,medir,bw,do,cp,s,bal,fstart,fend); % 1-oct (middle:5.7-11.3kHz)
-waitbar(4/5)
-p1oh= langendijk( medir1oh,medir,bw,do,cp,s,bal,fstart,fend); % 1-oct (high:8-16kHz)
-waitbar(5/5)
+pb  = langendijk( medir   ,medir); % baseline
+disp('1/5')
+p2o = langendijk( medir2o ,medir); % 2-oct (4-16kHz)
+disp('2/5')
+p1ol= langendijk( medir1ol,medir); % 1-oct (low:4-8kHz)
+disp('3/5')
+p1om= langendijk( medir1om,medir); % 1-oct (middle:5.7-11.3kHz)
+disp('4/5')
+p1oh= langendijk( medir1oh,medir); % 1-oct (high:8-16kHz)
+disp('5/5')
 
 % likelihood estimations
 la=zeros(5,1);le=zeros(5,1);ci=zeros(5,2);
@@ -92,7 +85,6 @@ idb=1:2:length(targetb); % in order to get comparable likelihoods
 [la(3),le(3),ci(3,:)] = likelilangendijk( p1ol,pol,pol,targetc,response1ol );
 [la(4),le(4),ci(4,:)] = likelilangendijk( p1om,pol,pol,targetc,response1om );
 [la(5),le(5),ci(5,:)] = likelilangendijk( p1oh,pol,pol,targetc,response1oh );
-close(h)
 
 % pdf plots with actual responses
 plotlangendijk(pb,pol,pol,[listener '; ' 'baseline']);
