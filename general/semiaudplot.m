@@ -10,9 +10,9 @@ function h=semiaudplot(x,y,varargin)
 %
 %-     'x'    - Make the x-axis use the auditory scale. This is the default.
 %
-%-      'y'    - Make the y-axis use the auditory scale.
+%-     'y'    - Make the y-axis use the auditory scale.
 %
-%-      'opts',c - Pass options stored in a cell array onto the plot
+%-     'opts',c - Pass options stored in a cell array onto the plot
 %                  function.
 %
 %   In addition to these parameters, the auditory scale can be

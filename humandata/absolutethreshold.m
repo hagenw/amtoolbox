@@ -1,4 +1,4 @@
-function [t,x,y]=absolutethreshold(freq,varargin)
+function [t]=absolutethreshold(freq,varargin)
 %ABSOLUTETHRESHOLD  Absolute threshold at specified frequencies
 %   Usage:  t=absolutethreshold(freq);
 %           t=absolutethreshold(freq,...);
@@ -6,6 +6,9 @@ function [t,x,y]=absolutethreshold(freq,varargin)
 %   ABSOLUTETHRESHOLD(freq) will return the absolute threshold of hearing in
 %   dB SPL at the frequencies given in freq. The output will have the same
 %   shape as the input.
+%
+%   [t,x,y]=ABSOLUTETHRESHOLD(...) additionally returns the frequencies x
+%   and levels y specifying the choosen standard.
 %
 %   ABSOLUTETHRESHOLD takes the following optional parameters:
 %
@@ -23,6 +26,8 @@ function [t,x,y]=absolutethreshold(freq,varargin)
 %
 %   The default is to use the 'iso226_2003' setting.
 %
+%   Demos: demo_absolutethreshold
+%
 %R  bentler1989transfer han1998equivalent
   
 % AUTHOR : Peter Søndergaard based on data collected by Claus Elberling
@@ -39,6 +44,6 @@ definput.importdefaults = {'iso226_2003'};
 x=kv.deffreq;
 y=kv.level;
 
-t=spline(kv.deffreq,x,y);
+t=spline(x,y,freq);
   
   
