@@ -9,16 +9,16 @@ function [t,x,y]=absolutethreshold(freq,varargin)
 %
 %   ABSOLUTETHRESHOLD takes the following optional parameters:
 %
-%-     'iso226_2003' : Free field binaural as given by the ISO 226:2003 standard.
+%-     'iso226_2003' - Free field binaural as given by the ISO 226:2003 standard.
 %
-%-     'map'         : The ISO 226:2003 standard coverted to monaural ear drum
+%-     'map'         - The ISO 226:2003 standard coverted to monaural ear drum
 %                      pressure using the method from Bentler &
 %                      Pavlovic 1989.
 %
-%-     'er3a'        : Using ER-3A insert earphones. This is described in
+%-     'er3a'        - Using ER-3A insert earphones. This is described in
 %                      the ISO 389-2:1994(E) standard
 %
-%-     'er2a'        : Using ER-2A insert earphones. This is described in
+%-     'er2a'        - Using ER-2A insert earphones. This is described in
 %                      Han & Poulsen (1998)
 %
 %   The default is to use the 'iso226_2003' setting.
