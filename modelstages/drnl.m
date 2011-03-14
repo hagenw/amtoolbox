@@ -97,7 +97,7 @@ function outsig = drnl(insig,fs,varargin)
 %
 %   See also: middleearfilter, jepsen2008preproc
 % 
-%R   lopezpoveda2001hnc jepsen2008cmh
+%R  meddis2001computational lopezpoveda2001hnc jepsen2008cmh
 
 % AUTHOR: Morten Løve Jepsen
   
