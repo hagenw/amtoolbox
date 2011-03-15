@@ -50,7 +50,7 @@ function [ out ] = langendijkcomp( in1,in2,varargin )
         if kv.do==0
           z=corrcoef(in1(:,ch),in2(:,ind,ch));
         else
-          z=corrcoef(dif(in1(:,ch),kv.do),dif(in2(:,ind,ch),kv.do));
+          z=corrcoef(diff(in1(:,ch),kv.do),diff(in2(:,ind,ch),kv.do));
         end
         z=z(2);
         ptemp(ind,ch)=(z+1)/2;
@@ -59,7 +59,7 @@ function [ out ] = langendijkcomp( in1,in2,varargin )
     if size(in2,3)==1
       p=ptemp;
     else
-      p=(kvbal*ptemp(:,1)+1/kv.bal*ptemp(:,2))/2; % balance
+      p=(kv.bal*ptemp(:,1)+1/kv.bal*ptemp(:,2))/2; % balance
     end
   
   end
