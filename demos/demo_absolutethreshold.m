@@ -23,9 +23,9 @@ xrange=linspace(flow,fhigh,plotpoints);
 
 figure(1)
 
-types   = {'iso226_2003','map','er3a','er2a'};
-legends = {'iso226\_2003','map','er3a','er2a'};
-symbols = {'k-'         ,'ro' ,'gx'  ,'b+'  };
+types   = {'iso226_2003','map','er3a','er2a','hda200'};
+legends = {'iso226\_2003','map','er3a','er2a','hda200'};
+symbols = {'k-'         ,'ro' ,'gx'  ,'b+','y*'  };
 
 hold on;
 for ii=1:numel(types)

@@ -1,4 +1,4 @@
-function [t]=absolutethreshold(freq,varargin)
+function [t,table]=absolutethreshold(freq,varargin)
 %ABSOLUTETHRESHOLD  Absolute threshold at specified frequencies
 %   Usage:  t=absolutethreshold(freq);
 %           t=absolutethreshold(freq,...);
@@ -14,8 +14,8 @@ function [t]=absolutethreshold(freq,varargin)
 %
 %-     'iso226_2003' - Free field binaural as given by the ISO 226:2003 standard.
 %
-%-     'map'         - The ISO 226:2003 standard coverted to monaural ear drum
-%                      pressure using the method from Bentler &
+%-     'map'         - The ISO 226:2003 standard coverted to minimal
+%                      audible pressure using the method from Bentler &
 %                      Pavlovic 1989.
 %
 %-     'er3a'        - Using ER-3A insert earphones. This is described in
@@ -24,11 +24,14 @@ function [t]=absolutethreshold(freq,varargin)
 %-     'er2a'        - Using ER-2A insert earphones. This is described in
 %                      Han & Poulsen (1998)
 %
+%-     'hda200'      - Using HDA200 circumaural earphone. This is
+%                      decribed in the ISO 389-8:2004 standard.
+%
 %   The default is to use the 'iso226_2003' setting.
 %
 %   Demos: demo_absolutethreshold
 %
-%R  bentler1989transfer han1998equivalent
+%R  iso226-2003 iso389-2-1994 iso389-8-2004 bentler1989transfer han1998equivalent
   
 % AUTHOR : Peter Søndergaard based on data collected by Claus Elberling
   
@@ -39,11 +42,6 @@ end;
 definput.import = {'absolutethreshold'};
 definput.importdefaults = {'iso226_2003'};
 
-[flags,kv]  = ltfatarghelper({},definput,varargin);
+[flags,kv,table]  = ltfatarghelper({'table'},definput,varargin);
 
-x=kv.deffreq;
-y=kv.level;
-
-t=spline(x,y,freq);
-  
-  
+t=spline(table(:,1),table(:,2),freq);
