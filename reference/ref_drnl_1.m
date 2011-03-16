@@ -195,13 +195,12 @@ for ii=1:nfc
   % Broken stick nonlinearity
   if kv.nlin_d~=1
     % Just to save some flops, make this optional.
-    y_decide = [nlin_a*abs(y_nlin).^kv.nlin_d; ...
-                nlin_b*(abs(y_nlin)).^nlin_c];
+    y_nlin = sign(y_nlin).*min(nlin_a*abs(y_nlin).^kv.nlin_d, ...
+                               nlin_b*(abs(y_nlin)).^nlin_c);
   else
-    y_decide = [nlin_a*abs(y_nlin); ...
-                nlin_b*(abs(y_nlin)).^nlin_c];    
+    y_nlin = sign(y_nlin).*min(nlin_a*abs(y_nlin), ...
+                               nlin_b*(abs(y_nlin)).^nlin_c);
   end;
-  y_nlin = sign(y_nlin).* min(y_decide);
   
   % GT filtering after
   for jj=1:kv.nlin_ngt_after

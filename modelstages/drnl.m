@@ -86,13 +86,13 @@ function outsig = drnl(insig,fs,varargin)
 %-     'nlin_a',a - 'a' coefficient for the broken-stick non-linearity. Default
 %                   value is [1.40298 .81916 ].
 %
-%-     'nlin_b',b = 'b' coefficient for the broken-stick non-linearity. Default
+%-     'nlin_b',b - 'b' coefficient for the broken-stick non-linearity. Default
 %                   value is [1.61912 -.81867
 %
-%-     'nlin_c',c = 'c' coefficient for the broken-stick non-linearity. Default
+%-     'nlin_c',c - 'c' coefficient for the broken-stick non-linearity. Default
 %                   value is [-.60206 0].
 %
-%-     'nlin_d',d = 'd' coefficient for the broken-stick non-linearity. Default
+%-     'nlin_d',d - 'd' coefficient for the broken-stick non-linearity. Default
 %                    value is 1.
 %
 %   See also: middleearfilter, jepsen2008preproc
@@ -110,7 +110,7 @@ function outsig = drnl(insig,fs,varargin)
 % runs through 'filter', as the linear-part lowpass filter turned out to
 % be unstable when the coefficients was convolved.
 
-if nargin<3
+if nargin<2
   error('%s: Too few input parameters.',upper(mfilename));
 end;
 
@@ -123,6 +123,14 @@ definput.import={'drnl'};
 % find the center frequencies used in the filterbank, 1 ERB spacing
 fc = erbspacebw(kv.flow, kv.fhigh, 1, kv.basef);
 
+%% Convert the input to column vectors
+nchannels  = length(fc);
+
+% Change f to correct shape.
+[insig,siglen,nsigs,wasrow,remembershape]=comp_sigreshape_pre(insig,'DRNL',0);
+
+outsig=zeros(siglen,nchannels,nsigs);
+
 %% Apply the middle-ear filter
 if flags.do_middleear
   
@@ -132,13 +140,6 @@ if flags.do_middleear
 end;
 
 %% ---------------- main loop over center frequencies
-
-% Code will fail for a row vector, FIXME
-siglen = size(insig,1);
-nsigs  = size(insig,2);
-nfc    = length(fc);
-
-outsig=zeros(siglen,nfc,nsigs);
 
 % Handle the compression limiting in the broken-stick non-linearity
 if ~isempty(kv.compresslimit)
@@ -151,7 +152,7 @@ end;
 % frequency
 % Happens for lin_lp_cutoff
 
-for ii=1:nfc
+for ii=1:nchannels
 
   % -------- Setup channel dependant definitions -----------------
 
