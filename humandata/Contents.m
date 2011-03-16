@@ -6,6 +6,7 @@
 %      ABSOLUTETHRESHOLD    - Absolute threshold of hearing
 %
 %   Data from papers
+%      DATA_ZWICKER1961     - Definition of critical bands.
 %      DATA_LINDEMANN1986A  - Data from the lindemann1986a paper.
 %
 %  For help, bug reports, suggestions etc. please send email to

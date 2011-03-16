@@ -27,11 +27,14 @@ function [t,table]=absolutethreshold(freq,varargin)
 %-     'hda200'      - Using HDA200 circumaural earphone. This is
 %                      decribed in the ISO 389-8:2004 standard.
 %
+%   Absolute thresholds for the ER2A and HDA-200 are provided up to 16
+%   kHz by the ISO 389-5:2006 standard.
+%
 %   The default is to use the 'iso226_2003' setting.
 %
 %   Demos: demo_absolutethreshold
 %
-%R  iso226-2003 iso389-2-1994 iso389-8-2004 bentler1989transfer han1998equivalent
+%R  iso226-2003 iso389-2-1994 iso389-5-2006 iso389-8-2004 bentler1989transfer han1998equivalent
   
 % AUTHOR : Peter Søndergaard based on data collected by Claus Elberling
   

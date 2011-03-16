@@ -29,15 +29,12 @@ end;
 
 definput.import       = {'freqtoaud'};
 definput.flags.plotdir= {'x','y'};
-definput.keyvals.tick = [0,100,250,500,1000,2000,4000,8000];
+definput.keyvals.tick = [0,100,250,500,1000,2000,4000,8000,16000];
 definput.keyvals.res  = 500;
 definput.keyvals.opts = {};
 
 [flags,keyvals]=ltfatarghelper({},definput,varargin);
 
-  
-  
-tick=[0,100,250,500,1000,2000,4000,8000];
 n=500;
 tickpos=freqtoaud(keyvals.tick,flags.audscale);
     
@@ -49,7 +46,7 @@ if flags.do_x
   plotval=spline(x,y,audspace(xmin,xmax,n,flags.audscale));
   plot(linspace(audminmax(1),audminmax(2),n),plotval,keyvals.opts{:});
   set(gca,'XTick',tickpos);
-  set(gca,'XTickLabel',num2str(tick(:)));
+  set(gca,'XTickLabel',num2str(keyvals.tick(:)));
  
 end;
 
