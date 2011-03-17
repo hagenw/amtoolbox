@@ -5,6 +5,7 @@ function definput=arg_drnl(definput)
   definput.keyvals.flow=80;
   definput.keyvals.fhigh=8000;
   definput.keyvals.basef=[];
+  definput.keyvals.bwmul=1;
 
   definput.keyvals.lin_ngt = 2; 
   definput.keyvals.lin_nlp = 4; 

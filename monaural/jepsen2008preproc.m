@@ -56,6 +56,7 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
 end;
 
 definput.import={'drnl'};
+definput.importdefaults={'jepsen2008'};
 definput.keyvals.subfs=[];
 
 [flags,keyvals]  = ltfatarghelper({'flow','fhigh'},definput,varargin);
@@ -81,7 +82,3 @@ outsig = adaptloop(outsig,fs,'dau');
 
 %% Modulation filterbank
 [outsig,mfc] = modfilterbank(outsig,fs,fc);
-
-
-
-

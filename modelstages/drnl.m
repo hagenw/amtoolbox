@@ -1,8 +1,8 @@
-function outsig = drnl(insig,fs,varargin)
+function [outsig, fc] = drnl(insig,fs,varargin)
 %DRNL  Dual Resonance Nonlinear Filterbank
-%   Usage: outsig = drnl(insig,fc,fs);
+%   Usage: outsig = drnl(insig,fs);
 %
-%   DRNL(insig,fc,fs) computes the Dual Resonance Non-Linear filterbank of
+%   DRNL(insig,fs) computes the Dual Resonance Non-Linear filterbank of
 %   the input signal insig sampled at fs Hz with channels specified by the
 %   center frequencies in fc. The DRNL is described in the paper
 %   Lopez-Poveda and Meddis (2001). The DRNL models the basilar membrane
@@ -121,7 +121,7 @@ definput.import={'drnl'};
 [flags,kv]=ltfatarghelper({'flow','fhigh'},definput,varargin);
 
 % find the center frequencies used in the filterbank, 1 ERB spacing
-fc = erbspacebw(kv.flow, kv.fhigh, 1, kv.basef);
+fc = erbspacebw(kv.flow, kv.fhigh, kv.bwmul, kv.basef);
 
 %% Convert the input to column vectors
 nchannels  = length(fc);

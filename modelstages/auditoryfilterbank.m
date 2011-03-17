@@ -51,7 +51,7 @@ definput.import={'auditoryfilterbank'};
 % ------ do the computation -------------------------
 
 % find the center frequencies used in the filterbank, 1 ERB spacing
-fc = erbspacebw(flow, fhigh, 1, keyvals.basef);
+fc = erbspacebw(flow, fhigh, keyvals.bwmul, keyvals.basef);
 
 % Calculate filter coefficients for the gammatone filter bank.
 [gt_b, gt_a]=gammatone(fc, fs, 'complex');
