@@ -7,8 +7,10 @@ function [t,table]=absolutethreshold(freq,varargin)
 %   dB SPL at the frequencies given in freq. The output will have the same
 %   shape as the input.
 %
-%   [t,x,y]=ABSOLUTETHRESHOLD(...) additionally returns the frequencies x
-%   and levels y specifying the choosen standard.
+%   [outvals,table]=ABSOLUTETHRESHOLD(...) additionally returns the
+%   frequencies table defining the choosen standard. The first column of
+%   the table contains frequencies in Hz, and the second column contains the
+%   absolute threshold at the given frequency.
 %
 %   ABSOLUTETHRESHOLD takes the following optional parameters:
 %
