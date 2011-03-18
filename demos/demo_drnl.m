@@ -59,9 +59,9 @@ ytick=[0,100,250,500,1000,2000,4000,8000];
 ytickpos=freqtoerb(ytick);
 xr=(0:siglen-1)/fs;
 yr=linspace(freqtoerb(fc1(1)),freqtoerb(fc1(end)),length(fc1));
-max1=max(outsig1(:));
-max2=max(outsig2(:));
-max3=max(outsig3(:));
+max1=20*log10(max(outsig1(:)));
+max2=20*log10(max(outsig2(:)));
+max3=20*log10(max(outsig3(:)));
 
 
 figure(1);
