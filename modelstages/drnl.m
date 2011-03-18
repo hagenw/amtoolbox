@@ -8,6 +8,10 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %   Lopez-Poveda and Meddis (2001). The DRNL models the basilar membrane
 %   non-linearity.
 %
+%   This version of the DRNL incoorperate the middle-ear filter used in
+%   Lopez-Poveda and Meddis (2001), and the post-scaling propsed in
+%   Jepsen 2008. Both can be turned off by a flag (see below).
+%
 %   The DRNL takes a lot of parameters which vary over frequency. Such a
 %   parameter is described by a 1x2 vector [b a] and indicates that the
 %   value of the parameter at frequency fc can be calculated by
@@ -28,7 +32,8 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %
 %-     'middleear'  - Perform middleear filtering before the actual DRNL
 %                     is applied using the middleear filter specified in
-%                     Lopez-Poveda and Meddis (2001). This is the
+%                     Lopez-Poveda and Meddis (2001), and compensate for
+%                     the effect of the filter after DRNL filtering. This is the
 %                     default.
 %
 %-     'nomiddleear' - No middle-ear filtering. Be carefull with this setting,
@@ -231,7 +236,12 @@ for ii=1:nchannels
   outsig(:,ii,:) = reshape(y_lin + y_nlin,siglen,1,nsigs);    
   
 end;
-  
+
+% Compensate for the middle-ear filter, if it was applied
+if flags.do_middleear
+  outsig = gaindb(outsig,50);
+end;
+
  
 function outpar=polfun(par,fc)
   %outpar=10^(par(1)+par(2)*log10(fc));
