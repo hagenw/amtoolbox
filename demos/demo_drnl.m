@@ -34,7 +34,7 @@ lvl2=70;
 lvl3=90;
 
 % Set the dynamic range for plotting.
-dynrange=80;
+dynrange=25;
 
 %% DRNL 
 % Change 'bwmul' to generate more channels, this make the visualization
