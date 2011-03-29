@@ -56,6 +56,7 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
 end;
 
 definput.import={'drnl'};
+definput.importdefaults={'jepsen2008'};
 definput.keyvals.subfs=[];
 
 [flags,keyvals]  = ltfatarghelper({'flow','fhigh'},definput,varargin);
@@ -68,7 +69,6 @@ outsig = filter(hp_fir,1,insig);
 
 %% DRNL and compensation for middle-ear
 [outsig, fc] = drnl(outsig, fs, 'argimport',flags,keyvals);
-outsig = gaindb(outsig,50);
 
 %% 'haircell' envelope extraction
 outsig = ihcenvelope(outsig,fs,'dau');
@@ -81,7 +81,3 @@ outsig = adaptloop(outsig,fs,'dau');
 
 %% Modulation filterbank
 [outsig,mfc] = modfilterbank(outsig,fs,fc);
-
-
-
-

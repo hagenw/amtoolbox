@@ -45,8 +45,9 @@ end
 a = nlinDRNLpar(4).vals;
 b = nlinDRNLpar(5).vals;
 c = nlinDRNLpar(6).vals;
-y_decide = [a*abs(y_nlin); b*(abs(y_nlin)).^c];
-y_nlin = sign(y_nlin).* min(y_decide);
+% The following line only works correctly for column vectors.
+y_decide = [a*abs(y_nlin), b*(abs(y_nlin)).^c];
+y_nlin = sign(y_nlin).* min(y_decide,[],2);
 
 % Now GT filtering again
 for n = 1:nlinDRNLpar(2).vals % Gammatone filtering multiple times for cascading
@@ -60,3 +61,5 @@ end
 end
 
 out = (y_lin + y_nlin);
+
+out = gaindb(out,50);

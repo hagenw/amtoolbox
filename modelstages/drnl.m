@@ -1,12 +1,16 @@
-function outsig = drnl(insig,fs,varargin)
+function [outsig, fc] = drnl(insig,fs,varargin)
 %DRNL  Dual Resonance Nonlinear Filterbank
-%   Usage: outsig = drnl(insig,fc,fs);
+%   Usage: outsig = drnl(insig,fs);
 %
-%   DRNL(insig,fc,fs) computes the Dual Resonance Non-Linear filterbank of
+%   DRNL(insig,fs) computes the Dual Resonance Non-Linear filterbank of
 %   the input signal insig sampled at fs Hz with channels specified by the
 %   center frequencies in fc. The DRNL is described in the paper
 %   Lopez-Poveda and Meddis (2001). The DRNL models the basilar membrane
 %   non-linearity.
+%
+%   This version of the DRNL incoorperate the middle-ear filter used in
+%   Lopez-Poveda and Meddis (2001), and the post-scaling propsed in
+%   Jepsen 2008. Both can be turned off by a flag (see below).
 %
 %   The DRNL takes a lot of parameters which vary over frequency. Such a
 %   parameter is described by a 1x2 vector [b a] and indicates that the
@@ -28,14 +32,22 @@ function outsig = drnl(insig,fs,varargin)
 %
 %-     'middleear'  - Perform middleear filtering before the actual DRNL
 %                     is applied using the middleear filter specified in
-%                     Lopez-Poveda and Meddis (2001). This is the
+%                     Lopez-Poveda and Meddis (2001), and compensate for
+%                     the effect of the filter after DRNL filtering. This is the
 %                     default.
 %
-%-     'nomiddleear' - No middle-ear filtering. Be carefull with this setting,
-%                     as another scaling must then be perform to convert the
-%                     input to stapes movement.
+%-     'nomiddleear'- No middle-ear filtering. Be carefull with this setting,
+%                    as another scaling must then be perform to convert the
+%                    input to stapes movement.
 %
-%-     'lin_ngt',n  - Number of cascaded gammatone filter in the linear
+%-     'bothparts' - Compute both the linear and the non-linear path of
+%                    the DRNL. This is the default.
+%
+%-     'linonly'   - Compute only the linear path.
+%
+%-     'nlinonly'  - Compute only the non-linear path.
+%
+%-     'lin_ngt',n - Number of cascaded gammatone filter in the linear
 %                    part, default value is 2.
 %
 %-     'lin_nlp',n - Number of cascaded lowpass filters in the linear
@@ -86,18 +98,18 @@ function outsig = drnl(insig,fs,varargin)
 %-     'nlin_a',a - 'a' coefficient for the broken-stick non-linearity. Default
 %                   value is [1.40298 .81916 ].
 %
-%-     'nlin_b',b = 'b' coefficient for the broken-stick non-linearity. Default
+%-     'nlin_b',b - 'b' coefficient for the broken-stick non-linearity. Default
 %                   value is [1.61912 -.81867
 %
-%-     'nlin_c',c = 'c' coefficient for the broken-stick non-linearity. Default
+%-     'nlin_c',c - 'c' coefficient for the broken-stick non-linearity. Default
 %                   value is [-.60206 0].
 %
-%-     'nlin_d',d = 'd' coefficient for the broken-stick non-linearity. Default
+%-     'nlin_d',d - 'd' coefficient for the broken-stick non-linearity. Default
 %                    value is 1.
 %
 %   See also: middleearfilter, jepsen2008preproc
 % 
-%R   lopezpoveda2001hnc jepsen2008cmh
+%R  meddis2001computational lopezpoveda2001hnc jepsen2008cmh
 
 % AUTHOR: Morten Løve Jepsen
   
@@ -110,7 +122,7 @@ function outsig = drnl(insig,fs,varargin)
 % runs through 'filter', as the linear-part lowpass filter turned out to
 % be unstable when the coefficients was convolved.
 
-if nargin<3
+if nargin<2
   error('%s: Too few input parameters.',upper(mfilename));
 end;
 
@@ -121,7 +133,15 @@ definput.import={'drnl'};
 [flags,kv]=ltfatarghelper({'flow','fhigh'},definput,varargin);
 
 % find the center frequencies used in the filterbank, 1 ERB spacing
-fc = erbspacebw(kv.flow, kv.fhigh, 1, kv.basef);
+fc = erbspacebw(kv.flow, kv.fhigh, kv.bwmul, kv.basef);
+
+%% Convert the input to column vectors
+nchannels  = length(fc);
+
+% Change f to correct shape.
+[insig,siglen,nsigs,wasrow,remembershape]=comp_sigreshape_pre(insig,'DRNL',0);
+
+outsig=zeros(siglen,nchannels,nsigs);
 
 %% Apply the middle-ear filter
 if flags.do_middleear
@@ -132,13 +152,6 @@ if flags.do_middleear
 end;
 
 %% ---------------- main loop over center frequencies
-
-% Code will fail for a row vector, FIXME
-siglen = size(insig,1);
-nsigs  = size(insig,2);
-nfc    = length(fc);
-
-outsig=zeros(siglen,nfc,nsigs);
 
 % Handle the compression limiting in the broken-stick non-linearity
 if ~isempty(kv.compresslimit)
@@ -151,7 +164,7 @@ end;
 % frequency
 % Happens for lin_lp_cutoff
 
-for ii=1:nfc
+for ii=1:nchannels
 
   % -------- Setup channel dependant definitions -----------------
 
@@ -193,44 +206,58 @@ for ii=1:nfc
 
   % -------------- linear part --------------------------------
 
-  % Apply linear gain
-  y_lin = insig.*lin_gain; 
-  
-  % Gammatone filtering
-  y_lin = filter(GTlin_b,GTlin_a,y_lin);    
-
-  % Multiple LP filtering
-  for jj=1:kv.lin_nlp
-    y_lin = filter(LPlin_b,LPlin_a,y_lin);
+  if flags.do_bothparts || flags.do_linonly
+    % Apply linear gain
+    y_lin = insig.*lin_gain; 
+    
+    % Gammatone filtering
+    y_lin = filter(GTlin_b,GTlin_a,y_lin);    
+    
+    % Multiple LP filtering
+    for jj=1:kv.lin_nlp
+      y_lin = filter(LPlin_b,LPlin_a,y_lin);
+    end;
+  else
+    y_lin = zeros(size(insig));
   end;
 
   % -------------- Non-linear part ------------------------------
-      
-  % GT filtering before
-  y_nlin = filter(GTnlin_b_before,GTnlin_a_before,insig);
-  
-  % Broken stick nonlinearity
-  if kv.nlin_d~=1
-    % Just to save some flops, make this optional.
-    y_nlin = sign(y_nlin).*min(nlin_a*abs(y_nlin).^kv.nlin_d, ...
-                               nlin_b*(abs(y_nlin)).^nlin_c);
+
+  if flags.do_bothparts || flags.do_nlinonly
+    
+    % GT filtering before
+    y_nlin = filter(GTnlin_b_before,GTnlin_a_before,insig);
+    
+    % Broken stick nonlinearity
+    if kv.nlin_d~=1
+      % Just to save some flops, make this optional.
+      y_nlin = sign(y_nlin).*min(nlin_a*abs(y_nlin).^kv.nlin_d, ...
+                                 nlin_b*(abs(y_nlin)).^nlin_c);
+    else
+      y_nlin = sign(y_nlin).*min(nlin_a*abs(y_nlin), ...
+                                 nlin_b*(abs(y_nlin)).^nlin_c);
+    end;
+    
+    % GT filtering after
+    y_nlin = filter(GTnlin_b_after,GTnlin_a_after,y_nlin);
+    
+    % then LP filtering
+    for jj=1:kv.nlin_nlp
+      y_nlin = filter(LPnlin_b,LPnlin_a,y_nlin);
+    end;
   else
-    y_nlin = sign(y_nlin).*min(nlin_a*abs(y_nlin), ...
-                               nlin_b*(abs(y_nlin)).^nlin_c);
-  end;
-
-  % GT filtering after
-  y_nlin = filter(GTnlin_b_after,GTnlin_a_after,y_nlin);
-
-  % then LP filtering
-  for jj=1:kv.nlin_nlp
-    y_nlin = filter(LPnlin_b,LPnlin_a,y_nlin);
+    y_nlin = zeros(size(insig));
   end;
   
   outsig(:,ii,:) = reshape(y_lin + y_nlin,siglen,1,nsigs);    
-  
+    
 end;
-  
+
+% Compensate for the middle-ear filter, if it was applied
+if flags.do_middleear
+  outsig = gaindb(outsig,50);
+end;
+
  
 function outpar=polfun(par,fc)
   %outpar=10^(par(1)+par(2)*log10(fc));

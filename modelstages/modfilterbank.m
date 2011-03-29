@@ -15,7 +15,7 @@ function [outsig,mfc] = modfilterbank(insig,fs,fc,varargin)
 %   signals insig which are sampled with a frequency of fs Hz. Each column in
 %   insig is assumed to be bandpass filtered with a center frequency stored in fc.
 %
-%   By default, the modulation filters will have bandwidth
+%   By default, the modulation filters will have center frequencies
 %   0,5,10,16.6,27.77,... where each next center frequency is 5/3 times the
 %   previous one. For modulation frequencies below (and including) 10 Hz,
 %   the real value of the filters are returned, and for higher modulation

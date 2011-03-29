@@ -29,7 +29,9 @@ linDRNLstruct(5).vals = 10^(-0.06762+1.01*log10(CF)); % Hz, LP_lin cutoff
     linDRNLstruct(6).vals = 4; % no. of cascaded LP filters, orig 4
     NlinDRNLstruct(1).vals = 10^(-0.05252+1.01650*log10(CF)); % Hz, CF_nlin
     NlinDRNLstruct(2).vals = 2; % number of cascaded gammatone filters 
-    NlinDRNLstruct(3).vals = 10^(-0.03193+.7*log10(CF)); % Hz, BW_nlin
+    % In some code, this parameter has been .7, but in the jepsen2008
+    % this parameter is .77
+    NlinDRNLstruct(3).vals = 10^(-0.03193+.77*log10(CF)); % Hz, BW_nlin
     NlinDRNLstruct(7).vals = 10^(-0.05252+1.01*log10(CF)); % LP_nlincutoff
     NlinDRNLstruct(8).vals = 1; % no. of cascaded LP filters in nlin path, use "1"
 

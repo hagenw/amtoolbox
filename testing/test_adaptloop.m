@@ -17,7 +17,7 @@ end;
 
 limitr = [0.5, 10];
 
-minlvl=1e-5;
+minlvl=0;
 
 disp(' ===============  TEST_ADAPTLOOP ================');
 
@@ -54,7 +54,7 @@ for w=1:2
             
       s1=adaptloop(f(:,1:w),fs,limit,minlvl,tau);
             
-      s2=ref_adaptloop_1(f(:,1:w),fs,limit,minlvl,tau);
+      s2=ref_adaptloop_1(f(:,1:w),fs,limit,setdbspl(1,minlvl),tau);
 
 
       res=norm(s1(:)-s2(:))/norm(s1);

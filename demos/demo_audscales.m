@@ -1,4 +1,4 @@
-%EXAMP_AUDSCALES  Plot of the different auditory scales.
+%DEMO_AUDSCALES  Plot of the different auditory scales.
 %
 %  This demos generates a simple figure that shows the behaviour of
 %  the different audiory scales in the frequency range from 0 to 8000 Hz.
@@ -23,8 +23,8 @@ xrange=linspace(flow,fhigh,plotpoints);
 
 figure(1)
 
-types   = {'erb','bark','mel','erb83'};
-symbols = {'k-' ,'ro'  ,'gx' ,'b+'};
+types   = {'erb','bark','mel','erb83','mel1000'};
+symbols = {'k-' ,'ro'  ,'gx' ,'b+'   ,'y*'};
 
 hold on;
 for ii=1:numel(types)

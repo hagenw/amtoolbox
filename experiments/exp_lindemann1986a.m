@@ -182,7 +182,7 @@ if flags.do_fig6
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply onset window
         sig = sig(1:siglen,:);
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s
         for jj = 1:length(c_s)
             % Calculate cross-correlation (and squeeze due to T_int==inf)
