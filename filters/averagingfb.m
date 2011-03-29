@@ -33,7 +33,7 @@ if max(imag(insig))==0
     if length(insig) <=2^11
         zp=nextpow2(length(insig))-4;   % zero padding for higher frequency resolution 
     else
-        zp=0;
+        zp=0;       
     end
     nfft =2^(nextpow2(length(insig))+zp);   % next power of 2 from length of input signal
     y = abs(fft(insig,nfft,1));
@@ -41,6 +41,9 @@ else  % input signal already in frequency domain
     y = abs(insig);
     nfft=length(insig);
 end
+length(insig)
+nfft
+pause
 n=round(2.^((j)/bw)*fstart/fs*nfft); %startbins
 ybw=zeros(length(j)-1,size(insig,3)); %initialisation
 for ind=j(1)+1:j(end)
