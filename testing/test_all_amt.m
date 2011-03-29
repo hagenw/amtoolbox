@@ -1,5 +1,5 @@
 
-tests_todo={ 'adaptloop', 'outermiddle' };
+tests_todo={ 'adaptloop', 'outermiddle', 'coefgtdrnl'};
 
 
 total_tests_failed=0;

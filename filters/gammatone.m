@@ -95,7 +95,7 @@ definput.keyvals.n=4;
 definput.keyvals.betamul=[];
 definput.flags.real={'real','complex'};
 definput.flags.phase={'causalphase','peakphase'};
-definput.flags.filtertype={'allpole','mixed'};
+definput.flags.filtertype={'allpole','classic'};
 
 [flags,keyvals,n,betamul]  = ltfatarghelper({'n','betamul'},definput,varargin);
 

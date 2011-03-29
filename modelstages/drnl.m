@@ -189,16 +189,21 @@ for ii=1:nchannels
       
   nlin_c = polfun(kv.nlin_c,fc(ii));
   
-  [GTlin_b,GTlin_a] = coefGtDRNL(lin_fc,lin_bw,kv.lin_ngt,fs);
+  % Compute gammatone coefficients for the linear stage
+  [GTlin_b,GTlin_a] = gammatone(lin_fc,fs,kv.lin_ngt,lin_bw/audfiltbw(lin_fc),'classic');
   
   % Compute coefficients for the linear stage lowpass, use 2nd order
   % Butterworth.
   [LPlin_b,LPlin_a] = butter(2,lin_lp_cutoff/(fs/2));
 
-  [GTnlin_b_before,GTnlin_a_before] = coefGtDRNL(nlin_fc_before,nlin_bw_before,...
-                                                 kv.nlin_ngt_before,fs);
-  [GTnlin_b_after, GTnlin_a_after]  = coefGtDRNL(nlin_fc_after, nlin_bw_after,...
-                                                   kv.nlin_ngt_after,fs);    
+  % Compute gammatone coefficients for the non-linear stage
+  %[GTnlin_b_before,GTnlin_a_before] = coefGtDRNL(nlin_fc_before,nlin_bw_before,...
+  %                                               kv.nlin_ngt_before,fs);
+  [GTnlin_b_before,GTnlin_a_before] = gammatone(nlin_fc_before,fs,kv.nlin_ngt_before,...
+                                                nlin_bw_before/audfiltbw(nlin_fc_before),'classic');
+
+  [GTnlin_b_after,GTnlin_a_after] = gammatone(nlin_fc_after,fs,kv.nlin_ngt_after,...
+                                                nlin_bw_after/audfiltbw(nlin_fc_after),'classic');
 
   % Compute coefficients for the non-linear stage lowpass, use 2nd order
   % Butterworth.

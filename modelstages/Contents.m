@@ -8,7 +8,8 @@
 %     ADAPTLOOP          - Adaptation loops.
 %     DRNL               - Dual resonance non-linear filterbank.
 %
-%  Correlation
+%  Binaural processing stages
+%     LANGENDIJKCOMP     - Comparison process from Langendijk 20002.
 %     LINDEMANNBINCORR   - Running cross-correlation between two signals.
 %
 %  For help, bug reports, suggestions etc. please send email to
