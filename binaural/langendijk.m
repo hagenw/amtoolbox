@@ -43,6 +43,9 @@ function p = langendijk(ir1,ir2,varargin)
 %   See also: plotlangendijk
 
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
+  
+  % FIXME: fs is hardcoded
+  fs=48000;
 
   definput.import={'langendijkcomp'};
   definput.keyvals.bw=6;
@@ -62,10 +65,10 @@ function p = langendijk(ir1,ir2,varargin)
   % filter bank
   % response pdf for every target position
   for ind2=1:size(ir1,2) 
-    x=averagingfb(ir1(:,ind2,:),kv.bw,kv.flow,kv.fhigh);
+    x=averagingfb(ir1(:,ind2,:),fs,kv.flow,kv.fhigh,kv.bw);
     y=zeros(length(x),size(ir2,2),size(ir2,3)); % initialisation
     for ind=1:size(y,2) % response pdf for one target position
-      y(:,ind,:)=averagingfb(ir2(:,ind,:),kv.bw,kv.flow,kv.fhigh);
+      y(:,ind,:)=averagingfb(ir2(:,ind,:),fs,kv.flow,kv.fhigh,kv.bw);
     end
     
     % comparison process for one target position

@@ -54,47 +54,8 @@ definput.import={'auditoryfilterbank'};
 % find the center frequencies used in the filterbank, 1 ERB spacing
 fc = erbspacebw(flow, fhigh, keyvals.bwmul, keyvals.basef);
 
-if flags.do_gammatone
-  % Calculate filter coefficients for the gammatone filter bank.
-  [gt_b, gt_a]=gammatone(fc, fs, 'complex');
-  
-  % Apply the Gammatone filterbank
-  outsig = 2*real(ufilterbankz(gt_b,gt_a,insig));
-end;
+% Calculate filter coefficients for the gammatone filter bank.
+[gt_b, gt_a]=gammatone(fc, fs, 'complex');
 
-if flags.do_langendijk
-    
-  % calculation
-  jj=0:log(kv.fhigh/kv.flow)/log(2)*bw; 
-  if max(imag(insig))==0
-
-    if length(insig) <=2^11
-      zp=nextpow2(length(insig))-4;   % zero padding for higher frequency resolution 
-    else
-      zp=0;
-    end
-    nfft =2^(nextpow2(length(insig))+zp);   % next power of 2 from length of input signal
-    y = abs(fft(insig,nfft,1));
-  
-  else  % input signal already in frequency domain
-
-    y = abs(insig);
-    nfft=length(insig);
-  
-  end
-  
-  n=round(2.^((jj)/bw)*kv.flow/fs*nfft); %startbins
-  ybw=zeros(length(jj)-1,size(insig,3)); %initialisation
-  
-  for ind=jj(1)+1:jj(end)
-    nj=n(ind+1)-n(ind);
-    for ch=1:size(insig,3)
-      ybw(ind,ch)=sqrt(1/(nj)*sum(y(n(ind):n(ind+1)-1,ch).^2));
-    end
-  end
-  
-  outsig=20*log10(ybw);    
-  
-end;
-
-
+% Apply the Gammatone filterbank
+outsig = 2*real(ufilterbankz(gt_b,gt_a,insig));

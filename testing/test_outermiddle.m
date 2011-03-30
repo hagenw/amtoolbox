@@ -28,4 +28,3 @@ res=norm(ff(:)-fr(:));
 
 [test_failed,fail]=ltfatdiditfail(res,test_failed);
 
-test_failed
