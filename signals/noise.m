@@ -19,17 +19,18 @@ function outsig = noise(siglen,nsigs,varargin)
 
 
 % ------ Checking of input parameter -------------------------------------
-
-if nargin<2
-  error('%s: Too few input arguments.',upper(mfilename));
-end;
+nargmin = 1;
+nargmax = 3;
+error(nargchk(nargmin,nargmax,nargin));
 
 if ~isnumeric(siglen) || ~isscalar(siglen) || siglen<=0
     error('%s: siglen has to be a positive scalar.',upper(mfilename));
 end
 
-if ~isnumeric(nsigs) || ~isscalar(nsigs) || nsigs<=0
-    error('%s: siglen has to be a positive scalar.',upper(mfilename));
+if nargin<2
+    nsigs = 1;
+elseif ~isnumeric(nsigs) || ~isscalar(nsigs) || nsigs<=0
+    error('%s: nsigs has to be a positive scalar.',upper(mfilename));
 end
 
 defnopos.flags.real={'white','pink','brown','red'};
