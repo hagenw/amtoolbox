@@ -21,7 +21,7 @@ plotpoints=50;
 xrange=linspace(flow,fhigh,plotpoints);
 
 
-figure(1)
+figure(1);
 
 types   = {'erb','bark','mel','erb83','mel1000'};
 symbols = {'k-' ,'ro'  ,'gx' ,'b+'   ,'y*'};

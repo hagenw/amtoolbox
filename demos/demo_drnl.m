@@ -23,7 +23,7 @@
 %   See also: drnl, jepsen2008preproc
 
 
-fs=16000;
+fs=32000;
 siglen=7000;
 % Increase the length of the test signal to add room for the filter delay
 insig=postpad(greasy,siglen);

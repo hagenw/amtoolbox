@@ -59,7 +59,7 @@ ylabel('level / model units');
 insig=abs(insig+0.001*randn(siglen,1));
 insig=max(insig,minlvl);
 
-figure(2)
+figure(2);
 
 subplot(3,1,1);
 plot(20*log10(insig));

@@ -19,7 +19,7 @@ disp(['Type "help demo_absolutethreshold" to see a description of how this ', ..
       'demo works.']);
 
 
-figure(1)
+figure(1);
 
 flow=125;
 fhigh=8000;
@@ -41,7 +41,7 @@ xlabel('Frequency (Hz)');
 ylabel('Absolte threshold (dB SPL)');
 
 
-figure(2)
+figure(2);
 
 flow=125;
 fhigh=16000;

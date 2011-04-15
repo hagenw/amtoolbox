@@ -40,6 +40,10 @@ function data = data_lindemann1986a(varargin)
 %
 %    If no flag is given, the function will print the list of valid flags.
 %
+%   Simpledemo:  data_lindemann1986a('fig11_yost','plot');
+%
+%   Simpledemo:  data_lindemann1986a('fig11_sayers','plot');
+%
 %R  lindemann1986a
 
 %   AUTHOR: Hagen Wierstorf

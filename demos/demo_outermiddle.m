@@ -38,7 +38,7 @@ xlabel('Frequency in Hz (on erb scale)');
 ylabel('Magnitude response (dB)');
 title('Magnitude response of headphone+outer ear filter.');
 
-figure(2)
+figure(2);
 % Manually calculate the frequency response
 fmid = 20*log10(abs(fftreal(bmid)));
 

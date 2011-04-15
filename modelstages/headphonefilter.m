@@ -16,7 +16,7 @@ function b = headphonefilter(fs,order)
 %   column of the table contain frequencies and the second column
 %   contains the amplitude of the frequency.
 %
-%   See also: middleearfilter, data_pralong1994, data_lopezpoveda2001
+%   See also: middleearfilter, data_pralong1996, data_lopezpoveda2001
 %
 %   Demos: demo_outermiddle
 %   

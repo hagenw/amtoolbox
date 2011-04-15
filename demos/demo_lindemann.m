@@ -27,7 +27,7 @@ f = 500;
 
 % ------ Fig 1. ----------------------------------------------------------
 
-figure(1)
+figure(1);
 
 % Binaural modulation frequency
 mf = 2;
@@ -50,7 +50,7 @@ plotlindemann(cc,t,f,'title',tstr);
 
 % ------ Fig 2. ----------------------------------------------------------
 
-figure(2)
+figure(2);
 
 % Generate an sinusoid with a ITD
 itd = 0.3; % (ms)
