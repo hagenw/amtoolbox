@@ -12,7 +12,7 @@ function definput=arg_drnl(definput)
   definput.keyvals.lin_fc = [-0.06762 1.01679];
   definput.keyvals.lin_bw = [  .03728 .78563];
   definput.keyvals.lin_gain = [4.20405 -.47909];
-  definput.keyvals.lin_lp_cutoff = [.06762 1.01679 ];
+  definput.keyvals.lin_lp_cutoff = [-0.06762 1.01679 ];
   
   definput.keyvals.nlin_ngt_before = 2;
   definput.keyvals.nlin_ngt_after = 2;
