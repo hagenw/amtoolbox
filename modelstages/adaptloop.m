@@ -55,7 +55,7 @@ definput.keyvals.dim=[];
 [flags,keyvals,limit,minlvl_db,tau]  = ltfatarghelper({'limit','minlvl','tau'},definput,varargin);
 
 % Convert minlvl from dB SPL to numerical value
-minlvl=setdbspl(1,minlvl_db);
+minlvl=setdbspl(minlvl_db);
 
 if ~isnumeric(tau) || ~isvector(tau) || any(tau<=0)
   error('%s: tau must be a vector with positive values.',upper(mfilename));

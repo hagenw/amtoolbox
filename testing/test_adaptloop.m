@@ -54,7 +54,7 @@ for w=1:2
             
       s1=adaptloop(f(:,1:w),fs,limit,minlvl,tau);
             
-      s2=ref_adaptloop_1(f(:,1:w),fs,limit,setdbspl(1,minlvl),tau);
+      s2=ref_adaptloop_1(f(:,1:w),fs,limit,setdbspl(minlvl),tau);
 
 
       res=norm(s1(:)-s2(:))/norm(s1);

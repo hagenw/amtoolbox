@@ -33,7 +33,7 @@ definput.import = {'adaptloop'};
 [flags,keyvals,limit,minlvl_db,tau]  = ltfatarghelper({'limit','minlvl','tau'},definput,varargin);
 
 % Convert minlvl
-minlvl=setdbspl(1,minlvl_db);
+minlvl=setdbspl(minlvl_db);
 
 % -------- Computation ------------------
 

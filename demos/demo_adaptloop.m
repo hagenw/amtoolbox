@@ -24,9 +24,8 @@ fs=10000;
 
 % This is the default minimum level (0 dB) of the adaptation loops. The
 % loops assume that a signal is never silent, and sets all values below
-% minlvl equal to minlvl. For plotting purposes, we done the same
-% explicitly.
-minlvl=setdbspl(1,0);
+% minlvl equal to minlvl. For plotting purposes, we do the same explicitly.
+minlvl=setdbspl(0);
 
 part=siglen/10;
 

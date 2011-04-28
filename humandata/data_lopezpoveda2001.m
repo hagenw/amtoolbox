@@ -13,6 +13,8 @@ function data = data_lopezpoveda2001(varargin)
 %
 %-    'fig2b'        - Data from Fig. 2(b), middle ear filter.
 %
+%-    'fig2'         - Only for plotting: fig2a and fig2b combined
+%
 %R  lopezpoveda2001hnc
 
 %   AUTHOR: Peter L. Soendergaard, Katharina Egger

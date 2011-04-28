@@ -7,6 +7,9 @@ function inoutsig = setdbspl(inoutsig,lvl,varargin);
 %   insig to lvl dB, using the convention that a pure tone with an RMS value
 %   of 1 corresponds to 100 dB SPL.
 %
+%   SETDBSPL(lvl) returns a scaling constant that will scale a signal
+%   with RMS value of 1 to the correct level. 
+%
 %   If the input is a matrix, it is assumed that each column is a signal.
 %
 %   SETDBSPL(insig,lvl,'ac') does the same, but considers only the AC
@@ -20,11 +23,24 @@ function inoutsig = setdbspl(inoutsig,lvl,varargin);
 
 % ------ Checking of input parameters ---------
   
-error(nargchk(2,3,nargin));
+error(nargchk(1,3,nargin));
 
 if ~isnumeric(inoutsig)
   error('%s: insig must be numeric.',upper(mfilename));
 end;
+
+if nargin==1
+  % Special mode, only the level has been given
+  lvl=inoutsig;
+  
+  if ~isscalar(lvl) 
+    error('%s: lvl must be a scalar.',upper(mfilename));
+  end;
+
+  inoutsig=gaindb(1,lvl-100);
+  return;
+end;
+
 
 if ~isnumeric(lvl) || ~isscalar(lvl) 
   error('%s: lvl must be a scalar.',upper(mfilename));
@@ -33,6 +49,7 @@ end;
 if (nargin<3) || (~ischar(options))
   options='';
 end;
+
 
 % ------ Computation --------------------------
 
