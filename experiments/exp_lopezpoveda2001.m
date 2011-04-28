@@ -1,4 +1,4 @@
-function exp_lopezpoveda2001(varargin)
+function output=exp_lopezpoveda2001(varargin)
 %LOPEZPOVEDA2001   Iso-itensity curves of the DRNL Lopez-Poveda and Meddis (2001)
 %   Usage: lopezpoveda2001_fig3bc;
 %
@@ -517,7 +517,7 @@ if flags.do_fig4
   end
   
   %% plots    
-  if flags.do_fig4
+  if flags.do_plot
     subplot(2,3,1)
     plot(LSDB,LMDB(indx(:,1)),'-', 'LineWidth', 2)
     hold on
