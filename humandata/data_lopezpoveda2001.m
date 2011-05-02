@@ -53,7 +53,7 @@ if flags.do_fig2a
     % Plot the measured data
     x=data(:,1);
     freqresp=20*log10(data(:,2));
-    semilogx(x,freqresp);
+    semilogx(x,freqresp,'ro');
     
     % Plot the filter
     x_filter=linspace(0,fs/2,n2);
