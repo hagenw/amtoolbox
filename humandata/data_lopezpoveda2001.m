@@ -13,8 +13,6 @@ function data = data_lopezpoveda2001(varargin)
 %
 %-    'fig2b'        - Data from Fig. 2(b), middle ear filter.
 %
-%-    'fig2'         - Only for plotting: fig2a and fig2b combined
-%
 %R  lopezpoveda2001hnc
 
 %   AUTHOR: Peter L. Soendergaard, Katharina Egger
@@ -24,10 +22,16 @@ function data = data_lopezpoveda2001(varargin)
 
 % Define input flags
 definput.flags.plot = {'noplot','plot'};
-definput.flags.type = {'fig2a','fig2b'};
+definput.flags.type = {'missingflag','fig2a','fig2b'};
 
 % Parse input options
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
+
+if flags.do_missingflag
+  flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+             sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end;
 
 %% ------ Data points from the paper ------------------------------------
 %

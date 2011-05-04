@@ -2,6 +2,9 @@ function output=exp_lopezpoveda2001(varargin)
 %LOPEZPOVEDA2001   Reproduces figures from Lopez-Poveda and Meddis (2001)
 %   Usage: output = exp_lopezpoveda2001(flag)
 %
+%   EXP_LOPEZPOVEDA2001(flags,... ) reproduces experiments from the Lopez
+%   & Poveda (2001) paper.
+%
 %   The following flags can be specified;
 %
 %-    'plot' - plot the output of the experiment. This is the default.
@@ -14,8 +17,9 @@ function output=exp_lopezpoveda2001(varargin)
 %       The output is the output of the DRNL filter for the different input levels.
 %       Dim: input frequency x [frequency values, linear output, nonlinear output, summed DRNL output] x input level
 %
-%     'fig3b' - reproduces just fig 3b
-%     'fig3c' - reproduces just fig 3c
+%-    'fig3b' - reproduces just fig 3b
+%
+%-    'fig3c' - reproduces just fig 3c
 %
 %-    'fig4' - reproduces fig 4 from lopezpoveda2001 - pulsation threshold 
 %       data (just the model results, not the experimental data)
@@ -27,23 +31,23 @@ function output=exp_lopezpoveda2001(varargin)
 %               3: results for average parameter set, table II
 %               4: results for regression lines, table III
 %
-%   Isointensity response of the linear, nonlinear and summed response of the
-%   DRNL filter
-%
-%   This script reproduces figure 3 and 4 Lopez-Poveda and Meddis 2001
-%
 %R  lopezpoveda2001hnc
   
 %  AUTHOR: Katharina Egger
 
 %% ------ Check input options --------------------------------------------
 
-  definput.flags.type = {'fig3bc','fig3b','fig3c','fig4'};
+  definput.flags.type = {'missingflag','fig3bc','fig3b','fig3c','fig4'};
   definput.flags.plot = {'plot','noplot'};
 
   % Parse input options
   [flags,keyvals]  = ltfatarghelper({},definput,varargin);
         
+if flags.do_missingflag
+  flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+             sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end;
 
 %% parameter set of YO, table I
 % The data is specified in this way, because the data for figure 4 is
