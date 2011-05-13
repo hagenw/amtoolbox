@@ -41,7 +41,9 @@ function p = langendijk(ir1,ir2,varargin)
 %-     'stim',stim   : Applied stimulus for localization test (optional)
 %
 %   See also: plotlangendijk
-
+%
+%R  langendijk2002contribution
+%
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
   
   % FIXME: fs is hardcoded

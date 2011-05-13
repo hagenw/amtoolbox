@@ -11,6 +11,21 @@ function output=exp_lopezpoveda2001(varargin)
 %
 %-    'noplot' - don't plot, only return data.
 %
+%-    'fig2' - reproduces fig 2 from lopezpoveda2001 
+%       Fig 2a represents the outer ear filter - pressure gain (dB) over
+%       frequency with data points from Pralong and Carlile (1996)
+%       Fig 2b represents the middle ear filter - stapes peak velocity at 0dB over frequency
+%           in one plot fig 2b shows for default fs = 22050Hz: 
+%           - data points directly derived from Goode et al. 1994
+%           - FIR filter with data points from Goode et al. 1994
+%           - data points of figure 2b from Lopez-Poveda and Meddis 2001 (read
+%             from fig 2b, actually also derived from Goode et al. 1994)
+%       The output are the data points of the respective figure.
+%       Dim: [frequency values', data points'] x figure no.
+%
+%     'fig2a' - reproduces just fig 2a
+%     'fig2b' - reproduces just fig 2b
+%
 %-    'fig3bc' - reproduces fig 3b and c from lopezpoveda2001 
 %       Isointensity response of the linear, nonlinear and summed response 
 %       of the DRNL filter for an input level of 30dB (fig 3b) and 85dB (fig 3c) SPL 
@@ -31,13 +46,15 @@ function output=exp_lopezpoveda2001(varargin)
 %               3: results for average parameter set, table II
 %               4: results for regression lines, table III
 %
+%   This script reproduces figures 2, 3bc and 4 Lopez-Poveda and Meddis 2001
+%
 %R  lopezpoveda2001hnc
   
 %  AUTHOR: Katharina Egger
 
 %% ------ Check input options --------------------------------------------
 
-  definput.flags.type = {'missingflag','fig3bc','fig3b','fig3c','fig4'};
+  definput.flags.type = {'missingflag','fig2','fig2a','fig2b','fig3bc','fig3b','fig3c','fig4'};
   definput.flags.plot = {'plot','noplot'};
 
   % Parse input options
@@ -320,6 +337,124 @@ f8000avg = {...
 
 expparsavg = [f250avg; f500avg; f1000avg; f2000avg; f4000avg; f8000avg];
 
+%% Lopez-Poveda and Meddis 2001, Figure 2
+
+  %% Lopez-Poveda and Meddis 2001, Figure 2, a)
+
+  if flags.do_fig2a || flags.do_fig2
+    fs=22050;
+    hpdata=data_pralong1996;
+    bout=headphonefilter(fs);
+
+    % Manually calculate the frequency response.
+    fout = 20*log10(abs(fftreal(bout)));
+
+    % Half the filter length.
+    n2=length(fout);
+    output(:,:,1) = hpdata;
+  end
+
+
+  %% Lopez-Poveda and Meddis 2001, Figure 2, b)
+
+  if flags.do_fig2b || flags.do_fig2
+    fs = 22050;
+    
+    gde = middleearfilter;           % data points directly derived from Goode et al. 1994
+    stapes_data = data_lopezpoveda2001('fig2b', 'noplot', 'lopezpoveda');    % control data points directly read from Lopez-Poveda and Meddis 2001
+    
+    % Calculate the filters.
+    bmid = middleearfilter(fs);      % Goode et al. 1994
+    
+    % Manually calculate the frequency response for an input of 0dB SPL
+    fmid = abs(fftreal(bmid*20e-6));
+    % Half the filter length.
+    n2=length(fmid);
+    % x-values for plotting.
+    xplot=linspace(0,fs/2,n2);
+    outB = gde;
+    if exist('output','var')
+      output(end+1:end+(length(outB)-length(output)),:,1) = 0;
+      output(:,:,2) = outB;
+    else
+      output(:,:,1) = outB;
+    end
+
+  end
+    
+%% plots    
+if flags.do_plot
+    if flags.do_fig2       
+        figure
+        set(gcf,'Position',[50,50,500,760])
+        subplot(2,1,1)
+        hold on;
+        % Plot the measured data
+        x=hpdata(:,1);
+        freqresp=20*log10(hpdata(:,2));
+        plot(x,freqresp,'ro');
+    
+        % Plot the filter
+        x_filter=linspace(0,fs/2,n2);
+        plot(x_filter,fout);
+        axis([100 10000 -30 20])
+        set(gca,'XScale','log')
+        set(gca,'Position',[0.15,0.55,0.8,0.4]);
+        leg1=legend('Pralong and Carlile (1996) + extrapolated points', ...
+            'FIR filter');
+        xlabel('Frequency (Hz)')
+        ylabel('Pressure gain (dB)')
+        title('Lopez-Poveda and Meddis 2001, Figure 2')
+        set(leg1,'Position',[0.1887, 0.5991, 0.666, 0.0553]);
+
+        subplot(2,1,2)
+        p = loglog (stapes_data(:,1),stapes_data(:,2),':ok', 'MarkerFaceColor', 'k');
+        hold on
+        g = loglog (gde(:,1),gde(:,2),':or', 'MarkerFaceColor', 'r');
+        firG = loglog(xplot,fmid,'r');
+        axis([100 10000 1E-10 1E-07])
+        set(gca,'Position',[0.15,0.07,0.8,0.4]);
+        xlabel('Frequency (Hz)')
+        ylabel('Stapes velocity (m/s) at 0dB SPL')
+        leg2=legend([g,firG,p],'directly derived from Goode et al. 1994', 'FIR filter with data points from Goode et al. 1994', ...
+            'Control points as in Lopez-Poveda and Meddis 2001');        
+        set(leg2,'Position',[0.1637, 0.085, 0.716, 0.07]);
+    
+    elseif flags.do_fig2a
+        hold on;
+        % Plot the measured data
+        x=hpdata(:,1);
+        freqresp=20*log10(hpdata(:,2));
+        plot(x,freqresp,'ro');
+    
+        % Plot the filter
+        x_filter=linspace(0,fs/2,n2);
+        plot(x_filter,fout);
+        axis([100 10000 -30 20])
+        set(gca,'XScale','log')
+        legend('Pralong and Carlile (1996) + extrapolated points', ...
+            'FIR filter');
+        title('Lopez-Poveda and Meddis 2001, Figure 2a) - Pressure gain (dB) as a function of frequency')
+        xlabel('Frequency (Hz)')
+        ylabel('Pressure gain (dB)')
+        hold off
+        
+    elseif flags.do_fig2b
+        p = loglog (stapes_data(:,1),stapes_data(:,2),':ok', 'MarkerFaceColor', 'k');
+        hold on
+        g = loglog (gde(:,1),gde(:,2),':or', 'MarkerFaceColor', 'r');
+        firG = loglog(xplot,fmid,'r');
+        axis([100 10000 1E-10 1E-07])
+        title('Lopez-Poveda and Meddis 2001, Figure 2b) - Stapes peak velocity as a function of frequency')
+        xlabel('Frequency (Hz)')
+        ylabel('Stapes velocity (m/s) at 0dB SPL')
+        legend([g,firG,p],'directly derived from Goode et al. 1994', 'FIR filter with data points from Goode et al. 1994', ...
+        'Control points as in Lopez-Poveda and Meddis 2001')
+        hold off
+    end
+end
+
+
 %% Lopez-Poveda and Meddis 2001, Figure 3
 
 if flags.do_fig3b || flags.do_fig3bc
@@ -335,7 +470,7 @@ if flags.do_fig3b || flags.do_fig3bc
   lin3b = zeros(1,length(fsig));
   nlin3b = zeros(1,length(fsig));
 
-  level = setdbspl(30);
+  level = 20e-6 * 10^(30/20);
   
   for ii = 1:length(fsig)
     
@@ -347,8 +482,6 @@ if flags.do_fig3b || flags.do_fig3bc
     [y_lin, ~] = drnl(insig, fs, f1000{:},'linonly');    
     [y_nlin, ~] = drnl(insig, fs, f1000{:},'nlinonly');
     
-    y_lin = gaindb(y_lin,-50);   % undo the 50dB gain in the drnl (not used in Lopez-Poveda and Meddis 2001)
-    y_nlin = gaindb(y_nlin,-50);
     outsig = y_lin + y_nlin;
     
     result3b(1,ii) = rms(outsig(floor(length(insig)/2):end));
@@ -371,7 +504,7 @@ if flags.do_fig3c || flags.do_fig3bc
   lin3c = zeros(1,length(fsig));
   nlin3c = zeros(1,length(fsig));
   
-  level = setdbspl(85);
+  level = 20e-6 * 10^(85/20);
   
   for ii = 1:length(fsig)
     
@@ -382,8 +515,6 @@ if flags.do_fig3c || flags.do_fig3bc
     [y_lin, ~] = drnl(insig, fs, f1000{:},'linonly');    
     [y_nlin, ~] = drnl(insig, fs, f1000{:},'nlinonly');
 
-    y_lin = gaindb(y_lin,-50);
-    y_nlin = gaindb(y_nlin,-50);
     outsig = y_lin + y_nlin;
         
     result3c(1,ii) = rms(outsig(floor(length(insig)/2):end));
@@ -488,14 +619,14 @@ if flags.do_fig4
   LSDB = 30:0.5:85;           % Signal level
   n=1;
   for jj = 30:0.5:85
-    levelS(n) = setdbspl(jj);
+    levelS(n) = 20e-6 * 10^(jj/20);
     n = n+1;
   end
   
   LMDB = 30:0.5:100;          % Masker level
   n=1;
   for jj = 30:0.5:100
-    levelM(n) = setdbspl(jj);
+    levelM(n) = 20e-6 * 10^(jj/20);
     n = n+1;
   end
   
@@ -521,11 +652,9 @@ if flags.do_fig4
       insig = mask(:,ii) * levelM(kk);
       outsig = filter(hp_fir,1,insig);
       outsigavg = drnl(outsig, fs, expparsavg{ii,:});         % average parameter set, table II
-      outsigavg = gaindb(outsigavg,-50);
       OMavg(kk,ii) = max(outsigavg(floor(length(insig)/2):end));    
       
       outsig = drnl(outsig, fs, expparsYO{ii,:});             % parameter set of YO, table I
-      outsig = gaindb(outsig,-50);
       OM(kk,ii) = max(outsig(floor(length(insig)/2):end));            
     end
     
@@ -537,10 +666,8 @@ if flags.do_fig4
       insig = sig(:,ii) * levelS(mm);
       outsig = filter(hp_fir,1,insig);
       outsigavg = drnl(outsig, fs, expparsavg{ii,:});         % average parameter set, table II
-      outsigavg = gaindb(outsigavg,-50);
       OSavg(mm,ii) = max(outsigavg(floor(length(insig)/2):end)); 
       outsig = drnl(outsig, fs, expparsYO{ii,:});             % parameter set of YO, table I
-      outsig = gaindb(outsig,-50);    
       OS(mm,ii) = max(outsig(floor(length(insig)/2):end)); 
       
       ratio(:,mm,ii) = OS(mm,ii) ./ OM(:,ii);                 % ratio for parameter set of YO, table I
@@ -565,7 +692,6 @@ if flags.do_fig4
       insig = mask(:,ii) * levelM(kk);
       outsig = filter(hp_fir,1,insig);
       outsigrl = drnl(outsig, fs, 'flow', fsig(ii), 'fhigh', fsig(ii), 'basef', fsig(ii), 'lin_ngt', 3, 'nlin_ngt_before', 3, 'nlin_ngt_after', 3, 'nlin_nlp', 3);
-      outsigrl = gaindb(outsigrl,-50);
       OMrl(kk,ii) = max(outsigrl(floor(length(insig)/2):end));                       
     end
     
@@ -573,7 +699,6 @@ if flags.do_fig4
       insig = sig(:,ii) * levelS(mm);
       outsig = filter(hp_fir,1,insig);
       outsigrl = drnl(outsig, fs, 'flow', fsig(ii), 'fhigh', fsig(ii), 'basef', fsig(ii), 'lin_ngt', 3, 'nlin_ngt_before', 3, 'nlin_ngt_after', 3, 'nlin_nlp', 3);
-      outsigrl = gaindb(outsigrl,-50);
       OSrl(mm,ii) = max(outsigrl(floor(length(insig)/2):end)); 
       
       ratiorl(:,mm,ii) = OSrl(mm,ii) ./ OMrl(:,ii);           
