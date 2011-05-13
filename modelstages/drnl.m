@@ -33,12 +33,17 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %-     'middleear'  - Perform middleear filtering before the actual DRNL
 %                     is applied using the middleear filter specified in
 %                     Lopez-Poveda and Meddis (2001), and compensate for
-%                     the effect of the filter after DRNL filtering. This is the
-%                     default.
+%                     the effect of the filter after DRNL filtering. 
+%                     This is the default.
 %
 %-     'nomiddleear'- No middle-ear filtering. Be carefull with this setting,
 %                    as another scaling must then be perform to convert the
 %                    input to stapes movement.
+%   
+%      'fourdb' - Use middleearfilter_jepsen2008 for middleear filtering.
+%                 Note: This includes the assumption, that a linear input value  
+%                 of 1(rms) equals 100dB SPL. Furthermore so far it provides 
+%                 data which is 4dB apart (FIXME).
 %
 %-     'bothparts' - Compute both the linear and the non-linear path of
 %                    the DRNL. This is the default.
@@ -46,6 +51,13 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %-     'linonly'   - Compute only the linear path.
 %
 %-     'nlinonly'  - Compute only the non-linear path.
+%
+%      'noscaling' - No output scaling is used. This is the default.
+%
+%      'scale2adaptloop' - Performs an output scaling of 50dB. When afterwards
+%                          the adaptation stage (adaptloop) is used, apply
+%                          the scaling (together with the expansion stage)
+%                          in order to fit its input range.                          
 %
 %-     'lin_ngt',n - Number of cascaded gammatone filter in the linear
 %                    part, default value is 2.
@@ -67,14 +79,14 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %
 %-     'nlin_ngt_before',n - Number of cascaded gammatone filters in the
 %                    non-linear part before the broken stick
-%                    non-linearity. Default value is 2.
+%                    non-linearity. Default value is 3.
 %
 %-     'nlin_ngt_after',n -  Number of cascaded gammatone filters in the
 %                    non-linear part after the broken stick
-%                    non-linearity. Default value is 2.
+%                    non-linearity. Default value is 3.
 %
 %-     'nlin_nlp',n - Number of cascaded lowpass filters in the
-%                    non-linear part. Default value is 1.
+%                    non-linear part. Default value is 3.
 %
 %-     'nlin_fc_before',fc - Center frequencies of the gammatone filters in the
 %                    non-linear part before the broken stick
@@ -93,13 +105,13 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %                    non-linearity. Default value is [-0.03193 .77426 ].
 %
 %-     'nlin_lp_cutoff',c - Cutoff frequency of the lowpass filters in the
-%                    non-linear part. Default value is [-0.05252 1.01 ].
+%                    non-linear part. Default value is [-0.05252 1.01650 ].
 %
 %-     'nlin_a',a - 'a' coefficient for the broken-stick non-linearity. Default
 %                   value is [1.40298 .81916 ].
 %
 %-     'nlin_b',b - 'b' coefficient for the broken-stick non-linearity. Default
-%                   value is [1.61912 -.81867
+%                   value is [1.61912 -.81867].
 %
 %-     'nlin_c',c - 'c' coefficient for the broken-stick non-linearity. Default
 %                   value is [-.60206 0].
@@ -145,10 +157,11 @@ outsig=zeros(siglen,nchannels,nsigs);
 
 %% Apply the middle-ear filter
 if flags.do_middleear
-  
   me_fir = middleearfilter(fs);
+  insig = filter(me_fir,1,insig);  
+elseif flags.do_fourdb
+  me_fir = middleearfilter_jepsen2008(fs);
   insig = filter(me_fir,1,insig);
-
 end;
 
 %% ---------------- main loop over center frequencies
@@ -258,8 +271,8 @@ for ii=1:nchannels
     
 end;
 
-% Compensate for the middle-ear filter, if it was applied
-if flags.do_middleear
+% Output scaling if flag is set: compensate for the middle-ear filter, if it was applied
+if flags.do_scale2adaptloop %&& flags.do_middleear
   outsig = gaindb(outsig,50);
 end;
 
