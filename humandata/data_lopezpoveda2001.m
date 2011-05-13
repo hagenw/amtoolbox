@@ -108,7 +108,7 @@ if flags.do_fig2b
         hold on
         loglog(extrp(:,1)/1000,extrp(:,2),'ok');
         xlabel('Frequency (kHz)');
-        ylabel('Stapes peak velocity (m/s) at 0dB SPL)');
+        ylabel('Stapes velocity (m/s) at 0dB SPL)');
         axis([0.1,10,1e-10,1e-7]);
       end;
 

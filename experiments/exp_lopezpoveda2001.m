@@ -14,7 +14,7 @@ function output=exp_lopezpoveda2001(varargin)
 %-    'fig2' - reproduces fig 2 from lopezpoveda2001 
 %       Fig 2a represents the outer ear filter - pressure gain (dB) over
 %       frequency with data points from Pralong and Carlile (1996)
-%       Fig 2b represents the middle ear filter - stapes peak velocity at 0dB over frequency
+%       Fig 2b represents the middle ear filter - stapes velocity at 0dB over frequency
 %           in one plot fig 2b shows for default fs = 22050Hz: 
 %           - data points directly derived from Goode et al. 1994
 %           - FIR filter with data points from Goode et al. 1994
@@ -445,7 +445,7 @@ if flags.do_plot
         g = loglog (gde(:,1),gde(:,2),':or', 'MarkerFaceColor', 'r');
         firG = loglog(xplot,fmid,'r');
         axis([100 10000 1E-10 1E-07])
-        title('Lopez-Poveda and Meddis 2001, Figure 2b) - Stapes peak velocity as a function of frequency')
+        title('Lopez-Poveda and Meddis 2001, Figure 2b) - Stapes velocity as a function of frequency')
         xlabel('Frequency (Hz)')
         ylabel('Stapes velocity (m/s) at 0dB SPL')
         legend([g,firG,p],'directly derived from Goode et al. 1994', 'FIR filter with data points from Goode et al. 1994', ...
