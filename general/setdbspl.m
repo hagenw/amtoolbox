@@ -29,6 +29,9 @@ if ~isnumeric(inoutsig)
   error('%s: insig must be numeric.',upper(mfilename));
 end;
 
+% In the code below, "setdbspl" obtains the reference level from "dbspl"
+% by calling "dbspl(1)", which will return only the offset measured in dB.
+
 if nargin==1
   % Special mode, only the level has been given
   lvl=inoutsig;
@@ -37,7 +40,7 @@ if nargin==1
     error('%s: lvl must be a scalar.',upper(mfilename));
   end;
 
-  inoutsig=gaindb(1,lvl-100);
+  inoutsig=gaindb(1,lvl-dbspl(1));
   return;
 end;
 
@@ -54,10 +57,10 @@ end;
 % ------ Computation --------------------------
 
 if isvector(inoutsig)
-  inoutsig = gaindb(inoutsig/rms(inoutsig,varargin{:}),lvl-100);
+  inoutsig = gaindb(inoutsig/rms(inoutsig,varargin{:}),lvl-dbspl(1));
 else
   % If we have a matrix, set the level for every column.
   for ii=1:size(inoutsig,2);
-    inoutsig(:,ii) = gaindb(inoutsig(:,ii)/rms(inoutsig(:,ii),varargin{:}),lvl-100);
+    inoutsig(:,ii) = gaindb(inoutsig(:,ii)/rms(inoutsig(:,ii),varargin{:}),lvl-dbspl(1));
   end;
 end;
