@@ -1,4 +1,4 @@
-function [out, CenterFreq, MF_CFs] = ref_dau1997preproc(insig, fs)
+function [out, CenterFreq, MF_CFs] = ref_jepsen2008preproc(insig, fs)
 %
 %  This is a trimmed down version of CASP_Preproc by Morten Løve Jepsen
 %  to just reproduce the jepsen2008. All values are hardwired.

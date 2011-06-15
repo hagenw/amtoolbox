@@ -40,7 +40,7 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %                    as another scaling must then be perform to convert the
 %                    input to stapes movement.
 %   
-%      'fourdb' - Use middleearfilter_jepsen2008 for middleear filtering.
+%      'fourdb' - Use the jepsen2008 variant of middleear filtering.
 %                 Note: This includes the assumption, that a linear input value  
 %                 of 1(rms) equals 100dB SPL. Furthermore so far it provides 
 %                 data which is 4dB apart (FIXME).
@@ -51,13 +51,6 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %-     'linonly'   - Compute only the linear path.
 %
 %-     'nlinonly'  - Compute only the non-linear path.
-%
-%      'noscaling' - No output scaling is used. This is the default.
-%
-%      'scale2adaptloop' - Performs an output scaling of 50dB. When afterwards
-%                          the adaptation stage (adaptloop) is used, apply
-%                          the scaling (together with the expansion stage)
-%                          in order to fit its input range.                          
 %
 %-     'lin_ngt',n - Number of cascaded gammatone filter in the linear
 %                    part, default value is 2.
@@ -160,7 +153,7 @@ if flags.do_middleear
   me_fir = middleearfilter(fs);
   insig = filter(me_fir,1,insig);  
 elseif flags.do_fourdb
-  me_fir = middleearfilter_jepsen2008(fs);
+  me_fir = middleearfilter(fs,'jepsen');
   insig = filter(me_fir,1,insig);
 end;
 
@@ -270,12 +263,6 @@ for ii=1:nchannels
   outsig(:,ii,:) = reshape(y_lin + y_nlin,siglen,1,nsigs);    
     
 end;
-
-% Output scaling if flag is set: compensate for the middle-ear filter, if it was applied
-if flags.do_scale2adaptloop %&& flags.do_middleear
-  outsig = gaindb(outsig,50);
-end;
-
  
 function outpar=polfun(par,fc)
   %outpar=10^(par(1)+par(2)*log10(fc));

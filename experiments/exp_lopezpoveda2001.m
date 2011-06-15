@@ -23,14 +23,16 @@ function output=exp_lopezpoveda2001(varargin)
 %       The output are the data points of the respective figure.
 %       Dim: [frequency values', data points'] x figure no.
 %
-%     'fig2a' - reproduces just fig 2a
-%     'fig2b' - reproduces just fig 2b
+%-    'fig2a' - reproduces just fig 2a
 %
-%-    'fig3bc' - reproduces fig 3b and c from lopezpoveda2001 
-%       Isointensity response of the linear, nonlinear and summed response 
-%       of the DRNL filter for an input level of 30dB (fig 3b) and 85dB (fig 3c) SPL 
-%       The output is the output of the DRNL filter for the different input levels.
-%       Dim: input frequency x [frequency values, linear output, nonlinear output, summed DRNL output] x input level
+%-    'fig2b' - reproduces just fig 2b
+%
+%-    'fig3bc' - reproduces fig 3b and c from lopezpoveda2001 Isointensity
+%       response of the linear, nonlinear and summed response of the DRNL
+%       filter for an input level of 30dB (fig 3b) and 85dB (fig 3c) SPL The
+%       output is the output of the DRNL filter for the different input
+%       levels.  Dim: input frequency x [frequency values, linear output,
+%       nonlinear output, summed DRNL output] x input level
 %
 %-    'fig3b' - reproduces just fig 3b
 %

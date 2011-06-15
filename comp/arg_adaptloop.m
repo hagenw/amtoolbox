@@ -1,4 +1,4 @@
-function definput=arg_drnl(definput)
+function definput=arg_adaptloop(definput)
  
   definput.keyvals.limit=10;
   definput.keyvals.minlvl=0;
