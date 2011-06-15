@@ -16,8 +16,8 @@ function plotlikelilangendijk(la,le,ci,tit)
 if ~exist('tit','var')
     tit='';
 end
-figure('Name','Likelihood statistic','NumberTitle','off');
-clf
+% figure('Name','Likelihood statistic','NumberTitle','off');
+% clf
 hold on
 plot(0.5:length(la)+0.5,275*ones(length(la)+1,1),'k:') % unimodal
 plot(0.5:length(la)+0.5,350*ones(length(la)+1,1),'k:') % bimodal

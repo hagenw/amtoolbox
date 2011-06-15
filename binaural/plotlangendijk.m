@@ -17,9 +17,9 @@ function [ out ] = plotlangendijk( p,rang,tang,name,latang,delta,deltat,cond,col
 % latest update: 2010-08-05
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-figure('Name','Localization model','NumberTitle','off');
-clf
-pcolor(rang,tang,p)
+% figure('Name','Localization model','NumberTitle','off');
+% clf
+pcolor(tang,rang,p)
 load('LangendijkColormap','langecmap');
 set(gcf,'Colormap',langecmap);
 shading interp
