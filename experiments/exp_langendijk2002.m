@@ -1,5 +1,7 @@
 %DEMO_LANGENDIJK  Demo of the localization model of Langendijk & Bronkhorst 2002
 %
+%   Validation of Langendijk et al. (2002)
+%
 %   This script generates figures showing the results of the localization 
 %   model based on the simulation shown in the related paper of Langendijk &
 %   Bronkhorst 2002. 
@@ -28,9 +30,7 @@
 %
 %   See also: langendijk, likelilangendijk, plotlangendijk, plotlikelilangendijk
 
-
-% Validation of Langendijk et al. (2002)
-% 
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 % latest update: 2010-08-16
@@ -66,16 +66,17 @@ load(['langendijk2002-' listener]);
 % medir1oh=gr2ir(med,'1oh',fs);
 
 % pdf calcualtion
+h = waitbar(0,'Please wait...');
 pb  = langendijk( medir   ,medir); % baseline
-disp('1/5')
+waitbar(1/5)
 p2o = langendijk( medir2o ,medir); % 2-oct (4-16kHz)
-disp('2/5')
+waitbar(2/5)
 p1ol= langendijk( medir1ol,medir); % 1-oct (low:4-8kHz)
-disp('3/5')
+waitbar(3/5)
 p1om= langendijk( medir1om,medir); % 1-oct (middle:5.7-11.3kHz)
-disp('4/5')
+waitbar(4/5)
 p1oh= langendijk( medir1oh,medir); % 1-oct (high:8-16kHz)
-disp('5/5')
+waitbar(5/5)
 
 % likelihood estimations
 la=zeros(5,1);le=zeros(5,1);ci=zeros(5,2);
@@ -85,18 +86,25 @@ idb=1:2:length(targetb); % in order to get comparable likelihoods
 [la(3),le(3),ci(3,:)] = likelilangendijk( p1ol,pol,pol,targetc,response1ol );
 [la(4),le(4),ci(4,:)] = likelilangendijk( p1om,pol,pol,targetc,response1om );
 [la(5),le(5),ci(5,:)] = likelilangendijk( p1oh,pol,pol,targetc,response1oh );
+close(h)
 
 % pdf plots with actual responses
+figure('Name','Localization model','NumberTitle','off');
 plotlangendijk(pb,pol,pol,[listener '; ' 'baseline']);
 hold on; h=plot( targetb, responseb, 'ko'); set(h,'MarkerFaceColor','w')
+figure('Name','Localization model','NumberTitle','off');
 plotlangendijk(p2o,pol,pol,[listener '; ' '2-oct (4-16kHz)']);
 hold on; h=plot( targetc, response2o, 'ko'); set(h,'MarkerFaceColor','w')
+figure('Name','Localization model','NumberTitle','off');
 plotlangendijk(p1ol,pol,pol,[listener '; ' '1-oct (low: 4-8kHz)']);
 hold on; h=plot( targetc, response1ol, 'ko'); set(h,'MarkerFaceColor','w')
+figure('Name','Localization model','NumberTitle','off');
 plotlangendijk(p1om,pol,pol,[listener '; ' '1-oct (middle: 5.7-11.3kHz)']);
 hold on; h=plot( targetc, response1om, 'ko'); set(h,'MarkerFaceColor','w')
+figure('Name','Localization model','NumberTitle','off');
 plotlangendijk(p1oh,pol,pol,[listener '; ' '1-oct (high: 8-16kHz)']);
 hold on; h=plot( targetc, response1oh, 'ko'); set(h,'MarkerFaceColor','w')
 
 % likelihood statistic
+figure('Name','Likelihood statistic','NumberTitle','off')
 plotlikelilangendijk(la,le,ci)

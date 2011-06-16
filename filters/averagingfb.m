@@ -16,7 +16,7 @@ function [ outsig ] = averagingfb( insig,fs,varargin )
   
 % AUTHOR : Robert Baumgartner
 
-  size(insig)
+%   size(insig);
   
   definput.keyvals.flow=2000;
   definput.keyvals.fhigh=16000;
