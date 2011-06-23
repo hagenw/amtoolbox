@@ -394,13 +394,13 @@ if flags.do_plot
         % Plot the measured data
         x=hpdata(:,1);
         freqresp=20*log10(hpdata(:,2));
-        plot(x,freqresp,'ro');
+        plot(x,freqresp,'ro','MarkerFaceColor', 'r');
     
         % Plot the filter
         x_filter=linspace(0,fs/2,n2);
         plot(x_filter,fout);
         axis([100 10000 -30 20])
-        set(gca,'XScale','log')
+        set(gca,'XScale','log','YTick',[-30,-20,-10,0,10,20])
         set(gca,'Position',[0.15,0.55,0.8,0.4]);
         leg1=legend('Pralong and Carlile (1996) + extrapolated points', ...
             'FIR filter');
@@ -427,13 +427,13 @@ if flags.do_plot
         % Plot the measured data
         x=hpdata(:,1);
         freqresp=20*log10(hpdata(:,2));
-        plot(x,freqresp,'ro');
+        plot(x,freqresp,'ro','MarkerFaceColor', 'r');
     
         % Plot the filter
         x_filter=linspace(0,fs/2,n2);
         plot(x_filter,fout);
         axis([100 10000 -30 20])
-        set(gca,'XScale','log')
+        set(gca,'XScale','log','YTick',[-30,-20,-10,0,10,20])
         legend('Pralong and Carlile (1996) + extrapolated points', ...
             'FIR filter');
         title('Lopez-Poveda and Meddis 2001, Figure 2a) - Pressure gain (dB) as a function of frequency')
@@ -721,7 +721,7 @@ if flags.do_fig4
     plot(LSDB,LMDB(indxrl(:,1)),'--')
     plot(LSDB,LSDB,':')
     grid on
-    set(gca,'XLim',[20 90],'Layer','top')
+    set(gca,'XLim',[20 90],'Layer','top','YTick',[55,65,75,85,95])
     axis([20,90,55,100]);
     title('250 Hz')
     xlabel('Signal level (dB SPL)')
@@ -734,7 +734,7 @@ if flags.do_fig4
     plot(LSDB,LMDB(indxrl(:,2)),'--')
     plot(LSDB,LSDB,':')
     grid on
-    set(gca,'XLim',[20 90],'Layer','top')
+    set(gca,'XLim',[20 90],'Layer','top','YTick',[55,65,75,85,95])
     axis([20,90,55,100]);
     title('500 Hz')
     xlabel('Signal level (dB SPL)')
@@ -747,7 +747,7 @@ if flags.do_fig4
     plot(LSDB,LMDB(indxrl(:,3)),'--')
     plot(LSDB,LSDB,':')
     grid on
-    set(gca,'XLim',[20 90],'Layer','top')
+    set(gca,'XLim',[20 90],'Layer','top','YTick',[55,65,75,85,95])
     axis([20,90,55,100]);
     title('1000 Hz')
     xlabel('Signal level (dB SPL)')
@@ -760,7 +760,7 @@ if flags.do_fig4
     plot(LSDB,LMDB(indxrl(:,4)),'--')
     plot(LSDB,LSDB,':')
     grid on
-    set(gca,'XLim',[20 90],'Layer','top')
+    set(gca,'XLim',[20 90],'Layer','top','YTick',[55,65,75,85,95])
     axis([20,90,55,100]);
     title('2000 Hz')
     xlabel('Signal level (dB SPL)')
@@ -773,7 +773,7 @@ if flags.do_fig4
     plot(LSDB,LMDB(indxrl(:,5)),'--')
     plot(LSDB,LSDB,':')
     grid on
-    set(gca,'XLim',[20 90],'Layer','top')
+    set(gca,'XLim',[20 90],'Layer','top','YTick',[55,65,75,85,95])
     axis([20,90,55,100]);
     title('4000 Hz')
     xlabel('Signal level (dB SPL)')
@@ -786,7 +786,7 @@ if flags.do_fig4
     plot(LSDB,LMDB(indxrl(:,6)),'--')
     plot(LSDB,LSDB,':')
     grid on
-    set(gca,'XLim',[20 90],'Layer','top')
+    set(gca,'XLim',[20 90],'Layer','top','YTick',[55,65,75,85,95])
     axis([20,90,55,100]);
     title('8000 Hz')
     xlabel('Signal level (dB SPL)')
