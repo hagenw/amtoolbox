@@ -4,6 +4,14 @@ function test_failed=test_adaptloop
 %  Test the adaptation loop implementation by comparing it to a reference
 %  implementation.
 
+% The reference implementations are not dbspl-safe, so switch to the
+% dboffset=100 setting.
+  
+save_dboffset = dbspl(1);
+
+ltfatsetdefaults('dbspl','dboffset',100);
+
+  
 if 0
   f  = greasy;
   L=length(f);
@@ -58,7 +66,7 @@ for w=1:2
 
 
       res=norm(s1(:)-s2(:))/norm(s1);
-      [test_failed,fail]=amtdiditfail(res,test_failed);
+      [test_failed,fail]=ltfatdiditfail(res,test_failed);
       s=sprintf('REF_ADAPT %s %s L: %3i W:%2i %0.5g %s',slimit,tauname,L,w,res,fail);
       disp(s);
 
@@ -73,7 +81,7 @@ for w=1:2
         end;        
       
         res=norm(s1(:)-s3(:))/norm(s3);
-        [test_failed,fail]=amtdiditfail(res,test_failed);
+        [test_failed,fail]=ltfatdiditfail(res,test_failed);
         s=sprintf('NLAL_LIM  %s %s L: %3i W:%2i %0.5g %s',slimit,tauname,L,w,res,fail);
         disp(s);
       end;
@@ -91,10 +99,12 @@ for w=1:2
       
       %[9999,norm(s2(:)-s4(:))]
       
-      [test_failed,fail]=amtdiditfail(res,test_failed);
+      [test_failed,fail]=ltfatdiditfail(res,test_failed);
       s=sprintf('BLOCK     %s %s L: %3i W:%2i %0.5g %s',slimit,tauname,L,w,res,fail);
       disp(s);
       
     end;
   end;
 end;
+
+ltfatsetdefaults('dbspl','dboffset',save_dboffset);

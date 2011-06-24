@@ -19,7 +19,7 @@ ref_MiddleEarFilter(fs);
 fr=OuterMiddleFilter(f);
 
 outer_ear_fir_coeff=headphonefilter(fs);
-mid_ear_fir_coeff=middleearfilter(fs);
+mid_ear_fir_coeff=middleearfilter(fs,'jepsenmiddleear');
 
 ff = fftfilt(outer_ear_fir_coeff,f);
 ff = fftfilt(mid_ear_fir_coeff,ff);
@@ -28,3 +28,4 @@ res=norm(ff(:)-fr(:));
 
 [test_failed,fail]=ltfatdiditfail(res,test_failed);
 
+disp(sprintf('OUTER+MIDDLE %0.5g %s',res,fail));

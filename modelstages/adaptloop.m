@@ -74,7 +74,17 @@ end;
 [inoutsig,siglen,dummy,nsigs,dim,permutedsize,order]=assert_sigreshape_pre(inoutsig,[],keyvals.dim, ...
                                                   upper(mfilename));
 
-% minlvl is converted from dB SPL to an absolute no. value
+% The current implementation of the adaptation loops works with
+% dboffset=100, so we must change to this setting.
+% The output is always the same, so there is no need for changing back.
+ 
+% Obtain the dboffset currently used.
+dboffset=dbspl(1);
+
+% Switch the minimum level and signal to the correct scaling.
+minlvl=gaindb(minlvl,dboffset-100);
+inoutsig=gaindb(inoutsig,dboffset-100);
+
 inoutsig=comp_adaptloop(inoutsig,fs,limit,minlvl,tau);
 
 inoutsig=assert_sigreshape_post(inoutsig,dim,permutedsize,order);

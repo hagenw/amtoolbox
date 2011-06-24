@@ -1,4 +1,20 @@
-testsig=4;
+function test_failed=test_drnl
+%TEST_DRNL  Test the DRNL
+%
+%  Test if the DRNL produce the same results as the reference implementation.
+%
+%  
+
+disp(' ===============  TEST_DRNL ================');
+
+% The reference implementations are not dbspl-safe, so switch to the
+% dboffset=100 setting.
+  
+save_dboffset = dbspl(1);
+
+ltfatsetdefaults('dbspl','dboffset',100);
+
+testsig=2;
 
 switch testsig
   case 1
@@ -30,6 +46,8 @@ for ii=1:nfc
 end;
 
 outsig=drnl(insig,fs,'jepsen2008');
+outsig=gaindb(outsig,50);
+
 outsig_ref_1=ref_drnl_1(insig,fs,'jepsen2008');
 
 
@@ -47,6 +65,9 @@ fprintf('Peak SNR: %f\n',20*log10(norm(res(:),inf)/norm(outsig_ref(:),inf)));
 
 % Test binaural
 binoutsig=drnl([insig,insig],fs,'jepsen2008');
+binoutsig=gaindb(binoutsig,50);
+
 res=2*outsig-binoutsig(:,:,1)-binoutsig(:,:,2);
 fprintf('Binaural: %f\n',norm(res(:)));
 
+ltfatsetdefaults('dbspl','dboffset',save_dboffset);

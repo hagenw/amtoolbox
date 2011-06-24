@@ -152,6 +152,16 @@ if flags.do_fig2b
 
     data = [extrp(extrp(:,1) < data(1,1),:); data; extrp(extrp(:,1) > data(end,1),:)];
 
+    if flags.do_plot
+      figure;
+      loglog(data(:,1)/1000,data(:,2),'ok', 'MarkerFaceColor', 'k');
+      hold on
+      loglog(extrp(:,1)/1000,extrp(:,2),'ok');
+      xlabel('Frequency (kHz)');
+      ylabel('Stapes velocity (m/s) at 0dB SPL)');
+      axis([0.1,10,1e-10,1e-7]);
+    end;
+
   end
   
 end;

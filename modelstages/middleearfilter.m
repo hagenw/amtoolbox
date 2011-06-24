@@ -33,7 +33,7 @@ function b = middleearfilter(fs,varargin)
 %% ------ Check input options --------------------------------------------
 
 % Define input flags
-definput.flags.filtertype = {'lopezpoveda','jepsen'};
+definput.flags.filtertype = {'lopezpoveda','jepsenmiddleear'};
 definput.flags.phase = {'minimum','zero'};
 definput.keyvals.order = 512;
 
@@ -92,7 +92,9 @@ if flags.do_lopezpoveda
     
   end
   
-else
+end;
+
+if flags.do_jepsenmiddleear
     
   stapes_data = [...
       50,	 48046.39731;...

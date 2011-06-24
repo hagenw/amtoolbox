@@ -40,7 +40,7 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %                    as another scaling must then be perform to convert the
 %                    input to stapes movement.
 %   
-%      'fourdb' - Use the jepsen2008 variant of middleear filtering.
+%      'jepsen' - Use the jepsen2008 variant of middleear filtering.
 %                 Note: This includes the assumption, that a linear input value  
 %                 of 1(rms) equals 100dB SPL. Furthermore so far it provides 
 %                 data which is 4dB apart (FIXME).
@@ -148,12 +148,24 @@ nchannels  = length(fc);
 
 outsig=zeros(siglen,nchannels,nsigs);
 
+% The current implementation of the DRNL works with
+% dboffset=100, so we must change to this setting.
+% The output is always the same, so there is no need for changing back.
+ 
+% Obtain the dboffset currently used.
+dboffset=dbspl(1);
+
+% Switch signal to the correct scaling.
+insig=gaindb(insig,dboffset-100);
+
 %% Apply the middle-ear filter
 if flags.do_middleear
   me_fir = middleearfilter(fs);
   insig = filter(me_fir,1,insig);  
-elseif flags.do_fourdb
-  me_fir = middleearfilter(fs,'jepsen');
+end;
+
+if flags.do_jepsenmiddleear
+  me_fir = middleearfilter(fs,'jepsenmiddleear');
   insig = filter(me_fir,1,insig);
 end;
 
