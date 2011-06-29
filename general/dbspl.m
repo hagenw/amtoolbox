@@ -12,7 +12,7 @@ function y = dbspl(insig,varargin)
 %   used values are:
 %
 %     * dboffset = 0. This convention was used for the development of the
-%     DRNL and Breebart models.
+%     DRNL and Breebaart models.
 %
 %     * dboffset = -20*log10(20e-6) = 93.98. This corresponds to the common
 %     convention of the reference being 20 micro Pa RMS. Using this

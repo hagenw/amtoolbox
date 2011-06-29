@@ -16,7 +16,7 @@
 % 					improve speed.
 %
 % COMMENT BY PETER: The code in ihc.c produces /almost/ the same result
-% as ihcenvelope(x,fs,'breebart');
+% as ihcenvelope(x,fs,'breebaart');
 
 
 % This file does not include source code but is intended as

@@ -2,9 +2,9 @@
 %
 %  The AMT team, 2011.
 %
-%  The Breebart model
-%     BREEBART2001PREPROC  - Preprocessing stage only
-%     BREEBART2001         - Preprocessing and decision stage
+%  The Breebaart model
+%     BREEBAART2001PREPROC  - Preprocessing stage only
+%     BREEBAART2001         - Preprocessing and decision stage
 %
 %  The Lindemann model
 %     LINDEMANN         - Calculate a binaural activity map

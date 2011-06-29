@@ -36,8 +36,8 @@ for idx = 1 : ERBnum,
   x2h_ref(:,idx) = ihc( x2g(:,idx) , fs);
 end
 
-x1h = ihcenvelope(x1g,fs,'breebart');
-x2h = ihcenvelope(x2g,fs,'breebart');
+x1h = ihcenvelope(x1g,fs,'breebaart');
+x2h = ihcenvelope(x2g,fs,'breebaart');
 
 % feed signals through adaptation loops:
 for idx=1:ERBnum

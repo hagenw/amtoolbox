@@ -1,5 +1,5 @@
-function decision=breebart2001(intervals,fs,tau,alpha)
-%BREEBART2001  The Breebart2001 model
+function decision=breebaart2001(intervals,fs,tau,alpha)
+%BREEBAART2001  The Breebaart2001 model
 %
 %  Input arguments:
 %    Intervals  - Maxtrix of intervals. Dimensions: time, channel,
@@ -9,7 +9,7 @@ function decision=breebart2001(intervals,fs,tau,alpha)
 %  
   
 % Compute the preprocessing of all the intervals
-ir_all = breebart2001preproc(intervals,fs);
+ir_all = breebaart2001preproc(intervals,fs);
 
 [siglen,nfreqchannels,naudiochannels,nifc] = size(ir_all);
 

@@ -1,17 +1,17 @@
-function [outsig, fc] = breebart2001preproc(insig, fs, varargin);
-%BREEBART2001PREPROC   Auditory model from Dau et. al. 1996.
-%   Usage: [outsig, fc] = breebart2001preproc(insig,fs);
-%          [outsig, fc] = breebart2001preproc(insig,fs,...);
+function [outsig, fc] = breebaart2001preproc(insig, fs, varargin);
+%BREEBAART2001PREPROC   Auditory model from Breebaart et. al. 2001
+%   Usage: [outsig, fc] = breebaart2001preproc(insig,fs);
+%          [outsig, fc] = breebaart2001preproc(insig,fs,...);
 %
 %   Input parameters:
 %     insig  : input acoustic signal.
 %     fs     : sampling rate.
 %  
-%   BREEBART2001PREPROC(insig,fs) computes the internal representation of
+%   BREEBAART2001PREPROC(insig,fs) computes the internal representation of
 %   the signal insig sampled with a frequency of fs Hz as described in
-%   Breebart (2001).
+%   Breebaart (2001).
 %  
-%   [outsig,fc]=BREEBART2001PREPROC(...) additionally returns the center
+%   [outsig,fc]=BREEBAART2001PREPROC(...) additionally returns the center
 %   frequencies of the filter bank.
 %
 %   The following parameters may be passed at the end of the line of
@@ -30,7 +30,7 @@ function [outsig, fc] = breebart2001preproc(insig, fs, varargin);
 %   The model assumes than a pure tone input signal with an RMS value of 1
 %   corresponds to an acoustic signal of 100 db SPL.
 %  
-%   The breebart2001 model consists of the following stages:
+%   The breebaart2001 model consists of the following stages:
 %   
 %     * a gammatone filter bank with 1-erb spaced filters.
 %
@@ -77,10 +77,10 @@ fc = erbspacebw(flow, fhigh, 1, basef);
 outsig = 2*real(filterbankz(gt_b,gt_a,insig));
 
 % 'haircell' envelope extraction
-outsig = ihcenvelope(outsig,fs,'breebart');
+outsig = ihcenvelope(outsig,fs,'breebaart');
 
 % non-linear adaptation loops
-outsig = adaptloop(outsig,fs,'breebart');
+outsig = adaptloop(outsig,fs,'breebaart');
 
 
 
