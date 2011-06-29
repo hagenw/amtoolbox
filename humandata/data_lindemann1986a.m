@@ -40,6 +40,10 @@ function data = data_lindemann1986a(varargin)
 %
 %    If no flag is given, the function will print the list of valid flags.
 %
+%   Simpledemo:  data_lindemann1986a('fig11_yost','plot');
+%
+%   Simpledemo:  data_lindemann1986a('fig11_sayers','plot');
+%
 %R  lindemann1986a
 
 %   AUTHOR: Hagen Wierstorf
@@ -84,7 +88,6 @@ if flags.do_fig11_yost
            18 10.0 ];
   % Plotting
   if flags.do_plot
-    figure;
     plot(data(:,1),data(:,2)*0.058,'+');
     axis([0 25 0 0.8]);
     legend('500 Hz, Yost');
@@ -100,7 +103,6 @@ if flags.do_fig11_sayers
            12  8.9 ];
   % Plotting
   if flags.do_plot
-    figure;
     plot(data(:,1),data(:,2)*0.058,'*');
     axis([0 25 0 0.8]);
     legend('600 Hz, Sayers');
@@ -120,7 +122,6 @@ if flags.do_fig12_400
            0.00  0.1 ];
   % Plotting
   if flags.do_plot
-    figure;
     plot(data(:,1),data(:,2),'+');
     axis([-1 0 0 10]);
     legend('Trading experiment of Young, 400 Hz');
@@ -140,7 +141,6 @@ if flags.do_fig12_600
            0.00  0.4 ];
   % Plotting
   if flags.do_plot
-    figure;
     plot(data(:,1),data(:,2),'*');
     axis([-1 0 0 10]);
     legend('Trading experiment of Young, 600 Hz');
@@ -166,7 +166,6 @@ if flags.do_fig13
            1.0   2  19  30  37  38 ];
   % Plotting
   if flags.do_plot
-    figure;
     plot(data(:,1),data(:,2),'x-r', ...   % -3dB
          data(:,1),data(:,3),'x-b', ...   %  3dB
          data(:,1),data(:,4),'x-g', ...   %  9dB
@@ -193,7 +192,6 @@ if flags.do_fig16
            0.000  11.1 ];
   % Plotting
   if flags.do_plot
-    figure;
     plot(data(:,1),data(:,2),'+');
     axis([-1 0 0 15]);
     legend('f = 500 Hz');
@@ -214,7 +212,6 @@ if flags.do_fig17
            9  0.17  0.25  0.34  0.42 ];
   % Plotting
   if flags.do_plot
-    figure;
     plot(data(:,1),data(:,5),'x-r', ...   %  0 ms
          data(:,1),data(:,4),'x-b', ...   %  0.09 ms
          data(:,1),data(:,3),'x-g', ...   %  0.18 ms

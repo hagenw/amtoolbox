@@ -1,6 +1,6 @@
 % AMT Testing - Testing AMT
 %
-%   The AMT team, 2010.
+%   The AMT team, 2011.
 %
 %   General routines
 %       TEST_ALL_AMT    - test all amt functions

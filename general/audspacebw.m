@@ -43,8 +43,7 @@ if flow>fhigh
   error('%s: flow must be less than or equal to fhigh.',upper(mfilename));
 end;
 
-
-definput.flags.scale={'missingflag','mel','bark','erb','erb83'};
+definput.import={'freqtoaud'};
 definput.keyvals.hitme=[];
 definput.keyvals.bw=1;
 
@@ -59,7 +58,7 @@ end;
 
 if isempty(kv.hitme)
   % Convert the frequency limits to auds.
-  audlimits = freqtoaud([flow,fhigh],flags.scale);
+  audlimits = freqtoaud([flow,fhigh],flags.audscale);
   audrange  = audlimits(2)-audlimits(1);
 
   % Calculate number of points, excluding final point
@@ -77,7 +76,7 @@ if isempty(kv.hitme)
 else
     
   % Convert the frequency limits to auds.
-  audlimits    = freqtoaud([flow,fhigh,kv.hitme],flags.scale);
+  audlimits    = freqtoaud([flow,fhigh,kv.hitme],flags.audscale);
   audrangelow  = audlimits(3)-audlimits(1);
   audrangehigh = audlimits(2)-audlimits(3);
 
@@ -89,4 +88,4 @@ else
   n=nlow+nhigh+1;
 end;
 
-y = audtofreq(audpoints,flags.scale);
+y = audtofreq(audpoints,flags.audscale);

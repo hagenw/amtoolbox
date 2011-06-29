@@ -1,4 +1,4 @@
-function s = adaptloop_init(nsigs,fs,limit,minlvl,tau);
+function s = adaptloop_init(nsigs,fs,varargin);
 %ADAPTLOOP   Adaptation loops.
 %   Usage: s = adaptloop(nsigs,fs,limit,minlvl,tau);
 %          s = adaptloop(nsigs,fs,limit,minlvl);
@@ -27,37 +27,13 @@ function s = adaptloop_init(nsigs,fs,limit,minlvl,tau);
 % ------ Checking of input parameters and default parameters ---------
 
 error(nargchk(2,5,nargin));
-  
-% Default parameters for tau measured in seconds.
-if nargin<5
-  tau=[0.005 0.050 0.129 0.253 0.500];
-else
-  if ~isnumeric(tau) || ~isvector(tau) || any(tau<=0)
-    error('%s: tau must be a vector with positive values.',upper(mfilename));
-  end;
-end;
 
-if nargin<4
-  minlvl =1e-5;
-else
-  if ~isnumeric(minlvl) || ~isscalar(minlvl) || minlvl<=0
-    error('%s: minlvl must be a positive scalar.',upper(mfilename));
-  end;
-end;
+definput.keyvals.dim=[];
+definput.import = {'adaptloop'};
+[flags,keyvals,limit,minlvl_db,tau]  = ltfatarghelper({'limit','minlvl','tau'},definput,varargin);
 
-if nargin<3
-  limit = 10;
-else
-  if ~isnumeric(limit) || ~isscalar(limit) 
-    error('%s: "limit" must be a scalar.',upper(mfilename));
-  end;  
-end;
-
-% -------- Computation ------------------
-
-if nargin<4
-  tau=[0.005 0.050 0.129 0.253 0.500];
-end;
+% Convert minlvl
+minlvl=setdbspl(minlvl_db);
 
 % -------- Computation ------------------
 

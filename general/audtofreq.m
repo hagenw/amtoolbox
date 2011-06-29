@@ -6,7 +6,7 @@ function freq = audtofreq(aud,varargin);
 %   values on the frequency scale measured in Hz.
 %
 %   See the help on FREQTOAUD to get a list of the supported values of the
-%   scale parameter. 
+%   scale parameter. If no scale is given, the erb-scale will be selected by default.
 %
 %   See also: freqtoaud, audspace, audfiltbw
 
@@ -23,24 +23,21 @@ if ~isnumeric(aud) ||  all(aud(:)<0)
   error('%s: aud must be a non-negative number.',upper(mfilename));
 end;
 
-definput.flags.scale={'missingflag','mel','bark','erb','erb83'};
+definput.import={'freqtoaud'};
 [flags,kv]=ltfatarghelper({},definput,varargin);
-
-if flags.do_missingflag
-  flagnames=[sprintf('%s, ',definput.flags.scale{2:end-2}),...
-             sprintf('%s or %s',definput.flags.scale{end-1},...
-                     definput.flags.scale{end})];
-  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
-end;
 
 %% ------ Computation --------------------------
   
 if flags.do_mel
-  freq = 700*(exp(aud/1127.01048)-1);
+  freq = 700*(exp(aud*log(17/7)/1000)-1);
+end;
+
+if flags.do_mel1000
+  freq = 1000*(exp(aud*log(2)/1000)-1);
 end;
 
 if flags.do_erb
-  freq = 228.8455*(exp(aud/9.265)-1);
+freq = (1/0.00437)*(exp(aud/9.2645)-1);
 end;
 
 if flags.do_bark
@@ -50,4 +47,8 @@ end;
 
 if flags.do_erb83
     freq = 14363./(1-exp((aud-43.0)/11.7))-14675;
+end;
+
+if flags.do_freq
+    freq=aud;
 end;

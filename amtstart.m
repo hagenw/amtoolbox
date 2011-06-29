@@ -37,7 +37,33 @@ if ~exist('ltfatarghelper','file')
          'and then call the LTFATSTART command BEFORE you call ' ...
           'AMTSTART.'])
 end;
-          
+
+% Check for the correct version
+% Required version is given by:
+major_rq  = 0;
+minor_rq  = 98;
+bugfix_rq = 1;
+
+
+s=ltfathelp('version');
+
+% Split into major, minor and bugfix version.
+stops=find(s=='.');
+major_no  = str2num(s(1:stops(1)));
+if numel(stops)==1
+  minor_no  = str2num(s(stops(1)+1:end));
+  bugfix_no = 0;
+else
+  minor_no  = str2num(s(stops(1)+1:stops(2)));
+  bugfix_no = str2num(s(stops(2)+1:end));
+end;
+
+% Do the check, multiply by some big number to make the check easy
+if major_rq*1000000+minor_rq*1000+bugfix_rq>major_no*1000000+minor_no*1000+ ...
+            bugfix_no
+  error(['Your version of LTFAT is too old for this version of AMToolbox ' ...
+         'to function proberly. Your need at least version %i.%i.%i of LTFAT.'],major_rq,minor_rq,bugfix_rq);
+end;
           
 % --- general settings ---
 % Print the banner at startup?

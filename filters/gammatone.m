@@ -1,4 +1,4 @@
-function [b,a,delay]=gammatone(fc,fs,varargin);
+function [b,a,delay]=gammatone(fc,fs,varargin)
 %GAMMATONE  Gammatone filter coefficients
 %   Usage: [b,a] = gammatone(fc,fs,n,betamul);
 %          [b,a] = gammatone(fc,fs,n);
@@ -20,8 +20,10 @@ function [b,a,delay]=gammatone(fc,fs,varargin);
 %   determined as betamul times AUDFILTBW of the center frequency of
 %   corresponding filter.
 %
-%   The returned filter coefficients comes from the all-pole
-%   approximation described in Hohmann (2002).
+%   By default, the returned filter coefficients comes from the all-pole
+%   approximation described in Lyon (1997). The filters are normalized to
+%   have a 0 dB attenuation at the center frequency (another way of
+%   stating this is that their impulse responses will have unit area).
 %
 %   GAMMATONE(fc,fs,n) will do the same but choose a filter bandwidth
 %   according to Glasberg and Moore (1990).
@@ -37,16 +39,34 @@ function [b,a,delay]=gammatone(fc,fs,varargin);
 %M    g(t) = a*t^(n-1)*cos(2*pi*fc*t)*exp(-2*pi*beta*t)
 %F  \[g(t) = at^{n-1}cos(2\pi\cdot fc\cdot t)e^{-2\pi \beta \cdot t}\]
 %
-%   GAMMATONE( ..., 'complex') will generate filter coefficients
-%   corresponding to a complex valued filterbank modulated by exponential
-%   functions. This is usefull for envelope extration purposes.
+%   GAMMATONE takes the following flags at the end of the line of input
+%   arguments:
+%
+%-     'allpole' - Compute the all-pole approximation of Gammatone
+%                  filters by Lyon. This is the default
+%
+%-     'classic' - Compute the classical mixed pole-zero approximation of 
+%                  gammatone filters.
+%  
+%-     'complex' - Generate filter coefficients corresponding to a
+%                  complex valued filterbank modulated by exponential
+%                  functions. This is useful for envelope extration
+%                  purposes.
+%
+%-     'real'    - Generate real-valued filters.
+%
+%-     'casualphase' - This makes the phase of each filter start at zero.
+%                  This is the default.
+%
+%-     'peakphase' - This makes the phase of each filter be zero when the
+%                  envelope of the impulse response of the filter peaks.
 %
 %   To create the filter coefficients of a 1-erb spaced filter bank using
 %   gammatone filters use the following construction
 %
 %C    [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 %  
-%R  aertsen1980strI patterson1988efficient glasberg1990daf hohmann2002frequency
+%R  aertsen1980strI patterson1988efficient lyon1997all
   
 %   AUTHOR : Stephan Ewert, Peter L. Soendergaard
 
@@ -75,6 +95,7 @@ definput.keyvals.n=4;
 definput.keyvals.betamul=[];
 definput.flags.real={'real','complex'};
 definput.flags.phase={'causalphase','peakphase'};
+definput.flags.filtertype={'allpole','classic'};
 
 [flags,keyvals,n,betamul]  = ltfatarghelper({'n','betamul'},definput,varargin);
 
@@ -96,56 +117,187 @@ end;
 
 % ------ Computation --------------------------
 
-if flags.do_real
-  error(['GAMMATONE: It is currently not possible to generate coefficients for a real-valued ', ...
-         'filterbank. Please add the "complex" flag, and use 2*real(filterbank(', ...
-         '...)) to process your signal.']);
-end;      
+% ourbeta is used in order not to mask the beta function.  
+ourbeta = betamul*audfiltbw(fc);
 
 nchannels = length(fc);
 
-b=zeros(nchannels,1);
-a=zeros(nchannels,n+1);
+if flags.do_allpole
 
-% ourbeta is used in order not to mask the beta function.
+  if flags.do_real
 
-ourbeta = betamul*audfiltbw(fc);
+    warning(['FIXME: The real-valued allpole filters are not scaled ' ...
+             'correctly.']);
+    
+    
+    b=zeros(nchannels,1);
+    a=zeros(nchannels,2*n+1);
+        
+    % This is when the function peaks.
+    delay = 3./(2*pi*ourbeta);
 
-% This is when the function peaks.
-delay = 3./(2*pi*ourbeta);
+    for ii = 1:nchannels
+      % convert to radians
+      theta = 2*pi*fc(ii)/fs;
+      phi   = 2*pi*ourbeta(ii)/fs;
 
-for ii = 1:nchannels
+      alpha = -exp(-phi)*cos(theta);
+      
+      b1 = 2*alpha;
+      b2 = exp(-2*phi);
+      a0 = abs( (1+b1*cos(theta)-1i*b1*sin(theta)+b2*cos(2*theta)-1i*b2*sin(2*theta)) / (1+alpha*cos(theta)-1i*alpha*sin(theta))  );
+      
+      % Compute the position of the pole
+      atilde = exp(-phi - 1i*theta);
+      
+      % Repeat the pole n times, and expand the polynomial
+      a2=poly([atilde*ones(1,n),conj(atilde)*ones(1,n)]);
 
-  % It should be possible to replace the code in this loop by the
-  % following two lines, but zp2tf only seems to handle real-valued
-  % filters, so the code does not work.
-  %atilde = exp(-2*pi*ourbeta(ii)/fs + i*2*pi*fc(ii)/fs);
-  %[bnew,anew]=zp2tf([],atilde*ones(1,n),1);
+      % Scale to get 0 dB attenuation, FIXME: Does not work, works only
+      % for fc=fs/4
+      b2=a0^n;
+      
+      if flags.do_peakphase
+        b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
+      end;
+      
+      % Place the result (a row vector) in the output matrices.
+      b(ii,:)=b2;
+      a(ii,:)=a2;
+      
+    end;
+
+  end;      
   
-  btmp=1-exp(-2*pi*ourbeta(ii)/fs);
-  atmp=[1, -exp(-(2*pi*ourbeta(ii) + i*2*pi*fc(ii))/fs)];
-  
-  b2=1;
-  a2=1;
-  
-  for jj=1:n
-    b2=conv(btmp,b2);
-    a2=conv(atmp,a2);
-  end
-  
-  % Place the result (a row vector) in the output matrices.
-  b(ii,:)=b2;
-  a(ii,:)=a2;
+  if flags.do_complex
 
-end;
+    b=zeros(nchannels,1);
+    a=zeros(nchannels,n+1);
+        
+    % This is when the function peaks.
+    delay = 3./(2*pi*ourbeta);
 
-if flags.do_peakphase
-  b=b.*exp(-2*pi*i*fc.*delay)
-  %b=2*b;
-end;
+    for ii = 1:nchannels
+      % convert to radians
+      theta = 2*pi*fc(ii)/fs;
+      phi   = 2*pi*ourbeta(ii)/fs;
+      
+      % Compute the position of the pole
+      atilde = exp(-2*pi*ourbeta(ii)/fs - 1i*2*pi*fc(ii)/fs);
+      
+      % Repeat the pole n times, and expand the polynomial
+      a2=poly(atilde*ones(1,n));
+      
+      btmp=1-exp(-2*pi*ourbeta(ii)/fs);
+      b2=btmp.^n;
+      
+      if flags.do_peakphase
+        b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
+      end;
+      
+      % Place the result (a row vector) in the output matrices.
+      b(ii,:)=b2;
+      a(ii,:)=a2;
+      
+    end;
+    
+  end;
   
-if flags.do_real
-  b=real(b);
-  a=real(a);
+else
+
+  if flags.do_real
+    b=zeros(nchannels,n+1);
+    a=zeros(nchannels,2*n+1);
+        
+    % This is when the function peaks.
+    delay = 3./(2*pi*ourbeta);
+    
+    for ii = 1:nchannels      
+      % convert to radians
+      theta = 2*pi*fc(ii)/fs;
+      phi   = 2*pi*ourbeta(ii)/fs;
+
+      alpha = -exp(-phi)*cos(theta);
+      
+      b1 = 2*alpha;
+      b2 = exp(-2*phi);
+      a0 = abs( (1+b1*cos(theta)-1i*b1*sin(theta)+b2*cos(2*theta)-1i*b2*sin(2*theta)) / (1+alpha*cos(theta)-1i*alpha*sin(theta))  );
+      
+      % Compute the position of the pole
+      atilde = exp(-phi-1i*theta);
+      
+      % Repeat the conjugate pair n times, and expand the polynomial
+      a2 = poly([atilde*ones(1,n),conj(atilde)*ones(1,n)]);
+      
+      % Compute the position of the zero, just the real value of the pole
+      btilde = real(atilde);
+      
+      % Repeat the zero n times, and expand the polynomial
+      b2 = poly(btilde*ones(1,n));
+      
+      % Scale to get 0 dB attenuation
+      b2=b2*(a0^n);
+      
+      if flags.do_peakphase
+        b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
+      end;
+      
+      % Place the result (a row vector) in the output matrices.
+      b(ii,:)=b2;
+      a(ii,:)=a2;
+      
+    end;
+  end;
+  
+  
+  if flags.do_complex
+
+    warning(['FIXME: The complex-valued mixed pole-zero filters are not scaled ' ...
+             'correctly.']);
+
+    b=zeros(nchannels,n+1);
+    a=zeros(nchannels,n+1);
+    
+    
+    % This is when the function peaks.
+    delay = 3./(2*pi*ourbeta);
+
+    for ii = 1:nchannels
+      % convert to radians
+      theta = 2*pi*fc(ii)/fs;
+      phi   = 2*pi*ourbeta(ii)/fs;
+
+      alpha = -exp(-phi)*cos(theta);
+      b1 = 2*alpha;
+      b2 = exp(-2*phi);
+      a0 = abs( (1+b1*cos(theta)-1i*b1*sin(theta)+b2*cos(2*theta)-1i*b2*sin(2*theta)) / (1+alpha*cos(theta)-1i*alpha*sin(theta))  );
+      
+      % Compute the position of the pole
+      atilde = exp(-2*pi*ourbeta(ii)/fs - 1i*2*pi*fc(ii)/fs);
+      
+      % Repeat the pole n times, and expand the polynomial
+      a2=poly(atilde*ones(1,n));
+
+      % Compute the position of the zero, just the real value of the pole
+      btilde = real(atilde);
+      
+      % Repeat the zero n times, and expand the polynomial
+      b2 = poly(btilde*ones(1,n));
+
+      % Scale to get 0 dB attenuation
+      b2=b2*(a0^n);
+
+      if flags.do_peakphase
+        b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
+      end;
+      
+      % Place the result (a row vector) in the output matrices.
+      b(ii,:)=b2;
+      a(ii,:)=a2;
+  
+    end;  
+  
+  end;
+
 end;
 
