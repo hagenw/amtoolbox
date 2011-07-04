@@ -1,10 +1,10 @@
 function z = eicell(insig,fs,tau,ild)
-%EICELL  XXX
+%EICELL  Excitaion-inhibition cell computation for the Breebaart model
 %   Usage: y = eicell(insig,fs,tau,ild)
 %
 %   Input parameters:
-%        l,r	    : input signals, these must be a [n by 1] matrix
-%        fs        : sampling rate of input signals
+%        insig	   : input signal, must be an [n by 2] matrix
+%        fs        : sampling rate of input signal
 %        tau       : characteristic delay in seconds (positive: left is leading)
 %        ild       : characteristic ILD in dB (positive: left is louder)
 %
@@ -18,10 +18,15 @@ function z = eicell(insig,fs,tau,ild)
 
 
 % parameters:
-tc          = 30e-3;            % Temporal smoothing constant
-a           = 0.1;              % non-linear I/O parameter 'a' 
-b           = 0.00002;          % non-linear I/O parameter 'b'
-ptau        = 2.2e-3;           % time constant for p(tau) function
+definput.keyvals.tc    = 30e-3;   % Temporal smoothing constant
+definput.keyvals.a     = 0.1;     % non-linear I/O parameter 'a' 
+definput.keyvals.b     = 0.00002; % non-linear I/O parameter 'b'
+definput.keyvals.ptau  = 2.2e-3;  % time constant for p(tau) function
+
+definput.flags.phase={'freqinv','timeinv'};
+[flags,kv]=ltfatarghelper({'L'},definput,varargin);
+
+
 
 % apply characteristic delay:
 n = round( abs(tau) * fs );
@@ -43,12 +48,10 @@ r=gaindb(l,-ild/2);
 x = (l - r).^2;
 
 % temporal smoothing:
-A=[1 -exp(-1/(fs*tc))];
-B=[1-exp(-1/(fs*tc)) ];
+A=[1 -exp(-1/(fs*kv.tc))];
+B=[1-exp(-1/(fs*kv.tc)) ];
 y= filtfilt(B,A,x);% / ( (1-exp(-1/(fs*tc)))/2 );
 
 % compressive I/O: Scale signal by 200. This approximately
 % results in JNDs of 1 in the output
-z = exp(-tau/ptau) * a * log( b * y + 1);
-
-
+z = exp(-tau/kv.ptau) * kv.a * log( kv.b * y + 1);
