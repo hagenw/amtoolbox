@@ -25,7 +25,7 @@ function definput=arg_drnl(definput)
   
   definput.keyvals.nlin_a = [1.40298 .81916 ];
   definput.keyvals.nlin_b = [1.61912 -.81867 ];
-  definput.keyvals.nlin_c = [-.60206 0];
+  definput.keyvals.nlin_c = [log10(.25) 0];
   definput.keyvals.nlin_d = 1;
 
   definput.keyvals.compresslimit = [];
@@ -41,5 +41,4 @@ function definput=arg_drnl(definput)
       'compresslimit', 1500, ...
       'jepsenmiddleear', ...
       'nlin_ngt_before', 2, ...
-      'nlin_nlp', 3, ...
       };
