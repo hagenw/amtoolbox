@@ -13,7 +13,9 @@
 %
 %  The Langendijk model
 %     LANGENDIJK        - Langendijk & Bronkhorst 2002 auditory model 
+%     LIKELILANGENDIJK  - Likelihood estimation to quantify model performance
 %     PLOTLANGENDIJK    - Plot the pdf-matrices with grey colormap
+%     PLOTLIKELILANGENDIJK - Plot the likelihood statistics 
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

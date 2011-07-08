@@ -92,7 +92,7 @@ function [ outsig ] = halfconv( ir1,stim )
 % latest update: 2010-07-19
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  nfft = 2^nextpow2(max([size(ir1,1) length(stim)]));
+  nfft = nextfastfft(max(size(ir1,1), length(stim)));
   stimf=fft(stim(:),nfft);
   ir1f = fft(ir1,nfft,1);
   temp=zeros(nfft,size(ir1,2),size(ir1,3));

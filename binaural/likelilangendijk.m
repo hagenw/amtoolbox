@@ -1,21 +1,21 @@
 function [ la,le,ci ] = likelilangendijk( p,rang,tang,target,response )
-% LIKELILANGENDIJK Likelihood estimation for evaluating model performance 
-% according to Langendijk et al. (2002)
-% Usage:           [la,le,ci] = likelilangendijk(p,rang,tang,target,response)
-% Input arguments:
+%LIKELILANGENDIJK   Likelihood estimation for evaluating model performance
+%   Usage:           [la,le,ci] = likelilangendijk(p,rang,tang,target,response)
+%
+%   Input arguments:
 %     p:           pdf matrix
 %     rang:        polar angles of possible response angles
 %     tang:        polar angles of possible target angles
 %     target:      target polar angles of localization test
 %     response:    response polar angles of localization test
-% Output argument:
+%
+%  Output arguments:
 %     la:          actual likelihood
 %     le:          expected likelihood
 %     ci:          99% confidence interval for expected likelihood
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
-% latest update: 2010-08-25
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% AUTHOR : Robert Baumgartner
 
   nt=length(target);
 
