@@ -76,7 +76,8 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %
 %-     'nlin_ngt_after',n -  Number of cascaded gammatone filters in the
 %                    non-linear part after the broken stick
-%                    non-linearity. Default value is 3.
+%                    non-linearity. The default value of [] means to use the 'before'
+%                    value.
 %
 %-     'nlin_nlp',n - Number of cascaded lowpass filters in the
 %                    non-linear part. Default value is 3.
@@ -87,15 +88,17 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %
 %-     'nlin_fc_after',fc - Center frequencies of the gammatone filters in the
 %                    non-linear part after the broken stick
-%                    non-linearity. Default value is [-0.05252 1.01650].
+%                    non-linearity. The default value of [] means to use the 'before'
+%                    value.
 %
 %-     'nlin_bw_before',bw - Bandwidth of the gammatone filters in the
 %                    non-linear part before the broken stick
 %                    non-linearity. Default value is [-0.03193 .77426 ].
 %
 %-     'nlin_bw_after',w - Bandwidth of the gammatone filters in the
-%                    non-linear part before the broken stick
-%                    non-linearity. Default value is [-0.03193 .77426 ].
+%                    non-linear part after the broken stick
+%                    non-linearity. The default value of [] means to use the 'before'
+%                    value.
 %
 %-     'nlin_lp_cutoff',c - Cutoff frequency of the lowpass filters in the
 %                    non-linear part. Default value is [-0.05252 1.01650 ].
@@ -136,6 +139,21 @@ end;
 definput.import={'drnl'};
 
 [flags,kv]=ltfatarghelper({'flow','fhigh'},definput,varargin);
+
+% Expand the 'after' settings, if they are empty.
+
+if isempty(kv.nlin_ngt_after)
+  kv.nlin_ngt_after=kv.nlin_ngt_before;
+end;
+
+if isempty(kv.nlin_fc_after)
+  kv.nlin_fc_after=kv.nlin_fc_before;
+end;
+
+if isempty(kv.nlin_bw_after)
+  kv.nlin_bw_after=kv.nlin_bw_before;
+end;
+
 
 % find the center frequencies used in the filterbank, 1 ERB spacing
 fc = erbspacebw(kv.flow, kv.fhigh, kv.bwmul, kv.basef);

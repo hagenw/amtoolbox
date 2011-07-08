@@ -8,7 +8,6 @@
 %     DEMO_AUDSCALES        - Different auditory scales.
 %     DEMO_LINDEMANN        - Lindemann binaural model.
 %     DEMO_ADAPTLOOP        - Adaptation loops.
-%     DEMO_LANGENDIJK       - Langendijk & Bronkhorst 2002 localization model
 %
 %   Demonstration of model stages
 %     DEMO_ADAPTLOOP         - Adaptation loops.
