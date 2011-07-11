@@ -1,4 +1,4 @@
-function [outsig, fc] = breebaart2001preproc(insig, fs, varargin);
+function [outsig, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %BREEBAART2001PREPROC   Auditory model from Breebaart et. al. 2001
 %   Usage: [outsig, fc] = breebaart2001preproc(insig,fs);
 %          [outsig, fc] = breebaart2001preproc(insig,fs,...);
@@ -13,6 +13,18 @@ function [outsig, fc] = breebaart2001preproc(insig, fs, varargin);
 %  
 %   [outsig,fc]=BREEBAART2001PREPROC(...) additionally returns the center
 %   frequencies of the filter bank.
+%  
+%   The breebaart2001 model consists of the following stages:
+%   
+%     1) a gammatone filter bank with 1-erb spaced filters.
+%
+%     2) an envelope extraction stage done by half-wave rectification
+%        followed by low-pass filtering to 770 Hz.
+%
+%     3) an adaptation stage modelling nerve adaptation by a cascade of 5
+%        loops.
+%
+%     4) An excitation-inhibition (EI) cell model.
 %
 %   The following parameters may be passed at the end of the line of
 %   input arguments:
@@ -26,20 +38,7 @@ function [outsig, fc] = breebaart2001preproc(insig, fs, varargin);
 %-     'basef',basef - Ensure that the frequency basef is a center frequency
 %                    in the filterbank. The default value of [] means
 %                    no default.
-%
-%   The model assumes than a pure tone input signal with an RMS value of 1
-%   corresponds to an acoustic signal of 100 db SPL.
-%  
-%   The breebaart2001 model consists of the following stages:
-%   
-%     * a gammatone filter bank with 1-erb spaced filters.
-%
-%     * an envelope extraction stage done by half-wave rectification
-%        followed by low-pass filtering to 770 Hz.
-%
-%     * an adaptation stage modelling nerve adaptation by a cascade of 5
-%        loops.
-%
+
 %R  breebaart2001binaural
 
 %   AUTHOR : Peter L. Soendergaard
@@ -82,5 +81,11 @@ outsig = ihcenvelope(outsig,fs,'breebaart');
 % non-linear adaptation loops
 outsig = adaptloop(outsig,fs,'breebaart');
 
+ei_map = zeros(nifc, nfreqchannels, siglen);
+for k=1:nifc
+  for g=1:nfreqchannels
+    ei_map(k,g,:) = eicell(squeeze(ir_all(:,g,:,k)),fs,tau,alpha);
+  end
+end
 
 
