@@ -11,20 +11,27 @@ function z = eicell(insig,fs,tau,ild)
 %   Output parameters:
 %        y	   : EI-type cell output as a function of time
 %
+%   EICELL(insig,fs,tau,ild) compute the excitation-inhibition model on the input signal insig.
+%   The cell to be model is responds to a delay tau (measured in seconds) and interaural-level difference
+%   ild measured in dB.
 %
+%   EICELL takes the following optional parameters:
+%  
+%-       'tc',tc     - Temporal smoothing constant. Default value is 30e-3.
+%
+%-       'rc_a',rc_a - Parameter 'a' for dynamic range compression. Default value is .1 .
+%
+%-       'rc_b',rc_b - Parameter 'b' for dynamic range compression. Default value is .00002 .
+%
+%-       'ptau',ptau - Time constant for p(tau) function. Default value is 2.2e-3.
+%
+%   See also: breebaart2001preproc
 
-% Written by Jeroen Breebaart - jeroen.breebaart@philips.com
-% (C) 2003 Philips Research Labs, Eindhoven.
+% Author: Jeroen Breebaart and Peter L. Soendergaard
 
 
-% parameters:
-definput.keyvals.tc    = 30e-3;   % Temporal smoothing constant
-definput.keyvals.a     = 0.1;     % non-linear I/O parameter 'a' 
-definput.keyvals.b     = 0.00002; % non-linear I/O parameter 'b'
-definput.keyvals.ptau  = 2.2e-3;  % time constant for p(tau) function
-
-definput.flags.phase={'freqinv','timeinv'};
-[flags,kv]=ltfatarghelper({'L'},definput,varargin);
+definput.import={'eicell'};
+[flags,kv]=ltfatarghelper({},definput,varargin);
 
 
 
@@ -54,4 +61,4 @@ y= filtfilt(B,A,x);% / ( (1-exp(-1/(fs*tc)))/2 );
 
 % compressive I/O: Scale signal by 200. This approximately
 % results in JNDs of 1 in the output
-z = exp(-tau/kv.ptau) * kv.a * log( kv.b * y + 1);
+z = exp(-tau/kv.ptau) * kv.rc_a * log( kv.rc_b * y + 1);
