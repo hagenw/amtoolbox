@@ -64,10 +64,10 @@ definput.keyvals.subfs=[];
 [outsig, fc] = auditoryfilterbank(insig, fs, 'argimport',flags,keyvals);
 
 % 'haircell' envelope extraction
-outsig = ihcenvelope(outsig,fs,'dau');
+outsig = ihcenvelope(outsig,fs,'ihc_dau');
 
 % non-linear adaptation loops
-outsig = adaptloop(outsig,fs,'dau');
+outsig = adaptloop(outsig,fs,'adt_dau');
 
 % Calculate filter coefficients for the 20 ms (approx.eq to 8 Hz) modulation
 % lowpass filter.

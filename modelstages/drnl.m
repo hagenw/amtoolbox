@@ -115,16 +115,19 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %-     'nlin_d',d - 'd' coefficient for the broken-stick non-linearity. Default
 %                    value is 1.
 %
+%   The output from DRNL can be conveniantly visualized using the PLOTFILTERBANK
+%   function from LTFAT.
+%
 %   See also: middleearfilter, jepsen2008preproc
 % 
 %R  meddis2001computational lopezpoveda2001hnc jepsen2008cmh
 
 % AUTHOR: Morten Løve Jepsen
   
-% Bugfix by Marton Marschall 9/2008
+% Bugfixes by Marton Marschall 9/2008 and Katarina Egger 2011
 % Cleanup by Peter L. Soendergaard.
 %
-% In comparison to the oroginal code, the gammatone filter are computed
+% In comparison to the original code, the gammatone filters are computed
 % by convolving the filter coefficients, instead of performing multiple
 % runs of 'filter'. The lowpass filtering is still performed by mutliple
 % runs through 'filter', as the linear-part lowpass filter turned out to

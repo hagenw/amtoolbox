@@ -58,10 +58,10 @@ definput.keyvals.subfs=[];
 [outsig, fc] = auditoryfilterbank(insig, fs, 'argimport',flags,keyvals);
 
 % 'haircell' envelope extraction
-outsig = ihcenvelope(outsig,fs,'dau');
+outsig = ihcenvelope(outsig,fs,'ihc_dau');
 
 % non-linear adaptation loops
-outsig = adaptloop(outsig,fs,'dau');
+outsig = adaptloop(outsig,fs,'adt_dau');
 
 % Modulation filterbank
 [outsig,mfc] = modfilterbank(outsig,fs,fc);

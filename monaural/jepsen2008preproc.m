@@ -19,23 +19,23 @@ function [outsig, fc, mfc] = jepsen2008preproc(insig, fs, varargin);
 %  
 %   The Jepsen2008 model consists of the following stages:
 % 
-%     * A heaphone filter to simulate the effect of a standard set of
+%     1) A heaphone filter to simulate the effect of a standard set of
 %     headphones
 %
-%     * A middle ear filter to simulate the effect of the middle ear, and
+%     2) A middle ear filter to simulate the effect of the middle ear, and
 %     to convert to stapes movement.
 %
-%     * DRNL - Dual resonance non-linear filterbank
+%     3) DRNL - Dual resonance non-linear filterbank
 %
-%     * an envelope extraction stage done by half-wave rectification
+%     4) an envelope extraction stage done by half-wave rectification
 %        followed by low-pass filtering to 1000 Hz.
 %
-%     * An expansion stage
+%     5) An expansion stage
 %
-%     * an adaptation stage modelling nerve adaptation by a cascade of 5
+%     6) an adaptation stage modelling nerve adaptation by a cascade of 5
 %        loops.
 %
-%     * a modulation filterbank
+%     7) a modulation filterbank
 %
 %R  jepsen2008cmh
 
@@ -72,13 +72,13 @@ outsig = filter(hp_fir,1,insig);
 outsig = gaindb(outsig,50);
 
 %% 'haircell' envelope extraction
-outsig = ihcenvelope(outsig,fs,'dau');
+outsig = ihcenvelope(outsig,fs,'ihc_dau');
 
 %% Expansion stage
 outsig = outsig.^2;
 
 %% non-linear adaptation loops
-outsig = adaptloop(outsig,fs,'dau');
+outsig = adaptloop(outsig,fs,'adt_dau');
 
 %% Modulation filterbank
 [outsig,mfc] = modfilterbank(outsig,fs,fc);

@@ -1,4 +1,4 @@
-function [outsig, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
+function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %BREEBAART2001PREPROC   Auditory model from Breebaart et. al. 2001
 %   Usage: [outsig, fc] = breebaart2001preproc(insig,fs);
 %          [outsig, fc] = breebaart2001preproc(insig,fs,...);
@@ -57,7 +57,7 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-definput.keyvals.flow=80;
+definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','eicell'}
 definput.keyvals.fhigh=8000;
 definput.keyvals.basef=[];
 
@@ -81,8 +81,10 @@ outsig = ihcenvelope(outsig,fs,'breebaart');
 % non-linear adaptation loops
 outsig = adaptloop(outsig,fs,'breebaart');
 
-ei_map = zeros(nifc, nfreqchannels, siglen);
-for k=1:nifc
+[siglen,nfreqchannels,naudiochannels,nsignals] = size(outsig);
+
+ei_map = zeros(nsignals, nfreqchannels, siglen);
+for k=1:nsignals
   for g=1:nfreqchannels
     ei_map(k,g,:) = eicell(squeeze(ir_all(:,g,:,k)),fs,tau,alpha);
   end

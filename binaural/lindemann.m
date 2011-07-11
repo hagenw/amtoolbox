@@ -23,6 +23,16 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %   insig using a cross-correlation (delay-line) mechanism. The calculation
 %   is done for every frequency band in the range 5-40 Erb.
 %
+%   Lindemann has extended the delay line model of Jeffres (1948) by a
+%   contralateral inhibition, which introduce the ILD to the model.  Also
+%   monaural detectors were extended, to handle monaural signals (and some
+%   stimuli with a split off of the lateralization image). Hess has
+%   extented the output from the lindemann model to a binaural activity map
+%   dependend on time, by using a running cross-correlation function.
+%   This has been done here by starting a new running cross-correlation
+%   every time step T_int.  A detailed description of these cross-
+%   correlation steps is given in the lindemannbincorr function.
+
 %   The steps of the binaural model to calculate the result are the
 %   following:
 %
@@ -37,16 +47,6 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %        channel.  This is done using the model described in Lindemann
 %        (1986a) and Hess (2007). These are extensions to the delay line model
 %        of Jeffres (1948).
-%
-%        Lindemann has extended the delay line model of Jeffres (1948) by a
-%        contralateral inhibition, which introduce the ILD to the model.  Also
-%        monaural detectors were extended, to handle monaural signals (and some
-%        stimuli with a split off of the lateralization image). Hess has
-%        extented the output from the lindemann model to a binaural activity map
-%        dependend on time, by using a running cross-correlation function.
-%        This has been done here by starting a new running cross-correlation
-%        every time step T_int.  A detailed description of these cross-
-%        correlation steps is given in the lindemannbincorr function.
 %
 %   You may supply any flags or key/value pairs of the AUDIORYFILTERBANK,
 %   IHCENVELOPE or LINDEMANNBINCORR at the end of the line of input
@@ -87,7 +87,7 @@ definput.import={'auditoryfilterbank','ihcenvelope','lindemannbincorr'};
 
 % Highest and lowest frequency to use for the erbfilterbank (this gives us
 % 36 frequency channels, channel 5-40)
-definput.importdefaults = {'flow',erbtofreq(5),'fhigh',erbtofreq(40),'lindemann'};
+definput.importdefaults = {'flow',erbtofreq(5),'fhigh',erbtofreq(40),'ihc_lindemann'};
 
 [flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
     ltfatarghelper({'c_s','w_f','M_f','T_int','N_1'},definput,varargin);

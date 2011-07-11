@@ -12,7 +12,7 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %   use. The name refers to a set of papers where in this particular
 %   method has been utilized or studied. The options are
 %
-%-    'bernstein' - Compute the Hilbert envelope, compress the envelope
+%-    'ihc_bernstein' - Compute the Hilbert envelope, compress the envelope
 %                 by raising it to the power .2, combine the envelope
 %                 with the original fine-structure, half-wave rectify it, 
 %                 square it and low-pass filter it with a cut-off
@@ -20,10 +20,10 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %                 Bernstein 1999. Note that this method includes both a
 %                 compression and an expansion stage.
 %
-%-    'breebaart' - Use a 5th order filter with a cut-off frequency of 770
+%-    'ihc_breebaart' - Use a 5th order filter with a cut-off frequency of 770
 %                 Hz. This method is given in Breebaart 2001. Page 94 in thesis.
 %
-%-    'dau'     - Use a 2nd order Butterworth filter with a cut-off
+%-    'ihc_dau'     - Use a 2nd order Butterworth filter with a cut-off
 %                 frequency of 1000 Hz. This method has been used in all
 %                 models deriving from the original 1996 model by 
 %                 Dau et. al. These models are mostly monaural in nature.
@@ -35,7 +35,7 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %                 completeness. The Hilbert envelope was first suggested
 %                 for signal analysis in Gabor 1946.
 %
-%-    'lindemann' - Use a 1st order Butterworth filter with a cut-off frequency
+%-    'ihc_lindemann' - Use a 1st order Butterworth filter with a cut-off frequency
 %                 of 800 Hz. This method is defined in the paper
 %                 Lindemann 1986a.
 %
@@ -80,7 +80,7 @@ if flags.do_nodefault
          'use.'],upper(mfilename));
 end;
 
-if flags.do_bernstein
+if flags.do_ihc_bernstein
   % The computational trick mentioned in the Bernstein paper is used
   % here: Instead of raising the envelope to power .23 and combine with its
   % TFS, we raise it to power -.77, and combine with the original
@@ -91,7 +91,7 @@ if flags.do_bernstein
   inoutsig = filter(b,a, inoutsig);
 end;
 
-if flags.do_breebaart
+if flags.do_ihc_breebaart
   inoutsig = max( inoutsig, 0 );
   cutofffreq=2000;
   [b, a] = butter(1, cutofffreq*2/fs);
@@ -100,7 +100,7 @@ if flags.do_breebaart
   end;
 end;
 
-if flags.do_dau
+if flags.do_ihc_dau
   inoutsig = max( inoutsig, 0 );
   cutofffreq=1000;
   [b, a] = butter(2, cutofffreq*2/fs);
@@ -111,7 +111,7 @@ if flags.do_hilbert
   inoutsig = abs(hilbert(inoutsig));
 end;
 
-if flags.do_lindemann
+if flags.do_ihc_lindemann
   inoutsig = max( inoutsig, 0 );
   cutofffreq=800;
   [b, a] = butter(1, cutofffreq*2/fs);

@@ -23,18 +23,18 @@ function inoutsig = adaptloop(inoutsig,fs,varargin);
 %   ADAPTLOOP takes the following flags at the end of the line of input
 %   arguments:
 %
-%-     'dau' - Choose the parameters as in the Dau 1996 and 1997 models. This
+%-     'adt_dau' - Choose the parameters as in the Dau 1996 and 1997 models. This
 %           consists of 5 adaptation loops with an overshoot limiting of 10
 %           and a minimum level of 1e-5. This is a correction in regard to
 %           the published version of Dau 96, which did not use overshoot
 %           limiting. The adaptation loops have an exponential spacing. This
 %           flag is the default.
 %
-%-    'puschel' - Choose the parameters as in the original Puschel 1988
+%-     'adt_puschel' - Choose the parameters as in the original Puschel 1988
 %           model. This consists of 5 adaptation loops without overshoot
 %           limiting The adapation loops have a linear spacing.
 %
-%-     'breebaart' - As 'puschel', but with overshoot limiting     
+%-     'adt_breebaart' - As 'puschel', but with overshoot limiting     
 %
 %-     'dim',d - Do the computation along dimension d of the input. 
 %
