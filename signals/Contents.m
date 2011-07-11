@@ -1,8 +1,12 @@
 % AMT - Signals
 %
 %  Sound signals.
-%    GREASY         -  Woman speaking the word 'greasy'
-%    GSPI           -  Glockenspiel test signal.
+%    BMSIN          -  Binaural modulated sinusoid
+%    ITDSIN         -  Sinusoid with interaural time difference
+%    ILDSIN         -  Sinusoid with interaural level difference
+%    ITDILDSIN      -  Sinusoid with interaural time and level difference
+%    NOISE          -  White, pink, brown, or red noise
+%    CORPINKNOISE   -  Interaural correlated pink noise
 %
 %  Other test signals are available from:
 %

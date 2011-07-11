@@ -1,5 +1,5 @@
 
-tests_todo={ };
+tests_todo={ 'adaptloop', 'outermiddle', 'coefgtdrnl','dbsplsafety'};
 
 
 total_tests_failed=0;

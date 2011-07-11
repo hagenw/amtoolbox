@@ -1,6 +1,6 @@
 % AMT - General functions
 %
-%  The AMT team, 2009.
+%  The AMT team, 2011.
 %
 %  Plots
 %     SEMIAUDPLOT      - 2D plot on auditory scale.
@@ -14,15 +14,11 @@
 %     FREQTOERB        - Frequency to erb scale conversion.
 %     ERBSPACE         - Equidistant points on the erb scale.
 %     ERBSPACEBW       - Equidistant points by equal bandwidth.
-%
-%  Properties of the auditory system
 %     AUDFILTBW        - Bandwidth of audiory filters.
 %
-%  General signal processing
-%     RMS              - RMS value of a signal.
-%     RMSDB            - RMS value in Db.
-%     GAINDB           - Increase/descrease level of signal.
-%     SETLEVELDB       - Specify level of signal.
+%  Signal levels
+%     DBSPL            - SPL of signal measured in dB.
+%     SETDBSPL         - Specify SPL of signal.
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

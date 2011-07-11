@@ -1,20 +1,70 @@
 function amtstart()
-%AMTSTART   Start the CASP toolbox.
+%AMTSTART   Start the Auditory Modelling Toolbox.
 %   Usage:  amtstart;
 %
-%   AMTSTART starts the Auditory Modellingd toolbox. This command must be
+%   AMTSTART starts the Auditory Modelling toolbox. This command must be
 %   run before using any of the function in the toolbox. If you issue a
 %   CLEAR ALL command then you must run AMTSTART again.
 %
-%   You may manually edit this function to configure the toolbox to your
-%   taste. This includes default settings for the plotting functions.
-%M
+%   The auditory modelling toolbox depends on the Linear Time Frequency
+%   Analysis Toolbox (LTFAT) to properly function. Therefore, you must issue
+%   the LTFATSTART command before you start AMT.
+%
+%   To configure default options for functions, you can use the the
+%   LTFATSETDEFAULTS functions in your startup script. A typical startup
+%   file could look like:
+%
+%C    addpath('/path/to/my/work/ltfat');
+%C    addpath('/path/to/my/work/amtoolbox');
+%C    ltfatstart;
+%C    amtstart;
+%C    ltfatsetdefaults('audspecgram','classic');
+%
+%   The last command wil configure AUDSPECGRAM to display a classic
+%   auditory spectrogram by default.
+%
 %   See also:  amthelp
 
 %   AUTHOR : Peter L. Soendergaard.  
 
-% ------- Settings: ----------------------------------
+% Verify that LTFAT has been installed
+if ~exist('ltfatarghelper','file')  
+    disp('');
+    disp('--- AMTOOLBOX - The Auditory Modelling toolbox. ---');
+    disp('')
+    error(['The toolbox require the LTFAT toolbox to properly function. ' ...
+         'Please download and install it from http://ltfat.sourceforge.net,' ...
+         'and then call the LTFATSTART command BEFORE you call ' ...
+          'AMTSTART.'])
+end;
 
+% Check for the correct version
+% Required version is given by:
+major_rq  = 1;
+minor_rq  = 0;
+bugfix_rq = 0;
+
+
+s=ltfathelp('version');
+
+% Split into major, minor and bugfix version.
+stops=find(s=='.');
+major_no  = str2num(s(1:stops(1)));
+if numel(stops)==1
+  minor_no  = str2num(s(stops(1)+1:end));
+  bugfix_no = 0;
+else
+  minor_no  = str2num(s(stops(1)+1:stops(2)));
+  bugfix_no = str2num(s(stops(2)+1:end));
+end;
+
+% Do the check, multiply by some big number to make the check easy
+if major_rq*1000000+minor_rq*1000+bugfix_rq>major_no*1000000+minor_no*1000+ ...
+            bugfix_no
+  error(['Your version of LTFAT is too old for this version of AMToolbox ' ...
+         'to function proberly. Your need at least version %i.%i.%i of LTFAT.'],major_rq,minor_rq,bugfix_rq);
+end;
+          
 % --- general settings ---
 % Print the banner at startup?
 printbanner=1;
@@ -95,11 +145,12 @@ for ii=1:length(d)
         addpath([bp,name]);
 
 	eval([name,'init']);
-
-	if status==1
-	  nplug=nplug+1;
-	  modules{nplug}.name=name;
-	  modules{nplug}.version=module_version;
+        if status>0
+          if status==1
+            nplug=nplug+1;
+            modules{nplug}.name=name;
+            modules{nplug}.version=module_version;
+          end;
 	else
 	  rmpath([bp,name]);
 	end;

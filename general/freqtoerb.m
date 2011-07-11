@@ -4,11 +4,11 @@ function erb = freqtoerb(freq);
 %
 %   This is a wrapper around freqtoaud that selects the erb-scale. Please
 %   see the help on FREQTOAUD for more information.
-%M
+%
 %   See also: freqtoaud
-%M
+%
 %   Demos: demo_audscales
   
 %   AUTHOR: Peter L. Soendergaard
 
-erb = freqtoaud('erb',freq);
+erb = freqtoaud(freq,'erb');

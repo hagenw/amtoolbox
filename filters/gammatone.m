@@ -1,4 +1,4 @@
-function [b,a]=gammatone(fc,fs,n,betamul);
+function [b,a,delay]=gammatone(fc,fs,varargin)
 %GAMMATONE  Gammatone filter coefficients
 %   Usage: [b,a] = gammatone(fc,fs,n,betamul);
 %          [b,a] = gammatone(fc,fs,n);
@@ -20,10 +20,13 @@ function [b,a]=gammatone(fc,fs,n,betamul);
 %   determined as betamul times AUDFILTBW of the center frequency of
 %   corresponding filter.
 %
+%   By default, the returned filter coefficients comes from the all-pole
+%   approximation described in Lyon (1997). The filters are normalized to
+%   have a 0 dB attenuation at the center frequency (another way of
+%   stating this is that their impulse responses will have unit area).
+%
 %   GAMMATONE(fc,fs,n) will do the same but choose a filter bandwidth
-%   according to Glasberg and Moore (1990). The order n can only be 2 or
-%   4. If the order is 4 then betamul is choosen to be 1.0183 and if the
-%   order is 2 then betamul is choosen to be 0.637.
+%   according to Glasberg and Moore (1990).
 %
 %   GAMMATONE(fc,fs) will do as above for a 4th order filter.
 %
@@ -36,24 +39,48 @@ function [b,a]=gammatone(fc,fs,n,betamul);
 %M    g(t) = a*t^(n-1)*cos(2*pi*fc*t)*exp(-2*pi*beta*t)
 %F  \[g(t) = at^{n-1}cos(2\pi\cdot fc\cdot t)e^{-2\pi \beta \cdot t}\]
 %
-%   The gammatone filters as implemented by this function generate
-%   complex valued output, because the filters are modulated by the
-%   exponential function. Using REAL on the output will give the
-%   coefficients of the corresponding cosine modulated filters.
+%   GAMMATONE takes the following flags at the end of the line of input
+%   arguments:
+%
+%-     'allpole' - Compute the all-pole approximation of Gammatone
+%                  filters by Lyon. This is the default
+%
+%-     'classic' - Compute the classical mixed pole-zero approximation of 
+%                  gammatone filters.
+%  
+%-     'complex' - Generate filter coefficients corresponding to a
+%                  complex valued filterbank modulated by exponential
+%                  functions. This is useful for envelope extration
+%                  purposes.
+%
+%-     'real'    - Generate real-valued filters.
+%
+%-     'casualphase' - This makes the phase of each filter start at zero.
+%                  This is the default.
+%
+%-     'peakphase' - This makes the phase of each filter be zero when the
+%                  envelope of the impulse response of the filter peaks.
 %
 %   To create the filter coefficients of a 1-erb spaced filter bank using
 %   gammatone filters use the following construction
 %
-%C    [b,a] = gammatone(fs,erbspacebw(flow,fhigh));
+%C    [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 %  
-%R  aertsen1980strI glasberg1990daf
+%R  aertsen1980strI patterson1988efficient lyon1997all
   
 %   AUTHOR : Stephan Ewert, Peter L. Soendergaard
 
 % ------ Checking of input parameters ---------
   
   
-error(nargchk(2,4,nargin));
+% TODO: The phases of the filters all start at zero. This means that the
+% real value of the impulse response of the filters does peak at the same
+% time as the absolute value does. Include option to shift the phases so
+% all filters have a distinct peak.
+
+if nargin<2
+  error('%s: Too few input arguments.',upper(mfilename));
+end;
 
 if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
@@ -64,66 +91,213 @@ if ~isnumeric(fc) || ~isvector(fc) || any(fc<0) || any(fc>fs/2)
          'the sampling rate.'],upper(mfilename));
 end;
 
-if nargin==4
-  if ~isnumeric(betamul) || ~isscalar(betamul) || betamul<=0
-    error('%s: beta must be a positive scalar.',upper(mfilename));
-  end;
+definput.keyvals.n=4;
+definput.keyvals.betamul=[];
+definput.flags.real={'real','complex'};
+definput.flags.phase={'causalphase','peakphase'};
+definput.flags.filtertype={'allpole','classic'};
+
+[flags,keyvals,n,betamul]  = ltfatarghelper({'n','betamul'},definput,varargin);
+
+if ~isnumeric(n) || ~isscalar(n) || n<=0 || fix(n)~=n
+  error('%s: n must be a positive, integer scalar.',upper(mfilename));
 end;
 
-if nargin>2
-  if ~isnumeric(n) || ~isscalar(n) || n<=0 || fix(n)~=n
-    error('%s: n must be a positive, integer scalar.',upper(mfilename));
+if isempty(betamul)
+  % This formula comes from patterson1988efficient, but it is easier to
+  % find in the Hohmann paper.
+  betamul = (factorial(n-1))^2/(pi*factorial(2*n-2)*2^(-(2*n-2)));
+
+else
+  if ~isnumeric(betamul) || ~isscalar(betamul) || betamul<=0
+    error('%s: beta must be a positive scalar.',upper(mfilename));
   end;
 end;
 
 
 % ------ Computation --------------------------
 
-if nargin==2
-  % Choose a 4th order filter.
-  n=4;
-end;
-
-if nargin<4
-  % Determine the correct multiplier for beta depending on the filter
-  % order.
-  switch(n)
-   case 2
-    betamul =  0.637;
-   case 4
-    betamul = 1.0183;
-   otherwise
-    error(['GAMMATONE: Default value for beta can only be computed for 2nd ' ...
-           'and 4th order filters.']);
-  end;
-end;
+% ourbeta is used in order not to mask the beta function.  
+ourbeta = betamul*audfiltbw(fc);
 
 nchannels = length(fc);
 
-b=zeros(nchannels,1);
-a=zeros(nchannels,n+1);
+if flags.do_allpole
 
-% ourbeta is used in order not to mask the beta function.
+  if flags.do_real
 
-ourbeta = betamul*audfiltbw(fc);
+    warning(['FIXME: The real-valued allpole filters are not scaled ' ...
+             'correctly.']);
+    
+    
+    b=zeros(nchannels,1);
+    a=zeros(nchannels,2*n+1);
+        
+    % This is when the function peaks.
+    delay = 3./(2*pi*ourbeta);
+
+    for ii = 1:nchannels
+      % convert to radians
+      theta = 2*pi*fc(ii)/fs;
+      phi   = 2*pi*ourbeta(ii)/fs;
+
+      alpha = -exp(-phi)*cos(theta);
+      
+      b1 = 2*alpha;
+      b2 = exp(-2*phi);
+      a0 = abs( (1+b1*cos(theta)-1i*b1*sin(theta)+b2*cos(2*theta)-1i*b2*sin(2*theta)) / (1+alpha*cos(theta)-1i*alpha*sin(theta))  );
+      
+      % Compute the position of the pole
+      atilde = exp(-phi - 1i*theta);
+      
+      % Repeat the pole n times, and expand the polynomial
+      a2=poly([atilde*ones(1,n),conj(atilde)*ones(1,n)]);
+
+      % Scale to get 0 dB attenuation, FIXME: Does not work, works only
+      % for fc=fs/4
+      b2=a0^n;
+      
+      if flags.do_peakphase
+        b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
+      end;
+      
+      % Place the result (a row vector) in the output matrices.
+      b(ii,:)=b2;
+      a(ii,:)=a2;
+      
+    end;
+
+  end;      
   
-for ii = 1:nchannels
+  if flags.do_complex
+
+    b=zeros(nchannels,1);
+    a=zeros(nchannels,n+1);
+        
+    % This is when the function peaks.
+    delay = 3./(2*pi*ourbeta);
+
+    for ii = 1:nchannels
+      % convert to radians
+      theta = 2*pi*fc(ii)/fs;
+      phi   = 2*pi*ourbeta(ii)/fs;
+      
+      % Compute the position of the pole
+      atilde = exp(-2*pi*ourbeta(ii)/fs - 1i*2*pi*fc(ii)/fs);
+      
+      % Repeat the pole n times, and expand the polynomial
+      a2=poly(atilde*ones(1,n));
+      
+      btmp=1-exp(-2*pi*ourbeta(ii)/fs);
+      b2=btmp.^n;
+      
+      if flags.do_peakphase
+        b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
+      end;
+      
+      % Place the result (a row vector) in the output matrices.
+      b(ii,:)=b2;
+      a(ii,:)=a2;
+      
+    end;
+    
+  end;
   
-  btmp=1-exp(-2*pi*ourbeta(ii)/fs);
-  atmp=[1, -exp(-(2*pi*ourbeta(ii) + i*2*pi*fc(ii))/fs)];
+else
+
+  if flags.do_real
+    b=zeros(nchannels,n+1);
+    a=zeros(nchannels,2*n+1);
+        
+    % This is when the function peaks.
+    delay = 3./(2*pi*ourbeta);
+    
+    for ii = 1:nchannels      
+      % convert to radians
+      theta = 2*pi*fc(ii)/fs;
+      phi   = 2*pi*ourbeta(ii)/fs;
+
+      alpha = -exp(-phi)*cos(theta);
+      
+      b1 = 2*alpha;
+      b2 = exp(-2*phi);
+      a0 = abs( (1+b1*cos(theta)-1i*b1*sin(theta)+b2*cos(2*theta)-1i*b2*sin(2*theta)) / (1+alpha*cos(theta)-1i*alpha*sin(theta))  );
+      
+      % Compute the position of the pole
+      atilde = exp(-phi-1i*theta);
+      
+      % Repeat the conjugate pair n times, and expand the polynomial
+      a2 = poly([atilde*ones(1,n),conj(atilde)*ones(1,n)]);
+      
+      % Compute the position of the zero, just the real value of the pole
+      btilde = real(atilde);
+      
+      % Repeat the zero n times, and expand the polynomial
+      b2 = poly(btilde*ones(1,n));
+      
+      % Scale to get 0 dB attenuation
+      b2=b2*(a0^n);
+      
+      if flags.do_peakphase
+        b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
+      end;
+      
+      % Place the result (a row vector) in the output matrices.
+      b(ii,:)=b2;
+      a(ii,:)=a2;
+      
+    end;
+  end;
   
-  b2=1;
-  a2=1;
   
-  for jj=1:n
-    b2=conv(btmp,b2);
-    a2=conv(atmp,a2);
-  end
+  if flags.do_complex
+
+    warning(['FIXME: The complex-valued mixed pole-zero filters are not scaled ' ...
+             'correctly.']);
+
+    b=zeros(nchannels,n+1);
+    a=zeros(nchannels,n+1);
+    
+    
+    % This is when the function peaks.
+    delay = 3./(2*pi*ourbeta);
+
+    for ii = 1:nchannels
+      % convert to radians
+      theta = 2*pi*fc(ii)/fs;
+      phi   = 2*pi*ourbeta(ii)/fs;
+
+      alpha = -exp(-phi)*cos(theta);
+      b1 = 2*alpha;
+      b2 = exp(-2*phi);
+      a0 = abs( (1+b1*cos(theta)-1i*b1*sin(theta)+b2*cos(2*theta)-1i*b2*sin(2*theta)) / (1+alpha*cos(theta)-1i*alpha*sin(theta))  );
+      
+      % Compute the position of the pole
+      atilde = exp(-2*pi*ourbeta(ii)/fs - 1i*2*pi*fc(ii)/fs);
+      
+      % Repeat the pole n times, and expand the polynomial
+      a2=poly(atilde*ones(1,n));
+
+      % Compute the position of the zero, just the real value of the pole
+      btilde = real(atilde);
+      
+      % Repeat the zero n times, and expand the polynomial
+      b2 = poly(btilde*ones(1,n));
+
+      % Scale to get 0 dB attenuation
+      b2=b2*(a0^n);
+
+      if flags.do_peakphase
+        b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
+      end;
+      
+      % Place the result (a row vector) in the output matrices.
+      b(ii,:)=b2;
+      a(ii,:)=a2;
   
-  % Place the result (a row vector) in the output matrices.
-  b(ii,:)=b2;
-  a(ii,:)=a2;
+    end;  
+  
+  end;
 
 end;
-
 

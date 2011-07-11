@@ -1,4 +1,19 @@
-@string{jasa = "The Journal of the Acoustical Society of America"}
+%@string{jasa = "The Journal of the Acoustical Society of America"}
+@string{jasa = "J.\ Acoust.\ Soc.\  Am."}
+
+@String{pub-ANSI                = "American National Standards Institute"}
+@String{pub-ANSI:adr            = "New York"}
+
+@String{pub-ISO                 = "International Organization for Standardization"}
+@String{pub-ISO:adr             = "Geneva, Switzerland"}
+
+@inproceedings{aabba2011,
+  author = {A. Kohlrausch and J. Blauert and J. Braasch and H.S. Colburn and J. Culling and T. Dau and V. Hohmann and U. Jekosch and J. Mourjopoulos and V. Pulkki and A. Raake and P. S{\o}ndergaard and D. Kolossa},
+  title = {{Introducing the Topic 'Aural Assessment by means of Binaural Algorithms'}},
+  booktitle={Proceedings of the Forum Acousticum},
+  year = 2011
+}  
+
 
 @article{aertsen1980strI,
   title={{Spectro-temporal receptive fields of auditory neurons in the grassfrog. I. Characterization of tonal and natural stimuli}},
@@ -6,7 +21,46 @@
   journal={Biol. Cybern},
   volume=38,
   pages={223--234},
-  year=1980
+  year=1980,
+}
+
+
+
+@manual{ansi-sii,
+  title = 	 {Methods for calculation of the speech intelligibility index},
+  organization = pub-ANSI,
+  address = 	 pub-ANSI:adr,
+  edition = 	 {{ANSI S3.5-1997}},
+  year = 	 1997
+}
+
+@article{bentler1989transfer,
+  title = {{Transfer Functions and Correction Factors used in Hearing Aid Evaluation and Research}},
+  author = {Bentler, R. A. and Pavlovic, C. V.},
+  journal = {Ear and Hearing},
+  year=1989,
+  pages = {58-63},
+  volume = 10,
+  numbers = 1
+}  
+
+@article{bernstein1999normalized,
+  title={{The normalized interaural correlation: Accounting for NoS$\pi$ thresholds obtained with Gaussian and \"low-noise\" masking noise}},
+  author={Bernstein, L.R. and van de Par, S. and Trahiotis, C.},
+  journal=jasa,
+  volume=106,
+  pages=870,
+  year=1999
+}
+
+@article{blauert1978some,
+  title={{Some consideration of binaural cross correlation analysis}},
+  author={Blauert, J. and Cobben, W.},
+  journal={Acustica},
+  volume=39,
+  number=2,
+  pages={96--104},
+  year=1978
 }
 
 @article{braida1991cii,
@@ -19,6 +73,56 @@
   year={1991}
 }
 
+@article{breebaart2001a,
+  title={{Binaural processing model based on contralateral inhibition. I. Model structure}},
+  author={Jeroen Breebaart and Steven van de Par and Armin Kohlrausch},
+  journal=jasa,
+  volume=110,
+  pages={1074--1088},
+  year=2001,
+  month = {August},
+}
+
+@ARTICLE{breebaart2001b,
+  author = {Jeroen Breebaart and Steven van de Par and Armin Kohlrausch},
+  title = {{Binaural processing model based on contralateral inhibition. II.
+	Dependence on spectral parameters}},
+  journal = jasa,
+  year = 2001,
+  volume = 110,
+  pages = {1089-1104},
+  month = {August},
+  date-modified = {2007-04-06 21:13:55 +0200}
+}
+
+@ARTICLE{breebaart2001c,
+  author = {Jeroen Breebaart and Steven van de Par and Armin Kohlrausch},
+  title = {{Binaural processing model based on contralateral inhibition. III.
+	Dependence on temporal parameters}},
+  journal = jasa,
+  year = 2001,
+  volume = 110,
+  pages = {1105-1117},
+  month = {August},
+  date-modified = {2007-04-06 21:13:55 +0200}
+}
+
+@article{culling2007evidence,
+  title={{Evidence specifically favoring the equalization-cancellation theory of binaural unmasking}},
+  author={Culling, J.F.},
+  journal=jasa,
+  volume=122,
+  pages=2803,
+  year=2007
+}
+
+@inproceedings{culling2010mapping,
+  title={{Mapping Speech Intelligibility in Noisy Rooms}},
+  author={Culling, J.F. and Jelfs, S. and Lavandier, M.},
+  booktitle={Audio Engineering Society Convention 128},
+  year = 2010,
+}
+
 @article{dau1996qmeI,
   title={{A quantitative model of the effective signal processing in the auditory system. I. Model structure}},
   author={Dau, T. and P{\"u}schel, D. and Kohlrausch, A.},
@@ -27,7 +131,6 @@
   number=6,
   pages={3615--3622},
   year={1996a},
-  publisher={[New York: Acoustical Society of America]}
 }
 
 @article{dau1996qmeII,
@@ -50,6 +153,7 @@
   publisher={ASA}
 }
 
+
 @article{dau1997mapII,
   title={{Modeling auditory processing of amplitude modulation. II. Spectral and temporal integration}},
   author={Dau, T. and Kollmeier, B. and Kohlrausch, A.},
@@ -70,9 +174,77 @@
   publisher={Elsevier}
 }
 
+@incollection{durlach1972binaural,
+  title = {{Binaural signal detection: equalization and cancellation theory}},
+  author = {Durlach, N. I.},
+  booktitle = {{Foundations of Modern Auditory Theory. Vol. II}},
+  editor = {Tobias, J. V.},
+  pages = {369-462},
+  publisher = {Academic, New York},
+  year = 1972
+}
+
+
+@article{elliott2009modulation,
+  title={{The modulation transfer function for speech intelligibility}},
+  author={Elliott, T.M. and Theunissen, F.E.},
+  journal={PLoS Computational Biology},
+  volume=5,
+  number=3,
+  year=2009,
+  publisher={Public Library of Science}
+}
+
+@incollection{fant1968,
+  author = {Fant, Gunnar},
+  year = 1968,
+  title = {{Analysis and synthesis of speech processes}},
+  booktitle = {{Manual of phonetics}},
+  editor = {B. Malmberg},
+  publisher = {North-Holland},
+ }
+
+@article{fassel1993modulation,
+  title={{Modulation detection and masking using deterministic and random maskers}},
+  author={Fassel, R. and P{\"u}schel, D.},
+  journal={Contributions to Psychological Acoustics, edited by A. Schick (Universit{\"a}tsgesellschaft Oldenburg, Oldenburg)},
+  pages={419--429},
+  year=1993
+}
+
+@article{fassel1996sinusoidal,
+  title={{Sinusoidal amplitude modulation thresholds as a function of carrier frequency and level.}},
+  author={Fassel, R. and Kohlrausch, A.},
+  journal=jasa,
+  volume=99,
+  pages=2566,
+  year=1996
+}
+
+
+@article{gabor1946,
+  author = "Gabor, Dennis",
+  year = 1946,
+  title = "Theory of communication",
+  journal = "J.\ IEE",
+  volume = 93,
+  number = 26,
+  pages = "429-457",
+  keywords = "analysis;fourier analysis;frequency analysis;modulation space;time analysis",
+}
+
+@article{gaik1993combined,
+  title={{Combined evaluation of interaural time and intensity differences: Psychoacoustic results and computer modeling}},
+  author={Gaik, W.},
+  journal=jasa,
+  volume={94},
+  pages={98},
+  year={1993}
+}
+
 @article{glasberg1990daf,
   title={{Derivation of auditory filter shapes from notched-noise data.}},
-  author={Glasberg, BR and Moore, BC},
+  author={Glasberg, B. R. and Moore, B.C.J.},
   journal={Hearing Research},
   volume=47,
   number={1-2},
@@ -91,9 +263,90 @@
   publisher={Lippincott}
 }
 
+@book{green1966signal,
+  title={{Signal detection theory and psychophysics}},
+  author={Green, D.M. and Swets, J.A.},
+  year=1966,
+  publisher={Wiley New York}
+}
+
+@article{han1998equivalent,
+  title={{Equivalent threshold sound pressure levels for Sennheiser HDA 200 earphone and Etymotic Research ER-2 insert earphone in the frequency range 125 Hz to 16 kHz}},
+  author={Han, L.A. and Poulsen, T.},
+  journal={Scandinavian Audiology},
+  volume=27,
+  number=2,
+  pages={105--112},
+  issn={0105-0397},
+  year=1998,
+  publisher={Taylor \& Francis}
+}
+
+
+@PhdThesis{hess2007phd,
+  author = 	 {W. Hess},
+  title = 	 {{Time-Variant Binaural-Activity Characteristics as Indicator of Auditory Spatial Attributes}},
+  school = 	 {Ruhr-Universit{\"a}t Bochum},
+  year = 	 2007,
+}
+
+
+@book{iso226-2003,
+  author =       {{ISO 226:2003}},
+  title =        "Acoustics -- Normal equal-loudness-level contours",
+  publisher =    pub-ISO,
+  address =      pub-ISO:adr,
+  year =         2003,
+ }
+
+@book{iso389-2-1994,
+  author =       {{ISO 389-2:1994(E)}},
+  title =        "Acoustics -- Reference zero for the calibration of audiometric equipment -- Part 2: Reference equivalent threshold sound pressure levels for pure tones and insert earphones",
+  publisher =    pub-ISO,
+  address =      pub-ISO:adr,
+  year =         1994,
+ }
+
+@book{iso389-5-2006,
+  author =       {{ISO 389-5:2006}},
+  title =        "Acoustics -- Reference zero for the calibration of audiometric equipment -- Part 5: Reference equivalent threshold sound pressure levels for pure tones in the frequency range 8 kHz to 16 kHz",
+  publisher =    pub-ISO,
+  address =      pub-ISO:adr,
+  year =         2006,
+ }
+
+@book{iso389-8-2004,
+  author =       {{ISO 389-8:2004}},
+  title =        "Acoustics -- Reference zero for the calibration of audiometric equipment -- Part 8: Reference equivalent threshold sound pressure levels for pure tones and circumaural earphones",
+  publisher =    pub-ISO,
+  address =      pub-ISO:adr,
+  year =         2004,
+ }
+
+@article{jelfs2010revision,
+  title={{Revision and validation of a binaural model for speech intelligibility in noise}},
+  author={Jelfs, S. and Culling, J.F. and Lavandier, M.},
+  journal={Hearing Research},
+  issn={0378-5955},
+  year=2010,
+  publisher={Elsevier}
+}
+
+@article{jeffress1948place,
+  title={{A place theory of sound localization}},
+  author={Jeffress, L.A.},
+  journal={Journal of comparative and physiological psychology},
+  volume=41,
+  number=1,
+  pages={35--39},
+  issn={0021-9940},
+  year=1948,
+  publisher={Elsevier}
+}
+
 @article{jepsen2008cmh,
     author = {Jepsen, M.L. and Ewert, S.D. and Dau, T.},
-    journal = {Journal of the Acoustical Society of America},
+    journal = jasa,
     volume = 124,
     number = 1,
     pages = {422-438},
@@ -117,13 +370,66 @@ perception}}
   publisher={S. Hirzel Verlag}
 }
 
+@article{langendijk2002contribution,
+  title={{Contribution of spectral cues to human sound localization}},
+  author={Langendijk, E.H.A. and Bronkhorst, A.W.},
+  journal=jasa,
+  volume=112,
+  pages=1583,
+  year=2002
+}
+
+@article{lavandier2010prediction,
+  title={{Prediction of binaural speech intelligibility against noise in rooms}},
+  author={Lavandier, M. and Culling, J.F.},
+  journal=jasa,
+  volume=127,
+  pages=387,
+  year=2010
+}
+
+@article{lindemann1986a,
+  title={{Extension of a binaural cross-correlation model by contralateral inhibition. I. Simulation of lateralization for stationary signals}},
+  author={Lindemann, W.},
+  journal=jasa,
+  volume=80,
+  pages=1608,
+  year=1986
+}
+
+@article{lindemann1986b,
+  title={{Extension of a binaural cross-correlation model by contralateral inhibition. II. The law of the first wave front}},
+  author={Lindemann, W.},
+  journal=jasa,
+  volume={80},
+  pages={1623},
+  year={1986}
+}
+
 @article{lopezpoveda2001hnc,
   title={{A human nonlinear cochlear filterbank}},
   author={Lopez-Poveda, E.A. and Meddis, R.},
-  journal={The Journal of the Acoustical Society of America},
+  journal=jasa,
   volume=110,
   pages=3107,
   year=2001
+}
+
+@article{lyon1997all,
+  title={{All pole models of auditory filtering}},
+  author={Lyon, R.F.},
+  journal={Diversity in auditory mechanics, World Scientific Publishing, Singapore},
+  year={1997}
+}
+
+@inproceedings{lyon2010history,
+  title={{History and future of auditory filter models}},
+  author={Lyon, R.F. and Katsiamis, A.G. and Drakakis, E.M.},
+  booktitle={Circuits and Systems (ISCAS), Proceedings of 2010 IEEE International Symposium on},
+  pages={3809--3812},
+  year=2010,
+  organization={IEEE},
+  url = { http://research.google.com/pubs/archive/36895.pdf }
 }
 
 @article{mazh93,
@@ -138,13 +444,36 @@ perception}}
   zbl = {0842.94004}
 }
 
+@article{vandealle2009reproducible,
+          volume = 26,
+          number = 3,
+           month = {May},
+          author = {Patrick Vandewalle and Jelena Kovacevic and Martin Vetterli},
+           title = {Reproducible Research in Signal Processing - What, why, and how},
+         journal = {IEEE Signal Processing Magazine},
+           pages = {37--47},
+            year = 2009,
+             url = {http://rr.epfl.ch/17/},
+}
+
+
+
+@article{meddis2001computational,
+  title={{A computational algorithm for computing nonlinear auditory frequency selectivity}},
+  author={Meddis, R. and O'Mard, L.P. and Lopez-Poveda, E.A.},
+  journal=jasa,
+  volume={109},
+  pages={2852},
+  year={2001}
+}
+
 @article{moore1983sfc,
   title={{Suggested formulae for calculating auditory-filter bandwidths and excitation patterns}},
   author={Moore, B.C.J. and Glasberg, B.R.},
-  journal={The Journal of the Acoustical Society of America},
-  volume={74},
-  pages={750},
-  year={1983}
+  journal=jasa,
+  volume=74,
+  pages=750,
+  year=1983
 }
 
 @book{moore2003introduction,
@@ -166,6 +495,26 @@ perception}}
   publisher={National\ Acad.\ Sciences}
 }
 
+@article{park2008,
+  author = {Munhum Park and Philip A. Nelson and Kyeongok Kang},
+  title = {A model of sound localisation applied to the evaluation of systems
+	for stereophony},
+  journal = {Acta Acustica united Acoustica},
+  year = 2008,
+  volume = 94,
+  pages = {825-839},
+  timestamp = {2009.12.03}
+}
+
+
+@article{patterson1988efficient,
+  title={{An efficient auditory filterbank based on the gammatone function}},
+  author={Patterson, R.D. and Nimmo-Smith, I. and Holdsworth, J. and Rice, P.},
+  journal={APU report},
+  volume=2341,
+  year=1988
+}
+
 @article{piechowiak2007mcm,
   title={{Modeling comodulation masking release using an equalization-cancellation mechanism}},
   author={Piechowiak, T. and Ewert, S.D. and Dau, T.},
@@ -175,7 +524,7 @@ perception}}
   year=2007
 }
 
-@article{pralong1996rih,
+@article{pralong1996role,
   title={{The role of individualized headphone calibration for the generation of high fidelity virtual auditory space}},
   author={Pralong, D. and Carlile, S.},
   journal=jasa,
@@ -189,6 +538,16 @@ perception}}
   author= {P{\"u}schel, D.},
   school={Universit{\"a}t G{\"o}ttingen},
   year = 1988
+}
+
+@article{slaney1993efficient,
+  title={{An efficient implementation of the Patterson-Holdsworth auditory filter bank}},
+  author={Slaney, M.},
+  journal={Apple Computer, Perception Group, Tech. Rep},
+  year=1993,
+  publisher={Citeseer},
+  url = { http://cobweb.ecn.purdue.edu/~malcolm/apple/tr35/PattersonsEar.pdf }
+
 }
 
 @article{stevens1937smp,
@@ -228,6 +587,15 @@ perception}}
 	year=1996
 }
 
+@article{zakarauskas1993computational,
+  title={{A computational theory of spectral cue localization}},
+  author={Zakarauskas, P. and Cynader, M.S.},
+  journal=jasa,
+  volume=94,
+  pages=1323,
+  year=1993
+}
+
 @article{zwicker1961saf,
   author = {E. Zwicker},
   title = {Subdivision of the Audible Frequency Range into Critical Bands (Frequenzgruppen)},
@@ -239,4 +607,19 @@ perception}}
   pages = {248-248},
   url = {http://link.aip.org/link/?JAS/33/248/1},
   doi = {10.1121/1.1908630}
+}
+
+@book{zwicker1999psychoacoustics,
+  title={{Psychoacoustics: Facts and models}},
+  author={Zwicker, E. and Fastl, H.},
+  volume={254},
+  year={1999},
+  publisher={Springer Berlin}
+}
+
+@article{ltfatnote015,
+  author = "Peter L. S{\o}ndergaard and Bruno Torr\'esani and Peter Balazs",
+  title = {{The Linear Time Frequency Analysis Toolbox}},
+  journal = "International Journal of Wavelets, Multiresolution Analysis and Information Processing",
+  year = "submitted, 2011"
 }

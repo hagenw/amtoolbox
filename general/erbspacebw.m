@@ -1,4 +1,4 @@
-function [y,n] = erbspacebw(varargin)
+function [y,n] = erbspacebw(flow,fhigh,varargin)
 %ERBSPACE  Erbscale points specified by bandwidth
 %   Usage: y=erbspacebw(flow,fhigh,bw,hitme);
 %          y=erbspacebw(flow,fhigh,bw);
@@ -6,9 +6,9 @@ function [y,n] = erbspacebw(varargin)
 %
 %   This is a wrapper around audspacebw that selects the erb-scale. Please
 %   see the help on AUDSPACEBW for more information.
-%M
+%
 %   See also: audspacebw, freqtoaud
   
 %   AUTHOR : Peter L. Soendergaard
   
-[y,n] = audspacebw('erb',varargin{:});
+[y,n] = audspacebw(flow,fhigh,varargin{:},'erb');
