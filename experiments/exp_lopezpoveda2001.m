@@ -48,8 +48,8 @@ function output=exp_lopezpoveda2001(varargin)
 %               3: results for average parameter set, table II
 %               4: results for regression lines, table III
 %
-%   This script reproduces figures 2, 3bc and 4 Lopez-Poveda and Meddis 2001
-%
+%   See also: drnl, data_lopezpoveda2001, data_pralong1996, data_goode1994
+% 
 %R  lopezpoveda2001hnc
   
 %  AUTHOR: Katharina Egger
@@ -58,6 +58,8 @@ function output=exp_lopezpoveda2001(varargin)
 
   definput.flags.type = {'missingflag','fig2','fig2a','fig2b','fig3bc','fig3b','fig3c','fig4'};
   definput.flags.plot = {'plot','noplot'};
+  definput.keyvals.predrnl = {}
+  definput.keyvals.postdrnl = {}
 
   % Parse input options
   [flags,keyvals]  = ltfatarghelper({},definput,varargin);
@@ -266,8 +268,11 @@ expparsavg = [f250avg; f500avg; f1000avg; f2000avg; f4000avg; f8000avg];
   if flags.do_fig2b || flags.do_fig2
     fs = 22050;
     
-    gde = middleearfilter;           % data points directly derived from Goode et al. 1994
-    stapes_data = data_lopezpoveda2001('fig2b', 'noplot', 'lopezpoveda');    % control data points directly read from Lopez-Poveda and Meddis 2001
+    % data points directly derived from Goode et al. 1994
+    gde = middleearfilter;           
+
+    % control data points directly read from Lopez-Poveda and Meddis 2001
+    stapes_data = data_lopezpoveda2001('fig2b', 'noplot', 'lopezpoveda');    
     
     % Calculate the filters.
     bmid = middleearfilter(fs);      % Goode et al. 1994
@@ -322,8 +327,9 @@ if flags.do_plot
         set(gca,'Position',[0.15,0.07,0.8,0.4]);
         xlabel('Frequency (Hz)')
         ylabel('Stapes velocity (m/s) at 0dB SPL')
-        leg2=legend([g,firG,p],'directly derived from Goode et al. 1994', 'FIR filter with data points from Goode et al. 1994', ...
-            'Control points as in Lopez-Poveda and Meddis 2001');        
+        leg2=legend([g,firG,p],'directly derived from Goode et al. 1994', ...
+                    'FIR filter with data points from Goode et al. 1994', ...
+                    'Control points as in Lopez-Poveda and Meddis 2001');        
         set(leg2,'Position',[0.1637, 0.085, 0.716, 0.07]);
     
     elseif flags.do_fig2a
@@ -385,8 +391,8 @@ if flags.do_fig3b || flags.do_fig3bc
     hp_fir = headphonefilter(fs);
     insig = filter(hp_fir,1,insig);
     
-    [y_lin, ~] = drnl(insig, fs, f1000{:},'linonly');    
-    [y_nlin, ~] = drnl(insig, fs, f1000{:},'nlinonly');
+    [y_lin, ~] = drnl(insig, fs, kv.predrnl{:}, f1000{:},'linonly', kv.postdrnl{:});    
+    [y_nlin, ~] = drnl(insig, fs, kv.predrnl{:},f1000{:},'nlinonly', kv.postdrnl{:});
     
     outsig = y_lin + y_nlin;
     
@@ -418,8 +424,8 @@ if flags.do_fig3c || flags.do_fig3bc
     hp_fir = headphonefilter(fs);
     insig = filter(hp_fir,1,insig);
     
-    [y_lin, ~] = drnl(insig, fs, f1000{:},'linonly');    
-    [y_nlin, ~] = drnl(insig, fs, f1000{:},'nlinonly');
+    [y_lin, ~] = drnl(insig, fs, kv.predrnl{:}, f1000{:},'linonly', kv.postdrnl{:});    
+    [y_nlin, ~] = drnl(insig, fs, kv.predrnl{:}, f1000{:},'nlinonly', kv.postdrnl{:});
 
     outsig = y_lin + y_nlin;
         
@@ -557,10 +563,14 @@ if flags.do_fig4
       mask(:,ii) = rampsignal(sin(2*pi*fsig(ii)*0.6.*t),length(ramp),'sine').*(2^0.5);
       insig = mask(:,ii) * levelM(kk);
       outsig = filter(hp_fir,1,insig);
-      outsigavg = drnl(outsig, fs, expparsavg{ii,:});         % average parameter set, table II
+
+      % average parameter set, table II
+      outsigavg = drnl(outsig, fs, kv.predrnl{:}, expparsavg{ii,:}, kv.postdrnl{:});         
+
       OMavg(kk,ii) = max(outsigavg(floor(length(insig)/2):end));    
       
-      outsig = drnl(outsig, fs, expparsYO{ii,:});             % parameter set of YO, table I
+      % parameter set of YO, table I
+      outsig = drnl(outsig, fs, kv.predrnl{:}, expparsYO{ii,:}, kv.postdrnl{:});             
       OM(kk,ii) = max(outsig(floor(length(insig)/2):end));            
     end
     
@@ -571,14 +581,24 @@ if flags.do_fig4
       sig(:,ii) = rampsignal(sin(2*pi*fsig(ii).*t),length(ramp),'sine').*(2^0.5);
       insig = sig(:,ii) * levelS(mm);
       outsig = filter(hp_fir,1,insig);
-      outsigavg = drnl(outsig, fs, expparsavg{ii,:});         % average parameter set, table II
+
+      % average parameter set, table II
+      outsigavg = drnl(outsig, fs, kv.predrnl{:}, expparsavg{ii,:}, kv.postdrnl{:});         
+
       OSavg(mm,ii) = max(outsigavg(floor(length(insig)/2):end)); 
-      outsig = drnl(outsig, fs, expparsYO{ii,:});             % parameter set of YO, table I
+
+      % parameter set of YO, table I
+      outsig = drnl(outsig, fs, kv.predrnl{:}, expparsYO{ii,:}, kv.postdrnl{:});
+
       OS(mm,ii) = max(outsig(floor(length(insig)/2):end)); 
       
-      ratio(:,mm,ii) = OS(mm,ii) ./ OM(:,ii);                 % ratio for parameter set of YO, table I
-      [~, indx(mm,ii)] = min(abs(1-ratio(:,mm,ii)),[],1);          
-      ratioavg(:,mm,ii) = OSavg(mm,ii) ./ OMavg(:,ii);        % ratio for average parameter set, table II      
+      % ratio for parameter set of YO, table I
+      ratio(:,mm,ii) = OS(mm,ii) ./ OM(:,ii);                 
+
+      [~, indx(mm,ii)] = min(abs(1-ratio(:,mm,ii)),[],1);     
+
+      % ratio for average parameter set, table II           
+      ratioavg(:,mm,ii) = OSavg(mm,ii) ./ OMavg(:,ii);        
       [~, indxavg(mm,ii)] = min(abs(1-ratioavg(:,mm,ii)),[],1);          
     end
   
@@ -597,14 +617,14 @@ if flags.do_fig4
     for kk = 1:length(levelM)
       insig = mask(:,ii) * levelM(kk);
       outsig = filter(hp_fir,1,insig);
-      outsigrl = drnl(outsig, fs, 'flow', fsig(ii), 'fhigh', fsig(ii), 'lin_ngt', 3);
+      outsigrl = drnl(outsig, fs, kv.predrnl{:}, 'flow', fsig(ii), 'fhigh', fsig(ii), 'lin_ngt', 3, kv.postdrnl{:});
       OMrl(kk,ii) = max(outsigrl(floor(length(insig)/2):end));                       
     end
     
     for mm = 1:length(levelS)
       insig = sig(:,ii) * levelS(mm);
       outsig = filter(hp_fir,1,insig);
-      outsigrl = drnl(outsig, fs, 'flow', fsig(ii), 'fhigh', fsig(ii), 'lin_ngt', 3);
+      outsigrl = drnl(outsig, fs, kv.predrnl{:}, 'flow', fsig(ii), 'fhigh', fsig(ii), 'lin_ngt', 3, kv.postdrnl{:});
       OSrl(mm,ii) = max(outsigrl(floor(length(insig)/2):end)); 
       
       ratiorl(:,mm,ii) = OSrl(mm,ii) ./ OMrl(:,ii);           
