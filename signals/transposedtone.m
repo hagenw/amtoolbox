@@ -1,30 +1,50 @@
-function outsig = transposedtone(fc,fm,dur,fs)
+function outsig = transposedtone(siglen,fc,fm,fs,varargin)
 %TRANSPOSEDTONE  Transposed tone test stimuli
 %   Usage:  ts = transposedtone(fc,fm,dur,fs);
 %
 %   Input parameters:
+%     siglen  : Length of signal
 %     fc      : Vector of carrier frequencies (Hz)
 %     fm      : Vector of modulation frequencies (Hz)
-%     dur     : Stimulus duration (s)
-%     fs      : Sampling frequency
+%     fs      : Sampling frequency (Hz)
 % 
 %   Output parameters:
 %     outsig  : transposed tone (column vector)
+%
+%   TRANSPOSEDTONE(siglen,fc,fm,dur,fs) generates a transposed tone test stimuli as
+%   defined in Kolrausch et. al (1997).
+%
+%   By default, the output is normalized to have an RMS value of 1, but this can be
+%   changed by passing any of the flags from the NORMALIZE function.
+% 
+%   Example parameters as used in a study by Santurette
+%   
+%C     siglen = 44100;
+%C     fc     = 5000;
+%C     fm     = 435;
+%C     fs     = 44100;
+%C     outsig = transposedtone(fc,fm,dur,fs);
 %
 %R  kohlrausch1997detection oxenham2004correct
 
 % Author: Sébastien Santurette  2009
 
-% time vector
-t = (0:dur*fs-1)/fs;
+if nargin<4
+  error('Too few input parameters.');
+end;
 
-% number of samples
-ns = dur*fs;
-                       
+definput.import={'normalize'};
+definput.importdefaults={'rms'};
+[flags,keyvals]=ltfatarghelper({},definput,varargin);
+
+
+% time vector
+t = (0:siglen-1)/fs;
+
 % number of tones
 n = length(fc);
                        
-outsig = zeros(ns,1);
+outsig = zeros(siglen,1);
 for ii = 1:n
   % carrier tone
   carrier = cos(2*pi*fc(ii)*t);        
@@ -46,5 +66,4 @@ for ii = 1:n
   outsig = outsig+(carrier.*hrsine)';
 end;
 
-% Normalize the output
-outsig = outsig/rms(outsig);
+outsig=normalize(outsig,flags.norm);

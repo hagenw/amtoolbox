@@ -1,6 +1,7 @@
 % AMT - Signals
 %
 %  Monaural signal generators
+%    TRANSPOSEDTONE -  Transposed tone stimuli
 %
 %  Binaural signal generators
 %    BMSIN          -  Binaural modulated sinusoid
