@@ -1088,7 +1088,7 @@ if flags.do_fig18
     output = zeros(niacs,ndl);
     for ii = 1:niacs; 
         % Generate ITD shifted sinusoid
-        sig = corpinknoise(fs,iac(ii));
+        sig = bincorrnoise(fs,iac(ii),'pink');
         % Aplly onset window
         sig = rampsignal(sig,[N_1/2-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
