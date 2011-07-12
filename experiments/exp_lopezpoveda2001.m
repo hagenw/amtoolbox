@@ -58,11 +58,11 @@ function output=exp_lopezpoveda2001(varargin)
 
   definput.flags.type = {'missingflag','fig2','fig2a','fig2b','fig3bc','fig3b','fig3c','fig4'};
   definput.flags.plot = {'plot','noplot'};
-  definput.keyvals.predrnl = {}
-  definput.keyvals.postdrnl = {}
+  definput.keyvals.predrnl = {};
+  definput.keyvals.postdrnl = {};
 
   % Parse input options
-  [flags,keyvals]  = ltfatarghelper({},definput,varargin);
+  [flags,kv]  = ltfatarghelper({},definput,varargin);
         
 if flags.do_missingflag
   flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
