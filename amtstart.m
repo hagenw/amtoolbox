@@ -42,7 +42,7 @@ end;
 % Required version is given by:
 major_rq  = 1;
 minor_rq  = 0;
-bugfix_rq = 0;
+bugfix_rq = 2;
 
 
 s=ltfathelp('version');
