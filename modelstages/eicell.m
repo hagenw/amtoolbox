@@ -1,4 +1,4 @@
-function z = eicell(insig,fs,tau,ild)
+function z = eicell(insig,fs,tau,ild,varargin)
 %EICELL  Excitaion-inhibition cell computation for the Breebaart model
 %   Usage: y = eicell(insig,fs,tau,ild)
 %
@@ -29,11 +29,12 @@ function z = eicell(insig,fs,tau,ild)
 
 % Author: Jeroen Breebaart and Peter L. Soendergaard
 
+if nargin<4
+  error('%s: Too few input arguments.',upper(mfilename));
+end;
 
 definput.import={'eicell'};
 [flags,kv]=ltfatarghelper({},definput,varargin);
-
-
 
 % apply characteristic delay:
 n = round( abs(tau) * fs );
@@ -49,7 +50,7 @@ end
 
 % apply characteristic ILD:
 l=gaindb(l, ild/2);
-r=gaindb(l,-ild/2);
+r=gaindb(r,-ild/2);
 
 % compute instanteneous EI output:
 x = (l - r).^2;
