@@ -68,25 +68,3 @@ start_frequency_erb = ...
 center_frequencies_erb = ...
     [start_frequency_erb:(1/filters_per_ERBaud):upper_cutoff_frequency_erb];
 center_frequencies_hz = Gfb_erbscale2hz(center_frequencies_erb);
-
-%%-----------------------------------------------------------------------------
-%%
-%%   Copyright (C) 2003 2006 2007 AG Medizinische Physik,
-%%                        Universitaet Oldenburg, Germany
-%%                        http://www.physik.uni-oldenburg.de/docs/medi
-%%
-%%   Permission to use, copy, and distribute this software/file and its
-%%   documentation for any purpose without permission by UNIVERSITAET OLDENBURG
-%%   is not granted.
-%%   
-%%   Permission to use this software for academic purposes is generally
-%%   granted.
-%%
-%%   Permission to modify the software is granted, but not the right to
-%%   distribute the modified code.
-%%
-%%   This software is provided "as is" without expressed or implied warranty.
-%%
-%%   Author: Tobias Herzke
-%%
-%%-----------------------------------------------------------------------------

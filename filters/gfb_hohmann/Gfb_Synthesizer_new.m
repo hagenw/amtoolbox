@@ -28,26 +28,3 @@ end
 
 synthesizer.delay = Gfb_Delay_new(analyzer, desired_delay_in_samples);
 synthesizer.mixer = Gfb_Mixer_new(analyzer, synthesizer.delay);
-
-
-%%-----------------------------------------------------------------------------
-%%
-%%   Copyright (C) 2002 2003 2006 2007 AG Medizinische Physik,
-%%                        Universitaet Oldenburg, Germany
-%%                        http://www.physik.uni-oldenburg.de/docs/medi
-%%
-%%   Permission to use, copy, and distribute this software/file and its
-%%   documentation for any purpose without permission by UNIVERSITAET OLDENBURG
-%%   is not granted.
-%%   
-%%   Permission to use this software for academic purposes is generally
-%%   granted.
-%%
-%%   Permission to modify the software is granted, but not the right to
-%%   distribute the modified code.
-%%
-%%   This software is provided "as is" without expressed or implied warranty.
-%%
-%%   Author: Tobias Herzke
-%%
-%%-----------------------------------------------------------------------------

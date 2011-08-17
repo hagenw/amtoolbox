@@ -50,26 +50,3 @@ Gfb_plot(1, [0, sampling_rate_hz/2, -40, 0], ...
 
 disp(' ');
 disp('Figure 1 shows the frequency response of the individual filters.');
-
-
-%%-----------------------------------------------------------------------------
-%%
-%%   Copyright (C) 2002 2006  AG Medizinische Physik,
-%%                        Universitaet Oldenburg, Germany
-%%                        http://www.physik.uni-oldenburg.de/docs/medi
-%%
-%%   Permission to use, copy, and distribute this software/file and its
-%%   documentation for any purpose without permission by UNIVERSITAET OLDENBURG
-%%   is not granted.
-%%   
-%%   Permission to use this software for academic purposes is generally
-%%   granted.
-%%
-%%   Permission to modify the software is granted, but not the right to
-%%   distribute the modified code.
-%%
-%%   This software is provided "as is" without expressed or implied warranty.
-%%
-%%   Author: Tobias Herzke
-%%
-%%-----------------------------------------------------------------------------
