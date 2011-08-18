@@ -43,10 +43,13 @@ impulse = [1, zeros(1,8191)];
 [impulse_response, analyzer] = Gfb_Analyzer_fprocess(analyzer, impulse);
 frequency_response = fft(real(impulse_response)');                     
 frequency = [0:8191] * sampling_rate_hz / 8192;                        
-Gfb_plot(1, [0, sampling_rate_hz/2, -40, 0], ...
-	 'frequency response of the individual filters in this filterbank', ...
-	 'frequency / Hz', 'filter response / dB', ...
-	 frequency, 20 * log10(abs(frequency_response)));
+
+figure(1);
+plot(frequency, 20 * log10(abs(frequency_response)));
+axis([0, sampling_rate_hz/2, -40, 0]);
+title('frequency response of the individual filters in this filterbank');
+xlabel('frequency / Hz');
+ylabel('filter response / dB');
 
 disp(' ');
 disp('Figure 1 shows the frequency response of the individual filters.');

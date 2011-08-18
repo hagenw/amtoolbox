@@ -39,11 +39,11 @@ end
 
 % Calculate the values of the parameter frequencies on the ERBscale:
 lower_cutoff_frequency_erb     = ...
-    Gfb_hz2erbscale(lower_cutoff_frequency_hz);
+    freqtoerb(lower_cutoff_frequency_hz);
 specified_center_frequency_erb = ...
-    Gfb_hz2erbscale(specified_center_frequency_hz);
+    freqtoerb(specified_center_frequency_hz);
 upper_cutoff_frequency_erb     = ...
-    Gfb_hz2erbscale(upper_cutoff_frequency_hz);
+    freqtoerb(upper_cutoff_frequency_hz);
 
 
 % The center frequencies of the individual filters are equally
@@ -67,4 +67,4 @@ start_frequency_erb = ...
 % frequency values:
 center_frequencies_erb = ...
     [start_frequency_erb:(1/filters_per_ERBaud):upper_cutoff_frequency_erb];
-center_frequencies_hz = Gfb_erbscale2hz(center_frequencies_erb);
+center_frequencies_hz = erbtofreq(center_frequencies_erb);

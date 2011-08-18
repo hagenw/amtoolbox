@@ -57,16 +57,20 @@ impulse = [1, zeros(1,8191)];
 [resynthesized_impulse, synthesizer] = ...
     Gfb_Synthesizer_process(synthesizer, analyzed_impulse);
 
-Gfb_plot(1, [40/sampling_rate_hz*1e3, 120/sampling_rate_hz*1e3, -1, 1],...
-         'impulse response of the analysis-synthesis system',          ...
-         'time / ms', 'system output',                                 ...
-         [0:8191]/sampling_rate_hz*1e3, resynthesized_impulse);
+figure(1);
+plot([0:8191]/sampling_rate_hz*1e3, resynthesized_impulse);
+axis([40/sampling_rate_hz*1e3, 120/sampling_rate_hz*1e3, -1, 1]);
+title('impulse response of the analysis-synthesis system');
+xlabel('time / ms');
+ylabel('system output');
 
-frequency = [0:8191] * sampling_rate_hz / 8192;                        
-Gfb_plot(2, [0, sampling_rate_hz/2, -40, 5],                    ...
-	 'frequency response of the analysis-synthesis-system', ...
-	 'frequency / Hz', 'system response level / dB',        ...
-	 frequency, 20 * log10(abs(fft(resynthesized_impulse'))));
+frequency = [0:8191] * sampling_rate_hz / 8192;
+figure(2)
+plot(frequency, 20 * log10(abs(fft(resynthesized_impulse'))));
+axis([0, sampling_rate_hz/2, -40, 5]);
+title('frequency response of the analysis-synthesis-system');
+xlabel('frequency / Hz');
+ylabel('system response level / dB');
 
 disp('Figure 1 shows the impulse response of the analysis-synthesis system');
 disp('in the time domain; figure 2 shows its frequency response.');

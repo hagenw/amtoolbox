@@ -18,6 +18,7 @@
  *                        http://www.physik.uni-oldenburg.de/docs/medi
  */   
 
+#include <stdlib.h>
 #include "Gfb_analyze.h"
 
 /*
