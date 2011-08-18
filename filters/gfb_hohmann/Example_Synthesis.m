@@ -8,8 +8,8 @@
 
 %%% First, create a filterbank analyzer as in Example_Filterbank.m %%%
 
-lower_cutoff_frequency_hz =    70;
-upper_cutoff_frequency_hz =  6700;
+flow =    70;
+fhigh =  6700;
 base_frequency_hz         =  1000;
 sampling_rate_hz          = 16276;
 filters_per_ERB           =     1.0;
@@ -18,8 +18,8 @@ filter_order              =     4;
 bandwidth_factor          =     1.0;
 
 disp(['Building analysis filterbank']);
-analyzer = Gfb_Analyzer_new(sampling_rate_hz, lower_cutoff_frequency_hz, ...
-                            base_frequency_hz, upper_cutoff_frequency_hz,...
+analyzer = Gfb_Analyzer_new(sampling_rate_hz, flow, ...
+                            base_frequency_hz, fhigh,...
 			    filters_per_ERB, filter_order, bandwidth_factor);
 
 

@@ -16,10 +16,10 @@ disp('input signals with a sampling frequency of 10kHz.              ');
 center_frequency_hz   =  1000;
 bandwidth_hz          =   100;
 attenuation_db        =     3;
-sampling_frequency_hz = 10000;
+fs = 10000;
 filter_order          =     4;
 
-filter = Gfb_Filter_new(sampling_frequency_hz, center_frequency_hz, ...
+filter = Gfb_Filter_new(fs, center_frequency_hz, ...
                         bandwidth_hz, attenuation_db, filter_order);
 
 %%% print the filter's parameters to the screen %%%
@@ -56,7 +56,7 @@ ylabel('filter output');
 frequency_response = abs(fft(real(impulse_response.')));
 figure(2);
 plot([0:(impulse_samples - 1)] *                     ...
-     (sampling_frequency_hz / impulse_samples),       ...
+     (fs / impulse_samples),       ...
      20 * log10(frequency_response));
 axis([0,1500, -40,0]);
 title('frequency response of example gammatone filter');

@@ -5,21 +5,21 @@
 % author   : tp
 % date     : Jan, Mar 2002, Nov 2006
 
-lower_cutoff_frequency_hz = 70;
-upper_cutoff_frequency_hz = 6700;
+flow = 70;
+fhigh = 6700;
 base_frequency_hz = 1000;
 sampling_rate_hz = 16276;
 filters_per_ERB = 1.0;
 
 disp(['Building a filterbank for ', num2str(sampling_rate_hz), ...
       'Hz sampling frequency.']);
-disp(['Lower cutoff frequency: ', num2str(lower_cutoff_frequency_hz), 'Hz']);
-disp(['Upper cutoff frequency: ', num2str(upper_cutoff_frequency_hz), 'Hz']);
+disp(['Lower cutoff frequency: ', num2str(flow), 'Hz']);
+disp(['Upper cutoff frequency: ', num2str(fhigh), 'Hz']);
 disp(['Base frequency        : ', num2str(base_frequency_hz), 'Hz']);
 disp(['filters per ERB       : ', num2str(filters_per_ERB)]);
 disp(' ')
-analyzer = Gfb_Analyzer_new(sampling_rate_hz, lower_cutoff_frequency_hz, ...
-                            base_frequency_hz, upper_cutoff_frequency_hz,...
+analyzer = Gfb_Analyzer_new(sampling_rate_hz, flow, ...
+                            base_frequency_hz, fhigh,...
 			    filters_per_ERB);
 bands = length(analyzer.center_frequencies_hz);
 disp(['filterbank contains ', num2str(bands), ' filters:']);

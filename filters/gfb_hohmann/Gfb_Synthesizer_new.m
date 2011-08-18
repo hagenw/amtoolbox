@@ -9,7 +9,7 @@ function synthesizer = Gfb_Synthesizer_new(analyzer, desired_delay_in_seconds)
 % desired_delay_in_seconds  the desired group delay of the analysis-synthesis
 %                           system in seconds.  Greater delays result in better
 %                           output signal quality.  Minimum delay is
-%                           (1 / analyzer.sampling_frequency_hz)
+%                           (1 / analyzer.fs)
 % synthesizer               the constructed Gfb_Synthesizer structure
 %
 % copyright: Universitaet Oldenburg
@@ -21,9 +21,9 @@ function synthesizer = Gfb_Synthesizer_new(analyzer, desired_delay_in_seconds)
 
 synthesizer.type         = 'Gfb_Synthesizer';
 desired_delay_in_samples = round(desired_delay_in_seconds * ...
-			         analyzer.sampling_frequency_hz);
+			         analyzer.fs);
 if (desired_delay_in_samples < 1)
-    error('delay must be at least 1/analyzer.sampling_frequency_hz');
+    error('delay must be at least 1/analyzer.fs');
 end
 
 synthesizer.delay = Gfb_Delay_new(analyzer, desired_delay_in_samples);

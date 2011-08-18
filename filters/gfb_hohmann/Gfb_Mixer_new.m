@@ -32,7 +32,7 @@ Gfb_set_constants;
 mixer.type           = 'Gfb_Mixer';
 center_frequencies   = analyzer.center_frequencies_hz;
 number_of_bands   = length(center_frequencies);
-sampling_frequency   = analyzer.sampling_frequency_hz;
+sampling_frequency   = analyzer.fs;
 
 
 % The center frequencies in the z plain

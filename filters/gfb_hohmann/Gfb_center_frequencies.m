@@ -1,32 +1,32 @@
 function center_frequencies_hz =                            ...
       Gfb_center_frequencies(filters_per_ERBaud,            ...
-			     lower_cutoff_frequency_hz,     ...
-			     specified_center_frequency_hz, ...
-			     upper_cutoff_frequency_hz)
+			     flow,     ...
+			     basef, ...
+			     fhigh)
 % function frequencies_hz =                                   ...
 %       Gfb_center_frequencies(frequencies_per_ERBaud,        ...
-%                              lower_cutoff_frequency_hz,     ...
-%                              specified_center_frequency_hz, ...
-%                              upper_cutoff_frequency_hz)
+%                              flow,     ...
+%                              basef, ...
+%                              fhigh)
 % 
 % constructs a vector of frequencies that are equidistand on the ERB
 % scale.
 % PARAMETERS:
 % frequencies_per_ERBaud     The density of frequencies on the ERB scale.
-% lower_cutoff_frequency_hz  The lowest possible frequency.
-% specified_center_frequency_hz       ( == "base frequency")
+% flow  The lowest possible frequency.
+% basef       ( == "base frequency")
 %                            The result vector will contain this exact
-%                            frequency. Must be >= lower_cutoff_frequency_hz
-% upper_cutoff_frequency_hz  The highest possible frequency. Must be >=
-%                            specified_center_frequency_hz
+%                            frequency. Must be >= flow
+% fhigh  The highest possible frequency. Must be >=
+%                            basef
 % OUTPUT:
 % frequencies_hz             A vector containing frequencies between
-%                            lower_cutoff_frequency_hz and
-%                            upper_cutoff_frequency_hz, equally
+%                            flow and
+%                            fhigh, equally
 %                            distributed on the ERB scale with a distance
 %                            of (1 / frequencies_per_ERBaud) ERB, with
 %                            one of the frequencies being
-%                            specified_center_frequency_hz.
+%                            basef.
 % copyright: Universitaet Oldenburg
 % author   : tp
 % date     : Jan, Sep 2003, Nov 2006, Feb 2007
@@ -34,16 +34,16 @@ function center_frequencies_hz =                            ...
 % filename : Gfb_center_frequencies.m
 
 if (nargin < 4)
-  upper_cutoff_frequency_hz = specified_center_frequency_hz;
+  fhigh = basef;
 end
 
 % Calculate the values of the parameter frequencies on the ERBscale:
 lower_cutoff_frequency_erb     = ...
-    freqtoerb(lower_cutoff_frequency_hz);
+    freqtoerb(flow);
 specified_center_frequency_erb = ...
-    freqtoerb(specified_center_frequency_hz);
+    freqtoerb(basef);
 upper_cutoff_frequency_erb     = ...
-    freqtoerb(upper_cutoff_frequency_hz);
+    freqtoerb(fhigh);
 
 
 % The center frequencies of the individual filters are equally
