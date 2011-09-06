@@ -20,7 +20,7 @@ function output = exp_langendijk2002(varargin)
 %   You can choose between two of his listeners P3 and P6. The required
 %   data (DTF data and response patterns) will be provided by precalculated
 %   mat-files due to high computing time (optionally data can be calculated
-%   by using the data_langendijk2002 function). 
+%   by using the data_langendijk2002('expdata') function. 
 %
 %
 %   subfigure 1 Baseline condition
@@ -42,7 +42,8 @@ function output = exp_langendijk2002(varargin)
 %
 %   The output are the pdfs for the baseline condition.
 %
-%   See also: langendijk, likelilangendijk, plotlangendijk, plotlikelilangendijk
+%   See also: langendijk, likelilangendijk, plotlangendijk,
+%   plotlikelilangendijk, data_langendijk2002
 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -79,48 +80,31 @@ fs = 48000;     % sampling frequency
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-load(['langendijk2002-' listener]); 
-% loads hM data for all conditions which were calculated as follows:
-% temp=data_langendijk2002([listener '-dtf']);
-% pol=temp(1,:);
-% med=temp(2:end,:);
-% temp=data_langendijk2002([listener '-b']);
-% targetb=temp(1,:); responseb=temp(2,:);
-% medir=gr2ir(med,'b',fs);
-% temp=data_langendijk2002([listener '-2o']);
-% target2o=temp(1,:); response2o=temp(2,:);
-% medir2o=gr2ir(med,'2o',fs);
-% temp=data_langendijk2002([listener '-1ol']);
-% target1ol=temp(1,:); response1ol=temp(2,:);
-% medir1ol=gr2ir(med,'1ol',fs);
-% temp=data_langendijk2002([listener '-1om']);
-% target1om=temp(1,:); response1om=temp(2,:);
-% medir1om=gr2ir(med,'1om',fs);
-% temp=data_langendijk2002([listener '-1oh']);
-% target1oh=temp(1,:); response1oh=temp(2,:);
-% medir1oh=gr2ir(med,'1oh',fs);
+dtfdata=load(['langendijk2002-' listener '.mat']);
+% loads hM data for all conditions 
+% data can be recalculated by calling data_langendijk2002('expdata')
 
 % pdf calcualtion
 h = waitbar(0,'Please wait...');
-pb  = langendijk( medir   ,medir); % baseline
+pb  = langendijk( dtfdata.medir,dtfdata.medir); % baseline
 waitbar(1/5)
-p2o = langendijk( medir2o ,medir); % 2-oct (4-16kHz)
+p2o = langendijk( dtfdata.medir2o,dtfdata.medir); % 2-oct (4-16kHz)
 waitbar(2/5)
-p1ol= langendijk( medir1ol,medir); % 1-oct (low:4-8kHz)
+p1ol= langendijk( dtfdata.medir1ol,dtfdata.medir); % 1-oct (low:4-8kHz)
 waitbar(3/5)
-p1om= langendijk( medir1om,medir); % 1-oct (middle:5.7-11.3kHz)
+p1om= langendijk( dtfdata.medir1om,dtfdata.medir); % 1-oct (middle:5.7-11.3kHz)
 waitbar(4/5)
-p1oh= langendijk( medir1oh,medir); % 1-oct (high:8-16kHz)
+p1oh= langendijk( dtfdata.medir1oh,dtfdata.medir); % 1-oct (high:8-16kHz)
 waitbar(5/5)
 
 % likelihood estimations
 la=zeros(5,1);le=zeros(5,1);ci=zeros(5,2);
-idb=1:2:length(targetb); % in order to get comparable likelihoods
-[la(1),le(1),ci(1,:)] = likelilangendijk( pb,pol,pol,targetb(idb),responseb(idb) );
-[la(2),le(2),ci(2,:)] = likelilangendijk( p2o,pol,pol,targetc,response2o );
-[la(3),le(3),ci(3,:)] = likelilangendijk( p1ol,pol,pol,targetc,response1ol );
-[la(4),le(4),ci(4,:)] = likelilangendijk( p1om,pol,pol,targetc,response1om );
-[la(5),le(5),ci(5,:)] = likelilangendijk( p1oh,pol,pol,targetc,response1oh );
+idb=1:1:length(dtfdata.targetb); % in order to get comparable likelihoods
+[la(1),le(1),ci(1,:)] = likelilangendijk( pb,dtfdata.pol,dtfdata.pol,dtfdata.targetb(idb),dtfdata.responseb(idb) );
+[la(2),le(2),ci(2,:)] = likelilangendijk( p2o,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response2o );
+[la(3),le(3),ci(3,:)] = likelilangendijk( p1ol,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1ol );
+[la(4),le(4),ci(4,:)] = likelilangendijk( p1om,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1om );
+[la(5),le(5),ci(5,:)] = likelilangendijk( p1oh,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1oh );
 close(h)
 
 output = pb;
@@ -131,20 +115,20 @@ if flags.do_plot
     
     % pdf plots with actual responses
     subplot(2,3,1)
-    plotlangendijk(pb,pol,pol,[listener '; ' 'baseline']);
-    hold on; h=plot( targetb, responseb, 'ko'); set(h,'MarkerFaceColor','w')
+    plotlangendijk(pb,dtfdata.pol,dtfdata.pol,[listener '; ' 'baseline']);
+    hold on; h=plot( dtfdata.targetb, dtfdata.responseb, 'ko'); set(h,'MarkerFaceColor','w')
     subplot(2,3,2)
-    plotlangendijk(p2o,pol,pol,[listener '; ' '2-oct (4-16kHz)']);
-    hold on; h=plot( targetc, response2o, 'ko'); set(h,'MarkerFaceColor','w')
+    plotlangendijk(p2o,dtfdata.pol,dtfdata.pol,[listener '; ' '2-oct (4-16kHz)']);
+    hold on; h=plot( dtfdata.targetc, dtfdata.response2o, 'ko'); set(h,'MarkerFaceColor','w')
     subplot(2,3,3)
-    plotlangendijk(p1ol,pol,pol,[listener '; ' '1-oct (low: 4-8kHz)']);
-    hold on; h=plot( targetc, response1ol, 'ko'); set(h,'MarkerFaceColor','w')
+    plotlangendijk(p1ol,dtfdata.pol,dtfdata.pol,[listener '; ' '1-oct (low: 4-8kHz)']);
+    hold on; h=plot( dtfdata.targetc, dtfdata.response1ol, 'ko'); set(h,'MarkerFaceColor','w')
     subplot(2,3,4)
-    plotlangendijk(p1om,pol,pol,[listener '; ' '1-oct (middle: 5.7-11.3kHz)']);
-    hold on; h=plot( targetc, response1om, 'ko'); set(h,'MarkerFaceColor','w')
+    plotlangendijk(p1om,dtfdata.pol,dtfdata.pol,[listener '; ' '1-oct (middle: 5.7-11.3kHz)']);
+    hold on; h=plot( dtfdata.targetc, dtfdata.response1om, 'ko'); set(h,'MarkerFaceColor','w')
     subplot(2,3,5)
-    plotlangendijk(p1oh,pol,pol,[listener '; ' '1-oct (high: 8-16kHz)']);
-    hold on; h=plot( targetc, response1oh, 'ko'); set(h,'MarkerFaceColor','w')
+    plotlangendijk(p1oh,dtfdata.pol,dtfdata.pol,[listener '; ' '1-oct (high: 8-16kHz)']);
+    hold on; h=plot( dtfdata.targetc, dtfdata.response1oh, 'ko'); set(h,'MarkerFaceColor','w')
     
     % likelihood statistic
     subplot(2,3,6)
@@ -152,88 +136,5 @@ if flags.do_plot
 end
 
 
-function [medir]=gr2ir(med,cond,fs)
-% GR2IR converts given gain responses MED (in dB) to impulse responses
-% MEDIR; furthermore several conditions according to langendijk et al.
-% (2002) can be defined
-% Usage:            [medir]=gr2ir(med,cond,fs)
-% Input arguments:
-%       med:        gain responses (in dB)
-%       cond:       condition, 
-%                   possibilities:  baseline    'b'
-%                                   2 octaves   '2o'
-%                                   1 oct (low) '1ol'
-%                                   1 oct (mid) '1om'
-%                                   1 oct (high)'1oh'
-%       fs:      	sampling frequency
-% Output arguments:
-%       medir:   	impulse responses
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
-% latest update: 2010-08-16
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% default settings
-if ~exist('cond','var')
-    cond='b';
-end
-if ~exist('fs','var')
-    fs=48000;
-end
-
-imp=zeros(240,1);imp(1)=1;
-n=256;
-len=240;
-frq=logspace(log10(2000),log10(16000),size(med,1));
-
-% frequency indices
-f1=find(frq>=4000,1);
-f2=find(frq>=5700,1);
-f3=find(frq>=8000,1);
-f4=find(frq>=11300,1);
-
-switch cond
-    case 'b' % baseline
-        medir=zeros(n,size(med,2));
-        for ii=1:size(med,2)
-            bp = firls(len,[0 0.08 frq/(fs/2) 0.68 1],[0;0; 10.^(med(:,ii)/20); 0;0]);
-            medir(1:length(imp),ii) = filter(bp,1,imp);
-        end
-
-    case '2o' % 2 oct (4-16kHz)
-        medir=zeros(n,size(med,2));
-        med2o=med;
-        for ii=1:size(med,2)
-            med2o(f1:end,ii)=mean(med(f1:end,ii));
-            bp = firls(len,[0 0.08 frq/(fs/2) 0.68 1],[0;0; 10.^(med2o(:,ii)/20); 0;0]);
-            medir(1:length(imp),ii) = filter(bp,1,imp);
-        end
-
-    case '1ol' % 1 oct (low:4-8kHz)
-        medir=zeros(n,size(med,2));
-        med1ol=med;
-        for ii=1:size(med,2)
-            med1ol(f1:f3,ii)=mean(med(f1:f3,ii));
-            bp = firls(len,[0 0.08 frq/(fs/2) 0.68 1],[0;0; 10.^(med1ol(:,ii)/20); 0;0]);
-            medir(1:length(imp),ii) = filter(bp,1,imp);
-        end
-
-    case '1om' % 1 oct (middle:5.7-11.3kHz)
-        medir=zeros(n,size(med,2));
-        med1om=med;
-        for ii=1:size(med,2)
-            med1om(f2:f4,ii)=mean(med(f2:f4,ii));
-            bp = firls(len,[0 0.08 frq/(fs/2) 0.68 1],[0;0; 10.^(med1om(:,ii)/20); 0;0]);
-            medir(1:length(imp),ii) = filter(bp,1,imp);
-        end
-
-    case '1oh' % 1 oct (high:8-16kHz)
-        medir=zeros(n,size(med,2));
-        med1oh=med;
-        for ii=1:size(med,2)
-            med1oh(f3:end,ii)=mean(med(f3:end,ii));
-            bp = firls(len,[0 0.08 frq/(fs/2) 0.68 1],[0;0; 10.^(med1oh(:,ii)/20); 0;0]);
-            medir(1:length(imp),ii) = filter(bp,1,imp);
-        end
-end
 end
