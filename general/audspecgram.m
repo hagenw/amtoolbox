@@ -106,7 +106,7 @@ definput.flags.fmax={'nofmax','fmax'};
 definput.flags.mlp={'mlp','mf','nomf'};
 %definput.flags.delay={'gammatonedelay','zerodelay'};
 
-definput.keyvals.ihc='dau';
+definput.keyvals.ihc='ihc_dau';
 definput.keyvals.dynrange=100;
 definput.keyvals.thr=0;
 definput.keyvals.clim=[0,1];
