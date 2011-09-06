@@ -21,7 +21,7 @@ fs=22050;
 
 % Calculate the filters.
 bout = headphonefilter(fs);
-bmid = middleearfilter_jepsen2008(fs);
+bmid = middleearfilter(fs);
 
 % Manually calculate the frequency response
 fout = 20*log10(abs(fftreal(bout)));
