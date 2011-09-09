@@ -99,7 +99,7 @@ waitbar(5/5)
 
 % likelihood estimations
 la=zeros(5,1);le=zeros(5,1);ci=zeros(5,2);
-idb=1:1:length(dtfdata.targetb); % in order to get comparable likelihoods
+idb=1:2:length(dtfdata.targetb); % in order to get comparable likelihoods
 [la(1),le(1),ci(1,:)] = likelilangendijk( pb,dtfdata.pol,dtfdata.pol,dtfdata.targetb(idb),dtfdata.responseb(idb) );
 [la(2),le(2),ci(2,:)] = likelilangendijk( p2o,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response2o );
 [la(3),le(3),ci(3,:)] = likelilangendijk( p1ol,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1ol );
