@@ -86,15 +86,15 @@ dtfdata=load(['langendijk2002-' listener '.mat']);
 
 % pdf calcualtion
 h = waitbar(0,'Please wait...');
-pb  = langendijk( dtfdata.medir,dtfdata.medir); % baseline
+pb  = langendijk( dtfdata.medir,dtfdata.medir,fs); % baseline
 waitbar(1/5)
-p2o = langendijk( dtfdata.medir2o,dtfdata.medir); % 2-oct (4-16kHz)
+p2o = langendijk( dtfdata.medir2o,dtfdata.medir,fs); % 2-oct (4-16kHz)
 waitbar(2/5)
-p1ol= langendijk( dtfdata.medir1ol,dtfdata.medir); % 1-oct (low:4-8kHz)
+p1ol= langendijk( dtfdata.medir1ol,dtfdata.medir,fs); % 1-oct (low:4-8kHz)
 waitbar(3/5)
-p1om= langendijk( dtfdata.medir1om,dtfdata.medir); % 1-oct (middle:5.7-11.3kHz)
+p1om= langendijk( dtfdata.medir1om,dtfdata.medir,fs); % 1-oct (middle:5.7-11.3kHz)
 waitbar(4/5)
-p1oh= langendijk( dtfdata.medir1oh,dtfdata.medir); % 1-oct (high:8-16kHz)
+p1oh= langendijk( dtfdata.medir1oh,dtfdata.medir,fs); % 1-oct (high:8-16kHz)
 waitbar(5/5)
 
 % likelihood estimations

@@ -1,11 +1,12 @@
-function p = langendijk(ir1,ir2,varargin)
+function p = langendijk(ir1,ir2,fs,varargin)
 %LANGENDIJK Localization model according to Langendijk et al. (2002)
 %   Usage:    p = langendijk(ir1,ir2)
-%             p = langendijk(ir1,ir2,bw,do,cp,s,bal,flow,fhigh,stim)
+%             p = langendijk(ir1,ir2,fs,bw,do,cp,s,bal,flow,fhigh,stim)
 %
 %   Input argumentss:
 %     ir1     : modified impulse responses of DTFs for all positions and both ears (sorted)
 %     ir2     : stored impulse responses of DTF-templates for all positions and both ears (sorted)
+%     fs      : sampling frequency
 %
 %   Output arguments:
 %     p       : Predicted probability density functions for response angles with respect to target positions
@@ -46,16 +47,15 @@ function p = langendijk(ir1,ir2,varargin)
 %
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
   
-  % FIXME: fs is hardcoded
-  fs=48000;
-
+  
   definput.import={'langendijkcomp'};
   definput.keyvals.bw=6;
   definput.keyvals.flow=2000;
   definput.keyvals.fhigh=16000;
   definput.keyvals.stim=[];
+  definput.keyvals.fs=48000;
   
-  [flags,kv]=ltfatarghelper({'bw','do','s','bal','flow','fhigh','stim'},definput,varargin);
+  [flags,kv]=ltfatarghelper({'bw','do','s','bal','flow','fhigh','stim','fs'},definput,varargin);
   
   if ~isempty(kv.stim)
     ir1=halfconv( ir1,stim );
