@@ -1,16 +1,19 @@
-function plotlikelilangendijk(la,le,ci,tit)
+function plotlikelilangendijk(la,le,ci,tit,horlin)
 % PLOTLIKELILANGENDIJK plots likelihood statistics according to Langendijk
 % et al. (2002)
 % Usage:           plotlikelilangendijk(la,le,ci)
 %                  plotlikelilangendijk(la,le,ci,tit)
+%                  plotlikelilangendijk(la,le,ci,dynlin)
 % Input arguments:
 %     la:          actual likelihood
 %     le:          expected likelihood
 %     ci:          confidence interval for expected likelihood
 %     [tit:]       set to 'spatstrat' optionally
+%     horlin:      vector with dynamic values for reference lines
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 % latest update: 2010-08-25
+% Modifications: Sebastian Grill 2011-9
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if ~exist('tit','var')
@@ -19,10 +22,17 @@ end
 % figure('Name','Likelihood statistic','NumberTitle','off');
 % clf
 hold on
-plot(0.5:length(la)+0.5,275*ones(length(la)+1,1),'k:') % unimodal
-plot(0.5:length(la)+0.5,350*ones(length(la)+1,1),'k:') % bimodal
-plot(0.5:length(la)+0.5,400*ones(length(la)+1,1),'k:') % trimodal
-plot(0.5:length(la)+0.5,437*ones(length(la)+1,1),'k:') % flat
+if ~exist('horlin','var')
+    plot(0.5:length(la)+0.5,275*ones(length(la)+1,1),'k:') % unimodal
+    plot(0.5:length(la)+0.5,350*ones(length(la)+1,1),'k:') % bimodal
+    plot(0.5:length(la)+0.5,400*ones(length(la)+1,1),'k:') % trimodal
+    plot(0.5:length(la)+0.5,437*ones(length(la)+1,1),'k:') % flat
+else
+    plot(0.5:length(la)+0.5,horlin(1)*ones(length(la)+1,1),'k:') % unimodal
+    plot(0.5:length(la)+0.5,horlin(2)*ones(length(la)+1,1),'k:') % bimodal
+    plot(0.5:length(la)+0.5,horlin(3)*ones(length(la)+1,1),'k:') % trimodal
+    plot(0.5:length(la)+0.5,horlin(4)*ones(length(la)+1,1),'k:') % flat
+end
 h=bar(la);
 set(gca,'XTick',1:length(la))
 if strcmp('spatstrat',tit)==1
