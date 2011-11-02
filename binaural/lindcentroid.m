@@ -34,6 +34,10 @@ error(nargchk(1,1,nargin));
 if ~isnumeric(cc) || ~isvector(cc)
     error('%s: cc has to be a numeric vector signal!',upper(mfilename));
 end
+% Ensure size(cc) = delay line length x 1
+if size(cc,1)==1
+    cc = cc';
+end
 
 
 % ------ Computation -----------------------------------------------------
