@@ -1,6 +1,0 @@
-% dietzdemo
-load speakers24;
-load azi_lookup_4;
-[fine_ipd,mod_ipd,fine_itd,mod_itd,ild,fine_ic,mod_ic,fine_f_inst,mod_f_inst,cfreqs] = dietz(signal,16000);
-angl=itd2angle(fine_itd(:,1:12),ild(:,1:12),fine_f_inst(:,1:12),lookup,2.5);
-hist
