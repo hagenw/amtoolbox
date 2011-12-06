@@ -2,7 +2,9 @@ function data = data_lopezpoveda2001(varargin)
 %DATA_LOPEZPOVEDA2001 Returns data points from the Lopez-Poveda and Meddis (2001) paper
 %   Usage: data = data_lopezpoveda2001(flag)
 %
-%   DATA_LOPEZPOVEDA2001(flag) returns data points from the Lopez-Poveda and Meddis (2001)
+%   DATA_LOPEZPOVEDA2001(flag) returns data points from the paper by 
+%   Lopez-Poveda and Meddis (2001).
+%
 %   The flag may be one of:
 %
 %-    'noplot'       - Don't plot, only return data. This is the default.
@@ -13,11 +15,12 @@ function data = data_lopezpoveda2001(varargin)
 %
 %-    'fig2b'        - Data from Fig. 2(b), middle ear filter.
 %
-%       for figure 2(b) you can choose between:
-%       'goode' - returns the data points derived from Goode et al. (1994)  
-%                 This is the default.
-%       'lopezpoveda' - returns the data points just read from figure 2(b)
-%                       of Lopez-Poveda and Meddis (2001)
+%   For figure 2(b) you can choose between:
+%-    'goode'        - returns the data points derived from Goode et al. (1994)
+%                      This is the default.
+%
+%-    'lopezpoveda'  - returns the data points just read from figure 2(b)
+%                      of Lopez-Poveda and Meddis (2001)
 %
 %R  lopezpoveda2001hnc
 

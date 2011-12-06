@@ -2,13 +2,13 @@ function data = data_zwicker1961()
 %DATA_ZWICKER1961  Data for the Bark scale
 %   Usage: data = data_zwicker1961;
 %
-%   DATA_ZWICKER1961() returns the data points defining the notion of
+%   DATA_ZWICKER1961 returns the data points defining the notion of
 %   critical bands. The output data consists of the frequency limit of
 %   each band in Hz.
 %
 %   To get the bandwidth of each channel, simply use
 %
-%     bw = diff(data_zwicker1961);
+%C     bw = diff(data_zwicker1961);
 %
 %   The first entry has been modified from the original paper: It was
 %   originally 20 Hz, but in Zwicker and Fastl 1999 this has been changed

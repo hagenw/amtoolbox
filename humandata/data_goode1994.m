@@ -2,8 +2,8 @@ function data = data_goode1994(varargin)
 %DATA_GOODE1994 Returns data points from the Goode et al. (1994) paper
 %   Usage: data = data_goode1994_data(flag)
 %
-%   DATA_GOODE1994(flag) returns data points from the Goode et
-%   al. (1994). Currently, one Figure 1 with condition 104 dB is
+%   DATA_GOODE1994(flag) returns data points from the paper by Goode et
+%   al. (1994). Currently, only Figure 1 with condition 104 dB is
 %   supported.
 %
 %   The flag may be one of:
