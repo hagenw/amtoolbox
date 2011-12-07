@@ -16,6 +16,7 @@ function data = data_lopezpoveda2001(varargin)
 %-    'fig2b'        - Data from Fig. 2(b), middle ear filter.
 %
 %   For figure 2(b) you can choose between:
+%
 %-    'goode'        - returns the data points derived from Goode et al. (1994)
 %                      This is the default.
 %

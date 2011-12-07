@@ -1,16 +1,17 @@
 function [ out ] = langendijkcomp( in1,in2,varargin )
-% LANGENDIJKCOMP Comparison process according to Langendijk et al. (2002)
-% Usage:        [ out ] = langecomp( in1,in2,s,do,cp )
-% Input arguments:
-%     in1:      modified DFT for one target position and both ears
-%     in2:      stored DFT-templates for all positions and both ears
-%     s:        standard deviation of transforming Gaussian function;
+%LANGENDIJKCOMP Comparison process according to Langendijk et al. (2002)
+%   Usage:        [ out ] = langecomp( in1,in2,s,do,cp )
+%
+%   Input parameters:
+%     in1    :  modified DFT for one target position and both ears
+%     in2    :  stored DFT-templates for all positions and both ears
+%     s      :  standard deviation of transforming Gaussian function;
 %               default: 2
-%     do:       differential order; default: 0
-%     cp:       comparison process; 'std' (default) or 'xcorr' 
-%     bal:      balance of left to right channel; default: 1
-% Output argument:
-%     out:      probability density function (pdf)
+%     do     :  differential order; default: 0
+%     cp     :  comparison process; 'std' (default) or 'xcorr' 
+%     bal    :  balance of left to right channel; default: 1
+%   Output parameters:
+%     out    :  probability density function (pdf)
 
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 

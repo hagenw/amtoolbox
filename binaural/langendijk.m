@@ -3,12 +3,12 @@ function p = langendijk(ir1,ir2,fs,varargin)
 %   Usage:    p = langendijk(ir1,ir2)
 %             p = langendijk(ir1,ir2,fs,bw,do,cp,s,bal,flow,fhigh,stim)
 %
-%   Input argumentss:
+%   Input parameters:
 %     ir1     : modified impulse responses of DTFs for all positions and both ears (sorted)
 %     ir2     : stored impulse responses of DTF-templates for all positions and both ears (sorted)
 %     fs      : sampling frequency
 %
-%   Output arguments:
+%   Output parameters:
 %     p       : Predicted probability density functions for response angles with respect to target positions
 %
 %   LANGENDIJK(ir1,ir2,... ) results to a two dimensional matrix p.  The
@@ -21,30 +21,30 @@ function p = langendijk(ir1,ir2,fs,varargin)
 %
 %   LANGENDIJK accepts the following optional parameters.
 %  
-%-     'bw',bw   : Bandwidth of filter bands as partial of an octave. The
-%                default value is 6.
+%-     'bw',bw     - Bandwidth of filter bands as partial of an octave. The
+%                    default value is 6.
 %
-%-     'do',do   : Differential order. The default value is 0.
+%-     'do',do     - Differential order. The default value is 0.
 %
-%-     'std'     : Use 'std' for comparison. This is the default.
+%-     'std'       - Use 'std' for comparison. This is the default.
 %  
-%-     'corr'    : Use 'corr' for comparison.
+%-     'corr'      - Use 'corr' for comparison.
 %
-%-     's',s     : Standard deviation of transforming Gaussian function; default: 2
+%-     's',s       - Standard deviation of transforming Gaussian function; default: 2
 %
-%-     'bal',bal : Balance of left to right channel (not included in 
-%                langendijk's original comparison process); default: 1
+%-     'bal',bal   - Balance of left to right channel (not included in 
+%                    langendijk's original comparison process); default: 1
 %
-%-     'flow',flow   : Start frequency of filter bank. min: 0,5kHz; default: 2kHz
+%-     'flow',flow   - Start frequency of filter bank. min: 0,5kHz; default: 2kHz
 %
-%-     'fhigh',fhigh : End frequency of filter bank; default: 16kHz
+%-     'fhigh',fhigh - End frequency of filter bank; default: 16kHz
 %
-%-     'stim',stim   : Applied stimulus for localization test (optional)
+%-     'stim',stim   - Applied stimulus for localization test (optional)
 %
 %   See also: plotlangendijk
 %
 %R  langendijk2002contribution
-%
+
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
   
   

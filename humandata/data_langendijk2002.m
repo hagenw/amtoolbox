@@ -53,7 +53,8 @@ function data = data_langendijk2002(flag)
 %
 %    If no flag is given, the function will print the list of valid flags.
 %
-%R  langendijk et al. 2002
+%R   langendijk2002contribution
+  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 % latest update: 2010-08-19

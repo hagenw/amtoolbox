@@ -1,15 +1,16 @@
 function plotlikelilangendijk(la,le,ci,tit,horlin)
-% PLOTLIKELILANGENDIJK plots likelihood statistics according to Langendijk
-% et al. (2002)
-% Usage:           plotlikelilangendijk(la,le,ci)
-%                  plotlikelilangendijk(la,le,ci,tit)
-%                  plotlikelilangendijk(la,le,ci,dynlin)
-% Input arguments:
+%PLOTLIKELILANGENDIJK plots likelihood statistics according to Langendijk et al. (2002)
+%   Usage:           plotlikelilangendijk(la,le,ci)
+%                    plotlikelilangendijk(la,le,ci,tit)
+%                    plotlikelilangendijk(la,le,ci,dynlin)
+%
+%   Input parameters:
 %     la:          actual likelihood
 %     le:          expected likelihood
 %     ci:          confidence interval for expected likelihood
 %     [tit:]       set to 'spatstrat' optionally
 %     horlin:      vector with dynamic values for reference lines
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 % latest update: 2010-08-25
@@ -19,6 +20,7 @@ function plotlikelilangendijk(la,le,ci,tit,horlin)
 if ~exist('tit','var')
     tit='';
 end
+
 % figure('Name','Likelihood statistic','NumberTitle','off');
 % clf
 hold on

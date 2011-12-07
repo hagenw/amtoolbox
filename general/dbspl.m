@@ -29,18 +29,18 @@ function y = dbspl(insig,varargin)
 %
 %   and the currently used reference level is obtained by
 %
-%      current_dboffset = dbspl(1);
+%C     current_dboffset = dbspl(1);
 %  
 %   DBSPL takes the following flags at the end of the line of input
 %   parameters:
 %
-%-     'ac'     : Consider only the AC component of the signal (i.e. the mean is
+%-     'ac'     - Consider only the AC component of the signal (i.e. the mean is
 %                 removed).
 %
-%-     'dim',d  : Work along specified dimension. The default value of []
+%-     'dim',d  - Work along specified dimension. The default value of []
 %                 means to work along the first non-singleton one.
 %
-%-     'dboffset',dboffset : Specify offset in dB. Default value is 100.
+%-     'dboffset',dboffset - Specify offset in dB. Default value is 100.
 %
 %   See also: setdbspl
 %
