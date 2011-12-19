@@ -12,7 +12,7 @@ function amtmex(varargin)
 %-     'compile' - Compile stuff. This is the default.
 %
 %-     'clean'   - Removes the compiled functions.
-%
+
 %   AUTHOR : Peter Soendergaard.
 %   TESTING: NA
 %   REFERENCE: NA
