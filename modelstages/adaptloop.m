@@ -38,7 +38,7 @@ function inoutsig = adaptloop(inoutsig,fs,varargin);
 %
 %-     'dim',d - Do the computation along dimension d of the input. 
 %
-%R  puschel1988pza dau1996qmeI  breebaart2001binaural
+%   References:puschel1988pza dau1996qmeI  breebaart2001binaural
 
 % Copyright (c) 1999 - 2004 Stephan Ewert. All rights reserved.
 
@@ -88,3 +88,5 @@ inoutsig=gaindb(inoutsig,dboffset-100);
 inoutsig=comp_adaptloop(inoutsig,fs,limit,minlvl,tau);
 
 inoutsig=assert_sigreshape_post(inoutsig,dim,permutedsize,order);
+
+%OLDFORMAT

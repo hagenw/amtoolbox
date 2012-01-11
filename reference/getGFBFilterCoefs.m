@@ -14,3 +14,5 @@ for i=1:nrch
    b=[b;bt];
    a=[a;at];
 end
+
+%OLDFORMAT

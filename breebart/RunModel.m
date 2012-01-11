@@ -163,3 +163,5 @@ if s.gamma>0,
 else
     s.gamma = 1;
 end
+
+%OLDFORMAT

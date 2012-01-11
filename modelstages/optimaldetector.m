@@ -11,3 +11,5 @@ optfactor = sqrt(numel(corrmue));
 % optimalityfactor.
 mue = mean(corrmue(:))*optfactor;
 
+
+%OLDFORMAT

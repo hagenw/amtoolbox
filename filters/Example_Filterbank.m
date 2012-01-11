@@ -53,3 +53,5 @@ ylabel('filter response / dB');
 
 disp(' ');
 disp('Figure 1 shows the frequency response of the individual filters.');
+
+%OLDFORMAT

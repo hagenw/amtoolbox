@@ -29,3 +29,4 @@ res=norm(ff(:)-fr(:));
 [test_failed,fail]=ltfatdiditfail(res,test_failed);
 
 disp(sprintf('OUTER+MIDDLE %0.5g %s',res,fail));
+%OLDFORMAT

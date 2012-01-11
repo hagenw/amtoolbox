@@ -66,7 +66,7 @@ function [b,a,delay]=gammatone(fc,fs,varargin)
 %
 %C    [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 %  
-%R  aertsen1980strI patterson1988efficient lyon1997all
+%   References:aertsen1980strI patterson1988efficient lyon1997all
   
 %   AUTHOR : Stephan Ewert, Peter L. Soendergaard
 
@@ -301,3 +301,5 @@ else
 
 end;
 
+
+%OLDFORMAT

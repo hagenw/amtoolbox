@@ -15,7 +15,7 @@ function inoutsig = setdbspl(inoutsig,lvl,varargin);
 %   SETDBSPL(insig,lvl,'ac') does the same, but considers only the AC
 %   component of the signal (i.e. the mean is removed).
 %
-%R  moore2003introduction
+%   References:moore2003introduction
   
 %   See also: dbspl
   
@@ -64,3 +64,5 @@ else
     inoutsig(:,ii) = gaindb(inoutsig(:,ii)/rms(inoutsig(:,ii),varargin{:}),lvl-dbspl(1));
   end;
 end;
+
+%OLDFORMAT

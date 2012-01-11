@@ -10,3 +10,5 @@ function bp = amtbasepath;
 f=mfilename('fullpath');
 
 bp = f(1:end-11);
+
+%OLDFORMAT

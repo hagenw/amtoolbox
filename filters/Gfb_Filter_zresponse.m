@@ -15,3 +15,5 @@ function zresponse = Gfb_Filter_zresponse(filter, z)
 
 zresponse = (1 - filter.coefficient ./ z) .^ -filter.gamma_order * ...
     filter.normalization_factor;
+
+%OLDFORMAT

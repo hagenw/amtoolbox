@@ -23,7 +23,7 @@ function data = data_lopezpoveda2001(varargin)
 %-    'lopezpoveda'  - returns the data points just read from figure 2(b)
 %                      of Lopez-Poveda and Meddis (2001)
 %
-%R  lopezpoveda2001hnc
+%   References:lopezpoveda2001hnc
 
 %   AUTHOR: Peter L. Soendergaard, Katharina Egger
 
@@ -170,3 +170,5 @@ if flags.do_fig2b
   
 end;
 
+
+%OLDFORMAT

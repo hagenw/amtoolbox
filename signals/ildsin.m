@@ -48,3 +48,5 @@ sigr = gaindb(sigl,ild);
 outsig = [sigl' sigr'];
 % Scale outsig
 outsig = outsig / (max(abs(outsig(:)))+eps);
+
+%OLDFORMAT

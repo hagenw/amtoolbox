@@ -44,7 +44,7 @@ function y = dbspl(insig,varargin)
 %
 %   See also: setdbspl
 %
-%R  moore2003introduction
+%   References:moore2003introduction
 
 %   AUTHOR : Hagen Wierstorf
 
@@ -60,3 +60,5 @@ definput.keyvals.dboffset=100;
 % level = 20*log10(p/p_0)
 % To get to the standard used in the toolbox.
 y = 20*log10( rms(insig,varargin{:}) )+kv.dboffset;
+
+%OLDFORMAT

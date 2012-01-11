@@ -74,3 +74,5 @@ ylabel('system response level / dB');
 
 disp('Figure 1 shows the impulse response of the analysis-synthesis system');
 disp('in the time domain; figure 2 shows its frequency response.');
+
+%OLDFORMAT

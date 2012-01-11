@@ -1132,3 +1132,5 @@ function m = findmax(list)
 d = linspace(-1,1,length(list));
 m = d(idx);
 
+
+%OLDFORMAT

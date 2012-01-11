@@ -37,7 +37,7 @@ function [outsig, fc, mfc] = jepsen2008preproc(insig, fs, varargin);
 %
 %     7) a modulation filterbank
 %
-%R  jepsen2008cmh
+%   References:jepsen2008cmh
 
 %   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Soendergaard
   
@@ -82,3 +82,5 @@ outsig = adaptloop(outsig,fs,'adt_dau');
 
 %% Modulation filterbank
 [outsig,mfc] = modfilterbank(outsig,fs,fc);
+
+%OLDFORMAT

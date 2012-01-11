@@ -46,7 +46,7 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %
 %-    'dim',d  - Work along dimension d.
 %
-%R  bernstein1999normalized breebaart2001binaural gabor1946 lindemann1986a dau1996qmeI
+%   References:bernstein1999normalized breebaart2001binaural gabor1946 lindemann1986a dau1996qmeI
   
 % FIXME: Which paper did this idea originally appear in?
 
@@ -123,3 +123,5 @@ if ~isempty(keyvals.minlvl)
 end;
 
 inoutsig=assert_sigreshape_post(inoutsig,dim,permutedsize,order);
+
+%OLDFORMAT

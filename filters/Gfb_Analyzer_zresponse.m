@@ -22,3 +22,5 @@ for band = [1:number_of_bands]
   filter = analyzer.filters(band);
   zresponse(:,band) = Gfb_Filter_zresponse(filter, z);
 end
+
+%OLDFORMAT

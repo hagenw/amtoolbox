@@ -44,3 +44,5 @@ for ii=1:nchannels
   outsig{ii} = assert_sigreshape_post(res(1:hopsize:siglen,:),dim,permutedsize,order);  
 end;
 
+
+%OLDFORMAT

@@ -120,7 +120,7 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %
 %   See also: middleearfilter, jepsen2008preproc
 % 
-%R  meddis2001computational lopezpoveda2001hnc jepsen2008cmh
+%   References:meddis2001computational lopezpoveda2001hnc jepsen2008cmh
 
 % AUTHOR: Morten Løve Jepsen
   
@@ -300,3 +300,5 @@ end;
 function outpar=polfun(par,fc)
   %outpar=10^(par(1)+par(2)*log10(fc));
   outpar=10^(par(1))*fc^par(2);
+
+%OLDFORMAT

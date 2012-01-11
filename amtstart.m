@@ -176,3 +176,5 @@ AMT_CONF.modules=modules;
 if printbanner
   disp(['AMT version ',amt_version,'. Copyright 2009 Peter L. Soendergaard. For help, please type "amthelp".'])
 end;
+
+%OLDFORMAT

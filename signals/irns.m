@@ -52,3 +52,5 @@ outsig = noisesig(1:siglen);
 % Scale to RMS of 1
 outsig = outsig/rms(outsig);
 
+
+%OLDFORMAT

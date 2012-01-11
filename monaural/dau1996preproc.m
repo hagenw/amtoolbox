@@ -35,7 +35,7 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %   input signal would cause unnaturally big responses. This is described
 %   in Dau et. al. (1997a).
 %
-%R  dau1996qmeI dau1996qmeII dau1997mapI
+%   References:dau1996qmeI dau1996qmeII dau1997mapI
 
 %   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Soendergaard
   
@@ -85,3 +85,5 @@ if ~isempty(keyvals.subfs)
 end;
 
 
+
+%OLDFORMAT

@@ -5,3 +5,5 @@ function definput=arg_adaptloop(definput)
   definput.keyvals.rc_b  = .00002;  % Range compression parameter 'b'
   definput.keyvals.ptau  = 2.2e-3;  % time constant for p(tau) function
  
+
+%OLDFORMAT

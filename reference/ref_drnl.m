@@ -63,3 +63,4 @@ end
 out = (y_lin + y_nlin);
 
 out = gaindb(out,50);
+%OLDFORMAT

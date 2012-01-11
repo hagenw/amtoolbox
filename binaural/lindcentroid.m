@@ -45,3 +45,5 @@ end
 m = linspace(-1,1,length(cc))';
 % Calculate the centroid using the -M:M delay line
 d = sum(m.*cc) / sum(cc);
+
+%OLDFORMAT

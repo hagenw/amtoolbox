@@ -56,3 +56,5 @@ ei_single = ei( x1a(:,10) , x2a(:,10) , fs , 0 , 0 );
 ei_single_ref = ei( x1a_ref(:,10) , x2a_ref(:,10) , fs , 0 , 0 );
 
 
+
+%OLDFORMAT

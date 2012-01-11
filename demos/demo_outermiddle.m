@@ -46,3 +46,4 @@ semiaudplot(xplot,fmid);
 xlabel('Frequency in Hz (on erb scale)');
 ylabel('Magnitude response (dB)');
 title('Magnitude response of middle ear filter.');
+%OLDFORMAT

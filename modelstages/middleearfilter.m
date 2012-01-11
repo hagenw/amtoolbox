@@ -26,7 +26,7 @@ function b = middleearfilter(fs,varargin)
 %   frequency like in figure 2b) of Lopez-Poveda and Meddis 2001
 %
 %
-%R  goode1994nkf lopezpoveda2001hnc
+%   References:goode1994nkf lopezpoveda2001hnc
 %
 %   AUTHOR: Peter L. Soendergaard, Katharina Egger
 
@@ -177,3 +177,5 @@ end;
 %     xlabel('Frequency (kHz)');
 %     ylabel('FIR middleearfilter');
 % end
+
+%OLDFORMAT

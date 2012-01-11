@@ -29,7 +29,7 @@ function [outsig, fc, mfc] = dau1997preproc(insig, fs, varargin);
 %
 %     4) a modulation filterbank
 %
-%R  dau1997mapI dau1997mapII
+%   References:dau1997mapI dau1997mapII
 
 %   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Soendergaard
   
@@ -69,3 +69,5 @@ outsig = adaptloop(outsig,fs,'adt_dau');
 
 
 
+
+%OLDFORMAT

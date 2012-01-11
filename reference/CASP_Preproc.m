@@ -109,3 +109,5 @@ for ChannelNr = 1:NrFBChannels
             out(:,ChannelNr,1:length(infpar)) = y;
             
 end
+
+%OLDFORMAT

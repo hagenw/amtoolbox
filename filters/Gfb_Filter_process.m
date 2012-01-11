@@ -38,3 +38,5 @@ output = input;
 % call to filter:
 filter_obj.state = filter_state / filter_obj.coefficient;
 
+
+%OLDFORMAT

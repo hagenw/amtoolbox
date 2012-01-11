@@ -99,3 +99,5 @@ filter.normalization_factor = ...
     2 * (1 - abs(filter.coefficient)) ^ filter.gamma_order;
 
 filter.state = zeros(1, filter.gamma_order);
+
+%OLDFORMAT

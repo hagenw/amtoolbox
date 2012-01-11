@@ -40,3 +40,5 @@ else
    error('Freq range in XY-table exceeds Nyquist freq (fs/2)');
 end
 
+
+%OLDFORMAT

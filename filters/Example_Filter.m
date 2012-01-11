@@ -71,3 +71,5 @@ disp('response are plotted as lines 1, 2, and 3, respectively.     ');
 disp(' ');
 disp('Figure 2 shows the frequency response function of this filter');
 disp('in dB over frequency in Hz.');
+
+%OLDFORMAT

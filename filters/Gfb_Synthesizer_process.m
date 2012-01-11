@@ -21,3 +21,5 @@ function [output, synthesizer] = Gfb_Synthesizer_process(synthesizer, input)
 
 [output, synthesizer.delay] = Gfb_Delay_process(synthesizer.delay, input);
 [output, synthesizer.mixer] = Gfb_Mixer_process(synthesizer.mixer, output);
+
+%OLDFORMAT

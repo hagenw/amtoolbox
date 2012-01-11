@@ -5,3 +5,4 @@ function definput=arg_auditoryfilterbank(definput)
   definput.keyvals.basef=[];
   definput.keyvals.bwmul=1;
   
+%OLDFORMAT

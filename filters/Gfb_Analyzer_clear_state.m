@@ -13,3 +13,5 @@ function analyzer = Gfb_Analyzer_clear_state(analyzer)
     analyzer.filters(1, band) = ...
 	Gfb_Filter_clear_state(analyzer.filters(1, band));
   end
+
+%OLDFORMAT

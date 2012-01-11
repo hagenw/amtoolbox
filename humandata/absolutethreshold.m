@@ -36,7 +36,7 @@ function [t,table]=absolutethreshold(freq,varargin)
 %
 %   Demos: demo_absolutethreshold
 %
-%R  iso226-2003 iso389-2-1994 iso389-5-2006 iso389-8-2004 bentler1989transfer han1998equivalent
+%   References:iso226-2003 iso389-2-1994 iso389-5-2006 iso389-8-2004 bentler1989transfer han1998equivalent
   
 % AUTHOR : Peter Søndergaard based on data collected by Claus Elberling
   
@@ -50,3 +50,5 @@ definput.importdefaults = {'iso226_2003'};
 [flags,kv,table]  = ltfatarghelper({'table'},definput,varargin);
 
 t=spline(table(:,1),table(:,2),freq);
+
+%OLDFORMAT

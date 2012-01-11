@@ -25,7 +25,7 @@ function outsig = transposedtone(siglen,fc,fm,fs,varargin)
 %C     fs     = 44100;
 %C     outsig = transposedtone(fc,fm,dur,fs);
 %
-%R  kohlrausch1997detection oxenham2004correct
+%   References:kohlrausch1997detection oxenham2004correct
 
 % Author: Sébastien Santurette  2009
 
@@ -67,3 +67,5 @@ for ii = 1:n
 end;
 
 outsig=normalize(outsig,flags.norm);
+
+%OLDFORMAT

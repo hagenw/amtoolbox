@@ -50,7 +50,7 @@ function output=exp_lopezpoveda2001(varargin)
 %
 %   See also: drnl, data_lopezpoveda2001, data_pralong1996, data_goode1994
 % 
-%R  lopezpoveda2001hnc
+%   References:lopezpoveda2001hnc
   
 %  AUTHOR: Katharina Egger
 
@@ -719,3 +719,5 @@ if flags.do_fig4
   end      
   
 end;
+
+%OLDFORMAT

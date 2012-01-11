@@ -16,3 +16,5 @@ function synthesizer = Gfb_Synthesizer_clear_state(synthesizer)
 
 synthesizer.delay = Gfb_Delay_clear_state(synthesizer.delay);
 
+
+%OLDFORMAT

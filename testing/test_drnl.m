@@ -71,3 +71,5 @@ res=2*outsig-binoutsig(:,:,1)-binoutsig(:,:,2);
 fprintf('Binaural: %f\n',norm(res(:)));
 
 ltfatsetdefaults('dbspl','dboffset',save_dboffset);
+
+%OLDFORMAT

@@ -37,7 +37,7 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %
 %   See also: eicell, auditoryfilterbank, ihcenvelope, adaptloop
 
-%R  breebaart2001binaural
+%   References:breebaart2001binaural
 
 %   AUTHOR : Peter L. Soendergaard
   
@@ -89,3 +89,5 @@ for k=1:nsignals
 end
 
 
+
+%OLDFORMAT

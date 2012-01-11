@@ -14,7 +14,7 @@ function data = data_pralong1996(varargin)
 %-    'fig1e'        - Data from Fig. 1(e), Gain of Sennheiser 250 Linear
 %                      circumaural headphones. This is the default
 %
-%R  pralong1996role
+%   References:pralong1996role
   
 % Define input flags
 definput.flags.type={'fig1e'};
@@ -58,3 +58,5 @@ if flags.do_fig1e
   end;
   
 end;
+
+%OLDFORMAT

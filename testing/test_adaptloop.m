@@ -108,3 +108,5 @@ for w=1:2
 end;
 
 ltfatsetdefaults('dbspl','dboffset',save_dboffset);
+
+%OLDFORMAT

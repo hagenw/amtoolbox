@@ -12,7 +12,7 @@ function [ outsig ] = averagingfb( insig,fs,varargin )
 %   AVERAGINGFB(insig,fs) computes an averaging filterbank as done by
 %   Langendijk et al. (2002).
 %
-%R  langendijk2002contribution
+%   References:langendijk2002contribution
   
 % AUTHOR : Robert Baumgartner
 
@@ -46,3 +46,5 @@ function [ outsig ] = averagingfb( insig,fs,varargin )
   outsig=20*log10(ybw);
 
 
+
+%OLDFORMAT

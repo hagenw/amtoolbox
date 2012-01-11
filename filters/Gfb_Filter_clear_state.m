@@ -16,3 +16,5 @@ function filter = Gfb_Filter_clear_state(filter)
 
 filter.state = zeros(1, filter.gamma_order);
 
+
+%OLDFORMAT

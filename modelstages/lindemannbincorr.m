@@ -57,7 +57,7 @@ function [crosscorr,t] = lindemannbincorr(insig,fs,varargin)
 % 
 %   See also: lindemann
 %
-%R  lindemann1986a lindemann1986b
+%   References:lindemann1986a lindemann1986b
 
 % AUTHOR: Hagen Wierstorf
 
@@ -275,3 +275,5 @@ if T_int==Inf
 else
     N_2 = N_1 + T_int;
 end
+
+%OLDFORMAT

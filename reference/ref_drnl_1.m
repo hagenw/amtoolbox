@@ -95,7 +95,7 @@ function outsig = drnl_1(insig,fs,varargin)
 %
 %   See also: middlerearfilter, jepsen2008preproc
 % 
-%R   lopezpoveda2001hnc jepsen2008cmh
+%   References: lopezpoveda2001hnc jepsen2008cmh
 
 % AUTHOR: Morten Løve Jepsen
   
@@ -221,3 +221,4 @@ outsig=gaindb(outsig,50);
 function outpar=polfun(par,fc)
   %outpar=10^(par(1)+par(2)*log10(fc));
   outpar=10^(par(1))*fc^par(2);
+%OLDFORMAT

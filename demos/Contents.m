@@ -16,3 +16,5 @@
 %   For help, bug reports, suggestions etc. send email to 
 %   amtoolbox-help@lists.sourceforge.net
 %
+
+%OLDFORMAT

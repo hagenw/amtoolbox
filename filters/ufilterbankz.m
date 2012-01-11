@@ -51,3 +51,5 @@ permutedsize=[outlen,nchannels,permutedsize(2:end)];
 order=assert_groworder(order);
 
 outsig=assert_sigreshape_post(outsig,dim,permutedsize,order);
+
+%OLDFORMAT

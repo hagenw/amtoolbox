@@ -21,3 +21,5 @@ function [output, mixer] = Gfb_Mixer_process(mixer, input)
 
 output = mixer.gains * input;
 
+
+%OLDFORMAT

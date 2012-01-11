@@ -57,3 +57,5 @@ for i = 1:m*n
     u = max(c)*rand;
     X(i) = find(u < c ,1);
 end
+
+%OLDFORMAT

@@ -66,3 +66,5 @@ tstr = sprintf('Sinusoid with an ITD\nf = %i Hz\nitd = %.1f ms\nfc = %i\n',...
     f,itd,round(freqtoerb(f)));
 % Plot frequency channel 11, due to round(freqtoerb(500))==11
 plotlindemann(cc,t,f,'title',tstr);
+
+%OLDFORMAT

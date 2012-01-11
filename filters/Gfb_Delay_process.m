@@ -37,3 +37,5 @@ for band = [1:number_of_bands]
     output(band,:) = tmp_out(1:number_of_samples);
   end
 end
+
+%OLDFORMAT

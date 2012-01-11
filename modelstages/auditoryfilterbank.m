@@ -59,3 +59,5 @@ fc = erbspacebw(flow, fhigh, keyvals.bwmul, keyvals.basef);
 
 % Apply the Gammatone filterbank
 outsig = 2*real(ufilterbankz(gt_b,gt_a,insig));
+
+%OLDFORMAT

@@ -44,7 +44,7 @@ function data = data_lindemann1986a(varargin)
 %
 %   Simpledemo:  data_lindemann1986a('fig11_sayers','plot');
 %
-%R  lindemann1986a
+%   References:lindemann1986a
 
 %   AUTHOR: Hagen Wierstorf
 
@@ -224,3 +224,5 @@ if flags.do_fig17
   end;
 end;
 
+
+%OLDFORMAT

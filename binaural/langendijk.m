@@ -43,7 +43,7 @@ function p = langendijk(ir1,ir2,fs,varargin)
 %
 %   See also: plotlangendijk
 %
-%R  langendijk2002contribution
+%   References:langendijk2002contribution
 
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
   
@@ -104,3 +104,5 @@ function [ outsig ] = halfconv( ir1,stim )
   outsig=temp;
   
   
+
+%OLDFORMAT

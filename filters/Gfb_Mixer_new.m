@@ -72,3 +72,5 @@ for i = [1:iterations]
   mixer.gains = mixer.gains ./ abs(selected_spectrum);
 end
 mixer.gains = mixer.gains.';
+
+%OLDFORMAT

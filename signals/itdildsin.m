@@ -68,3 +68,5 @@ else
 end
 % Scale outsig
 outsig = outsig / (max(abs(outsig(:)))+eps);
+
+%OLDFORMAT

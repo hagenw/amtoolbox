@@ -15,3 +15,5 @@ function delay = Gfb_Delay_clear_state(delay)
 
 
 delay.memory = zeros(size(delay.memory));
+
+%OLDFORMAT

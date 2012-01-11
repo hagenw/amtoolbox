@@ -22,3 +22,5 @@ function y=f2erb(x)
 
 
 y=log(0.00437*x+1)/.11;
+
+%OLDFORMAT

@@ -48,3 +48,5 @@ n = noise(siglen,2,varargin{:});
 
 % Correlate the noise
 outsig = n * W';
+
+%OLDFORMAT

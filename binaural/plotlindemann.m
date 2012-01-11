@@ -102,3 +102,5 @@ end
 if ~isempty(keyvals.title)  
     title(keyvals.title);
 end
+
+%OLDFORMAT

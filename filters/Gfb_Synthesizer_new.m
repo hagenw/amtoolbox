@@ -28,3 +28,5 @@ end
 
 synthesizer.delay = Gfb_Delay_new(analyzer, desired_delay_in_samples);
 synthesizer.mixer = Gfb_Mixer_new(analyzer, synthesizer.delay);
+
+%OLDFORMAT

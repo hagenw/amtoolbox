@@ -16,7 +16,7 @@ function data = data_goode1994(varargin)
 %                      footplate diplacement at 104 dB SPL. This is
 %                      the default (and currently only option).
 %
-%R  goode1994nkf
+%   References:goode1994nkf
 
 %   AUTHOR: Peter L. Soendergaard
 
@@ -69,3 +69,5 @@ if flags.do_fig1_104
   end;
 end;
 
+
+%OLDFORMAT

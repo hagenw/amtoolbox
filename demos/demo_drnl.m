@@ -65,3 +65,5 @@ plotfilterbank(outsig2,1,fc1,fs,dynrange,'audtick');
 figure(3);
 plotfilterbank(outsig3,1,fc1,fs,dynrange,'audtick');
 
+
+%OLDFORMAT
