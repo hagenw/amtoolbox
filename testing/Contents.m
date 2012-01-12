@@ -1,6 +1,6 @@
 % AMT Testing - Testing AMT
 %
-%   The AMT team, 2011.
+%   The AMT team, 2012.
 %
 %   General routines
 %       TEST_ALL_AMT    - test all amt functions
@@ -20,7 +20,7 @@
 %       LINDEMANN1986a_FIG17    - plot fig. 17 from lindemann1986a
 %       LINDEMANN1986a_FIG18    - plot fig. 18 from lindemann1986a
 %       
-%R lindemann1986a
+%   References: lindemann1986a
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

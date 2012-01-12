@@ -1,6 +1,6 @@
 % AMT - Recreate experiments
 %
-%   The AMT team, 2011.
+%   The AMT team, 2012.
 %
 %   Experiments
 %       EXP_LINDEMANN1986a  - Recreate plot from lindemann1986a

@@ -1,17 +1,17 @@
 function b = headphonefilter(fs,order)
-%HEADPHONEFILTER  Combined headphone and outer ear filter.
+%HEADPHONEFILTER  Combined headphone and outer ear filter
 %   Usage:  b=headphonefilter(fs,order);
 %           b=headphonefilter(fs);
 %           b=headphonefilter;
 %
-%   HEADPHONEFILTER(fs,order) computes the filter coefficients of a FIR
-%   filter or order _order approximating the combined effect of headphones
+%   `headphonefilter(fs,order)` computes the filter coefficients of a FIR
+%   filter or order *order* approximating the combined effect of headphones
 %   and the outer ear. The data describes a generic set of headphones,
 %   originally from Pralong et al. (1996)
 %
-%   HEADPHONEFILTER(fs) does the same with a FIR filter of order 512.
+%   `headphonefilter(fs)` does the same with a FIR filter of order 512.
 %
-%   HEADPHONEFILTER without any input arguments returns a table
+%   `headphonefilter` without any input arguments returns a table
 %   describing the frequency response of the headphone filter. First
 %   column of the table contain frequencies and the second column
 %   contains the amplitude of the frequency.
@@ -20,7 +20,7 @@ function b = headphonefilter(fs,order)
 %
 %   Demos: demo_outermiddle
 %   
-%R pralong1996role lopezpoveda2001hnc
+%   References: pralong1996role lopezpoveda2001hnc
   
 % Author: Morten Løve Jepsen, Peter L. Soendergaard
 
@@ -56,4 +56,3 @@ else
 
 end;
 
-%OLDFORMAT

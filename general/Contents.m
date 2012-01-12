@@ -1,6 +1,6 @@
 % AMT - General functions
 %
-%  The AMT team, 2011.
+%  The AMT team, 2012.
 %
 %  Signal levels
 %     DBSPL            - SPL of signal measured in dB.

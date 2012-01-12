@@ -1,6 +1,6 @@
 % AMT - Spectral and temporal modulations
 %
-%  The AMT team, 2011.
+%  The AMT team, 2012.
 %
 %  Plots
 %     MODSPECGRAM         - Temporal modulation spectrogram

@@ -21,7 +21,7 @@ function d = lindcentroid(cc)
 %
 %   See also: lindemann
 %
-%R lindemann1986a
+%   References: lindemann1986a
 %
 
 %   AUTHOR: Hagen Wierstorf

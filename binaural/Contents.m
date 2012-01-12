@@ -1,6 +1,6 @@
 % AMT - Binaural models
 %
-%  The AMT team, 2011.
+%  The AMT team, 2012.
 %
 %  The Breebaart model
 %     BREEBAART2001PREPROC  - EI-cell output
@@ -18,5 +18,3 @@
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
-
-%OLDFORMAT

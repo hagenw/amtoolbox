@@ -1,6 +1,6 @@
 % AMT - Base routines
 %
-%  Peter L. Soendergaard, 2011.
+%  The AMT team, 2012.
 %
 %  Basic routines
 %    AMTSTART     -  Start the toolbox

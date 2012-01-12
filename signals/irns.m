@@ -1,26 +1,27 @@
-function outsig = irns(delay,iterations,gn,siglen,fs);
+function outsig = irns(d,iterations,gn,siglen,fs);
 %IRNS	Generate iterated rippled noise
-% 	Usage: outsig=irns(delay,iterations,gn,siglen,fs)
+%   Usage: outsig=irns(delay,iterations,gn,siglen,fs)
 %
-%   IRNS(delay,iterations,gn,siglen,fs) generates a signal consisting of white 
-%   noise, which is added iterations times to himself with a delay of delay (in 
-%   ms). 
+%   Input parameters:
+%      d          : delay in ms of the time-shifted noise adding process
+%      iterations : number of iterations of the adding process
+%      gn         : relative gain of irn
+%      siglen	  : signal length of irn in samples
+%      fs         : sampling rate in Hz
 %
-%   Options:
-%  		delay      	delay in ms of the time-shifted noise adding process
-%  		iterations 	number of iterations of the adding process
-%  		gn       		relative gain of irn
-%  		siglen	   	signal length of irn in samples
-%  		fs         	sampling rate in Hz
+%   `irns(d,iterations,gn,siglen,fs)` generates a signal consisting of
+%   white noise, with iterations added to itself with a delay of *d* (in
+%   ms).
 %
-% Try
-% fs = 44100;
-% signal = irns(4,6,1,fs,fs);
-% sound(signal,fs)
+%   An example::
 %
-%R	yost1996irn
+%     fs = 44100;
+%     signal = irns(4,6,1,fs,fs);
+%     sound(signal,fs)
 %
-% See also: irno
+%   References: yost1996irn
+%
+%   See also: irno
 
 % AUTHOR: Hagen Wierstorf, Daniel Pressnitzer, Stefan Uppenkamp
 
@@ -31,7 +32,7 @@ error(nargchk(5,5,nargin));
 % ------ Computation --------------------------
 
 % Frequency to which the delay corresponds
-freq = 1000/delay;
+freq = 1000/d;
 % Number of samples for the noise (slightly longer to avoid circular iterations 
 % (S. Uppenkamp)
 noiselen = siglen + round(iterations*fs/freq);
@@ -52,5 +53,3 @@ outsig = noisesig(1:siglen);
 % Scale to RMS of 1
 outsig = outsig/rms(outsig);
 
-
-%OLDFORMAT

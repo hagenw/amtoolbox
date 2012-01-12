@@ -1,6 +1,6 @@
 % AMT - Demos
 %
-%   Peter L. Soendergaard, 2011.
+%   The AMT team, 2012.
 %
 %   This page documents the demos.
 %
@@ -16,5 +16,3 @@
 %   For help, bug reports, suggestions etc. send email to 
 %   amtoolbox-help@lists.sourceforge.net
 %
-
-%OLDFORMAT
