@@ -1,5 +1,5 @@
 function output = exp_lindemann1986a(varargin)
-%EXP_LINDEMANN1986a Reproduces figures from lindemann1986a
+%EXP_LINDEMANN1986a Figures from Lindemann (1986a)
 %   Usage: output = exp_lindemann1986a(flag)
 %
 %   `exp_lindemann1986a(flag)` reproduces the results for the figure given
@@ -22,7 +22,7 @@ function output = exp_lindemann1986a(varargin)
 %             $c_s=0,0.3,1$. Afterwards for every *c_s* the correlation is
 %             plotted for every used ITD dependend on the correlation-time
 %             delay. The output is cross-correlation result of the figure.
-%             The output has dimensions:: number of c_s conditions x
+%             The output has dimensions: number of *c_s* conditions x
 %             nitds x delay line length
 %
 %     'fig7'  Reproduce Fig.7 from Lindemann (1986a).  The cross-correlation
@@ -31,27 +31,27 @@ function output = exp_lindemann1986a(varargin)
 %             *c_s* the displacement of the centroid of the auditory image
 %             is calculated and plotted depending on the ITD. The output is
 %             the displacement of the centroid for different *c_s* values.
-%             The output has dimensions:: c_s x nitds
+%             The output has dimensions: *c_s* x nitds
 %
 %     'fig8'  Reproduce Fig.8 from Lindemann (1986a).  The cross-correlation
 %             is calculated for different ILDs and different inhibition factors
 %             $c_s = 0.3, 1$. Afterwards for every *c_s* the ILD is plotted
 %             depending on the correlation time. The output is the
 %             cross-correlation result of the figure. The dimensions of the
-%             output are: number of c_s conditions x nilds x delay line length.
+%             output are: number of *c_s* conditions x nilds x delay line length.
 %
 %     'fig10'  Reproduce Fig.10 from Lindemann (1986a). The
 %              cross-correlation is calculated for different ILDs with an
 %              inhibition factor of $c_s = 0.3$ and a monaural detector
 %              factor $w_f = 0.035$. Afterwards the ILD is plotted depending
 %              on the correlation time.  The output is the cross-correlation
-%              result of the figure.  The output has dimensions::
-%              number of c_s conditions x nilds x delay line length
+%              result of the figure.  The output has dimensions:
+%              number of *c_s* conditions x nilds x delay line length
 %
 %     'fig11'  Reproduce Fig.11 from Lindemann (1986a).  The centroid
 %              position is calculated for different ILDs, an inhibition
 %              factor $c_s = 0.3$ and a monaural detector factor $w_f =
-%              0.035$. Afterwards for every c_s the displacement of the
+%              0.035$. Afterwards for every *c_s* the displacement of the
 %              centroid is plotted dependend on the ILD. The output is the
 %              cross-correlation result of the to figure. The dimensions of
 %              the output are: number of *c_s* conditions x nilds x delay
@@ -65,7 +65,7 @@ function output = exp_lindemann1986a(varargin)
 %              ITD. The output is the simulated results for a trading
 %              experiment. The ILD value for getting a centroid near the
 %              center for an combined ITD, ILD stimulus with a given ITD
-%              value.  The output has dimensions:: number of ITDs x 1
+%              value.  The output has dimensions: number of ITDs x 1
 %
 %     'fig13'  Reproduce Fig.13 from Lindemann (1986a). The centroids are
 %              calculated for ILD only and ITD/ILD combination
@@ -78,35 +78,35 @@ function output = exp_lindemann1986a(varargin)
 %              stimulus compared to a stimulus with both ITD and ILD.
 %              The output has dimensions: number of ILDs x number of ITDs
 %
-%     'fig14a' Reproduce fig.14 (a) from Lindemann (1986a). The
-%              cross-correlations for a combination of ILDs and a ITD of
-%              ~1ms are calculated. This is done for different ILDs and
-%              different inhibition factors $c_s = 0,0.2,0.4,0.6,1$.
-%              Afterwards for every *c_s* the centroid of the auditory image
-%              is calculated and plotted dependend on the ILD. The output is
-%              the displacement of the centroid for different *c_s* values
-%              and ILDs. The output has dimensions: c_s x nilds
+%     'fig14a'  Reproduce fig.14 (a) from Lindemann (1986a). The
+%               cross-correlations for a combination of ILDs and a ITD of
+%               ~1ms are calculated. This is done for different ILDs and
+%               different inhibition factors $c_s = 0,0.2,0.4,0.6,1$.
+%               Afterwards for every *c_s* the centroid of the auditory image
+%               is calculated and plotted dependend on the ILD. The output is
+%               the displacement of the centroid for different *c_s* values
+%               and ILDs. The output has dimensions: *c_s* x nilds
 %
-%    'fig14b'  Reproduce Fig.14 (b) from Lindemann (1986a). The
-%              cross-correlations for a combination of ILDs and a ITD of ~1ms
-%              are calculated. This is done for different small ILDs with a
-%              standard deviation of 0-5. Afterwards for every standard
-%              deviation the mean centroid displacement is calculated and
-%              plotted dependend on the ITD. The output is the displacement
-%              of the centroid as a function of the ITD averaged over
-%              different small ILD with a standard deviation of $0,1,2,3,4,5$.
-%              The output has dimensions: nilds x nitds
+%     'fig14b'  Reproduce Fig.14 (b) from Lindemann (1986a). The
+%               cross-correlations for a combination of ILDs and a ITD of ~1ms
+%               are calculated. This is done for different small ILDs with a
+%               standard deviation of 0-5. Afterwards for every standard
+%               deviation the mean centroid displacement is calculated and
+%               plotted dependend on the ITD. The output is the displacement
+%               of the centroid as a function of the ITD averaged over
+%               different small ILD with a standard deviation of $0,1,2,3,4,5$.
+%               The output has dimensions: nilds x nitds
 %
-%    'fig15'   Reproduce Fig.15 from Lindemann (1986a). The cross-correlation
+%     'fig15'  Reproduce Fig.15 from Lindemann (1986a). The cross-correlation
 %              for an ITD of -0.5ms is calculated. This is done for
 %              different ILDs, an inhibition factor $c_s = 0.3$ and a
 %              monaural detector factor $w_f = 0.035$. Afterwards for every
 %              *c_s* the ILD is plotted depending on the correlation
 %              time. The output is the cross-correlation result. The output
-%              has dimensions: number of c_s conditions x nilds x delay line
+%              has dimensions: number of *c_s* conditions x nilds x delay line
 %              length
 %
-%    'fig16'   Reproduces Fig.16 from Lindemann (1986a). The
+%     'fig16'  Reproduces Fig.16 from Lindemann (1986a). The
 %              cross-correlations for combinations of ITDs and ILDs are
 %              calculated. Afterwards the combinations of ILD and ITD are
 %              looked for the ones that have two peaks in its
@@ -117,7 +117,7 @@ function output = exp_lindemann1986a(varargin)
 %              two peaks with the same (nearest) height, depending on the
 %              ITD. The output has dimensions: number of ITDs x 1
 %
-%    'fig17' - Reproduce Fig.17 from Lindemann (1986a). The
+%     'fig17'  Reproduce Fig.17 from Lindemann (1986a). The
 %              cross-correlation for ITD/ILD combination and ITD only
 %              stimuli is calculated. Afterwards the values for the
 %              centroids and maxima of the ITD only stimuli are searched to

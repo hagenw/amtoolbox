@@ -1,10 +1,10 @@
-function zresponse = Gfb_Filter_zresponse(filter, z)
-% zresponse = Gfb_Filter_zresponse(filter, z)
+function zresponse = gfb_filter_zresponse(filter, z)
+% zresponse = gfb_filter_zresponse(filter, z)
 %
 % Computes the frequency response of the gammatone filter at the frequency z.
 % 
-% PARAMETERS
-% filter  A Gfb_Filter struct as created by Gfb_Filter_new.
+%  Input parameters:
+% filter  A gfb_Filter struct as created by gfb_filter_new.
 % z       A vector of z-plane frequencies where the frequency response should
 %         be computed. z = exp(2i*pi*f[Hz]/fs[Hz])
 % zresponse The complex response of the filter at z.

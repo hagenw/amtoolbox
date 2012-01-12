@@ -1,57 +1,57 @@
 function data = data_langendijk2002(flag)
-%DATA_LANGENDIJK2002 Returns data points of response patterns in figures 7
-%and 9 or of left-ear DTF plots in figure 11 of Langendijk's paper
+%DATA_LANGENDIJK2002  Data from Langendijk & Bronkhorst (2002)
 %   Usage: data = data_langendijk2002(flag)
 %
 %   Output parameters:
-%      data       - the data points from the given figure;
-%                   in the case of response patterns (fig. 7&9) the first 
-%                   row describes target position and the second one 
-%                   belongs to the response position;
-%                   in the case of DTF data (fig. 11) the first dimension
-%                   of the data matrix describes frequency and the second one
-%                   angle position, the FIRST COLUMN defines the actual angle
-%                   positions
+%      data  : The data points from the given figure;
 %
-%   DATA_LANGENDIJK2002(flag) returns data points from the Langendijk
-%   2002 paper. The flag may be one of:
+%   `data_langendijk2002(flag)` returns data points from the paper by 
+%   Langendijk & Bronkhorst (2002). 
 %
-%-    'P3-b'   - data from Fig.9; listener: P3, condition: 'baseline'.
+%   In the case of response patterns (Fig. 7 & 9) the first row of *data*
+%   describes target position and the second one belongs to the response
+%   position.  In the case of DTF data (Fig. 11) the first dimension of the
+%   *data* matrix describes frequency and the second one angle position, the
+%   **first column** defines the actual angle positions.
 %
-%-    'P3-2o'  - data from Fig.9; listener: P3, condition: '2-oct'.
+%   The flag may be one of:
 %
-%-    'P3-1ol' - data from Fig.9; listener: P3, condition: '1-oct(low)'.
-%
-%-    'P3-1om' - data from Fig.9; listener: P3, condition: '1-oct(middle)'.
-%
-%-    'P3-1oh' - data from Fig.9; listener: P3, condition: '1-oct(high)'.
-%
-%-    'P6-b'   - data from Fig.9; listener: P6, condition: 'baseline'.
-%
-%-    'P6-2o'  - data from Fig.9; listener: P6, condition: '2-oct'.
-%
-%-    'P6-1ol' - data from Fig.9; listener: P6, condition: '1-oct(low)'.
-%
-%-    'P6-1om' - data from Fig.9; listener: P6, condition: '1-oct(middle)'.
-%
-%-    'P6-1oh' - data from Fig.9; listener: P6, condition: '1-oct(high)'.
-%
-%-    'P3-dtf' - DTF data from Fig.11; listener: P3. If you do not have the
+%     'P3-b'     Data from Fig.9; listener: P3, condition: 'baseline'.
+%              
+%     'P3-2o'    Data from Fig.9; listener: P3, condition: '2-oct'.
+%              
+%     'P3-1ol'   Data from Fig.9; listener: P3, condition: '1-oct(low)'.
+%              
+%     'P3-1om'   Data from Fig.9; listener: P3, condition: '1-oct(middle)'.
+%              
+%     'P3-1oh'   Data from Fig.9; listener: P3, condition: '1-oct(high)'.
+%              
+%     'P6-b'     Data from Fig.9; listener: P6, condition: 'baseline'.
+%              
+%     'P6-2o'    Data from Fig.9; listener: P6, condition: '2-oct'.
+%              
+%     'P6-1ol'   Data from Fig.9; listener: P6, condition: '1-oct(low)'.
+%              
+%     'P6-1om'   Data from Fig.9; listener: P6, condition: '1-oct(middle)'.
+%              
+%     'P6-1oh'   Data from Fig.9; listener: P6, condition: '1-oct(high)'.
+%              
+%     'P3-dtf'   DTF data from Fig.11; listener: P3. If you do not have the
 %                bitmap of the JASA paper you will get the precalculated
 %                gain response data hrtf_M_langendijk2002 P3.ampMdB.
-%
-%-    'P6-dtf' - DTF data from Fig.11; listener: P6. If you do not have the
+%              
+%     'P6-dtf'   DTF data from Fig.11; listener: P6. If you do not have the
 %                bitmap of the JASA paper you will get the precalculated
 %                gain response data hrtf_M_langendijk2002 P6.ampMdB.
 %
-%-   'expdata' - create the whole dataset required for exp_langendijk2002,
+%     'expdata'  Create the whole dataset required for exp_langendijk2002,
 %                e.g. after adjusting response data.
-%                !BE ADVISED!: The calculation takes a long time.
+%                **BE ADVISED**: The calculation takes a long time.
 %                If only parts of data (e.g. '1-oct(high)') are to be
 %                regenerated, the unnecessary parts can be commented out to
 %                save computation time.
 %
-%    If no flag is given, the function will print the list of valid flags.
+%   If no flag is given, the function will print the list of valid flags.
 %
 %   References: langendijk2002contribution
   
@@ -455,6 +455,3 @@ switch cond
         end
 end
 end
-
-
-%OLDFORMAT

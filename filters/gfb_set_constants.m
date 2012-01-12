@@ -5,7 +5,7 @@
 % author   : tp
 % date     : Jan 2002, Nov 2006
 
-% filename : Gfb_set_constants
+% filename : gfb_set_constants
 
 global GFB_L GFB_Q GFB_PREFERED_GAMMA_ORDER GFB_GAINCALC_ITERATIONS;
 

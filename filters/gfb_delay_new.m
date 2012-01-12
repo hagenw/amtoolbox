@@ -1,7 +1,7 @@
-function delay = Gfb_Delay_new(analyzer, delay_samples)
-% delay = Gfb_Delay_new(analyzer, delay_samples)
+function delay = gfb_delay_new(analyzer, delay_samples)
+% delay = gfb_delay_new(analyzer, delay_samples)
 %
-% Gfb_Delay_new creates a new Gfb_Delay object that can act as the first stage
+% gfb_delay_new creates a new gfb_Delay object that can act as the first stage
 % of a synthsizer that resynthesizes the output of the gammatone filterbank
 % analyzer.  The purpose of the delay object is to delay the output of each
 % band by a band-dependent ammount of samples, so that the envelope of
@@ -20,28 +20,27 @@ function delay = Gfb_Delay_new(analyzer, delay_samples)
 % the samples directly preceeding and following the desired local
 % maximum will be equal after multiplication with the pase factor.
 %
-% PARAMETERS:
-% analyzer      The Gfb_Analyzer structure as returned by Gfb_Analyzer_new.
+%  Input parameters:
+% analyzer      The gfb_analyzer structure as returned by gfb_analyzer_new.
 % delay_samples The desired group delay in samples. must be at least 1,
 %               because of the way the phase factors are computed.  Larger
 %               delays lead to better signal quality
-% delay         The new Gfb_Delay object
+% delay         The new gfb_Delay object
 %
+
 % copyright: Universitaet Oldenburg
 % author   : tp
 % date     : Jan 2002; Nov 2003; Mar Jun Nov 2006; Jan Feb 2007
 
-% filename : Gfb_Delay_new.m
 
+delay.type           = 'gfb_Delay';
 
-delay.type           = 'Gfb_Delay';
-
-  analyzer             = Gfb_Analyzer_clear_state(analyzer);
+  analyzer             = gfb_analyzer_clear_state(analyzer);
   impulse              = zeros(1, delay_samples + 2);
   impulse(1)           = 1;
 
     impulse_response = ...
-      Gfb_Analyzer_process(analyzer, impulse);
+      gfb_analyzer_process(analyzer, impulse);
 
 number_of_bands      = size(impulse_response, 1);
 

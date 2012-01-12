@@ -1,10 +1,10 @@
-function [output, synthesizer] = Gfb_Synthesizer_process(synthesizer, input)
-% [output, synthesizer] = Gfb_Synthesizer_process(synthesizer, input)
+function [output, synthesizer] = gfb_synthesizer_process(synthesizer, input)
+% [output, synthesizer] = gfb_synthesizer_process(synthesizer, input)
 %
 % The synthesizer will resynthesize the given input.
 %
-% PARAMETERS:
-% synthesizer  A synthesizer structure as created by Gfb_Synthesizer_new. A
+%  Input parameters:
+% synthesizer  A synthesizer structure as created by gfb_synthesizer_new. A
 %              copy of the synthesizer object with an updated internal state
 %              is returned in the second return parameter
 % input        A matrix containing the (possibly processed) complex output of
@@ -16,10 +16,10 @@ function [output, synthesizer] = Gfb_Synthesizer_process(synthesizer, input)
 % author   : tp
 % date     : Jan 2002, Nov 2006
 
-% filename : Gfb_Synthesizer_process.m
+% filename : gfb_synthesizer_process.m
 
 
-[output, synthesizer.delay] = Gfb_Delay_process(synthesizer.delay, input);
-[output, synthesizer.mixer] = Gfb_Mixer_process(synthesizer.mixer, output);
+[output, synthesizer.delay] = gfb_delay_process(synthesizer.delay, input);
+[output, synthesizer.mixer] = gfb_mixer_process(synthesizer.mixer, output);
 
 %OLDFORMAT

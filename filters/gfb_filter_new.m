@@ -1,10 +1,10 @@
-function filter = Gfb_Filter_new(arg1,arg2,arg3,arg4,arg5)
-% Gfb_Filter_new is the constructor of a cascaded gammatonefilter. 
+function filter = gfb_filter_new(arg1,arg2,arg3,arg4,arg5)
+% gfb_filter_new is the constructor of a cascaded gammatonefilter. 
 % it may be called with 2, 3, 4 or 5 arguments:
 %
 % 2 arguments:
 % Specify complex filter coefficient directly:
-% Gfb_Filter_new(a_tilde,           % complex filter constant
+% gfb_filter_new(a_tilde,           % complex filter constant
 %                gamma_filter_order)% positive integer
 %
 % 3 or 4 arguments:
@@ -12,7 +12,7 @@ function filter = Gfb_Filter_new(arg1,arg2,arg3,arg4,arg5)
 % order of the gammatone filter.  Filter will have 1 ERBaud equivalent
 % rectangular bandwidth, times bandwidth_factor.
 % Filter coefficient is computed from equations (13),(14)[Hohmann 2002].
-% Gfb_Filter_new(sampling_rate_hz,    % positive real number
+% gfb_filter_new(sampling_rate_hz,    % positive real number
 %                center_frequency_hz, % positive real number
 %                                     %      < sampling_rate_hz/2
 %                gamma_filter_order,  % positive integer
@@ -24,7 +24,7 @@ function filter = Gfb_Filter_new(arg1,arg2,arg3,arg4,arg5)
 % order of the gammatone filter.
 % Filter coefficient is computed as in equations (11),(12)[Hohmann 2002]
 % (section 2.3).
-% Gfb_Filter_new(sampling_rate_hz,    % positive real number
+% gfb_filter_new(sampling_rate_hz,    % positive real number
 %                center_frequency_hz, % positive real number
 %                                     %  < sampling_rate_hz/2
 %                bandwidth_hz,        % posivive real number
@@ -38,10 +38,10 @@ function filter = Gfb_Filter_new(arg1,arg2,arg3,arg4,arg5)
 % author   : tp
 % date     : Jan 2002, Nov 2006, Jan 2007
 
-% filename : Gfb_Filter_new.m
+% filename : gfb_filter_new.m
 
 
-filter.type = 'Gfb_Filter';
+filter.type = 'gfb_Filter';
 if (nargin == 2)
   filter.coefficient = arg1;
   filter.gamma_order = arg2;
@@ -55,7 +55,7 @@ elseif (nargin == 3) | (nargin == 4)
   end
   global GFB_L;
   global GFB_Q;
-  Gfb_set_constants;
+  gfb_set_constants;
 
   % equation (13) [Hohmann 2002]:
   audiological_erb = (GFB_L + center_frequency_hz / GFB_Q) * bandwidth_factor;
@@ -91,7 +91,7 @@ elseif (nargin == 5)
   % equation (1), line 2 [Hohmann 2002]:
   filter.coefficient   = lambda * exp(1i*beta);
 else
-  error ('Gfb_Filter_new needs either 2, 3, 4 or 5 arguments');
+  error ('gfb_filter_new needs either 2, 3, 4 or 5 arguments');
 end
 
 % normalization factor from section 2.2 (text) [Hohmann 2002]:

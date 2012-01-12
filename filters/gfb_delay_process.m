@@ -1,12 +1,12 @@
-function [output, delay] = Gfb_Delay_process(delay, input)
-% [output, delay] = Gfb_Delay_process(delay, input)
+function [output, delay] = gfb_delay_process(delay, input)
+% [output, delay] = gfb_delay_process(delay, input)
 %
 % Each band (row) of the input data will be delayed by a band-dependend
 % ammount of samples, then multiplied with a band-dependend complex
 % constant.  Finally, the real part of this product will be returned.
 %
-% PARAMETERS
-% delay   A Gfb_Delay structure created from Gfb_Delay_new.  The delay
+%  Input parameters:
+% delay   A gfb_Delay structure created from gfb_delay_new.  The delay
 %         will be returned with updated delayline states as the second
 %         return parameter
 % input   A complex matrix containing the signal to delay.  Each row
@@ -17,7 +17,7 @@ function [output, delay] = Gfb_Delay_process(delay, input)
 % author   : tp
 % date     : Jan 2002, Nov 2006
 
-% filename : Gfb_Delay_process.m
+% filename : gfb_delay_process.m
 
 
 [number_of_bands, number_of_samples] = size(input);

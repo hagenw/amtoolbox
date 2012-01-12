@@ -1,3 +1,5 @@
 status=1;
 
-%OLDFORMAT
+p = mfilename('fullpath');
+addpath([p(1:end-11),'obsolete']);
+

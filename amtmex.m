@@ -3,15 +3,15 @@ function amtmex(varargin)
 %   Usage:  amtmex;
 %           amtmex(...);
 %
-%   AMTMEX compiles the C backend in order to speed up the execution of
+%   `amtmex` compiles the C backend in order to speed up the execution of
 %   the toolbox. The C backend is linked to Matlab and Octave through mex
 %   and Octave C++ interfaces.
 %
-%   The action of AMTMEX is determined by one of the following flags:
+%   The action of `amtmex` is determined by one of the following flags:
 %
-%-     'compile' - Compile stuff. This is the default.
+%     'compile'  Compile stuff. This is the default.
 %
-%-     'clean'   - Removes the compiled functions.
+%     'clean'    Removes the compiled functions.
 
 %   AUTHOR : Peter Soendergaard.
 %   TESTING: NA
@@ -133,4 +133,3 @@ for ii=1:numel(L)
 end;
 
 status=0;
-%OLDFORMAT

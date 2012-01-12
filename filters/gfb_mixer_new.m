@@ -1,35 +1,35 @@
-function mixer = Gfb_Mixer_new(analyzer, delay, iterations)
-% mixer = Gfb_Mixer_new(analyzer, delay, iterations)
+function mixer = gfb_mixer_new(analyzer, delay, iterations)
+% mixer = gfb_mixer_new(analyzer, delay, iterations)
 % 
-% Gfb_Mixer_new creates a Gfb_Mixer object with gain factors suitable
+% gfb_mixer_new creates a gfb_mixer object with gain factors suitable
 % to calculate a weighted sum of the bands present in the output of the
 % given delay.  The gain factors are computed using a numerical optimization
 % method described in [Herzke & Hohmann 2007].
 % The <iterations> argument may be omitted.
 %
-% PARAMETERS
-% analyzer   A Gfb_Analyzer structure as created by Gfb_Analyzer_new. The
+%  Input parameters:
+% analyzer   A gfb_analyzer structure as created by gfb_analyzer_new. The
 %            mixer created by this function can act as part of a synthesizer
 %            that resynthesizes the output of this analyzer
-% delay      A Gfb_Delay structure as created by Gfb_Delay_new, Together with
+% delay      A gfb_Delay structure as created by gfb_delay_new, Together with
 %            the mixer created by this function, this delay can form a
 %            synthesizer that resynthesizes the output of the analyzer
 % iterations The gain factors are approximated numerically in iterations.
 %            If this parameter is omitted, then the number of iterations will
-%            be  GFB_GAINCALC_ITERATIONS (see Gfb_set_constants.m, usually
+%            be  GFB_GAINCALC_ITERATIONS (see gfb_set_constants.m, usually
 %            =100)
 %
 % copyright: Universitaet Oldenburg
 % author   : tp
 % date     : Jan 2002, Nov 2003, Mar & Nov 2006, Jan Feb 2007
 
-% filename : Gfb_Mixer_new.m
+% filename : gfb_mixer_new.m
 
 
 global GFB_GAINCALC_ITERATIONS;
-Gfb_set_constants;
+gfb_set_constants;
 
-mixer.type           = 'Gfb_Mixer';
+mixer.type           = 'gfb_mixer';
 center_frequencies   = analyzer.center_frequencies_hz;
 number_of_bands   = length(center_frequencies);
 sampling_frequency   = analyzer.fs;
@@ -43,9 +43,9 @@ mixer.gains          = ones(number_of_bands, 1);
 % compute the frequency response of each filter (col) at the center
 % frequencies of all filters (row)
   pos_f_response = ...
-    Gfb_Analyzer_zresponse(analyzer, z_c);
+    gfb_analyzer_zresponse(analyzer, z_c);
   neg_f_response = ...
-    Gfb_Analyzer_zresponse(analyzer, conj(z_c));
+    gfb_analyzer_zresponse(analyzer, conj(z_c));
 
 % apply delay and phase correction
 for band = [1:number_of_bands]

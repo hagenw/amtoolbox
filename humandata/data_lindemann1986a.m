@@ -1,48 +1,44 @@
 function data = data_lindemann1986a(varargin)
-%DATA_LINDEMANN1986a Returns data points from the Lindemann paper
+%DATA_LINDEMANN1986a Data points from the Lindemann (1986a) paper
 %   Usage: data = data_lindemann1986a_data(flag)
 %
 %   Output parameters:
-%       data    - the data points from the given figure as a matrix with x and y
+%       data    : the data points from the given figure as a matrix with x and y
 %                 data or (in cases where no clear x values were given such as
 %                 T/2) as a vector containing only the y data
 %
-%   DATA_LINDEMANN1986A(flag) returns data points from the Lindemann
+%   `data_lindemann1986a(flag)` returns data points from the Lindemann
 %   1986a paper. The flag may be one of:
 %
-%-    'noplot'       - don't plot, only return data. This is the default.
+%     'noplot'        Don't plot, only return data. This is the default.
 %
-%-    'plot'         - plot the data.
+%     'plot'          Plot the data.
 %
-%-    'fig11_yost'   - return data from Fig. 11. with condition 'yost'.
-%                      The data is ILD vs. lateral displacement (10 is max
-%                      displacement).
+%     'fig11_yost'    Return data from Fig. 11. with condition "yost".
+%                     The data is ILD vs. lateral displacement (10 is max
+%                     Displacement).
 %
-%-    'fig11_sayers' - return data from Fig. 11. with condition 'sayers'. The
-%                      data is ILD vs. lateral displacement (10 is max
-%                      displacement).
+%     'fig11_sayers'  Return data from Fig. 11. with condition "sayers". The
+%                     data is ILD vs. lateral displacement (10 is max
+%                     displacement).
 %
-%-    'fig12_400'    - return data from Fig. 12. for the 400 Hz pure tone. The
-%                      data is ILD vs. ITD.
+%     'fig12_400'     Return data from Fig. 12. for the 400 Hz pure tone. The
+%                     data is ILD vs. ITD.
 %
-%-    'fig12_600'    - return data from Fig. 12. for the 600 Hz pure tone. The
-%                      data is ILD vs. ITD. 
+%     'fig12_600'     Return data from Fig. 12. for the 600 Hz pure tone. The
+%                     data is ILD vs. ITD. 
 %
-%-    'fig13'        - return data from Fig. 13. The output data format is
-%                      x-axis, -3dB, 3dB, 9dB, 15dB, 25dB. The data is ILD vs.
-%                      ITD.
+%     'fig13'         Return data from Fig. 13. The output data format is
+%                     x-axis, -3dB, 3dB, 9dB, 15dB, 25dB. The data is ILD vs.
+%                     ITD.
 %
-%-    'fig16'        - return data from Fig. 16. The data is ILD vs. ITD.
+%     'fig16'         Return data from Fig. 16. The data is ILD vs. ITD.
 %
-%-    'fig17'        - return data from Fig. 17. The output data format is
-%                      x-axis, 0ms, 0.09ms, 0.18ms, 0.27ms. The data is ITD vs.
-%                      ILD.
+%     'fig17'         Return data from Fig. 17. The output data format is
+%                     x-axis, 0ms, 0.09ms, 0.18ms, 0.27ms. The data is ITD vs.
+%                     ILD.
 %
-%    If no flag is given, the function will print the list of valid flags.
-%
-%   Simpledemo:  data_lindemann1986a('fig11_yost','plot');
-%
-%   Simpledemo:  data_lindemann1986a('fig11_sayers','plot');
+%   If no flag is given, the function will print the list of valid flags.
 %
 %   References:lindemann1986a
 
@@ -223,6 +219,3 @@ if flags.do_fig17
     ylabel('interaural time difference (ms)');
   end;
 end;
-
-
-%OLDFORMAT

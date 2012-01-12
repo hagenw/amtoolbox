@@ -1,10 +1,10 @@
-function [output, filter_obj] = Gfb_Filter_process(filter_obj, input)
-% [output, filter] = Gfb_Filter_process(filter, input)
+function [output, filter_obj] = gfb_filter_process(filter_obj, input)
+% [output, filter] = gfb_filter_process(filter, input)
 %
 % The filter processes the input data.
 %
-% PARAMETERS
-% filter  A Gfb_Filter struct created from Gfb_Filter_new.  The filter
+%  Input parameters:
+% filter  A gfb_Filter struct created from gfb_filter_new.  The filter
 %         will be returned with an updated filter state as the second
 %         return parameter
 % input   A vector containing the input signal to process
@@ -14,7 +14,7 @@ function [output, filter_obj] = Gfb_Filter_process(filter_obj, input)
 % author   : tp
 % date     : Jan 2002, Nov 2006, Jan 2007
 
-% filename : Gfb_filter_process.m
+% filename : gfb_filter_process.m
 
 
 factor = filter_obj.normalization_factor;
