@@ -63,3 +63,5 @@ end
 % Scale to model units
 inoutsig = (inoutsig-s.corr)*s.mult;
 
+
+%OLDFORMAT

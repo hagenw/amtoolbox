@@ -15,7 +15,7 @@ function outsig = itdsin(fc,itd,fs)
 %
 %   The output is scaled to have a maximum value of 1-eps.
 %
-%R moore2003introduction
+%   References: moore2003introduction
 %
 
 % AUTHOR: Hagen Wierstorf
@@ -57,3 +57,5 @@ else
 end
 % Scale outsig
 outsig = outsig / (max(abs(outsig(:)))+eps);
+
+%OLDFORMAT

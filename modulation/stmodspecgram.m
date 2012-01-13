@@ -57,7 +57,7 @@ function stmodspecgram(f,fs,varargin)
 %
 %   See also:  audspecgram
 %
-%R  elliott2009modulation
+%   References:elliott2009modulation
   
 if nargin<2
   error('%s: Too few input parameters.',upper(mfilename));
@@ -195,3 +195,5 @@ xlabel('Modulation Frequency (Hz)')
 ylabel('Spectral Modulation Frequency (Cycles/kHz)')
 
 
+
+%OLDFORMAT

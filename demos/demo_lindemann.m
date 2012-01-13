@@ -6,11 +6,15 @@
 %
 %   FIGURE 1 Binaural modulated sinusoid
 %
-%     This figure shows the result of the lindemann binaural model.
+%     This figure shows the binaural activity map for one frequency channel of
+%     the lindemann binaural model for a sinusoid with a binaural modulation
+%     rate of 2 Hz.
 %
 %   FIGURE 2 Sinusoid with ITD
 %
-%     This figure shows the result of the lindemann binaural model.
+%     This figure shows the result of the lindemann binaural model averaged over
+%     time for the desired frequency channel for a sinusoid with an ITD of 0.3
+%     ms.
 %
 %   See also: lindemann, bincorr, plotlindemann
 
@@ -23,7 +27,7 @@ f = 500;
 
 % ------ Fig 1. ----------------------------------------------------------
 
-figure(1)
+figure(1);
 
 % Binaural modulation frequency
 mf = 2;
@@ -31,14 +35,11 @@ mf = 2;
 sig = bmsin(f,mf,fs);
 
 % Model paramter (Note: T_int (ms) should be a multiple of 1000/f == 2)
-c_s=0.3; w_f=0.035; M_f=6; T_int=6;
 % Begin of the storage of the cross-correlation is set to 1, because we have a
 % non-stationary signal
-% NOTE: you can also use the 'dynamic' option to achieve this
-N_1=1;
 
 % Calculate binaural cross-correlation
-[cc,t] = lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1);
+[cc,t] = lindemann(sig,fs,'T_int',6);
 
 % Set title string for the plot
 tstr = sprintf(['Binaural modulated sinusoid\nf = %i Hz\nf_m = %i Hz\n',...
@@ -49,7 +50,7 @@ plotlindemann(cc,t,f,'title',tstr);
 
 % ------ Fig 2. ----------------------------------------------------------
 
-figure(2)
+figure(2);
 
 % Generate an sinusoid with a ITD
 itd = 0.3; % (ms)
@@ -65,3 +66,5 @@ tstr = sprintf('Sinusoid with an ITD\nf = %i Hz\nitd = %.1f ms\nfc = %i\n',...
     f,itd,round(freqtoerb(f)));
 % Plot frequency channel 11, due to round(freqtoerb(500))==11
 plotlindemann(cc,t,f,'title',tstr);
+
+%OLDFORMAT

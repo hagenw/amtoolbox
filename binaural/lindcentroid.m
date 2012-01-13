@@ -21,7 +21,7 @@ function d = lindcentroid(cc)
 %
 %   See also: lindemann
 %
-%R lindemann1986a
+%   References: lindemann1986a
 %
 
 %   AUTHOR: Hagen Wierstorf
@@ -34,6 +34,10 @@ error(nargchk(1,1,nargin));
 if ~isnumeric(cc) || ~isvector(cc)
     error('%s: cc has to be a numeric vector signal!',upper(mfilename));
 end
+% Ensure size(cc) = delay line length x 1
+if size(cc,1)==1
+    cc = cc';
+end
 
 
 % ------ Computation -----------------------------------------------------
@@ -41,3 +45,5 @@ end
 m = linspace(-1,1,length(cc))';
 % Calculate the centroid using the -M:M delay line
 d = sum(m.*cc) / sum(cc);
+
+%OLDFORMAT

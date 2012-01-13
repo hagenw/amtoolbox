@@ -27,3 +27,5 @@ if rule(1) == 1 && max(prob) > (1 / (2 .^ (1/rule(2))))
 else
     detect = 0; % no signal heard
 end;
+
+%OLDFORMAT

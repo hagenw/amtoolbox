@@ -1,5 +1,5 @@
 
-tests_todo={ 'adaptloop' };
+tests_todo={ 'adaptloop', 'outermiddle', 'coefgtdrnl','dbsplsafety'};
 
 
 total_tests_failed=0;
@@ -24,3 +24,5 @@ else
     disp(['   ',list_of_failed_tests{ii}]);
   end;
 end;
+
+%OLDFORMAT

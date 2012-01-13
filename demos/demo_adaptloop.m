@@ -22,10 +22,10 @@
 siglen=10000;
 fs=10000;
 
-% This is the default minimum level of the adaptation loops. The loops
-% assume that a signal is never silent, and sets all values below minlvl
-% equal to minlvl. For plotting purposes, we done the same explicitly.
-minlvl=1e-5;
+% This is the default minimum level (0 dB) of the adaptation loops. The
+% loops assume that a signal is never silent, and sets all values below
+% minlvl equal to minlvl. For plotting purposes, we do the same explicitly.
+minlvl=setdbspl(0);
 
 part=siglen/10;
 
@@ -58,7 +58,7 @@ ylabel('level / model units');
 insig=abs(insig+0.001*randn(siglen,1));
 insig=max(insig,minlvl);
 
-figure(2)
+figure(2);
 
 subplot(3,1,1);
 plot(20*log10(insig));
@@ -75,3 +75,5 @@ plot(adaptloop(insig,fs));
 title('Adaptation w. limiting.');
 ylabel('level / model units');
 
+
+%OLDFORMAT

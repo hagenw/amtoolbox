@@ -1,31 +1,14 @@
 % AMT - General functions
 %
-%  The AMT team, 2010.
+%  The AMT team, 2012.
 %
-%  Plots
-%     SEMIAUDPLOT      - 2D plot on auditory scale.
-%
-%  Auditory scales
-%     AUDTOFREQ        - Auditory unit to frequency conversion.
-%     FREQTOAUD        - Frequency to auditory unit conversion.
-%     AUDSPACE         - Auditory unit spaced vector
-%     AUDSPACEBW       - Auditory unit spaced vector by equal bandwidth.
-%     ERBTOFREQ        - Erb scale to frequency conversion.
-%     FREQTOERB        - Frequency to erb scale conversion.
-%     ERBSPACE         - Equidistant points on the erb scale.
-%     ERBSPACEBW       - Equidistant points by equal bandwidth.
-%     AUDFILTBW        - Bandwidth of audiory filters.
+%  General plotting
+%     AUDSPECGRAM      - Auditory spectrogram.
 %
 %  Signal levels
-%     RMSDB            - RMS value in dB.
-%     PEAKSPL          - Peak SPL value in dB.
-%     GAINDB           - Increase/descrease level of signal.
-%     SETLEVELDB       - Specify level of signal.
-%     CRESTFACTOR      - Crest factor of signal     
-%
-%  Ramping of signals
-%     RAMPUP           - Rising ramp.
-%     RAMPDOWN         - Falling ramp.
+%     DBSPL            - SPL of signal measured in dB.
+%     SETDBSPL         - Specify SPL of signal.
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
+

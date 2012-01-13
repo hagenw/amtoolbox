@@ -1,6 +1,6 @@
 % AMT - Base routines
 %
-%  Peter L. Soendergaard, 2010.
+%  The AMT team, 2012.
 %
 %  Basic routines
 %    AMTSTART     -  Start the toolbox
@@ -12,3 +12,5 @@
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
 
+
+%OLDFORMAT

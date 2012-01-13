@@ -42,3 +42,5 @@ sigr = sin(2*pi*fc.*t + sin(2*pi*mf.*t));
 outsig = [sigl' sigr'];
 % Scale outsig
 outsig = outsig / (max(abs(outsig(:)))+eps);
+
+%OLDFORMAT

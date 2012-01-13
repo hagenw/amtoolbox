@@ -43,3 +43,4 @@ template = ir_target - ir_reference;
 
 % Normalize across all dimenstions of the internal representation.
 template=template/rms(tempate(:));
+%OLDFORMAT
