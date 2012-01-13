@@ -3,15 +3,17 @@ function [benefit, weighted_SNR, weighted_bmld] = culling2010(target,interferer,
 %   Usage:  [benefit weighted_SNR weighted_bmld] = culling2010(target,interferer,fs)
 %  
 %   Input parameters:
-%     target       - Binaural target stimuli
-%     interfererer - Binaural interferer stimuli
+%     target       : Binaural target stimuli
+%     interfererer : Binaural interferer stimuli
 %    
-%   CULLING2010(target,interferer,fs) will compute the increase in speech
+%   `culling2010(target,interferer,fs)` computes the increase in speech
 %   intelligibility of the target when listening binaurally to the target
 %   and interferer. The signals are assumed to be sampled at a sampling
-%   frequency of fs Hz.
+%   frequency of *fs* Hz.
+%
+%   See also: culling2007bmld
 % 
-%R  culling2010mapping culling2007evidence
+%   References:  culling2010mapping culling2007evidence
   
 definput.flags.ears={'both','left','right'};
 [flags,kv]=ltfatarghelper({},definput,varargin);

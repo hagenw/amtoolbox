@@ -14,8 +14,8 @@
 %     LANGENDIJKCOMP     - Comparison process from Langendijk 20002.
 %     LINDEMANNBINCORR   - Running cross-correlation between two signals.
 %     EICELL             - Excitation-inhibition cell model by Breebaart.
+%     CULLING2007BMLD    - BMLD calculation from Culling (2007).
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
 
-%OLDFORMAT
