@@ -1,34 +1,35 @@
-#include "math.h"      
-
-/* meddishaircell.c --  Meddis haircell model for monaural and
+/* mhc.c --  Meddis haircell model for monaural and
         binaural models (peripheral preprocessing).
         This file can be compiled by the matlab
         mex compiler. (c) 2001 Jeroen Breebaart
 */
-
-
+     
+#include "math.h"      
       
 void meddishaircell(
-   double theVector[],    /* vector with data from VECTOR_IN */
-   int fs,                /* samplerate of signal */
-   int length,            /* length of vector */
-   double theResult[]     /* vector with data for VECTOR_OUT */
-   )
+   double insig[],
+   int fs,
+   int siglen,
+   int nsigs,
+   double theResult[]
+        )
       
 {
 
-   int ii;
+   int ii, jj;
 
 /* Parameters from Meddis' April 1990 JASA paper: */
-   const double M=1;
    const double A=5;
    const double B=300;
-   const double g=2000;
-   const double y=5.05;
-   const double l=2500;
-   const double r=6580;
-   const double x=66.31;
+   double g=2000;
+   double y=5.05;
+   double l=2500;
+   double x=66.31;
+   double r=6580;
+   const double M=1;
+
    const double h=50000;
+
 
 /* internal variables */
 
@@ -42,35 +43,40 @@ void meddishaircell(
    double reuptake;
    double reprocess;
    double loss;
-
    double srate;
 
-   printf("%i\n",fs);
+   srate=fs;
 
-   srate = 1.0*fs;
+   /* Rescale by the sampling rate */
+   r=r/srate;
+   x=x/srate;
+   y=y/srate;
+   l=l/srate;
+   g=g/srate;
 
-   kt = g*A/(A+B);
-   spont = M*y*kt/(l*kt+y*(l+r));
-   q=spont*(l+r)/kt;
-   w=spont*r/x;
-
-    
-   /* do the MEDDISHAIRCELL thing! */
-   for (ii=0; ii < length; ii++)
-   {
-      temp=(theVector[ii]+A+fabs(A+theVector[ii]))/2;
-      kt=(g/srate)*temp/(temp+B);
-      replenish=((y/srate)*(M-q)+fabs((y/srate)*(M-q)))/2;
-      eject=kt*q;
-      loss=(l/srate)*spont;
-      reuptake=(r/srate)*spont;
-      reprocess=(x/srate)*w;
-
-      q=q+replenish-eject+reprocess;
-      spont=spont+eject-loss-reuptake;
-      w=w+reuptake-reprocess;
-      theResult[ii]=spont*h;
-    
+   for (jj=0; jj < nsigs; jj++)
+   {      
+      kt = g*A/(A+B);
+      spont = M*y*kt/(l*kt+y*(l+r));
+      q=spont*(l+r)/kt;
+      w=spont*r/x;
+            
+      /* do the MHC thing! */
+      for (ii=0; ii < siglen; ii++)
+      {
+	 temp=(insig[ii+jj*siglen]+A+abs(A+insig[ii+jj*siglen]))/2;
+	 kt=g*temp/(temp+B);
+	 replenish=(y*(M-q)+abs(y*(M-q)))/2;
+	 eject=kt*q;
+	 loss=l*spont;
+	 reuptake=r*spont;
+	 reprocess=x*w;
+	 
+	 q=q+replenish-eject+reprocess;
+	 spont=spont+eject-loss-reuptake;
+	 w=w+reuptake-reprocess;
+	 theResult[ii+jj*siglen]=spont*h;	 
+      }
    }
 }
       

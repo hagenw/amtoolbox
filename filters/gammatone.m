@@ -5,19 +5,19 @@ function [b,a,delay]=gammatone(fc,fs,varargin)
 %          [b,a] = gammatone(fc,fs);
 %
 %   Input parameters:
-%      fc    -  center frequency in Hz.
-%      fs    -  sampling rate in Hz.
-%      n     -  filter order.
-%      beta  -  bandwidth of the filter.
+%      fc    : center frequency in Hz.
+%      fs    : sampling rate in Hz.
+%      n     :  filter order.
+%      beta  :  bandwidth of the filter.
 %
 %   Output parameters:
-%      b     -  nominator coefficients.
-%      a     -  denominator coefficients.
+%      b     :  nominator coefficients.
+%      a     :  denominator coefficients.
 %
-%   GAMMATONE(fc,fs,n,betamul) computes the filter coefficients of a digital
-%   gammatone filter with center frequency fc, order n, sampling rate fs and
-%   bandwith determined by betamul. The bandwidth _beta of each filter is
-%   determined as betamul times AUDFILTBW of the center frequency of
+%   `gammatone(fc,fs,n,betamul)` computes the filter coefficients of a digital
+%   gammatone filter with center frequency *fc*, order *n*, sampling rate *fs* and
+%   bandwith determined by *betamul*. The bandwidth *beta* of each filter is
+%   determined as *betamul* times `audfiltbw` of the center frequency of
 %   corresponding filter.
 %
 %   By default, the returned filter coefficients comes from the all-pole
@@ -25,46 +25,47 @@ function [b,a,delay]=gammatone(fc,fs,varargin)
 %   have a 0 dB attenuation at the center frequency (another way of
 %   stating this is that their impulse responses will have unit area).
 %
-%   GAMMATONE(fc,fs,n) will do the same but choose a filter bandwidth
+%   `gammatone(fc,fs,n)` will do the same but choose a filter bandwidth
 %   according to Glasberg and Moore (1990).
 %
-%   GAMMATONE(fc,fs) will do as above for a 4th order filter.
+%   `gammatone(fc,fs)` will do as above for a 4th order filter.
 %
-%   If fc is a vector, each entry of fc is considered as one center
+%   If *fc* is a vector, each entry of *fc* is considered as one center
 %   frequency, and the corresponding coefficients are returned as row
 %   vectors in the output.
 %
-%   The inpulse response of the gammatone filter is given by
+%   The inpulse response of the gammatone filter is given by:
 %
-%M    g(t) = a*t^(n-1)*cos(2*pi*fc*t)*exp(-2*pi*beta*t)
-%F  \[g(t) = at^{n-1}cos(2\pi\cdot fc\cdot t)e^{-2\pi \beta \cdot t}\]
+%   ..   g(t) = a*t^(n-1)*cos(2*pi*fc*t)*exp(-2*pi*beta*t)
 %
-%   GAMMATONE takes the following flags at the end of the line of input
+%   .. math::  g(t) = at^{n-1}cos(2\pi\cdot fc\cdot t)e^{-2\pi \beta \cdot t}
+%
+%   `gammatone` takes the following flags at the end of the line of input
 %   arguments:
 %
-%-     'allpole' - Compute the all-pole approximation of Gammatone
-%                  filters by Lyon. This is the default
+%     'allpole'  Compute the all-pole approximation of Gammatone
+%                filters by Lyon. This is the default
 %
-%-     'classic' - Compute the classical mixed pole-zero approximation of 
-%                  gammatone filters.
+%     'classic'  Compute the classical mixed pole-zero approximation of 
+%                gammatone filters.
 %  
-%-     'complex' - Generate filter coefficients corresponding to a
-%                  complex valued filterbank modulated by exponential
-%                  functions. This is useful for envelope extration
-%                  purposes.
+%     'complex'  Generate filter coefficients corresponding to a
+%                complex valued filterbank modulated by exponential
+%                functions. This is useful for envelope extration
+%                purposes.
 %
-%-     'real'    - Generate real-valued filters.
+%     'real'     Generate real-valued filters.
 %
-%-     'casualphase' - This makes the phase of each filter start at zero.
-%                  This is the default.
+%     'casualphase'  This makes the phase of each filter start at zero.
+%                    This is the default.
 %
-%-     'peakphase' - This makes the phase of each filter be zero when the
-%                  envelope of the impulse response of the filter peaks.
+%     'peakphase'    This makes the phase of each filter be zero when the
+%                    envelope of the impulse response of the filter peaks.
 %
 %   To create the filter coefficients of a 1-erb spaced filter bank using
-%   gammatone filters use the following construction
+%   gammatone filters use the following construction::
 %
-%C    [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
+%     [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 %  
 %   References:aertsen1980strI patterson1988efficient lyon1997all
   
@@ -301,5 +302,3 @@ else
 
 end;
 
-
-%OLDFORMAT

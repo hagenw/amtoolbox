@@ -3,84 +3,85 @@ function varargout=audspecgram(insig,fs,varargin)
 %   Usage: audspecgram(insig,fs,op1,op2, ... );
 %          C=audspecgram(insig,fs, ... );
 %
-%   AUDSPECGRAM(insig,fs) plots an auditory spectrogram of the signal insig,
-%   which has been sampled at a sampling rate of fs Hz. The output is
+%   `audspecgram(insig,fs)` plots an auditory spectrogram of the signal insig,
+%   which has been sampled at a sampling rate of *fs* Hz. The output is
 %   low-pass modulation filtered before presentation.
 %
 %   The frequency axis is diplayed on a erb-scale, but labelled in
 %   Hz. Using the mouse to get plot coordinates will reveal the real
-%   value in erb's. Use ERBTOFREQ to convert to Hz.
+%   value in erb's. Use `erbtofreq` to convert to Hz.
 %
-%   C=AUDSPECGRAM(insig,fs, ... ) returns the image to be displayed as a
-%   matrix. Use this in conjunction with IMWRITE etc. Do NOT use this as a
+%   `C=audspecgram(insig,fs, ... )` returns the image to be displayed as a
+%   matrix. Use this in conjunction with `imwrite` etc. Do **not** use this as a
 %   method to compute an auditory representation. Use some of the model
 %   preprocessing functions for this.
 %
-%   Be carefull with long signals, as the routine may lock up the
-%   interpreter.
+%   Additional arguments can be supplied like this::
 %
-%   Additional arguments can be supplied like this:
-%   AUDSPECGRAM(insig,fs,'dynrange',30). The arguments must be character
-%   strings possibly followed by an argument:
+%     audspecgram(insig,fs,'dynrange',30);
 %
-%-   'adapt'   - Model adaptation. This is the default. This options also
-%                sets the output to be displayed on a linear scale.
+%   The arguments must be character strings possibly followed by an argument:
 %
-%-   'noadapt' - Do not model adaptation. This option also sets a Db scale to
-%                display the output.
+%     'adapt'       Model adaptation. This is the default. This options also
+%                   sets the output to be displayed on a linear scale.
+%    
+%     'noadapt'     Do not model adaptation. This option also sets a dB scale to
+%                   display the output.
+%    
+%     'ihc',modelname
+%                   Pass modelname to |ihcenvelope|_ to determine the inner
+%                   hair cell envelope extraction process to use. Default is to
+%                   use the `'dau'` model.
+%    
+%     'classic'     Display a classic spectrogram. This option is equal to
+%                   `{'ihc','hilbert', 'noadapt', 'nomf'}`
+%    
+%     'mlp',f       Modulation low-pass filter to frequency *f*. Default is to
+%                   low-pass filter to 50 Hz.
+%    
+%     'mf',f        Modulation filter with specified center frequency.
+%    
+%     'nomf'        No modulation filtering of any kind.
+%    
+%     'image'       Use `imagesc` to display the spectrogram. This is the default.
+%    
+%     'clim',[clow,chigh]  Use a colormap ranging from *clow* to *chigh*. These                   
+%                          values are passed to `imagesc`. See the help on `imagesc`.
+%    
+%     'dynrange',r  Limit the displayed dynamic range to r. This option
+%                   is especially usefull when displaying on a dB scale (no adaptation).
+%    
+%     'fullrange'   Use the full dynamic range. This is the default.
+%    
+%     'ytick'       A vector containing the frequency in Hz of the yticks.
+%    
+%     'thr',r       Keep only the largest fraction r of the coefficients, and
+%                   set the rest to zero.
+%    
+%     'frange',[flow,fhigh]
+%                   Choose a frequency scale ranging from *flow* to
+%                   *fhigh*, values are entered in Hz. Default is to display from
+%                   0 to 8000 Hz.
+%    
+%     'xres',xres   Approximate number of pixels along x-axis / time.
+%    
+%     'yres',yres   Approximate number of pixels along y-axis / frequency If
+%                   only one of 'xres' and 'yres' is specified, the default
+%                   aspect ratio will be used.
+%    
+%     'displayratio',r  Set the default aspect ratio.
+%    
+%     'contour'     Do a contour plot to display the spectrogram.
+%           
+%     'surf'        Do a surf plot to display the spectrogram.
+%    
+%     'mesh'        Do a mesh plot to display the spectrogram.
 %
-%-   'ihc',modelname - Pass modelname to IHCENVELOPE to determine the inner
-%                hair cell envelope extraction process to use. Default is to
-%                use the 'dau' model.
+%     'colorbar'    Display the colorbar. This is the default.
 %
-%-   'classic' - Display a classic spectrogram. This option is equal to
-%               {'ihc','hilbert', 'noadapt', 'nomf'}
+%     'nocolorbar'  Do not display the colorbar.
 %
-%-   'mlp',f   - Modulation low-pass filter to frequency f. Default is to
-%                low-pass filter to 50 Hz.
-%
-%-   'mf',f    - Modulation filter with specified center frequency.
-%
-%-   'nomf'    - No modulation filtering of any kind.
-%
-%-   'image'   - Use 'imagesc' to display the spectrogram. This is the default.
-%
-%-   'clim',[clow,chigh] - Use a colormap ranging from clow to chigh. These
-%               values are passed to IMAGESC. See the help on IMAGESC.
-%
-%-   'dynrange',r - Limit the displayed dynamic range to r. This option
-%                is especially usefull when displaying on a dB scale (no adaptation).
-%
-%-   'fullrange' - Use the full dynamic range. This is the default.
-%
-%-   'ytick'   - A vector containing the frequency in Hz of the yticks.
-%
-%-   'thr',r   - Keep only the largest fraction r of the coefficients, and
-%                set the rest to zero.
-%
-%-   'frange',[flow,fhigh] - Choose a frequency scale ranging from flow to
-%                fhigh, values are entered in Hz. Default is to display from
-%                0 to 8000 Hz.
-%
-%-   'xres',xres - Approximate number of pixels along x-axis / time.
-%
-%-   'yres',yres - Approximate number of pixels along y-axis / frequency If
-%                 only one of 'xres' and 'yres' is specified, the default
-%                 aspect ratio will be used.
-%
-%-   'displayratio',r - Set the default aspect ratio.
-%
-%-   'contour' - Do a contour plot to display the spectrogram.
-%          
-%-   'surf'    - Do a surf plot to display the spectrogram.
-%
-%-   'mesh'    - Do a mesh plot to display the spectrogram.
-%
-%-  'colorbar' - Display the colorbar. This is the default.
-%
-%-  'nocolorbar' - Do not display the colorbar.
-%
-%   See also:  erbtofreq, dau1996preproc
+%   See also:   dau1996preproc
 %
 %   Demos:  demo_audspecgram
   
@@ -329,5 +330,3 @@ e0 = exp(-bw/2);
 
 b = 1 - e0;
 a = [1, -e0*exp(1i*w0)];
-
-%OLDFORMAT
