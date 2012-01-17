@@ -1,5 +1,5 @@
-function [hairc_fine_ipd_smooth hairc_mod_ipd_smooth hairc_fine_itd_smooth hairc_mod_itd_smooth hairc_ild hairc_fine_ic hairc_mod_ic hairc_fine_f_inst hairc_mod_f_inst cfreqs] = dietz(signal,fs)
-%DIETZ  Dietz binaural model
+function [hairc_fine_ipd_smooth hairc_mod_ipd_smooth hairc_fine_itd_smooth hairc_mod_itd_smooth hairc_ild hairc_fine_ic hairc_mod_ic hairc_fine_f_inst hairc_mod_f_inst cfreqs] = dietz2011(signal,fs)
+%DIETZ2011  Dietz 2011 binaural model
 %   Usage: [...] = dietz(insig,fs);
 %
 %   Input parameters:

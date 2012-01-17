@@ -9,9 +9,10 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %        tau    : characteristic delay in seconds (positive: left is leading)
 %        ild    : characteristic ILD in dB (positive: left is louder)
 %  
-%   `breebaart2001preproc(insig,fs,tau,ild)` computes the EI-cell representation of
-%   the signal *insig* sampled with a frequency of *fs* Hz as described in
-%   Breebaart (2001). The parameters *tau* and *ild* define the sensitivity of the EI-cell.
+%   `breebaart2001preproc(insig,fs,tau,ild)` computes the EI-cell
+%   representation of the signal *insig* sampled with a frequency of *fs* Hz
+%   as described in Breebaart (2001). The parameters *tau* and *ild* define
+%   the sensitivity of the EI-cell.
 %
 %   The input must have dimensions time x left/right channel x signal no.
 %
@@ -37,7 +38,7 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %
 %   See also: eicell, auditoryfilterbank, ihcenvelope, adaptloop
 
-%   References:breebaart2001binaural
+%   References: breebaart2001binaural
 
 %   AUTHOR : Peter L. Soendergaard
   

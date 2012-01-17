@@ -36,16 +36,17 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %                      completeness. The Hilbert envelope was first suggested
 %                      for signal analysis in Gabor (1946).
 %
-%     'ihc_lindemann'  Use a 1st order Butterworth filter with a cut-off frequency
-%                      of 800 Hz. This method is defined in the paper
-%                      Lindemann 1986a.
+%     'ihc_lindemann'  Use a 1st order Butterworth filter with a cut-off
+%                      frequency of 800 Hz. This method is defined in the
+%                      Lindemann (1986a) paper.
 %
 %     'ihc_meddis'     Use the Meddis inner hair cell model.
 %
-%     'minlvl'         Set all values in the output equal to minlvl. The ensures that
-%                      the output is non-negative and that further processing
-%                      is not affected by unnaturally small values. The default
-%                      value of [] means to not do this.
+%     'minlvl'         Set all values in the output equal to minlvl.
+%                      This ensures that the output is non-negative and
+%                      that further processing is not affected by
+%                      unnaturally small values. The default value of []
+%                      means to not do this.
 %
 %     'dim',d          Work along dimension d.
 %
