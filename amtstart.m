@@ -2,25 +2,24 @@ function amtstart()
 %AMTSTART   Start the Auditory Modelling Toolbox.
 %   Usage:  amtstart;
 %
-%   AMTSTART starts the Auditory Modelling toolbox. This command must be
-%   run before using any of the function in the toolbox. If you issue a
-%   CLEAR ALL command then you must run AMTSTART again.
+%   `amtstart` starts the Auditory Modelling toolbox. This command must be
+%   run before using any of the function in the toolbox.
 %
 %   The auditory modelling toolbox depends on the Linear Time Frequency
 %   Analysis Toolbox (LTFAT) to properly function. Therefore, you must issue
-%   the LTFATSTART command before you start AMT.
+%   the `ltfatstart` command before you start AMT.
 %
-%   To configure default options for functions, you can use the the
-%   LTFATSETDEFAULTS functions in your startup script. A typical startup
-%   file could look like:
+%   To configure default options for functions, you can use the
+%   `ltfatsetdefaults` function in your startup script. A typical startup
+%   file could look like::
 %
-%C    addpath('/path/to/my/work/ltfat');
-%C    addpath('/path/to/my/work/amtoolbox');
-%C    ltfatstart;
-%C    amtstart;
-%C    ltfatsetdefaults('audspecgram','classic');
+%     addpath('/path/to/my/work/ltfat');
+%     addpath('/path/to/my/work/amtoolbox');
+%     ltfatstart;
+%     amtstart;
+%     ltfatsetdefaults('audspecgram','classic');
 %
-%   The last command wil configure AUDSPECGRAM to display a classic
+%   The last command wil configure |audspecgram|_ to display a classic
 %   auditory spectrogram by default.
 %
 %   See also:  amthelp
@@ -174,7 +173,5 @@ AMT_CONF.modules=modules;
 %end;
 
 if printbanner
-  disp(['AMT version ',amt_version,'. Copyright 2009 Peter L. Soendergaard. For help, please type "amthelp".'])
+  disp(['AMT version ',amt_version,'. Copyright 2012 Peter L. Soendergaard. For help, please type "amthelp".'])
 end;
-
-%OLDFORMAT

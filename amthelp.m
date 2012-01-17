@@ -4,14 +4,14 @@ function op1=amthelp(q,modulename)
 %           v=amthelp('version');
 %           mlist=amthelp('modules');
 %
-%   AMTHELP displays some general help on the AMT toolbox and model.
+%   `amthelp` displays some general help on the AMT toolbox..
 %
-%   AMTHELP('version') returns the version number.
+%   `amthelp('version')` returns the version number.
 %
-%   AMTHELP('modules') returns a cell array of installed modules and
+%   `amthelp('modules')` returns a cell array of installed modules and
 %   corresponding version numbers.
 %
-%   AMTHELP('authors') lists the name of the authors.
+%   `amthelp('authors')` lists the name of the authors.
 %
 %   See also:  amtstart
 
@@ -19,17 +19,17 @@ function op1=amthelp(q,modulename)
 %   TESTING: NA
 %   REFERENCE: NA
 
-global AMT_CONF;
-
-% Verify that AMT_CONF has been initialized
-if numel(AMT_CONF)==0
+% Verify that ltfatarghelper is in path
+% Verify that ltfatarghelper is in path
+if ~exist('ltfatarghelper','file')
   disp(' ');
   disp('--- AMT - Auditory Modelling Toolbox. ---');
   disp(' ')
-  disp('To start the toolbox, call AMTSTART as the first command.');
+  disp('To use the AMToolbox, you must first install LTFAT and call LTFATSTART as the first command.');
   disp(' ');
   return;
 end;
+
 
 if nargin==0
   disp(' ');
@@ -137,5 +137,3 @@ if ischar(q);
       end;
   end;
 end;
-
-%OLDFORMAT

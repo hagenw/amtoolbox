@@ -4,6 +4,7 @@
 %
 %  General routines
 %     UFILTERBANKZ     - Apply multiple filters
+%     FILTERBANKZ      - Apply multiple filters with non-equidistant downsampling
 %     FILTERBANK_INIT  - Create control structure for FILTERBANK_BLOCK
 %     FILTERBANK_BLOCK - Filterbank block processing
 %     AVERAGINGFB      - Averaging rectangular filter bank

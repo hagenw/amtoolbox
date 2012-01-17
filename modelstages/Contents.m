@@ -9,6 +9,7 @@
 %     IHCENVELOPE        - Inner hair cell envelope extration.
 %     ADAPTLOOP          - Adaptation loops.
 %     DRNL               - Dual resonance non-linear filterbank.
+%     MODFILTERBANK      - Modulation filter bank.
 %
 %  Binaural processing stages
 %     LANGENDIJKCOMP     - Comparison process from Langendijk 20002.

@@ -76,7 +76,9 @@ php.he='</H2>'
 php.fext='.php'
 
 php.head="""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN"><html>
-<head><title>Auditory Modelling Toolbox</title>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Auditory Modelling Toolbox</title>
 <link rel="stylesheet" href="/amtoolbox.css" type="text/css">
 </head>
 <body>

@@ -11,17 +11,18 @@ function [outsig,mfc] = modfilterbank(insig,fs,fc,varargin)
 %      outsig : Modulation filtered signals
 %      mfc    : Center frequencies of the modulation filters.
 %
-%   MODFILTERBANK(insig,fs,fc) applies a modulation filterbank to the input
-%   signals insig which are sampled with a frequency of fs Hz. Each column in
-%   insig is assumed to be bandpass filtered with a center frequency stored in fc.
+%   `modfilterbank(insig,fs,fc)` applies a modulation filterbank to the input
+%   signals *insig* which are sampled with a frequency of *fs* Hz. Each column in
+%   *insig* is assumed to be bandpass filtered with a center frequency stored in *fc*.
 %
 %   By default, the modulation filters will have center frequencies
-%   0,5,10,16.6,27.77,... where each next center frequency is 5/3 times the
+%   $0,5,10,16.6,27.77,...$ where each next center frequency is 5/3 times the
 %   previous one. For modulation frequencies below (and including) 10 Hz,
 %   the real value of the filters are returned, and for higher modulation
 %   center frequencies, the absolute value (the envelope) is returned.
 %  
-
+%   See also: dau1997preproc
+  
 % AUTHOR: Stephan Ewert
 %
 % Modifications by Morten L. Jepsen and Peter L. Soendergaard.
@@ -114,6 +115,3 @@ e0 = exp(-bw/2);
 b = 1 - e0;
 a = [1, -e0*exp(1i*w0)];
 
-
-
-%OLDFORMAT

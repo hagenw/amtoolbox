@@ -4,6 +4,3 @@ function definput=arg_ihcenvelope(definput)
                     'ihc_lindemann','ihc_meddis'};
 
   definput.keyvals.minlvl=[];
-
-
-%OLDFORMAT

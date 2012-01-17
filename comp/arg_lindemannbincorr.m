@@ -7,5 +7,3 @@ definput.keyvals.T_int = 5;
 definput.keyvals.N_1   = 1;
 
 definput.groups.stationary={'T_int',Inf,'N_1',17640'};
-
-%OLDFORMAT

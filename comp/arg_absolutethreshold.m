@@ -125,6 +125,3 @@ function definput=arg_absolutethreshold(definput)
  14000 35
  16000 56  ]};
 
-
-
-%OLDFORMAT

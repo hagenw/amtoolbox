@@ -11,35 +11,37 @@ function p = langendijk(ir1,ir2,fs,varargin)
 %   Output parameters:
 %     p       : Predicted probability density functions for response angles with respect to target positions
 %
-%   LANGENDIJK(ir1,ir2,... ) results to a two dimensional matrix p.  The
+%   `langendijk(ir1,ir2,... )` results to a two dimensional matrix p.  The
 %   first dimension represents all possible response positions in
 %   increasing order and the second dimension all possible target
 %   respectively source positions. Consequently each column describes the
 %   probability density function of the response distribution for one
 %   special target position. If you want to plot this matrix use
-%   PLOTLANGENDIJK.
+%   |plotlangendijk|_.
 %
-%   LANGENDIJK accepts the following optional parameters.
+%   `langendijk` accepts the following optional parameters.
 %  
-%-     'bw',bw     - Bandwidth of filter bands as partial of an octave. The
+%     'bw',bw        Bandwidth of filter bands as partial of an octave. The
 %                    default value is 6.
 %
-%-     'do',do     - Differential order. The default value is 0.
+%     'do',do        Differential order. The default value is 0.
 %
-%-     'std'       - Use 'std' for comparison. This is the default.
+%     'std'          Use `'std'` for comparison. This is the default.
 %  
-%-     'corr'      - Use 'corr' for comparison.
+%     'corr'         Use `'corr'` for comparison.
 %
-%-     's',s       - Standard deviation of transforming Gaussian function; default: 2
+%     's',s          Standard deviation of transforming Gaussian
+%                    function, default value is 2.
 %
-%-     'bal',bal   - Balance of left to right channel (not included in 
-%                    langendijk's original comparison process); default: 1
+%     'bal',bal      Balance of left to right channel (not included in 
+%                    langendijk's original comparison process). Default
+%                    value is 1.
 %
-%-     'flow',flow   - Start frequency of filter bank. min: 0,5kHz; default: 2kHz
+%     'flow',flow    Start frequency of filter bank. min: 0,5kHz; default: 2kHz
 %
-%-     'fhigh',fhigh - End frequency of filter bank; default: 16kHz
+%     'fhigh',fhigh  End frequency of filter bank; default: 16kHz
 %
-%-     'stim',stim   - Applied stimulus for localization test (optional)
+%     'stim',stim    Applied stimulus for localization test (optional)
 %
 %   See also: plotlangendijk
 %
@@ -102,7 +104,3 @@ function [ outsig ] = halfconv( ir1,stim )
     end
   end
   outsig=temp;
-  
-  
-
-%OLDFORMAT

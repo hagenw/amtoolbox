@@ -66,8 +66,12 @@ function [b,a,delay]=gammatone(fc,fs,varargin)
 %   gammatone filters use the following construction::
 %
 %     [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
+%
+%   To apply the (complex valued) filters to an input signal, use |filterbankz|_::
+%
+%     outsig = 2*real(ufilterbankz(b,a,insig));
 %  
-%   References:aertsen1980strI patterson1988efficient lyon1997all
+%   References: aertsen1980strI patterson1988efficient lyon1997all
   
 %   AUTHOR : Stephan Ewert, Peter L. Soendergaard
 

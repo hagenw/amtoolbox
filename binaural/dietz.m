@@ -1,30 +1,27 @@
 function [hairc_fine_ipd_smooth hairc_mod_ipd_smooth hairc_fine_itd_smooth hairc_mod_itd_smooth hairc_ild hairc_fine_ic hairc_mod_ic hairc_fine_f_inst hairc_mod_f_inst cfreqs] = dietz(signal,fs)
-% DIETZ Calculates interaural phase, time and level differences of fine-
-%       structure and envelope of the signal, as well as the interaural
-%       coherence, which can be used as a weighting function.
-%
-%   Usage: [fine_ipd,mod_ipd,fine_itd,mod_itd,ild,fine_ic,mod_ic,fine_f_inst,mod_f_inst] =
-%          dietz(insig,fs);
+%DIETZ  Dietz binaural model
+%   Usage: [...] = dietz(insig,fs);
 %
 %   Input parameters:
-%       insig       - binaural signal for which values should be calculated
-%       fs          - sampling rate (Hz)
+%       insig       : binaural signal for which values should be calculated
+%       fs          : sampling rate (Hz)
 %
 %   Output parameters:
+%       fine_ipd    : IPD in fine-structure channels
+%       mod_ipd     : IPD in envelope channels
+%       fine_itd    : ITD in fine-structure channels
+%       mod_itd     : ITD in modulation channels
+%       ild         : Interaural level difference
+%       fine_ic     : Interaural coherence in fine-structure channels
+%       mod_ic      : Interaural coherence in modulation channels
+%       fine_f_inst : Instantaneous frequency in fine-structure channels
+%       mod_f_inst  : Instantaneous frequency in modulation channels
 %
-%
-%       fine_ipd    - IPD in fine-structure channels
-%       mod_ipd     - IPD in envelope channels
-%       fine_itd    - ITD in fine-structure channels
-%       mod_itd     - ITD in modulation channels
-%       ild         - Interaural level difference
-%       fine_ic     - Interaural coherence in fine-structure channels
-%       mod_ic      - Interaural coherence in modulation channels
-%       fine_f_inst - Instantaneous frequency in fine-structure channels
-%       mod_f_inst  - Instantaneous frequency in modulation channels
-%
-%   The steps of the binaural model to calculate the result are the
-%   following (see also Dietz et al., 2011):
+%   `dietz(...)` calculates interaural phase, time and level differences of
+%   fine- structure and envelope of the signal, as well as the interaural
+%   coherence, which can be used as a weighting function.  The steps of the
+%   binaural model to calculate the result are the following (see also Dietz
+%   et al., 2011):
 %
 %     1) Middle ear filtering (500-2000 Hz 1st order bandpass)
 %
@@ -44,10 +41,17 @@ function [hairc_fine_ipd_smooth hairc_mod_ipd_smooth hairc_fine_itd_smooth hairc
 %   second-order complex gammatone bandpass (see paper for details).
 %
 %   Demos: demo_dietz
-%
 
 % AUTHOR: Mathias Dietz, Martin Klein-Hennig (implementation for AMT)
 
+%   Copyright (C) 2002-2011   AG Medizinische Physik,
+%                             Universitaet Oldenburg, Germany
+%                             http://www.physik.uni-oldenburg.de/docs/medi
+%
+%   Authors: Tobias Peters (tobias@medi.physik.uni-oldenburg.de) 2002
+%            Mathias Dietz (mathias.dietz@uni-oldenburg.de)      2006-2009
+%            Martin Klein-Hennig (martin.klein.hennig@uni-oldenburg.de) 2011
+  
 % Gammatone filterbank parameters
 lower_cutoff_frequency_hz = 200;
 upper_cutoff_frequency_hz = 5000;
@@ -455,37 +459,5 @@ if (cutoff~='' | order ~= '')
 end
 
 end
-%% rms
-function y = rms(x)
 
-y = sqrt(sum(x .^ 2) ./ length(x));
-end
 
-%% ------------------------------------------------------------------------
-%%-----------------------------------------------------------------------------
-%%
-%%   Copyright (C) 2002-2011   AG Medizinische Physik,
-%%                             Universitaet Oldenburg, Germany
-%%                             http://www.physik.uni-oldenburg.de/docs/medi
-%%
-%%   Permission to use, copy, and distribute this software/file and its
-%%   documentation for any purpose without permission by UNIVERSITAET OLDENBURG
-%%   is not granted.
-%%
-%%   Permission to use this software for academic purposes is generally
-%%   granted.
-%%
-%%   Permission to modify the software is granted, but not the right to
-%%   distribute the modified code.
-%%
-%%   This software is provided "as is" without expressed or implied warranty.
-%%
-%%   Authors: Tobias Peters (tobias@medi.physik.uni-oldenburg.de) 2002
-%%            Mathias Dietz (mathias.dietz@uni-oldenburg.de)      2006-2009
-%%            Martin Klein-Hennig (martin.klein.hennig@uni-oldenburg.de)
-%%            2011
-%%
-%%
-%%-------------------------------------------------------------------------
-
-%OLDFORMAT

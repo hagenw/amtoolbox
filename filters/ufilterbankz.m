@@ -3,21 +3,23 @@ function outsig=ufilterbankz(b,a,insig,hopsize)
 %   Usage: outsig=ufilterbankz(b,a,insig);
 %          outsig=ufilterbankz(b,a,insig,hopsize);
 %
-%   UFILTERBANKZ(b,a,insig) filters the input signal with the filters
-%   described in _a and b.
+%   `ufilterbankz(b,a,insig)` filters the input signal with the filters
+%   described in *a* and *b*.
 %
-%   UFILTERBANKZ(b,a,insig,hopsize) does the same, but only outputs every
-%   hopsize sample in the time domain.
+%   `ufilterbankz(b,a,insig,hopsize)` does the same, but only outputs every
+%   *hopsize* sample in the time domain.
 %
-%   If _a and b are matrices then each row corresponds to a subband
+%   If *a* and *b* are matrices then each row corresponds to a subband
 %   channel.
 %
-%   If insig is a matrix then filtering is applied along the columns.
+%   If *insig* is a matrix then filtering is applied along the columns.
 %
-%   If both insig, _a and b are matrices the output will be
+%   If both *insig*, *a* and *b* are matrices the output will be
 %   3-dimensional. First dimension is time, second dimension is frequency
-%   channel third dimension corresponds to the column of the input signal.
-
+%   and the third dimension corresponds to the columns of the input signal.
+%
+%   See also: gammatone, filterbankz, auditoryfilterbank
+  
 %   AUTHOR : Peter L. Soendergaard
 
 %% ------ Checking of input parameters ---------  
@@ -52,4 +54,3 @@ order=assert_groworder(order);
 
 outsig=assert_sigreshape_post(outsig,dim,permutedsize,order);
 
-%OLDFORMAT

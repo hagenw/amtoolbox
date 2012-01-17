@@ -32,5 +32,3 @@ if ii==nii
 else
     fprintf(1,'\rRun %.0f/%.0f',ii,nii);
 end
-
-%OLDFORMAT

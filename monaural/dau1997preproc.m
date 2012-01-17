@@ -7,17 +7,15 @@ function [outsig, fc, mfc] = dau1997preproc(insig, fs, varargin);
 %     insig  : input acoustic signal.
 %     fs     : sampling rate.
 %  
-%   DAU1997PREPROC(insig,fs) computes the internal representation of the signal insig
-%   sampled with a frequency of fs Hz as described in Dau, Puschel and
-%   Kohlrausch (1996a).
+%   `dau1997preproc(insig,fs)` computes the internal representation of the
+%   signal *insig* sampled with a frequency of *fs* Hz as described in Dau,
+%   Puschel and Kohlrausch (1997a).
 %  
-%   [outsig,fc]=DAU1997(...) additionally returns the center frequencies of
-%   the filter bank.
-%
-%   The model assumes than a pure tone input signal with an RMS value of 1
-%   corresponds to an acoustic signal of 100 db SPL.
+%   `[outsig,fc,mfc]=dau1997preproc(...)` additionally returns the center
+%   frequencies of the filter bank and the center frequencies of the
+%   modulation filterbank.
 %  
-%   The Dau1997 model consists of the following stages:
+%   The Dau 1997 model consists of the following stages:
 %   
 %     1) a gammatone filter bank with 1-erb spaced filtes.
 %
@@ -29,7 +27,13 @@ function [outsig, fc, mfc] = dau1997preproc(insig, fs, varargin);
 %
 %     4) a modulation filterbank
 %
-%   References:dau1997mapI dau1997mapII
+%   Any of the optinal parameters for |auditoryfilterbank|_,
+%   |ihcenvelope|_ and |adaptloop|_ may be optionally specified for this
+%   function. They will be passed to the corresponding functions.
+%
+%   See also: auditoryfilterbank, ihcenvelope, adaptloop, modfilterbank
+
+%   References: dau1997mapI dau1997mapII
 
 %   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Soendergaard
   
@@ -47,7 +51,8 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-definput.import={'auditoryfilterbank'};
+definput.import={'auditoryfilterbank','ihcenvelope','adaptloop'};
+definput.importdefaults={'ihc_dau','adt_dau'};
 definput.keyvals.subfs=[];
 
 [flags,keyvals]  = ltfatarghelper({'flow','fhigh'},definput,varargin);
@@ -55,19 +60,14 @@ definput.keyvals.subfs=[];
 % ------ do the computation -------------------------
 
 % Apply the auditory filterbank
-[outsig, fc] = auditoryfilterbank(insig, fs, 'argimport',flags,keyvals);
+[outsig, fc] = auditoryfilterbank(insig,fs,'argimport',flags,keyvals);
 
 % 'haircell' envelope extraction
-outsig = ihcenvelope(outsig,fs,'ihc_dau');
+outsig = ihcenvelope(outsig,fs,'argimport',flags,keyvals);
 
 % non-linear adaptation loops
-outsig = adaptloop(outsig,fs,'adt_dau');
+outsig = adaptloop(outsig,fs,'argimport',flags,keyvals);
 
 % Modulation filterbank
 [outsig,mfc] = modfilterbank(outsig,fs,fc);
 
-
-
-
-
-%OLDFORMAT

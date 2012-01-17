@@ -7,37 +7,40 @@ function [outsig, fc, mfc] = jepsen2008preproc(insig, fs, varargin);
 %     insig  : input acoustic signal.
 %     fs     : sampling rate.
 %  
-%   JEPSEN2008PREPROC(insig,fs) computes the internal representation of the signal insig
+%   `jepsen2008preproc(insig,fs)` computes the internal representation of the signal insig
 %   sampled with a frequency of fs Hz as described in Jepsen, Ewert and
 %   Dau (2008).
 %  
-%   [outsig,fc]=JEPSEN2008(...) additionally returns the center frequencies of
+%   `[outsig,fc]=jepsen2008(...)` additionally returns the center frequencies of
 %   the filter bank.
 %
-%   The model assumes than a pure tone input signal with an RMS value of 1
-%   corresponds to an acoustic signal of 100 db SPL.
-%  
-%   The Jepsen2008 model consists of the following stages:
+%   The Jepsen 2008 model consists of the following stages:
 % 
-%     1) A heaphone filter to simulate the effect of a standard set of
-%     headphones
+%     1) a heaphone filter to simulate the effect of a standard set of
+%        headphones.
 %
-%     2) A middle ear filter to simulate the effect of the middle ear, and
-%     to convert to stapes movement.
+%     2) a middle ear filter to simulate the effect of the middle ear, and
+%        to convert to stapes movement.
 %
-%     3) DRNL - Dual resonance non-linear filterbank
+%     3) DRNL - Dual resonance non-linear filterbank.
 %
 %     4) an envelope extraction stage done by half-wave rectification
 %        followed by low-pass filtering to 1000 Hz.
 %
-%     5) An expansion stage
+%     5) an expansion stage
 %
 %     6) an adaptation stage modelling nerve adaptation by a cascade of 5
 %        loops.
 %
-%     7) a modulation filterbank
+%     7) a modulation filterbank.
 %
-%   References:jepsen2008cmh
+%   Any of the optinal parameters for |drnl|_, |ihcenvelope|_ and
+%   |adaptloop|_ may be optionally specified for this function. They will be
+%   passed to the corresponding functions.
+%
+%   See also: drnl, ihcenvelope, adaptloop, modfilterbank, dau1997preproc
+%
+%   References: jepsen2008cmh
 
 %   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Soendergaard
   
@@ -55,7 +58,7 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-definput.import={'drnl'};
+definput.import={'drnl','ihcenvelope','adaptloop'};
 definput.importdefaults={'jepsen2008'};
 definput.keyvals.subfs=[];
 
@@ -72,15 +75,13 @@ outsig = filter(hp_fir,1,insig);
 outsig = gaindb(outsig,50);
 
 %% 'haircell' envelope extraction
-outsig = ihcenvelope(outsig,fs,'ihc_dau');
+outsig = ihcenvelope(outsig,fs,'argimport',flags,keyvals);
 
 %% Expansion stage
 outsig = outsig.^2;
 
 %% non-linear adaptation loops
-outsig = adaptloop(outsig,fs,'adt_dau');
+outsig = adaptloop(outsig,fs,'argimport',flags,keyvals);
 
 %% Modulation filterbank
 [outsig,mfc] = modfilterbank(outsig,fs,fc);
-
-%OLDFORMAT
