@@ -10,12 +10,6 @@
 %     PLOTLINDEMANN         - Plot the binaural activity map
 %     LINDCENTROID          - Centroid of the cross-correlation activation
 %
-%  The Langendijk model
-%     LANGENDIJK            - Langendijk & Bronkhorst 2002 auditory model 
-%     LIKELILANGENDIJK      - Likelihood estimation to quantify model performance
-%     PLOTLANGENDIJK        - Plot the pdf-matrices with grey colormap
-%     PLOTLIKELILANGENDIJK  - Plot the likelihood statistics
-%
 %  The Culling model
 %     CULLING2010           - The Culling binaural speech advantage model
 %
