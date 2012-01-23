@@ -14,11 +14,11 @@ function [b,a,delay]=gammatone(fc,fs,varargin)
 %      b     :  nominator coefficients.
 %      a     :  denominator coefficients.
 %
-%   `gammatone(fc,fs,n,betamul)` computes the filter coefficients of a digital
-%   gammatone filter with center frequency *fc*, order *n*, sampling rate *fs* and
-%   bandwith determined by *betamul*. The bandwidth *beta* of each filter is
-%   determined as *betamul* times `audfiltbw` of the center frequency of
-%   corresponding filter.
+%   `gammatone(fc,fs,n,betamul)` computes the filter coefficients of a
+%   digital gammatone filter with center frequency *fc*, order *n*, sampling
+%   rate *fs* and bandwith determined by *betamul*. The bandwidth *beta* of
+%   each filter is determined as *betamul* times `audfiltbw` of the center
+%   frequency of corresponding filter.
 %
 %   By default, the returned filter coefficients comes from the all-pole
 %   approximation described in Lyon (1997). The filters are normalized to
@@ -67,7 +67,8 @@ function [b,a,delay]=gammatone(fc,fs,varargin)
 %
 %     [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 %
-%   To apply the (complex valued) filters to an input signal, use |filterbankz|_::
+%   To apply the (complex valued) filters to an input signal, use
+%   |filterbankz|_::
 %
 %     outsig = 2*real(ufilterbankz(b,a,insig));
 %  

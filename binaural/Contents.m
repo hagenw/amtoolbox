@@ -10,8 +10,8 @@
 %     PLOTLINDEMANN         - Plot the binaural activity map
 %     LINDCENTROID          - Centroid of the cross-correlation activation
 %
-%  The Culling model
-%     CULLING2010           - The Culling binaural speech advantage model
+%  Binaural speech advantage models  
+%     JELFS2011             - Binaural speech advantage
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
