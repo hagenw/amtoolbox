@@ -53,7 +53,7 @@ function output=exp_lopezpoveda2001(varargin)
 %               data (just the model results, not the experimental data)
 %               The output is the model result for the different parameter sets.
 %               The dimensions of the output are: signal level x masker level x signal frequency
-%       	masker level consists of 4 columns:
+%               masker level consists of 4 columns:
 %
 %                 1) Signal level in dB SPL (x axis in the plots)
 %                 

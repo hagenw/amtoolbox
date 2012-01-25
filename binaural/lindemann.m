@@ -56,7 +56,7 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %
 %   Demos: demo_lindemann
 %
-%   References:lindemann1986a lindemann1986b gaik1993combined jeffres1948 hess2007phd
+%   References:lindemann1986a lindemann1986b gaik1993combined jeffress1948place hess2007phd
 
 %   A first implementation of the Lindemann model in Matlab was done from
 %   Wolfgang Hess and inspired this work.

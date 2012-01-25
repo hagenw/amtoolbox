@@ -39,7 +39,7 @@ function analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,gamm
 %
 %   The center frequencies of the individual filters are computed as
 %   described in section 3 of Hohmann (2002).
-
+%
   
 % copyright: Universitaet Oldenburg
 % author   : tp

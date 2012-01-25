@@ -38,7 +38,7 @@ function inoutsig = adaptloop(inoutsig,fs,varargin);
 %
 %-     'dim',d - Do the computation along dimension d of the input. 
 %
-%   References:puschel1988pza dau1996qmeI  breebaart2001binaural
+%   References:puschel1988pza dau1996qmeI  breebaart2001a
 
 % Copyright (c) 1999 - 2004 Stephan Ewert. All rights reserved.
 

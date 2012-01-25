@@ -50,7 +50,7 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %
 %     'dim',d          Work along dimension d.
 %
-%   References: bernstein1999normalized breebaart2001binaural gabor1946 lindemann1986a dau1996qmeI
+%   References: bernstein1999normalized breebaart2001a gabor1946 lindemann1986a dau1996qmeI
   
 
 % ------ Checking of input parameters --------------------------------
