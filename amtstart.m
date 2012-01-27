@@ -46,6 +46,11 @@ bugfix_rq = 2;
 
 s=ltfathelp('version');
 
+if isempty(s)
+  error(['ltfathelp("version") returns an empty array. Please check your '...
+         installation.']);
+end;
+
 % Split into major, minor and bugfix version.
 stops=find(s=='.');
 major_no  = str2num(s(1:stops(1)));

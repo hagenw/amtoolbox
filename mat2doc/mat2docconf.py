@@ -149,6 +149,9 @@ mat=ConfType()
 
 mat.basetype='mat'
 
+mat.urlbase='http://amtoolbox.sourceforge.net/doc'
+mat.urlext='php'
+
 # ------------------------------------------
 # Configuration of Verification system
 # ------------------------------------------

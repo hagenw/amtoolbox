@@ -6,13 +6,20 @@ function [ out ] = plotlangendijk( p,rang,tang,name,latang,delta,deltat,cond,col
 %             plotlangendijk(p,rang,tang,name,latang,delta,deltat,cond,colbar)
 %
 %   Input parameters:
-%     p:        pdf-matrix for all target and response positions
-%     rang:     response angles
-%     tang:     target angles
+%     p       : pdf-matrix for all target and response positions
+%     rang    : response angles
+%     tang    : target angles
 %     name,latang,delta,deltat,cond: only for plot title
-%     colbar:   switch for plotting colorbar-legend, use string 'colorbar' 
+%     colbar  : switch for plotting colorbar-legend, use string 'colorbar' 
 %               for switching on
-
+%
+%   XXX Description is missing
+%
+%   See also: langendijk
+%
+%   References:langendijk2002contribution
+  
+  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 % latest update: 2010-08-05
@@ -307,4 +314,4 @@ langecmap= [ ...
  9.99650300e-01 9.99650300e-01 9.99650300e-01
  1.00000000e+00 1.00000000e+00 1.00000000e+00 ];
 end
-%OLDFORMAT
+

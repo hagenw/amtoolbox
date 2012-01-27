@@ -5,38 +5,40 @@ function inoutsig = adaptloop(inoutsig,fs,varargin);
 %          outsig = adaptloop(insig,fs,limit);
 %          outsig = adaptloop(insig,fs);
 %
-%   ADAPTLOOP(insig,fs,limit,minlvl,tau) applies non-linear adaptation to an
-%   input signal insig sampled at a sampling frequency of fs Hz. limit is
-%   used to limit the overshoot of the output, minlvl determines the lowest
-%   audible threshhold of the signal (in dB SPL) and tau are time constants
+%   `adaptloop(insig,fs,limit,minlvl,tau)` applies non-linear adaptation to an
+%   input signal *insig* sampled at a sampling frequency of *fs* Hz. *limit* is
+%   used to limit the overshoot of the output, *minlvl* determines the lowest
+%   audible threshhold of the signal (in dB SPL) and *tau* are time constants
 %   involved in the adaptation loops. The number of adaptation loops is
-%   determined by the length of tau.
+%   determined by the length of *tau*.
 %
-%   ADAPTLOOP(insig,fs,limit,minlvl) does as above, but uses the values for
-%   tau determined in Dau. 1996.
+%   `adaptloop(insig,fs,limit,minlvl)` does as above, but uses the values for
+%   tau determined in Dau. et al (1996a).
 %
-%   ADAPTLOOP(insig,fs,limit) does as above with a minimum threshhold minlvl
+%   `adaptloop(insig,fs,limit)` does as above with a minimum threshhold *minlvl*
 %   equal to 0 dB SPL.
 %
-%   ADAPTLOOP(insig,fs) does as above with an overshoot limit of limit=10.
+%   `adaptloop(insig,fs)` does as above with an overshoot limit of $limit=10$.
 %
-%   ADAPTLOOP takes the following flags at the end of the line of input
+%   `adaptloop` takes the following flags at the end of the line of input
 %   arguments:
 %
-%-     'adt_dau' - Choose the parameters as in the Dau 1996 and 1997 models. This
+%     'adt_dau'
+%           Choose the parameters as in the Dau 1996 and 1997 models. This
 %           consists of 5 adaptation loops with an overshoot limiting of 10
 %           and a minimum level of 1e-5. This is a correction in regard to
-%           the published version of Dau 96, which did not use overshoot
+%           the model described in Dau et al. (1996a), which did not use overshoot
 %           limiting. The adaptation loops have an exponential spacing. This
 %           flag is the default.
 %
-%-     'adt_puschel' - Choose the parameters as in the original Puschel 1988
+%     'adt_puschel'
+%           Choose the parameters as in the original Puschel 1988
 %           model. This consists of 5 adaptation loops without overshoot
-%           limiting The adapation loops have a linear spacing.
+%           limiting. The adapation loops have a linear spacing.
 %
-%-     'adt_breebaart' - As 'puschel', but with overshoot limiting     
+%     'adt_breebaart'  As `'puschel'`, but with overshoot limiting.
 %
-%-     'dim',d - Do the computation along dimension d of the input. 
+%     'dim',d          Do the computation along dimension *d* of the input. 
 %
 %   References:puschel1988pza dau1996qmeI  breebaart2001a
 
@@ -89,4 +91,3 @@ inoutsig=comp_adaptloop(inoutsig,fs,limit,minlvl,tau);
 
 inoutsig=assert_sigreshape_post(inoutsig,dim,permutedsize,order);
 
-%OLDFORMAT

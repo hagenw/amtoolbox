@@ -3,8 +3,13 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,fs
 %   Usage:  [benefit weighted_SNR weighted_bmld] = culling2010(target,interferer,fs)
 %  
 %   Input parameters:
-%     target       : Binaural target stimuli
-%     interfererer : Binaural interferer stimuli
+%     target        : Binaural target stimuli
+%     interfererer  : Binaural interferer stimuli
+%
+%   Output parameters:
+%     benefit       : XXX
+%     weighted_SNR  : XXX
+%     weighted_bmld : XXX
 %    
 %   `jelfs2011(target,interferer,fs)` computes the increase in speech
 %   intelligibility of the target when listening binaurally to the target

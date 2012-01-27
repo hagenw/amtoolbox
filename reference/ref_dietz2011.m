@@ -108,7 +108,7 @@ signal_me = middle_ear(signal, middle_ear_thr, middle_ear_order, fs);
 if displ disp('splitting signal into frequency channels -> signal_filtered'); end
 
 % create filterbank
-analyzer = Gfb_Analyzer_new(fs, lower_cutoff_frequency_hz, ...
+analyzer = gfb_analyzer_new(fs, lower_cutoff_frequency_hz, ...
     base_frequency_hz, upper_cutoff_frequency_hz,...
     filters_per_ERB);
 channels = length(analyzer.center_frequencies_hz);
@@ -116,8 +116,8 @@ cfreqs=analyzer.center_frequencies_hz;
 analyzer_sh = analyzer;
 
 % apply filterbank
-[signal_filtered, analyzer] = Gfb_Analyzer_process(analyzer, signal_me(:,1));
-[signal_sh_filtered, analyzer_sh] = Gfb_Analyzer_process(analyzer_sh, signal_me(:,2));
+[signal_filtered, analyzer] = gfb_analyzer_process(analyzer, signal_me(:,1));
+[signal_sh_filtered, analyzer_sh] = gfb_analyzer_process(analyzer_sh, signal_me(:,2));
 
 % get number of channels
 channels = length(cfreqs);
@@ -157,8 +157,8 @@ end
 %cmin = min(find(cfreqs>2*mod_center_frequency_hz)); % lowest freq. band for envelope detection
 if displ disp('enveloping haircell output -> hairc_mod'); end
 mod_filter_bandwidth_hz = mod_center_frequency_hz/mod_filter_finesse;
-[hairc_mod, hairc_sh_mod] =... %Gfb_envelope_filter(hairc(:,cmin:end), hairc_sh(:,cmin:end), fs,...
-    Gfb_envelope_filter(hairc, hairc_sh, fs,...
+[hairc_mod, hairc_sh_mod] =... %gfb_envelope_filter(hairc(:,cmin:end), hairc_sh(:,cmin:end), fs,...
+    gfb_envelope_filter(hairc, hairc_sh, fs,...
     mod_center_frequency_hz, mod_filter_bandwidth_hz, ...
     filter_attenuation_db, filter_order);
 
@@ -175,7 +175,7 @@ if displ disp('calculating interaural functions from haircell modulation'); end
 % processing the hairc output with a fine structure filter
 if displ disp('deriving fine structure of haircell output -> hairc_fine'); end
 [hairc_fine, hairc_sh_fine] =...
-    Gfb_envelope_filter(hairc_nolp, hairc_nolp_sh, fs, cfreqs,...
+    gfb_envelope_filter(hairc_nolp, hairc_nolp_sh, fs, cfreqs,...
     cfreqs/fine_filter_finesse, filter_attenuation_db, filter_order);
 
 % calculation of interaural functions from haircell fine structure
@@ -222,13 +222,13 @@ output= filter(b,a,low_filtered);
 
 end
 
-%% Gfb_envelope_filter %%%%%%%%%%%%%%%%%
-function [envelopes_filtered, envelopes_sh_filtered] = Gfb_envelope_filter(s1, s2, sampling_rate_hz, center_frequency_hz,...
+%% gfb_envelope_filter %%%%%%%%%%%%%%%%%
+function [envelopes_filtered, envelopes_sh_filtered] = gfb_envelope_filter(s1, s2, sampling_rate_hz, center_frequency_hz,...
     bandwidth_hz, attenuation_db, gamma_filter_order)
 % [envelopes_filtered, envelopes_sh_filtered] =...
-%   Gfb_envelope_filter(s1, s2, sampling_rate_hz, center_frequency_hz, bandwidth_hz, attenuation_db, gamma_filter_order);
+%   gfb_envelope_filter(s1, s2, sampling_rate_hz, center_frequency_hz, bandwidth_hz, attenuation_db, gamma_filter_order);
 %
-% Filters each row of s1 and s2 with the gammatone filter defined by the input parameters.
+% filters each row of s1 and s2 with the gammatone filter defined by the input parameters.
 % Takes both vectors and matrices.
 %
 % Input
@@ -247,17 +247,17 @@ if length(center_frequency_hz) == 1
     center_frequency_hz = center_frequency_hz * ones(1,M);
 end
 if isempty(bandwidth_hz) % default: width = 1 ERB
-    recip_width1erb = diff(Gfb_hz2erbscale(1:N/2));
+    recip_width1erb = diff(gfb_hz2erbscale(1:N/2));
     bandwidth_hz = round(1./recip_width1erb(round(center_frequency_hz)));
 elseif length(bandwidth_hz) == 1
     bandwidth_hz = bandwidth_hz * ones(1,M);
 end
 
 for i = 1:M
-    filter = Gfb_Filter_new(sampling_rate_hz, center_frequency_hz(i),...
+    filter = gfb_filter_new(sampling_rate_hz, center_frequency_hz(i),...
         bandwidth_hz(i), attenuation_db, gamma_filter_order);
-    [envelopes_filtered(:,i),    filter_obj] = Gfb_Filter_process(filter, s1(i,:));
-    [envelopes_sh_filtered(:,i), filter_obj] = Gfb_Filter_process(filter, s2(i,:));
+    [envelopes_filtered(:,i),    filter_obj] = gfb_filter_process(filter, s1(i,:));
+    [envelopes_sh_filtered(:,i), filter_obj] = gfb_filter_process(filter, s2(i,:));
 end
 end
 
@@ -267,7 +267,7 @@ function [itf, ipd, ipd_lp, ild, itd, itd_C, itd_lp, itd_C_lp,...
     interaural_functions(s1, s2, tau, cfreqs, signal_level_dB_SPL,...
     compr, coh_cycles, fs)
 % Calculates interaural parameters of two complex-valued
-% Hilbert-transformed signals, supplied by the GFB Analyzer()
+% Hilbert-transformed signals, supplied by the GFB analyzer()
 %
 % Input
 %   s1, s2 - input signals

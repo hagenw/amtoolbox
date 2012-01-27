@@ -1,4 +1,4 @@
-function [hairc_fine, fc] = dietz2011(insig,fs,varargin)
+function [hairc_fine, hairc_mod, fc, hairc_ild] = dietz2011(insig,fs,varargin)
 %DIETZ2011  Dietz 2011 binaural model
 %   Usage: [...] = dietz(insig,fs);
 %

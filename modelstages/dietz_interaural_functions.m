@@ -26,63 +26,63 @@ function [outp] = dietz_interaural_functions(s1, s2, tau, fc, signal_level_dB_SP
 %     f_inst_1 : instantaneous frequencies in the channels of the filtered s1
 %     f_inst_2 : instantaneous frequencies in the channels of the filtered s2
 
-a = exp( -1./(fs*tau) );
+  a = exp( -1./(fs*tau) );
 
-outp.itf = s2 .* conj(s1);
+  outp.itf = s2 .* conj(s1);
+  
+  outp.ipd_lp = zeros(size(s1));
+  f_inst_1 = zeros(size(s1));
+  f_inst_2 = zeros(size(s1));
+  
+  % interaural phase difference
+  outp.ipd = angle(outp.itf);
+  
+  % interaural coherence
+  outp.ic = new_ic(outp.itf, coh_cycles./fc, fs);
+  
+  % interaural level difference for the case of tau - scalar
+  
+  s1_low = lowpass(abs(s1),a);
+  s2_low = lowpass(abs(s2),a);    % take envelope at higher frequencies
+  
+  s1_low( find(abs(s1_low) < eps) ) = eps;    % avoid log(0)
+  s2_low( find(abs(s2_low) < eps) ) = eps;    % avoid division by zero
+  
+  outp.ild = 20*log10(s1_low./s2_low)./compr;
+  if length(a) == 1
+    a(1:length(fc)) = a;
+    tau(1:length(fc)) = tau;
+  end
+  
+  for k = 1:length(fc);
+    outp.ipd_lp(:,k) = angle(lowpass(outp.itf(:,k),a(k)))';
+  end
+  
+  % interaural time difference, based on central and instantaneous frequencies
+  for k = 1:length(fc)
+    f_inst_1(:,k) = calc_f_inst(s1(:,k),fs,tau(k),0);
+    f_inst_2(:,k) = calc_f_inst(s2(:,k),fs,tau(k),0);
+    outp.itd_C(:,k) = 1/(2*pi)*outp.ipd(:,k)/fc(k);
+    outp.itd_C_lp(:,k) = 1/(2*pi)*outp.ipd_lp(:,k)/fc(k);
+  end
+  outp.f_inst = max(eps,0.5*(f_inst_1 + f_inst_2));
 
-outp.ipd_lp = zeros(size(s1));
-f_inst_1 = zeros(size(s1));
-f_inst_2 = zeros(size(s1));
-
-% interaural phase difference
-outp.ipd = angle(outp.itf);
-
-% interaural coherence
-outp.ic = new_ic(outp.itf, coh_cycles./fc, fs);
-
-% interaural level difference for the case of tau - scalar
-
-s1_low = lowpass(abs(s1),a);
-s2_low = lowpass(abs(s2),a);    % take envelope at higher frequencies
-
-s1_low( find(abs(s1_low) < eps) ) = eps;    % avoid log(0)
-s2_low( find(abs(s2_low) < eps) ) = eps;    % avoid division by zero
-
-outp.ild = 20*log10(s1_low./s2_low)./compr;
-if length(a) == 1
-  a(1:length(fc)) = a;
-  tau(1:length(fc)) = tau;
+  % to avoid division by zero
+  
+  % based on instantaneous frequencies
+  outp.itd = 1/(2*pi)*outp.ipd./outp.f_inst;    
+  outp.itd_lp = 1/(2*pi)*outp.ipd_lp./outp.f_inst;
+  
+  %level = signal_level_dB_SPL*compr + 20*log10(abs(s1)+abs(s2));
+  
+  
+  
+  % weighting of channels for cumulative ixd determination
+  % sqrt(2) is due to half-wave rectification (included 28th Sep 07)
+  outp.rms = signal_level_dB_SPL*compr + 20*log10(sqrt(2)*min(rms(abs(s1)),rms(abs(s2))));
+  outp.rms = max(outp.rms,0); % avoid negative weights
+  
 end
-for k = 1:length(fc);
-  outp.ipd_lp(:,k) = angle(lowpass(outp.itf(:,k),a(k)))';
-end
-
-% interaural time difference, based on central and instantaneous frequencies
-for k = 1:length(fc)
-  f_inst_1(:,k) = calc_f_inst(s1(:,k),fs,tau(k),0);
-  f_inst_2(:,k) = calc_f_inst(s2(:,k),fs,tau(k),0);
-  outp.itd_C(:,k) = 1/(2*pi)*outp.ipd(:,k)/fc(k);
-  outp.itd_C_lp(:,k) = 1/(2*pi)*outp.ipd_lp(:,k)/fc(k);
-end
-outp.f_inst = max(eps,0.5*(f_inst_1 + f_inst_2));
-
-% to avoid division by zero
-
-% based on instantaneous frequencies
-outp.itd = 1/(2*pi)*outp.ipd./outp.f_inst;    
-outp.itd_lp = 1/(2*pi)*outp.ipd_lp./outp.f_inst;
-
-%level = signal_level_dB_SPL*compr + 20*log10(abs(s1)+abs(s2));
-
-
-
-% weighting of channels for cumulative ixd determination
-% sqrt(2) is due to half-wave rectification (included 28th Sep 07)
-outp.rms = signal_level_dB_SPL*compr + 20*log10(sqrt(2)*min(rms(abs(s1)),rms(abs(s2))));
-outp.rms = max(outp.rms,0); % avoid negative weights
-
-
-end;
 
 %% lowpass
 function y = lowpass(x, a)
@@ -104,17 +104,17 @@ function y = lowpass(x, a)
 %  y - filtered signal
 %
 % Example see ...\examples\example_lowpass_tester.m
-
-[rows, columns] = size(x);
-if rows < columns
-  x = x.';
-  y = zeros(columns,rows);
-else
-  y = zeros(rows, columns);
-end
-[rows, columns] = size(y);
-
-y = filter([1-a], [1, -a], x);
+  
+  [rows, columns] = size(x);
+  if rows < columns
+    x = x.';
+    y = zeros(columns,rows);
+  else
+    y = zeros(rows, columns);
+  end
+  [rows, columns] = size(y);
+  
+  y = filter([1-a], [1, -a], x);
 end
 
 

@@ -11,19 +11,19 @@ function outsig = transposedtone(siglen,fc,fm,fs,varargin)
 %   Output parameters:
 %     outsig  : transposed tone (column vector)
 %
-%   TRANSPOSEDTONE(siglen,fc,fm,dur,fs) generates a transposed tone test
+%   `transposedtone(siglen,fc,fm,dur,fs)` generates a transposed tone test
 %   stimuli as defined in Kolrausch et. al (1997).
 %
 %   By default, the output is normalized to have an RMS value of 1, but this
-%   can be changed by passing any of the flags from the NORMALIZE function.
+%   can be changed by passing any of the flags from the `normalize` function.
 % 
-%   Some example parameters as used in a study by Santurette
+%   Some example parameters as used in a study by Santurette::
 %   
-%C     siglen = 44100;
-%C     fc     = 5000;
-%C     fm     = 435;
-%C     fs     = 44100;
-%C     outsig = transposedtone(fc,fm,dur,fs);
+%     siglen = 44100;
+%     fc     = 5000;
+%     fm     = 435;
+%     fs     = 44100;
+%     outsig = transposedtone(fc,fm,dur,fs);
 %
 %   References:kohlrausch1997detection oxenham2004correct
 
@@ -68,4 +68,3 @@ end;
 
 outsig=normalize(outsig,flags.norm);
 
-%OLDFORMAT

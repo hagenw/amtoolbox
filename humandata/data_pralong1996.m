@@ -58,5 +58,3 @@ if flags.do_fig1e
   end;
   
 end;
-
-%OLDFORMAT

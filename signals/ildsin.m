@@ -3,15 +3,15 @@ function outsig = ildsin(fc,ild,fs)
 %   Usage: outsig = itdsin(fc,ild,fs)
 %
 %   Input parameters:
-%       fc      - carrier frequency of the sinusoid (Hz)
-%       ild     - ILD of the right signal, positive or negative (dB)
-%       fs      - sampling rate (Hz)
+%       fc      : carrier frequency of the sinusoid (Hz)
+%       ild     : ILD of the right signal, positive or negative (dB)
+%       fs      : sampling rate (Hz)
 %
 %   Output parameters:
-%       outsig  - two channel 1 s long sinusoid 
+%       outsig  : two channel 1 s long sinusoid 
 %
-%   ILDSIN(fc,ild,fs) generates a sinusoid with a interaural level difference
-%   of ild and a frequency of fc.
+%   `ildsin(fc,ild,fs)` generates a sinusoid with a interaural level difference
+%   of *ild* and a frequency of *fc*.
 %
 %   The output is scaled to have a maximum value of 1-eps.
 %
@@ -49,4 +49,3 @@ outsig = [sigl' sigr'];
 % Scale outsig
 outsig = outsig / (max(abs(outsig(:)))+eps);
 
-%OLDFORMAT

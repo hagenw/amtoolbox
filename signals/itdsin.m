@@ -3,20 +3,19 @@ function outsig = itdsin(fc,itd,fs)
 %   Usage: outsig = itdsin(fc,itd,fs)
 %
 %   Input parameters:
-%       fc      - carrier frequency of the sinusoid (Hz)
-%       itd     - ITD of the left signal, positive or negative (ms)
-%       fs      - sampling rate (Hz)
+%       fc      : carrier frequency of the sinusoid (Hz)
+%       itd     : ITD of the left signal, positive or negative (ms)
+%       fs      : sampling rate (Hz)
 %
 %   Output parameters:
-%       outsig  - two channel 1 s long sinusoid
+%       outsig  : two channel 1 s long sinusoid
 %
-%   ITDSIN(fc,itd,fs) generates a sinusoid with a interaural time difference
-%   of itd and a frequency of fc.
+%   `itdsin(fc,itd,fs)` generates a sinusoid with a interaural time difference
+%   of *itd* and a frequency of *fc*.
 %
 %   The output is scaled to have a maximum value of 1-eps.
 %
 %   References: moore2003introduction
-%
 
 % AUTHOR: Hagen Wierstorf
 
@@ -58,4 +57,3 @@ end
 % Scale outsig
 outsig = outsig / (max(abs(outsig(:)))+eps);
 
-%OLDFORMAT
