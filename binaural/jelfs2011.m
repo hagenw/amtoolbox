@@ -90,6 +90,6 @@ function [phase coherence] = do_xcorr(left, right, fs, fc)
   % Compute the correlation
   iacc = xcorr(squeeze(left),squeeze(right),maxlag,'coeff');
   
-  % Find the position of the large correlation coefficient.
+  % Find the position of the largest correlation coefficient.
   [coherence delay_samp] = max(iacc);
   phase = fc*2*pi*delay_samp/fs;

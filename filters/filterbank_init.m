@@ -3,12 +3,12 @@ function fb=filterbank_init(b,a,varargin);
 %   Usage: outsig=filterbank(b,a);
 %          outsig=filterbank(b,a,nsigs,hopsize);
 %
-%   fb=FILTERBANK_INIT(b,a) creates a filterbank structure fb for use with
-%   FILTERBANK_BLOCK. The filterbank will filter the input signals with the
-%   filters described in b and _a.
+%   `fb=filterbank_init(b,a)` creates a filterbank structure *fb* for use with
+%   |filterbank_block|_. The filterbank will filter the input signals with the
+%   filters described in *b* and *a*.
 %
-%   fb=FILTERBANK_INIT(b,a,nsigs) does the same assuming that the input
-%   to FILTERBANK_BLOCK will consist of nsigs signal at once.
+%   `fb=filterbank_init(b,a,nsigs)` does the same assuming that the input
+%   to |filterbank_block|_ will consist of *nsigs* signal at once.
 %
 %   See also: ufilterbankz, filterbank_block
 
@@ -37,7 +37,3 @@ fb.outend   = 0;
 
 % Initialize the initial conditions to zero.
 fb.zi=zeros(zilen,fb.nsigs,fb.nchannels);
-
-
-
-%OLDFORMAT

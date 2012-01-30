@@ -4,29 +4,30 @@ function b = middleearfilter(fs,varargin)
 %          b=middleearfilter(fs);
 %          b=middleearfilter;
 %
-%   MIDDLEEARFILTER(fs) computes the filter coefficients of a FIR
+%   `middleearfilter(fs)` computes the filter coefficients of a FIR
 %   filter approximating the effect of the middle ear.
 %
 %   The following parameter and flags can be specified additionally:
 %
-%-    'order',order - Sets the filter order of the computed FIR filter.
-%                     Default value is 512.
+%     'order',order  Sets the filter order of the computed FIR filter.
+%                    Default value is 512.
 %
-%-    'minimum' - calculates a minimum phase filter. This is the default.
+%     'minimum'      Calculates a minimum phase filter. This is the default.
 %
-%-    'zero' - returns a filter with zero phase. Since Matlab shifts the
-%                symmetric impulse response due to no negative indices.
-%                This results in a linear phase and hence a delay in the 
-%                signal chain.
+%     'zero'         returns a filter with zero phase. Since Matlab shifts the
+%                    symmetric impulse response due to no negative indices.
+%                    This results in a linear phase and hence a delay in the 
+%                    signal chain.
 %
-%   MIDDLEEARFILTER without any input arguments returns a table
-%   describing the frequency response of the middle ear filter. First
-%   column of the table contain frequencies and the second column
-%   contains the amplitude (stapes peak velocity in m/s at 0dB SPL) of the 
-%   frequency like in figure 2b) of Lopez-Poveda and Meddis 2001
+%   `middleearfilter` without any input arguments returns a table describing
+%   the frequency response of the middle ear filter. First column of the
+%   table contain frequencies and the second column contains the amplitude
+%   (stapes peak velocity in m/s at 0dB SPL) of the frequency like in figure
+%   2b) of Lopez-Poveda and Meddis (2001).
 %
-%
-%   References:goode1994nkf lopezpoveda2001hnc
+%   See also:  data_lopezpoveda2001, drnl
+% 
+%   References: goode1994nkf lopezpoveda2001hnc
 %
 %   AUTHOR: Peter L. Soendergaard, Katharina Egger
 
@@ -178,4 +179,3 @@ end;
 %     ylabel('FIR middleearfilter');
 % end
 
-%OLDFORMAT
