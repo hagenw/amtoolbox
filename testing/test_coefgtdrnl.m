@@ -23,4 +23,4 @@ res=norm(a1-a2);
 [test_failed,fail]=ltfatdiditfail(res,test_failed);
 fprintf('GTDRNL A %f %s\n', res,fail);
 
-%OLDFORMAT
+

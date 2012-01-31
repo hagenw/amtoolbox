@@ -53,4 +53,4 @@ linDRNLstruct(5).vals = 10^(-0.06762+1.01*log10(CF)); % Hz, LP_lin cutoff
         NlinDRNLparOut(k).vals = NlinDRNLstruct(k).vals;
     end
  
-%OLDFORMAT
+

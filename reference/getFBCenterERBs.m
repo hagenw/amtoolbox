@@ -37,4 +37,4 @@ centerFrq = erbtofreq(cerbs);
 
 % eof
 
-%OLDFORMAT
+

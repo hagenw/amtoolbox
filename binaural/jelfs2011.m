@@ -1,20 +1,26 @@
 function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,fs,varargin)
-%JELFS2011  Binaural advantage for speech in reverberant conditions
+%JELFS2011  Predicted binaural advantage for speech in reverberant conditions
 %   Usage:  [benefit weighted_SNR weighted_bmld] = culling2010(target,interferer,fs)
 %  
 %   Input parameters:
-%     target        : Binaural target stimuli
-%     interfererer  : Binaural interferer stimuli
+%     target        : Binaural target impulse respone (or stimulus)
+%     interfererer  : Binaural interferer impulse response (or stimulus)
+%                     Multiple interfering impulse responses MUST be
+%                     concatenated, not added.
 %
 %   Output parameters:
-%     benefit       : XXX
-%     weighted_SNR  : XXX
-%     weighted_bmld : XXX
+%     benefit       : spatial release from masking (SRM)in dB
+%     weighted_SNR  : component of SRM due to better-ear listening (dB)
+%     weighted_bmld : component of SRM due to binaural unmasking (dB)
 %    
 %   `jelfs2011(target,interferer,fs)` computes the increase in speech
-%   intelligibility of the target when listening binaurally to the target
-%   and interferer. The signals are assumed to be sampled at a sampling
-%   frequency of *fs* Hz.
+%   intelligibility of the target when the target and interferer are 
+%   spatially separated. They are preferably represented by their impulse
+%   responses, but can be represented by noise recordings of equivalent
+%   spectral shape emitted from the same source locations. The impulse 
+%   responses are assumed to be sampled at a sampling frequency of *fs* Hz.
+%   If the modelled sources differ in spectral shape, this can be
+%   simulated by pre-filtering the impulse responses.
 %
 %   See also: culling2007bmld
 % 
@@ -23,7 +29,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,fs
 definput.flags.ears={'both','left','right'};
 [flags,kv]=ltfatarghelper({},definput,varargin);
 
-% Make sure that there is slightly more than 1 erb per channel, and get
+% Make sure that there is at least 1 erb per channel, and get
 % the gammatone filters.
 nchannels=ceil(freqtoerb(fs/2));
 fc=erbspace(0,fs/2,nchannels);
@@ -81,7 +87,7 @@ benefit = weighted_SNR + weighted_bmld;
 
 
 % Helper function to do the cross-correlation, and extract the delay of
-% the peak (output parameter 'phase' and the coherence at the peak.
+% the peak (output parameter 'phase' and the coherence at the peak).
 function [phase coherence] = do_xcorr(left, right, fs, fc)
   % Compute maximum lag to be considered. This could be very large for a
   % centre frequency close to 0, so set a maximum.

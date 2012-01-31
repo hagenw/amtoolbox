@@ -10,4 +10,4 @@ load MiddleFIR.mat
 y_tmp = filter(outer_ear_fir_coeff,1,x);
 y = filter(mid_ear_fir_coeff,1,y_tmp);
 
-%OLDFORMAT
+

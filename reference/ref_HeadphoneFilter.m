@@ -37,4 +37,4 @@ save OuterFIR.mat outer_ear_fir_coeff
 %[H_outer,f_outer]=freqz(outer_ear_fir_coeff,1,floor(fs/2),fs);
 %b = outer_ear_fir_coeff;
 %y = filter(b,1,x);
-%OLDFORMAT
+

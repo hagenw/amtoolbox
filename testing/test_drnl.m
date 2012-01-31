@@ -72,4 +72,4 @@ fprintf('Binaural: %f\n',norm(res(:)));
 
 ltfatsetdefaults('dbspl','dboffset',save_dboffset);
 
-%OLDFORMAT
+

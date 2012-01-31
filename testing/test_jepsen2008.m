@@ -17,4 +17,4 @@ for nfc=1:length(fc)
   end;  
 end;
 
-%OLDFORMAT
+

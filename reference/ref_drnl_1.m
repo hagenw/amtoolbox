@@ -221,4 +221,4 @@ outsig=gaindb(outsig,50);
 function outpar=polfun(par,fc)
   %outpar=10^(par(1)+par(2)*log10(fc));
   outpar=10^(par(1))*fc^par(2);
-%OLDFORMAT
+
