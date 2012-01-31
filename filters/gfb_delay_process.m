@@ -1,41 +1,43 @@
-function [output, delay] = gfb_delay_process(delay, input)
-% [output, delay] = gfb_delay_process(delay, input)
+function [outsig, delay] = gfb_delay_process(delay, insig)
+%GFB_DELAY_PROCESS  Filterbank delay processing
+%   Usage: [outsig, delay] = gfb_delay_process(delay, insig)
 %
-% Each band (row) of the input data will be delayed by a band-dependend
-% ammount of samples, then multiplied with a band-dependend complex
-% constant.  Finally, the real part of this product will be returned.
+%   Input parameters:
+%     delay  : A `gfb_delay` structure created from |gfb_delay_new|_. The delay
+%              will be returned with updated delayline states as the second
+%              return parameter
+%     insig  : A complex matrix containing the signal to delay.  Each row
+%              corresponds to a filterbank band
 %
-%  Input parameters:
-% delay   A gfb_Delay structure created from gfb_delay_new.  The delay
-%         will be returned with updated delayline states as the second
-%         return parameter
-% input   A complex matrix containing the signal to delay.  Each row
-%         corresponds to a filterbank band
-% output  A real matrix containing the delay's output
+%   Output parameters:
+%     outsig : A real matrix containing the delay's output
 %
+%   `gfb_delay_process(delay, insig)` will delay each band (row) of the
+%   input data *insig* by a band-dependent amount of samples, then
+%   multiplied with a band-dependent complex constant.  Finally, the real
+%   part of this product will be returned.
+%
+%   See also: gfb_delay_new
+
 % copyright: Universitaet Oldenburg
 % author   : tp
 % date     : Jan 2002, Nov 2006
 
-% filename : gfb_delay_process.m
-
-
-[number_of_bands, number_of_samples] = size(input);
+[number_of_bands, number_of_samples] = size(insig);
 if (number_of_bands ~= length(delay.delays_samples))
   error('input rows must match the number of bands');
 end
-output = zeros(number_of_bands, number_of_samples);
+outsig = zeros(number_of_bands, number_of_samples);
 for band = [1:number_of_bands]
   if (delay.delays_samples(band) == 0)
-    output(band,:) = ...
-        real(input(band,:) * delay.phase_factors(band));
+    outsig(band,:) = ...
+        real(insig(band,:) * delay.phase_factors(band));
   else
     tmp_out = [delay.memory(band,1:delay.delays_samples(band)), ...
-               real(input(band,:) * delay.phase_factors(band))];
+               real(insig(band,:) * delay.phase_factors(band))];
     delay.memory(band,1:delay.delays_samples(band)) = ...
         tmp_out(number_of_samples+1:length(tmp_out));
-    output(band,:) = tmp_out(1:number_of_samples);
+    outsig(band,:) = tmp_out(1:number_of_samples);
   end
 end
 
-%OLDFORMAT
