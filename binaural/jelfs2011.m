@@ -22,7 +22,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,fs
 %   If the modelled sources differ in spectral shape, this can be
 %   simulated by pre-filtering the impulse responses.
 %
-%   See also: culling2007bmld
+%   See also: culling2005bmld
 % 
 %   References:  jelfs2011revision culling2010mapping culling2007evidence
   
@@ -49,7 +49,7 @@ for n = 1:nchannels
     [phase_t, coher_t] = do_xcorr(targ_f(:,n,1),targ_f(:,n,2),fs,fc(n)); 
     [phase_i, coher_i] = do_xcorr( int_f(:,n,1), int_f(:,n,2),fs,fc(n)); 
 
-    bmld_prediction(n) = culling2007bmld(coher_t,phase_t,phase_i,fc(n));
+    bmld_prediction(n) = culling2005bmld(coher_t,phase_t,phase_i,fc(n));
   end
 
   % Calculate the effect of better-ear SNR
