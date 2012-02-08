@@ -3,58 +3,60 @@ function modspecgram(f,fs,varargin)
 %   Usage:  modspecgram(f,fs);
 %           modspecgram(f,fs,...);
 %
-%   MODSPECGRAM(f,fs) plot the modulation spectogram of the signal f samples
-%   at a sampling frequency of fs Hz.
+%   `modspecgram(f,fs)` plot the modulation spectogram of the signal *f* sampled
+%   at a sampling frequency of *fs* Hz.
 %
-%   C=MODSPECGRAM(f,fs, ... ) returns the image to be displayed as a matrix. Use
-%   this in conjunction with IMWRITE etc.
+%   `C=modspecgram(f,fs, ... )` returns the image to be displayed as a matrix. Use
+%   this in conjunction with `imwrite` etc.
 %
 %   The function takes the following additional arguments
 %
-%-  'win',g   - Use the window g. See the help on GABWIN for some
-%               possiblities. Default is to use a Gaussian window
-%               controlled by the 'thr' or 'wlen' parameters listed below.
+%     'win',g      Use the window g. See the help on `gabwin` for some
+%                  possiblities. Default is to use a Gaussian window
+%                  controlled by the `'thr'` or `'wlen'` parameters listed below.
+%   
+%     'tfr',v      Set the ratio of frequency resolution to time resolution.
+%                  A value $v=1$ is the default. Setting $v>1$ will give better
+%                  frequency resolution at the expense of a worse time
+%                  resolution. A value of $0<v<1$ will do the opposite.
+%   
+%     'wlen',s     Window length. Specifies the length of the window
+%                  measured in samples. See help of PGAUSS on the exact
+%                  details of the window length.
+%   
+%     'image'      Use `imagesc` to display the spectrogram. This is the
+%                  default.
+%   
+%     'clim',[clow,chigh]
+%                  Use a colormap ranging from *clow* to *chigh*. These
+%                  values are passed to `imagesc`.
+%   
+%     'dynrange',r  Use a colormap in the interval [chigh-r,chigh], where
+%                   chigh is the highest value in the plot.
+%   
+%     'fmax',fmax  Display *fmax* as the highest frequency.
+%   
+%     'mfmax',mfmax  
+%                  Display *mfmax* as the highest modulation frequency.
+%   
+%     'xres',xres  Approximate number of pixels along x-axis / time.
+%   
+%     'yres',yres  Approximate number of pixels along y-axis / frequency
+%   
+%     'contour'    Do a contour plot to display the spectrogram.
+%            
+%     'surf'       Do a surf plot to display the spectrogram.
+%   
+%     'mesh'       Do a mesh plot to display the spectrogram.
+%   
+%     'colorbar'   Display the colorbar. This is the default.
+%   
+%     'nocolorbar'  Do not display the colorbar.
+%   
+%     'interp'     Interpolate the image to get the desired
+%                  x-resolution. Turn this off by using 'nointerp'
 %
-%-  'tfr',v   - Set the ratio of frequency resolution to time resolution.
-%               A value v=1 is the default. Setting v>1 will give better
-%               frequency resolution at the expense of a worse time
-%               resolution. A value of 0<v<1 will do the opposite.
-%
-%-  'wlen',s  - Window length. Specifies the length of the window
-%               measured in samples. See help of PGAUSS on the exact
-%               details of the window length.
-%
-%-  'image'   - Use 'imagesc' to display the spectrogram. This is the
-%               default.
-%
-%-  'clim',[clow,chigh] - Use a colormap ranging from clow to chigh. These
-%               values are passed to IMAGESC. See the help on IMAGESC.
-%
-%-  'dynrange',r - Use a colormap in the interval [chigh-r,chigh], where
-%               chigh is the highest value in the plot.
-%
-%-  'fmax',fmax - Display fmax as the highest frequency.
-%
-%-  'mfmax',mfmax - Display mfmax as the highest modulation frequency.
-%
-%-  'xres',xres - Approximate number of pixels along x-axis / time.
-%
-%-  'yres',yres - Approximate number of pixels along y-axis / frequency
-%
-%-  'contour' - Do a contour plot to display the spectrogram.
-%          
-%-  'surf'    - Do a surf plot to display the spectrogram.
-%
-%-  'mesh'    - Do a mesh plot to display the spectrogram.
-%
-%-  'colorbar' - Display the colorbar. This is the default.
-%
-%-  'nocolorbar' - Do not display the colorbar.
-%
-%-  'interp'  - Interpolate the image to get the desired
-%              x-resolution. Turn this off by using 'nointerp'
-%
-%   The parameters 'dynrange' and 'mfmax' may be speficied first on the
+%   The parameters `'dynrange'` and `'mfmax'` may be speficied first on the
 %   argument line, in that order.
 %
 %   See also:  audspecgram
@@ -177,6 +179,3 @@ title('Temporal modulation spectrogram')
 xlabel('Modulation Frequency (Hz)')
 ylabel('Frequency (Hz)')
 
-
-
-%OLDFORMAT

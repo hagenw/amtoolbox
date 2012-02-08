@@ -55,7 +55,7 @@ function varargout=audspecgram(insig,fs,varargin)
 %    
 %     'ytick'       A vector containing the frequency in Hz of the yticks.
 %    
-%     'thr',r       Keep only the largest fraction r of the coefficients, and
+%     'thr',r       Keep only the largest fraction *r* of the coefficients, and
 %                   set the rest to zero.
 %    
 %     'frange',[flow,fhigh]

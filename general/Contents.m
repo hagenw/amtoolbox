@@ -4,6 +4,8 @@
 %
 %  General plotting
 %     AUDSPECGRAM      - Auditory spectrogram.
+%     MODSPECGRAM      - Temporal modulation spectrogram
+%     STMODSPECGRAM    - Spectro-Temporal modulation spectrogram
 %
 %  Signal levels
 %     DBSPL            - SPL of signal measured in dB.
