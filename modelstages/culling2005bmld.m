@@ -18,7 +18,7 @@ function [bmld_out] = culling2007bmld(coherence,phase_target,phase_int,fc)
 %   `culling2005bmld(coherence,phase_target,phase_int,fc)` calculates the
 %   binaural masking level differencefor a signal in broadband noise. 
 %   The input noise coherence and phase must be pre-calculated for the 
-%   frequency channel bearng the signal. See |jelfs2001|_ for an example on
+%   frequency channel bearng the signal. See |jelfs2011|_ for an example on
 %   how to calculate these.
 % 
 %   See also: jelfs2011

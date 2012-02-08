@@ -14,9 +14,11 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %
 %   The DRNL takes a lot of parameters which vary over frequency. Such a
 %   parameter is described by a $1 \times 2$ vector `[b a]` and indicates
-%   that the value of the parameter at frequency *fc* can be calculated by::
+%   that the value of the parameter at frequency *fc* can be calculated by
 %
-%     10^(b+a*log10(fc));
+%   ..  10^(b+a*log10(fc));
+%
+%   .. math:: 10^{b+a\cdot log_{10}(fc)}
 %
 %   The parameters are:
 %

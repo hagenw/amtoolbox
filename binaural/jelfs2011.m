@@ -14,17 +14,18 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,fs
 %     weighted_bmld : component of SRM due to binaural unmasking (dB)
 %    
 %   `jelfs2011(target,interferer,fs)` computes the increase in speech
-%   intelligibility of the target when the target and interferer are 
+%   intelligibility of the target when the target and interferer are
 %   spatially separated. They are preferably represented by their impulse
 %   responses, but can be represented by noise recordings of equivalent
-%   spectral shape emitted from the same source locations. The impulse 
-%   responses are assumed to be sampled at a sampling frequency of *fs* Hz.
-%   If the modelled sources differ in spectral shape, this can be
-%   simulated by pre-filtering the impulse responses.
+%   spectral shape emitted from the same source locations (using the same
+%   noise duration for target and interferer). The impulse responses are
+%   assumed to be sampled at a sampling frequency of *fs* Hz.  If the
+%   modelled sources differ in spectral shape, this can be simulated by
+%   pre-filtering the impulse responses.
 %
 %   See also: culling2005bmld
 % 
-%   References:  jelfs2011revision culling2010mapping culling2007evidence
+%   References:  jelfs2011revision culling2010mapping lavandier2012binaural
   
 definput.flags.ears={'both','left','right'};
 [flags,kv]=ltfatarghelper({},definput,varargin);

@@ -28,7 +28,7 @@ function b = middleearfilter(fs,varargin)
 %   See also:  data_lopezpoveda2001, drnl
 % 
 %   References: goode1994nkf lopezpoveda2001hnc
-%
+
 %   AUTHOR: Peter L. Soendergaard, Katharina Egger
 
 %% ------ Check input options --------------------------------------------

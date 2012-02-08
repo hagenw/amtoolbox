@@ -14,6 +14,14 @@ function data = data_pralong1996(varargin)
 %     'fig1e'   Data from Fig. 1(e), Gain of Sennheiser 250 Linear
 %               circumaural headphones. This is the default
 %
+%   Examples:
+%   ---------
+%
+%   Figure 1e can be displayed using:::
+%
+%     data_pralong1996('plot');
+%     5+5
+%
 %   References: pralong1996role
   
 % Define input flags

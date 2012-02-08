@@ -149,6 +149,8 @@ mat=ConfType()
 
 mat.basetype='mat'
 
+mat.subdir='amtoolbox/'
+
 mat.urlbase='http://amtoolbox.sourceforge.net/doc'
 mat.urlext='php'
 

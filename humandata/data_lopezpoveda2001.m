@@ -23,6 +23,17 @@ function data = data_lopezpoveda2001(varargin)
 %     'lopezpoveda'  Return the data points just read from Fig. 2b
 %                    of Lopez-Poveda and Meddis (2001)
 %
+%   Examples:
+%   ---------
+%
+%   To display Figure 2a, use:::
+%
+%     data_lopezpoveda2001('fig2a','plot');
+%
+%   To display Figure 2b, use:::
+%
+%     data_lopezpoveda2001('fig2b','plot');
+%
 %   References:lopezpoveda2001hnc
 
 %   AUTHOR: Peter L. Soendergaard, Katharina Egger
