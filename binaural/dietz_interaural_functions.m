@@ -1,6 +1,5 @@
 function [outp] = dietz_interaural_functions(s1, s2, tau, fc, signal_level_dB_SPL, compr, coh_cycles, fs)
-% Calculates interaural parameters of two complex-valued
-% Hilbert-transformed signals, supplied by the GFB Analyzer()
+%DIETZ_INTERAURAL_FUNCTIONS  Interaural stages of Dietz 2011
 %
 %   Input parameters
 %     s1, s2 : input signals
@@ -12,19 +11,25 @@ function [outp] = dietz_interaural_functions(s1, s2, tau, fc, signal_level_dB_SP
 %              vector, it has to have as many elements as the number of 
 %              channels of s1 and s2; each value tau(i) is applied to
 %              the signals in s1(i,:) and s2(i,:).
-%     fc : central frequencies
+%     fc     : central frequencies
 %     fs     : sampling frequencies
 %
 %   Output parameters:
-%     itf : transfer function
+%     itf       : transfer function
 %     itf_equal : transfer function without amplitude
 %     ipd : phase difference in rad
-%     ipd_lp : based on lowpass-filtered itf, phase difference in rad
+%     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
 %     ild : level difference in dB
 %     itd, itd_C, itd_lp, itd_C_lp - time difference based on instantaneous
 %                  and central frequencies, with and without low-passed itf
 %     f_inst_1 : instantaneous frequencies in the channels of the filtered s1
-%     f_inst_2 : instantaneous frequencies in the channels of the filtered s2
+%     f_inst_2 : instantaneous frequencies in the channels of the
+%                filtered s2
+%
+%   XXX Description is missing. 
+%
+%   See also: dietz2011
+  
 
   a = exp( -1./(fs*tau) );
 

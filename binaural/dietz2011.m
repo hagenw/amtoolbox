@@ -13,17 +13,35 @@ function [hairc_fine, hairc_mod, fc, hairc_ild] = dietz2011(insig,fs,varargin)
 %   differences of fine- structure and envelope of the signal, as well as
 %   the interaural coherence, which can be used as a weighting function.
 %
-%   The output structure *hairc_fine* consists of the following fields
+%   The output structures *hairc_fine* and *hairc_mod* have the following
+%   fields:
 %
-%     * `fine_ipd`    : IPD in fine-structure channels
-%     * `mod_ipd`     : IPD in envelope channels
-%     * `fine_itd`    : ITD in fine-structure channels
-%     * `mod_itd`     : ITD in modulation channels
-%     * `ild`         : Interaural level difference
-%     * `fine_ic`     : Interaural coherence in fine-structure channels
-%     * `mod_ic`      : Interaural coherence in modulation channels
-%     * `fine_f_inst` : Instantaneous frequency in fine-structure channels
-%     * `mod_f_inst`  : Instantaneous frequency in modulation channels
+%     `fine_ipd`
+%        IPD in fine-structure channels
+%
+%     `mod_ipd`
+%        IPD in envelope channels
+%
+%     `fine_itd`
+%        ITD in fine-structure channels
+%
+%     `mod_itd`
+%        ITD in modulation channels
+%
+%     `ild`         
+%        Interaural level difference
+%  
+%     `fine_ic`     
+%        Interaural coherence in fine-structure channels
+%
+%     `mod_ic`      
+%        Interaural coherence in modulation channels
+%
+%     `fine_f_inst` 
+%        Instantaneous frequency in fine-structure channels
+%
+%     `mod_f_inst`
+%        Instantaneous frequency in modulation channels
 %  
 %   The steps of the binaural model to calculate the result are the
 %   following (see also Dietz et al., 2011):
@@ -44,6 +62,86 @@ function [hairc_fine, hairc_mod, fc, hairc_ild] = dietz2011(insig,fs,varargin)
 %
 %   The interaural temporal disparities are then extracted using a
 %   second-order complex gammatone bandpass (see paper for details).
+%
+%   `dietz2011` accepts the following optional parameters:
+%
+%     'flow',flow    Set the lowest frequency in the filterbank to
+%                    flow. Default value is 200 Hz.
+%
+%     'fhigh',fhigh  Set the highest frequency in the filterbank to
+%                    fhigh. Default value is 5000 Hz.
+%
+%     'basef',basef  Ensure that the frequency basef is a center frequency
+%                    in the filterbank. The default value  is 1000.
+%
+%     'filters_per_ERB', filters_per_erb
+%                    Filters per erb. The default value is 1.
+%
+%     'middle_ear_thr',r
+%                    Bandpass freqencies for middle ear transfer. The
+%                    default value is `[500 2000]`.
+%
+%     'middle_ear_order',n 
+%                    Order of middle ear filter. Only even numbers are
+%                    possible. The default value is 2.
+%
+%     'haircell_lp_freq',hlpfreq
+%                    Cutoff frequency for haircell lowpass filter.
+%                    The default value is 770.
+%
+%     'haircell_lp_order',hlporder
+%                    Order of haircell lowpass filter. The default value is 5.
+%
+%     'compression_power',cpwr
+%                    XXX. The default value is 0.4.
+%
+%     'alpha',alpha  Internal noise strength. Convention FIXME 65dB =
+%                    0.0354. The default value is 0.
+%
+%     'int_randn'    Internal noise XXX. This is the default.
+%
+%     'int_mini'     Internal noise XXX.
+%
+%     'filter_order',fo
+%                    Filter order for output XXX. Used for both 'mod' and 'fine'.
+%                    The default value is 2.
+%
+%     'filter_attenuation_db',fadb
+%                    XXX. Used for both 'mod' and 'fine'. The default value is 10.
+% 
+%     'fine_filter_finesse',fff
+%                    Only for finestructure plugin. The default value is 3.
+%
+%     'mod_center_frequency_hz',mcf_hz
+%                    XXX. Only for envelope plugin. The default value is 216.
+%
+%     'mod_filter_finesse',mff
+%                    XXX. Only for envelope plugin. The default value is 8.
+% 
+%     'level_filter_cutoff_hz',lfc_hz
+%                    XXX. For ild- or level-plugin. The default value is 30.
+%
+%     'level_filter_order',lforder
+%                    XXX. For ild- or level-plugin. The default value is 2.
+%
+%     'coh_param',coh_param
+%                    This is a structure used for the localization
+%                    plugin. It has the following fields:
+%  
+%                      `max_abs_itd`
+%                         XXX. The default value is 1e-3.
+%
+%                      `tau_cycles`
+%                         XXX. The default value is 2.5. 
+%
+%                      `tau_s`
+%                         XXX. The default value is 10e-3.
+%
+%     'signal_level_dB_SPL',signal_level
+%                    Sound pressure level of left channel. Used for data
+%                    display and analysis. Default value is 70.
+%
+%   See also: dietz_interaural_functions
 %
 %   Demos: demo_dietz
 
@@ -85,7 +183,6 @@ definput.keyvals.haircell_lp_order = 5;       % Order of haircell lowpass
 definput.keyvals.compression_power = 0.4;
 definput.keyvals.alpha = 0;                   % Internal noise strength
                                               % 65dB = 0.0354
-                                              
 % randn: add random noise with rms = alpha
 % mini: set all values < alpha to alpha
 definput.flags.int_noise_case = {'int_randn','int_mini'};
