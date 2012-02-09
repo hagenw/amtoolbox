@@ -13,9 +13,17 @@ function output = exp_lindemann1986a(varargin)
 %   
 %   The following flags can be specified;
 %
-%     'plot'    plot the output of the experiment. This is the default.
+%     'plot'     plot the output of the experiment. This is the default.
 %
-%     'noplot'  Don't plot, only return data.
+%     'noplot'   Don't plot, only return data.
+%
+%     'auto'     Re-calculate the file if it does not exist. Return 1 if the
+%                file exist, otherwise 0. This is the default
+%
+%     'refresh'  Always recalculate the file.
+%
+%     'cached'   Always use the cached version. Throws an error if the
+%                file does not exist.
 %
 %     'fig6'  Reproduce Fig.6 from Lindemann (1986a).  The cross-correlation is
 %             calculated for different ITDs and different inhibition factors
@@ -139,11 +147,67 @@ function output = exp_lindemann1986a(varargin)
 %
 %   If no flag is given, the function will print the list of valid flags.
 %
+%   Examples:
+%   ---------
+%
+%   To display Figure 6 use :::
+%
+%     exp_lindemann1986a('fig6');
+%
+%   To display Figure 7 use :::
+%
+%     exp_lindemann1986a('fig7');
+%
+%   To display Figure 8 use :::
+%
+%     exp_lindemann1986a('fig8');
+%
+%   To display Figure 10 use :::
+%
+%     exp_lindemann1986a('fig10');
+%
+%   To display Figure 11 use :::
+%
+%     exp_lindemann1986a('fig11');
+%
+%   To display Figure 12 use :::
+%
+%     exp_lindemann1986a('fig12');
+%
+%   To display Figure 13 use :::
+%
+%     exp_lindemann1986a('fig13');
+%
+%   To display Figure 14a use :::
+%
+%     exp_lindemann1986a('fig14a');
+%
+%   To display Figure 14b use :::
+%
+%     exp_lindemann1986a('fig14b');
+%
+%   To display Figure 15 use :::
+%
+%     exp_lindemann1986a('fig15');
+%
+%   To display Figure 16 use :::
+%
+%     exp_lindemann1986a('fig16');
+%
+%   To display Figure 17 use :::
+%
+%     exp_lindemann1986a('fig17');
+%
+%   To display Figure 18 use :::
+%
+%     exp_lindemann1986a('fig18');
+%
 %   References: lindemann1986a
 %
 
 %   AUTHOR: Hagen Wierstorf
 
+definput.import={'amtredofile'};
 definput.flags.type={'missingflag','fig6','fig7','fig8','fig10','fig11',...
                     'fig12','fig13','fig14a','fig14b','fig15',...
                     'fig16','fig17','fig18'};
@@ -161,7 +225,11 @@ end;
 
 %% ------ FIG 6 -----------------------------------------------------------
 if flags.do_fig6
-    
+
+  s = [mfilename('fullpath'),'_fig6.dat'];
+  
+  if amtredofile(s,flags.redomode)
+  
     % Sampling rate
     fs = 44100;
     % Frequency of the sinusoid
@@ -204,23 +272,28 @@ if flags.do_fig6
         end
     end
 
-    if flags.do_plot
-      % ------ Plotting ------
-      % Generate time axis
-      tau = linspace(-1,1,ndl);
-      % Plot figure for every c_s condition
-      for jj = 1:length(c_s)
-        figure;
-        mesh(tau,itd(end:-1:1),squeeze(output(jj,:,:)));
-        view(0,57);
-        xlabel('correlation-time tau (ms)');
-        ylabel('interaural time difference (ms)');
-        set(gca,'YTick',0:0.2:1);
-        set(gca,'YTickLabel',{'1','0.8','0.6','0.4','0.2','0'});
-        tstr = sprintf('c_s = %.1f\nw_f = 0\nf = %i Hz\n',c_s(jj),f);
-        title(tstr);
-      end
-    end;
+    save(s,'output','-v7.0');
+  else
+    output = load(s);
+  end;
+    
+  if flags.do_plot
+    % ------ Plotting ------
+    % Generate time axis
+    tau = linspace(-1,1,ndl);
+    % Plot figure for every c_s condition
+    for jj = 1:length(c_s)
+      figure;
+      mesh(tau,itd(end:-1:1),squeeze(output(jj,:,:)));
+      view(0,57);
+      xlabel('correlation-time tau (ms)');
+      ylabel('interaural time difference (ms)');
+      set(gca,'YTick',0:0.2:1);
+      set(gca,'YTickLabel',{'1','0.8','0.6','0.4','0.2','0'});
+      tstr = sprintf('c_s = %.1f\nw_f = 0\nf = %i Hz\n',c_s(jj),f);
+      title(tstr);
+    end
+  end;
 
 end;
 
@@ -453,7 +526,7 @@ if flags.do_fig11
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply onset window
         sig = sig(1:siglen,:);
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
             % Calculate cross-correlation (and squeeze due to T_int==inf)
@@ -526,7 +599,7 @@ if flags.do_fig12
             % Use only the beginning of the signal to generate only one time 
             % instance of the cross-correlation and apply a linear onset window
             sig = sig(1:siglen,:);
-            sig = rampsignal(sig,[N_1/2-1 0],'tria');
+            sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
             % Calculate cross-correlation (and squeeze due to T_int==inf)
             tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
             % Store the needed frequency channel
@@ -604,7 +677,7 @@ if flags.do_fig13
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply a linear onset window
         sig = sig(1:siglen,:);
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         % Store the needed frequency channel
@@ -619,7 +692,7 @@ if flags.do_fig13
         for jj = 1:nilds_t
             sig = itdildsin(f,itd_t(ii),ild_t(jj),fs);
             sig = sig(1:siglen,:);
-            sig = rampsignal(sig,[N_1/2-1 0],'tria');
+            sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
             tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
             cc = tmp(:,fc-4);
             cen_t(jj,ii) = lindcentroid(cc);
@@ -705,7 +778,7 @@ if flags.do_fig14a
         sig = sig(1:siglen,:);
         % Apply a linear onset window with length N_1/2 to minimize onset effects
         % (see lindemann1986a p. 1614)
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
             % Calculate cross-correlation (and squeeze due to T_int==inf)
@@ -772,7 +845,7 @@ if flags.do_fig14b
         % First generate the result for std(ILD) == 0
         sig = itdsin(f,itd(ii),fs);
         sig = sig(1:siglen,:);
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         cc = tmp(:,fc-4);
         cen(1,ii) = lindcentroid(cc);
@@ -787,7 +860,7 @@ if flags.do_fig14b
             for jj = 1:nilds
                 sig = itdildsin(f,itd(ii),ild(jj),fs);
                 sig = sig(1:siglen,:);
-                sig = rampsignal(sig,[N_1/2-1 0],'tria');
+                sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
                 tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
                 cc = tmp(:,fc-4);
                 centmp(jj,ii) = lindcentroid(cc);
@@ -847,7 +920,7 @@ if flags.do_fig15
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply onset window
         sig = sig(1:siglen,:);
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
             % Calculate cross-correlation (and squeeze due to T_int==inf)
@@ -918,7 +991,7 @@ if flags.do_fig16
             % Use only the beginning of the signal to generate only one time 
             % instance of the cross-correlation and apply a linear onset window
             sig = sig(1:siglen,:);
-            sig = rampsignal(sig,[N_1/2-1 0],'tria');
+            sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
             % Calculate cross-correlation (and squeeze due to T_int==inf)
             tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
             % Store the needed frequency channel
@@ -990,7 +1063,7 @@ if flags.do_fig17
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply a linear onset window
         sig = sig(1:siglen,:);
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         % Store the needed frequency channel
@@ -1008,7 +1081,7 @@ if flags.do_fig17
         for jj = 1:nitds_t
             sig = itdildsin(f,itd_t(jj),ild_t(ii),fs);
             sig = sig(1:siglen,:);
-            sig = rampsignal(sig,[N_1/2-1 0],'tria');
+            sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
             tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
             cc = tmp(:,fc-4);
             max_t(jj,ii) = findmax(cc);
@@ -1101,7 +1174,7 @@ if flags.do_fig18
         % Generate ITD shifted sinusoid
         sig = bincorrnoise(fs,iac(ii),'pink');
         % Aplly onset window
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         % Store the needed frequency channel. NOTE: the cross-correlation

@@ -26,7 +26,7 @@ function [F, tau]  = data_neely1988(varargin)
 %
 %   Figure can be displayed using:::
 %
-%     data_neely1988('plot','F', [1000 2000 5000 8000],'L', [40 60 80 100]);
+%     data_neely1988('plot');
 %
 %   References: neely1988latency
 

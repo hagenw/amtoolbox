@@ -40,6 +40,37 @@ function data = data_lindemann1986a(varargin)
 %
 %   If no flag is given, the function will print the list of valid flags.
 %
+%   Examples:
+%   ---------
+%
+%   Figure 11 with the "yost" condition can be displayed using :::
+%
+%     data_lindemann1986a('fig11_yost','plot');
+%
+%   Figure 11 with the "sayers" condition can be displayed using :::
+%
+%     data_lindemann1986a('fig11_sayers','plot');
+%
+%   Figure 12 for a 400 Hz pure tone can be displayed using :::
+%
+%     data_lindemann1986a('fig12_400','plot');
+%
+%   Figure 12 for a 600 Hz pure tone can be displayed using :::
+%
+%     data_lindemann1986a('fig12_600','plot');
+%
+%   Figure 13 can be displayed by using :::
+%
+%     data_lindemann1986a('fig13','plot');
+%
+%   Figure 16 can be displayed using :::
+%
+%     data_lindemann1986a('fig16','plot');
+%
+%   Figure 17 can be displayed using :::
+%
+%     data_lindemann1986a('fig17','plot');
+% 
 %   References:lindemann1986a
 
 %   AUTHOR: Hagen Wierstorf

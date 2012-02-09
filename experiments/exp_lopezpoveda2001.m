@@ -64,7 +64,22 @@ function output=exp_lopezpoveda2001(varargin)
 %                 4) Results for regression lines, table III
 %
 %   See also: drnl, data_lopezpoveda2001, data_pralong1996, data_goode1994
-% 
+%
+%   Examples:
+%   ---------
+%
+%   To display Figure 2 use :::
+%
+%     exp_lopezpoveda2001('fig2');
+%
+%   To display Figure 3b and 3c use :::
+%
+%     exp_lopezpoveda2001('fig3bc');
+%
+%   To display Figure 4 use :::
+%
+%     exp_lopezpoveda2001('fig4');
+%
 %   References:lopezpoveda2001hnc pralong1996role goode1994nkf
   
 %  AUTHOR: Katharina Egger
