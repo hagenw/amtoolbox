@@ -20,7 +20,6 @@ function data = data_pralong1996(varargin)
 %   Figure 1e can be displayed using:::
 %
 %     data_pralong1996('plot');
-%     5+5
 %
 %   References: pralong1996role
   
