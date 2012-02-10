@@ -1,3 +1,3 @@
 function definput=arg_amtredofile(definput)
  
-  definput.flags.redomode={'auto','refresh','cached'};
+  definput.flags.redomode={'autorefresh','refresh','cached'};

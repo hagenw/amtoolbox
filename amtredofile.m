@@ -7,13 +7,13 @@ function doit=amtredofile(filename,varargin)
 %
 %   `mode` may one of the following flags:
 %
-%     'auto'     Re-calculate the file if it does not exist. Return 1 if the
-%                file exist, otherwise 0. This is the default
+%     'autorefresh'  Re-calculate the file if it does not exist. Return 1 if the
+%                    file exist, otherwise 0. This is the default
 %
-%     'refresh'  Always recalculate the file.
-%
-%     'cached'   Always use the cached version. Throws an error if the
-%                file does not exist.
+%     'refresh'      Always recalculate the file.
+%                  
+%     'cached'       Always use the cached version. Throws an error if the
+%                    file does not exist.
   
 if nargin<2
   error('%s: Too few input parameters.',upper(mfilename));
