@@ -11,7 +11,7 @@ function modspecgram(f,fs,varargin)
 %
 %   The function takes the following additional arguments
 %
-%     'win',g      Use the window g. See the help on `gabwin` for some
+%     'win',g      Use the window *g*. See the help on `gabwin` for some
 %                  possiblities. Default is to use a Gaussian window
 %                  controlled by the `'thr'` or `'wlen'` parameters listed below.
 %   
@@ -27,9 +27,8 @@ function modspecgram(f,fs,varargin)
 %     'image'      Use `imagesc` to display the spectrogram. This is the
 %                  default.
 %   
-%     'clim',[clow,chigh]
-%                  Use a colormap ranging from *clow* to *chigh*. These
-%                  values are passed to `imagesc`.
+%     'clim',clim  Use a colormap ranging from `clim(1)` to `clim(2)`. These
+%                  values are passed to `imagesc`. See the help on `imagesc`.
 %   
 %     'dynrange',r  Use a colormap in the interval [chigh-r,chigh], where
 %                   chigh is the highest value in the plot.

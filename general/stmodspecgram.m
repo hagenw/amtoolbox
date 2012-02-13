@@ -1,5 +1,5 @@
 function stmodspecgram(f,fs,varargin)
-%MODSPECGRAM  Spectro-Temporal Modulation spectrogram
+%STMODSPECGRAM  Spectro-Temporal Modulation spectrogram
 %   Usage:  stmodspecgram(f,fs);
 %           stmodspecgram(f,fs,...);
 %
@@ -26,10 +26,9 @@ function stmodspecgram(f,fs,varargin)
 %   
 %     'image'      Use `imagesc` to display the spectrogram. This is the
 %                  default.
-%   
-%     'clim',[clow,chigh]
-%                  Use a colormap ranging from *clow* to *chigh*. These
-%                  values are passed to `imagesc`.
+%
+%     'clim',clim  Use a colormap ranging from `clim(1)` to `clim(2)`. These
+%                  values are passed to `imagesc`. See the help on `imagesc`.
 %   
 %     'dynrange',r  Use a colormap in the interval [chigh-r,chigh], where
 %                   chigh is the highest value in the plot.
@@ -201,7 +200,3 @@ axis('xy');
 title('Spectro-Temporal modulation spectrogram')
 xlabel('Modulation Frequency (Hz)')
 ylabel('Spectral Modulation Frequency (Cycles/kHz)')
-
-
-
-%OLDFORMAT
