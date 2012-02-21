@@ -1,5 +1,5 @@
-function [bmld_out] = culling2007bmld(coherence,phase_target,phase_int,fc)
-%CULLING2005BLMD  Binaural Masking Level Difference 
+function [bmld_out] = culling2005bmld(coherence,phase_target,phase_int,fc)
+%CULLING2005BMLD  Binaural Masking Level Difference 
 %
 %   Input parameters:
 %      coherence    : Maximum of the interaural cross-correlation, the

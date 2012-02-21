@@ -1,5 +1,5 @@
 function fb=filterbank_init(b,a,varargin);
-%FILTERBANK  Wrapper around filter to multiple filters
+%FILTERBANK_INIT  Wrapper around filter to multiple filters
 %   Usage: outsig=filterbank(b,a);
 %          outsig=filterbank(b,a,nsigs,hopsize);
 %

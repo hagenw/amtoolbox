@@ -1,5 +1,5 @@
 function data = data_lopezpoveda2001(varargin)
-%DATA_LOPEZPOVEDA2001  Data from Lopez-Poveda & Meddis (2001).
+%DATA_LOPEZPOVEDA2001  Data from Lopez-Poveda & Meddis (2001)
 %   Usage: data = data_lopezpoveda2001(flag)
 %
 %   `data_lopezpoveda2001(flag)` returns data points from the paper by 

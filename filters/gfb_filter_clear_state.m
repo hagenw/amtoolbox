@@ -1,4 +1,5 @@
 function filter = gfb_filter_clear_state(filter)
+%GFB_FILTER_CLEAR_STATE  Clear filters
 %   Usage: filter = gfb_filter_clear_state(filter)
 %
 %   Input parameters:

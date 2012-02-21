@@ -1,5 +1,5 @@
 function inoutsig = adaptloop(inoutsig,fs,varargin);
-%ADAPTLOOP   Adaptation loops.
+%ADAPTLOOP   Adaptation loops
 %   Usage: outsig = adaptloop(insig,fs,limit,minlvl,tau);
 %          outsig = adaptloop(insig,fs,limit,minlvl);
 %          outsig = adaptloop(insig,fs,limit);

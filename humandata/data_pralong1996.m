@@ -61,7 +61,8 @@ if flags.do_fig1e
     x=data(:,1);
     freqresp=20*log10(data(:,2));
     semilogx(x,freqresp);
-
+    xlabel('Frequency (Hz)');
+    ylabel('Gain (dB)');
   end;
   
 end;

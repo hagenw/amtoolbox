@@ -1,5 +1,5 @@
 function amtstart()
-%AMTSTART   Start the Auditory Modelling Toolbox.
+%AMTSTART   Start the Auditory Modelling Toolbox
 %   Usage:  amtstart;
 %
 %   `amtstart` starts the Auditory Modelling toolbox. This command must be

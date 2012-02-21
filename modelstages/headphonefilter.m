@@ -16,6 +16,16 @@ function b = headphonefilter(fs,order)
 %   column of the table contain frequencies and the second column
 %   contains the amplitude of the frequency.
 %
+%   The following code displays the magnitude response of the filter:::
+%
+%     fs=16000;
+%     x=erbspace(0,fs/2,100);
+%     b=headphonefilter(fs);
+%     H=freqz(b,1,x,fs);
+%     semiaudplot(x,10*log10(abs(H).^2));
+%     xlabel('Frequency (Hz)');
+%     ylabel('Magnitude (dB)');
+%
 %   See also: middleearfilter, data_pralong1996, data_lopezpoveda2001
 %
 %   Demos: demo_outermiddle

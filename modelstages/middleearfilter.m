@@ -1,5 +1,5 @@
 function b = middleearfilter(fs,varargin)
-%MIDDLEEARFILTER   Middle ear filter.
+%MIDDLEEARFILTER   Middle ear filter
 %   Usage: b=middleearfilter(fs,varargin);
 %          b=middleearfilter(fs);
 %          b=middleearfilter;
@@ -19,11 +19,32 @@ function b = middleearfilter(fs,varargin)
 %                    This results in a linear phase and hence a delay in the 
 %                    signal chain.
 %
+%     'lopezpoveda'  Use data from Lopez-Poveda and Meddis (2001). These
+%                    data are in turn derived from Goode et al. (1994).
+%                    This is the default. 
+%
+%     'jepsenmiddleear'
+%                    Use the data originally used for the Jepsen 2008
+%                    model, |jepsen2008preproc|_.
+%
 %   `middleearfilter` without any input arguments returns a table describing
 %   the frequency response of the middle ear filter. First column of the
 %   table contain frequencies and the second column contains the amplitude
 %   (stapes peak velocity in m/s at 0dB SPL) of the frequency like in figure
 %   2b) of Lopez-Poveda and Meddis (2001).
+%
+%   'middleearfilter' is meant to be used in conjunction with the |drnl|_
+%   function, as the output is scaled to make DRNL work. If you are not
+%   using the DRNl, you probably do not want to call this function. The
+%   following code displays the magnitude response of the filter:::
+%
+%     fs=16000;
+%     x=erbspace(0,fs/2,100);
+%     b=middleearfilter(fs);
+%     H=freqz(b,1,x,fs);
+%     semiaudplot(x,10*log10(abs(H).^2));
+%     xlabel('Frequency (Hz)');
+%     ylabel('Magnitude (dB)');
 %
 %   See also:  data_lopezpoveda2001, drnl
 % 

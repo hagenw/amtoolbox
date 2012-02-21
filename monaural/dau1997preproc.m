@@ -1,5 +1,5 @@
 function [outsig, fc, mfc] = dau1997preproc(insig, fs, varargin);
-%DAU1997PREPROC   Auditory model from Dau et. al. 1997.
+%DAU1997PREPROC   Auditory model from Dau et. al. 1997
 %   Usage: [outsig, fc] = dau1997preproc(insig,fs);
 %          [outsig, fc] = dau1997preproc(insig,fs,...);
 %

@@ -1,5 +1,5 @@
 function varargout=audspecgram(insig,fs,varargin)
-%AUDSPECGRAM  Auditory spectrogram.
+%AUDSPECGRAM  Auditory spectrogram
 %   Usage: audspecgram(insig,fs,op1,op2, ... );
 %          C=audspecgram(insig,fs, ... );
 %
