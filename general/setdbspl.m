@@ -1,7 +1,7 @@
 function inoutsig = setdbspl(inoutsig,lvl,varargin);
 %SETDBSPL  Set level of signal in dB
-%   Usage: outsig = setlevel(insig,lvl);
-%          outsig = setlevel(insig,lvl,'ac');
+%   Usage: outsig = setdbspl(insig,lvl);
+%          outsig = setdbspl(insig,lvl,'ac');
 %
 %   `setdbspl(insig,lvl)` sets the SPL (sound pressure level) of the signal
 %   insig to *lvl* dB, using the convention that a pure tone with an RMS value

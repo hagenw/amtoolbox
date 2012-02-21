@@ -1,7 +1,7 @@
 function outsig=filterbankz(b,a,insig,hopsize)
 %FILTERBANKZ  Filter bank with zero boundary condition
-%   Usage: outsig=filterbank(b,a,insig);
-%          outsig=filterbank(b,a,insig,hopsize);
+%   Usage: outsig=filterbankz(b,a,insig);
+%          outsig=filterbankz(b,a,insig,hopsize);
 %
 %   `filterbankz(b,a,insig,hopsize)` filters the input signal with the filters
 %   described in *a* and *b*. *hopsize* is a vector with a length equal to the number

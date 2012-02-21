@@ -1,7 +1,7 @@
 function fb=filterbank_init(b,a,varargin);
 %FILTERBANK_INIT  Wrapper around filter to multiple filters
-%   Usage: outsig=filterbank(b,a);
-%          outsig=filterbank(b,a,nsigs,hopsize);
+%   Usage: outsig=filterbank_init(b,a);
+%          outsig=filterbank_init(b,a,nsigs,hopsize);
 %
 %   `fb=filterbank_init(b,a)` creates a filterbank structure *fb* for use with
 %   |filterbank_block|_. The filterbank will filter the input signals with the
