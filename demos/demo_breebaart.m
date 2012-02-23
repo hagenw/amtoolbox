@@ -24,8 +24,8 @@ x2      = 10^(Spl2/20) * ( n1*sqrt((1+rho)/2) - n2*sqrt((1-rho)/2) );
 
 % feed signals through gammatone filterbank:
 [b,a]   = gammatone(erbspacebw(0,erbtofreq(ERBnum),ERBspce),fs,'complex')
-x1g = 2*real(filterbankz(b,a,x1));
-x2g = 2*real(filterbankz(b,a,x2));
+x1g = 2*real(ufilterbankz(b,a,x1));
+x2g = 2*real(ufilterbankz(b,a,x2));
 %x1g     = real( gtfbank(x1, fs, ERBnum, ERBspce) );
 %x2g     = real( gtfbank(x2, fs, ERBnum, ERBspce) );
 
@@ -55,6 +55,3 @@ end
 ei_single = ei( x1a(:,10) , x2a(:,10) , fs , 0 , 0 );
 ei_single_ref = ei( x1a_ref(:,10) , x2a_ref(:,10) , fs , 0 , 0 );
 
-
-
-%OLDFORMAT

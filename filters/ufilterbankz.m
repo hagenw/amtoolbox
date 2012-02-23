@@ -14,10 +14,10 @@ function outsig=ufilterbankz(b,a,insig,hopsize)
 %
 %   If *insig* is a matrix then filtering is applied along the columns.
 %
-%   If both *insig*, *a* and *b* are matrices the output will be
-%   3-dimensional. First dimension is time, second dimension is frequency
-%   and the third dimension corresponds to the columns of the input signal.
-%
+%   If *f* is a single vector, then the output will be a matrix, where each
+%   column in *f* is filtered by the corresponding filter in *g*. If *f* is
+%   a matrix, the output will be 3-dimensional, and the third dimension will
+%   correspond to the columns of the input signal
 %   See also: gammatone, filterbankz, auditoryfilterbank
   
 %   AUTHOR : Peter L. Soendergaard

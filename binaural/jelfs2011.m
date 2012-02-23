@@ -39,8 +39,8 @@ fc=erbspace(0,fs/2,nchannels);
 effective_SNR = zeros(nchannels,1);
 bmld_prediction = zeros(nchannels,1);
 
-targ_f = 2*real(filterbankz(b,a,target));
-int_f  = 2*real(filterbankz(b,a,interferer));
+targ_f = 2*real(ufilterbankz(b,a,target));
+int_f  = 2*real(ufilterbankz(b,a,interferer));
 
 for n = 1:nchannels
   % Calculate the effect of BMLD

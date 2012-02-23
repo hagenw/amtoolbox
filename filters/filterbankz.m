@@ -3,18 +3,21 @@ function outsig=filterbankz(b,a,insig,hopsize)
 %   Usage: outsig=filterbankz(b,a,insig);
 %          outsig=filterbankz(b,a,insig,hopsize);
 %
-%   `filterbankz(b,a,insig,hopsize)` filters the input signal with the filters
-%   described in *a* and *b*. *hopsize* is a vector with a length equal to the number
-%   of filters. Each channel is sub-sampled by the corresponding hopsize.
+%   `filterbankz(b,a,insig,hopsize)` filters the input signal with the
+%   filters described in *a* and *b*. *hopsize* is a vector with a length
+%   equal to the number of filters. Each channel is sub-sampled by the
+%   corresponding hopsize.
 %
 %   If *a* and *b* are matrices then each row corresponds to a subband
 %   channel.
 %
 %   If *insig* is a matrix then filtering is applied along the columns.
 %
-%   If both *insig*, *a* and *b* are matrices the output will be
-%   3-dimensional. First dimension is time, second dimension is frequency
-%   and the third dimension corresponds to the columns of the input signal.
+%   The output coefficients are stored a cell array. More precisely, the
+%   n'th cell of *c*, `c{m}`, is a 2D matrix of size $M(n) \times W$ and
+%   containing the output from the m'th channel subsampled at a rate of
+%   $a(m)$.  `c{m}(n,l)` is thus the value of the coefficient for time index
+%   *n*, frequency index *m* and signal channel *l*.
 %
 %   See also: gammatone, ufilterbankz, auditoryfilterbank
   
