@@ -19,7 +19,7 @@ conf.workdir=localconf.userdir+'publish/'
 
 conf.ignorepars=['a','order','type']
 
-conf.copyrightplate=localconf.basepath+'amtscripts/copyrightplate'
+conf.copyrightplate=conf.root+'mat2doc/copyrightplate'
 
 def mycopyrightfun(self):
     vf=file(self.root+'amt_version');

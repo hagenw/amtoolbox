@@ -65,7 +65,7 @@ if 'releasemat' in todo:
     os.system('rm '+fname+'.zip')
 
     printdoc.dos2unix(cwd+'amtoolbox')
-    os.system('gtar zcvf '+fname+'.tgz amtoolbox/')
+    os.system('tar zcvf '+fname+'.tgz amtoolbox/')
 
     printdoc.unix2dos(cwd+'amtoolbox')
     os.system('zip -r '+fname+'.zip amtoolbox/')
@@ -89,7 +89,7 @@ if 'releasebranch' in todo:
     os.system('rm '+fname+'.zip')
 
     printdoc.dos2unix(cwd+'amtoolbox')
-    os.system('gtar zcvf '+fname+'.tgz amtoolbox/')
+    os.system('tar zcvf '+fname+'.tgz amtoolbox/')
 
     printdoc.unix2dos(cwd+'amtoolbox')
     os.system('zip -r '+fname+'.zip amtoolbox/')
