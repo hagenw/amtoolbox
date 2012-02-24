@@ -27,7 +27,7 @@ function [ out ] = langendijkcomp( in1,in2,varargin )
 %   See also: langendijk
   
   
-% AUTHORRobert Baumgartner, OEAW Acoustical Research Institute
+% AUTHOR: Robert Baumgartner, OEAW Acoustical Research Institute
 
 
 definput.import={'langendijkcomp'};

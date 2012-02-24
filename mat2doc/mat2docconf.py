@@ -44,6 +44,7 @@ allcontentsfiles=['Contents',
                   'monaural/Contents',
                   'binaural/Contents',
                   'humandata/Contents',
+                  'hrtf/Contents',
                   'experiments/Contents',
                   'signals/Contents',
                   'demos/Contents']

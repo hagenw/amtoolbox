@@ -104,7 +104,7 @@ definput.importdefaults={'lin','audtick'};
 definput.flags.adapt={'adapt','noadapt'};
 definput.flags.thr={'nothr','thr'};
 definput.flags.mlp={'mlp','mf','nomf'};
-%definput.flags.delay={'gammatonedelay','zerodelay'};
+definput.flags.delay={'gammatonedelay','zerodelay'};
 
 definput.keyvals.ihc='ihc_dau';
 definput.keyvals.thr=0;

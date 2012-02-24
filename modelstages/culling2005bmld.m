@@ -28,5 +28,5 @@ function [bmld_out] = culling2005bmld(coherence,phase_target,phase_int,fc)
 k = (1 + 0.25^2) * exp((2*pi*fc)^2 * 0.000105^2);
 bmld_out = 10 * log10 ((k - cos(phase_target-phase_int))/(k - coherence));
 
-bmld_out = max(mbld_out,0);
+bmld_out = max(bmld_out,0);
 
