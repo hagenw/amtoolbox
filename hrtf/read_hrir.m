@@ -1,4 +1,4 @@
-function op = read_hrir(elev,azim,database);
+function [outsig,fs] = read_hrir(elev_r,azim_r,database);
 %READ_HRIR  Read HRIR from selected databases
 %   Usage:  hrir = read_hrir(elev,azim,database);
 %  
@@ -37,23 +37,11 @@ function op = read_hrir(elev,azim,database);
 
   % Base path of where to store the data
   s=[amtbasepath,'hrtf/hrir/'];
+
+  [elev_r,azim_r]=scalardistribute(elev_r,azim_r);  
   
-  % fix out of range cases
-  if azim < 0
-    azim = 360 + azim;
-  elseif azim >= 360 
-    azim = azim-360;
-  end
-
-  % prefix zeros for KEMAR databases
-  if azim < 10           
-    azim_str = sprintf('00%d',azim);
-  elseif azim < 100
-    azim_str = sprintf('0%d',azim);  
-  else
-    azim_str = sprintf('%d',azim);
-  end  
-
+  nexps=numel(elev_r);
+  
   switch (database)
    case 'hats'        % HATS
     mik_nums = [1 2];
@@ -64,12 +52,36 @@ function op = read_hrir(elev,azim,database);
    case 'siemens3'        % rear mike
     mik_nums = [7 8];
    case 'kemar'
-    ipfile = fopen(sprintf('%skemar/elev%d/L%de%sa.dat',s,elev,elev,azim_str));
-    op(:,1) = fread(ipfile, 512, 'int16',0,'b');
-    fclose(ipfile);
-    ipfile = fopen(sprintf('%skemar/elev%d/R%de%sa.dat',s,elev,elev,azim_str));
-    op(:,2) = fread(ipfile, 512, 'int16',0,'b');
-    fclose(ipfile);
+    outsig=zeros(512,nexps,2);
+    for ii=1:nexps
+      azim=azim_r(ii);
+      elev=elev_r(ii);
+        
+      % fix out of range cases
+      if azim < 0
+        azim = 360 + azim;
+      elseif azim >= 360 
+        azim = azim-360;
+      end
+      
+      % prefix zeros for KEMAR databases
+      if azim < 10           
+        azim_str = sprintf('00%d',azim);
+      elseif azim < 100
+        azim_str = sprintf('0%d',azim);  
+      else
+        azim_str = sprintf('%d',azim);
+      end  
+
+      
+      ipfile = fopen(sprintf('%skemar/elev%d/L%de%sa.dat',s,elev,elev,azim_str));
+      outsig(:,ii,1) = fread(ipfile, 512, 'int16',0,'b');
+      fclose(ipfile);
+
+      ipfile = fopen(sprintf('%skemar/elev%d/R%de%sa.dat',s,elev,elev,azim_str));
+      outsig(:,ii,2) = fread(ipfile, 512, 'int16',0,'b');
+      fclose(ipfile);
+    end;
   end
 
 if strncmp(database,'siemens',7) || strcmp(database,'cardioid') || strcmp(database,'hats')
@@ -86,3 +98,12 @@ if strncmp(database,'siemens',7) || strcmp(database,'cardioid') || strcmp(databa
     op = set(:,mik_nums(1):mik_nums(2));
   end
 end
+
+if strncmp(database,'siemens',7)
+    fs = 48000;
+else
+    fs = 44100;
+end
+
+% Remove unnecessary dimension if only one dataset was requested
+outsig=squeeze(outsig);

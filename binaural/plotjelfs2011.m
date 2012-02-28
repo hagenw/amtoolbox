@@ -25,7 +25,8 @@ function op = plotjelfs2011(target_azim,database)
   op = zeros(n_op,3);
   angles = (0:step:360)'*pi/180;
   for direction_num = 1:n_op
-    op(direction_num,:) = test_jelfs2011(target_azim, (direction_num-1)*step, database);
+    op(direction_num,:) = jelfs2011({target_azim, database}, ...
+                                    {(direction_num-1)*step, database});
   end
   polar([angles angles angles], op);
   

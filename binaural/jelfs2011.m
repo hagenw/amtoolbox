@@ -1,6 +1,6 @@
-function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,fs,varargin)
+function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,varargin)
 %JELFS2011  Predicted binaural advantage for speech in reverberant conditions
-%   Usage:  [benefit weighted_SNR weighted_bmld] = culling2010(target,interferer,fs)
+%   Usage:  [benefit weighted_SNR weighted_bmld] = jelfs2011(target,interferer,fs)
 %  
 %   Input parameters:
 %     target        : Binaural target impulse respone (or stimulus)
@@ -23,12 +23,58 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,fs
 %   modelled sources differ in spectral shape, this can be simulated by
 %   pre-filtering the impulse responses.
 %
-%   See also: culling2005bmld
+%   `[benefit, weighted_SNR, weighted_bmld]=jelfs2011(...)` additionaly
+%   returns the benefit from the SII weighted SNR and the SII weighted BMLD.
+%
+%   If *target* or *interferer* are cell-arrays, they contents of these cell
+%   arrays will be passed as arguments to the |read_hrir|_. The first
+%   argument in the cell-array is the azimuth angle, and the second
+%   parameter is the database type. The elevation is set to zer.
+%   function. This makes it possible to directly load HRIR from a
+%   database.
+%
+%   Example:
+%   --------
+%
+%   The following code will load HRIRs from the 'kemar' database and
+%   compute the binaural speech intelligibility advantage for a target
+%   at 0 degrees and interferers at 300 and 90 degrees:::
+%
+%     jelfs2011({0,'kemar'},{[330 90],'kemar'})
+%
+%   See also: culling2005bmld, read_hrir, exp_jelfs2011
 % 
 %   References:  jelfs2011revision culling2010mapping lavandier2012binaural
   
   definput.flags.ears={'both','left','right'};
-  [flags,kv]=ltfatarghelper({},definput,varargin);
+  definput.keyvals.fs=[];
+  definput.keyvals.pad=1024;
+  [flags,kv,fs]=ltfatarghelper({'fs'},definput,varargin);
+  
+  % If target or interferer are cell arrays, call read_hrir to load the data.
+  if iscell(target)
+    [target,fs] = read_hrir(0,target{:});
+    target=postpad(target,size(target,1)+kv.pad);
+  end;
+  
+  if iscell(interferer)
+    azims=numel(interferer{1});
+    [interferer,fs2] = read_hrir(0,interferer{:});
+    interferer=postpad(interferer,size(interferer,1)+kv.pad);
+    if fs2~=fs
+      error('%s: Mis-match between target and interferer sampling rate.',upper(mfilename));
+    end;
+    % Old code compatibility
+    if ndims(interferer)==3
+      s=size(interferer);
+      interferer=reshape(interferer,s(1)*s(2),s(3));
+      interferer=interferer/sqrt(azims);
+    end;
+  end;  
+  
+  if isempty(fs)
+    error('%s: You must specify the sampling rate, fs.',upper(mfilename));
+  end;
   
   % Make sure that there is at least 1 erb per channel, and get
   % the gammatone filters.
