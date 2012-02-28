@@ -29,7 +29,8 @@ function [outp] = dietz_interaural_functions(s1, s2, tau, fc, signal_level_dB_SP
 %   XXX Description is missing. 
 %
 %   See also: dietz2011
-  
+%
+%   References: dietz2011auditory
 
   a = exp( -1./(fs*tau) );
 

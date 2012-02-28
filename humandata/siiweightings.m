@@ -12,8 +12,8 @@ for n = 1:length(fc)
   if fc(n) >= 9500
     weightings(n) = 0;
   else
-    i = find(bands > fc(n));
-    weightings(n) = weights((i(1) - 1));
+    ii = find(bands > fc(n));
+    weightings(n) = weights((ii(1) - 1));
   end
 end
 weightings = weightings ./ sum(weightings);
