@@ -15,6 +15,7 @@
 %      DATA_LOPEZPOVEDA2001 - Outer and middle ear filter data.
 %      DATA_LANGENDIJK2002  - Data from Langendijk et al. 2002.
 %      DATA_ELBERLING2010   - ABR wave V data as functon of level and sweeping rate.
+%      DATA_ROENNE2012      - Unitary response.
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

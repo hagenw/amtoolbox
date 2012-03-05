@@ -3,16 +3,26 @@
 %  The AMT team, 2012.
 %
 %  Models
-%     dau1996preproc - Dau et. al. (1996a) peripheral processor
-%     dau1997preproc - Dau et. al. (1997a) peripheral processor
-%     jepsen2008preproc - Jepsen et. al. (2008) peripheral processor
-%     viemeister79   - Viemeisters modulation detection model
+%     DAU1996PREPROC    - Dau et. al. (1996a) peripheral processor
+%     DAU1997PREPROC    - Dau et. al. (1997a) peripheral processor
+%     JEPSEN2008PREPROC - Jepsen et. al. (2008) peripheral processor
+%     VIEMEISTER79      - Viemeisters modulation detection model
 %
 %  The Langendijk model
 %     LANGENDIJK            - Langendijk & Bronkhorst 2002 auditory model 
 %     LIKELILANGENDIJK      - Likelihood estimation
 %     PLOTLANGENDIJK        - Plot the pdf-matrices with grey colormap
 %     PLOTLIKELILANGENDIJK  - Plot the likelihood statistics
-
+%
+%  The Roenne 2012 model
+%     ROENNE2012                - Simulate ABR to given stimulus
+%     ROENNE2012_CHIRP          - XXX
+%     ROENNE2012_CLICK          - XXX
+%     ROENNE2012_GENFILT        - XXX
+%     PLOTROENNE2012_CHIRP      - XXX
+%     PLOTROENNE2012_TONEBURSTS - XXX
+%     ROENNE2012_TONEBURSTS     - XXX
+%     ZILANY2007HUMANIZED       - Humanized auditory nerve model
+%
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
