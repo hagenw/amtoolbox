@@ -1,21 +1,21 @@
 function inoutsig = setdbspl(inoutsig,lvl,varargin);
 %SETDBSPL  Set level of signal in dB
-%   Usage: outsig = setlevel(insig,lvl);
-%          outsig = setlevel(insig,lvl,'ac');
+%   Usage: outsig = setdbspl(insig,lvl);
+%          outsig = setdbspl(insig,lvl,'ac');
 %
-%   SETDBSPL(insig,lvl) sets the SPL (sound pressure level) of the signal
-%   insig to lvl dB, using the convention that a pure tone with an RMS value
+%   `setdbspl(insig,lvl)` sets the SPL (sound pressure level) of the signal
+%   insig to *lvl* dB, using the convention that a pure tone with an RMS value
 %   of 1 corresponds to 100 dB SPL.
 %
-%   SETDBSPL(lvl) returns a scaling constant that will scale a signal
+%   `setdbspl(lvl)` returns a scaling constant that will scale a signal
 %   with RMS value of 1 to the correct level. 
 %
 %   If the input is a matrix, it is assumed that each column is a signal.
 %
-%   SETDBSPL(insig,lvl,'ac') does the same, but considers only the AC
+%   `setdbspl(insig,lvl,'ac')` does the same, but considers only the AC
 %   component of the signal (i.e. the mean is removed).
 %
-%R  moore2003introduction
+%   References: moore2003introduction
   
 %   See also: dbspl
   

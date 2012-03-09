@@ -1,56 +1,86 @@
 function output=exp_lopezpoveda2001(varargin)
-%LOPEZPOVEDA2001   Reproduces figures from Lopez-Poveda and Meddis (2001)
+%EXP_LOPEZPOVEDA2001   Figures from Lopez-Poveda and Meddis (2001)
 %   Usage: output = exp_lopezpoveda2001(flag)
 %
-%   EXP_LOPEZPOVEDA2001(flags,... ) reproduces experiments from the Lopez
+%   `exp_lopezpoveda2001(flags,... )` reproduces experiments from the Lopez
 %   & Poveda (2001) paper.
 %
 %   The following flags can be specified;
 %
-%-    'plot' - plot the output of the experiment. This is the default.
+%     'plot'    Plot the output of the experiment. This is the default.
 %
-%-    'noplot' - don't plot, only return data.
+%     'noplot'  Don't plot, only return data.
 %
-%-    'fig2' - reproduces fig 2 from lopezpoveda2001 
-%       Fig 2a represents the outer ear filter - pressure gain (dB) over
-%       frequency with data points from Pralong and Carlile (1996)
-%       Fig 2b represents the middle ear filter - stapes velocity at 0dB over frequency
-%           in one plot fig 2b shows for default fs = 22050Hz: 
-%           - data points directly derived from Goode et al. 1994
-%           - FIR filter with data points from Goode et al. 1994
-%           - data points of figure 2b from Lopez-Poveda and Meddis 2001 (read
-%             from fig 2b, actually also derived from Goode et al. 1994)
-%       The output are the data points of the respective figure.
-%       Dim: [frequency values', data points'] x figure no.
+%     'fig2'    Reproduce Fig. 2 from Lopez & Poveda (2001)
 %
-%-    'fig2a' - reproduces just fig 2a
+%               Fig. 2a represents the outer ear filter - pressure gain (dB) over
+%               frequency with data points from Pralong and Carlile (1996).
 %
-%-    'fig2b' - reproduces just fig 2b
+%               Fig. 2b represents the middle ear filter - stapes velocity at
+%               0dB over frequency in one plot Fig. 2b shows for default 
+%               $fs = 22050 Hz$: 
+%               
+%                  * Data points directly derived from Goode et al. 1994 
 %
-%-    'fig3bc' - reproduces fig 3b and c from lopezpoveda2001 Isointensity
-%       response of the linear, nonlinear and summed response of the DRNL
-%       filter for an input level of 30dB (fig 3b) and 85dB (fig 3c) SPL The
-%       output is the output of the DRNL filter for the different input
-%       levels.  Dim: input frequency x [frequency values, linear output,
-%       nonlinear output, summed DRNL output] x input level
+%                  * FIR filter with data points from Goode et al. 1994
 %
-%-    'fig3b' - reproduces just fig 3b
+%                  * Data points of figure 2b from Lopez-Poveda and Meddis
+%                    2001 (read from fig 2b, actually also derived from Goode et
+%                    al. 1994) The output are the data points of the respective
+%                    figure.
 %
-%-    'fig3c' - reproduces just fig 3c
+%               The dimensions of the output are: frequency values x data
+%               points  x figure no.
 %
-%-    'fig4' - reproduces fig 4 from lopezpoveda2001 - pulsation threshold 
-%       data (just the model results, not the experimental data)
-%       The output is the model result for the different parameter sets.
-%       Dim: signal level x masker level x signal frequency
-%       	 masker level consists of 4 columns:
-%               1: signal level in dB SPL (x axis in the plots)
-%               2: results for parameter set of YO, table I
-%               3: results for average parameter set, table II
-%               4: results for regression lines, table III
+%     'fig2a'   Reproduce just Fig. 2a.
+%
+%     'fig2b'   Reproduce just Fig. 2b.
+%
+%     'fig3bc'  Reproduce Fig. 3b and c from Lopez & Poveda
+%               (2001). Isointensity response of the linear, nonlinear and
+%               summed response of the DRNL filter for an input level of
+%               30dB (fig 3b) and 85dB (fig 3c) SPL The output is the output
+%               of the DRNL filter for the different input levels. The
+%               dimensions of the output are: input frequency x [frequency
+%               values, linear output, nonlinear output, summed DRNL output]
+%               x input level.
+%
+%     'fig3b'   Reproduce just Fig. 3b.
+%
+%     'fig3c'   Reproduce just fig. 3c.
+%
+%     'fig4'    Reproduce Fig. 4 from Lopez & Poveda (2001) - pulsation threshold 
+%               data (just the model results, not the experimental data)
+%               The output is the model result for the different parameter sets.
+%               The dimensions of the output are: signal level x masker level x signal frequency
+%               masker level consists of 4 columns:
+%
+%                 1) Signal level in dB SPL (x axis in the plots)
+%                 
+%                 2) Results for parameter set of YO, table I
+%
+%                 3) Results for average parameter set, table II
+% 
+%                 4) Results for regression lines, table III
 %
 %   See also: drnl, data_lopezpoveda2001, data_pralong1996, data_goode1994
-% 
-%R  lopezpoveda2001hnc
+%
+%   Examples:
+%   ---------
+%
+%   To display Figure 2 use :::
+%
+%     exp_lopezpoveda2001('fig2');
+%
+%   To display Figure 3b and 3c use :::
+%
+%     exp_lopezpoveda2001('fig3bc');
+%
+%   To display Figure 4 use :::
+%
+%     exp_lopezpoveda2001('fig4');
+%
+%   References:lopezpoveda2001hnc pralong1996role goode1994nkf
   
 %  AUTHOR: Katharina Egger
 

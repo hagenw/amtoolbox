@@ -18,7 +18,7 @@ filter_order              =     4;
 bandwidth_factor          =     1.0;
 
 disp(['Building analysis filterbank']);
-analyzer = Gfb_Analyzer_new(sampling_rate_hz, flow, ...
+analyzer = gfb_analyzer_new(sampling_rate_hz, flow, ...
                             base_frequency_hz, fhigh,...
 			    filters_per_ERB, filter_order, bandwidth_factor);
 
@@ -27,7 +27,7 @@ analyzer = Gfb_Analyzer_new(sampling_rate_hz, flow, ...
 
 disp(['Building synthesizer for an analysis-synthesis delay of ', ...
       num2str(desired_delay_in_seconds), ' seconds']);
-synthesizer = Gfb_Synthesizer_new(analyzer, desired_delay_in_seconds);
+synthesizer = gfb_synthesizer_new(analyzer, desired_delay_in_seconds);
 
 %%% Extract the synthesizer's parameters %%%
 disp(['The synthesizers parameters:';...
@@ -53,9 +53,9 @@ end
 %%%  analysis-synthesis system                                         %%%
 
 impulse = [1, zeros(1,8191)];                                          
-[analyzed_impulse, analyzer] = Gfb_Analyzer_process(analyzer, impulse);
+[analyzed_impulse, analyzer] = gfb_analyzer_process(analyzer, impulse);
 [resynthesized_impulse, synthesizer] = ...
-    Gfb_Synthesizer_process(synthesizer, analyzed_impulse);
+    gfb_synthesizer_process(synthesizer, analyzed_impulse);
 
 figure(1);
 plot([0:8191]/sampling_rate_hz*1e3, resynthesized_impulse);
@@ -74,3 +74,5 @@ ylabel('system response level / dB');
 
 disp('Figure 1 shows the impulse response of the analysis-synthesis system');
 disp('in the time domain; figure 2 shows its frequency response.');
+
+%OLDFORMAT

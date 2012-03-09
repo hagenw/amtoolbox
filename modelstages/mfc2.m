@@ -19,3 +19,5 @@ tmp = fix(log(umf/tmp2)/log(ex));
 tmp = 0:tmp;
 tmp = ex.^tmp;
 mfc=[0 mfc tmp2*tmp];
+
+%OLDFORMAT

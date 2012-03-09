@@ -9,3 +9,4 @@ dur = 1;
 fs  = 44100;
 
 outsig = transposedtone(fc,fm,dur,fs);
+%OLDFORMAT

@@ -1,49 +1,43 @@
 function output = exp_langendijk2002(varargin)
-%EXP_LANGENDIJK2002  Demo of the localization model of Langendijk & Bronkhorst 2002
+%EXP_LANGENDIJK2002  Experiment from Langendijk & Bronkhorst 2002
+%   Usage: output = exp_langendijk2002(flags);
 %
-%   Validation of Langendijk et al. (2002)
-%
-%   This script generates figures showing the results of the localization 
-%   model based on the simulation shown in the related paper of Langendijk &
-%   Bronkhorst 2002. 
+%   `exp_langendijk(flags)` recreates figures from Langendijk & Bronkhorst
+%   (2002)
 %
 %   The following flags can be specified;
 %
-%-    'plot' - plot the output of the experiment. This is the default.
+%     'plot'    Plot the output of the experiment. This is the default.
 %
-%-    'noplot' - don't plot, only return data.
+%     'noplot'  Don't plot, only return data.
 %
-%-    'fig7' - listener P6
+%     'fig7'    Listener P6
 %
-%-    'fig9' - listener P3
+%     'fig9'    Listener P3
 %
 %   You can choose between two of his listeners P3 and P6. The required
 %   data (DTF data and response patterns) will be provided by precalculated
 %   mat-files due to high computing time (optionally data can be calculated
 %   by using the data_langendijk2002('expdata') function. 
 %
+%   The following subfigures shows the probability density function (pdf)
+%   and actual responses(°) for the chosen listener as a function of the target
+%   position for different conditions. The shading of each cell codes the
+%   probability density (light/dark is high/low probability):
 %
-%   subfigure 1 Baseline condition
-%   subfigure 2 2-octave condition (4-16kHz)
-%   subfigure 3 1-octave condition (low 4-8kHz)
-%   subfigure 4 1-octave condition (middle 5.7-11.3kHz)
-%   subfigure 5 1-octave condition (high 8-16kHz)
-%
-%     Above-named subfigures are showing the probability density function (pdf) 
-%     and actual responses(°) for chosen listener as a function of target 
-%     position for different conditions. The shading of each cell codes the 
-%     probability density (light/dark is high/low probability)
-%
-%   subfigure 6 Likelihood statistics
-%
-%     subfigure 6 shows the likelihood statistics for the actual responses
-%     (bars), the average and the 99% confidence interval of the expected
-%     likelihood (dots and bars). See the paper for further details.
+%     * Subfigure 1: Baseline condition
+%     * Subfigure 2: 2-octave condition (4-16kHz)
+%     * Subfigure 3: 1-octave condition (low 4-8kHz)
+%     * Subfigure 4: 1-octave condition (middle 5.7-11.3kHz)
+%     * Subfigure 5: 1-octave condition (high 8-16kHz)
+%   
+%   Subfigure 6 shows the likelihood statistics for the actual responses
+%   (bars), the average and the 99% confidence interval of the expected
+%   likelihood (dots and bars). See the paper for further details.
 %
 %   The output are the pdfs for the baseline condition.
 %
-%   See also: langendijk, likelilangendijk, plotlangendijk,
-%   plotlikelilangendijk, data_langendijk2002
+%   See also: langendijk, likelilangendijk, plotlangendijk, plotlikelilangendijk, data_langendijk2002
 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -59,57 +53,57 @@ function output = exp_langendijk2002(varargin)
 
   % Parse input options
   [flags,keyvals]  = ltfatarghelper({},definput,varargin);
-        
-if flags.do_missingflag
-  flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
-             sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
-  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
-end;
+  
+  if flags.do_missingflag
+    flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+               sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+    error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+  end;
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                               SETTINGS                                %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if flags.do_fig7
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %                               SETTINGS                                %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  if flags.do_fig7
     listener='P6';  % ID of listener (P3 or P6)
-elseif flags.do_fig9
+  elseif flags.do_fig9
     listener='P3';
-end
+  end
 
-fs = 48000;     % sampling frequency
+  fs = 48000;     % sampling frequency
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-dtfdata=load(['langendijk2002-' listener '.mat']);
-% loads hM data for all conditions 
-% data can be recalculated by calling data_langendijk2002('expdata')
+  dtfdata=load(['langendijk2002-' listener '.mat']);
+  % loads hM data for all conditions 
+  % data can be recalculated by calling data_langendijk2002('expdata')
 
-% pdf calcualtion
-h = waitbar(0,'Please wait...');
-pb  = langendijk( dtfdata.medir,dtfdata.medir,fs); % baseline
-waitbar(1/5)
-p2o = langendijk( dtfdata.medir2o,dtfdata.medir,fs); % 2-oct (4-16kHz)
-waitbar(2/5)
-p1ol= langendijk( dtfdata.medir1ol,dtfdata.medir,fs); % 1-oct (low:4-8kHz)
-waitbar(3/5)
-p1om= langendijk( dtfdata.medir1om,dtfdata.medir,fs); % 1-oct (middle:5.7-11.3kHz)
-waitbar(4/5)
-p1oh= langendijk( dtfdata.medir1oh,dtfdata.medir,fs); % 1-oct (high:8-16kHz)
-waitbar(5/5)
+  % pdf calcualtion
+  h = waitbar(0,'Please wait...');
+  pb  = langendijk( dtfdata.medir,dtfdata.medir,fs); % baseline
+  waitbar(1/5)
+  p2o = langendijk( dtfdata.medir2o,dtfdata.medir,fs); % 2-oct (4-16kHz)
+  waitbar(2/5)
+  p1ol= langendijk( dtfdata.medir1ol,dtfdata.medir,fs); % 1-oct (low:4-8kHz)
+  waitbar(3/5)
+  p1om= langendijk( dtfdata.medir1om,dtfdata.medir,fs); % 1-oct (middle:5.7-11.3kHz)
+  waitbar(4/5)
+  p1oh= langendijk( dtfdata.medir1oh,dtfdata.medir,fs); % 1-oct (high:8-16kHz)
+  waitbar(5/5)
 
-% likelihood estimations
-la=zeros(5,1);le=zeros(5,1);ci=zeros(5,2);
-idb=1:2:length(dtfdata.targetb); % in order to get comparable likelihoods
-[la(1),le(1),ci(1,:)] = likelilangendijk( pb,dtfdata.pol,dtfdata.pol,dtfdata.targetb(idb),dtfdata.responseb(idb) );
-[la(2),le(2),ci(2,:)] = likelilangendijk( p2o,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response2o );
-[la(3),le(3),ci(3,:)] = likelilangendijk( p1ol,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1ol );
-[la(4),le(4),ci(4,:)] = likelilangendijk( p1om,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1om );
-[la(5),le(5),ci(5,:)] = likelilangendijk( p1oh,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1oh );
-close(h)
+  % likelihood estimations
+  la=zeros(5,1);le=zeros(5,1);ci=zeros(5,2);
+  idb=1:2:length(dtfdata.targetb); % in order to get comparable likelihoods
+  [la(1),le(1),ci(1,:)] = likelilangendijk( pb,dtfdata.pol,dtfdata.pol,dtfdata.targetb(idb),dtfdata.responseb(idb) );
+  [la(2),le(2),ci(2,:)] = likelilangendijk( p2o,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response2o );
+  [la(3),le(3),ci(3,:)] = likelilangendijk( p1ol,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1ol );
+  [la(4),le(4),ci(4,:)] = likelilangendijk( p1om,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1om );
+  [la(5),le(5),ci(5,:)] = likelilangendijk( p1oh,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1oh );
+  close(h)
 
-output = pb;
+  output = pb;
 
-if flags.do_plot
+  if flags.do_plot
     figure
     clf
     
@@ -133,8 +127,9 @@ if flags.do_plot
     % likelihood statistic
     subplot(2,3,6)
     plotlikelilangendijk(la,le,ci)
-end
+  end
 
 
 
 end
+

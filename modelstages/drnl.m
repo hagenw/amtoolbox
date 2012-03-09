@@ -2,125 +2,132 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %DRNL  Dual Resonance Nonlinear Filterbank
 %   Usage: outsig = drnl(insig,fs);
 %
-%   DRNL(insig,fs) computes the Dual Resonance Non-Linear filterbank of
-%   the input signal insig sampled at fs Hz with channels specified by the
-%   center frequencies in fc. The DRNL is described in the paper
-%   Lopez-Poveda and Meddis (2001). The DRNL models the basilar membrane
-%   non-linearity.
+%   `drnl(insig,fs)` computes the Dual Resonance Non-Linear (DRNL)
+%   filterbank of the input signal insig sampled at *fs* Hz with channels
+%   specified by the center frequencies in *fc*. The DRNL is described in
+%   the paper Lopez-Poveda and Meddis (2001). The DRNL models the basilar
+%   membrane non-linearity.
 %
 %   This version of the DRNL incoorperate the middle-ear filter used in
 %   Lopez-Poveda and Meddis (2001), and the post-scaling propsed in
 %   Jepsen 2008. Both can be turned off by a flag (see below).
 %
 %   The DRNL takes a lot of parameters which vary over frequency. Such a
-%   parameter is described by a 1x2 vector [b a] and indicates that the
-%   value of the parameter at frequency fc can be calculated by
+%   parameter is described by a $1 \times 2$ vector `[b a]` and indicates
+%   that the value of the parameter at frequency *fc* can be calculated by
 %
-%C     10^(b+alog10(fc));
+%   ..  10^(b+a*log10(fc));
+%
+%   .. math:: 10^{b+a\cdot log_{10}(fc)}
 %
 %   The parameters are:
 %
-%-     'flow',flow - Set the lowest frequency in the filterbank to
-%                    flow. Default value is 80 Hz.
+%     'flow',flow    Set the lowest frequency in the filterbank to
+%                    *flow*. Default value is 80 Hz.
 %
-%-     'fhigh',fhigh - Set the highest frequency in the filterbank to
-%                    fhigh. Default value is 8000 Hz.
+%     'fhigh',fhigh  Set the highest frequency in the filterbank to
+%                    *fhigh*. Default value is 8000 Hz.
 %
-%-     'basef',basef - Ensure that the frequency basef is a center frequency
-%                    in the filterbank. The default value of [] means
+%     'basef',basef  Ensure that the frequency *basef* is a centre frequency
+%                    in the filterbank. The default value of *[]* means
 %                    no default.
 %
-%-     'middleear'  - Perform middleear filtering before the actual DRNL
-%                     is applied using the middleear filter specified in
-%                     Lopez-Poveda and Meddis (2001), and compensate for
-%                     the effect of the filter after DRNL filtering. 
-%                     This is the default.
+%     'middleear'    Perform middleear filtering before the actual DRNL
+%                    is applied using the middleear filter specified in
+%                    Lopez-Poveda and Meddis (2001), and compensate for
+%                    the effect of the filter after DRNL filtering. 
+%                    This is the default.
 %
-%-     'nomiddleear'- No middle-ear filtering. Be carefull with this setting,
+%     'nomiddleear'  No middle-ear filtering. Be carefull with this setting,
 %                    as another scaling must then be perform to convert the
 %                    input to stapes movement.
-%   
-%      'jepsen' - Use the jepsen2008 variant of middleear filtering.
-%                 Note: This includes the assumption, that a linear input value  
-%                 of 1(rms) equals 100dB SPL. Furthermore so far it provides 
-%                 data which is 4dB apart (FIXME).
+%  
+%     'jepsen'       Use the jepsen2008 variant of middleear filtering.  So far it
+%                    provides data which is 4dB apart (FIXME).
 %
-%-     'bothparts' - Compute both the linear and the non-linear path of
+%     'bothparts'    Compute both the linear and the non-linear path of
 %                    the DRNL. This is the default.
 %
-%-     'linonly'   - Compute only the linear path.
+%     'linonly'      Compute only the linear path.
 %
-%-     'nlinonly'  - Compute only the non-linear path.
+%     'nlinonly'     Compute only the non-linear path.
 %
-%-     'lin_ngt',n - Number of cascaded gammatone filter in the linear
+%     'lin_ngt',n    Number of cascaded gammatone filter in the linear
 %                    part, default value is 2.
 %
-%-     'lin_nlp',n - Number of cascaded lowpass filters in the linear
+%     'lin_nlp',n    Number of cascaded lowpass filters in the linear
 %                    part, default value is 4
-% 
-%-     'lin_gain',g - Gain in the linear part, default value is [4.20405 ...
+%
+%     'lin_gain',g   Gain in the linear part, default value is [4.20405 ...
 %                    .47909].
 %
-%-     'lin_fc',fc - Center frequencies of the gammatone filters in the
+%     'lin_fc',fc    Centre frequencies of the gammatone filters in the
 %                    linear part. Default value is [-0.06762 1.01679].
 %
-%-     'lin_bw',bw - Bandwidth of the gammatone filters in the linear
+%     'lin_bw',bw    Bandwidth of the gammatone filters in the linear
 %                    part. Default value is [.03728  .78563]
 %
-%-     'lin_lp_cutoff',c - Cutoff frequency of the lowpass filters in the
+%     'lin_lp_cutoff',c
+%                    Cutoff frequency of the lowpass filters in the
 %                    linear part. Default value is [-0.06762 1.01679 ]
 %
-%-     'nlin_ngt_before',n - Number of cascaded gammatone filters in the
+%     'nlin_ngt_before',n
+%                    Number of cascaded gammatone filters in the
 %                    non-linear part before the broken stick
 %                    non-linearity. Default value is 3.
 %
-%-     'nlin_ngt_after',n -  Number of cascaded gammatone filters in the
+%     'nlin_ngt_after',n
+%                    Number of cascaded gammatone filters in the
 %                    non-linear part after the broken stick
 %                    non-linearity. The default value of [] means to use the 'before'
 %                    value.
 %
-%-     'nlin_nlp',n - Number of cascaded lowpass filters in the
+%     'nlin_nlp',n   Number of cascaded lowpass filters in the
 %                    non-linear part. Default value is 3.
 %
-%-     'nlin_fc_before',fc - Center frequencies of the gammatone filters in the
+%     'nlin_fc_before',fc
+%                    Center frequencies of the gammatone filters in the
 %                    non-linear part before the broken stick
 %                    non-linearity. Default value is [-0.05252 1.01650].
 %
-%-     'nlin_fc_after',fc - Center frequencies of the gammatone filters in the
+%     'nlin_fc_after',fc
+%                    Center frequencies of the gammatone filters in the
 %                    non-linear part after the broken stick
-%                    non-linearity. The default value of [] means to use the 'before'
+%                    non-linearity. The default value of [] means to use the `'before'`
 %                    value.
 %
-%-     'nlin_bw_before',bw - Bandwidth of the gammatone filters in the
+%     'nlin_bw_before',bw
+%                    Bandwidth of the gammatone filters in the
 %                    non-linear part before the broken stick
 %                    non-linearity. Default value is [-0.03193 .77426 ].
 %
-%-     'nlin_bw_after',w - Bandwidth of the gammatone filters in the
-%                    non-linear part after the broken stick
-%                    non-linearity. The default value of [] means to use the 'before'
-%                    value.
+%     'nlin_bw_after',w
+%                    Bandwidth of the gammatone filters in the non-linear
+%                    part after the broken stick non-linearity. The default
+%                    value of [] means to use the `'before'` value.
 %
-%-     'nlin_lp_cutoff',c - Cutoff frequency of the lowpass filters in the
+%     'nlin_lp_cutoff',c
+%                    Cutoff frequency of the lowpass filters in the
 %                    non-linear part. Default value is [-0.05252 1.01650 ].
 %
-%-     'nlin_a',a - 'a' coefficient for the broken-stick non-linearity. Default
-%                   value is [1.40298 .81916 ].
+%     'nlin_a',a     The *a* coefficient for the broken-stick non-linearity. Default
+%                    value is [1.40298 .81916 ].
 %
-%-     'nlin_b',b - 'b' coefficient for the broken-stick non-linearity. Default
-%                   value is [1.61912 -.81867].
+%     'nlin_b',b     The *b* coefficient for the broken-stick non-linearity. Default
+%                    value is [1.61912 -.81867].
 %
-%-     'nlin_c',c - 'c' coefficient for the broken-stick non-linearity. Default
-%                   value is [-.60206 0].
+%     'nlin_c',c     The *c* coefficient for the broken-stick non-linearity. Default
+%                    value is [-.60206 0].
 %
-%-     'nlin_d',d - 'd' coefficient for the broken-stick non-linearity. Default
+%     'nlin_d',d     The *d* coefficient for the broken-stick non-linearity. Default
 %                    value is 1.
 %
-%   The output from DRNL can be conveniantly visualized using the PLOTFILTERBANK
+%   The output from DRNL can be conveniently visualized using the PLOTFILTERBANK
 %   function from LTFAT.
 %
 %   See also: middleearfilter, jepsen2008preproc
 % 
-%R  meddis2001computational lopezpoveda2001hnc jepsen2008cmh
+%   References: meddis2001computational lopezpoveda2001hnc jepsen2008cmh
 
 % AUTHOR: Morten Løve Jepsen
   
@@ -300,3 +307,4 @@ end;
 function outpar=polfun(par,fc)
   %outpar=10^(par(1)+par(2)*log10(fc));
   outpar=10^(par(1))*fc^par(2);
+

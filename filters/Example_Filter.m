@@ -19,7 +19,7 @@ attenuation_db        =     3;
 fs = 10000;
 filter_order          =     4;
 
-filter = Gfb_Filter_new(fs, center_frequency_hz, ...
+filter = gfb_filter_new(fs, center_frequency_hz, ...
                         bandwidth_hz, attenuation_db, filter_order);
 
 %%% print the filter's parameters to the screen %%%
@@ -38,7 +38,7 @@ impulse_samples            = 8192;
 impulse_response_samples   =  200;
 impulse                    = [1, zeros(1,impulse_samples - 1)];
 
-[impulse_response, filter] = Gfb_Filter_process(filter, impulse);
+[impulse_response, filter] = gfb_filter_process(filter, impulse);
 
 figure(1);
 plot([0:impulse_response_samples-1], ...
@@ -71,3 +71,5 @@ disp('response are plotted as lines 1, 2, and 3, respectively.     ');
 disp(' ');
 disp('Figure 2 shows the frequency response function of this filter');
 disp('in dB over frequency in Hz.');
+
+%OLDFORMAT

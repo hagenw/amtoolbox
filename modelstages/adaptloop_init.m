@@ -20,7 +20,7 @@ function s = adaptloop_init(nsigs,fs,varargin);
 %
 %   ADAPTLOOP(nsigs,fs) does as above with an overshoot limit of limit=10.
 %
-%R  dau1996qmeI puschel1988pza
+%   References:dau1996qmeI puschel1988pza
 
 %   AUTHOR: Peter L. Soendergaard
 
@@ -76,3 +76,4 @@ s.expfac = expfac;
 s.offset = offset;
 s.minlvl = minlvl;
 s.limit  = limit;
+%OLDFORMAT

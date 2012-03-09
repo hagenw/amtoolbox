@@ -1,138 +1,213 @@
 function output = exp_lindemann1986a(varargin)
-%EXP_LINDEMANN1986a Reproduces figures from lindemann1986a
+%EXP_LINDEMANN1986a Figures from Lindemann (1986a)
 %   Usage: output = exp_lindemann1986a(flag)
 %
-%   EXP_LINDEMANN1986a(flag) reproduces the results for the figure given by
-%   flag from the Lindemann (1986a) paper. It will also plot the results.
-%   The format of its output depends on the chosen figure. If not other
-%   stated the cross-correlation of a pure tone sinusoids with f=500 Hz and
-%   different ITDs, ILDs or a combination of both is calculated. Because of
-%   the stationary character of the input signals T_int = inf is used to
-%   produce only one time step in the crosscorr output.
+%   `exp_lindemann1986a(flag)` reproduces the results for the figure given
+%   by *flag* from the Lindemann (1986a) paper. It will also plot the
+%   results.  The format of its output depends on the chosen figure. If not
+%   otherwise stated, the cross-correlation of a pure tone sinusoids with
+%   f=500 Hz and different ITDs, ILDs or a combination of both is
+%   calculated. Because of the stationary character of the input signals,
+%   $T_{int} = \inf$ is used to produce only one time step in the crosscorr
+%   output.
 %   
 %   The following flags can be specified;
 %
-%-    'plot' - plot the output of the experiment. This is the default.
+%     'plot'     plot the output of the experiment. This is the default.
 %
-%-    'noplot' - don't plot, only return data.
+%     'noplot'   Don't plot, only return data.
 %
-%-    'fig6' - reproduces fig.6 from lindemann1986a.  The cross-correlation is
-%       calculated for different ITDs and different inhibition factors c_s
-%       (0,0.3,1). Afterwards for every c_s the correlation is plotted for
-%       every used ITD dependend on the correlation-time delay. The output
-%       is cross-correlation result of the figure.  Dim: number of c_s
-%       conditions x nitds x delay line length
+%     'auto'     Re-calculate the file if it does not exist. Return 1 if the
+%                file exist, otherwise 0. This is the default
 %
-%-    'fig7' - reproduces fig.7 from lindemann1986a.  The cross-correlation
-%       is calculated for different ITDs and different inhibition factors
-%       c_s (0:0.2:1). Afterwards for every c_s the displacement of the
-%       centroid of the auditory image is calculated and plotted dependend
-%       on the ITD. The output is the displacement of the centroid for
-%       different c_s values.  Dim: c_s x nitds
+%     'refresh'  Always recalculate the file.
 %
-%-    'fig8' - reproduces fig.8 from lindemann1986a.  The cross-correlation is
-%       calculated for different ILDs and different inhibition factors c_s =
-%       0.3, 1. Afterwards for every c_s the ILD is plotted dependend on the
-%       correaltion time. The output is the cross-correlation result of the
-%       to figure.  Dim: number of c_s conditions x nilds x delay line
-%       length.
+%     'cached'   Always use the cached version. Throws an error if the
+%                file does not exist.
 %
-%-    'fig10' - reproduces fig.10 from lindemann1986a. The cross-correlation is
-%       calculated for different ILDs, an inhibition factor c_s = 0.3 and a
-%       monaural detector factor w_f = 0.035. Afterwards for every c_s the
-%       ILD is plotted dependend on the correaltion time.  The output is the
-%       cross-correlation result of the to figure.  Dim: number of c_s
-%       conditions x nilds x delay line length
+%     'fig6'  Reproduce Fig.6 from Lindemann (1986a).  The cross-correlation is
+%             calculated for different ITDs and different inhibition factors
+%             $c_s=0,0.3,1$. Afterwards for every *c_s* the correlation is
+%             plotted for every used ITD dependend on the correlation-time
+%             delay. The output is cross-correlation result of the figure.
+%             The output has dimensions: number of *c_s* conditions x
+%             nitds x delay line length
 %
-%-    'fig11' - reproduces fig.11 from lindemann1986a.  The centroid position
-%       is calculated for different ILDs, an inhibition factor c_s = 0.3 and
-%       a monaural detector factor w_f = 0.035. Afterwards for every c_s the
-%       displacement of the centroid is plotted dependend on the ILD. The
-%       output is the cross-correlation result of the to figure.  Dim:
-%       number of c_s conditions x nilds x delay line length
+%     'fig7'  Reproduce Fig.7 from Lindemann (1986a).  The cross-correlation
+%             is calculated for different ITDs and different inhibition
+%             factors $c_s=0,0.2,0.4,0.6,0.8,1.0$. Afterwards for every
+%             *c_s* the displacement of the centroid of the auditory image
+%             is calculated and plotted depending on the ITD. The output is
+%             the displacement of the centroid for different *c_s* values.
+%             The output has dimensions: *c_s* x nitds
 %
-%-    'fig12' - reproduces fig.12 from lindemann1986a.  The centroids are
-%       calculated for combinations of ITDs and ILDs.  After the calculation
-%       the values for the centroids of the stimuli are searched to find the
-%       nearest value to 0. The corresponding ILD value is stored in output
-%       and plotted depnenden on the ITD. The output is the simulated
-%       results for a trading experiment. The ILD value for getting a
-%       centroid near the center for an combined ITD, ILD stimulus with a
-%       given ITD value.  Dim: number of ITDs x 1
+%     'fig8'  Reproduce Fig.8 from Lindemann (1986a).  The cross-correlation
+%             is calculated for different ILDs and different inhibition factors
+%             $c_s = 0.3, 1$. Afterwards for every *c_s* the ILD is plotted
+%             depending on the correlation time. The output is the
+%             cross-correlation result of the figure. The dimensions of the
+%             output are: number of *c_s* conditions x nilds x delay line length.
 %
-%-    'fig13' - reproduces fig.13 from lindemann1986a.  The centroids are
-%       calculated for ILD only and ITD/ILD combination stimuli.After the
-%       calculation the values for the centroids of the ILD only stimuli are
-%       searched to find the nearest value to the centroid of a given
-%       combined stimulus. The resulting ILD value is stored for different
-%       combinaition values and plotted dependend on ITD. The output is the
-%       ILD value for getting the same lateralization with an ILD only
-%       stimulus compared to a stimulus with both ITD and ILD.  Dim: number
-%       of ILDs x number of ITDs
+%     'fig10'  Reproduce Fig.10 from Lindemann (1986a). The
+%              cross-correlation is calculated for different ILDs with an
+%              inhibition factor of $c_s = 0.3$ and a monaural detector
+%              factor $w_f = 0.035$. Afterwards the ILD is plotted depending
+%              on the correlation time.  The output is the cross-correlation
+%              result of the figure.  The output has dimensions:
+%              number of *c_s* conditions x nilds x delay line length
 %
-%-   'fig14a' - reproduces fig.14 (a) from lindemann1986a.  The
-%       cross-correlations for a combination of ILDs and a ITD of ~1ms are
-%       calculated. This is done for different ILDs and different inhibition
-%       factors c_s = [0,0.2,0.4,0.6,1]. Afterwards for every c_s the
-%       centroid of the auditory image is calculated and plotted dependend
-%       on the ILD. The output is the displacement of the centroid for
-%       different c_s values and ILDs.  Dim: c_s x nilds
+%     'fig11'  Reproduce Fig.11 from Lindemann (1986a).  The centroid
+%              position is calculated for different ILDs, an inhibition
+%              factor $c_s = 0.3$ and a monaural detector factor $w_f =
+%              0.035$. Afterwards for every *c_s* the displacement of the
+%              centroid is plotted dependend on the ILD. The output is the
+%              cross-correlation result of the to figure. The dimensions of
+%              the output are: number of *c_s* conditions x nilds x delay
+%              line length
 %
-%-   'fig14b' - reproduces fig.14 (b) from lindemann1986a. The
-%       cross-correlations for a combination of ILDs and a ITD of ~1ms are
-%       calculated. This is done for different small ILDs with a standard
-%       deviation of 0-5. Afterwards for every standard deviation the mean
-%       centroid displacement is calculated and plotted dependend on the ITD.
-%       output - Displacement of the centroid as a function of the ITD averaged
-%       over different small ILD with a standard deviation of 0,1,2,3,4,5.  Dim:
-%       nilds x nitds
+%     'fig12'  Reproduce Fig.12 from Lindemann (1986a). The centroids are
+%              calculated for combinations of ITDs and ILDs.  After the
+%              calculation the values for the centroids of the stimuli are
+%              searched to find the nearest value to 0. The corresponding ILD
+%              value is stored in output and plotted depending on the
+%              ITD. The output is the simulated results for a trading
+%              experiment. The ILD value for getting a centroid near the
+%              center for an combined ITD, ILD stimulus with a given ITD
+%              value.  The output has dimensions: number of ITDs x 1
 %
-%-   'fig15' - reproduces fig.15 from lindemann1986a.  The cross-correlation
-%       for an ITD of -0.5ms is calculated. This is done for different ILDs,
-%       an inhibition factor c_s = 0.3 and a monaural detector factor w_f =
-%       0.035. Afterwards for every c_s the ILD is plotted dependend on the
-%       correaltion time. The output is the cross-correlation result of the
-%       to figure.  Dim: number of c_s conditions x nilds x delay line
-%       length
+%     'fig13'  Reproduce Fig.13 from Lindemann (1986a). The centroids are
+%              calculated for ILD only and ITD/ILD combination
+%              stimuli. After the calculation the values for the centroids
+%              of the ILD only stimuli are searched to find the nearest
+%              value to the centroid of a given combined stimulus. The
+%              resulting ILD value is stored for different combinaition
+%              values and plotted dependend on ITD. The output is the ILD
+%              value for getting the same lateralization with an ILD only
+%              stimulus compared to a stimulus with both ITD and ILD.
+%              The output has dimensions: number of ILDs x number of ITDs
 %
-%-   'fig16' - reproduces fig.16 from lindemann1986a.  The cross-correlations
-%       for combinations of ITDs and ILDs are calculated. Afterwards the
-%       combinations of ILD and ITD are looked for the ones that have two
-%       peaks in its cross-correlation which have the nearly same
-%       height. The corresponding ILD value is than stored in output and
-%       plotted dependend on the ITD. The output is the ILD value for which
-%       the cross-correlation for a combined ITD, ILD stimulus has two peaks
-%       with the same (nearest) height, dependend on the ITD Dim: number of
-%       ITDs x 1
+%     'fig14a'  Reproduce fig.14 (a) from Lindemann (1986a). The
+%               cross-correlations for a combination of ILDs and a ITD of
+%               ~1ms are calculated. This is done for different ILDs and
+%               different inhibition factors $c_s = 0,0.2,0.4,0.6,1$.
+%               Afterwards for every *c_s* the centroid of the auditory image
+%               is calculated and plotted dependend on the ILD. The output is
+%               the displacement of the centroid for different *c_s* values
+%               and ILDs. The output has dimensions: *c_s* x nilds
 %
-%-   'fig17' - reproduces fig.17 from lindemann1986a. The cross-correlation for
-%       ITD/ILD combination and ITD only stimuli is calculated. Afterwards
-%       the values for the centroids and maxima of the ITD only stimuli are
-%       searched to find the nearest value to the centroid and maxima of a
-%       given combined stimulus. The resulting ITD value is stored for
-%       different combinaition values. The output.rcen is the ITD value for
-%       getting the same lateralization with an ITD only stimulus compared
-%       to a stimulus with both ITD and ILD using the centroid of the
-%       cross-correlation.  Dim: number of ITDs x number of ILDs. The output.rmax
-%       is the ITD value for getting the same lateralization with an ITD only
-%       stimulus compared to a stimulus with both ITD and ILD using the
-%       maximum of the cross-correlation.  Dim: number of ITDs x number of
-%       ILDs.
+%     'fig14b'  Reproduce Fig.14 (b) from Lindemann (1986a). The
+%               cross-correlations for a combination of ILDs and a ITD of ~1ms
+%               are calculated. This is done for different small ILDs with a
+%               standard deviation of 0-5. Afterwards for every standard
+%               deviation the mean centroid displacement is calculated and
+%               plotted dependend on the ITD. The output is the displacement
+%               of the centroid as a function of the ITD averaged over
+%               different small ILD with a standard deviation of $0,1,2,3,4,5$.
+%               The output has dimensions: nilds x nitds
 %
-%-     'fig18' - reproduces fig.18 from lindemann1986a. The cross-correlation of
-%       pink noise with different interaural coherence values is calculated.
-%       Afterwards for every interaural coherence value the correlation is
-%       plotted dependend on the correlation-time delay.  The output is the
-%       cross-correlation result of the figure.  Dim: number of interaural
-%       coherences x delay line length
+%     'fig15'  Reproduce Fig.15 from Lindemann (1986a). The cross-correlation
+%              for an ITD of -0.5ms is calculated. This is done for
+%              different ILDs, an inhibition factor $c_s = 0.3$ and a
+%              monaural detector factor $w_f = 0.035$. Afterwards for every
+%              *c_s* the ILD is plotted depending on the correlation
+%              time. The output is the cross-correlation result. The output
+%              has dimensions: number of *c_s* conditions x nilds x delay line
+%              length
 %
-%    If no flag is given, the function will print the list of valid flags.
+%     'fig16'  Reproduces Fig.16 from Lindemann (1986a). The
+%              cross-correlations for combinations of ITDs and ILDs are
+%              calculated. Afterwards the combinations of ILD and ITD are
+%              looked for the ones that have two peaks in its
+%              cross-correlation which have the nearly same height. The
+%              corresponding ILD value is than stored in output and plotted
+%              dependend on the ITD. The output is the ILD value for which
+%              the cross-correlation for a combined ITD, ILD stimulus has
+%              two peaks with the same (nearest) height, depending on the
+%              ITD. The output has dimensions: number of ITDs x 1
 %
-%R lindemann1986a
+%     'fig17'  Reproduce Fig.17 from Lindemann (1986a). The
+%              cross-correlation for ITD/ILD combination and ITD only
+%              stimuli is calculated. Afterwards the values for the
+%              centroids and maxima of the ITD only stimuli are searched to
+%              find the nearest value to the centroid and maxima of a given
+%              combined stimulus. The resulting ITD value is stored for
+%              different combinaition values. The output is the ITD
+%              value for getting the same lateralization with an ITD only
+%              stimulus compared to a stimulus with both ITD and ILD using
+%              the centroid of the cross-correlation.  The output has
+%              dimensions: number of ITDs x number of ILDs. 
+%
+%     'fig18'  Reproduce Fig.18 from Lindemann (1986a). The cross-correlation
+%              of pink noise with different interaural coherence values is
+%              calculated.  Afterwards for every interaural coherence value
+%              the correlation is plotted dependend on the correlation-time
+%              delay. The output is the cross-correlation result of the
+%              figure. The output has dimensions: number of interaural
+%              coherences x delay line length
+%
+%   If no flag is given, the function will print the list of valid flags.
+%
+%   Examples:
+%   ---------
+%
+%   To display Figure 6 use :::
+%
+%     exp_lindemann1986a('fig6');
+%
+%   To display Figure 7 use :::
+%
+%     exp_lindemann1986a('fig7');
+%
+%   To display Figure 8 use :::
+%
+%     exp_lindemann1986a('fig8');
+%
+%   To display Figure 10 use :::
+%
+%     exp_lindemann1986a('fig10');
+%
+%   To display Figure 11 use :::
+%
+%     exp_lindemann1986a('fig11');
+%
+%   To display Figure 12 use :::
+%
+%     exp_lindemann1986a('fig12');
+%
+%   To display Figure 13 use :::
+%
+%     exp_lindemann1986a('fig13');
+%
+%   To display Figure 14a use :::
+%
+%     exp_lindemann1986a('fig14a');
+%
+%   To display Figure 14b use :::
+%
+%     exp_lindemann1986a('fig14b');
+%
+%   To display Figure 15 use :::
+%
+%     exp_lindemann1986a('fig15');
+%
+%   To display Figure 16 use :::
+%
+%     exp_lindemann1986a('fig16');
+%
+%   To display Figure 17 use :::
+%
+%     exp_lindemann1986a('fig17');
+%
+%   To display Figure 18 use :::
+%
+%     exp_lindemann1986a('fig18');
+%
+%   References: lindemann1986a
 %
 
 %   AUTHOR: Hagen Wierstorf
 
+definput.import={'amtredofile'};
 definput.flags.type={'missingflag','fig6','fig7','fig8','fig10','fig11',...
                     'fig12','fig13','fig14a','fig14b','fig15',...
                     'fig16','fig17','fig18'};
@@ -148,33 +223,40 @@ if flags.do_missingflag
   error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
 
+save_format='-v6';
+
 %% ------ FIG 6 -----------------------------------------------------------
 if flags.do_fig6
+
+  s = [mfilename('fullpath'),'_fig6.mat'];
     
-    % Sampling rate
-    fs = 44100;
-    % Frequency of the sinusoid
-    f = 500;
-    T = 1/f;
-    fc = round(freqtoerb(f));   % corresponding frequency channel
+  % Sampling rate
+  fs = 44100;
+  % Frequency of the sinusoid
+  f = 500;
+  T = 1/f;
+  fc = round(freqtoerb(f));   % corresponding frequency channel
+  
+  % Model parameter
+  T_int = inf;
+  w_f = 0;
+  M_f = 6; % not used, if w_f==0
+  c_s = [0,0.3,1];
+  
+  % NOTE: the longer the signal, the more time we need for computation. On the
+  % other side N_1 needs to be long enough to eliminate any onset effects.
+  % Lindemann uses N_1 = 17640. Here I uses only N_1 = 2205 which gives the same
+  % results for this demo.
+  N_1 = ceil(25*T*fs);
+  siglen = ceil(30*T*fs);
+  
+  % Calculate crosscorrelations for 21 ITD points between 0~ms and 1~ms
+  nitds = 21; % number of used ITDs
+  ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
+  itd = linspace(0,1,nitds);
+  
+  if amtredofile(s,flags.redomode)
 
-    % Model parameter
-    T_int = inf;
-    w_f = 0;
-    M_f = 6; % not used, if w_f==0
-    c_s = [0,0.3,1];
-
-    % NOTE: the longer the signal, the more time we need for computation. On the
-    % other side N_1 needs to be long enough to eliminate any onset effects.
-    % Lindemann uses N_1 = 17640. Here I uses only N_1 = 2205 which gives the same
-    % results for this demo.
-    N_1 = ceil(25*T*fs);
-    siglen = ceil(30*T*fs);
-
-    % Calculate crosscorrelations for 21 ITD points between 0~ms and 1~ms
-    nitds = 21; % number of used ITDs
-    ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
-    itd = linspace(0,1,nitds);
     output = zeros(length(c_s),nitds,ndl);
     for ii = 1:nitds; 
         % Generate ITD shifted sinusoid
@@ -193,23 +275,29 @@ if flags.do_fig6
         end
     end
 
-    if flags.do_plot
-      % ------ Plotting ------
-      % Generate time axis
-      tau = linspace(-1,1,ndl);
-      % Plot figure for every c_s condition
-      for jj = 1:length(c_s)
-        figure;
-        mesh(tau,itd(end:-1:1),squeeze(output(jj,:,:)));
-        view(0,57);
-        xlabel('correlation-time tau (ms)');
-        ylabel('interaural time difference (ms)');
-        set(gca,'YTick',0:0.2:1);
-        set(gca,'YTickLabel',{'1','0.8','0.6','0.4','0.2','0'});
-        tstr = sprintf('c_s = %.1f\nw_f = 0\nf = %i Hz\n',c_s(jj),f);
-        title(tstr);
-      end
-    end;
+    save(s,'output',save_format);
+  else
+    s = load(s);
+    output = s.output;
+  end;
+    
+  if flags.do_plot
+    % ------ Plotting ------
+    % Generate time axis
+    tau = linspace(-1,1,ndl);
+    % Plot figure for every c_s condition
+    for jj = 1:length(c_s)
+      figure;
+      mesh(tau,itd(end:-1:1),squeeze(output(jj,:,:)));
+      view(0,57);
+      xlabel('correlation-time tau (ms)');
+      ylabel('interaural time difference (ms)');
+      set(gca,'YTick',0:0.2:1);
+      set(gca,'YTickLabel',{'1','0.8','0.6','0.4','0.2','0'});
+      tstr = sprintf('c_s = %.1f\nw_f = 0\nf = %i Hz\n',c_s(jj),f);
+      title(tstr);
+    end
+  end;
 
 end;
 
@@ -217,6 +305,8 @@ end;
 %% ------ FIG 7 -----------------------------------------------------------
 if flags.do_fig7
     
+    s = [mfilename('fullpath'),'_fig7.mat'];
+  
     % Sampling rate
     fs = 44100;
     % Frequency of the sinusoid
@@ -240,8 +330,11 @@ if flags.do_fig7
     % Calculate crosscorrelations for 21 ITD points between 0~ms and 1~ms
     nitds = 21; % number of used ITDs
     itd = linspace(0,1,nitds);
-    output = zeros(length(c_s),nitds);
-    for ii = 1:nitds 
+    
+    if amtredofile(s,flags.redomode)
+      
+      output = zeros(length(c_s),nitds);
+      for ii = 1:nitds 
         % Generate ITD shifted sinusoid
         sig = itdsin(f,itd(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
@@ -250,15 +343,21 @@ if flags.do_fig7
         sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
-            % Calculate cross-correlation (and squeeze due to T_int==inf)
-            tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
-            % Store the needed frequency channel. NOTE: the cross-correlation
-            % calculation starts with channel 5, so we have to subtract 4.
-            cc = tmp(:,fc-4);
-            % Calculate the position of the centroid
-            output(jj,ii) = lindcentroid(cc);
+          % Calculate cross-correlation (and squeeze due to T_int==inf)
+          tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
+          % Store the needed frequency channel. NOTE: the cross-correlation
+          % calculation starts with channel 5, so we have to subtract 4.
+          cc = tmp(:,fc-4);
+          % Calculate the position of the centroid
+          output(jj,ii) = lindcentroid(cc);
         end
-    end
+      end
+
+      save(s,'output',save_format);
+    else
+      s = load(s);
+      output = s.output;
+    end;
     
     if flags.do_plot
       % ------ Plotting ------
@@ -278,73 +377,85 @@ end;
 %% ------ FIG 8 -----------------------------------------------------------
 if flags.do_fig8
   
-    % Sampling rate
-    fs = 44100;
-    % Frequency of the sinusoid
-    f = 500;
-    T = 1/f;
-    fc = round(freqtoerb(f));   % corresponding frequency channel
+  s = [mfilename('fullpath'),'_fig8.mat'];
+  
+  % Sampling rate
+  fs = 44100;
+  % Frequency of the sinusoid
+  f = 500;
+  T = 1/f;
+  fc = round(freqtoerb(f));   % corresponding frequency channel
+  
+  % Model parameter
+  T_int = inf;
+  w_f = 0;
+  M_f = 6; % not used, if w_f==0
+  c_s = [0.3,1];
 
-    % Model parameter
-    T_int = inf;
-    w_f = 0;
-    M_f = 6; % not used, if w_f==0
-    c_s = [0.3,1];
-
-    % NOTE: the longer the signal, the more time we need for computation. On the
-    % other side N_1 needs to be long enough to eliminate any onset effects.
-    % Lindemann uses N_1 = 17640. Here I uses only N_1 = 2205 which gives the same
-    % results for this demo.
-    N_1 = ceil(25*T*fs);
-    siglen = ceil(30*T*fs);
-
-    % Calculate crosscorrelations for 26 ILD points between 0~dB and 25~dB
-    nilds = 26; % number of used ILDs
-    ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
-    ild = linspace(0,25,nilds);
+  % NOTE: the longer the signal, the more time we need for computation. On the
+  % other side N_1 needs to be long enough to eliminate any onset effects.
+  % Lindemann uses N_1 = 17640. Here I uses only N_1 = 2205 which gives the same
+  % results for this demo.
+  N_1 = ceil(25*T*fs);
+  siglen = ceil(30*T*fs);
+  
+  % Calculate crosscorrelations for 26 ILD points between 0~dB and 25~dB
+  nilds = 26; % number of used ILDs
+  ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
+  ild = linspace(0,25,nilds);
+  
+  if amtredofile(s,flags.redomode)
+    
     output = zeros(2,nilds,ndl);
     for ii = 1:nilds 
-        % Generate sinusoid with given ILD
-        sig = ildsin(f,ild(ii),fs);
-        % Use only the beginning of the signal to generate only one time instance of
-        % the cross-correlation and apply onset window
-        sig = sig(1:siglen,:);
-        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
-        % Calculate cross-correlation for different inhibition factor c_s 
-        for jj = 1:length(c_s)
-            % Calculate cross-correlation (and squeeze due to T_int==inf)
-            tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
-            % Store the needed frequency channel. NOTE: the cross-correlation
-            % calculation starts with channel 5, so we have to subtract 4.
-            output(jj,ii,:) = tmp(:,fc-4);
-        end
-    end
-
-
-    if flags.do_plot
-      % ------ Plotting ------
-      % Generate time axis
-      tau = linspace(-1,1,ndl);
-      % Plot figure for every c_s condition
-      for jj = 1:length(c_s) 
-        figure;
-        mesh(tau,ild(end:-1:1),squeeze(output(jj,:,:)));
-        view(0,57);
-        xlabel('correlation-time delay (ms)');
-        ylabel('interaural level difference (dB)');
-        set(gca,'YTick',0:5:25);
-        set(gca,'YTickLabel',{'25','20','15','10','5','0'});
-        tstr = sprintf('c_{inh} = %.1f\nw_f = 0\nf = %i Hz\n',c_s(jj),f);
-        title(tstr);
+      % Generate sinusoid with given ILD
+      sig = ildsin(f,ild(ii),fs);
+      % Use only the beginning of the signal to generate only one time instance of
+      % the cross-correlation and apply onset window
+      sig = sig(1:siglen,:);
+      sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
+      % Calculate cross-correlation for different inhibition factor c_s 
+      for jj = 1:length(c_s)
+        % Calculate cross-correlation (and squeeze due to T_int==inf)
+          tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
+          % Store the needed frequency channel. NOTE: the cross-correlation
+          % calculation starts with channel 5, so we have to subtract 4.
+          output(jj,ii,:) = tmp(:,fc-4);
       end
-    end;
-
+    end
+    
+    save(s,'output',save_format);
+  else
+    s = load(s);
+    output = s.output;
+  end;
+  
+  if flags.do_plot
+    % ------ Plotting ------
+    % Generate time axis
+    tau = linspace(-1,1,ndl);
+    % Plot figure for every c_s condition
+    for jj = 1:length(c_s) 
+      figure;
+      mesh(tau,ild(end:-1:1),squeeze(output(jj,:,:)));
+      view(0,57);
+      xlabel('correlation-time delay (ms)');
+      ylabel('interaural level difference (dB)');
+      set(gca,'YTick',0:5:25);
+      set(gca,'YTickLabel',{'25','20','15','10','5','0'});
+      tstr = sprintf('c_{inh} = %.1f\nw_f = 0\nf = %i Hz\n',c_s(jj),f);
+      title(tstr);
+    end
+  end;
+  
 end;
 
 
 %% ------ FIG 10 ----------------------------------------------------------
 if flags.do_fig10
-  
+
+  s = [mfilename('fullpath'),'_fig10.mat'];
+
   % Sampling rate
   fs = 44100;
   % Frequency of the sinusoid
@@ -369,23 +480,32 @@ if flags.do_fig10
   nilds = 26; % number of used ILDs
   ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
   ild = linspace(0,25,nilds);
-  output = zeros(length(c_s),nilds,ndl);
-  for ii = 1:nilds 
-    % Generate sinusoid with given ILD
-    sig = ildsin(f,ild(ii),fs);
-    % Use only the beginning of the signal to generate only one time instance of
-    % the cross-correlation and apply onset window
-    sig = sig(1:siglen,:);
-    sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
-    % Calculate cross-correlation for different inhibition factor c_s 
-    for jj = 1:length(c_s)
-      % Calculate cross-correlation (and squeeze due to T_int==inf)
-      tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
-      % Store the needed frequency channel. NOTE: the cross-correlation
-      % calculation starts with channel 5, so we have to subtract 4.
-      output(jj,ii,:) = tmp(:,fc-4);
+  
+  if amtredofile(s,flags.redomode)
+
+    output = zeros(length(c_s),nilds,ndl);
+    for ii = 1:nilds 
+      % Generate sinusoid with given ILD
+      sig = ildsin(f,ild(ii),fs);
+      % Use only the beginning of the signal to generate only one time instance of
+      % the cross-correlation and apply onset window
+      sig = sig(1:siglen,:);
+      sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
+      % Calculate cross-correlation for different inhibition factor c_s 
+      for jj = 1:length(c_s)
+        % Calculate cross-correlation (and squeeze due to T_int==inf)
+        tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
+        % Store the needed frequency channel. NOTE: the cross-correlation
+        % calculation starts with channel 5, so we have to subtract 4.
+        output(jj,ii,:) = tmp(:,fc-4);
+      end
     end
-  end
+    
+    save(s,'output',save_format);
+  else
+    s = load(s);
+    output = s.output;
+  end;
   
   
   % ------ Plotting ------
@@ -412,6 +532,8 @@ end;
 %% ------ FIG 11 ----------------------------------------------------------
 if flags.do_fig11
 
+  s = [mfilename('fullpath'),'_fig11.mat'];
+
     % Sampling rate
     fs = 44100;
     % Frequency of the sinusoid
@@ -435,24 +557,34 @@ if flags.do_fig11
     % Caelculate crosscorrelations for 26 ILD points between 0~dB and 25~dB
     nilds = 26; % number of used ILDs
     ild = linspace(0,25,nilds);
-    output = zeros(length(c_s),nilds);
-    for ii = 1:nilds 
+    
+      
+    if amtredofile(s,flags.redomode)
+      
+      output = zeros(length(c_s),nilds);
+      for ii = 1:nilds 
         % Generate sinusoid with given ILD
         sig = ildsin(f,ild(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply onset window
         sig = sig(1:siglen,:);
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
-            % Calculate cross-correlation (and squeeze due to T_int==inf)
-            tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f(jj),M_f,T_int,N_1));
-            % Store the needed frequency channel
-            cc = tmp(:,fc-4);
-            % Calculate the position of the centroid
-            output(jj,ii) = lindcentroid(cc);
+          % Calculate cross-correlation (and squeeze due to T_int==inf)
+          tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f(jj),M_f,T_int,N_1));
+          % Store the needed frequency channel
+          cc = tmp(:,fc-4);
+          % Calculate the position of the centroid
+          output(jj,ii) = lindcentroid(cc);
         end
-    end
+      end
+      
+      save(s,'output',save_format);
+    else
+      s = load(s);
+      output = s.output;
+    end;
 
 
     if flags.do_plot
@@ -480,6 +612,8 @@ end;
 %% ------ FIG 12 ----------------------------------------------------------
 if flags.do_fig12
 
+    s = [mfilename('fullpath'),'_fig12.mat'];
+
     % Sampling rate
     fs = 44100;
     % Frequency of the sinusoid
@@ -506,34 +640,43 @@ if flags.do_fig12
     ild = linspace(0,10,nilds);
     itd = linspace(-1,0,nitds);
 
-    % Calculate the centroids for ILD+ITD stimuli
-    cen = zeros(nitds,nilds);
-    for ii = 1:nitds
+    if amtredofile(s,flags.redomode)
+
+    
+      % Calculate the centroids for ILD+ITD stimuli
+      cen = zeros(nitds,nilds);
+      for ii = 1:nitds
         for jj = 1:nilds
-            % Generate sinusoid with given ILD
-            sig = itdildsin(f,itd(ii),ild(jj),fs);
-            % Use only the beginning of the signal to generate only one time 
-            % instance of the cross-correlation and apply a linear onset window
-            sig = sig(1:siglen,:);
-            sig = rampsignal(sig,[N_1/2-1 0],'tria');
-            % Calculate cross-correlation (and squeeze due to T_int==inf)
-            tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
-            % Store the needed frequency channel
-            cc = tmp(:,fc-4);
-            % Calculate the position of the centroid
-            cen(ii,jj) = lindcentroid(cc);
+          % Generate sinusoid with given ILD
+          sig = itdildsin(f,itd(ii),ild(jj),fs);
+          % Use only the beginning of the signal to generate only one time 
+          % instance of the cross-correlation and apply a linear onset window
+          sig = sig(1:siglen,:);
+          sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
+          % Calculate cross-correlation (and squeeze due to T_int==inf)
+          tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+          % Store the needed frequency channel
+          cc = tmp(:,fc-4);
+          % Calculate the position of the centroid
+          cen(ii,jj) = lindcentroid(cc);
         end
-    end
-
-
-    % ------ Fiting ------
-    % For every ITD find the ILD with gives a centroid near 0
-    output = zeros(nitds,1);
-    for ii = 1:nitds
+      end
+      
+      
+      % ------ Fiting ------
+      % For every ITD find the ILD with gives a centroid near 0
+      output = zeros(nitds,1);
+      for ii = 1:nitds
         % Find centroid nearest to 0
         [val,idx] = min(abs(cen(ii,:)));
         output(ii) = ild(idx);
-    end
+      end
+      
+      save(s,'output',save_format);
+    else
+      s = load(s);
+      output = s.output;
+    end;
 
     if flags.do_plot
       % ------ Plotting ------
@@ -554,6 +697,8 @@ end;
 
 %% ------ FIG 13 ----------------------------------------------------------
 if flags.do_fig13
+
+  s = [mfilename('fullpath'),'_fig13.mat'];
 
     % Sampling rate
     fs = 44100;
@@ -585,47 +730,55 @@ if flags.do_fig13
     itd_t = linspace(-1,1,nitds_t);
     ild_t = [-3,0,3,9,15,25];
 
-    % Calculate the centroids for the ILD only stimuli
-    cen_p = zeros(1,nilds_p);
-    for ii = 1:nilds_p
+    if amtredofile(s,flags.redomode)
+      
+      % Calculate the centroids for the ILD only stimuli
+      cen_p = zeros(1,nilds_p);
+      for ii = 1:nilds_p
         % Generate sinusoid with given ILD
         sig = ildsin(f,ild_p(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply a linear onset window
         sig = sig(1:siglen,:);
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         % Store the needed frequency channel
         cc = tmp(:,fc-4);
         % Calculate the position of the centroid
         cen_p(ii) = lindcentroid(cc);
-    end
-
-    % Calculate the centroids for the combined stimuli
-    cen_t = zeros(nilds_t,nitds_t);
-    for ii = 1:nitds_t
+      end
+      
+      % Calculate the centroids for the combined stimuli
+      cen_t = zeros(nilds_t,nitds_t);
+      for ii = 1:nitds_t
         for jj = 1:nilds_t
-            sig = itdildsin(f,itd_t(ii),ild_t(jj),fs);
-            sig = sig(1:siglen,:);
-            sig = rampsignal(sig,[N_1/2-1 0],'tria');
-            tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
-            cc = tmp(:,fc-4);
-            cen_t(jj,ii) = lindcentroid(cc);
+          sig = itdildsin(f,itd_t(ii),ild_t(jj),fs);
+          sig = sig(1:siglen,:);
+          sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
+          tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+          cc = tmp(:,fc-4);
+          cen_t(jj,ii) = lindcentroid(cc);
         end
-    end
+      end
 
-    % ------ Fitting ------
-    % For the results for the combined centroids find the nearest centroid for the
-    % ILD only stimuli
-    output = zeros(nilds_t,nitds_t);
-    for ii = 1:nitds_t
+      % ------ Fitting ------
+      % For the results for the combined centroids find the nearest centroid for the
+      % ILD only stimuli
+      output = zeros(nilds_t,nitds_t);
+      for ii = 1:nitds_t
         for jj = 1:nilds_t
-            idx = findnearest(cen_p,cen_t(jj,ii));
-            output(jj,ii) = ild_p(idx);
+          idx = findnearest(cen_p,cen_t(jj,ii));
+          output(jj,ii) = ild_p(idx);
         end
-    end
-
+      end
+      
+      save(s,'output',save_format);
+    else
+      s = load(s);
+      output = s.output;
+    end;
+    
     if flags.do_plot
       % ------ Plotting ------
       % First plot the only data from experiments
@@ -660,6 +813,8 @@ end;
 %% ------ FIG 14a ---------------------------------------------------------
 if flags.do_fig14a
 
+  s = [mfilename('fullpath'),'_fig14a.mat'];
+
     % Sampling rate
     fs = 44100;
     % Frequency of the sinusoid
@@ -685,8 +840,11 @@ if flags.do_fig14a
     nilds = 21; % number of used ITDs
     ild = linspace(-3,3,nilds);
     itd = 2000/f;
-    output = zeros(length(c_s),nilds);
-    for ii = 1:nilds 
+    
+    if amtredofile(s,flags.redomode)
+     
+      output = zeros(length(c_s),nilds);
+      for ii = 1:nilds 
         % Generate ITD shifted sinusoid
         sig = itdildsin(f,itd,ild(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
@@ -694,20 +852,25 @@ if flags.do_fig14a
         sig = sig(1:siglen,:);
         % Apply a linear onset window with length N_1/2 to minimize onset effects
         % (see lindemann1986a p. 1614)
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
-            % Calculate cross-correlation (and squeeze due to T_int==inf)
-            tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
-            % Store the needed frequency channel. NOTE: the cross-correlation
-            % calculation starts with channel 5, so we have to subtract 4.
+          % Calculate cross-correlation (and squeeze due to T_int==inf)
+          tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
+          % Store the needed frequency channel. NOTE: the cross-correlation
+          % calculation starts with channel 5, so we have to subtract 4.
             cc = tmp(:,fc-4);
             % Calculate the position of the centroid
             output(jj,ii) = lindcentroid(cc);
         end
-    end
-
-
+      end
+      
+      save(s,'output',save_format);
+    else
+      s = load(s);
+      output = s.output;
+    end;
+    
     if flags.do_plot
       % ------ Plotting ------
       for jj = 1:length(c_s)
@@ -725,6 +888,8 @@ end;
 
 %% ------ FIG 14b ---------------------------------------------------------
 if flags.do_fig14b
+
+    s = [mfilename('fullpath'),'_fig14b.mat'];
 
     % Sampling rate
     fs = 44100;
@@ -746,46 +911,54 @@ if flags.do_fig14b
     N_1 = ceil(25*T*fs);
     siglen = ceil(30*T*fs);
 
-    fprintf(1,'NOTE: this test function will need a lot of time!\n\n');
-
     % Calculate crosscorrelations for 21 ITD points between 0~ms and 1~ms
     nitds = 21; % number of used ITDS
     nilds = 201; % number of used ILDs
     itd = linspace(0,1,nitds);
     ild_std = [1,2,3,4,5];
-    output = zeros(length(ild_std)+1,nitds);
-    centmp = zeros(nilds,nitds);
-    for ii = 1:nitds
+    
+    if amtredofile(s,flags.redomode)
+
+      fprintf(1,'NOTE: this test function will need a lot of time!\n\n');
+
+      output = zeros(length(ild_std)+1,nitds);
+      centmp = zeros(nilds,nitds);
+      for ii = 1:nitds
         % Show progress
         progressbar(ii,nitds);
         % First generate the result for std(ILD) == 0
         sig = itdsin(f,itd(ii),fs);
         sig = sig(1:siglen,:);
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         cc = tmp(:,fc-4);
         cen(1,ii) = lindcentroid(cc);
         % Generate results for std(ILD) ~= 0
         for nn = 1:length(ild_std)
-            % Generate normal distributed ILDs with mean ~ 0 and std = 1
-            tmp = randn(nilds,1);
-            tmp = tmp/std(tmp);
-            % Generate desired ILD distribution
-            ild = tmp * ild_std(nn);
-            % For all distributed ILD values calculate the centroid
-            for jj = 1:nilds
-                sig = itdildsin(f,itd(ii),ild(jj),fs);
-                sig = sig(1:siglen,:);
-                sig = rampsignal(sig,[N_1/2-1 0],'tria');
-                tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
-                cc = tmp(:,fc-4);
-                centmp(jj,ii) = lindcentroid(cc);
-            end
-            % Calculate the mean centroid above the ILD distribution
-            output(nn+1,ii) = mean(centmp(:,ii));
+          % Generate normal distributed ILDs with mean ~ 0 and std = 1
+          tmp = randn(nilds,1);
+          tmp = tmp/std(tmp);
+          % Generate desired ILD distribution
+          ild = tmp * ild_std(nn);
+          % For all distributed ILD values calculate the centroid
+          for jj = 1:nilds
+            sig = itdildsin(f,itd(ii),ild(jj),fs);
+            sig = sig(1:siglen,:);
+            sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
+            tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+            cc = tmp(:,fc-4);
+            centmp(jj,ii) = lindcentroid(cc);
+          end
+          % Calculate the mean centroid above the ILD distribution
+          output(nn+1,ii) = mean(centmp(:,ii));
         end
-    end
-
+      end
+      
+      save(s,'output',save_format);
+    else
+      s = load(s);
+      output = s.output;
+    end;
 
     if flags.do_plot
       for nn = 1:length(ild_std)+1
@@ -803,6 +976,8 @@ end;
 
 %% ------ FIG 15 ----------------------------------------------------------
 if flags.do_fig15
+
+  s = [mfilename('fullpath'),'_fig15.mat'];
 
     % Sampling rate
     fs = 44100;
@@ -829,23 +1004,33 @@ if flags.do_fig15
     ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
     ild = linspace(0,25,nilds);
     itd = -0.5;
-    output = zeros(length(c_s),nilds,ndl);
-    for ii = 1:nilds 
+    
+        
+    if amtredofile(s,flags.redomode)
+
+      output = zeros(length(c_s),nilds,ndl);
+      for ii = 1:nilds 
         % Generate sinusoid with given ILD
         sig = itdildsin(f,itd,ild(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply onset window
         sig = sig(1:siglen,:);
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
-            % Calculate cross-correlation (and squeeze due to T_int==inf)
+          % Calculate cross-correlation (and squeeze due to T_int==inf)
             tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
             % Store the needed frequency channel. NOTE: the cross-correlation
             % calculation starts with channel 5, so we have to subtract 4.
             output(jj,ii,:) = tmp(:,fc-4);
         end
-    end
+      end
+
+      save(s,'output',save_format);
+    else
+      s = load(s);
+      output = s.output;
+    end;
 
     if flags.do_plot
       % ------ Plottinqg --------------------------------------------------------
@@ -870,6 +1055,9 @@ end;
 
 %% ------ FIG 16 ---------------------------------------------------------
 if flags.do_fig16
+
+  
+  s = [mfilename('fullpath'),'_fig16.mat'];
 
     % Sampling rate
     fs = 44100;
@@ -898,33 +1086,42 @@ if flags.do_fig16
     ild = linspace(0,10,nilds);
     itd = linspace(-1,0,nitds);
 
-    % Calculate the centroids for ILD+ITD stimuli
-    cc = zeros(nitds,nilds,ndl);
-    for ii = 1:nitds
+    if amtredofile(s,flags.redomode)
+      
+      % Calculate the centroids for ILD+ITD stimuli
+      cc = zeros(nitds,nilds,ndl);
+      for ii = 1:nitds
         for jj = 1:nilds
-            % Generate sinusoid with given ILD
-            sig = itdildsin(f,itd(ii),ild(jj),fs);
-            % Use only the beginning of the signal to generate only one time 
-            % instance of the cross-correlation and apply a linear onset window
-            sig = sig(1:siglen,:);
-            sig = rampsignal(sig,[N_1/2-1 0],'tria');
-            % Calculate cross-correlation (and squeeze due to T_int==inf)
-            tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
-            % Store the needed frequency channel
-            cc(ii,jj,:) = tmp(:,fc-4);
+          % Generate sinusoid with given ILD
+          sig = itdildsin(f,itd(ii),ild(jj),fs);
+          % Use only the beginning of the signal to generate only one time 
+          % instance of the cross-correlation and apply a linear onset window
+          sig = sig(1:siglen,:);
+          sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
+          % Calculate cross-correlation (and squeeze due to T_int==inf)
+          tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+          % Store the needed frequency channel
+          cc(ii,jj,:) = tmp(:,fc-4);
         end
-    end
+      end
 
-
-    % ------ Fiting ------
-    % For every ITD find the ILD with gives a centroid near 0
-    output = zeros(nitds,1);
-    for ii = 1:nitds
+      
+      % ------ Fiting ------
+      % For every ITD find the ILD with gives a centroid near 0
+      output = zeros(nitds,1);
+      for ii = 1:nitds
         % Find two peaks of same height
         idx = findpeaks(squeeze(cc(ii,:,:)));
         output(ii) = ild(idx);
-    end
+      end
 
+      save(s,'output',save_format);
+    else
+      s = load(s);
+      output = s.output;
+    end;
+    
+      
     if flags.do_plot
       % ------ Plotting ------
       data = data_lindemann1986a('fig16');
@@ -941,6 +1138,9 @@ end;
 
 %% ------ FIG 17 ----------------------------------------------------------
 if flags.do_fig17
+
+  
+  s = [mfilename('fullpath'),'_fig17.mat'];
 
     % Sampling rate
     fs = 44100;
@@ -970,16 +1170,18 @@ if flags.do_fig17
     ild_t = linspace(-9,9,nilds_t);
     itd_t = [0,0.09,0.18,0.27];
 
-    % Calculate the centroids for the ITD only stimuli
-    cen_p = zeros(1,nitds_p);
-    max_p = zeros(1,nitds_p);
-    for ii = 1:nitds_p
+    if amtredofile(s,flags.redomode)
+      
+      % Calculate the centroids for the ITD only stimuli
+      cen_p = zeros(1,nitds_p);
+      max_p = zeros(1,nitds_p);
+      for ii = 1:nitds_p
         % Generate sinusoid with given ILD
         sig = itdsin(f,itd_p(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply a linear onset window
         sig = sig(1:siglen,:);
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         % Store the needed frequency channel
@@ -988,37 +1190,44 @@ if flags.do_fig17
         max_p(ii) = findmax(cc);
         % Calculate the position of the centroid
         cen_p(ii) = lindcentroid(cc);
-    end
-
-    % Calculate the centroids for the combined stimuli
-    cen_t = zeros(nitds_t,nilds_t);
-    max_t = zeros(nitds_t,nilds_t);
-    for ii = 1:nilds_t
+      end
+      
+      % Calculate the centroids for the combined stimuli
+      cen_t = zeros(nitds_t,nilds_t);
+      max_t = zeros(nitds_t,nilds_t);
+      for ii = 1:nilds_t
         for jj = 1:nitds_t
-            sig = itdildsin(f,itd_t(jj),ild_t(ii),fs);
-            sig = sig(1:siglen,:);
-            sig = rampsignal(sig,[N_1/2-1 0],'tria');
-            tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
-            cc = tmp(:,fc-4);
-            max_t(jj,ii) = findmax(cc);
-            cen_t(jj,ii) = lindcentroid(cc);
+          sig = itdildsin(f,itd_t(jj),ild_t(ii),fs);
+          sig = sig(1:siglen,:);
+          sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
+          tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+          cc = tmp(:,fc-4);
+          max_t(jj,ii) = findmax(cc);
+          cen_t(jj,ii) = lindcentroid(cc);
         end
-    end
-
-    % ------ Fiting ------
-    % For the results for the combined centroids find the nearest centroid for the
-    % ITD only stimuli
-    output.rmax = zeros(nitds_t,nilds_t);
-    output.rcen = output.rmax;
-    for ii = 1:nilds_t
+      end
+      
+      % ------ Fiting ------
+      % For the results for the combined centroids find the nearest centroid for the
+      % ITD only stimuli
+      output.rmax = zeros(nitds_t,nilds_t);
+      output.rcen = output.rmax;
+      for ii = 1:nilds_t
         for jj = 1:nitds_t
-            idx = findnearest(cen_p,cen_t(jj,ii));
-            output.rcen(jj,ii) = itd_p(idx);
-            idx = findnearest(max_p,max_t(jj,ii));
-            output.rmax(jj,ii) = itd_p(idx);
+          idx = findnearest(cen_p,cen_t(jj,ii));
+          output.rcen(jj,ii) = itd_p(idx);
+          idx = findnearest(max_p,max_t(jj,ii));
+          output.rmax(jj,ii) = itd_p(idx);
         end
-    end
-
+      end
+      
+      save(s,'output',save_format);
+    else
+      s = load(s);
+      output = s.output;
+    end;
+    
+      
     if flags.do_plot
       % ------ Plotting ------
       % First plot the only data from experiments
@@ -1062,6 +1271,10 @@ end;
 %% ------ FIG 18 ----------------------------------------------------------
 if flags.do_fig18
 
+  
+  s = [mfilename('fullpath'),'_fig18.mat'];
+
+  
     % Sampling rate
     fs = 44100;
     % Frequency of the sinusoid
@@ -1085,18 +1298,27 @@ if flags.do_fig18
     niacs = 11; % number of used interaural coherence values
     ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
     iac = linspace(0,1,niacs);
-    output = zeros(niacs,ndl);
-    for ii = 1:niacs; 
+    
+    if amtredofile(s,flags.redomode)
+
+      output = zeros(niacs,ndl);
+      for ii = 1:niacs; 
         % Generate ITD shifted sinusoid
         sig = bincorrnoise(fs,iac(ii),'pink');
         % Aplly onset window
-        sig = rampsignal(sig,[N_1/2-1 0],'tria');
+        sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
         tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
         % Store the needed frequency channel. NOTE: the cross-correlation
         % calculation starts with channel 5, so we have to subtract 4.
         output(ii,:) =  tmp(:,fc-4);
-    end
+      end
+      
+      save(s,'output',save_format);
+    else
+      s = load(s);
+      output = s.output;
+    end;
 
     if flags.do_plot
       % ------ Plotting ------
@@ -1131,4 +1353,3 @@ function m = findmax(list)
 [m,idx] = max(list);
 d = linspace(-1,1,length(list));
 m = d(idx);
-

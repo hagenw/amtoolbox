@@ -9,15 +9,16 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %        tau    : characteristic delay in seconds (positive: left is leading)
 %        ild    : characteristic ILD in dB (positive: left is louder)
 %  
-%   BREEBAART2001PREPROC(insig,fs,tau,ild) computes the EI-cell representation of
-%   the signal insig sampled with a frequency of fs Hz as described in
-%   Breebaart (2001). The parameters tau and ild define the sensitivity of the EI-cell.
+%   `breebaart2001preproc(insig,fs,tau,ild)` computes the EI-cell
+%   representation of the signal *insig* sampled with a frequency of *fs* Hz
+%   as described in Breebaart (2001). The parameters *tau* and *ild* define
+%   the sensitivity of the EI-cell.
 %
 %   The input must have dimensions time x left/right channel x signal no.
 %
 %   The output has dimensions time x frequency x signal no. 
 %  
-%   [outsig,fc]=BREEBAART2001PREPROC(...) additionally returns the center
+%   `[outsig,fc]=breebaart2001preproc(...)` additionally returns the center
 %   frequencies of the filter bank.
 %  
 %   The Breebaart 2001 model consists of the following stages:
@@ -30,14 +31,14 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %     3) an adaptation stage modelling nerve adaptation by a cascade of 5
 %        loops.
 %
-%     4) An excitation-inhibition (EI) cell model.
+%     4) an excitation-inhibition (EI) cell model.
 %
-%   Parameters for AUDITORYFILTERBANK, IHCENVELOPE, ADAPTLOOP and EICELL can be
-%   passed at the end of the line of input arguments.
+%   Parameters for |auditoryfilterbank|_, |ihcenvelope|_, |adaptloop|_ and
+%   |eicell|_ can be passed at the end of the line of input arguments.
 %
 %   See also: eicell, auditoryfilterbank, ihcenvelope, adaptloop
 
-%R  breebaart2001binaural
+%   References: breebaart2001binaural
 
 %   AUTHOR : Peter L. Soendergaard
   
@@ -56,28 +57,21 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
 end;
 
 definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','eicell'};
-definput.keyvals.fhigh=8000;
-definput.keyvals.basef=[];
+definput.importdefaults={'fhigh',8000,'ihc_breebart','adt_breebaart'};
 
 [flags,keyvals,flow,fhigh,basef]  = ltfatarghelper({'flow', 'fhigh', ...
                     'basef'},definput,varargin);
 
 % ------ do the computation -------------------------
 
-% find the center frequencies used in the filterbank, 1 ERB spacing
-fc = erbspacebw(flow, fhigh, 1, basef);
+%% Apply the auditory filterbank
+[outsig, fc] = auditoryfilterbank(insig,fs,'argimport',flags,keyvals);
 
-% Calculate filter coefficients for the gammatone filter bank.
-[gt_b, gt_a]=gammatone(fc, fs, 'complex');
+%% 'haircell' envelope extraction
+outsig = ihcenvelope(outsig,fs,'argimport',flags,keyvals);
 
-% Apply the Gammatone filterbank
-outsig = 2*real(ufilterbankz(gt_b,gt_a,insig,1));
-
-% 'haircell' envelope extraction
-outsig = ihcenvelope(outsig,fs,'ihc_breebaart');
-
-% non-linear adaptation loops
-outsig = adaptloop(outsig,fs,'adt_breebaart');
+%% non-linear adaptation loops
+outsig = adaptloop(outsig,fs,'argimport',flags,keyvals);
 
 [siglen,nfreqchannels,naudiochannels,nsignals] = size(outsig);
 
@@ -87,5 +81,3 @@ for k=1:nsignals
     ei_map(:,g,k) = eicell(squeeze(outsig(:,g,:,k)),fs,tau,ild);
   end
 end
-
-

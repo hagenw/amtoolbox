@@ -1,25 +1,40 @@
 function data = data_lopezpoveda2001(varargin)
-%DATA_LOPEZPOVEDA2001 Returns data points from the Lopez-Poveda and Meddis (2001) paper
+%DATA_LOPEZPOVEDA2001  Data from Lopez-Poveda & Meddis (2001)
 %   Usage: data = data_lopezpoveda2001(flag)
 %
-%   DATA_LOPEZPOVEDA2001(flag) returns data points from the Lopez-Poveda and Meddis (2001)
+%   `data_lopezpoveda2001(flag)` returns data points from the paper by 
+%   Lopez-Poveda and Meddis (2001).
+%
 %   The flag may be one of:
 %
-%-    'noplot'       - Don't plot, only return data. This is the default.
+%     'noplot'       Don't plot, only return data. This is the default.
 %
-%-    'plot'         - Plot the data.
+%     'plot'         Plot the data.
 %  
-%-    'fig2a'        - Data from Fig. 2(a), outer ear filter.
+%     'fig2a'        Data from Fig. 2(a), outer ear filter.
 %
-%-    'fig2b'        - Data from Fig. 2(b), middle ear filter.
+%     'fig2b'        Data from Fig. 2(b), middle ear filter.
 %
-%       for figure 2(b) you can choose between:
-%       'goode' - returns the data points derived from Goode et al. (1994)  
-%                 This is the default.
-%       'lopezpoveda' - returns the data points just read from figure 2(b)
-%                       of Lopez-Poveda and Meddis (2001)
+%   For Fig. 2b you can choose between:
 %
-%R  lopezpoveda2001hnc
+%     'goode'        Return the data points derived from Goode et al. (1994)
+%                    This is the default.
+%
+%     'lopezpoveda'  Return the data points just read from Fig. 2b
+%                    of Lopez-Poveda and Meddis (2001)
+%
+%   Examples:
+%   ---------
+%
+%   To display Figure 2a, use:::
+%
+%     data_lopezpoveda2001('fig2a','plot');
+%
+%   To display Figure 2b, use:::
+%
+%     data_lopezpoveda2001('fig2b','plot');
+%
+%   References:lopezpoveda2001hnc
 
 %   AUTHOR: Peter L. Soendergaard, Katharina Egger
 
@@ -165,4 +180,3 @@ if flags.do_fig2b
   end
   
 end;
-

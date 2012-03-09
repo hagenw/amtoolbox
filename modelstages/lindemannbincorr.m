@@ -3,82 +3,87 @@ function [crosscorr,t] = lindemannbincorr(insig,fs,varargin)
 %   Usage: crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %
 %   Input parameters:
-%       insig       - signal with t x nfc x 2 (right, left channel)
-%       fs          - sampling rate
+%     insig      : signal with $t \times nfc \times 2$ (right, left channel)
+%     fs         : sampling rate
 %
 %   Output parameters:
-%       crosscorr   - output matrix containing the correlations                     
-%       t           - time axis corresponding to the n time samples in crosscorr
+%     crosscorr  : output matrix containing the correlations                     
+%     t          : time axis corresponding to the n time samples in crosscorr
 %
-%   LINDEMANNBINCORR(insig,fs) is an implementation of the Lindemann
+%   `lindemannbincorr(insig,fs)` is an implementation of the Lindemann
 %   cross-correlation algorithm to simulate a binaural delay line. The
-%   output is a matrix of size n x m x amplitude, where n = length(t)/fs.
+%   output is a matrix of size $n \times m \times amplitude$, where
+%   `n = length(t)/fs`.
 %
 %   The cross-correlation is calculated using:
 %
-%C              t
-%C CC(tau,t) = int R(l-tau/2) * L(k+tau/2) exp(-(t-k)/T_int) dk
-%C            -inf
+%   ..             t
+%     CC(tau,t) = int R(l-tau/2) * L(k+tau/2) exp(-(t-k)/T_int) dk
+%                -inf
 %
-%   where T_int denotes an integration time constant and R, L the right and 
+%   .. math:: CC(\tau,t) = \int_{-\infty}^{t} R(l-\frac{\tau}{2})
+%             L(k+\frac{\tau}{2})e^{-(t-k)/T_{int}} dk 
+%
+%   where $T_{int}$ denotes an integration time constant and *R*, *L* the right and 
 %   left input signal.
 %
-%   LINDEMANNBINCORR takes the following key/value pairs at the end of
+%   `lindemannbincorr` takes the following key/value pairs at the end of
 %   the command line:
 %
-%-      c_s         - stationary inhibition factor, 0 <= c_s <= 1 
-%                     (0.0 = no inhibition). Default value is 0.3
+%     'c_s',c_s     Stationary inhibition factor, $0 \leq c_s \leq 1$ 
+%                   (0.0 = no inhibition). Default value is 0.3.
 %
-%-      w_f         - monaural sensitivity at the end of the delay line, 
-%                     0 <= w_f < 1. Default value is 0.035
+%     'w_f',w_f     Monaural sensitivity at the end of the delay line, 
+%                   $0 \leq w_f < 1$. Default value is 0.035.
 %
-%-      M_f         - determines the decrease of the monaural sensitivity along 
-%                     the delay line. Default value is 6
+%     'M_f',M_f     Determines the decrease of the monaural sensitivity along 
+%                   the delay line. Default value is 6
 %
-%-      T_int       - integration time window (ms). This is the memory of the 
-%                     correlation process with exp(-1/T_int). Also this
-%                     determines the time steps in the binaural activity map,
-%                     because every time step T_int a new running
-%                     cross-correlation is started, so every T_int we have a new
-%                     result in crosscorr. You can set T_int = inf if you like
-%                     to have no memory effects, then you will get only one
-%                     time step in crosscorr. Default value is 5 ms.
+%     'T_int',t_int
+%                   integration time window (ms). This is the memory of the 
+%                   correlation process with `exp(-1/T_int)`. Also this
+%                   determines the time steps in the binaural activity map,
+%                   because every time step *T_int* a new running
+%                   cross-correlation is started, so every *T_int* we have a new
+%                   result in *crosscorr*. You can set *T_int = inf* if you like
+%                   to have no memory effects, then you will get only one
+%                   time step in crosscorr. Default value is 5 ms.
 %
-%-      N_1         - Sample at which the first running cross-correlation should
-%                     be started to avoid onset effects (see lindemann1986a p.
-%                     1614). Default: 1, 17640 (200/f*fs with f=500 and fs=44100) 
-%                     for 'stationary' (see above)  
+%     'N_1',N_1     Sample at which the first running cross-correlation should
+%                   be started to avoid onset effects (see Lindemann (1986a) p.
+%                   1614). Default: 1, 17640 (*200/f*fs* with $f=500$ and $fs=44100$) 
+%                   for `'stationary'` (see above)  
 %
-%-      'stationary'- will set the default values of N_1=17640 and T_int=Inf, use
-%                     this for stationary input signals
+%     'stationary'  will set the default values of *N_1=17640* and *T_int=inf*, use
+%                   this for stationary input signals.
 %
 %   The key/values can also be specified first in the line of arguments
-%   in the following order: c_s, w_f, M_f, T_int, N_1.
+%   in the following order: *c_s*, *w_f*, *M_f*, *T_int*, *N_1*.
 % 
 %   See also: lindemann
 %
-%R  lindemann1986a lindemann1986b
+%   References:lindemann1986a lindemann1986b
 
 % AUTHOR: Hagen Wierstorf
 
 %
 % --- Used abbreviations ---
 % 
-%   l,L     - left signal
-%   r,R     - right signal
-%   m       - discrete time steps on the delay line (tau)
-%   n       - discrete time (t)
-%   M       - number of discrete steps on the delay line, 
+%   l,L    : left signal
+%   r,R    : right signal
+%   m      : discrete time steps on the delay line (tau)
+%   n      : discrete time (t)
+%   M      : number of discrete steps on the delay line, 
 %             length(delay line) = length(-M:M)
-%   w_r     - monaural sensitivity in dependence of l
-%   w_l     - monaural sensitivity in dependence of r
-%   c_s     - stationary inhibition factor
-%   w_f     - monaural sensitivity at the end of the delay line
-%   M_f     - decrease of monaural sensitivity along the delay line
-%   T_int   - integration time window (see above)
-%   N_1     - lower summation boundary for the running cross-correlation
-%   N_2     - upper summation boundary for the running cross-correlation
-%   cc      - running cross-correlation
+%   w_r    : monaural sensitivity in dependence of l
+%   w_l    : monaural sensitivity in dependence of r
+%   c_s    : stationary inhibition factor
+%   w_f    : monaural sensitivity at the end of the delay line
+%   M_f    : decrease of monaural sensitivity along the delay line
+%   T_int  : integration time window (see above)
+%   N_1    : lower summation boundary for the running cross-correlation
+%   N_2    : upper summation boundary for the running cross-correlation
+%   cc     : running cross-correlation
 % 
 
 %% ------ Checking of input parameters -----------------------------------
@@ -275,3 +280,4 @@ if T_int==Inf
 else
     N_2 = N_1 + T_int;
 end
+

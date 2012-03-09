@@ -1,6 +1,6 @@
 % AMT - Binaural models
 %
-%  The AMT team, 2011.
+%  The AMT team, 2012.
 %
 %  The Breebaart model
 %     BREEBAART2001PREPROC  - EI-cell output
@@ -10,11 +10,13 @@
 %     PLOTLINDEMANN         - Plot the binaural activity map
 %     LINDCENTROID          - Centroid of the cross-correlation activation
 %
-%  The Langendijk model
-%     LANGENDIJK            - Langendijk & Bronkhorst 2002 auditory model 
-%     LIKELILANGENDIJK      - Likelihood estimation to quantify model performance
-%     PLOTLANGENDIJK        - Plot the pdf-matrices with grey colormap
-%     PLOTLIKELILANGENDIJK  - Plot the likelihood statistics 
+%  The Dietz model
+%     DIETZ2011             - Dietz 2011 binaural model
+%     DIETZ_INTERAURAL_FUNCTIONS - Interaural stages of Dietz 2011
+%
+%  Binaural speech advantage models  
+%     JELFS2011             - Binaural speech advantage
+%     PLOTJELFS2011         - Polar plot, fixed target moving masker
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

@@ -20,3 +20,4 @@ insig = filter(lp_b, lp_a, insig);
 
 % ac-coupled rms = std
 outsig = std(insig,1);
+

@@ -1,5 +1,5 @@
 function z = eicell(insig,fs,tau,ild,varargin)
-%EICELL  Excitaion-inhibition cell computation for the Breebaart model
+%EICELL  Excitation-inhibition cell computation for the Breebaart model
 %   Usage: y = eicell(insig,fs,tau,ild)
 %
 %   Input parameters:
@@ -11,19 +11,22 @@ function z = eicell(insig,fs,tau,ild,varargin)
 %   Output parameters:
 %        y	   : EI-type cell output as a function of time
 %
-%   EICELL(insig,fs,tau,ild) compute the excitation-inhibition model on the input signal insig.
-%   The cell to be model is responds to a delay tau (measured in seconds) and interaural-level difference
-%   ild measured in dB.
+%   `eicell(insig,fs,tau,ild)` compute the excitation-inhibition model on
+%   the input signal *insig*.  The cell to be modelled responds to a delay
+%   *tau* (measured in seconds) and interaural-level difference *ild*
+%   measured in dB.
 %
-%   EICELL takes the following optional parameters:
+%   `eicell` takes the following optional parameters:
 %  
-%-       'tc',tc     - Temporal smoothing constant. Default value is 30e-3.
+%     'tc',tc      Temporal smoothing constant. Default value is 30e-3.
 %
-%-       'rc_a',rc_a - Parameter 'a' for dynamic range compression. Default value is .1 .
+%     'rc_a',rc_a  Parameter *a* for dynamic range compression.
+%                  Default value is $a=.1$.
 %
-%-       'rc_b',rc_b - Parameter 'b' for dynamic range compression. Default value is .00002 .
+%     'rc_b',rc_b  Parameter *b* for dynamic range compression.
+%                  Default value is $b=0.00002$.
 %
-%-       'ptau',ptau - Time constant for p(tau) function. Default value is 2.2e-3.
+%     'ptau',ptau  Time constant for p(tau) function. Default value is 2.2e-3.
 %
 %   See also: breebaart2001preproc
 

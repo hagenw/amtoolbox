@@ -3,7 +3,7 @@ function inoutsig = comp_adaptloop(inoutsig,fs,limit,minlvl,tau);
 %   Usage: outsig = comp_adaptloop(insig,fs,limit,minlvl,tau);
 %
 %   This is a computational routine. DO NOT call it directly. Call
-%   ADAPTLOOP instead.
+%   |adaptloop|_ instead.
 %
 %   See also: adaptloop
 

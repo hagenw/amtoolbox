@@ -6,34 +6,33 @@ function plotlindemann(crosscorr,t,varargin)
 %          plotlindemann(crosscorr,t);
 %
 %   Input parameters:
-%       crosscorr   - cross-correlation matrix, output from the lindemann
-%                     function
-%       t           - time vector of the analysed stimuli (used for t axis)
+%       crosscorr : cross-correlation matrix, output from the lindemann
+%                   function
+%       t         : time vector of the analysed stimuli (used for t axis)
 %
-%   PLOTLINDEMANN(crosscorr,t) plots the cross-correlation output from the
+%   `plotlindemann(crosscorr,t)` plots the cross-correlation output from the
 %   lindemann function as a so called binaural activity map. This means the
-%   correlation value is plotted dependending on time of the stimulus and
-%   the correlation-time delay. t is the time axis of the plot. f determines
+%   correlation value is plotted depending on time of the stimulus and
+%   the correlation-time delay. *t* is the time axis of the plot. *f* determines
 %   the frequency channel to plot by using the channel in which the
-%   frequency f belongs.
+%   frequency *f* belongs.
 %
-%   If crosscorr has more than one time step a 3D activity map is plotted, else
+%   If *crosscorr* has more than one time step a 3D activity map is plotted, else
 %   a 2D plot of the cross-correlation is done.
 %
 %   The function takes the following flags at the end of the line of
 %   input arguments:
 %
-%-      'fc',fc - plot only the frequency channel with its center frequency
-%                   is nearest to the frequency f. The default value of []
-%                   means to plot the mean about all frequency channels
+%     'fc',fc    plot only the frequency channel with its center frequency
+%                is nearest to the frequency f. The default value of []
+%                means to plot the mean about all frequency channels
 %
-%-      'title',t - display t as the title overriding the default.
+%     'title',t  display t as the title overriding the default.
 %
 %   You may also supply the parameters in the input arguments in the
-%   following order: PLOTLINDEMANN(crosscorr,t,fc);
+%   following order: `plotlindemann(crosscorr,t,fc)`
 %  
 %   See also: lindemann, lindemannbincorr
-%
 
 %   AUTHOR: Hagen Wierstorf
 
@@ -102,3 +101,4 @@ end
 if ~isempty(keyvals.title)  
     title(keyvals.title);
 end
+

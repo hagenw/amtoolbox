@@ -1,14 +1,14 @@
 % AMT - Base routines
 %
-%  Peter L. Soendergaard, 2011.
+%  The AMT team, 2012.
 %
 %  Basic routines
 %    AMTSTART     -  Start the toolbox
 %    AMTHELP      -  Help
 %    AMTBASEPATH  -  Return the base path
 %    AMTMEX       -  Compile Mex/Oct interfaces
+%    AMTREDOFILE  -  Utility to work with cached files
 %    ISOCTAVE     -  True if interpreter is Octave
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
-

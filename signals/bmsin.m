@@ -3,15 +3,16 @@ function outsig = bmsin(fc,mf,fs)
 %   Usage: outsig = bmsin(fc,mf,fs)
 %
 %   Input parameters:
-%       fc  - carrier frequency of the sinus (Hz)
-%       mf  - binaural modulation frequency (Hz)
-%       fs  - sampling rate (Hz)
+%       fc  : carrier frequency of the sinus (Hz)
+%       mf  : binaural modulation frequency (Hz)
+%       fs  : sampling rate (Hz)
 %
 %   Output parameters:
-%       outsig  - fs x 2 sinusoid signal
+%       outsig  : $fs \times 2$ sinusoid signal
 %
-%   BMSIN(fc,mf,fs) generates an binaural modulated sinusoid with a
-%   carrier frequency of f and a frequency moving around the two ears of mf.
+%   `bmsin(fc,mf,fs)` generates an binaural modulated sinusoid with a
+%   carrier frequency of *f* and a frequency moving around the two ears of
+%   *mf*.
 
 % AUTHOR: Hagen Wierstorf
 
@@ -42,3 +43,4 @@ sigr = sin(2*pi*fc.*t + sin(2*pi*mf.*t));
 outsig = [sigl' sigr'];
 % Scale outsig
 outsig = outsig / (max(abs(outsig(:)))+eps);
+

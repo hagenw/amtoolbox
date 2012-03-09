@@ -2,15 +2,17 @@ function [outsig,fb]=filterbank_block(insig,fb)
 %FILTERBANK_BLOCK  Process signal block in a filterbank
 %   Usage: [outsig,fb]=filterbank(fb,insig);
 %
-%   [outsig,fb]=FILTERBANK_BLOCK(insig,fb) filters a block of input using the
-%   filters described in the structrure fb. The structure fb must first
-%   have been created using FILTERBANK_INIT.
+%   `[outsig,fb]=filterbank_block(insig,fb)` filters a block of input using the
+%   filters described in the structrure *fb*. The structure *fb* must first
+%   have been created using |filterbank_init|_.
 %
-%   If insig is a matrix then filtering is applied along the columns. In
+%   If *insig* is a matrix then filtering is applied along the columns. In
 %   this case, the output will be 3-dimensional. First dimension
 %   is time, second dimension is frequency channel and third dimension
 %   corresponds to the columns of the input signal.
-
+%
+%   See also: filterbank_init, ufilterbankz
+  
 %   AUTHOR : Peter L. Soendergaard
 
 % ------ Checking of input parameters ---------  
@@ -39,3 +41,4 @@ end;
 
 fb.outstart = fb.outend+1;
 fb.outend   = fb.outstart+fb.outlen-1;
+

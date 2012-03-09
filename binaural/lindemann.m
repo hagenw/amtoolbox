@@ -8,21 +8,21 @@ function [crosscorr,t,ild,cfreq] = lindemann(insig,fs,varargin)
 %          [crosscorr,t] = lindemann(insig,fs)
 %
 %   Input parameters:
-%       insig       - binaural signal for which the cross-correlation
+%       insig       : binaural signal for which the cross-correlation
 %                     should be calculated
-%       fs          - sampling rate (Hz)
+%       fs          : sampling rate (Hz)
 %
 %   Output parameters:
-%       crosscorr   - A matrix containing the cross-correlation signal
-%                     for every frequency channel fc and every time step n.
-%                     The format of this matrix is output(n,m,fc), where m
+%       crosscorr   : A matrix containing the cross-correlation signal
+%                     for every frequency channel *fc* and every time step *n*.
+%                     The format of this matrix is `output(n,m,fc)`, where *m*
 %                     denotes the correlation (delay line) time step.
-%       t           - time axis for the time steps n in crosscorr
+%       t           - time axis for the time steps *n* in crosscorr
 %       ild         - interaural level difference (ILD) for every freqeuncy
-%                     channel fc
+%                     channel *fc*
 %       cfreq       - center frequencies of every frequency channel
 %
-%   LINDEMANN(insig,fs) calculates a binaural activity map for the given
+%   `lindemann(insig,fs)` calculates a binaural activity map for the given
 %   insig using a cross-correlation (delay-line) mechanism. The calculation
 %   is done for every frequency band in the range 5-40 Erb.
 %
@@ -33,9 +33,9 @@ function [crosscorr,t,ild,cfreq] = lindemann(insig,fs,varargin)
 %   extented the output from the lindemann model to a binaural activity map
 %   dependend on time, by using a running cross-correlation function.
 %   This has been done here by starting a new running cross-correlation
-%   every time step T_int.  A detailed description of these cross-
+%   every time step *T_int*.  A detailed description of these cross-
 %   correlation steps is given in the lindemannbincorr function.
-
+%
 %   The steps of the binaural model to calculate the result are the
 %   following:
 %
@@ -51,15 +51,15 @@ function [crosscorr,t,ild,cfreq] = lindemann(insig,fs,varargin)
 %        (1986a) and Hess (2007). These are extensions to the delay line model
 %        of Jeffres (1948).
 %
-%   You may supply any flags or key/value pairs of the AUDIORYFILTERBANK,
-%   IHCENVELOPE or LINDEMANNBINCORR at the end of the line of input
+%   You may supply any flags or key/value pairs of the |auditoryfilterbank|_,
+%   |ihcenvelope|_ or |lindemannbincorr|_ at the end of the line of input
 %   arguments.
 %
 %   See also: lindemannbincorr, plotlindemann, gammatone, ufilterbankz
 %
 %   Demos: demo_lindemann
 %
-%R  lindemann1986a lindemann1986b gaik1993combined jeffres1948 hess2007phd
+%   References:lindemann1986a lindemann1986b gaik1993combined jeffress1948place hess2007phd
 
 %   A first implementation of the Lindemann model in Matlab was done from
 %   Wolfgang Hess and inspired this work.

@@ -42,3 +42,5 @@ smod = s.*(1+0.5*cos(2*pi*t*fm));
 
 figure(4);
 modspecgram(s,fs,50,2*fm,'fmax',2*fc)
+
+%OLDFORMAT

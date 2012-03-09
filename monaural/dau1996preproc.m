@@ -1,5 +1,5 @@
 function [outsig, fc] = dau1996preproc(insig, fs, varargin);
-%DAU1996PREPROC   Auditory model from Dau et. al. 1996.
+%DAU1996PREPROC   Auditory model from Dau et. al. 1996
 %   Usage: [outsig, fc] = dau1996preproc(insig,fs);
 %          [outsig, fc] = dau1996preproc(insig,fs,...);
 %
@@ -7,14 +7,14 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %     insig  : input acoustic signal.
 %     fs     : sampling rate.
 %  
-%   DAU1996PREPROC(insig,fs) computes the internal representation of the signal insig
-%   sampled with a frequency of fs Hz as described in Dau, Puschel and
-%   Kohlrausch (1996a).
+%   `dau1996preproc(insig,fs)` computes the internal representation of the
+%   signal *insig* sampled with a frequency of *fs* Hz as described in Dau,
+%   Puschel and Kohlrausch (1996a).
 %  
-%   [outsig,fc]=DAU1996(...) additionally returns the center frequencies of
+%   `[outsig,fc]=dau1996preproc(...)` additionally returns the center frequencies of
 %   the filter bank.
 %
-%   The Dau1996 model consists of the following stages:
+%   The Dau 1996 model consists of the following stages:
 %   
 %     1) a gammatone filter bank with 1-erb spaced filtes.
 %
@@ -26,8 +26,9 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %
 %     4) a modulation low pass filter liming modulations to below 50 Hz.
 %
-%   The following parameters may be passed at the end of the line of
-%   input arguments:
+%   Any of the optinal parameters for |auditoryfilterbank|_, |ihcenvelope|_
+%   and |adaptloop|_ may be specified for this function. They will be passed
+%   to the corresponding functions.
 %
 %   The model implemented in this file is not identical to the model
 %   published in Dau et. al. (1996a). An overshoot limit has been added to
@@ -35,7 +36,9 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %   input signal would cause unnaturally big responses. This is described
 %   in Dau et. al. (1997a).
 %
-%R  dau1996qmeI dau1996qmeII dau1997mapI
+%   See also: auditoryfilterbank, ihcenvelope, adaptloop, dau1997preproc
+%
+%   References: dau1996qmeI dau1996qmeII dau1997mapI
 
 %   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Soendergaard
   
@@ -53,7 +56,8 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-definput.import={'auditoryfilterbank'};
+definput.import={'auditoryfilterbank','ihcenvelope','adaptloop'};
+definput.importdefaults={'ihc_dau','adt_dau'};
 definput.keyvals.subfs=[];
 
 [flags,keyvals]  = ltfatarghelper({'flow','fhigh'},definput,varargin);
@@ -61,17 +65,17 @@ definput.keyvals.subfs=[];
 % ------ do the computation -------------------------
 
 % Apply the auditory filterbank
-[outsig, fc] = auditoryfilterbank(insig, fs, 'argimport',flags,keyvals);
+[outsig, fc] = auditoryfilterbank(insig,fs,'argimport',flags,keyvals);
 
 % 'haircell' envelope extraction
-outsig = ihcenvelope(outsig,fs,'ihc_dau');
+outsig = ihcenvelope(outsig,fs,'argimport',flags,keyvals);
 
 % non-linear adaptation loops
-outsig = adaptloop(outsig,fs,'adt_dau');
+outsig = adaptloop(outsig,fs,'argimport',flags,keyvals);
 
 % Calculate filter coefficients for the 20 ms (approx.eq to 8 Hz) modulation
 % lowpass filter.
-% FIXME: This filter places a pole /very/ close to the unit circle.
+% This filter places a pole /very/ close to the unit circle.
 mlp_a = exp(-(1/0.02)/fs);
 mlp_b = 1 - mlp_a;
 mlp_a = [1, -mlp_a];
@@ -83,5 +87,4 @@ outsig = filter(mlp_b,mlp_a,outsig);
 if ~isempty(keyvals.subfs)
   outsig = fftresample(outsig,round(length(outsig)/fs*subfs));
 end;
-
 

@@ -2,19 +2,26 @@ function data = data_pralong1996(varargin)
 %DATA_PRALONG1996 Head phone data from Pralong & Carlile (1996)
 %   Usage: data = data_pralong1996(flag)
 %
-%   DATA_PRALONG1996(flag) returns data points from the Pralong & Carlile
+%   `data_pralong1996(flag)` returns data points from the Pralong & Carlile
 %   (1996) paper.
 %
 %   The flag may be one of:
 %
-%-    'noplot'       - Don't plot, only return data. This is the default.
+%     'noplot'  Don't plot, only return data. This is the default.
 %
-%-    'plot'         - Plot the data.
+%     'plot'    Plot the data.
 %  
-%-    'fig1e'        - Data from Fig. 1(e), Gain of Sennheiser 250 Linear
-%                      circumaural headphones. This is the default
+%     'fig1e'   Data from Fig. 1(e), Gain of Sennheiser 250 Linear
+%               circumaural headphones. This is the default
 %
-%R  pralong1996
+%   Examples:
+%   ---------
+%
+%   Figure 1e can be displayed using:::
+%
+%     data_pralong1996('plot');
+%
+%   References: pralong1996role
   
 % Define input flags
 definput.flags.type={'fig1e'};
@@ -54,7 +61,8 @@ if flags.do_fig1e
     x=data(:,1);
     freqresp=20*log10(data(:,2));
     semilogx(x,freqresp);
-
+    xlabel('Frequency (Hz)');
+    ylabel('Gain (dB)');
   end;
   
 end;

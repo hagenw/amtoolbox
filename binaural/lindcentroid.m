@@ -3,25 +3,27 @@ function d = lindcentroid(cc)
 %   Usage: d = lindcentroid(cc)
 %
 %   Input parameters:
-%       cc  - Lindemann cross-correlation. Dim: 1 x delay line length
+%       cc  : Lindemann cross-correlation. Dim: 1 x delay line length
 %
 %   Output parameters:
-%       d   - lindcentroid in the range -1..1~ms
+%       d   : lindcentroid in the range -1..1~ms
 %
-%   LINDCENTROID(cc) calculates the centroid for a given cross-correlation
+%   `lindcentroid(cc)` calculates the centroid for a given cross-correlation
 %   from the Lindemann model.
 %
-%   The centroid is computed by (see lindemann1986a, page 1613, eq. 22):
+%   The centroid is computed by (see Lindemann (1986a), page 1613, eq. 22):
 %
-%C             M                  M
-%C      d = ( sum m*Psi(m) ) / ( sum Psi(m) )
-%C            m=-M               m=-M
+%   ..         M                  M
+%       d = ( sum m*Psi(m) ) / ( sum Psi(m) )
+%             m=-M               m=-M
 %
-%   where M is half the length of the delay line -M:M.
+%   .. math:: d = \frac{\sum_{m=-M}^{M} m*\Psi (m)}{\sum_{m=-M}^M \Psi (m) }
+%
+%   where *M* is half the length of the delay line $-M,...,M$.
 %
 %   See also: lindemann
 %
-%R lindemann1986a
+%   References: lindemann1986a
 %
 
 %   AUTHOR: Hagen Wierstorf
@@ -45,3 +47,4 @@ end
 m = linspace(-1,1,length(cc))';
 % Calculate the centroid using the -M:M delay line
 d = sum(m.*cc) / sum(cc);
+

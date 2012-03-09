@@ -18,7 +18,7 @@ disp(['Upper cutoff frequency: ', num2str(fhigh), 'Hz']);
 disp(['Base frequency        : ', num2str(base_frequency_hz), 'Hz']);
 disp(['filters per ERB       : ', num2str(filters_per_ERB)]);
 disp(' ')
-analyzer = Gfb_Analyzer_new(sampling_rate_hz, flow, ...
+analyzer = gfb_analyzer_new(sampling_rate_hz, flow, ...
                             base_frequency_hz, fhigh,...
 			    filters_per_ERB);
 bands = length(analyzer.center_frequencies_hz);
@@ -40,7 +40,7 @@ end
 %%% plot the frequency response of the individual filters: %%%         
 
 impulse = [1, zeros(1,8191)];                                          
-[impulse_response, analyzer] = Gfb_Analyzer_fprocess(analyzer, impulse);
+[impulse_response, analyzer] = gfb_analyzer_fprocess(analyzer, impulse);
 frequency_response = fft(real(impulse_response)');                     
 frequency = [0:8191] * sampling_rate_hz / 8192;                        
 
@@ -53,3 +53,5 @@ ylabel('filter response / dB');
 
 disp(' ');
 disp('Figure 1 shows the frequency response of the individual filters.');
+
+%OLDFORMAT

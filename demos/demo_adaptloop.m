@@ -75,3 +75,5 @@ plot(adaptloop(insig,fs));
 title('Adaptation w. limiting.');
 ylabel('level / model units');
 
+
+%OLDFORMAT

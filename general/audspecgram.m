@@ -1,86 +1,87 @@
 function varargout=audspecgram(insig,fs,varargin)
-%AUDSPECGRAM  Auditory spectrogram.
+%AUDSPECGRAM  Auditory spectrogram
 %   Usage: audspecgram(insig,fs,op1,op2, ... );
 %          C=audspecgram(insig,fs, ... );
 %
-%   AUDSPECGRAM(insig,fs) plots an auditory spectrogram of the signal insig,
-%   which has been sampled at a sampling rate of fs Hz. The output is
+%   `audspecgram(insig,fs)` plots an auditory spectrogram of the signal insig,
+%   which has been sampled at a sampling rate of *fs* Hz. The output is
 %   low-pass modulation filtered before presentation.
 %
 %   The frequency axis is diplayed on a erb-scale, but labelled in
 %   Hz. Using the mouse to get plot coordinates will reveal the real
-%   value in erb's. Use ERBTOFREQ to convert to Hz.
+%   value in erb's. Use `erbtofreq` to convert to Hz.
 %
-%   C=AUDSPECGRAM(insig,fs, ... ) returns the image to be displayed as a
-%   matrix. Use this in conjunction with IMWRITE etc. Do NOT use this as a
+%   `C=audspecgram(insig,fs, ... )` returns the image to be displayed as a
+%   matrix. Use this in conjunction with `imwrite` etc. Do **not** use this as a
 %   method to compute an auditory representation. Use some of the model
 %   preprocessing functions for this.
 %
-%   Be carefull with long signals, as the routine may lock up the
-%   interpreter.
+%   Additional arguments can be supplied like this::
 %
-%   Additional arguments can be supplied like this:
-%   AUDSPECGRAM(insig,fs,'dynrange',30). The arguments must be character
-%   strings possibly followed by an argument:
+%     audspecgram(insig,fs,'dynrange',30);
 %
-%-   'adapt'   - Model adaptation. This is the default. This options also
-%                sets the output to be displayed on a linear scale.
+%   The arguments must be character strings possibly followed by an argument:
 %
-%-   'noadapt' - Do not model adaptation. This option also sets a Db scale to
-%                display the output.
+%     'adapt'       Model adaptation. This is the default. This options also
+%                   sets the output to be displayed on a linear scale.
+%    
+%     'noadapt'     Do not model adaptation. This option also sets a dB scale to
+%                   display the output.
+%    
+%     'ihc',modelname
+%                   Pass modelname to |ihcenvelope|_ to determine the inner
+%                   hair cell envelope extraction process to use. Default is to
+%                   use the `'dau'` model.
+%    
+%     'classic'     Display a classic spectrogram. This option is equal to
+%                   `{'ihc','hilbert', 'noadapt', 'nomf'}`
+%    
+%     'mlp',f       Modulation low-pass filter to frequency *f*. Default is to
+%                   low-pass filter to 50 Hz.
+%    
+%     'mf',f        Modulation filter with specified center frequency.
+%    
+%     'nomf'        No modulation filtering of any kind.
+%    
+%     'image'       Use `imagesc` to display the spectrogram. This is the default.
+%    
+%     'clim',[clow,chigh]  Use a colormap ranging from *clow* to *chigh*. These              
+%                          values are passed to `imagesc`. See the help on `imagesc`.
+%    
+%     'dynrange',r  Limit the displayed dynamic range to r. This option
+%                   is especially usefull when displaying on a dB scale (no adaptation).
+%    
+%     'fullrange'   Use the full dynamic range. This is the default.
+%    
+%     'ytick'       A vector containing the frequency in Hz of the yticks.
+%    
+%     'thr',r       Keep only the largest fraction *r* of the coefficients, and
+%                   set the rest to zero.
+%    
+%     'frange',[flow,fhigh]
+%                   Choose a frequency scale ranging from *flow* to
+%                   *fhigh*, values are entered in Hz. Default is to display from
+%                   0 to 8000 Hz.
+%    
+%     'xres',xres   Approximate number of pixels along x-axis / time.
+%    
+%     'yres',yres   Approximate number of pixels along y-axis / frequency If
+%                   only one of 'xres' and 'yres' is specified, the default
+%                   aspect ratio will be used.
+%    
+%     'displayratio',r  Set the default aspect ratio.
+%    
+%     'contour'     Do a contour plot to display the spectrogram.
+%           
+%     'surf'        Do a surf plot to display the spectrogram.
+%    
+%     'mesh'        Do a mesh plot to display the spectrogram.
 %
-%-   'ihc',modelname - Pass modelname to IHCENVELOPE to determine the inner
-%                hair cell envelope extraction process to use. Default is to
-%                use the 'dau' model.
+%     'colorbar'    Display the colorbar. This is the default.
 %
-%-   'classic' - Display a classic spectrogram. This option is equal to
-%               {'ihc','hilbert', 'noadapt', 'nomf'}
+%     'nocolorbar'  Do not display the colorbar.
 %
-%-   'mlp',f   - Modulation low-pass filter to frequency f. Default is to
-%                low-pass filter to 50 Hz.
-%
-%-   'mf',f    - Modulation filter with specified center frequency.
-%
-%-   'nomf'    - No modulation filtering of any kind.
-%
-%-   'image'   - Use 'imagesc' to display the spectrogram. This is the default.
-%
-%-   'clim',[clow,chigh] - Use a colormap ranging from clow to chigh. These
-%               values are passed to IMAGESC. See the help on IMAGESC.
-%
-%-   'dynrange',r - Limit the displayed dynamic range to r. This option
-%                is especially usefull when displaying on a dB scale (no adaptation).
-%
-%-   'fullrange' - Use the full dynamic range. This is the default.
-%
-%-   'ytick'   - A vector containing the frequency in Hz of the yticks.
-%
-%-   'thr',r   - Keep only the largest fraction r of the coefficients, and
-%                set the rest to zero.
-%
-%-   'frange',[flow,fhigh] - Choose a frequency scale ranging from flow to
-%                fhigh, values are entered in Hz. Default is to display from
-%                0 to 8000 Hz.
-%
-%-   'xres',xres - Approximate number of pixels along x-axis / time.
-%
-%-   'yres',yres - Approximate number of pixels along y-axis / frequency If
-%                 only one of 'xres' and 'yres' is specified, the default
-%                 aspect ratio will be used.
-%
-%-   'displayratio',r - Set the default aspect ratio.
-%
-%-   'contour' - Do a contour plot to display the spectrogram.
-%          
-%-   'surf'    - Do a surf plot to display the spectrogram.
-%
-%-   'mesh'    - Do a mesh plot to display the spectrogram.
-%
-%-  'colorbar' - Display the colorbar. This is the default.
-%
-%-  'nocolorbar' - Do not display the colorbar.
-%
-%   See also:  erbtofreq, dau1996preproc
+%   See also:   dau1996preproc
 %
 %   Demos:  demo_audspecgram
   
@@ -96,22 +97,18 @@ if ~isnumeric(insig) || ~isvector(insig)
   error('%s: Input must be a vector.',upper(mfilename));
 end;
 
+definput.import={'plotfilterbank','ltfattranslate','tfplot'};
+definput.importdefaults={'lin','audtick'};
+
 % Define initial value for flags and key/value pairs.
 definput.flags.adapt={'adapt','noadapt'};
 definput.flags.thr={'nothr','thr'};
-definput.flags.dynrange={'fullrange','dynrange'};
-definput.flags.plottype={'image','contour','mesh','surf'};
-definput.flags.clim={'noclim','clim'};
-definput.flags.fmax={'nofmax','fmax'};
 definput.flags.mlp={'mlp','mf','nomf'};
-%definput.flags.delay={'gammatonedelay','zerodelay'};
+definput.flags.delay={'gammatonedelay','zerodelay'};
 
 definput.keyvals.ihc='ihc_dau';
-definput.keyvals.dynrange=100;
 definput.keyvals.thr=0;
-definput.keyvals.clim=[0,1];
-definput.keyvals.fmax=0;
-definput.keyvals.ytick=[0,100,250,500,1000,2000,4000,8000];
+%definput.keyvals.ytick=[0,100,250,500,1000,2000,4000,8000];
 definput.keyvals.mlp=50;
 definput.keyvals.mf=[0 5 10 16.6 27.7];
 definput.keyvals.frange=[0,8000];
@@ -206,7 +203,8 @@ if flags.do_mlp
   % filter. Just use a 2nd order Butterworth for this.
   
   % FIXME: This filter places a pole /very/ close to the unit circle.
-  mlp_a = exp(-(1/0.02)/fs);
+  %mlp_a = exp(-(1/0.02)/fs);
+  mlp_a = exp(-kv.mlp/fs);
   mlp_b = 1 - mlp_a;
   mlp_a = [1, -mlp_a];
 
@@ -252,7 +250,15 @@ for jj=1:nreps
     
     modfilt_outsig=20*log10(modfilt_outsig);
   end;
+
+  plotfilterbank(modfilt_outsig,1,fc,fs,'argimport',flags,kv);
   
+  
+  
+  
+  
+  
+  if 0
   % 'dynrange' parameter is handled by threshholding the coefficients.
   if flags.do_dynrange
     maxclim=max(modfilt_outsig(:));
@@ -317,6 +323,7 @@ for jj=1:nreps
   
 end;
   
+end;
   if nargout>0
     varargout={modfilt_outsig,fc};
   end;

@@ -16,3 +16,5 @@ for nfc=1:length(fc)
     disp(sprintf('Freq: %f MFreq: %f res: %f',fc(nfc),mfc(nmfc),res));
   end;  
 end;
+
+
