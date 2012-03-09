@@ -187,7 +187,7 @@ r = zeros(ndl,nfc);
 N_2 = setN_2(N_1,T_int,siglen);
 
 % Generate time axis
-t = (N_2:(N_2-N_1):siglen)'/fs; 
+t = (N_2:(N_2-N_1):siglen)'/fs;
 
 % Memory preallocation
 crosscorr = zeros( floor( (siglen-N_1)/(N_2-N_1) ),ndl,nfc );

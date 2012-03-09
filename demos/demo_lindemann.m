@@ -45,7 +45,7 @@ sig = bmsin(f,mf,fs);
 tstr = sprintf(['Binaural modulated sinusoid\nf = %i Hz\nf_m = %i Hz\n',...
     'fc = %i\n'],f,mf,round(freqtoerb(f)));
 % Plot frequency channel 11, due to round(freqtoerb(500))==11
-plotlindemann(cc,t,f,'title',tstr);
+plotlindemann(cc,t,'fc',f,'title',tstr);
 
 
 % ------ Fig 2. ----------------------------------------------------------
@@ -65,4 +65,4 @@ sig = sig(1:fs/2,:);
 tstr = sprintf('Sinusoid with an ITD\nf = %i Hz\nitd = %.1f ms\nfc = %i\n',...
     f,itd,round(freqtoerb(f)));
 % Plot frequency channel 11, due to round(freqtoerb(500))==11
-plotlindemann(cc,t,f,'title',tstr);
+plotlindemann(cc,t,'fc',f,'title',tstr);
