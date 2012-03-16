@@ -1,5 +1,5 @@
 function [waveVlat]  = roenne2012_tonebursts(stim_level,varargin)
-%ROENNE2012_TONEBURST  Simulates tone burst evoked ABR wave V latencies
+%ROENNE2012_TONEBURSTS  Simulates tone burst evoked ABR wave V latencies
 %   Usage: [waveVamp, waveVlat]  = roenne2012_tonebursts(flag)
 %
 %   Output parameters:
@@ -34,7 +34,7 @@ function [waveVlat]  = roenne2012_tonebursts(stim_level,varargin)
 %   Example:
 %   --------
 %
-%   Figure 5 can be displayed using:::
+%   Figure 5 of Roenne et al. (2012) can be displayed using::
 %
 %     roenne2012_tonebursts(40:10:100,'plot');
 %
@@ -63,19 +63,19 @@ CF = [1000, 1500, 2000, 3000 ,6000, 8000];
 
 
 % Load tone burst stimuli, identical to Harte et al. (2009)
-load([amtbasepath,'humandata',filesep,'roenne2012_harte2009stim']);
+[Hartestim,fs]  = data_harte2009;
 
 %% ABR model
 
 % Loop over stimulus levels
 for L = 1:length(stim_level)
-  TB_lvl = stim_level(L)  
+  TB_lvl = stim_level(L);
   
   % Loop over stimulus center frequencis
   for F = 1:length(CF) 
     
     % Read tone burst of current CF
-    stimread            = eval(['gp' num2str(CF(F))]);                  
+    stimread=Hartestim.(['gp' num2str(CF(F))]);
     stim                = zeros(fsstim*modellength/1000,1);     
     
     % Create stimulus with tone burst and concatenated zeros =>
@@ -84,7 +84,7 @@ for L = 1:length(stim_level)
     
     % call AN model, note that lots of extra outputs are possible - see
     % "roenne2012_get_an.m"
-    [ANout,vFreq] = roenne2012_get_an(TB_lvl, stim, fsstim,fsmod);    
+    [ANout,vFreq] = zilany2007humanized(TB_lvl, stim, fsstim,fsmod);    
     
     % subtract 50 due to spontaneous rate
     ANout = ANout-50;                                     

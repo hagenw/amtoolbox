@@ -20,8 +20,8 @@ function [delay,data_mean,data_std]  = data_elberling2010(varargin)
 %
 %     'fig5'    Data from Fig. 5, Latency of wave V
 %
-%     'stim'    Return the stimulus. XXX Describe the data. XXX change
-%               'stim' to figure no., if applicable.
+%     'stim'    Return the stimulus and the sampling frequency. XXX Describe
+%               the data. XXX change 'stim' to figure no., if applicable.
 %
 %   Examples:
 %   ---------
@@ -45,6 +45,8 @@ ftsz=12;
 %color
 col=[0.7,0.7,0.7];
 
+fs=30000;
+
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
 delay = [0 1.86 2.56 3.32 4.14 5.04];
@@ -64,8 +66,8 @@ if flags.do_fig4
     
     figure;
     hold on;
-    errorbar(delay2',data_mean,data_std/sqrt(20),'- ...
-             ','linewidth',1.5,'color',col);
+    errorbar(delay2',data_mean,data_std/sqrt(20),'-', 'linewidth',1.5, ...
+             'color',col);
     %,ylim([0 800])
     axis([-1.2 5.5 0 800]);
     xlabel('Change of delay [ms]');
@@ -131,6 +133,9 @@ if flags.do_stim
   % delay is the first output parameter, use it to return the stimulus.  
   delay=load([amtbasepath,'humandata',filesep, ...
               'roenne2012_elberling2010stim']);
+  
+  % fs is stored in data_mean
+  data_mean=fs;
   
   if flags.do_plot
     disp('XXX Plot is missing.');

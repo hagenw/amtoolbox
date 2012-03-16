@@ -51,9 +51,11 @@ function [waveVamp, waveVlat] = exp_roenne2012(varargin)
 %     exp_roenne2012('fig7');
 %
 %   References: roenne2012modeling elberling2010evaluating neely1988latency harte2009comparison
-  
+
+definput.import={'amtredofile'};
 definput.flags.type={'fig5','fig6','fig7'};
 definput.flags.plot={'plot','noplot'};
+
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
 save_format='-v6';

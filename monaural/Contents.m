@@ -18,10 +18,10 @@
 %     ROENNE2012                - Simulate ABR to given stimulus
 %     ROENNE2012_CHIRP          - XXX
 %     ROENNE2012_CLICK          - XXX
-%     ROENNE2012_GENFILT        - XXX
-%     PLOTROENNE2012_CHIRP      - XXX
-%     PLOTROENNE2012_TONEBURSTS - XXX
 %     ROENNE2012_TONEBURSTS     - XXX
+%     PLOTROENNE2012            - Plot output of roenne2012
+%     PLOTROENNE2012_CHIRP      - Plot output of roenne2012_chirp
+%     PLOTROENNE2012_TONEBURSTS - Plot output of roenne2012_tonebursts
 %     ZILANY2007HUMANIZED       - Humanized auditory nerve model
 %
 %  For help, bug reports, suggestions etc. please send email to

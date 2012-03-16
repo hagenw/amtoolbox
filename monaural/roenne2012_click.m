@@ -25,7 +25,7 @@ function [waveVamp,waveVlat] = roenne2012_click(stim_level,varargin)
 %   References: roenne2012modeling elberling2010evaluating zilany2007representation
   
 %definput.keyvals.stim_level     = 40:10:100;
-[flags,kv] = ltfatarghelper({},definput,varargin);
+%[flags,kv] = ltfatarghelper({},definput,varargin);
 
 fsmod       = 200e3;        % AN model fs.
 modellength = 40;           % length of modelling [ms].

@@ -26,17 +26,6 @@ function [waveVamp, waveVlat]  = roenne2012_chirp(levels,chirps,varargin)
 % 
 %     'plot'    Plot main figure (fig 6 or 7). See |plotroenne2012_chirp|_.
 %
-%   Examples:
-%   ---------
-%
-%   Figure 6 can be displayed using:::
-%
-%     roenne2012_chirp('fig6','plot');
-%
-%   Figure 7 can be displayed using:::
-%
-%     roenne2012_chirp('fig7','plot');
-%
 %   ---------
 %
 %   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
@@ -61,7 +50,7 @@ fsmod               = 200000;       % AN model fs
 [ur,fs]=data_roenne2012;
 
 % load Elberling et al (2010) click and chirp stimuli
-stim=data_elberling2010('stim');
+Elberlingstim=data_elberling2010('stim');
 
 % length of modelling [ms]
 modellength         = 40;           
@@ -84,7 +73,7 @@ for L = 1:length(levels)
     stim  = zeros(modellength/1000*fsstim,1);
     
     % Use one of Elberling et al. (2010) stimuli
-    stimCE = eval(['c' num2str(CE-1) ';']);                
+    stimCE = Elberlingstim.(['c' num2str(CE-1)]);
     
     % Create stimulus with chirp stimulus and concatenated zeros => combined 
     % length = "modellength"          
