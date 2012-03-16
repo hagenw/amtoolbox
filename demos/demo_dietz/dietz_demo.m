@@ -26,4 +26,3 @@ t=(1:length(signal))*1/fs;
 figure;plot(t,angl(:,cn));
 hold on;
 plot(t(fine_ic(:,cn)>ic_threshold),angl(fine_ic(:,cn)>ic_threshold,cn),'r.');
-

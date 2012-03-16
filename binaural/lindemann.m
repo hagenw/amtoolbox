@@ -1,5 +1,5 @@
-function [crosscorr,t] = lindemann(insig,fs,varargin)
-%LINDEMANN Calculates a binaural activation pattern
+function [crosscorr,t,ild,cfreq] = lindemann(insig,fs,varargin)
+% LINDEMANN Calculates a binaural activation pattern
 %   Usage: [crosscorr,t] = lindemann(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %          [crosscorr,t] = lindemann(insig,fs,c_s,w_f,M_f,T_int)
 %          [crosscorr,t] = lindemann(insig,fs,c_s,w_f,M_f)
@@ -17,7 +17,10 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 %                     for every frequency channel *fc* and every time step *n*.
 %                     The format of this matrix is `output(n,m,fc)`, where *m*
 %                     denotes the correlation (delay line) time step.
-%       t           : time axis for the time steps *n* in crosscorr
+%       t           - time axis for the time steps *n* in crosscorr
+%       ild         - interaural level difference (ILD) for every freqeuncy
+%                     channel *fc*
+%       cfreq       - center frequencies of every frequency channel
 %
 %   `lindemann(insig,fs)` calculates a binaural activity map for the given
 %   insig using a cross-correlation (delay-line) mechanism. The calculation
@@ -65,49 +68,47 @@ function [crosscorr,t] = lindemann(insig,fs,varargin)
 
 
 %% ------ Checking of input  parameters ---------------------------------
-
 if nargin<2
   error('%s: Too few input parameters.',upper(mfilename));
 end;
-
 if ~isnumeric(insig) || min(size(insig))~=2
     error('%s: insig has to be a numeric two channel signal!',upper(mfilename));
 end
-
 if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
     error('%s: fs has to be a positive scalar!',upper(mfilename));
 end
 
+% Parse the command line and load default parameters
 % For default values see lindemann1986a page 1613
 % NOTE: I modified the default value for T_int from 10 to 5.
-
-
-% Parse the command line
 definput.import={'auditoryfilterbank','ihcenvelope','lindemannbincorr'};
-
 % Highest and lowest frequency to use for the erbfilterbank (this gives us
 % 36 frequency channels, channel 5-40)
-definput.importdefaults = {'flow',erbtofreq(5),'fhigh',erbtofreq(40),'ihc_lindemann'};
-
+definput.importdefaults = ...
+    {'flow',erbtofreq(5),'fhigh',erbtofreq(40),'ihc_lindemann'};
 [flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
     ltfatarghelper({'c_s','w_f','M_f','T_int','N_1'},definput,varargin);
+
+
+%% ------ Computation ---------------------------------------------------
 
 % ------ Erb Bank -------------------------------------------------------
 % Apply the auditory filterbank
 % NOTE: Lindemann uses a bandpass filterbank after Duifhuis (1972) and
 % Blauert and Cobben (1978).
-[inoutsig,fc] = auditoryfilterbank(insig,fs,'argimport',flags,keyvals);
-%
-%% ------ Cross-correlation computation ---------------------------------
+[inoutsig,cfreq] = auditoryfilterbank(insig,fs,'argimport',flags,keyvals);
 
+% ------ ILD ------------------------------------------------------------
+% Calculate the interaural level difference (ILD) for every frequency channel
+% NOTE: this was not part of the original Lindemann model
+ild = interauralleveldifference(inoutsig(:,:,1),inoutsig(:,:,2));
+
+% ------ Cross-correlation computation ---------------------------------
 % Extract the envelope, apply a half-wave rectification and calculate a
 % running cross-correlation for every given frequency band
-
 % ------ Haircell simulation -------
 % Half-wave rectification and envelope extraction
 inoutsig = ihcenvelope(inoutsig,fs,'argimport',flags,keyvals);
-
 % ------ Cross-correlation ------
 % Calculate the cross-correlation after Lindemann (1986a).
 [crosscorr,t] = lindemannbincorr(inoutsig,fs,c_s,w_f,M_f,T_int,N_1);
-
