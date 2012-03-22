@@ -67,18 +67,21 @@ if flags.do_fig5
 
   waveVamp = 0;
 
+  stim_level                          = 40:10:100; % Default stimulus levels
+  
   if amtredofile(s,flags.redomode)
 
-    stim_level                          = 40:10:100; % Default stimulus levels
     [click_amplitude, click_latency]    = roenne2012_click(stim_level);     
+
     waveVlat = roenne2012_tonebursts(stim_level);
     
-    save(s,'waveVlat',save_format);
+    save(s,'waveVlat','click_latency',save_format);
   
   else
     
     s = load(s);
-    waveVlat = s.waveVlat;
+    waveVlat      = s.waveVlat;
+    click_latency = s.click_latency;
 
   end;
   

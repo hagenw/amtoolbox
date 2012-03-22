@@ -36,6 +36,31 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %   Parameters for |auditoryfilterbank|_, |ihcenvelope|_, |adaptloop|_ and
 %   |eicell|_ can be passed at the end of the line of input arguments.
 %
+%   Examples
+%   --------
+%
+%   The following code sets up a simple test example :::
+%
+%     % Setup parameters
+%     fs      = 44100;            % Sampling rate
+%     T       = 0.3;              % Duration
+%     Spl1    = 75;               % SPL of input signal 1
+%     Spl2    = 75;               % SPL of input signal 2
+%     rho     = 0;                % normalized correlation of signals
+%     tau     = 0;
+%     ild     = 0;
+%
+%     % Generate signals:
+%     t  = [0:1/fs:T];
+%     n1 = setdbspl(randn(length(t),1),Spl1);
+%     n2 = setdbspl(randn(length(t),1),Spl2);
+%     x1 = n1*sqrt((1+rho)/2) + n2*sqrt((1-rho)/2);
+%     x2 = n1*sqrt((1+rho)/2) - n2*sqrt((1-rho)/2);
+%
+%     % Run the model and plot it
+%     [ei_map, fc] = breebaart2001preproc([x1,x2], fs, tau, ild);
+%     plotfilterbank(ei_map,1,fc,fs,'audtick');
+%
 %   See also: eicell, auditoryfilterbank, ihcenvelope, adaptloop
 
 %   References: breebaart2001binaural
@@ -57,7 +82,7 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
 end;
 
 definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','eicell'};
-definput.importdefaults={'fhigh',8000,'ihc_breebart','adt_breebaart'};
+definput.importdefaults={'fhigh',8000,'ihc_breebaart','adt_breebaart'};
 
 [flags,keyvals,flow,fhigh,basef]  = ltfatarghelper({'flow', 'fhigh', ...
                     'basef'},definput,varargin);
