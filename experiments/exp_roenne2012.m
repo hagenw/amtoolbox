@@ -38,15 +38,15 @@ function [waveVamp, waveVlat] = exp_roenne2012(varargin)
 %   Examples:
 %   ---------
 %
-%   To display Figure 5 use :::
+%   To display Figure 5 use ::
 %
 %     exp_roenne2012('fig5');
 %
-%   To display Figure 6 use :::
+%   To display Figure 6 use ::
 %
 %     exp_roenne2012('fig6');
 %
-%   To display Figure 7 use :::
+%   To display Figure 7 use ::
 %
 %     exp_roenne2012('fig7');
 %
@@ -67,7 +67,7 @@ if flags.do_fig5
 
   waveVamp = 0;
 
-  stim_level                          = 40:10:100; % Default stimulus levels
+  stim_level = 40:10:100; % Default stimulus levels
   
   if amtredofile(s,flags.redomode)
 
@@ -86,7 +86,7 @@ if flags.do_fig5
   end;
   
   if flags.do_plot
-    plotroenne2012_tonebursts(waveVlat,click_latency)
+    plotroenne2012_tonebursts(waveVlat,click_latency);
   end    
 
 end;
@@ -114,7 +114,7 @@ if flags.do_fig6
   end;
         
   if flags.do_plot
-    plotroenne2012_chirp(waveVamp, waveVlat, flags.type)
+    plotroenne2012_chirp(waveVamp, waveVlat);
   end
 end;
 
@@ -140,7 +140,7 @@ if flags.do_fig7
   end;
         
   if flags.do_plot
-    plotroenne2012_chirp(waveVamp, waveVlat, flags.type)
+    plotroenne2012_chirp(waveVamp, waveVlat, flags.type);
   end
 end;
 

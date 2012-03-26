@@ -71,74 +71,41 @@ if ~flags.do_latonly
     waveVamp = waveVamp*1000; 
     
     % Plot Elberling et al. (2010) reference data
-    hold on;
     errorbar(Delay2',CEmean,CEstd/sqrt(20),'-', ...
              'linewidth',1.5,'color',col);
- 
-    % Plot Simulated wave V amplitudes    
-    plot(Delay,waveVamp,'-*k','linewidth',1.5),
-    
-    % Plot text strings
-    text(-.7,waveVamp(1,1), '20','fontsize',fntz)
-    text(-.7,waveVamp(1,2), '40','fontsize',fntz)
-    text(-.7,waveVamp(1,3), '60','fontsize',fntz)
-    text(-.9,waveVamp(1,3)+70, 'dB nHL','fontsize',fntz)
-    text(-.2,50, 'Click','fontsize',fntz)
-    text(Delay(2),75, '1','fontsize',fntz)
-    text(Delay(3),75, '2','fontsize',fntz)
-    text(Delay(4),75, '3','fontsize',fntz)
-    text(Delay(5),75, '4','fontsize',fntz)
-    text(Delay(6),75, '5','fontsize',fntz)
-    text(3,40, 'Chirps','fontsize',fntz)
-    
-    axis([-1.2 5.5 0 800])
-    set(gca,'fontsize',fntz);box on
-    xlabel('Change of delay [ms]'), ylabel('ABR amplitude [nv]')    
-end
 
-if flags.do_subplot
-  subplot(1,2,2);
-end;
-
-if flags.do_twofig
-  figure;
-end;
-
-if ~flags.do_wavonly
-    [Delay,CElatmean,CElatstd]  = data_elberling2010('fig5');
-    Delay2 = [Delay;Delay;Delay];
+    hold all;
     
-    figure;
-    box on;
-    hold on;
     set(gca,'fontsize',fntz);
     set(gca,'fontsize',fntz);
-    axis([-1.2 6.5 0 10]);
-    xlabel('Change of delay [ms]');
-    ylabel('ABR latency [ms]')
     
     % Plot text strings
-    text(-.7,5.88, '60','fontsize',fntz,'color',col)
-    text(-.7,6.59, '40','fontsize',fntz,'color',col)
-    text(-.7,7.6, '20','fontsize',fntz,'color', col)
-    text(-.9,8.7, 'dB nHL','fontsize',fntz,'color',col)
-    text(5.5,waveVlat(6,1), '20','fontsize',fntz)
-    text(5.5,waveVlat(6,2), '40','fontsize',fntz)
-    text(5.5,waveVlat(6,3), '60','fontsize',fntz)
-    text(5.3,waveVlat(6,1)+.6, 'dB nHL','fontsize',fntz)
-    text(-.2,.5, 'Click','fontsize',fntz)
-    text(Delay(2),1, '1','fontsize',fntz)
-    text(Delay(3),1, '2','fontsize',fntz)
-    text(Delay(4),1, '3','fontsize',fntz)
-    text(Delay(5),1, '4','fontsize',fntz)
-    text(Delay(6),1, '5','fontsize',fntz)
-    text(3,.5, 'Chirps','fontsize',fntz)
+    text(-.7,5.88, '60','fontsize',fntz,'color',col);
+    text(-.7,6.59, '40','fontsize',fntz,'color',col);
+    text(-.7,7.6, '20','fontsize',fntz,'color', col);
+    text(-.9,8.7, 'dB nHL','fontsize',fntz,'color',col);
+    text(5.5,waveVlat(6,1), '20','fontsize',fntz);
+    text(5.5,waveVlat(6,2), '40','fontsize',fntz);
+    text(5.5,waveVlat(6,3), '60','fontsize',fntz);
+    text(5.3,waveVlat(6,1)+.6, 'dB nHL','fontsize',fntz);
+    text(-.2,.5, 'Click','fontsize',fntz);
+    text(Delay(2),1, '1','fontsize',fntz);
+    text(Delay(3),1, '2','fontsize',fntz);
+    text(Delay(4),1, '3','fontsize',fntz);
+    text(Delay(5),1, '4','fontsize',fntz);
+    text(Delay(6),1, '5','fontsize',fntz);
+    text(3,.5, 'Chirps','fontsize',fntz);
        
     % Plot Elberling et al. (2010) reference data
     errorbar(Delay2',CElatmean,CElatstd,'-','linewidth',1.5, ...
-             'color',col)
+             'color',col);
     
     % Plot Simulated wave V latencies
-    plot(Delay,waveVlat,'-*k','linewidth',1.5),
+    plot(Delay,waveVlat,'-*k','linewidth',1.5);
+    
+    xlabel('Change of delay [ms]');
+    ylabel('ABR latency [ms]');
+    axis([-1.2 6.5 0 10]);
+
 end
 

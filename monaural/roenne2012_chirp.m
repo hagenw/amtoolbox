@@ -36,8 +36,8 @@ function [waveVamp, waveVlat]  = roenne2012_chirp(levels,chirps,varargin)
 %   References: roenne2012modeling elberling2010evaluating zilany2007representation
 
 % Define input flags
-definput.flags.type                 = {'fig6','fig7'};
-definput.flags.plot                 = {'plot','plot2','noplot'};
+%definput.flags.type                 = {'fig6','fig7'};
+definput.flags.plot                 = {'noplot','plot','plot2'};
 %definput.keyvals.stim_level         = (20:20:60)+35.2;
 %definput.keyvals.chirp_number       = 1:6;
 [flags,kv]  = ltfatarghelper({},definput,varargin);
@@ -155,6 +155,7 @@ waveVamp = (maxpeak-minpeak);
 % Subtract 15 ms as click stimulus peaks 15 ms into the time series
 waveVlat = waveVlat*1000/fs-15;
 
+%{
 if flags.do_plot
   %% Plot figure 7 from Rønne et al. (2012)
   if flags.do_fig7
@@ -212,3 +213,5 @@ if flags.do_plot
     box on
   end
 end
+
+%}

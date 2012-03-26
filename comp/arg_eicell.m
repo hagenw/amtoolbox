@@ -1,4 +1,4 @@
-function definput=arg_adaptloop(definput)
+function definput=arg_eicell(definput)
 
   definput.keyvals.tc    = 30e-3;   % Temporal smoothing constant
   definput.keyvals.rc_a  = 0.1;     % Range compression parameter 'a' 

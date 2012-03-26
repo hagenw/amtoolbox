@@ -32,13 +32,6 @@ function tau  = data_neely1988(F,L,varargin)
 %
 %   References: neely1988latency
 
-% Define input flags
-%definput.keyvals.L=40:10:100;
-%definput.keyvals.F=1000:8000; % Stimulus center frequency, Hz
-%definput.flags.plot = {'noplot','plot'};
-
-%[flags,kv]  = ltfatarghelper({},definput,varargin);
-
 L = L/100; % Stimulus level, dB SPL
 
 for ii = 1:length(L)

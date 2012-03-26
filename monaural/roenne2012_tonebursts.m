@@ -144,13 +144,13 @@ for L = 1:length(stim_level)
     end
   end
 end
+
 offset      = 3.5 ;        % stimuli delayed 3.5ms from start
 waveVlat    = waveVlat*1000/fs-offset;
 
 if flags.do_plot
   
   ClickLatency = roenne2012_click(stim_level); 
-  ClickLatency = ClickLatency-15;
   
   figure;
   plotroenne2012_toneburst(waveVlat,click_latency);

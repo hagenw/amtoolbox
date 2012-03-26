@@ -14,9 +14,10 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %   as described in Breebaart (2001). The parameters *tau* and *ild* define
 %   the sensitivity of the EI-cell.
 %
-%   The input must have dimensions time x left/right channel x signal no.
+%   The input must have dimensions time $\times $ left/right channel
+%   $\times $ signal no.
 %
-%   The output has dimensions time x frequency x signal no. 
+%   The output has dimensions time $\times $ frequency $\times $ signal no. 
 %  
 %   `[outsig,fc]=breebaart2001preproc(...)` additionally returns the center
 %   frequencies of the filter bank.
@@ -59,7 +60,7 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %
 %     % Run the model and plot it
 %     [ei_map, fc] = breebaart2001preproc([x1,x2], fs, tau, ild);
-%     plotfilterbank(ei_map,1,fc,fs,'audtick');
+%     plotfilterbank(ei_map,1,fc,fs,'audtick','lin');
 %
 %   See also: eicell, auditoryfilterbank, ihcenvelope, adaptloop
 
