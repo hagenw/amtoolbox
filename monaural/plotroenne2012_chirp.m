@@ -52,7 +52,11 @@ end;
 [flags,kv]  = ltfatarghelper({}, definput,varargin);
 
 fntz=12;
-col=[0.7,0.7,0.7];
+%col=[0.7,0.7,0.7];
+col=[0,0,0];
+
+[Delay,CElatmean,CElatstd]  = data_elberling2010('fig4');
+Delay2 = [Delay;Delay;Delay];  
 
 if flags.do_subplot
   subplot(1,2,1);
@@ -63,49 +67,81 @@ if flags.do_twofig
 end;
 
 if ~flags.do_latonly
+        
+  % Plot Elberling et al. (2010) reference data
+  errorbar(Delay2',CElatmean,CElatstd/sqrt(20),'-', ...
+           'linewidth',1.5,'color',col);
   
-    [Delay,CEmean,CEstd]  = data_elberling2010('fig4');
-    Delay2 = [Delay;Delay;Delay];  
-    
-    % Amplitude in nV
-    waveVamp = waveVamp*1000; 
-    
-    % Plot Elberling et al. (2010) reference data
-    errorbar(Delay2',CEmean,CEstd/sqrt(20),'-', ...
-             'linewidth',1.5,'color',col);
-
-    hold all;
-    
-    set(gca,'fontsize',fntz);
-    set(gca,'fontsize',fntz);
-    
-    % Plot text strings
-    text(-.7,5.88, '60','fontsize',fntz,'color',col);
-    text(-.7,6.59, '40','fontsize',fntz,'color',col);
-    text(-.7,7.6, '20','fontsize',fntz,'color', col);
-    text(-.9,8.7, 'dB nHL','fontsize',fntz,'color',col);
-    text(5.5,waveVlat(6,1), '20','fontsize',fntz);
-    text(5.5,waveVlat(6,2), '40','fontsize',fntz);
-    text(5.5,waveVlat(6,3), '60','fontsize',fntz);
-    text(5.3,waveVlat(6,1)+.6, 'dB nHL','fontsize',fntz);
-    text(-.2,.5, 'Click','fontsize',fntz);
-    text(Delay(2),1, '1','fontsize',fntz);
-    text(Delay(3),1, '2','fontsize',fntz);
-    text(Delay(4),1, '3','fontsize',fntz);
-    text(Delay(5),1, '4','fontsize',fntz);
-    text(Delay(6),1, '5','fontsize',fntz);
-    text(3,.5, 'Chirps','fontsize',fntz);
-       
-    % Plot Elberling et al. (2010) reference data
-    errorbar(Delay2',CElatmean,CElatstd,'-','linewidth',1.5, ...
-             'color',col);
-    
-    % Plot Simulated wave V latencies
-    plot(Delay,waveVlat,'-*k','linewidth',1.5);
-    
-    xlabel('Change of delay [ms]');
-    ylabel('ABR latency [ms]');
-    axis([-1.2 6.5 0 10]);
-
+  hold all;
+  
+  set(gca,'fontsize',fntz);
+  set(gca,'fontsize',fntz);
+  
+  % Plot text strings
+  text(-.7,5.88, '60','fontsize',fntz,'color',col);
+  text(-.7,6.59, '40','fontsize',fntz,'color',col);
+  text(-.7,7.6, '20','fontsize',fntz,'color', col);
+  text(-.9,8.7, 'dB nHL','fontsize',fntz,'color',col);
+  text(5.5,waveVlat(6,1), '20','fontsize',fntz);
+  text(5.5,waveVlat(6,2), '40','fontsize',fntz);
+  text(5.5,waveVlat(6,3), '60','fontsize',fntz);
+  text(5.3,waveVlat(6,1)+.6, 'dB nHL','fontsize',fntz);
+  text(-.2,.5, 'Click','fontsize',fntz);
+  text(Delay(2),1, '1','fontsize',fntz);
+  text(Delay(3),1, '2','fontsize',fntz);
+  text(Delay(4),1, '3','fontsize',fntz);
+  text(Delay(5),1, '4','fontsize',fntz);
+  text(Delay(6),1, '5','fontsize',fntz);
+  text(3,.5, 'Chirps','fontsize',fntz);
+  
+  % Plot Elberling et al. (2010) reference data
+  errorbar(Delay2',CElatmean,CElatstd,'-','linewidth',1.5, ...
+           'color',col);
+  
+  % Plot Simulated wave V latencies
+  plot(Delay,waveVlat,'-*k','linewidth',1.5);
+  
+  xlabel('Change of delay [ms]');
+  ylabel('ABR latency [ms]');
+  axis([-1.2 6.5 0 10]);
+  
 end
 
+
+if flags.do_subplot
+  subplot(1,2,2);
+end;
+
+if flags.do_twofig
+  figure;
+end;
+
+%% Plot figure 6 from Rønne et al. (2012)
+if ~flags.do_amponly
+    
+  % Amplitude in nV
+  waveVamp = waveVamp*1000; 
+
+  set(gca,'fontsize',fntz);
+  
+  hold all;
+  errorbar(Delay2',CElatmean,CElatstd/sqrt(20),'-','linewidth',1.5, ...
+           'color',[0.7,0.7,0.7])
+  %,ylim([0 800])
+  plot(Delay,waveVamp*1000,'-*k','linewidth',1.5);
+  axis([-1.2 5.5 0 800]);
+  xlabel('Change of delay [ms]');
+  ylabel('ABR amplitude [nv]');
+  text(-.7,waveVamp(1,1)*1000, '20','fontsize',fntz);
+  text(-.7,waveVamp(1,2)*1000, '40','fontsize',fntz);
+  text(-.7,waveVamp(1,3)*1000, '60','fontsize',fntz);
+  text(-.9,waveVamp(1,3)*1000+70, 'dB nHL','fontsize',fntz);
+  text(-.2,50, 'Click','fontsize',fntz);
+  text(Delay(2),75, '1','fontsize',fntz);
+  text(Delay(3),75, '2','fontsize',fntz);
+  text(Delay(4),75, '3','fontsize',fntz);
+  text(Delay(5),75, '4','fontsize',fntz);
+  text(Delay(6),75, '5','fontsize',fntz);
+  text(3,40, 'Chirps','fontsize',fntz);
+  box on;
+end

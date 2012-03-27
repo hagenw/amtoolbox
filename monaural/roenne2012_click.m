@@ -1,5 +1,5 @@
 function [waveVamp,waveVlat] = roenne2012_click(stim_level,varargin) 
-%ROENNE2012_CLICK  ABR respone to click
+%ROENNE2012_CLICK  Simulate ABR respone to click
 %   Usage: [waveVlat]  = roenne2012_click(stim_level).
 %
 %   Output parameters:

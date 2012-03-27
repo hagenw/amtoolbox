@@ -1,5 +1,5 @@
 function [waveVlat]  = roenne2012_tonebursts(stim_level,varargin)
-%ROENNE2012_TONEBURSTS  Simulates tone burst evoked ABR wave V latencies
+%ROENNE2012_TONEBURSTS  Simulate tone burst evoked ABR wave V latencies
 %   Usage: [waveVamp, waveVlat]  = roenne2012_tonebursts(flag)
 %
 %   Output parameters:

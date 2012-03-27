@@ -38,15 +38,15 @@ function [waveVamp, waveVlat] = exp_roenne2012(varargin)
 %   Examples:
 %   ---------
 %
-%   To display Figure 5 use ::
+%   To display Figure 5 use :::
 %
 %     exp_roenne2012('fig5');
 %
-%   To display Figure 6 use ::
+%   To display Figure 6 use :::
 %
 %     exp_roenne2012('fig6');
 %
-%   To display Figure 7 use ::
+%   To display Figure 7 use :::
 %
 %     exp_roenne2012('fig7');
 %
@@ -140,7 +140,7 @@ if flags.do_fig7
   end;
         
   if flags.do_plot
-    plotroenne2012_chirp(waveVamp, waveVlat, flags.type);
+    plotroenne2012_chirp(waveVamp, waveVlat);
   end
 end;
 

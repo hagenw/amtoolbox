@@ -1,5 +1,5 @@
 function [waveVamp, waveVlat]  = roenne2012_chirp(levels,chirps,varargin)
-%ROENNE2012_CHIRP simulates chirp evoked ABRs
+%ROENNE2012_CHIRP Simulate chirp evoked ABRs
 %   Usage: [waveVamp, waveVlat]  = ronne2012_chirp(flag)
 %
 %   Output parameters:
