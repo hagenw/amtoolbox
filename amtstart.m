@@ -23,7 +23,9 @@ function amtstart()
 %   auditory spectrogram by default.
 %
 %   See also:  amthelp
-
+%
+%   References: ltfatnote015
+  
 %   AUTHOR : Peter L. Soendergaard.  
 
 % Verify that LTFAT has been installed
