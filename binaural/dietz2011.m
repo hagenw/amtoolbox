@@ -409,7 +409,7 @@ rect = max(real(input),0);
 output = rect.^compress_power;
 
 % lowpass filtering, only if desired
-if (cutoff~='' | order ~= '')
+if (~isempty(cutoff) || ~isempty(order))
     fNorm = cutoff*(1/sqrt((2^(1/order)-1))) / (fs/2);
     [b,a] = butter(1,fNorm,'low');
     for k = 1:order
