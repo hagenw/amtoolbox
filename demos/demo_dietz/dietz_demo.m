@@ -15,14 +15,14 @@ ic_threshold=0.98;
 cn = 10; % channel number for time plot
 
 % run dietz model on signal
-[fine_ipd,mod_ipd,fine_itd,mod_itd,ild,fine_ic,mod_ic,fine_f_inst,mod_f_inst,cfreqs] = dietz(signal,fs);
+[hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs);
 
 % convert interaural information into azimuth
-angl=itd2angle(fine_itd,ild(:,1:12),fine_f_inst,lookup,2.5);
+angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,lookup,2.5);
 
 % plot
-figure;hist(angl(fine_ic>ic_threshold&[diff(fine_ic)>0; zeros(1,12)]),91);
+figure;hist(angl(hairc_fine.ic>ic_threshold&[diff(hairc_fine.ic)>0; zeros(1,12)]),91);
 t=(1:length(signal))*1/fs;
 figure;plot(t,angl(:,cn));
 hold on;
-plot(t(fine_ic(:,cn)>ic_threshold),angl(fine_ic(:,cn)>ic_threshold,cn),'r.');
+plot(t(hairc_fine.ic(:,cn)>ic_threshold),angl(hairc_fine.ic(:,cn)>ic_threshold,cn),'r.');
