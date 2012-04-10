@@ -267,18 +267,18 @@ if displ
 end
 
 % haircell processing
-hairc = haircell(signal_filtered, kv.haircell_lp_freq,...
-                 kv.haircell_lp_order,kv.compression_power, fs)';
+hairc = haircell(signal_filtered', kv.haircell_lp_freq,...
+                 kv.haircell_lp_order,kv.compression_power, fs);
 
-hairc_sh = haircell(signal_sh_filtered,kv.haircell_lp_freq,...
-                    kv.haircell_lp_order,kv.compression_power,fs)';
+hairc_sh = haircell(signal_sh_filtered',kv.haircell_lp_freq,...
+                    kv.haircell_lp_order,kv.compression_power,fs);
 
 % also haircell processing, but no 770 Hz filter for fine-structure channel
-hairc_nolp = haircell(signal_filtered, '','',...
-                      kv.compression_power, fs)';
+hairc_nolp = haircell(signal_filtered', [],[],...
+                      kv.compression_power, fs);
 
-hairc_nolp_sh = haircell(signal_sh_filtered, '','',...
-                         kv.compression_power, fs)';
+hairc_nolp_sh = haircell(signal_sh_filtered', [],[],...
+                         kv.compression_power, fs);
 
 % adding internal noise
 if flags.do_int_randn
@@ -290,7 +290,6 @@ if flags.do_int_randn
   hairc_nolp = hairc_nolp + (randn(length(hairc),channels)*kv.alpha);
   hairc_nolp_sh = hairc_nolp_sh + (randn(length(hairc_sh), ...
                                          length(fc))*kv.alpha);
-  
 end;
 
 if flags.do_int_mini
@@ -409,7 +408,7 @@ rect = max(real(input),0);
 output = rect.^compress_power;
 
 % lowpass filtering, only if desired
-if (cutoff~='' | order ~= '')
+if (~isempty(cutoff) || ~isempty(order))
     fNorm = cutoff*(1/sqrt((2^(1/order)-1))) / (fs/2);
     [b,a] = butter(1,fNorm,'low');
     for k = 1:order
