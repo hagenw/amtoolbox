@@ -39,13 +39,13 @@ a=1;
 
 %% create click stimulus
 % Load click stimulus (c0) from Elberling et al. (2010).
-stim=data_elberling2010('stim'); 
+[stim,fsstim] = data_elberling2010('stim'); 
 
 % Define length of stimulus, uses variable modellength.
 refstim = zeros(modellength/1000*fs,1);                 
 
 % Create stimulus with chirp stimulus and concatenated zeros => combined
-% length = "modellentgh".
+% length = "modellength".
 refstim(1:length(stim.c0)) = stim.c0;                                       
 
 
@@ -54,7 +54,7 @@ for L = 1:length(stim_level)
   lvl = stim_level(L);
   
   % call AN model
-  ANdata = zilany2007humanized(lvl, refstim, fs,fsmod);         
+  ANdata = zilany2007humanized(lvl, refstim, fsstim,fsmod);         
   
   % subtract 50 due to spontaneous rate. 
   ANout = ANdata'-50;                                       
@@ -62,7 +62,7 @@ for L = 1:length(stim_level)
   % Sum in time across fibers = summed activity pattern.
   ANsum = sum(ANout,2);                                     
   
-  % Downsample ANsum to get fs = fs_UR = 30kHz.
+  % Downsample ANsum to get fs = fs_UR = 32kHz.
   ANsum = resample(ANsum,fs,fsmod);                         
   
   % Simulated potential = UR * ANsum (* = convolved).

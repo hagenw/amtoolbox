@@ -14,6 +14,7 @@
 %      DATA_PRALONG1996     - Headphone and outer ear data.
 %      DATA_LOPEZPOVEDA2001 - Outer and middle ear filter data.
 %      DATA_LANGENDIJK2002  - Data from Langendijk et al. 2002.
+%      DATA_HARTE2009       - Tone burst stimuli.
 %      DATA_ELBERLING2010   - ABR wave V data as functon of level and sweeping rate.
 %      DATA_ROENNE2012      - Unitary response.
 %

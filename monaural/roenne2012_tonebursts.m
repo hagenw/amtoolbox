@@ -44,7 +44,6 @@ definput.flags.plot={'noplot','plot','plot2'};
 [flags,kv]  = ltfatarghelper({},definput,varargin);
 
 %% Init
-fsstim   = 48000;       % stimulus fs
 fsmod    = 200000;      % AN model fs
 
 % length of modelling [ms]
@@ -63,7 +62,7 @@ CF = [1000, 1500, 2000, 3000 ,6000, 8000];
 
 
 % Load tone burst stimuli, identical to Harte et al. (2009)
-[Hartestim,fs]  = data_harte2009;
+[Hartestim,fsstim]  = data_harte2009;
 
 %% ABR model
 
@@ -82,8 +81,7 @@ for L = 1:length(stim_level)
     % combined length = "modellength"
     stim(1:length(stimread)) = stimread;                                
     
-    % call AN model, note that lots of extra outputs are possible - see
-    % "roenne2012_get_an.m"
+    % call AN model, note that lots of extra outputs are possible 
     [ANout,vFreq] = zilany2007humanized(TB_lvl, stim, fsstim,fsmod);    
     
     % subtract 50 due to spontaneous rate
@@ -92,7 +90,7 @@ for L = 1:length(stim_level)
     % Sum in time across fibers, summed activity pattern
     ANsum = sum(ANout',2);                                
     
-    % Downsample ANsum to get fs = fs_UR = 30kHz
+    % Downsample ANsum to get fs = fs_UR = 32kHz
     ANsum = resample(ANsum,fs,fsmod);                     
     
     % Simulated potential = UR * ANsum (* = convolved)

@@ -11,9 +11,6 @@ function plotroenne2012(stim_level,waveVamp,waveVlat,varargin)
 %
 %   The flag may be one of:
 %
-%     'fs',fs           Simulation frequency (UR fs) of the
-%                       model. Default value is 30000.
-%
 %     'fsmod',fsmod     Auditory nerve model frequency.
 %                       Default value is 200000.
 %      
@@ -29,7 +26,6 @@ function plotroenne2012(stim_level,waveVamp,waveVlat,varargin)
 %   References: roenne2012modeling elberling2010evaluating zilany2007representation
 
 % Define input flags
-definput.keyvals.fs=30000;
 definput.keyvals.fsmod=200000;
 [flags,kv]      = ltfatarghelper({},definput,varargin);
 
@@ -39,10 +35,12 @@ definput.keyvals.fsmod=200000;
 % 3 (levels) x 6 (chirps / clicks) x 3 (different figures) = 48
 % figures will be created.
 
+% load Unitary Response and its samlping frequency
+[ur,fs]=data_roenne2012;
 
 % Plot simulated ABR
 figure;
-t = 1e3.*[0:length(simpot)-1]./kv.fs;
+t = 1e3.*[0:length(simpot)-1]./fs;
 plot(t,simpot,'k','linewidth',2)
 xlabel('time [ms]'), title(['Simulated ABR at ' num2str(stim_level) 'dB']),
 set(gca, 'fontsize',12)
@@ -64,13 +62,13 @@ colorbar;
 % Plot "AN-UR-gram" - spectrogram-like representation of the discharge
 % rate convolved line by line with the UR. 
 figure
-ANUR = resample(ANout,kv.fs,kv.fsmod);
+ANUR = resample(ANout,fs,kv.fsmod);
 ANUR = filter(ur,1,ANUR);
 imagesc(ANUR');
 set(gca,'YTick',[1 100 200 300 400 500]);
 set(gca,'YTicklabel',round(vFreq([1 100 200 300 400 500])));
 set(gca,'XTick',(0:150:1500));
-set(gca,'XTicklabel',(0:150:1500)/kv.fs*1000);
+set(gca,'XTicklabel',(0:150:1500)/fs*1000);
 ylabel('model CF');
 xlabel('time [ms]');
 colorbar;

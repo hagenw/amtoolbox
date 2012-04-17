@@ -18,6 +18,10 @@ notesdir=basepath+'amtnotes/'
 notehtml=cwd+'amtnoteshtml/'
 noteswww=www+'notes/'
 
+f=file(tbpath+'amt_version')
+versionstring=f.read()[:-1]
+f.close()
+
 sys.path.append(basepath+'mat2doc/')
 
 
@@ -46,6 +50,18 @@ if 'stagemat' in todo:
     publishmat=cwd+'amtoolbox/'
     printdoc.git_stageexport(tbpath,publishmat)
     printdoc.print_mat(m2dfile,publishmat)
+
+if 'develmat' in todo:
+    printdoc.git_repoexport(tbpath,'master','amtoolbox',cwd)
+
+    fname=cwd+'amtoolbox-devel-'+versionstring
+    os.system('rm '+fname+'.zip')
+
+    printdoc.dos2unix(cwd+'amtoolbox')
+    os.system('tar zcvf '+fname+'.tgz amtoolbox/')
+
+    printdoc.unix2dos(cwd+'amtoolbox')
+    os.system('zip -r '+fname+'.zip amtoolbox/')
 
 if 'releasemat' in todo:
     publishmat=cwd+'amtoolbox/'
@@ -127,7 +143,7 @@ if 'notesmake' in todo:
     notes = filter(lambda x: (os.path.exists(notesdir+x+'/Makefile')), notes)
 
     for notenumber in notes:
-        print 'Trying to make LTFAT note '+notenumber
+        print 'Trying to make AMTOOLBOX note '+notenumber
         os.system('cd '+notesdir+notenumber+'; make')
 
 if 'notestexclean' in todo:

@@ -51,7 +51,12 @@ function [waveVamp, waveVlat] = exp_roenne2012(varargin)
 %     exp_roenne2012('fig7');
 %
 %   References: roenne2012modeling elberling2010evaluating neely1988latency harte2009comparison
-
+%
+%   ---------
+%
+%   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
+%   this model.
+%
 definput.import={'amtredofile'};
 definput.flags.type={'fig5','fig6','fig7'};
 definput.flags.plot={'plot','noplot'};
@@ -69,7 +74,7 @@ if flags.do_fig5
 
   stim_level = 40:10:100; % Default stimulus levels
   
-  if amtredofile(s,flags.redomode)
+  if amtredofile(s,flags.redomode);
 
     [click_amplitude, click_latency]    = roenne2012_click(stim_level);     
 
@@ -85,14 +90,14 @@ if flags.do_fig5
 
   end;
   
-  if flags.do_plot
+  if flags.do_plot;
     plotroenne2012_tonebursts(waveVlat,click_latency);
-  end    
+  end  ;  
 
 end;
 
 %% ------ FIG 6 -----------------------------------------------------------
-if flags.do_fig6
+if flags.do_fig6;
 
   stim_level    = (20:20:60)+35.2;
   
@@ -114,11 +119,12 @@ if flags.do_fig6
   end;
         
   if flags.do_plot
-    plotroenne2012_chirp(waveVamp, waveVlat);
+    plotroenne2012_chirp(waveVamp, waveVlat,'amponly');
   end
 end;
 
-if flags.do_fig7
+%% ------ FIG 7 -----------------------------------------------------------
+if flags.do_fig7;
 
   stim_level    = (20:20:60)+35.2;
   
@@ -140,7 +146,7 @@ if flags.do_fig7
   end;
         
   if flags.do_plot
-    plotroenne2012_chirp(waveVamp, waveVlat);
+    plotroenne2012_chirp(waveVamp, waveVlat,'latonly');
   end
 end;
 

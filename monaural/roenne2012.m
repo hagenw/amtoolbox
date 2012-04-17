@@ -25,9 +25,6 @@ function [waveVamp, waveVlat]  = roenne2012(stim,fsstim,stim_level,varargin)
 %  
 %     'noplot'          Do not plot. This is the default.
 %
-%     'fs',fs           Simulation frequency (UR fs) of the
-%                       model. Default value is 30000.
-%
 %     'fsmod',fsmod     Auditory nerve model frequency.
 %                       Default value is 200000.
 %      
@@ -53,13 +50,12 @@ function [waveVamp, waveVlat]  = roenne2012(stim,fsstim,stim_level,varargin)
 
 % Define input flags
 definput.flags.plot     = {'plot','noplot'};
-definput.keyvals.fs=30000;
 definput.keyvals.fsmod=200000;
 definput.keyvals.min_modellength=40;
 [flags,kv]      = ltfatarghelper({},definput,varargin);
 
 %% Init
-ur=data_roenne2012;
+[ur,fs] = data_roenne2012;
 
 % Assure minimum model length of 40ms
 if length(stim)/fsstim < kv.min_modellength/1000                               
@@ -69,8 +65,7 @@ if length(stim)/fsstim < kv.min_modellength/1000
 end
 
 %% ABR model
-% call AN model, note that lots of extra outputs are possible - see
-% "roenne2012_get_an.m"
+% call AN model, note that lots of extra outputs are possible
 [ANout,vFreq] = zilany2007humanized(stim_level, stim, fsstim, kv.fsmod);   
 
 % subtract 50 due to spontaneous rate
@@ -79,8 +74,8 @@ ANout = ANout'-50;
 % Sum in time across fibers, summed activity pattern
 ANsum1 = sum(ANout,2);                 
 
-% Downsample ANsum to get fs = fs_UR = 30kHz
-ANsum = resample(ANsum1,kv.fs,kv.fsmod); 
+% Downsample ANsum to get fs = fs_UR = 32kHz
+ANsum = resample(ANsum1,fs,kv.fsmod); 
 
 % Simulated potential = UR * ANsum (* = convolution)
 simpot = filter(ur,1,ANsum);        
@@ -90,7 +85,7 @@ maxpeak = max(simpot);
 
 % Find corresponding time of max peak value (latency of wave V). The unit
 % is [ms]. 
-waveVlat = find(simpot == maxpeak)/kv.fs*1000; 
+waveVlat = find(simpot == maxpeak)/fs*1000; 
 
 % find minimum in the interval from "max peak" to 6.7 ms later
 minpeak = min(simpot(find(simpot == max(simpot)):...

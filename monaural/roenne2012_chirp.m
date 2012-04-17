@@ -43,14 +43,13 @@ definput.flags.plot                 = {'noplot','plot','plot2'};
 [flags,kv]  = ltfatarghelper({},definput,varargin);
 
 %% Init
-fsstim              = 30000;        % stimulus fs
 fsmod               = 200000;       % AN model fs
 
 % load Unitary Response and its samlping frequency
 [ur,fs]=data_roenne2012;
 
 % load Elberling et al (2010) click and chirp stimuli
-Elberlingstim=data_elberling2010('stim');
+[Elberlingstim,fsstim] = data_elberling2010('stim');
 
 % length of modelling [ms]
 modellength         = 40;           
@@ -79,8 +78,7 @@ for L = 1:length(levels)
     % length = "modellength"          
     stim(1:length(stimCE)) = stimCE;            
     
-    % call AN model, note that lots of extra outputs are possible - see
-    % "roenne2012_get_an.m"
+    % call AN model, note that lots of extra outputs are possible
     [ANout,vFreq] = zilany2007humanized(lvl, stim', fsstim, fsmod);
     
     % Subtract 50 due to spontaneous rate
@@ -155,6 +153,11 @@ waveVamp = (maxpeak-minpeak);
 % Subtract 15 ms as click stimulus peaks 15 ms into the time series
 waveVlat = waveVlat*1000/fs-15;
 
+
+if flags.do_plot
+  figure;
+  plotroenne2012_chirp(waveVamp, waveVlat);
+end
 %{
 if flags.do_plot
   %% Plot figure 7 from Rønne et al. (2012)
