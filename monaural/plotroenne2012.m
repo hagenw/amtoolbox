@@ -1,4 +1,4 @@
-function plotroenne2012(stim_level,waveVamp,waveVlat,varargin)
+function plotroenne2012(stim_level,waveVamp,waveVlat, simpot, ANout,varargin)
 %PLOTROENNE2012 Plot the output from the Roenne 2012 model
 %   Usage: plotroenne2012(waveVamp,waveVlat,...);
 %
@@ -13,6 +13,12 @@ function plotroenne2012(stim_level,waveVamp,waveVlat,varargin)
 %
 %     'fsmod',fsmod     Auditory nerve model frequency.
 %                       Default value is 200000.
+%
+%     'flow',flow       Auditory nerve model lowest center frequency.
+%                       Default value is 100 Hz.
+%
+%     'fhigh',fhigh     Auditory nerve model highest center frequency.
+%                       Default value is 16000 Hz.
 %      
 %     'min_modellength',mn 
 %                       Minimum length of modelling measured in ms.
@@ -27,6 +33,8 @@ function plotroenne2012(stim_level,waveVamp,waveVlat,varargin)
 
 % Define input flags
 definput.keyvals.fsmod=200000;
+definput.keyvals.flow = 100;
+definput.keyvals.fhigh = 16000;
 [flags,kv]      = ltfatarghelper({},definput,varargin);
 
 %% PLOTS, extra plots created for all conditions used, i.e. three
@@ -44,6 +52,18 @@ t = 1e3.*[0:length(simpot)-1]./fs;
 plot(t,simpot,'k','linewidth',2)
 xlabel('time [ms]'), title(['Simulated ABR at ' num2str(stim_level) 'dB']),
 set(gca, 'fontsize',12)
+
+% create frequency vector indentical to the CFs simulated
+% location of lowest and highest centre frequency 
+xlo     = (1.0/0.06)*log10((kv.flow/165.4)+0.88);
+xhi     = (1.0/0.06)*log10((kv.fhigh/165.4)+0.88);	
+
+% equal spaced distances on the BM
+vX      = linspace(xlo,xhi,500);
+
+% and the resulting frequency vector
+vFreq   = 165.4*(10.^(0.06*vX)-0.88); 
+
 
 % Plot "AN-gram" - spectrogram-like representation of the discharge
 % rate after the IHC-AN synapse 

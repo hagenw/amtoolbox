@@ -36,10 +36,7 @@ function [waveVamp, waveVlat]  = roenne2012_chirp(levels,chirps,varargin)
 %   References: roenne2012modeling elberling2010evaluating zilany2007representation
 
 % Define input flags
-%definput.flags.type                 = {'fig6','fig7'};
 definput.flags.plot                 = {'noplot','plot','plot2'};
-%definput.keyvals.stim_level         = (20:20:60)+35.2;
-%definput.keyvals.chirp_number       = 1:6;
 [flags,kv]  = ltfatarghelper({},definput,varargin);
 
 %% Init
@@ -158,63 +155,3 @@ if flags.do_plot
   figure;
   plotroenne2012_chirp(waveVamp, waveVlat);
 end
-%{
-if flags.do_plot
-  %% Plot figure 7 from Rønne et al. (2012)
-  if flags.do_fig7
-    [ElberlingDelay,CElatmean,CElatstd]  = data_elberling2010('fig5');
-    ElberlingDelay2 = [ElberlingDelay;ElberlingDelay;ElberlingDelay];
-    figure
-    set(gca,'fontsize',12);, axis([-1.2 6.5 0 10]),xlabel('Change of delay [ms]'), ylabel('ABR latency [ms]')
-    text(-.7,5.88, '60','fontsize',12,'color',[0.7,0.7,0.7])
-    text(-.7,6.59, '40','fontsize',12,'color',[0.7,0.7,0.7])
-    text(-.7,7.6, '20','fontsize',12,'color', [0.7,0.7,0.7])
-    text(-.9,8.7, 'dB nHL','fontsize',12,'color',[0.7,0.7,0.7])
-    text(5.5,waveVlat(6,1)/fs*1000-15, '20','fontsize',12)
-    text(5.5,waveVlat(6,2)/fs*1000-15, '40','fontsize',12)
-    text(5.5,waveVlat(6,3)/fs*1000-15, '60','fontsize',12)
-    text(5.3,waveVlat(6,1)/fs*1000-15+.6, 'dB nHL','fontsize',12)
-    text(-.2,.5, 'Click','fontsize',12)
-    text(ElberlingDelay(2),1, '1','fontsize',12)
-    text(ElberlingDelay(3),1, '2','fontsize',12)
-    text(ElberlingDelay(4),1, '3','fontsize',12)
-    text(ElberlingDelay(5),1, '4','fontsize',12)
-    text(ElberlingDelay(6),1, '5','fontsize',12)
-    text(3,.5, 'Chirps','fontsize',12)
-    box on;
-    hold on;
-    set(gca,'fontsize',12);
-    errorbar(ElberlingDelay2',CElatmean,CElatstd,'-','linewidth',1.5, ...
-             'color',[0.7,0.7,0.7])
-    %,ylim([0 800])
-    plot(ElberlingDelay,(waveVlat/fs*1000)-15,'-*k','linewidth',1.5),
-  end
-  
-  %% Plot figure 6 from Rønne et al. (2012)
-  if flags.do_fig6
-    [ElberlingDelay,CElatmean,CElatstd]  = data_elberling2010('fig4');
-    set(gca,'fontsize',12);
-
-    figure;
-    hold on;
-    errorbar(ElberlingDelay2',CEmean,CEstd/sqrt(20),'-','linewidth',1.5, ...
-             'color',[0.7,0.7,0.7])
-    %,ylim([0 800])
-    plot(ElberlingDelay,waveVamp*1000,'-*k','linewidth',1.5),
-    axis([-1.2 5.5 0 800]),xlabel('Change of delay [ms]'), ylabel('ABR amplitude [nv]')
-    text(-.7,waveVamp(1,1)*1000, '20','fontsize',12)
-    text(-.7,waveVamp(1,2)*1000, '40','fontsize',12)
-    text(-.7,waveVamp(1,3)*1000, '60','fontsize',12)
-    text(-.9,waveVamp(1,3)*1000+70, 'dB nHL','fontsize',12)
-    text(-.2,50, 'Click','fontsize',12)
-    text(ElberlingDelay(2),75, '1','fontsize',12)
-    text(ElberlingDelay(3),75, '2','fontsize',12)
-    text(ElberlingDelay(4),75, '3','fontsize',12)
-    text(ElberlingDelay(5),75, '4','fontsize',12)
-    text(ElberlingDelay(6),75, '5','fontsize',12)
-    text(3,40, 'Chirps','fontsize',12)
-    box on
-  end
-end
-
-%}

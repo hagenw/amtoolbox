@@ -25,9 +25,16 @@ function [waveVamp, waveVlat]  = roenne2012(stim,fsstim,stim_level,varargin)
 %  
 %     'noplot'          Do not plot. This is the default.
 %
-%     'fsmod',fsmod     Auditory nerve model frequency.
+%     'fsmod',fsmod     Auditory nerve model sampling frequency.
 %                       Default value is 200000.
 %      
+%     'flow',flow       Auditory nerve model lowest center frequency.
+%                       Default value is 100 Hz.
+%
+%     'fhigh',fhigh     Auditory nerve model highest center frequency.
+%                       Default value is 16000 Hz.
+%
+%   Default value is 200000.
 %     'min_modellength',mn 
 %                       Minimum length of modelling measured in ms.
 %                       Default value is 40.
@@ -51,6 +58,8 @@ function [waveVamp, waveVlat]  = roenne2012(stim,fsstim,stim_level,varargin)
 % Define input flags
 definput.flags.plot     = {'plot','noplot'};
 definput.keyvals.fsmod=200000;
+definput.keyvals.flow = 100;
+definput.keyvals.fhigh = 16000;
 definput.keyvals.min_modellength=40;
 [flags,kv]      = ltfatarghelper({},definput,varargin);
 
@@ -66,7 +75,7 @@ end
 
 %% ABR model
 % call AN model, note that lots of extra outputs are possible
-[ANout,vFreq] = zilany2007humanized(stim_level, stim, fsstim, kv.fsmod);   
+[ANout,vFreq] = zilany2007humanized(stim_level, stim, fsstim, kv.fsmod, 'flow',kv.flow, 'fhigh',kv.fhigh);   
 
 % subtract 50 due to spontaneous rate
 ANout = ANout'-50;                                            
@@ -96,5 +105,5 @@ minpeak = min(simpot(find(simpot == max(simpot)):...
 waveVamp = (maxpeak-minpeak);                               
 
 if flags.do_plot
-  plotroenne2012(stim_level,waveVamp, waveVlat);
+  plotroenne2012(stim_level,waveVamp, waveVlat, simpot, ANout, 'flow',kv.flow, 'fhigh', kv.fhigh);
 end
