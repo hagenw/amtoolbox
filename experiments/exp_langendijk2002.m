@@ -37,6 +37,17 @@ function output = exp_langendijk2002(varargin)
 %
 %   The output are the pdfs for the baseline condition.
 %
+%   Examples:
+%   ---------
+%
+%   To display Figure 7 use :::
+%
+%     exp_langendijk2002('fig7');
+%
+%   To display Figure 9 use :::
+%
+%     exp_langendijk2002('fig9');
+%
 %   See also: langendijk, likelilangendijk, plotlangendijk, plotlikelilangendijk, data_langendijk2002
 
 %
