@@ -34,19 +34,19 @@ function [waveVamp, waveVlat]  = roenne2012(stim,fsstim,stim_level,varargin)
 %     'fhigh',fhigh     Auditory nerve model highest center frequency.
 %                       Default value is 16000 Hz.
 %
-%   Default value is 200000.
 %     'min_modellength',mn 
 %                       Minimum length of modelling measured in ms.
 %                       Default value is 40.
+%
 %   Examples:
 %   ---------
 %
 %   Simulates a click evoked ABR (c0 of the loaded file is a click). Note
 %   that the click loaded in this example starts after 15ms. The simulated
-%   wave V latency is thus also 15 ms "late".
+%   wave V latency is thus also 15 ms "late" :::
 %
-%       stim=data_elberling2010('stim'); 
-%       roenne2012(stim.c0,30e3,60,'plot')
+%     stim=data_elberling2010('stim'); 
+%     roenne2012(stim.c0,30e3,60,'plot')
 %
 %   ---------
 %
