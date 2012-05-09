@@ -250,84 +250,14 @@ for jj=1:nreps
     
     modfilt_outsig=20*log10(modfilt_outsig);
   end;
+  
+  plotfilterbank(modfilt_outsig,1,fc,fs,'argimport',flags,kv,'fc',fc,'fs',fs);
 
-  plotfilterbank(modfilt_outsig,1,fc,fs,'argimport',flags,kv);
-  
-  
-  
-  
-  
-  
-  if 0
-  % 'dynrange' parameter is handled by threshholding the coefficients.
-  if flags.do_dynrange
-    maxclim=max(modfilt_outsig(:));
-    modfilt_outsig(modfilt_outsig<maxclim-kv.dynrange)=maxclim-kv.dynrange;
-  end;
-  
-  % Set the range for plotting
-  xsamples=siglen/hopsize;
-  xr=(0:hopsize:siglen-1)/fs;
-  yr=linspace(audlimits(1),audlimits(2),kv.yres);
-  
-  % Determine the labels and position for the y-label.
-  ytickpos=freqtoerb(kv.ytick);
-  
-  %if flags.do_zerodelay
-  % Correct the delays
-  %  for n=1:kv.yres
-  %    cut=round(delay(n)*fssubband);
-  %size(outsig(:,n))
-  %xsamples
-  %cut
-  %size([outsig(cut:end,n);zeros(cut-1,1)])
-  %    outsig(:,n)=[outsig(cut:end,n);zeros(cut-1,1)];
-  %  end;
-  %end;
-  
-  % Flip the output correctly. Each column is a subband signal, and should
-  % be display as the rows.
-  modfilt_outsig=modfilt_outsig.';
-  
-  if flags.do_image
-    if flags.do_clim
-      imagesc(xr,yr,modfilt_outsig,clim);
-    else
-    imagesc(xr,yr,modfilt_outsig);
-    end;
-  end;
-  
-  if flags.do_contour
-    contour(xr,yr,modfilt_outsig);
-  end;
-  
-  if flags.do_surf
-    surf(xr,yr,modfilt_outsig);
-  end;
-  
-  if flags.do_mesh
-    mesh(xr,yr,modfilt_outsig);
-  end;
-  
-  set(gca,'YTick',ytickpos);
-  % Use num2str here explicitly for Octave compatibility.
-  set(gca,'YTickLabel',num2str(kv.ytick(:)));
-  
-  axis('xy');
-  xlabel('Time (s)')
-  ylabel('Frequency (Hz)')
-  
-  if flags.do_colorbar
-    colorbar;
-  end;
-  
-end;
-  
-end;
   if nargout>0
     varargout={modfilt_outsig,fc};
   end;
   
+end
   
 % complex frequency shifted first order lowpass
 function [b,a] = efilt(w0,bw);
