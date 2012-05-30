@@ -17,10 +17,10 @@ function [crosscorr,t,ild,cfreq] = lindemann(insig,fs,varargin)
 %                     for every frequency channel *fc* and every time step *n*.
 %                     The format of this matrix is `output(n,m,fc)`, where *m*
 %                     denotes the correlation (delay line) time step.
-%       t           - time axis for the time steps *n* in crosscorr
-%       ild         - interaural level difference (ILD) for every freqeuncy
+%       t           : time axis for the time steps *n* in crosscorr
+%       ild         : interaural level difference (ILD) for every freqeuncy
 %                     channel *fc*
-%       cfreq       - center frequencies of every frequency channel
+%       cfreq       : center frequencies of every frequency channel
 %
 %   `lindemann(insig,fs)` calculates a binaural activity map for the given
 %   insig using a cross-correlation (delay-line) mechanism. The calculation
@@ -101,7 +101,8 @@ definput.importdefaults = ...
 % ------ ILD ------------------------------------------------------------
 % Calculate the interaural level difference (ILD) for every frequency channel
 % NOTE: this was not part of the original Lindemann model
-ild = interauralleveldifference(inoutsig(:,:,1),inoutsig(:,:,2));
+%ild = interauralleveldifference(inoutsig(:,:,1),inoutsig(:,:,2));
+%ild = dbspl(inoutsig(:,:,1))-dbspl(inoutsig(:,:,2));
 
 % ------ Cross-correlation computation ---------------------------------
 % Extract the envelope, apply a half-wave rectification and calculate a
