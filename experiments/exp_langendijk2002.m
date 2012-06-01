@@ -90,17 +90,17 @@ function output = exp_langendijk2002(varargin)
   % data can be recalculated by calling data_langendijk2002('expdata')
 
   % pdf calcualtion
-  h = waitbar(0,'Please wait...');
+  %h = waitbar(0,'Please wait...');
   pb  = langendijk( dtfdata.medir,dtfdata.medir,fs); % baseline
-  waitbar(1/5)
+  %waitbar(1/5)
   p2o = langendijk( dtfdata.medir2o,dtfdata.medir,fs); % 2-oct (4-16kHz)
-  waitbar(2/5)
+  %waitbar(2/5)
   p1ol= langendijk( dtfdata.medir1ol,dtfdata.medir,fs); % 1-oct (low:4-8kHz)
-  waitbar(3/5)
+  %waitbar(3/5)
   p1om= langendijk( dtfdata.medir1om,dtfdata.medir,fs); % 1-oct (middle:5.7-11.3kHz)
-  waitbar(4/5)
+  %waitbar(4/5)
   p1oh= langendijk( dtfdata.medir1oh,dtfdata.medir,fs); % 1-oct (high:8-16kHz)
-  waitbar(5/5)
+  %waitbar(5/5)
 
   % likelihood estimations
   la=zeros(5,1);le=zeros(5,1);ci=zeros(5,2);
@@ -110,7 +110,7 @@ function output = exp_langendijk2002(varargin)
   [la(3),le(3),ci(3,:)] = likelilangendijk( p1ol,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1ol );
   [la(4),le(4),ci(4,:)] = likelilangendijk( p1om,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1om );
   [la(5),le(5),ci(5,:)] = likelilangendijk( p1oh,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1oh );
-  close(h)
+  %close(h)
 
   output = pb;
 
