@@ -101,8 +101,7 @@ definput.importdefaults = ...
 % ------ ILD ------------------------------------------------------------
 % Calculate the interaural level difference (ILD) for every frequency channel
 % NOTE: this was not part of the original Lindemann model
-%ild = interauralleveldifference(inoutsig(:,:,1),inoutsig(:,:,2));
-%ild = dbspl(inoutsig(:,:,1))-dbspl(inoutsig(:,:,2));
+ild = dbspl(inoutsig(:,:,2))-dbspl(inoutsig(:,:,1));
 
 % ------ Cross-correlation computation ---------------------------------
 % Extract the envelope, apply a half-wave rectification and calculate a
