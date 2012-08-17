@@ -132,7 +132,7 @@ function [hairc_fine, hairc_mod, fc, hairc_ild] = dietz2011(insig,fs,varargin)
 %                         XXX. The default value is 1e-3.
 %
 %                      `tau_cycles`
-%                         XXX. The default value is 2.5. 
+%                         XXX. The default value is 5. 
 %
 %                      `tau_s`
 %                         XXX. The default value is 10e-3.
@@ -206,7 +206,7 @@ definput.keyvals.level_filter_order = 2;
 
 % Parameters for localization plugin
 definput.keyvals.coh_param.max_abs_itd = 1e-3;
-definput.keyvals.coh_param.tau_cycles  = 2.5;    % in cycles cycles
+definput.keyvals.coh_param.tau_cycles  = 5;   % in cycles
 definput.keyvals.coh_param.tau_s       = 10e-3; % in s for faller
 
 % parameters for data display and analysis
