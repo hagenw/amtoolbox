@@ -1123,5 +1123,206 @@ Hohmann FB
 
 \end_layout
 
+\begin_layout Section
+Roadmap for 1.0
+\end_layout
+
+\begin_layout Standard
+AMToolbox 1.0 will be released to support the Springer book about the AABBA
+ project.
+ As such, it must support the AABBA project and include all relevant models
+ for this book project.
+ The following is an overview of all the subprojects, their requirements
+ and their current status.
+\end_layout
+
+\begin_layout Subsection
+Chapter 1: An Introduction to Binaural Processing
+\end_layout
+
+\begin_layout Itemize
+Authors: Blauert, Kolossa, Kohlrausch 
+\end_layout
+
+\begin_layout Itemize
+Requirements: Perhaps some classical models, demos etc.
+ ?
+\end_layout
+
+\begin_layout Subsection
+Chapter 2: The Auditory-modeling Toolbox
+\end_layout
+
+\begin_layout Itemize
+Authors: Søndergaard, Majdak 
+\end_layout
+
+\begin_layout Itemize
+This is the toolbox overview chapter itself.
+ No further requirements.
+\end_layout
+
+\begin_layout Subsection
+Chapter 3: Acquisition and Representation of Head-related Transfer Functions
+\end_layout
+
+\begin_layout Itemize
+Authors: Enzner, Antweiler, Spors 
+\end_layout
+
+\begin_layout Subsection
+Chapter 4: From Lateralization to Surround Sound: Assessment of Localization
+ Performance in Spatial-audio Applications
+\end_layout
+
+\begin_layout Itemize
+Authors: Majdak, Laback
+\end_layout
+
+\begin_layout Subsection
+Chapter 5: Binaural Analysis of Complex Listening Environments
+\end_layout
+
+\begin_layout Itemize
+Authors: Larsen, Buchholz, Dau, Kohlrausch, van de Par, 
+\end_layout
+
+\begin_layout Itemize
+Requirements: The binaural model developed by Tobias May and a Gaussian
+ Mixture Model toolbox, which is freely available for download.
+\end_layout
+
+\begin_layout Itemize
+Status: Tobias May will send the model for inclusion into AMToolbox.
+ After that, some integration work regarding the gammatone filters is expected.
+\end_layout
+
+\begin_layout Subsection
+Chapter 6: Binaural Scene Analysis with Multi-dimensional Statistical Filters
+\end_layout
+
+\begin_layout Itemize
+Authors: Hohmann, Dietz, Klein-Henning 
+\end_layout
+
+\begin_layout Itemize
+Requirements: The Dietz 2011 model plus and extra model which cannot be
+ included in the toolbox.
+\end_layout
+
+\begin_layout Itemize
+Status: The Dietz 2011 model is already in AMToolbox.
+ See the table in the first section for the exact status.
+\end_layout
+
+\begin_layout Subsection
+Chapter 7: Extracting Room and Source-distance Information from Binaural
+ Signals
+\end_layout
+
+\begin_layout Itemize
+Authors: Georganti, May, van de Par, Mourjopoulos 
+\end_layout
+
+\begin_layout Subsection
+Chapter 8: Binaural Evaluation of Auditory Scenes Using Head Movements
+\end_layout
+
+\begin_layout Itemize
+Authors: Braasch, Clapp, Xiang 
+\end_layout
+
+\begin_layout Subsection
+Chapter 9: Binaural Systems in Robotics
+\end_layout
+
+\begin_layout Itemize
+Authors: Gas, Argentieri, Danés
+\end_layout
+
+\begin_layout Subsection
+Chapter 10: Binaural Assessment of Multi-channel Reproduction
+\end_layout
+
+\begin_layout Itemize
+Authors: Wierstorf, Spors, Raake 
+\end_layout
+
+\begin_layout Subsection
+Chapter 11: Optimization and Assessment of Binaural Algorithms for Hearing
+ Aids
+\end_layout
+
+\begin_layout Itemize
+Authors: Schlesinger 
+\end_layout
+
+\begin_layout Subsection
+Chapter 12: Modeling Electric Hearing via Bilateral Cochlear Implants
+\end_layout
+
+\begin_layout Itemize
+Authors: Wirtz, Nicoletti, Rudnitzki, Isics, Hemmert 
+\end_layout
+
+\begin_layout Subsection
+Chapter 13: Binaural Analysis of Artefacts in Parametric Spatial Audio
+\end_layout
+
+\begin_layout Itemize
+Authors: Pulkki, Takanen, Santala
+\end_layout
+
+\begin_layout Subsection
+Chapter 14: Binaural De-reverberation
+\end_layout
+
+\begin_layout Itemize
+Authors: Tsilfidis, Westermann, Buchholz, Georganti, Mourjopoulos 
+\end_layout
+
+\begin_layout Subsection
+Chapter 15: Binaural Localization and Recognition of Speakers in Complex
+ Acoustic Scenes
+\end_layout
+
+\begin_layout Itemize
+Authors: May, van de Par, Kohlrausch 
+\end_layout
+
+\begin_layout Subsection
+Chapter 16: Predicting Binaural Speech Intelligibility for Architectural
+ Acoustics
+\end_layout
+
+\begin_layout Itemize
+Authors: Culling, Lavandier, Jelfs 
+\end_layout
+
+\begin_layout Subsection
+Chapter 17: Predicting Binaural Speech Enhancement in Concurrent-speaker
+ Scenarios
+\end_layout
+
+\begin_layout Itemize
+Authors: Colburn, Kidd, Durlach 
+\end_layout
+
+\begin_layout Subsection
+Chapter 18: Human–machine Interfaces Employing Binaural/Tactile Interaction
+\end_layout
+
+\begin_layout Itemize
+Authors: Stamm, Altinsoy 
+\end_layout
+
+\begin_layout Subsection
+Chapter 19: Further Challenges—and the Road Ahead
+\end_layout
+
+\begin_layout Itemize
+Authors: Blauert, Kolossa
+\end_layout
+
 \end_body
 \end_document
