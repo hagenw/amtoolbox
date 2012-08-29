@@ -1,26 +1,46 @@
-function output = make_notchednoise(fs,fc,dur,L,bw,delta)
-%MAKE_NOTCHEDNOISE  Generates a notched-noise-type masker
-%   Usage: output = make_notchednoise(fs,fc,dur,L,bw,delta);
-%          output = make_notchednoise(fs,fc,dur,L,bw,[deltaL deltaR]);
+function outsig = notchednoise(fc,fs,dur,L,bw,delta)
+%NOTCHEDNOISE  Generates a notched-noise-type masker
+%   Usage: outsig = notchednoise(fs,fc,dur,L,bw,delta);
+%          outsig = notchednoise(fs,fc,dur,L,bw,[deltaL deltaR]);
 % 
-%   Generates a notched-noise-type masker as used in psychoacoustical
-%   studies investigating the auditory filters' shape (original method
+%   `outsig = notchednoise(fs,fc,dur,L,bw,delta)` generates a notched-noise
+%   masker with duration `dur` (in sec) and overall level `L` (in dB SPL)
+%   with a sampling rate of `fs` Hz. The deviation from center frequency
+%   `fc` is symmetric and is given by `delta` such that the stopband is
+%   `[fc-delta*fc fc+delta*fc]`. The left and right noise bands have a
+%   bandwidth of `bw*fc` in Hz. If `delta=0` then a broadband noise is
+%   returned.
+%
+%   `outsig = notchednoise(fs,fc,dur,L,bw,[deltaL deltaR])` generates a
+%   notched-noise masker with an asymmetric configuration. `deltaL` and
+%   `deltaR` denote the left and right deviations from `fc`, respectively.
+%   In this case the stopband is `[fc-deltaL*fc fc+deltaR*fc]`.
+%
+%   This notched-noise-type masker was used in psychoacoustical studies
+%   investigating the auditory filters' shape (the original method is
 %   described in Patterson, 1974). The noise is composed of two noise bands
 %   of width `bw` and a stopband centered at `fc` with a deviation from `fc`
 %   given by `delta`.
 %
-%   `output = make_notchednoise(fs,fc,dur,L,bw,delta)` generates a
-%   notched-noise masker with duration dur (in sec) and overall level `L`
-%   (in dB SPL) with a sampling rate of `fs` Hz. The deviation from center
-%   frequency `fc` is symmetric and is given by `delta` such that the
-%   stopband is `[fc-delta*fc fc+delta*fc]`. The left and right noise bands
-%   have a bandwidth of `bw*fc`, in Hz. If `delta=0` then a broadband noise
-%   is returned.
+%   Examples:
+%   ---------
 %
-%   `output = make_notchednoise(fs,fc,dur,L,bw,[deltaL deltaR])` generates a
-%   notched-noise masker with an asymmetric configuration. `deltaL` and
-%   `deltaR` denote the left and right deviations from `fc`, respectively.
-%   In this case the stopband is `[fc-deltaL*fc fc+deltaR*fc]`.
+%   The following shows the spectrum and a spectogram of a typical notched
+%   noise masker used in the Patterson study:::
+%
+%     fc    =  4000;  
+%     fs    = 16000;
+%     dur   =     1;
+%     L     =   100;  
+%     bw    =    .5;
+%     delta =    .2;
+%     outsig = notchednoise(fc,fs,dur,L,bw,delta);
+%
+%     figure(1);
+%     plotfftreal(fftreal(outsig),fs,100);
+%
+%     figure(2);
+%     sgram(outsig,fs,80);
 % 
 %   References: patterson1974auditory moore1990auditory
 
@@ -33,13 +53,10 @@ if ~isnumeric(delta) || ~isempty(find(delta<0,1))
 end;
 
 %% Generate broadband Gaussian noise
-n = round(dur*fs);
-if mod(n,2) ~= 0
-    n = n+1;
-end
+% Make sure the length is even
+n = round(dur*fs/2)*2;
 
-noise = randn(1,n);
-noise = noise./max(noise);% Normalize to 1
+noise = randn(n,1);
 
 n_ramp = round(10E-3*fs);% Default = 10-ms Hanning on/off ramps
 
@@ -52,15 +69,14 @@ noise = rampsignal(noise,n_ramp);
 % Zero padding to account for FIR delay (l = IR length)
 
 l = 1024;% Length of filter impulse response
-noiseZP = [zeros(1,l) noise zeros(1,l)];
+noiseZP = [zeros(l,1); noise; zeros(l,1)];
 
 % Set overall level in dB SPL
-% noiseZP = setdbspl(noiseZP,L);
-noiseZP = gaindb(noiseZP,L);
-
+noiseZP = setdbspl(noiseZP,L);    
+    
 %% If delta = 0 then filter is not required
 if isscalar(delta) && delta == 0
-    output = noiseZP;
+    outsig = noiseZP;
 end
 %% Multiband filter design (FIR filter)
 if isscalar(delta) && delta > 0
@@ -85,7 +101,7 @@ if isscalar(delta) && delta > 0
     % plot(f,m,w/pi,abs(h),'--'),grid on
     % xlabel('Normalized frequency'), ylabel('Magnitude'), title('Filter response')
     % Apply filter:
-    output = filter(b,1,noiseZP);
+    outsig = filter(b,1,noiseZP);
 elseif ~isscalar(delta) 
     if length(delta) > 2
         error('%s: Stopband is not correctly specified.',upper(mfilename));
@@ -111,18 +127,18 @@ elseif ~isscalar(delta)
     % plot(f,m,w/pi,abs(h),'--'),grid on
     % xlabel('Normalized frequency'), ylabel('Magnitude'), title('Filter response')
     % Apply filter:
-    output = filter(b,1,noiseZP);
+    outsig = filter(b,1,noiseZP);
 end
 
 %% Plot results (uncomment if needed)
 % fft_noise1 = fft(noiseZP)./(n+2*l);
-% fft_noise2 = fft(output)./(n+2*l);
+% fft_noise2 = fft(outsig)./(n+2*l);
 % figure
 % % Time domain
 % subplot(2,1,1)
 % plot(noiseZP), hold on
-% plot(output,'--r'), hold off
-% legend('Input','Output')
+% plot(outsig,'--r'), hold off
+% legend('Input','Outsig')
 % xlabel('Samples'),ylabel('Amplitude'),title('Time domain')
 % % Frequency domain
 % subplot(2,1,2)

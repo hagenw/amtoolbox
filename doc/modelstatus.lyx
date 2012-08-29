@@ -65,7 +65,7 @@ Status of the AMToolbox models
 
 \begin_layout Standard
 \begin_inset Tabular
-<lyxtabular version="3" rows="16" columns="6">
+<lyxtabular version="3" rows="21" columns="6">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="0pt">
 <column alignment="center" valignment="middle" width="1.5cm">
@@ -87,7 +87,7 @@ Status of the AMToolbox models
 \begin_inset Text
 
 \begin_layout Plain Layout
-Documenation and parameter handling
+Documentation and parameter handling
 \end_layout
 
 \end_inset
@@ -662,7 +662,7 @@ Jelfs 2011
 </cell>
 </row>
 <row>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -671,7 +671,7 @@ Dietz 2011
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -683,7 +683,7 @@ Dietz 2011
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -692,7 +692,7 @@ Dietz 2011
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -701,13 +701,293 @@ Dietz 2011
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 \begin_inset Formula $\checkmark$
 \end_inset
 
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Verhulst 2012
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Majdak & Baumgartner 2012
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+May 2012
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Faller & Meerima 2004
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Poulsen 2012
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -1170,6 +1450,15 @@ Chapter 3: Acquisition and Representation of Head-related Transfer Functions
 Authors: Enzner, Antweiler, Spors 
 \end_layout
 
+\begin_layout Itemize
+Requirements: The chapter focuses on capturing of HRTFs, and not modelling,
+ so they is no connection to the toolbox.
+\end_layout
+
+\begin_layout Itemize
+Status: No further requirements.
+\end_layout
+
 \begin_layout Subsection
 Chapter 4: From Lateralization to Surround Sound: Assessment of Localization
  Performance in Spatial-audio Applications
@@ -1177,6 +1466,14 @@ Chapter 4: From Lateralization to Surround Sound: Assessment of Localization
 
 \begin_layout Itemize
 Authors: Majdak, Laback
+\end_layout
+
+\begin_layout Itemize
+Requirements: Langendijk and new model Majdak/Baumgartner
+\end_layout
+
+\begin_layout Itemize
+Status: Langendijk, new model can go in without to much work.
 \end_layout
 
 \begin_layout Subsection
@@ -1188,13 +1485,14 @@ Authors: Larsen, Buchholz, Dau, Kohlrausch, van de Par,
 \end_layout
 
 \begin_layout Itemize
-Requirements: The binaural model developed by Tobias May and a Gaussian
- Mixture Model toolbox, which is freely available for download.
+Requirements: This chapter deals with the combination of the Breebaart model
+ and Faller & Meerimaas approach.
+ Therefore, both models are needed as well as their concatenation.
 \end_layout
 
 \begin_layout Itemize
-Status: Tobias May will send the model for inclusion into AMToolbox.
- After that, some integration work regarding the gammatone filters is expected.
+Status: Only the Breebaart models is currently in the toolbox.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -1248,6 +1546,15 @@ Chapter 10: Binaural Assessment of Multi-channel Reproduction
 Authors: Wierstorf, Spors, Raake 
 \end_layout
 
+\begin_layout Itemize
+Requirements: The Lindemann and Dietz model
+\end_layout
+
+\begin_layout Itemize
+Status: Lindemann is completed.
+ See the table in the first section for the exact status of the Dietz model.
+\end_layout
+
 \begin_layout Subsection
 Chapter 11: Optimization and Assessment of Binaural Algorithms for Hearing
  Aids
@@ -1255,6 +1562,30 @@ Chapter 11: Optimization and Assessment of Binaural Algorithms for Hearing
 
 \begin_layout Itemize
 Authors: Schlesinger 
+\end_layout
+
+\begin_layout Itemize
+Requirements: Speech intelligibility models, STI and a GPL optimization
+ toolbox: 
+\begin_inset Quotes eld
+\end_inset
+
+GAOT
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://daimi.au.dk/~pmn/Matlab/dochome/toolbox/GAOT/ "
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Status: STI in AMToolbox?
 \end_layout
 
 \begin_layout Subsection
@@ -1273,12 +1604,30 @@ Chapter 13: Binaural Analysis of Artefacts in Parametric Spatial Audio
 Authors: Pulkki, Takanen, Santala
 \end_layout
 
+\begin_layout Itemize
+Requirements: The Verhulst model and the count-comparison model developed
+ in Helsinki
+\end_layout
+
+\begin_layout Itemize
+Status: Neither models are currently included in the toolbox.
+\end_layout
+
 \begin_layout Subsection
 Chapter 14: Binaural De-reverberation
 \end_layout
 
 \begin_layout Itemize
 Authors: Tsilfidis, Westermann, Buchholz, Georganti, Mourjopoulos 
+\end_layout
+
+\begin_layout Itemize
+Requirements: The chapter focuses on de-reverberation methods, and does
+ not require any new models.
+\end_layout
+
+\begin_layout Itemize
+Status: No further requirements.
 \end_layout
 
 \begin_layout Subsection
@@ -1290,6 +1639,16 @@ Chapter 15: Binaural Localization and Recognition of Speakers in Complex
 Authors: May, van de Par, Kohlrausch 
 \end_layout
 
+\begin_layout Itemize
+Requirements: The binaural model developed by Tobias May and a Gaussian
+ Mixture Model toolbox, which is freely available for download.
+\end_layout
+
+\begin_layout Itemize
+Status: Tobias May will send the model for inclusion into AMToolbox.
+ After that, some integration work regarding the gammatone filters is expected.
+\end_layout
+
 \begin_layout Subsection
 Chapter 16: Predicting Binaural Speech Intelligibility for Architectural
  Acoustics
@@ -1297,6 +1656,16 @@ Chapter 16: Predicting Binaural Speech Intelligibility for Architectural
 
 \begin_layout Itemize
 Authors: Culling, Lavandier, Jelfs 
+\end_layout
+
+\begin_layout Itemize
+Requirements: The Jelfs 2011 model
+\end_layout
+
+\begin_layout Itemize
+Status: The Jelfs 2011 is already in the toolbox.
+ Please see the table in the first section for the exact status of the Jelfs
+ 2011 model.
 \end_layout
 
 \begin_layout Subsection

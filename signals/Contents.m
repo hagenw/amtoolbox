@@ -2,6 +2,7 @@
 %
 %  Monaural signal generators
 %    TRANSPOSEDTONE -  Transposed tone stimuli
+%    NOTCHEDNOISE   -  Notched noise
 %
 %  Binaural signal generators
 %    BMSIN          -  Binaural modulated sinusoid
