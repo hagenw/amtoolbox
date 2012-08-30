@@ -32,3 +32,9 @@ if ii==nii
 else
     fprintf(1,'\rRun %.0f/%.0f',ii,nii);
 end
+
+% Octave didn't show the output directly in a function call, in order to do so
+% it has explicitly flushed to stdout
+if isoctave
+    fflush(1);
+end
