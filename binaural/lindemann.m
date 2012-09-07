@@ -55,6 +55,30 @@ function [crosscorr,t,ild,cfreq] = lindemann(insig,fs,varargin)
 %   |ihcenvelope|_ or |lindemannbincorr|_ at the end of the line of input
 %   arguments.
 %
+%   Examples:
+%   ---------
+%
+%   This example shows how to the binaural activity map for one frequency channel of
+%   the lindemann binaural model for a sinusoid with a binaural modulation
+%   rate of 2 Hz. :::
+%     
+%     fs = 44100; % Sampling rate    
+%     f = 500;    % Frequency of the sinusoid
+%     mf = 2;     % Binaural modulation frequency
+%
+%     % Generate 1~s binaural modulated sinusoid
+%     sig = bmsin(f,mf,fs);
+%
+%     % Model paramter (Note: T_int (ms) should be a multiple of 1000/f == 2)
+%     % Begin of the storage of the cross-correlation is set to 1, because we have a
+%     % non-stationary signal
+%
+%     % Calculate binaural cross-correlation
+%     [cc,t] = lindemann(sig,fs,'T_int',6);
+%
+%     % Plot frequency channel 11, due to round(freqtoerb(500))==11
+%     plotlindemann(cc,t,'fc',f);
+%
 %   See also: lindemannbincorr, plotlindemann, gammatone, ufilterbankz
 %
 %   Demos: demo_lindemann

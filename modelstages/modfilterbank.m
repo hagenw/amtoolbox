@@ -21,6 +21,8 @@ function [outsig,mfc] = modfilterbank(insig,fs,fc,varargin)
 %   the real value of the filters are returned, and for higher modulation
 %   center frequencies, the absolute value (the envelope) is returned.
 %  
+%   References: fassel1993modulation dau1997mapI
+%
 %   See also: dau1997preproc
   
 % AUTHOR: Stephan Ewert

@@ -1,57 +1,49 @@
-function [ out ] = plotlangendijk( p,rang,tang,name,latang,delta,deltat,cond,colbar )
+function out = plotlangendijk( p,rang,tang,varargin)
 %PLOTLANGENDIJK plots pdf-matrixes with gray colormap according to Langendijk et al. (2002)
 %   Usage:    plotlangendijk(p,rang,tang)
-%             plotlangendijk(p,rang,tang,name)
-%             plotlangendijk(p,rang,tang,name,latang,delta,deltat,cond)
-%             plotlangendijk(p,rang,tang,name,latang,delta,deltat,cond,colbar)
 %
 %   Input parameters:
 %     p       : pdf-matrix for all target and response positions
 %     rang    : response angles
 %     tang    : target angles
-%     name,latang,delta,deltat,cond: only for plot title
-%     colbar  : switch for plotting colorbar-legend, use string 'colorbar' 
-%               for switching on
 %
-%   XXX Description is missing
+%   `plotlangendijk(p,rang,tang)` plots predicted probability mass vectors
+%   as a function of response angles *rang* and target angles *tang* with
+%   gray color coded probabilities similar to Langendijk et al. (2002).
+%
+%   `h=plotlangendijk(...)` additionally returns the figure handle.
+%
+%   `plotlagendijk` takes the following flags at the end of the line of input
+%   arguments:
+%
+%     'colorbar'   Display the colorbar. This is the default.
+%    
+%     'nocolorbar'  Do not display the colorbar.
 %
 %   See also: langendijk
 %
-%   References:langendijk2002contribution
+%   References: langendijk2002contribution
   
-  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
-% latest update: 2010-08-05
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% figure('Name','Localization model','NumberTitle','off');
-% clf
-pcolor(tang,rang,p)
-set(gcf,'Colormap',getlangecolormap);
-shading interp
-axis square
+    definput.flags.colorbar={'colorbar','nocolorbar'};
+    
+    [flags,kv]=ltfatarghelper({},definput,varargin);
 
-xlabel('Target Angle (°)')
-ylabel('Response Angle (°)')
-if ~exist('name','var')
-    name='localization model';
-end
-if ~exist('latang','var')
-    title(name)
-else
-    title(sprintf('condition: %s;  name: %s;  lateral angle: %d° +- %s°;  target: +- %s°',cond,name,latang,num2str(delta/2,'%7.1f'),num2str(deltat/2,'%7.1f')))
-end
-
-% plot legend
-if ~exist('colbar','var')
-    colbar='no';
-end
-if strcmp(colbar, 'colorbar')==1
-   colorbar
-end
-
-out=gcf;
+    pcolor(tang,rang,p);
+    set(gcf,'Colormap',getlangecolormap);
+    shading interp
+    axis image
+    
+    xlabel('Target Angle (Â°)')
+    ylabel('Response Angle (Â°)')
+    
+    if flags.do_colorbar
+        colorbar
+    end
+    
+    out=gcf;
+    
 end
 
 function langecmap = getlangecolormap()

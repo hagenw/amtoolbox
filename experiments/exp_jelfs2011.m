@@ -10,7 +10,7 @@ function output = exp_jelfs2011(varargin)
 %
 %     'noplot'   Don't plot, only return data.
 %
-%     'fig4'   Reproduce Fig. 4. XXX Description of fig 4 and the output format.
+%     'fig4'     Reproduce Fig. 4. XXX Description of fig 4 and the output format.
 %
 %   Examples:
 %   ---------

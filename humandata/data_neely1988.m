@@ -22,11 +22,11 @@ function tau  = data_neely1988(F,L,varargin)
 %   Examples:
 %   ---------
 %
-%   Figure XXX in Neely et al. (1988) can be reproduced using:::
+%   Figure 2 in Neely et al. (1988) can be reproduced using:::
 %
-%     F=[1000 2000 5000 8000];
+%     F=[250 500 1000 2000 5000 8000];
 %     tau=data_neely1988(F,[40 60 80 100]);
-%     semilogx(F,tau','k-');
+%     loglog(F,tau','k-');
 %     xlabel('CF');
 %     ylabel('Latency [ms]')
 %

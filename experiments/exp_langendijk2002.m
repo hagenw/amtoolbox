@@ -85,6 +85,7 @@ function output = exp_langendijk2002(varargin)
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+  path = mfilename('fullpath');
   dtfdata=load(['langendijk2002-' listener '.mat']);
   % loads hM data for all conditions 
   % data can be recalculated by calling data_langendijk2002('expdata')
@@ -117,27 +118,45 @@ function output = exp_langendijk2002(varargin)
   if flags.do_plot
     figure
     clf
-    
     % pdf plots with actual responses
     subplot(2,3,1)
-    plotlangendijk(pb,dtfdata.pol,dtfdata.pol,[listener '; ' 'baseline']);
-    hold on; h=plot( dtfdata.targetb, dtfdata.responseb, 'ko'); set(h,'MarkerFaceColor','w')
+    hold all;    
+    plotlangendijk(pb,dtfdata.pol,dtfdata.pol);
+    title([listener '; ' 'baseline']);    
+    h=plot( dtfdata.targetb, dtfdata.responseb, 'ko');
+    set(h, 'MarkerFaceColor','w');
+    
     subplot(2,3,2)
-    plotlangendijk(p2o,dtfdata.pol,dtfdata.pol,[listener '; ' '2-oct (4-16kHz)']);
-    hold on; h=plot( dtfdata.targetc, dtfdata.response2o, 'ko'); set(h,'MarkerFaceColor','w')
+    hold all;
+    plotlangendijk(p2o,dtfdata.pol,dtfdata.pol);
+    title([listener '; ' '2-oct (4-16kHz)']);
+    h=plot( dtfdata.targetc, dtfdata.response2o, 'ko');
+    set(h, 'MarkerFaceColor','w');
+    
     subplot(2,3,3)
-    plotlangendijk(p1ol,dtfdata.pol,dtfdata.pol,[listener '; ' '1-oct (low: 4-8kHz)']);
-    hold on; h=plot( dtfdata.targetc, dtfdata.response1ol, 'ko'); set(h,'MarkerFaceColor','w')
+    hold all;
+    plotlangendijk(p1ol,dtfdata.pol,dtfdata.pol);
+    title([listener '; ' '1-oct (low: 4-8kHz)']);
+    h=plot( dtfdata.targetc, dtfdata.response1ol, 'ko');
+    set(h, 'MarkerFaceColor','w');
+    
     subplot(2,3,4)
-    plotlangendijk(p1om,dtfdata.pol,dtfdata.pol,[listener '; ' '1-oct (middle: 5.7-11.3kHz)']);
-    hold on; h=plot( dtfdata.targetc, dtfdata.response1om, 'ko'); set(h,'MarkerFaceColor','w')
+    hold all;
+    plotlangendijk(p1om,dtfdata.pol,dtfdata.pol);
+    title([listener '; ' '1-oct (middle: 5.7-11.3kHz)']);
+    h=plot( dtfdata.targetc, dtfdata.response1om, 'ko');
+    set(h, 'MarkerFaceColor','w');
+    
     subplot(2,3,5)
-    plotlangendijk(p1oh,dtfdata.pol,dtfdata.pol,[listener '; ' '1-oct (high: 8-16kHz)']);
-    hold on; h=plot( dtfdata.targetc, dtfdata.response1oh, 'ko'); set(h,'MarkerFaceColor','w')
+    hold all;
+    plotlangendijk(p1oh,dtfdata.pol,dtfdata.pol);
+    title([listener '; ' '1-oct (high: 8-16kHz)']);
+    h=plot( dtfdata.targetc, dtfdata.response1oh, 'ko');
+    set(h,'MarkerFaceColor','w')
     
     % likelihood statistic
     subplot(2,3,6)
-    plotlikelilangendijk(la,le,ci)
+    plotlikelilangendijk(la,le,ci);
   end
 
 
