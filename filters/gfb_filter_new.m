@@ -45,7 +45,7 @@ filter.type = 'gfb_Filter';
 if (nargin == 2)
   filter.coefficient = arg1;
   filter.gamma_order = arg2;
-elseif (nargin == 3) | (nargin == 4)
+elseif (nargin == 3) || (nargin == 4)
   sampling_rate_hz    = arg1;
   center_frequency_hz = arg2;
   filter.gamma_order  = arg3;
