@@ -7,8 +7,8 @@ function [hairc_fine, hairc_mod, fc, hairc_ild] = dietz2011(insig,fs,varargin)
 %       fs          : sampling rate (Hz)
 %
 %   Output parameters:
-%       hairc_fine  : Structure containing the haircell information. See
-%                     the help text for a description of the fields.
+%       hairc_fine  : Structure containing the haircell information.
+%
 %   `dietz2011(insig,fs)` calculates interaural phase, time and level
 %   differences of fine- structure and envelope of the signal, as well as
 %   the interaural coherence, which can be used as a weighting function.

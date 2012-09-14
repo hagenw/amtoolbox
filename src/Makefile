@@ -4,14 +4,18 @@ CFLAGS=-O2 -Wall -fPIC -std=c99
 
 files = adaptloop.o meddishaircell.o
 
-all: libamtoolbox.a
+all: libamtoolbox.a verhulst2012
 
 libamtoolbox.a: $(files) 
 	ar rvu libamtoolbox.a $(files_unix)
 	ranlib libamtoolbox.a
 
+verhulst2012:
+	$(MAKE) -C verhulst
+
 %.o: %.c Makefile
 	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm *.o *.a 
+	rm *.o *.a
+	$(MAKE) -C verhulst clean

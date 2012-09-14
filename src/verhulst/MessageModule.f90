@@ -9,8 +9,8 @@ MODULE MessageModule
   INTEGER, PARAMETER :: ALLOCATIONFAILURE = 4
   INTEGER, PARAMETER :: CREATEDIRECTORYERROR = 5
  
-  character(len=100), dimension(5), parameter :: MessageText = & 
-       [character(len=100) :: "Parameter " // &
+  character(len=200), dimension(5), parameter :: MessageText = & 
+       [character(len=200) :: "Parameter " // &
        "file could not be read correctly. Make sure it is a correct parameter" // &
        "file and its not read only or in use by another program. Program will" // &
        "run using the values that are read correctly.", "-window cant be" // &
@@ -25,8 +25,8 @@ MODULE MessageModule
        "is a valid directory name and the location is writable. Output files" // &
        "will not be written."]
   
-  character(len=28), dimension(5), parameter :: MessageTitle = &
-       [character(len=28) :: "Error reading "//FN_parameters, &
+  character(len=10), dimension(5), parameter :: MessageTitle = &
+       [character(len=100) :: "Error reading "//FN_parameters, &
        "Initialization error", &
        "Error reading "//FN_gamma, &
        "Memory allocation error", &

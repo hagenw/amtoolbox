@@ -20,9 +20,9 @@ EFLAGS = -o
 #now come the rules
 CC = gfortran
 
-coch: $(OBJS)
-	$(CC) $(EFLAGS) coch $(OBJS)
-	cp coch ../../verhulst
+verhulst2012: $(OBJS)
+	$(CC) $(EFLAGS) verhulst2012 $(OBJS)
+	cp verhulst2012 ../../bin/
 
 cochlea.o: Declare.f90 filesmodule.mod cochlea.f90 wavereadmodule.mod messagemodule.mod graphsmodule.mod
 	$(CC) $(OFLAGS) cochlea.f90
@@ -166,4 +166,4 @@ wavereadmodule.mod: WaveReadModule.o WaveReadModule.f90
 
 #clean rule. Remove all object files, backup files AND the executable
 clean:
-	rm *.o *.mod *~ coch
+	rm *.o *.mod *~ verhulst2012
