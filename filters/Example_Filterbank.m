@@ -40,7 +40,7 @@ end
 %%% plot the frequency response of the individual filters: %%%         
 
 impulse = [1, zeros(1,8191)];                                          
-[impulse_response, analyzer] = gfb_analyzer_fprocess(analyzer, impulse);
+[impulse_response, analyzer] = gfb_analyzer_process(analyzer, impulse);
 frequency_response = fft(real(impulse_response)');                     
 frequency = [0:8191] * sampling_rate_hz / 8192;                        
 
