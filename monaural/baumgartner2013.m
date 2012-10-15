@@ -84,7 +84,7 @@ function varargout = baumgartner2013( target,template,varargin )
 %   See also: plotbaumgartner2013, data_baumgartner2013,
 %   exp_baumgartner2013
 %
-%   Examples:
+%   Example:
 %   ---------
 %
 %   To compute and visualize the baseline prediction (localizing broadband  
