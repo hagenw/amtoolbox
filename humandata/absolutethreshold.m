@@ -16,6 +16,9 @@ function [t,table]=absolutethreshold(freq,varargin)
 %
 %     'iso226_2003'  Free field binaural as given by the ISO 226:2003
 %                    standard.
+
+%     'iso389_2005'  Diffuse field binaural as given by the ISO 389-7:2005
+%                    standard.
 %
 %     'map'          The ISO 226:2003 standard coverted to minimal
 %                    audible pressure using the method from Bentler &
