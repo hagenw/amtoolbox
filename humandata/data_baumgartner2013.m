@@ -1,0 +1,122 @@
+function data = data_baumgartner2013(varargin)
+%DATA_BAUMGARTNER2013  Data from Baumgartner et al. (2013)
+%   Usage: data = data_baumgartner2013(flag)
+%
+%   `data_baumgartner2013(flag)` returns data of figures, the table, or 
+%   the pool of listener-specific models from Baumgartner et al. (2013) 
+%   describing a model for sound localization in sagittal planes (SPs) 
+%   on the basis of listener-specific directional transfer functions (DTFs).
+%
+%   The flag may be one of:
+%
+%     'noplot'       Don't plot, only return data. This is the default.
+%
+%     'plot'         Plot the data.
+%  
+%     'tab1'         Calibration data for listener pool listed in Table 1.
+%                    structure: 
+%                      data.id      listener ID
+%                      data.u       listener-specific uncertainty
+%
+%     'pool'         DTFs and calibration data of the pool.
+%                    structure: 
+%                      data.id      listener ID
+%                      data.u       listener-specific uncertainty
+%                      data.dtfs    matrix containing DTFs.
+%                                   Dimensions: time, position, channel 
+%                                   (more details see doc: HRTF format)
+%                      data.fs      sampling rate of impulse responses
+%                      data.pos     source-position matrix referring to 
+%                                   2nd dimension of hM and formated acc.
+%                                   to meta.pos (ARI format).
+%                                   6th col: lateral angle 
+%                                   7th col: polar angle
+%
+%   See also: baumgartner2013, exp_baumgartner2013
+%
+%   Examples:
+%   ---------
+%
+%   To get calibration data of pool of listener-specific models, use:::
+%
+%     data_baumgartner2013('tab1');
+%
+%   To get all listener-specific data of the pool, use:::
+%
+%     data_baumgartner2013('pool');
+%
+%   To get experimental data from Fig. 8, use:::
+%
+%     data_baumgartner2013('fig8');
+%
+%   References:baumgartner2013
+
+% AUTHOR : Robert Baumgartner
+
+%% ------ Check input options --------------------------------------------
+
+% Define input flags
+% definput.flags.plot = {'noplot','plot'};
+definput.flags.type = {'missingflag','tab1','pool'};
+
+% Parse input options
+[flags,keyvals]  = ltfatarghelper({},definput,varargin);
+
+if flags.do_missingflag
+  flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+             sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end;
+    
+
+%% Table 1 (model calibration)  
+if flags.do_tab1 || flags.do_pool
+  
+    listeners={ ...
+         'NH12'   1.6;  ...
+         'NH15'   2.0;  ...
+         'NH21'   1.8;  ...
+         'NH22'   1.9;  ...
+         'NH33'   2.3;  ...
+         'NH39'   2.2;  ...
+         'NH41'   2.9;  ...
+         'NH42'   1.8;  ...
+         'NH43'   1.9;  ...
+         'NH46'   1.7;  ...
+         'NH55'   2.0;  ...
+         'NH58'   1.4;  ...
+         'NH62'   2.2;  ...
+         'NH64'   2.0;  ...
+         'NH69'   2.1;  ...
+         'NH71'   2.0;  ...
+         'NH72'   2.1;  ...
+         };
+
+    f={'id', 'u'};
+    data=cell2struct(listeners,f,2);
+    
+    % sort acc. to ascending exp. PE
+    data = data([12,1,10,3,14,16,8,9,4,2,7,15,17,5,11,6,13]); 
+    
+end
+
+%% Listener pool (listener-specific SP-DTFs)
+if flags.do_pool % load also DTFs of SPs
+
+  hpath = which('hrtfinit'); % find local path of hrtf repository
+  hpath = hpath(1:end-10);
+
+  for ii = 1:length(data)
+    
+    load([hpath 'hrtf_M_baumgartner2013 ' data(ii).id])
+    data(ii).fs = stimPar.SamplingRate;
+    data(ii).pos = meta.pos;
+    data(ii).dtfs = double(hM);
+
+  end
+
+end
+    
+
+
+end

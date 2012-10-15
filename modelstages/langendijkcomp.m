@@ -1,19 +1,25 @@
-function [ out ] = langendijkcomp( in1,in2,varargin )
+function [ si ] = langendijkcomp( target,template,varargin )
 %LANGENDIJKCOMP Comparison process according to Langendijk et al. (2002)
-%   Usage:        [ out ] = langecomp( in1,in2,s,do,cp )
+%   Usage:        [ si ] = langendijkcomp( target,template )
+%                 [ si ] = langendijkcomp( target,template,s,do,flags )
 %
 %   Input parameters:
-%     in1    :  modified DFT for one target position and both ears
-%     in2    :  stored DFT-templates for all positions and both ears
+%     target   :  modified DFT for one target position and both ears
+%     template :  internal DTF-templates for all positions and both ears
 %
 %   Output parameters:
-%     out    :  probability density function (pdf)
+%     si       :  monaural similarity indices (one for each template entry)
 %
-%   XXX Description is missing.
+%   LANGENDIJKCOMP compares the spectral features of an internal spectral
+%   representation of a target sound with an internal template. As spectral
+%   similarity criterion either the crosscorrelation coefficient ('xcorr') 
+%   or a mapped version of the standard deviation of inter-spectral 
+%   differences ('std') can be used.
 %
 %   The function accepts the following optional parameters:
 %
-%     's', s     Standard deviation of transforming Gaussian function.
+%     's', s     Standard deviation of transforming Gaussian function 
+%                (only for comparison process: std).
 %                The default value is 2.
 %
 %     'do',do    Differential order. The default value is 0.
@@ -22,8 +28,6 @@ function [ out ] = langendijkcomp( in1,in2,varargin )
 %
 %     'xcorr'    Use the 'xcorr' comparison process. 
 %
-%     'bal',bal  balance of left to right channel. The default is 1.
-%
 %   See also: langendijk
   
   
@@ -31,54 +35,88 @@ function [ out ] = langendijkcomp( in1,in2,varargin )
 
 
 definput.import={'langendijkcomp'};
-[flags,kv]=ltfatarghelper({'do','s','bal'},definput,varargin);
-  
-if flags.do_std
-  
-  ptemp=zeros(size(in2,2),size(in2,3)); % initialisation
-  for ch=1:size(in2,3)
-    for ind=1:size(in2,2)
-      if kv.do==0
-        z=in1(:,ch)-in2(:,ind,ch);
-      else
-        z=diff(in1(:,ch),kv.do)-diff(in2(:,ind,ch),kv.do);
-      end
-      sigma=std(z,1);
-      ptemp(ind,ch)=normpdf(sigma,0,kv.s);
-    end
-  end
-  if size(in2,3)==1
-    p=ptemp;
-  else
-    p=(kv.bal*ptemp(:,1)+1/kv.bal*ptemp(:,2))/2; % balance
-  end
-  p=1/sum(p).*p;
-  % p=p/max(p); % normalisation
-    
-end;
-  
-if flags.do_xcorr
+[flags,kv]=ltfatarghelper({'s','do'},definput,varargin);
 
-  ptemp=zeros(size(in2,2),size(in2,3)); % initialisation
-  for ch=1:size(in2,3)
-    for ind=1:size(in2,2)
-      if kv.do==0
-        z=corrcoef(in1(:,ch),in2(:,ind,ch));
-      else
-        z=corrcoef(diff(in1(:,ch),kv.do),diff(in2(:,ind,ch),kv.do));
-      end
-      z=z(2);
-      ptemp(ind,ch)=(z+1)/2;
-    end
-  end
-  if size(in2,3)==1
-    p=ptemp;
-  else
-    p=(kv.bal*ptemp(:,1)+1/kv.bal*ptemp(:,2))/2; % balance
-  end
-  
+
+%% Optional differentiation
+
+if kv.do ~= 0
+	target = diff(target,kv.do);
+    template = diff(template,kv.do);
 end
 
-out=p;
+
+%% Comparison process
+
+if flags.do_std
+    
+    idiff = repmat(target,[1,size(template,2),1]) - template;
+    sigma = squeeze(std(idiff,1));
+    si = normpdf(sigma,0,kv.s);
+    
+elseif flags.do_xcorr
+    
+    r = zeros(size(template,2),size(template,3));
+    for ch = 1:size(template,3)
+        for ii = 1:size(template,2)
+            tmp = corrcoef(target(:,ch),template(:,ii,ch));
+            r(ii,ch) = tmp(2);
+        end
+    end
+    si = (r+1)/2;
+    
+end
+
+end
+
+
+
+% if flags.do_std
+%   
+%   ptemp=zeros(size(in2,2),size(in2,3)); % initialisation
+%   for ch=1:size(in2,3)
+%     for ind=1:size(in2,2)
+%       if kv.do==0
+%         z=in1(:,ch)-in2(:,ind,ch);
+%       else
+%         z=diff(in1(:,ch),kv.do)-diff(in2(:,ind,ch),kv.do);
+%       end
+%       sigma=std(z,1);
+%       ptemp(ind,ch)=normpdf(sigma,0,kv.s);
+%     end
+%   end
+%   if size(in2,3)==1
+%     p=ptemp;
+%   else
+%     p=(kv.bal*ptemp(:,1)+1/kv.bal*ptemp(:,2))/2; % balance
+%   end
+%   p=1/sum(p).*p;
+%   % p=p/max(p); % normalisation
+%     
+% end;
+%   
+% if flags.do_xcorr
+% 
+%   ptemp=zeros(size(in2,2),size(in2,3)); % initialisation
+%   for ch=1:size(in2,3)
+%     for ind=1:size(in2,2)
+%       if kv.do==0
+%         z=corrcoef(in1(:,ch),in2(:,ind,ch));
+%       else
+%         z=corrcoef(diff(in1(:,ch),kv.do),diff(in2(:,ind,ch),kv.do));
+%       end
+%       z=z(2);
+%       ptemp(ind,ch)=(z+1)/2;
+%     end
+%   end
+%   if size(in2,3)==1
+%     p=ptemp;
+%   else
+%     p=(kv.bal*ptemp(:,1)+1/kv.bal*ptemp(:,2))/2; % balance
+%   end
+%   
+% end
+% 
+% out=p;
 
 
