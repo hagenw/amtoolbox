@@ -1,9 +1,27 @@
 function varargout=exp_baumgartner2013(varargin)
 %EXP_BAUMGARTNER2013   Figures from Baumgartner et al. (2013)
-%   Usage: output = exp_baumgartner2013(flag)
+%   Usage: data = exp_baumgartner2013(flag)
 %
-%   `exp_baumgartner2013(flags,... )` reproduces figures of the book 
+%   `exp_baumgartner2013(flags)` reproduces figures of the book 
 %   chapter from Baumgartner et al. (2013).
+%
+%   Optional fields of output *data* structure:
+%      data.id        listener ID
+%      data.u         listener-specific uncertainty
+%      data.dtfs      matrix containing DTFs.
+%                     Dimensions: time, position, channel 
+%                     (more details see doc: HRTF format)
+%      data.fs        sampling rate of impulse responses
+%      data.pos       source-position matrix referring to 2nd dimension of 
+%                     hM and formated acc. to meta.pos (ARI format).
+%                     6th col: lateral angle 
+%                     7th col: polar angle
+%      data.spdtfs    DTFs of specific SPs
+%      data.polangs   polar angles corresponding to *data.spdtfs*
+%      data.p         predicted polar angular response PMVs
+%      data.respangs  polar response angules corresponding to *data.p*
+%      data.pe        predicted local polar RMS error in degrees
+%      data.qe        predicted quadrant error
 %
 %   The following flags can be specified;
 %
@@ -51,6 +69,39 @@ function varargout=exp_baumgartner2013(varargin)
 %               Panning ratio of 0: Only front loudspeaker active. 
 %               Panning ratio of 1: Only rear loudspeaker active. 
 %
+%     'fig19'   Reproduce Fig. 19:
+%               Prediction matrices (PMVs) for different loudspeaker spans
+%               and NH12. 
+%               Left: Span of 0° (single-loudspeaker reproduction, baseline). 
+%               Center: Span of 30°. 
+%               Right: Span of 60°. 
+%               P: Predicted performance.
+%
+%     'fig20'   Reproduce Fig. 20:
+%               Increase in localization errors as a function of the
+%               loudspeaker span. 
+%               Circles: Averages over all listeners from the pool. 
+%               Error bars: +/- 1 standard deviation of the averages.
+%
+%     'fig22'   Reproduce Fig. 22:
+%               Predictions for the surround setups in the VBAP configuration. 
+%               Left: 5.1 setup, panning between the loudspeakers L and LS. 
+%               Center: 10.2 setup (DSX), panning from L (polar angle of 0°) 
+%               via LH2 (55°) to LS (180°). 
+%               Right: 9.1 setup (Auro-3D), panning from L (0°) via 
+%               LH1 (34°) and LSH (121°) to LS (180°). 
+%               Desired polar angle: Continuous scale representing the VBAP 
+%               across pair-wise contributing loudspeakers. 
+%               All other conventions as in Fig. 18.
+%
+%     'fig23'   Reproduce Fig. 23:
+%               Predictions for two modifications to the 9.1 setup (Auro 3D). 
+%               Left: Original setup, loudspeakers LS and LSH 
+%               at the azimuth of 110°. 
+%               Center: LSH at the azimuth of 130°. 
+%               Right: LS and LSH at the azimuth of 130°. 
+%               All other conventions as in Fig. 22.
+%
 %   See also: baumgartner2013, data_baumgartner2013
 %
 %   Examples:
@@ -62,13 +113,13 @@ function varargout=exp_baumgartner2013(varargin)
 %
 %   References:baumgartner2013,lopezpoveda2001hnc pralong1996role goode1994nkf
   
-% AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
+% AUTHOR: Robert Baumgartner
 
 %% ------ Check input options --------------------------------------------
 
   definput.flags.type = {'missingflag',...
     'fig12','fig13','fig14','fig15',... % Ch. 4.1 (binaural rec.)
-    'fig18','fig22','fig23'}; % Ch. 4
+    'fig18','fig19','fig20','fig22','fig23'}; % Ch. 4
   definput.flags.plot = {'plot','noplot'};
 
   % Parse input options
@@ -91,7 +142,7 @@ if flags.do_fig12
   
   nfft = 2^12;
   range = 50;   % dB
-  ilat = 2;     % median sagittal plane
+  lat = 0;     % median sagittal plane
   fhigh = 18e3; % Hz
   da = 3;       % white frame for ticks (angles)
   df = 0.1;     % white frame for ticks (freq)
@@ -101,8 +152,11 @@ if flags.do_fig12
   
     f = 0:s(1).fs/nfft:s(ll).fs/2;
     f = f/1e3; % in kHz
-
-    mag = db(abs(fft(s(ll).spdtfs{ilat},nfft)));
+    
+    s(ll).spdtfs = [];
+    s(ll).polangs = [];
+    [s(ll).spdtfs,s(ll).polangs] = extractsp(lat,s(ll).dtfs,s(ll).pos);
+    mag = db(abs(fft(s(ll).spdtfs,nfft)));
     mag = mag(1:nfft/2+1,:,:);
     maxmag = max(max(max(mag)));
     mag = mag - maxmag;       % normalize to 0dB
@@ -113,7 +167,7 @@ if flags.do_fig12
     idf = f<fhigh/1e3;
     magl = mag(idf,:,1);
     fp = f(idf);
-    polp = s(ll).polangs{ilat};
+    polp = s(ll).polangs;
 
     subplot(1,3,ll)
     h = pcolor(fp,polp,magl');
@@ -271,6 +325,8 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
   elseif flags.do_fig14 % -------------------------------------------------
     
     ears = 1;  % NH58
+    s(ears).peexp = 23.5; % !!!
+    s(ears).qeexp = 1; % !!!
     
     if flags.do_plot
       
@@ -287,7 +343,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
       subplot(121)
       h = bar(pe(:,ears)-diag(pe));
       hold on
-%       plot(ears,exp.s(ears).pe_exp-pe(ears,ears),'k*')
+      plot(ears,s(ears).peexp-pe(ears,ears),'k*')
 
       dx = 0.42;
       peincchance = pechance-diag(pe);
@@ -306,7 +362,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
       subplot(122)
       h = bar(qe(:,ears)-diag(qe));
       hold on
-%       plot(ears,exp.s(ears).qe_exp-qe(ears,ears),'k*')
+      plot(ears,s(ears).qeexp-qe(ears,ears),'k*')
 
       dx = 0.4;
       qeincchance = qechance-diag(qe);
@@ -544,5 +600,136 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
   end
   
 end
+
+
+%% Figures 19, 20 (Effect of loudspeaker span)
+
+if flags.do_fig19 || flags.do_fig20
+  
+  s = data_baumgartner2013('pool');
+  
+  if flags.do_fig19
+    dPol = [0 30,60];
+    s = s(2); % NH12
+  elseif flags.do_fig20
+    dPol = 10:10:90; 
+  end
+  lat = 0;
+  
+  s(1).spdtfs = [];
+  [s(1).spdtfs,polang] = extractsp(lat,s(1).dtfs,s(1).pos); 
+  qeI = zeros(length(s),length(dPol));
+  peI = qeI;
+  ii = 0;
+  while ii < length(dPol)
+    ii = ii + 1;
+    
+    % find comparable angles
+    id0 = [];
+    id1 = [];
+    id2 = [];
+    for jj = 1: length(polang)
+        t0 = find( round(polang) == round(polang(jj)+dPol(ii)/2) );
+        t2 = find( round(polang) == round(polang(jj)+dPol(ii)) );
+        if ~isempty(t0) && ~isempty(t2)
+            id0 = [id0 t0];
+            id1 = [id1 jj];
+            id2 = [id2 t2];
+        end
+    end
+    pol2{ii} = (polang(id1)+polang(id2)) /2;
+    
+    w = waitbar(0,['Span: ' num2str(dPol(ii)) '°']);
+    for ll = 1:length(s)
+
+        s(ll).spdtfs = extractsp(lat,s(ll).dtfs,s(ll).pos);
+
+        % superposition
+        s(ll).dtfs2{ii} = s(ll).spdtfs(:,id1,:) + s(ll).spdtfs(:,id2,:);
+        
+        [s(ll).p1{ii},respang] = baumgartner2013(...
+          s(ll).spdtfs(:,id0,:),s(ll).spdtfs,s(ll).fs,'u',s(ll).u,...
+          'polsamp',polang);
+        s(ll).p2{ii} = baumgartner2013(...
+          s(ll).dtfs2{ii},s(ll).spdtfs,s(ll).fs,'u',s(ll).u,...
+          'polsamp',polang);
+
+        [s(ll).qe1{ii},s(ll).pe1{ii}] = pmv2ppp(...
+          s(ll).p1{ii},polang(id0),respang);
+        [s(ll).qe2{ii},s(ll).pe2{ii}] = pmv2ppp(...
+          s(ll).p2{ii},pol2{ii},respang);
+        
+        % Increse of error
+        qeI(ll,ii) = s(ll).qe2{ii} - s(ll).qe1{ii};
+        peI(ll,ii) = s(ll).pe2{ii} - s(ll).pe1{ii};
+
+        waitbar(ll/length(s),w)
+    end
+    close(w)
+  end
+  
+  if nargout == 1
+    varargout{1} = s;
+  end
+
+  if flags.do_plot
+    
+    if flags.do_fig19
+      
+      figure;
+      subplot(1,3,1)
+      plotbaumgartner2013(s(1).p1{1},polang,respang,'cmax',0.1,'nocolorbar');
+      title(['P: PE = ' num2str(s(1).pe1{1},2) '°, QE = ' num2str(s(1).qe1{1},2) '%'])
+      
+      subplot(1,3,2)
+      plotbaumgartner2013(s(1).p2{2},pol2{2},respang,'cmax',0.1,'nocolorbar');
+      title(['P: PE = ' num2str(s(1).pe2{2},2) '°, QE = ' num2str(s(1).qe2{2},2) '%'])
+            
+      subplot(1,3,3)
+      plotbaumgartner2013(s(1).p2{3},pol2{3},respang,'cmax',0.1,'nocolorbar');
+      title(['P: PE = ' num2str(s(1).pe2{3},2) '°, QE = ' num2str(s(1).qe2{3},2) '%'])
+      
+    elseif flags.do_fig20
+      
+      qeIm = mean(qeI);
+      peIm = mean(peI);
+      qeIs = std(qeI);
+      peIs = std(peI);
+
+      MarkerSize = 5;
+
+      figure
+      subplot(121)
+      errorbar(dPol,peIm,peIs,'ko-',...
+          'MarkerSize',MarkerSize,...
+          'MarkerFaceColor','k');
+      ylabel('Increase in Local Polar RMS Error (°)')
+      xlabel('Loudspeaker Span (°)')
+      set(gca,...
+          'XLim',[dPol(1)-10 dPol(end)+10],...
+          'XTick',dPol,...
+          'YLim',[-1,12.9],...
+          'YMinorTick','on')
+      axis square
+
+      subplot(122)
+      errorbar(dPol,qeIm,qeIs,'ko-',...
+          'MarkerSize',MarkerSize,...
+          'MarkerFaceColor','k');
+      ylabel('Increase in Quadrant Error (%)')
+      xlabel('Loudspeaker Span (°)')
+      set(gca,...
+          'XLim',[dPol(1)-10 dPol(end)+10],...
+          'XTick',dPol,...
+          'YLim',[-1,12.9],...
+          'YMinorTick','on')
+      axis square
+      
+    end
+      
+  end
+  
+end
+
 
 end

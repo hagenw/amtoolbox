@@ -44,7 +44,7 @@ function out = plotbaumgartner2013( p,tang,rang,varargin)
 %
 %   References: baumgartner2013
   
-% AUTHOR : Robert Baumgartner, OEAW Acoustic Research Institute
+% AUTHOR : Robert Baumgartner
 
 definput.keyvals.exptang = [];
 definput.keyvals.exprang = [];
