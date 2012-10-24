@@ -1,39 +1,38 @@
 function [ varargout ] = pmv2ppp( p,varargin )
-%PMV2PPP Retrieve psychoacoustic performance parameters (PPPs) from
-% predicted probability mass vectors (PMVs) of polar response angles.
+%PMV2PPP PMV to PPP conversion
+%   Usage:  [ qe,pe,pb ] = pmv2ppp( p,tang,rang );
+%           [ qe,pe,pb ] = pmv2ppp( p,tang,rang,exptang );
 %
-%   Usage:  [ qe,pe,pb ] = pmv2ppp( p,tang,rang )
-%           [ qe,pe,pb ] = pmv2ppp( p,tang,rang,exptang )
-%
-%   `pmv2ppp(...)` retrieves commonly used PPPs for sagittal-plane (SP)
-%   localization like quadrant error (QEs), local polar RMS error (PE), 
-%   and local polar bias (PB) from response PMVs predicted by a localization 
-%   model. PPPs are retreived either for a specific polar target angle or
-%   as an average across all available target angles. The latter is the
-%   default.
-%
-%   Input arguments:
+%   Input parameters:
 %     p          : prediction matrix (response PMVs)
 %     tang       : possible polar target angles. As default, ARI's MSP 
 %                  polar angles in the median SP is used.
 %     rang       : polar angles of possible response angles.
-%                  As default regular 5°-sampling is used (-30:5:210).
+%                  As default regular 5°-sampling is used (-30:5:210).    
+%
+%   Output parameters:
+%     qe         : quadrant error rate
+%     pe         : local polar RMS error in degrees
+%     pb         : polar bias in degrees
+%
+%   `pmv2ppp(...)` retrieves commonly used PPPs (Psychoacoustic performance
+%   parameters) for sagittal-plane (SP) localization like quadrant error
+%   (QEs), local polar RMS error (PE), and local polar bias (PB) from
+%   response PMVs (probability mass vectors) predicted by a localization
+%   model. PPPs are retreived either for a specific polar target angle or as
+%   an average across all available target angles. The latter is the
+%   default.
 %
 %   `pmv2ppp` needs the following optional parameter in order to retrieve
 %   the PPPs for a specific (set of) target angles:
 %
 %     'exptang', exptang   experimental polar target angles
 %
-%  Output arguments:
-%     qe         : quadrant error rate
-%     pe         : local polar RMS error in degrees
-%     pb         : polar bias in degrees
-%
 %   `pmv2ppp` accepts the following flag:
 %
 %     'print'      Display the outcomes.
 %
-%  References: baumgartner2013assessment baumgartner2012modelling
+%   References: baumgartner2013assessment baumgartner2012modelling
 
 % AUTHOR : Robert Baumgartner
 

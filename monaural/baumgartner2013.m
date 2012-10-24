@@ -89,11 +89,11 @@ function varargout = baumgartner2013( target,template,varargin )
 %
 %     p = demo_baumgartner2013('NH58');
 %
-%   See also: plotbaumgartner2013, data_baumgartner2013,
-%   exp_baumgartner2013
+%   See also: plotbaumgartner2013, data_baumgartner2013, exp_baumgartner2013
 %
 %   References: baumgartner2013assessment baumgartner2012modelling langendijk2002contribution patterson1988efficient dau1996qmeI
-%
+
+    
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
 %% Check input options 

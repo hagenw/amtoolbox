@@ -17,5 +17,8 @@
 %     EICELL             - Excitation-inhibition cell model by Breebaart.
 %     CULLING2005BMLD    - BMLD calculation from Culling et al. (2005).
 %
+%  Utility
+%     PMV2PPP            - PMV to PPP conversion
+%
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

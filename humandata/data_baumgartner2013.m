@@ -35,15 +35,15 @@ function data = data_baumgartner2013(varargin)
 %   Examples:
 %   ---------
 %
-%   To get calibration data of pool of listener-specific models, use:::
+%   To get calibration data of pool of listener-specific models, use::
 %
 %     data_baumgartner2013('tab1');
 %
-%   To get all listener-specific data of the pool, use:::
+%   To get all listener-specific data of the pool, use::
 %
 %     data_baumgartner2013('pool');
 %
-%   To get experimental data from Fig. 8, use:::
+%   To get experimental data from Fig. 8 (XXX Does not work), use::
 %
 %     data_baumgartner2013('fig8');
 %
