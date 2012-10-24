@@ -39,16 +39,11 @@ allcontentsfiles=['Contents',
                   'signals/Contents',
                   'demos/Contents']
 
-texcontentsfiles=allcontentsfiles
-
-
 # ------------------------------------------
 # Configuration of PHP for Sourceforge
 # ------------------------------------------
 
-php=phpConf()
-
-php.basetype='php'
+php=PhpConf()
 
 php.indexfiles=allcontentsfiles
 
@@ -84,23 +79,13 @@ php.foot="""<?php include("footer.php");?>
 
 tex=TexConf()
 
-tex.basetype='tex'
-
-tex.subdir='amtpdf/'
-
-tex.texfile='amt'
-
-tex.indexfiles=texcontentsfiles
+tex.indexfiles=allcontentsfiles
     
 # ------------------------------------------
 # Configuration of Matlab
 # ------------------------------------------
 
-mat=ConfType()
-
-mat.basetype='mat'
-
-mat.subdir='amtoolbox/'
+mat=MatConf()
 
 # ------------------------------------------
 # Configuration of Verification system
