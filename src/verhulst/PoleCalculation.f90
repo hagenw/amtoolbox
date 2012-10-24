@@ -53,7 +53,12 @@ SUBROUTINE PoleCalculation
   INTEGER ctr
   INTEGER fhtel
   INTEGER onektel
-  INTEGER, dimension(2) :: seed
+! Change by P. Soendergaard: The RANDOM_SEED function in GFortran
+! requires a random seed of length more than 2, which is not supported
+! by the original code. Therefore, the result may deviate if you use
+! the "useZweigIrregularity" setting
+!  INTEGER, dimension(2) :: seed
+  INTEGER, DIMENSION(:), ALLOCATABLE :: seed
 
 !calculate the PoleE depending on the starting pole
 !and the compression slope. The values come from the pole calculation plot, obtained by running linear models at 0 and 100 dB SPL for different starting poles.
@@ -85,7 +90,8 @@ IF (compressionslope .EQ. 0.2d0) THEN
   Bx=SheraPo-Ax*30d0
   PoleE=Ax*80.59d0+Bx	
 ENDIF
-IF (compressionslope .NE. 0.2d0 .AND. compressionslope .NE. 0.3d0 .AND. compressionslope .NE. 0.4d0 .AND. compressionslope .NE. 0.5d0) THEN 
+IF (compressionslope .NE. 0.2d0 .AND. compressionslope .NE. 0.3d0 .AND. &
+     compressionslope .NE. 0.4d0 .AND. compressionslope .NE. 0.5d0) THEN 
 !if other value is given present the default 0.4 compression slope
   Yknee2=1.5488d-8 !(Ybm at 97.4dB) 
   Vknee2=9.7836d-5 !(Vbm at 97.4dB)
@@ -97,6 +103,11 @@ ENDIF
 !Introduce variability in the Vknee thresholds, kneepoint varies slightly from section
 !to section
 IF (useZweigIrregularity) THEN
+   ! See the comment above on the allocation of the "seed" variable.
+   CALL RANDOM_SEED(size = n)
+   n=MAX(2,n)
+   ALLOCATE(seed(n))
+   seed = (/(0,I=1,n)/) ! Set the array to zero, only the first two variables are non-zero.
    seed(1)=Subjectnr * 29
    seed(2)=Subjectnr + 2010 * 08                
    CALL RANDOM_SEED(PUT=seed) 

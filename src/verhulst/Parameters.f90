@@ -7,13 +7,14 @@
 ! makes it possible to use one NAMELIST.
 
 SUBROUTINE Parameters (WriteRead, FileHandler)
-	USE Declare
-	USE FilesModule
-	IMPLICIT NONE
-	INTEGER, INTENT (IN) :: FileHandler
-	INTEGER, INTENT (IN) :: WriteRead
-	INTEGER ios
-	CHARACTER(127) tmpAudioFileName, tmpSettingsDirectory, tmpOutputDirectory, tmpPressureEarCanalFileName, tmpProfileFileName, tmpProbingFileName, tmpCochleaFileName !SV
+  USE Declare
+  USE FilesModule
+  IMPLICIT NONE
+  INTEGER, INTENT (IN) :: FileHandler
+  INTEGER, INTENT (IN) :: WriteRead
+  INTEGER ios
+  CHARACTER(127) tmpAudioFileName, tmpSettingsDirectory, tmpOutputDirectory
+  CHARACTER(127) tmpPressureEarCanalFileName, tmpProfileFileName, tmpProbingFileName, tmpCochleaFileName
 
 	NAMELIST /GENERAL/ n, ComputationalFrequency, t_max, retrieveMembraneStatus, storeMembraneStatus, settingsDirectory
 	NAMELIST /STIMULUS/ OnsetDuration
