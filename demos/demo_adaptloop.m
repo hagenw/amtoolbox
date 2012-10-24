@@ -1,4 +1,4 @@
-%DEMO_ADAPTLOOP  Show the effect of adaptation.
+%DEMO_ADAPTLOOP  Show the effect of adaptation
 %
 %   This script demonstrates the effect of adaptation applied to a test
 %   signal with and without noise.
@@ -6,12 +6,16 @@
 %   The test signal is made of a sinosoidal ramp up and down between 0
 %   and 1.
 %
-%   FIGURE 1 Clean test signal
+%   .. figure::
+%
+%     Clean test signal
 %
 %     This figure shows the effect of adaptation on the clean test signal with and
 %     without overshoot limiting.
 %
-%   FIGURE 2 Noisy test signal
+%   .. figure::
+%
+%     Noisy test signal
 %
 %     This figure shows the effect of adaptation on the noisy test signal with and
 %     without overshoot limiting.
@@ -74,6 +78,3 @@ subplot(3,1,3);
 plot(adaptloop(insig,fs));
 title('Adaptation w. limiting.');
 ylabel('level / model units');
-
-
-%OLDFORMAT

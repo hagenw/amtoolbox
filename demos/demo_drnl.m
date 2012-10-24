@@ -5,17 +5,23 @@
 %   levels. The purpose is to visualize the broading of the auditory
 %   filters at higher input levels.
 %
-%   FIGURE 1 Greasy at 50 dB
+%   .. figure::
+%
+%     Greasy at 50 dB
 %
 %     This figure shows the DRNL of an input speech signal with a level
 %     of 50 dB SPL.
 %
-%   FIGURE 2 Greasy at 70 dB
+%   .. figure::
+%
+%     Greasy at 70 dB
 %
 %     This figure shows the DRNL of an input speech signal with a level
 %     of 50 dB SPL.
 %
-%   FIGURE 3 Greasy at 90 dB
+%   .. figure::
+%
+%     Greasy at 90 dB
 %
 %     This figure shows the DRNL of an input speech signal with a level
 %     of 50 dB SPL.
@@ -64,6 +70,3 @@ plotfilterbank(outsig2,1,fc1,fs,dynrange,'audtick');
 
 figure(3);
 plotfilterbank(outsig3,1,fc1,fs,dynrange,'audtick');
-
-
-%OLDFORMAT

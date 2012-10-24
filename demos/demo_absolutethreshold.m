@@ -1,19 +1,23 @@
 %DEMO_ABSOLUTETHRESHOLD  Standards for absolute threshold of hearing
 %
-%  This demos generates a simple figure that shows the behaviour of
-%  the different standards for absolute thresholds of hearing.
+%   This demos generates a simple figure that shows the behaviour of
+%   the different standards for absolute thresholds of hearing.
 %
-%  FIGURE 1  Thresholds of hearing by standard
+%   .. figure::
 %
-%      This demos generates a simple figure that shows the behaviour of
-%      the different absolute thresholds of hearing.    
+%     Thresholds of hearing by standard
 %
-%  FIGURE 2 High frequencies
+%     This demos generates a simple figure that shows the behaviour of
+%     the different absolute thresholds of hearing.    
 %
-%      Absolute thesholds for the ER2A and the Sennheiser HDA-200
-%      earphones are provided up to 16 kHz.
+%   .. figure::
 %
-%  See also:  absolutethreshold
+%     High frequencies
+%
+%     Absolute thesholds for the ER2A and the Sennheiser HDA-200
+%     earphones are provided up to 16 kHz.
+%
+%   See also:  absolutethreshold
 
 disp(['Type "help demo_absolutethreshold" to see a description of how this ', ...
       'demo works.']);
@@ -27,9 +31,9 @@ plotpoints=30;
 
 xrange=linspace(flow,fhigh,plotpoints);
 
-types   = {'iso226_2003','map','er3a','er2a','hda200'};
-legends = {'iso226\_2003','map','er3a','er2a','hda200'};
-symbols = {'k-'         ,'ro' ,'gx'  ,'b+','y*'  };
+types   = {'iso226_2003','iso389_2005','map','er3a','er2a','hda200'};
+legends = {'iso226\_2003','iso389\_2005','map','er3a','er2a','hda200'};
+symbols = {'k-'          ,'m^',          'ro' ,'gx'  ,'b+',  'y*'  };
 
 hold on;
 for ii=1:numel(types)
@@ -61,6 +65,3 @@ hold off;
 legend(legends{:},'Location','SouthEast');
 xlabel('Frequency (Hz)');
 ylabel('Absolte threshold (dB SPL)');
-
-
-%OLDFORMAT

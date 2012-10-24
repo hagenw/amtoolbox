@@ -24,7 +24,7 @@ function out = plotlangendijk( p,rang,tang,varargin)
 %
 %   References: langendijk2002contribution
   
-% AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
+% AUTHOR : Robert Baumgartner, OEAW Acoustic Research Institute
 
     definput.flags.colorbar={'colorbar','nocolorbar'};
     
@@ -33,10 +33,15 @@ function out = plotlangendijk( p,rang,tang,varargin)
     pcolor(tang,rang,p);
     set(gcf,'Colormap',getlangecolormap);
     shading interp
-    axis image
+    axis equal
     
-    xlabel('Target Angle (Â°)')
-    ylabel('Response Angle (Â°)')
+    set(gca,'XTick',-60:30:240,...
+      'YTick',-60:30:240,...
+      'XLim',[tang(1)-5,tang(end)+5],'YLim',[rang(1)-5,rang(end)+5],...
+      'Box','on')
+    
+    xlabel('Target Angle (°)')
+    ylabel('Response Angle (°)')
     
     if flags.do_colorbar
         colorbar

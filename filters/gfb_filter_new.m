@@ -1,44 +1,36 @@
 function filter = gfb_filter_new(arg1,arg2,arg3,arg4,arg5)
-% gfb_filter_new is the constructor of a cascaded gammatonefilter. 
-% it may be called with 2, 3, 4 or 5 arguments:
+%GFB_FILTER_NEW   Constructor of a cascaded gammatonefilter
+%   Usage:  gfb_filter_new(a_tilde,gamma_filter_order);
+%           gfb_filter_new(fs,fc,gamma_filter_order,bandwidth_factor);
+%           gfb_filter_new(fs,fc,bw,attenuation_db,gamma_filter_order);
 %
-% 2 arguments:
-% Specify complex filter coefficient directly:
-% gfb_filter_new(a_tilde,           % complex filter constant
-%                gamma_filter_order)% positive integer
-%
-% 3 or 4 arguments:
-% Compute filter coefficient from sampling rate, center frequency, and
-% order of the gammatone filter.  Filter will have 1 ERBaud equivalent
-% rectangular bandwidth, times bandwidth_factor.
-% Filter coefficient is computed from equations (13),(14)[Hohmann 2002].
-% gfb_filter_new(sampling_rate_hz,    % positive real number
-%                center_frequency_hz, % positive real number
-%                                     %      < sampling_rate_hz/2
-%                gamma_filter_order,  % positive integer
-%                bandwidth_factor)    % real number > 0, default is 1.0
+%   Input arguments:
+%      a_tilde             : Complex filter constant
+%      gamma_filter_order  : Gammatone filter order
+%      fs                  : Sampling rate
+%      fc                  : Centre frequency
+%      a_tilde             : Complex filter constant
+%      bandwidth_factor    : Bandwidth factor, default value is 1.0 
+%      bw                  : Filter bandwidth (in Hz)
 % 
-% 5 arguments:
-% Compute filter coefficient from sampling rate, center frequency, the
-% desired bandwidth with respect to the given attenuation, and the
-% order of the gammatone filter.
-% Filter coefficient is computed as in equations (11),(12)[Hohmann 2002]
-% (section 2.3).
-% gfb_filter_new(sampling_rate_hz,    % positive real number
-%                center_frequency_hz, % positive real number
-%                                     %  < sampling_rate_hz/2
-%                bandwidth_hz,        % posivive real number
-%                attenuation_db,      % positive real number, the
-%                                     % damping of this filter at
-%                                     % (center_frequency_hz +/-
-%                                     %            bandwidth_hz/2)
-%                gamma_filter_order)  % positive integer
+%   `gfb_filter_new(a_tilde,gamma_filter_order)` specifies the complex
+%   filter coefficients directly.
 %
-% copyright: Universitaet Oldenburg
-% author   : tp
-% date     : Jan 2002, Nov 2006, Jan 2007
+%   `gfb_filter_new(fs,fc,gamma_filter_order,bandwidth_factor)` computes
+%   filter coefficient from sampling rate, center frequency, and order of
+%   the gammatone filter.  The filters will have 1 ERB equivalent
+%   rectangular bandwidth, times bandwidth_factor.  Filter coefficient are
+%   computed from equations (13),(14)[Hohmann 2002].
+%
+%   `gfb_filter_new(fs,fc,bw,attenuation_db,gamma_filter_order)` Computes
+%   the filter coefficients from the sampling rate, center frequency, the
+%   desired bandwidth with respect to the given attenuation, and the order
+%   of the gammatone filter. Filter coefficient are computed as in equations
+%   (11),(12)[Hohmann 2002] (section 2.3).
+%
+%   References: hohmann2002frequency
 
-% filename : gfb_filter_new.m
+%   AUTHOR: tp
 
 
 filter.type = 'gfb_Filter';
@@ -46,8 +38,8 @@ if (nargin == 2)
   filter.coefficient = arg1;
   filter.gamma_order = arg2;
 elseif (nargin == 3) || (nargin == 4)
-  sampling_rate_hz    = arg1;
-  center_frequency_hz = arg2;
+  fs    = arg1;
+  fc = arg2;
   filter.gamma_order  = arg3;
   bandwidth_factor    = 1.0;
   if (nargin == 4)
@@ -58,7 +50,7 @@ elseif (nargin == 3) || (nargin == 4)
   gfb_set_constants;
 
   % equation (13) [Hohmann 2002]:
-  audiological_erb = (GFB_L + center_frequency_hz / GFB_Q) * bandwidth_factor;
+  audiological_erb = (GFB_L + fc / GFB_Q) * bandwidth_factor;
   % equation (14), line 3 [Hohmann 2002]:
   a_gamma          = (pi * factorial(2*filter.gamma_order - 2) * ...
                       2 ^ -(2*filter.gamma_order - 2) /              ...
@@ -66,20 +58,20 @@ elseif (nargin == 3) || (nargin == 4)
   % equation (14), line 2 [Hohmann 2002]:
   b                = audiological_erb / a_gamma;
   % equation (14), line 1 [Hohmann 2002]:
-  lambda           = exp(-2 * pi * b / sampling_rate_hz);
+  lambda           = exp(-2 * pi * b / fs);
   % equation (10) [Hohmann 2002]:
-  beta             = 2 * pi * center_frequency_hz / sampling_rate_hz;
+  beta             = 2 * pi * fc / fs;
   % equation (1), line 2 [Hohmann 2002]:
   filter.coefficient   = lambda * exp(1i * beta);
 elseif (nargin == 5)
-  sampling_rate_hz    = arg1;
-  center_frequency_hz = arg2;
-  bandwidth_hz        = arg3;
+  fs    = arg1;
+  fc = arg2;
+  bw        = arg3;
   attenuation_db      = arg4;
   filter.gamma_order  = arg5;
 
   % equation (12), line 4 [Hohmann 2002]:
-  phi    =  pi * bandwidth_hz / sampling_rate_hz;
+  phi    =  pi * bw / fs;
   % equation (12), line 3 [Hohmann 2002]:
   u      = -attenuation_db/filter.gamma_order;
   % equation (12), line 2 [Hohmann 2002]:
@@ -87,7 +79,7 @@ elseif (nargin == 5)
   % equation (12), line 1 [Hohmann 2002]:
   lambda = -p/2 - sqrt(p*p/4 - 1);
   % equation (10) [Hohmann 2002]:
-  beta   =  2 * pi * center_frequency_hz / sampling_rate_hz;
+  beta   =  2*pi*fc/fs;
   % equation (1), line 2 [Hohmann 2002]:
   filter.coefficient   = lambda * exp(1i*beta);
 else
@@ -99,5 +91,3 @@ filter.normalization_factor = ...
     2 * (1 - abs(filter.coefficient)) ^ filter.gamma_order;
 
 filter.state = zeros(1, filter.gamma_order);
-
-%OLDFORMAT

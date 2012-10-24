@@ -1,51 +1,52 @@
-function p = langendijk(ir1,ir2,fs,varargin)
+function p = langendijk(targets,template,varargin)
 %LANGENDIJK Localization model according to Langendijk et al. (2002)
-%   Usage:    p = langendijk(ir1,ir2)
-%             p = langendijk(ir1,ir2,fs,bw,do,cp,s,bal,flow,fhigh,stim)
+%   Usage:    p = langendijk(targets,template)
+%             p = langendijk(targets,template,fs,bw,s,do,flow,fhigh)
 %
 %   Input parameters:
-%     ir1     : modified impulse responses of DTFs for all positions and both ears (sorted)
-%     ir2     : stored impulse responses of DTF-templates for all positions and both ears (sorted)
-%     fs      : sampling frequency
+%     targets  : head-related impulse responses (HRIRs) of target sounds 
+%                (sorted acc. ascending polar angle)
+%     template : HRIRs of template
 %
 %   Output parameters:
-%     p       : Predicted probability density functions for response angles with respect to target positions
+%     p       : Predicted probability mass vectors (PMVs) of polar response
+%               angles as a function of the polar target angle.
 %
-%   `langendijk(ir1,ir2,... )` results to a two dimensional matrix p.  The
+%   `langendijk(targets,template,... )` results to a two dimensional matrix p.  The
 %   first dimension represents all possible response positions in
 %   increasing order and the second dimension all possible target
-%   respectively source positions. Consequently each column describes the
-%   probability density function of the response distribution for one
-%   special target position. If you want to plot this matrix use
-%   |plotlangendijk|_.
+%   respectively source positions. Consequently each column represents the
+%   predicted probability mass vector (PMV) of the polar response angle 
+%   distribution for one special target position. If you want to plot this 
+%   prediction matrix use |plotlangendijk|_.
 %
 %   `langendijk` accepts the following optional parameters.
+%
+%     'fs',fs        Sampling rate of the head-related impulse responses.
 %  
 %     'bw',bw        Bandwidth of filter bands as partial of an octave. The
 %                    default value is 6.
 %
 %     'do',do        Differential order. The default value is 0.
 %
-%     'std'          Use `'std'` for comparison. This is the default.
-%  
-%     'corr'         Use `'corr'` for comparison.
-%
 %     's',s          Standard deviation of transforming Gaussian
 %                    function, default value is 2.
-%
-%     'bal',bal      Balance of left to right channel (not included in 
-%                    langendijk's original comparison process). Default
-%                    value is 1.
 %
 %     'flow',flow    Start frequency of filter bank. min: 0,5kHz; default: 2kHz
 %
 %     'fhigh',fhigh  End frequency of filter bank; default: 16kHz
 %
-%     'stim',stim    Applied stimulus for localization test (optional)
+%   `langendijk` accepts the following flags.
+%
+%     'std'          Apply Gaussian transformed standard deviation of 
+%                    inter-spectral differences for comparison process. 
+%                    This is the default.
+%  
+%     'xcorr'        Apply crosscorrelation for comparison process.
 %
 %   See also: plotlangendijk
 %
-%   References:langendijk2002contribution
+%   References: langendijk2002contribution
 
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
   
@@ -57,50 +58,24 @@ function p = langendijk(ir1,ir2,fs,varargin)
   definput.keyvals.stim=[];
   definput.keyvals.fs=48000;
   
-  [flags,kv]=ltfatarghelper({'bw','do','s','bal','flow','fhigh','stim','fs'},definput,varargin);
+  [flags,kv]=ltfatarghelper({'fs','bw','s','do','flow','fhigh'},definput,varargin);
   
-  if ~isempty(kv.stim)
-    ir1=halfconv( ir1,stim );
+  
+  % Filter bank
+  x = cqdft(targets,kv.fs,kv.flow,kv.fhigh,kv.bw);
+  y = cqdft(template,kv.fs,kv.flow,kv.fhigh,kv.bw);
+  
+  % Comparison process
+  si=zeros(size(template,2),size(targets,2),size(template,3)); % initialisation
+  for ii=1:size(targets,2)
+      si(:,ii,:) = langendijkcomp(x(:,ii,:),y,'argimport',flags,kv);
   end
   
-  % model calculations
-  p=zeros(size(ir2,2),size(ir1,2)); % initialisation
+  % Binaural average
+  si = mean(si,3);
   
-  % filter bank
-  % response pdf for every target position
-  for ind2=1:size(ir1,2) 
-    x=averagingfb(ir1(:,ind2,:),fs,kv.flow,kv.fhigh,kv.bw);
-    y=zeros(length(x),size(ir2,2),size(ir2,3)); % initialisation
-    for ind=1:size(y,2) % response pdf for one target position
-      y(:,ind,:)=averagingfb(ir2(:,ind,:),fs,kv.flow,kv.fhigh,kv.bw);
-    end
-    
-    % comparison process for one target position
-    p(:,ind2)=langendijkcomp(x,y,'argimport',flags,kv);
-  end
+  % Normalization to PMV
+  p = si ./ repmat(sum(si),size(si,1),1);
   
-
-function [ outsig ] = halfconv( ir1,stim )
-% HALFCONV calculates the fast convolution with fft but without ifft
-% Usage:        [ outsig ] = halfconv( ir1,stim )
-% Input arguments:
-%     ir1:      (modified) impulse responses of DFTs for all positions and
-%               both ears
-%     stim:     stimulus (time domain)
-% Output argument:
-%     outsig:   convolution of stimulus with DTFs in frequency domain
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% AUTHOR : Robert Baumgartner, OEAW
-% latest update: 2010-07-19
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-  nfft = nextfastfft(max(size(ir1,1), length(stim)));
-  stimf=fft(stim(:),nfft);
-  ir1f = fft(ir1,nfft,1);
-  temp=zeros(nfft,size(ir1,2),size(ir1,3));
-  for ch=1:size(ir1,3)
-    for ind=1:size(ir1,2)
-      temp(:,ind,ch) = ir1f(:,ind,ch).* stimf;
-    end
-  end
-  outsig=temp;
+  
+end

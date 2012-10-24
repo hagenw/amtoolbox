@@ -7,26 +7,16 @@ import localconf
 
 conf=ConfType()
 
-conf.octexec=localconf.octexec
-conf.matexec=localconf.matexec
-conf.plotengine=localconf.plotengine
-   
-conf.root=localconf.basepath+'amtoolbox/'
+conf.otherrefs=['ltfat.txt']
 
-conf.bibfile=conf.root+'mat2doc/project'
-
-conf.workdir=localconf.userdir+'publish/'
-
-conf.ignorepars=['a','order','type']
-
-conf.copyrightplate=conf.root+'mat2doc/copyrightplate'
+conf.urlbase='http://ltfat.sourceforge.net/doc/'
 
 def mycopyrightfun(self):
-    vf=file(self.root+'amt_version');
+    vf=file(self.root+'amtoolbox_version');
     v=vf.readline()
     vf.close
     
-    f=file(self.copyrightplate)
+    f=file(self.root+'mat2doc/copyrightplate')
     buf=f.readlines()
     f.close
 
@@ -49,31 +39,18 @@ allcontentsfiles=['Contents',
                   'signals/Contents',
                   'demos/Contents']
 
-texcontentsfiles=allcontentsfiles
-
-
 # ------------------------------------------
 # Configuration of PHP for Sourceforge
 # ------------------------------------------
 
-php=HTMLConf()
-
-php.basetype='html'
-
-php.subdir='amthtml/'
+php=PhpConf()
 
 php.indexfiles=allcontentsfiles
 
 # This is the full path, used for php-including files.
-php.docroot='/home/groups/a/am/amtoolbox/htdocs/doc/'
+php.docroot='/home/project-web/amtoolbox/htdocs/doc/'
 
 # This is the usual web-server root for "<a href=" ... > tags.
-php.htmlroot='/doc/'
-    
-php.hb='<H2>'
-
-php.he='</H2>'
-
 php.fext='.php'
 
 php.head="""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN"><html>
@@ -87,17 +64,14 @@ php.head="""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN"><html>
 </head>
 <body>
 
-   <?php ini_set("include_path",".:/home/groups/a/am/amtoolbox/htdocs/"); ?>
-   <?php require("topnav.php");?>
+   <?php ini_set("include_path",".:/home/project-web/amtoolbox/htdocs/"); ?>
+   <?php include("topnav.php");?>
 
 """
 
-php.foot="""<?php require("footer.php");?>
+php.foot="""<?php include("footer.php");?>
 </body>
 </html>"""
-
-php.dryrun=1
-
 
 # ------------------------------------------
 # Configuration of LaTeX
@@ -105,55 +79,13 @@ php.dryrun=1
 
 tex=TexConf()
 
-tex.basetype='tex'
-
-tex.subdir='amtpdf/'
-
-tex.texfile='amt'
-
-tex.indexfiles=texcontentsfiles
+tex.indexfiles=allcontentsfiles
     
-tex.head="""\documentclass{amsart}
-\usepackage{ae}
-\usepackage{aecompl}
-\usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
-\usepackage{graphicx}
-\setlength\parskip{\medskipamount}
-\setlength\parindent{0pt}
-\makeatletter
-
-%\usepackage{babel}
-\usepackage{amssymb}
-\makeatother
-\\begin{document}
-\\title{AMT Reference manual}
-\\author{The AMT team}
-
-\\maketitle
-\\tableofcontents{}
-
-"""
-tex.foot='\\bibliographystyle{abbrv}\n'+ \
-         '\\bibliography{'+conf.bibfile+'}\n'+ \
-"""\end{document}
-"""
-
-tex.dryrun=1
-tex.dooutput=1
-
 # ------------------------------------------
 # Configuration of Matlab
 # ------------------------------------------
 
-mat=ConfType()
-
-mat.basetype='mat'
-
-mat.subdir='amtoolbox/'
-
-mat.urlbase='http://amtoolbox.sourceforge.net/doc'
-mat.urlext='php'
+mat=MatConf()
 
 # ------------------------------------------
 # Configuration of Verification system

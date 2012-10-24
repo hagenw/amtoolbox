@@ -7,14 +7,14 @@
 ! makes it possible to use one NAMELIST.
 
 SUBROUTINE Parameters (WriteRead, FileHandler)
-	USE Declare
-	USE FilesModule
-	IMPLICIT NONE
-	INTEGER, INTENT (IN) :: FileHandler
-	INTEGER, INTENT (IN) :: WriteRead
-	INTEGER ios
-	CHARACTER(127) tmpAudioFileName, tmpSettingsDirectory, tmpOutputDirectory
-        CHARACTER(127) tmpPressureEarCanalFileName, tmpProfileFileName, tmpProbingFileName, tmpCochleaFileName
+  USE Declare
+  USE FilesModule
+  IMPLICIT NONE
+  INTEGER, INTENT (IN) :: FileHandler
+  INTEGER, INTENT (IN) :: WriteRead
+  INTEGER ios
+  CHARACTER(127) tmpAudioFileName, tmpSettingsDirectory, tmpOutputDirectory
+  CHARACTER(127) tmpPressureEarCanalFileName, tmpProfileFileName, tmpProbingFileName, tmpCochleaFileName
 
 	NAMELIST /GENERAL/ n, ComputationalFrequency, t_max, retrieveMembraneStatus, storeMembraneStatus, settingsDirectory
 	NAMELIST /STIMULUS/ OnsetDuration
@@ -22,7 +22,7 @@ SUBROUTINE Parameters (WriteRead, FileHandler)
 	NAMELIST /SIGNAL2/ useSignal2, signal2Frequency, signal2Phase, signal2Level
 	NAMELIST /SIGNAL3/ useSignal3, signal3Period, signal3Duration, signal3Level
 	NAMELIST /AUDIOFILE/ useAudiofile, useLeftChannel, audioFileName, audioFileLevel, audioFileRMS
-	NAMELIST /COCHLEA/ Rme, useZweigIrregularity, IrrPct, useLFirregularity, useKneeVar , KneeVar , Nonlinear, SheraNonlinearityType, SheraPo, Subjectnr			 
+	NAMELIST /COCHLEA/ Rme, useZweigIrregularity, IrrPct, useLFirregularity, useKneeVar , KneeVar , Nonlinear, SheraNonlinearityType, SheraPo, compressionslope, Subjectnr			 
 	NAMELIST /OUTPUT/ OutputDirectory, storePressureEarCanal, PressureEarCanalFileName, storeProfile, ProfileFileName, &
 													storeProbing, ProbingFileName, probes !!SV
 

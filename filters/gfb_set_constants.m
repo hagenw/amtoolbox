@@ -18,5 +18,3 @@ GFB_PREFERED_GAMMA_ORDER = 4;
 % The gain factors are approximated in iterations. This is the default
 % number of iterations:
 GFB_GAINCALC_ITERATIONS  = 100;
-
-%OLDFORMAT
