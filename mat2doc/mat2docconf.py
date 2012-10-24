@@ -12,11 +12,11 @@ conf.otherrefs=['ltfat.txt']
 conf.urlbase='http://ltfat.sourceforge.net/doc/'
 
 def mycopyrightfun(self):
-    vf=file(self.root+'amt_version');
+    vf=file(self.root+'amtoolbox_version');
     v=vf.readline()
     vf.close
     
-    f=file(self.copyrightplate)
+    f=file(self.root+'mat2doc/copyrightplate')
     buf=f.readlines()
     f.close
 

@@ -111,7 +111,7 @@ function varargout=exp_baumgartner2013(varargin)
 %
 %     exp_baumgartner2013('fig13');
 %
-%   References:baumgartner2013,lopezpoveda2001hnc pralong1996role goode1994nkf
+%   References: baumgartner2013 lopezpoveda2001hnc pralong1996role goode1994nkf
   
 % AUTHOR: Robert Baumgartner
 

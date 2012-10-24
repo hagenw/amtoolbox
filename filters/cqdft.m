@@ -1,31 +1,26 @@
 function [cqmag,fc,cqmaghr,fvec] = cqdft( insig,varargin )
-% CQDFT FFT-based filter bank with constant relative bandwidth according to 
-% Langendijk and Bronkhorst (2002)
-%
+%CQDFT FFT-based filter bank with constant relative bandwidth according
 %   Usage:  [cqmag] = cqdft( insig )
 %           [cqmag,fc,cqmaghr,fvec] = cqdft( insig,fs,flow,fhigh,bw )
 %
-%   CQDFT(insig) approximates a constant-Q filter bank by averaging the
-%   magnitude bins of a DFT. CQDFT results in 'bw' dB-magnitudes per
-%   octave.
-%
-%   Input arguments:
+%   Input parameters:
 %      insig   : Impulse response or complex spectrum
 %      fs      : Sampling rate, default is 48kHz.
 %      flow    : Lowest frequency, minimum: 0.5kHz, default is 2kHz
 %      fhigh   : Highest frequency, default is, default is 16kHz  
 %      bw      : bandwidth, possible values 3,6,9,12, default is 6.
 %
-%   Output arguments:
+%   Output parameters:
 %      cqmag   : mean magnitudes of CQ-bands in dB
 %      fc      : center frequencies of bands (geo. mean of corners)
 %      cqmaghr : same as cqmag but for all freq. bins (high resolution)
 %      fvec    : freq. vector according to FFT-resolution
 %
-%   References:
-%     E. Langendijk and A. Bronkhorst. Contribution of spectral cues to human
-%     sound localization. J. Acoust. Soc. Am., 112:1583, 2002.  
-
+%   `cqdft(insig)` approximates a constant-Q filter bank by averaging the
+%   magnitude bins of a DFT. `cqdft` results in 'bw' dB-magnitudes per octave.
+%
+%   References: langendijk2002contribution
+    
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 
 definput.keyvals.fs=48000;

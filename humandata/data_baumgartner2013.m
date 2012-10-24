@@ -9,30 +9,28 @@ function data = data_baumgartner2013(varargin)
 %
 %   The flag may be one of:
 %
-%     'noplot'       Don't plot, only return data. This is the default.
+%     'noplot'     Don't plot, only return data. This is the default.
 %
-%     'plot'         Plot the data.
+%     'plot'       Plot the data.
 %  
-%     'tab1'         Calibration data for listener pool listed in Table 1.
-%                    structure: 
-%                      data.id      listener ID
-%                      data.u       listener-specific uncertainty
+%     'tab1'       Calibration data for listener pool listed in Table 1.
+%                  structure: 
+%                    data.id      listener ID
+%                    data.u       listener-specific uncertainty
 %
-%     'pool'         DTFs and calibration data of the pool.
-%                    structure: 
-%                      data.id      listener ID
-%                      data.u       listener-specific uncertainty
-%                      data.dtfs    matrix containing DTFs.
-%                                   Dimensions: time, position, channel 
-%                                   (more details see doc: HRTF format)
-%                      data.fs      sampling rate of impulse responses
-%                      data.pos     source-position matrix referring to 
-%                                   2nd dimension of hM and formated acc.
-%                                   to meta.pos (ARI format).
-%                                   6th col: lateral angle 
-%                                   7th col: polar angle
-%
-%   See also: baumgartner2013, exp_baumgartner2013
+%     'pool'       DTFs and calibration data of the pool.
+%                  structure: 
+%                    data.id      listener ID
+%                    data.u       listener-specific uncertainty
+%                    data.dtfs    matrix containing DTFs.
+%                                 Dimensions: time, position, channel 
+%                                 (more details see doc: HRTF format)
+%                    data.fs      sampling rate of impulse responses
+%                    data.pos     source-position matrix referring to 
+%                                 2nd dimension of hM and formated acc.
+%                                 to meta.pos (ARI format).
+%                                 6th col: lateral angle 
+%                                 7th col: polar angle
 %
 %   Examples:
 %   ---------
@@ -49,7 +47,9 @@ function data = data_baumgartner2013(varargin)
 %
 %     data_baumgartner2013('fig8');
 %
-%   References:baumgartner2013
+%   See also: baumgartner2013, exp_baumgartner2013
+%
+%   References: baumgartner2013
 
 % AUTHOR : Robert Baumgartner
 

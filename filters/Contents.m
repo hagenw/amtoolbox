@@ -10,6 +10,7 @@
 %
 %  Auditory filters
 %     GAMMATONE        - Gammatone filter coefficients
+%     CQDFT            - FFT-based filter bank with constant relative bandwidth
 %
 %  Hohmann (2002) filterbank
 %     GFB_ANALYZER_NEW            - XXX 

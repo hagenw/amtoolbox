@@ -1,8 +1,7 @@
 function out = plotbaumgartner2013( p,tang,rang,varargin)
-%PLOTBAUMGARTNER2013 plot probabilistic prediction matrixes for
-% sound-source localization in sagittal planes
-%   Usage:    plotlangendijk(p,tang,rang)
-%             plotlangendijk(p,tang,rang,exptang,exprang)
+%PLOTBAUMGARTNER2013 plot probabilistic prediction matrixes
+%   Usage:    plotbaumgartner2013(p,tang,rang);
+%             plotbaumgartner2013(p,tang,rang,exptang,exprang);
 %
 %   Input parameters:
 %     p       : prediction matrix containing probability mass vectors (PMVs) 

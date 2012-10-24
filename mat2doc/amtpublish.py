@@ -66,7 +66,6 @@ if 'releasemat' in todo:
     # Remove unwanted files
     os.system('rm -rf '+project['mat']+'testing')
     os.system('rm -rf '+project['mat']+'reference')
-    os.system('rm -rf '+project['mat']+'timing')
 
     fname=filesdir+projectname+'-'+versionstring
 
@@ -77,6 +76,11 @@ if 'releasemat' in todo:
     os.system('rm '+fname+'.zip')
     printdoc.unix2dos(filesdir+projectname)
     os.system('zip -r '+fname+'.zip '+projectname+'/')
+
+# Quick staging to test for errors in the files
+if 'stagemat' in todo:
+    printdoc.git_stageexport(project['dir'],project['mat'])
+    printdoc.printdoc(projectname,'mat')
     
 if 'tex' in todo:
     printdoc.printdoc(projectname,'tex')
@@ -120,46 +124,6 @@ else:
 
 if 'verify' in todo:
     printdoc.printdoc([m2dfile,'verify'])
-
-if 'stagemat' in todo:
-    publishmat=cwd+'amtoolbox/'
-    printdoc.git_stageexport(tbpath,publishmat)
-    printdoc.print_mat(m2dfile,publishmat)
-
-if 'develmat' in todo:
-    printdoc.git_repoexport(tbpath,'master','amtoolbox',cwd)
-
-    fname=cwd+'amtoolbox-devel-'+versionstring
-    os.system('rm '+fname+'.zip')
-
-    printdoc.dos2unix(cwd+'amtoolbox')
-    os.system('tar zcvf '+fname+'.tgz amtoolbox/')
-
-    printdoc.unix2dos(cwd+'amtoolbox')
-    os.system('zip -r '+fname+'.zip amtoolbox/')
-
-if 'releasemat' in todo:
-    publishmat=cwd+'amtoolbox/'
-    printdoc.git_repoexport(tbpath,'master','amtoolbox',cwd)
-    printdoc.print_mat(m2dfile,publishmat)
-
-    # Remove unwanted files
-    os.system('rm -rf '+publishmat+'testing')
-    os.system('rm -rf '+publishmat+'reference')
-
-
-    f=file(tbpath+'amt_version')
-    versionstring=f.read()[:-1]
-    f.close()
-    
-    fname=cwd+'amtoolbox-'+versionstring
-    os.system('rm '+fname+'.zip')
-
-    printdoc.dos2unix(cwd+'amtoolbox')
-    os.system('tar zcvf '+fname+'.tgz amtoolbox/')
-
-    printdoc.unix2dos(cwd+'amtoolbox')
-    os.system('zip -r '+fname+'.zip amtoolbox/')
 
 if 'releasebranch' in todo:
     bname=sys.argv[2]
