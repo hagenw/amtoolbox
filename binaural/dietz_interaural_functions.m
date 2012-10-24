@@ -4,33 +4,37 @@ function [outp] = dietz_interaural_functions(s1, s2, tau, fc, signal_level_dB_SP
 %   Input parameters
 %     s1, s2 : input signals
 %     tau    : lowpass filter parameter, such that a = exp(-1./(fs*tau)), 
-%              lowpass = filter([1-a], [1, -a], x)
-%  
-%              Note: If tau is a scalar, lowpass is done on every channel
-%              with the value of tau. If the filter parameter tau is a
-%              vector, it has to have as many elements as the number of 
-%              channels of s1 and s2; each value tau(i) is applied to
-%              the signals in s1(i,:) and s2(i,:).
+%              lowpass = filter([1-a], [1, -a], x)  
 %     fc     : central frequencies
 %     fs     : sampling frequencies
 %
 %   Output parameters:
-%     itf       : transfer function
-%     itf_equal : transfer function without amplitude
-%     ipd : phase difference in rad
-%     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
-%     ild : level difference in dB
-%     itd, itd_C, itd_lp, itd_C_lp - time difference based on instantaneous
-%                  and central frequencies, with and without low-passed itf
-%     f_inst_1 : instantaneous frequencies in the channels of the filtered s1
-%     f_inst_2 : instantaneous frequencies in the channels of the
-%                filtered s2
+%     outp   : Structure containing the output. See the description
+%              below. XXX Missing
 %
 %   XXX Description is missing. 
+%
+%   **Note**: If *tau* is a scalar, lowpass is done on every channel
+%   with the value of *tau*. If the filter parameter *tau* is a vector, it has
+%   to have as many elements as the number of channels of *s1* and *s2*; each
+%   value *tau(i)* is applied to the signals in `s1(i,:)` and `s2(i,:)`.
 %
 %   See also: dietz2011
 %
 %   References: dietz2011auditory
+
+%
+%     itf       : transfer function
+%     itf_equal : transfer function without amplitude
+%     ipd       : phase difference in rad
+%     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
+%     ild       : level difference in dB
+%     itd       itd_C, itd_lp, itd_C_lp : time difference based on instantaneous
+%                  and central frequencies, with and without low-passed itf
+%     f_inst_1  : instantaneous frequencies in the channels of the filtered s1
+%     f_inst_2  : instantaneous frequencies in the channels of the
+%                filtered s2
+%
 
   a = exp( -1./(fs*tau) );
 

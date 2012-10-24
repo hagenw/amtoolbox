@@ -1,7 +1,8 @@
-% This example program demonstrates how to create and use an analysis
-% gammatone filterbank
+%DEMO_HOHMANNFILTERBANK  Filterbank example
 %
-% copyright: Universitaet Oldenburg
+%   This example program demonstrates how to create and use an analysis
+%   gammatone filterbank
+
 % author   : tp
 % date     : Jan, Mar 2002, Nov 2006
 
@@ -54,4 +55,3 @@ ylabel('filter response / dB');
 disp(' ');
 disp('Figure 1 shows the frequency response of the individual filters.');
 
-%OLDFORMAT

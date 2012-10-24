@@ -46,9 +46,7 @@ function p = langendijk(targets,template,varargin)
 %
 %   See also: plotlangendijk
 %
-%   References:
-%     E. Langendijk and A. Bronkhorst. Contribution of spectral cues to human
-%     sound localization. J. Acoust. Soc. Am., 112:1583, 2002.  
+%   References: langendijk2002contribution
 
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
   

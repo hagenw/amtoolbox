@@ -5,7 +5,6 @@
 %   This page documents the demos.
 %
 %   Psychoacoustics
-%     DEMO_AUDSCALES        - Different auditory scales.
 %     DEMO_LINDEMANN        - Lindemann binaural model.
 %     DEMO_ABSOLUTETHRESHOLD - Absolute thresholds of hearing
 %

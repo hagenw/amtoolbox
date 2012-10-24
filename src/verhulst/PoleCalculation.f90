@@ -1,29 +1,21 @@
 !this subroutine will calculate the polepositions of the next iteration
 !depending on the current V and/or Y or envelope (depends on the choice)
-
-!pole function fitted with a quadratic function: slope 0.4
-!starting pole at 30 is 0.061 and end pole at 97.4 dB is 0.5994
-!to optimize this model, Yknee should have a function like omega_c
 SUBROUTINE PoleCalculation
   USE Declare
   IMPLICIT NONE
   
   REAL(8), PARAMETER :: Yknee1=6.9183d-10 !(Ybm at 30dB)
-  REAL(8), PARAMETER :: Yknee2=1.5488d-8 !(Ybm at 97.4dB)
+!  REAL(8), PARAMETER :: Yknee2=1.5488d-8 !(Ybm at 97.4dB) 
   REAL(8), PARAMETER :: Vknee1=4.3652d-6 !(Vbm at 30dB)
-  REAL(8), PARAMETER :: Vknee2=9.7836d-5 !(Vbm at 97.4dB)
+!  REAL(8), PARAMETER :: Vknee2=9.7836d-5 !(Vbm at 97.4dB)
  
- ! values for when there is no coupling
- ! REAL(8), PARAMETER :: Yknee1=1.3335d-10 !(Ybm at 30dB)
- ! REAL(8), PARAMETER :: Yknee2=2.9512d-9 !(Ybm at 97.18dB)
- ! REAL(8), PARAMETER :: Vknee1=8.3176d-7 !(Vbm at 30dB)
- ! REAL(8), PARAMETER :: Vknee2=1.8344d-5 !(Vbm at 97.18dB)
-
-  REAL(8), PARAMETER :: Va=-3.112d18
-  REAL(8), PARAMETER :: Vb=1.828d14
-  REAL(8), PARAMETER :: Vc=-2.466d9 
-  REAL(8), PARAMETER :: Vd=4.318d4
-  REAL(8), PARAMETER :: Ve=0.02669d0
+  REAL(8) Vknee2
+  REAL(8) Yknee2
+ ! REAL(8), PARAMETER :: Va=-3.112d18
+ ! REAL(8), PARAMETER :: Vb=1.828d14
+ ! REAL(8), PARAMETER :: Vc=-2.466d9 
+ ! REAL(8), PARAMETER :: Vd=4.318d4
+ ! REAL(8), PARAMETER :: Ve=0.02669d0
   REAL(8) Yknee1CST(1:n)
   REAL(8) Yknee2CST(1:n)
   REAL(8) Vvect(1:n)
@@ -43,11 +35,7 @@ SUBROUTINE PoleCalculation
   REAL(8) dY2
   REAL(8) dV1
   REAL(8) dV2
-!  REAL(8),PARAMETER ::  KneeVar=1d0 !in dB around the kneepoints +5 and -5
-  !Pole Hyperbola function, C.Shera's idea
-!  REAL(8), PARAMETER :: IrrPct=0.05d0 !percentage of variation on the poles
   REAL(8),PARAMETER ::  factor=100d0
- ! REAL(8) PoleS1
   REAL(8) PoleE
   REAL(8) Ax
   REAL(8) Bx
@@ -65,27 +53,50 @@ SUBROUTINE PoleCalculation
   INTEGER ctr
   INTEGER fhtel
   INTEGER onektel
-! Change by P. Soendergaard: The RANDOM_SEED function in GFortran
-! requires a random seed of length more than 2, which is not supported
-! by the original code. Therefore, the result may deviate if you use
-! the "useZweigIrregularity" setting
-!  INTEGER, dimension(2) :: seed
-INTEGER, DIMENSION(:), ALLOCATABLE :: seed
+  INTEGER, dimension(2) :: seed
 
 !calculate the PoleE depending on the starting pole
-!the compression slope is constant
+!and the compression slope. The values come from the pole calculation plot, obtained by running linear models at 0 and 100 dB SPL for different starting poles.
+IF (compressionslope .EQ. 0.4d0) THEN
+  Yknee2=1.5488d-8 !(Ybm at 97.4dB) 
+  Vknee2=9.7836d-5 !(Vbm at 97.4dB)
   Ax=(0.7d0-0.06d0)/(97.4d0-30d0)
   Bx=SheraPo-Ax*30d0
   PoleE=Ax*97.4d0+Bx
+ENDIF
+IF (compressionslope .EQ. 0.5d0) THEN
+  Yknee2=1.766d-8 !(Ybm at 97.82dB) 
+  Vknee2=1.114d-4 !(Vbm at 97.82dB)
+  Ax=(0.4d0-0.06d0)/(97.82d0-30d0)
+  Bx=SheraPo-Ax*30d0
+  PoleE=Ax*97.82d0+Bx
+ENDIF
+IF (compressionslope .EQ. 0.3d0) THEN
+  Yknee2=7.015d-9 !(Ybm at 87.77dB) 
+  Vknee2=4.426d-5 !(Vbm at 87.77dB)
+  Ax=(0.7d0-0.06d0)/(87.77d0-30d0)
+  Bx=SheraPo-Ax*30d0
+  PoleE=Ax*87.77d0+Bx
+ENDIF
+IF (compressionslope .EQ. 0.2d0) THEN
+  Yknee2=3.228d-9 !(Ybm at 80.59dB) 
+  Vknee2=2.037d-5 !(Vbm at 80.59dB)
+  Ax=(0.7d0-0.06d0)/(80.59d0-30d0)
+  Bx=SheraPo-Ax*30d0
+  PoleE=Ax*80.59d0+Bx	
+ENDIF
+IF (compressionslope .NE. 0.2d0 .AND. compressionslope .NE. 0.3d0 .AND. compressionslope .NE. 0.4d0 .AND. compressionslope .NE. 0.5d0) THEN 
+!if other value is given present the default 0.4 compression slope
+  Yknee2=1.5488d-8 !(Ybm at 97.4dB) 
+  Vknee2=9.7836d-5 !(Vbm at 97.4dB)
+  Ax=(0.7d0-0.06d0)/(97.4d0-30d0)
+  Bx=SheraPo-Ax*30d0
+  PoleE=Ax*97.4d0+Bx
+ENDIF
  
-
-!Introduce variability in the Vknee thresholds, kneepoint varies slightly from
+!Introduce variability in the Vknee thresholds, kneepoint varies slightly from section
+!to section
 IF (useZweigIrregularity) THEN
-   ! See the comment above on the allocation of the "seed" variable.
-   CALL RANDOM_SEED(size = n)
-   n=MAX(2,n)
-   ALLOCATE(seed(n))
-   seed = (/(0,I=1,n)/) ! Set the array to zero, only the first two variables are non-zero.
    seed(1)=Subjectnr * 29
    seed(2)=Subjectnr + 2010 * 08                
    CALL RANDOM_SEED(PUT=seed) 
@@ -170,24 +181,6 @@ IF (Nonlinear) THEN
   ENDIF !end for the displacement nonlinearity
   
   IF (SheraNonlinearityType == VEL) THEN 
- !      !nonlinearity threshold for the velocity is constant across freq.
- !    Vvect(1:n)=ABS(V(1:n))
- !    DO i = 1, n, 1 !from 1 to n in steps of 1
- !       IF(Vvect(i) .LT. RthV1(i)) THEN 
- !          SheraP(i)=0.06d0 !below 30dB maximally active and linear
- !      ENDIF
-       ! IF(Vvect(i) .GE. Vknee1) THEN
- !       IF(Vvect(i) .GE. RthV1(i) .AND. Vvect(i) .LT. RthV2(i)) THEN
- !          SheraP(i)= (Va * ( Vvect(i) ** 4d0 )) + (Vb * ( Vvect(i) ** 3d0 )) +(Vc * ( Vvect(i) ** 2d0 )) + ( Vd * Vvect(i) ) + Ve                  
-!SheraP(i)= (Va * EXP(Vb * Vvect(i))) + (Vc * EXP(Vd * Vvect(i)))
-           !poles create compressive behaviour
-           !from more active to less active
- !       ENDIF
- !       IF (Vvect(i) .GE. RthV2(i)) THEN
- !          SheraP(i)= (Va * ( RthV2(i) ** 4d0 )) +(Vb * ( RthV2(i) ** 3d0 ))  +(Vc * ( RthV2(i) ** 2d0 ))  + ( Vd * RthV2(i) ) + Ve        
-           !above 80dB passive and linear 
- !       ENDIF
- !    ENDDO
 
      Vvect(1:n)=ABS(V(1:n))/RthV1(1:n)
      Theta0(1:n)=ATAN(((PoleE-PoleS)*factor)/((RthV2(1:n)/RthV1(1:n))-1d0)) 
@@ -200,7 +193,6 @@ IF (Nonlinear) THEN
      Syp(1:n)=Sb(1:n)*DSQRT(1d0+(Sxp(1:n)/Sa(1:n))**2d0)
      Sy(1:n)=Sxp(1:n)*SIN(Theta(1:n))+Syp*COS(Theta(1:n))
      SheraP(1:n)=PoleS(1:n)+Sy(1:n)/factor
-   !  SheraP(1:n)=(1d0+Rand(1:n)) * SheraP(1:n)
 
   ENDIF
      
@@ -208,7 +200,7 @@ IF (Nonlinear) THEN
      SheraP(1:n)=0.061d0 !is not implemented yet, so is set to active,linear behaviour for now
   ENDIF
 
-!to stop the poles from increasing after a certain value
+!to stop the poles from increasing after a certain value lead to linear behavior at high levels
   DO i=1,n
      IF(SheraP(i).GT.PoleE) THEN
         SheraP(i)=PoleE
