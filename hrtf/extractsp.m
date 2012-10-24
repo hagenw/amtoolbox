@@ -2,7 +2,7 @@ function varargout = extractsp(lat,hM,pos)
 % EXTRACTSP extracts sagittal plane (SP) HRTFs from measurement data stored
 % in ARI's HRTF format
 %
-% Usage:    [sphrtfs,polangs] = extractsp( lat,hM,meta )
+% Usage:    [sphrtfs,polangs] = extractsp( lat,hM,pos )
 %
 % Input parameters:
 %     lat     : lateral angle of the SP

@@ -32,6 +32,8 @@ function [ varargout ] = pmv2ppp( p,varargin )
 %   `pmv2ppp` accepts the following flag:
 %
 %     'print'      Display the outcomes.
+%
+%  References: baumgartner2013assessment baumgartner2012modelling
 
 % AUTHOR : Robert Baumgartner
 

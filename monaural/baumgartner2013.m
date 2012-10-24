@@ -3,19 +3,19 @@ function varargout = baumgartner2013( target,template,varargin )
 %   Usage:    [p,respang] = baumgartner2013( target,template,varargin )
 %
 %   Input parameters:
-%      target  : binaural impulse response(s) referring to the directional 
-%                transfer function(s) (DFTs) of the target sound(s).
-%      template: binaural impulse responses of all available
-%                listener-specific DTFs of the sagittal plane referring to
-%                the perceived lateral angle of the target sound
+%     target  : binaural impulse response(s) referring to the directional 
+%               transfer function(s) (DFTs) of the target sound(s).
+%     template: binaural impulse responses of all available
+%               listener-specific DTFs of the sagittal plane referring to
+%               the perceived lateral angle of the target sound
 %
 %   Output parameters:
-%      p       : predicted probability mass vectors for response angles 
-%                with respect to target positions
-%                1st dim: polar response angle
-%                2nd dim: polar taget angle
-%      respang : polar response angles (after regularization of angular 
-%                sampling)
+%     p       : predicted probability mass vectors for response angles 
+%               with respect to target positions
+%               1st dim: polar response angle
+%               2nd dim: polar taget angle
+%     respang : polar response angles (after regularization of angular 
+%               sampling)
 %
 %   `baumgartner2013(...)` is a model for sound-source localization in
 %   sagittal planes (SPs). It bases on the comparison of internal sound 
@@ -89,8 +89,11 @@ function varargout = baumgartner2013( target,template,varargin )
 %
 %     p = demo_baumgartner2013('NH58');
 %
-%   See also: plotbaumgartner2013, data_baumgartner2013, exp_baumgartner2013
-    
+%   See also: plotbaumgartner2013, data_baumgartner2013,
+%   exp_baumgartner2013
+%
+%   References: baumgartner2013assessment baumgartner2012modelling langendijk2002contribution patterson1988efficient dau1996qmeI
+%
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
 %% Check input options 

@@ -49,7 +49,7 @@ function data = data_baumgartner2013(varargin)
 %
 %   See also: baumgartner2013, exp_baumgartner2013
 %
-%   References: baumgartner2013
+%   References: baumgartner2013assessment baumgartner2012modelling
 
 % AUTHOR : Robert Baumgartner
 

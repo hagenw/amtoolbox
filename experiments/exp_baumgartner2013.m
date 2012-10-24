@@ -111,7 +111,8 @@ function varargout=exp_baumgartner2013(varargin)
 %
 %     exp_baumgartner2013('fig13');
 %
-%   References: baumgartner2013 lopezpoveda2001hnc pralong1996role goode1994nkf
+%   References: baumgartner2013assessment baumgartner2012modelling
+
   
 % AUTHOR: Robert Baumgartner
 
@@ -325,8 +326,8 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
   elseif flags.do_fig14 % -------------------------------------------------
     
     ears = 1;  % NH58
-    s(ears).peexp = 23.5; % !!!
-    s(ears).qeexp = 1; % !!!
+    s(ears).peexp = 23.5;
+    s(ears).qeexp = 0.775;
     
     if flags.do_plot
       

@@ -41,7 +41,7 @@ function out = plotbaumgartner2013( p,tang,rang,varargin)
 %
 %   See also: baumgartner2013
 %
-%   References: baumgartner2013
+%   References: baumgartner2013assessment baumgartner2012modelling
   
 % AUTHOR : Robert Baumgartner
 
