@@ -15,7 +15,7 @@ OBJS =  AllocationError.o CloseWrite.o cochlea.o \
 #CC = /opt/intel/Compiler/11.0/074/bin/ia32/ifort
 #CC=/mnt/localhd/home/save/intel/composer_xe_2011_sp1.9.293/bin/ia32/ifort
 #CC = ifort
-OFLAGS = -c -ffixed-line-length-none
+OFLAGS = -c -ffixed-line-length-none -Wline-truncation
 EFLAGS = -o
 #now come the rules
 CC = gfortran
