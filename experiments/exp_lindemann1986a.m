@@ -361,6 +361,7 @@ if flags.do_fig7
     
     if flags.do_plot
       % ------ Plotting ------
+      figure;
       for jj = 1:length(c_s)
         plot(itd,output(jj,:));
         hold on;
@@ -680,6 +681,7 @@ if flags.do_fig12
 
     if flags.do_plot
       % ------ Plotting ------
+      figure;
       data = data_lindemann1986a('fig12_400');
       plot(data(:,1),data(:,2),'+');
       hold on;
@@ -873,6 +875,7 @@ if flags.do_fig14a
     
     if flags.do_plot
       % ------ Plotting ------
+      figure;
       for jj = 1:length(c_s)
         plot(ild,output(jj,:));
         hold on;
@@ -961,6 +964,7 @@ if flags.do_fig14b
     end;
 
     if flags.do_plot
+      figure;
       for nn = 1:length(ild_std)+1
         plot(itd,output(nn,:)); hold on;
       end
@@ -1124,6 +1128,7 @@ if flags.do_fig16
       
     if flags.do_plot
       % ------ Plotting ------
+      figure;
       data = data_lindemann1986a('fig16');
       plot(data(:,1),data(:,2),'+');
       hold on;
