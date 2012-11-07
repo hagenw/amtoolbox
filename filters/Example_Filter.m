@@ -16,7 +16,8 @@ disp('input signals with a sampling frequency of 10kHz.              ');
 center_frequency_hz   =  1000;
 bandwidth_hz          =   100;
 attenuation_db        =     3;
-fs = 10000;
+%fs = 10000;
+fs = 44100;
 filter_order          =     4;
 
 filter = gfb_filter_new(fs, center_frequency_hz, ...
@@ -35,7 +36,7 @@ disp(['Its normalization factor is             : ', ...
 
 %%% plot the impulse response and the frequency response of this filter: %%%
 impulse_samples            = 8192;
-impulse_response_samples   =  200;
+impulse_response_samples   =  800;
 impulse                    = [1, zeros(1,impulse_samples - 1)];
 
 [impulse_response, filter] = gfb_filter_process(filter, impulse);

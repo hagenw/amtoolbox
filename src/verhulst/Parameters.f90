@@ -16,15 +16,19 @@ SUBROUTINE Parameters (WriteRead, FileHandler)
   CHARACTER(127) tmpAudioFileName, tmpSettingsDirectory, tmpOutputDirectory
   CHARACTER(127) tmpPressureEarCanalFileName, tmpProfileFileName, tmpProbingFileName, tmpCochleaFileName
 
-	NAMELIST /GENERAL/ n, ComputationalFrequency, t_max, retrieveMembraneStatus, storeMembraneStatus, settingsDirectory
+	NAMELIST /GENERAL/ n, ComputationalFrequency, t_max, retrieveMembraneStatus, &
+      &storeMembraneStatus, settingsDirectory
 	NAMELIST /STIMULUS/ OnsetDuration
 	NAMELIST /SIGNAL1/ useSignal1, signal1Frequency, signal1Phase, signal1Level
 	NAMELIST /SIGNAL2/ useSignal2, signal2Frequency, signal2Phase, signal2Level
 	NAMELIST /SIGNAL3/ useSignal3, signal3Period, signal3Duration, signal3Level
 	NAMELIST /AUDIOFILE/ useAudiofile, useLeftChannel, audioFileName, audioFileLevel, audioFileRMS
-	NAMELIST /COCHLEA/ Rme, useZweigIrregularity, IrrPct, useLFirregularity, useKneeVar , KneeVar , Nonlinear, SheraNonlinearityType, SheraPo, compressionslope, Subjectnr			 
-	NAMELIST /OUTPUT/ OutputDirectory, storePressureEarCanal, PressureEarCanalFileName, storeProfile, ProfileFileName, &
-													storeProbing, ProbingFileName, probes !!SV
+	NAMELIST /COCHLEA/ Rme, useZweigIrregularity, IrrPct, useLFirregularity, useKneeVar , &
+      &KneeVar , Nonlinear, SheraNonlinearityType, SheraPo, compressionslope, Subjectnr			 
+
+	NAMELIST /OUTPUT/ OutputDirectory, storePressureEarCanal, &
+      PressureEarCanalFileName, storeProfile, ProfileFileName, &
+      storeProbing, ProbingFileName, probes !!SV
 
 	IF (WriteRead==READS) THEN
 		READ (FileHandler, GENERAL, IOSTAT = ios)
