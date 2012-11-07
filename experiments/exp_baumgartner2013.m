@@ -217,7 +217,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
     end
   end
   
-  h = waitbar(0,'Please wait a little!');
+  fprintf('\n Please wait a little! \n');
   qe = zeros(ns,ns,length(latdivision)); % init QEs
   pe = qe;                               % init PEs
   for ll = 1:ns    % listener
@@ -236,10 +236,8 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
 
           end
       end
-      waitbar(ll/ns,h)
-
+      fprintf(' Subject %2u of %2u \n',ll,ns);
   end
-  close(h)
 
   qe = mean(qe,3);
   pe = mean(pe,3);
@@ -476,7 +474,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
 
     D = LSPhp(1,2):dpol:LSPhp(nLSP,2);     % Desired polar angle    
 
-    w = waitbar(0,'Please wait a little!');
+    fprintf('\n Please wait a little! \n');
     for ll = 1:ns
 
       [poscart(:,1),poscart(:,2),poscart(:,3)] = ...
@@ -529,10 +527,9 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
 
       end
 
-      waitbar(ll/ns,w)
+      fprintf(' Subject %2u of %2u \n',ll,ns);
 
     end
-    close(w)
 
     % Pool
     ppool = zeros(size(s(1).p{ss}));
@@ -640,7 +637,7 @@ if flags.do_fig19 || flags.do_fig20
     end
     pol2{ii} = (polang(id1)+polang(id2)) /2;
     
-    w = waitbar(0,['Span: ' num2str(dPol(ii)) '°']);
+    fprintf([' Span: ' num2str(dPol(ii)) '° \n']);
     for ll = 1:length(s)
 
         s(ll).spdtfs = extractsp(lat,s(ll).dtfs,s(ll).pos);
@@ -664,9 +661,8 @@ if flags.do_fig19 || flags.do_fig20
         qeI(ll,ii) = s(ll).qe2{ii} - s(ll).qe1{ii};
         peI(ll,ii) = s(ll).pe2{ii} - s(ll).pe1{ii};
 
-        waitbar(ll/length(s),w)
     end
-    close(w)
+
   end
   
   if nargout == 1
