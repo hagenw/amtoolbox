@@ -483,7 +483,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
       % DTF indices of LSPs
       idLSP = zeros(nLSP,1);
       for ii = 1:nLSP
-        [~,idLSP(ii)] = min( dist(poscart,LSPcart(ii,:)') );
+        [tmp,idLSP(ii)] = min( dist(poscart,LSPcart(ii,:)') );
       end
       clear poscart
 
