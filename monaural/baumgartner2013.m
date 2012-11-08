@@ -183,8 +183,8 @@ elseif flags.do_gt
     ireptem = reshape(ireptem,[size(template,1),Nfc,size(template,2),size(template,3)]);
     
     % Averaging over time (RMS)
-    ireptar = db(squeeze(rms(ireptar)));      % in dB !!!!!!
-    ireptem = db(squeeze(rms(ireptem)));
+    ireptar = 20*log10(squeeze(rms(ireptar)));      % in dB !!!!!!
+    ireptem = 20*log10(squeeze(rms(ireptem)));
         
 elseif flags.do_drnl   
     
@@ -210,8 +210,8 @@ elseif flags.do_drnl
     ireptem = reshape(ireptem,[size(ireptem,1),length(fc),size(template,2),size(template,3)]);
     
     % Averaging over time (RMS)
-    ireptar = db(squeeze(rms(ireptar)));
-    ireptem = db(squeeze(rms(ireptem)));
+    ireptar = 20*log10(squeeze(rms(ireptar)));
+    ireptem = 20*log10(squeeze(rms(ireptem)));
 
 end
 

@@ -157,7 +157,7 @@ if flags.do_fig12
     s(ll).spdtfs = [];
     s(ll).polangs = [];
     [s(ll).spdtfs,s(ll).polangs] = extractsp(lat,s(ll).dtfs,s(ll).pos);
-    mag = db(abs(fft(s(ll).spdtfs,nfft)));
+    mag = 20*log10(abs(fft(s(ll).spdtfs,nfft)));
     mag = mag(1:nfft/2+1,:,:);
     maxmag = max(max(max(mag)));
     mag = mag - maxmag;       % normalize to 0dB
