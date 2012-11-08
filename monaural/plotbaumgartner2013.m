@@ -6,7 +6,8 @@ function out = plotbaumgartner2013( p,tang,rang,varargin)
 %   Input parameters:
 %     p       : prediction matrix containing probability mass vectors (PMVs) 
 %               for the polar response angle as a function of the polar  
-%               target angle
+%               target angle (1st dim: response angle, 2nd dim: target
+%               angle)
 %     rang    : polar response angles
 %     tang    : polar target angles
 %
@@ -48,11 +49,20 @@ function out = plotbaumgartner2013( p,tang,rang,varargin)
 definput.keyvals.exptang = [];
 definput.keyvals.exprang = [];
 definput.keyvals.MarkerSize = 6;
-definput.keyvals.cmax = 0.2;
+definput.keyvals.cmax = 0.1;
 definput.flags.colorbar = {'colorbar','nocolorbar'};
 [flags,kv]=ltfatarghelper({'exptang','exprang','MarkerSize','cmax'},definput,varargin);
 
-% Plot prediction matrix 
+
+%% Error handling
+if size(p,1) ~= length(rang) || size(p,2) ~= length(tang)
+  fprintf('\n Error: Dimension mismatch between p and rang/tang! \n Check the order of input arguments to fit plotbaumgartner2013(p,tang,rang). \n')
+  return
+end
+
+
+
+%% Plot prediction matrix 
 h = pcolor(tang,rang,p);
 axis equal
 set(gca,'XTick',-60:30:240,...
@@ -68,7 +78,7 @@ end
 xlabel('Target Angle (°)')
 ylabel('Response Angle (°)')
 
-% Plot response pattern on top
+%% Plot response pattern on top
 if length(kv.exptang)==length(kv.exprang)
     hold on 
     h1 = plot( kv.exptang, kv.exprang, 'wo');  % shadow

@@ -1,6 +1,6 @@
 function varargout = baumgartner2013( target,template,varargin )
 %BAUMGARTNER2013 Model for localization in saggital planes
-%   Usage:    [p,respang] = baumgartner2013( target,template,varargin )
+%   Usage:    [p,respang] = baumgartner2013( target,template )
 %
 %   Input parameters:
 %     target  : binaural impulse response(s) referring to the directional 
@@ -12,8 +12,8 @@ function varargout = baumgartner2013( target,template,varargin )
 %   Output parameters:
 %     p       : predicted probability mass vectors for response angles 
 %               with respect to target positions
-%               1st dim: polar response angle
-%               2nd dim: polar taget angle
+%               1st dim: response angle
+%               2nd dim: target angle
 %     respang : polar response angles (after regularization of angular 
 %               sampling)
 %
@@ -124,6 +124,13 @@ definput.keyvals.polsamp=[-30:5:70 80 100 110:5:210];  % polar sampling (for reg
 [flags,kv]=ltfatarghelper(...
   {'fs','space','do','u','lat','flow','fhigh',...
   'lvlstim','lvltem','stim','fsstim','bwsteep','polsamp'},definput,varargin);
+
+
+%% Error handling
+if size(template,2) ~= length(kv.polsamp)
+  fprintf('\n Error: Second dimension of template and length of polsamp need to be of the same size! \n')
+  return
+end
 
 
 %% Stimulus 
