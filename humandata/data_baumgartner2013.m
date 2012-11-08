@@ -103,9 +103,18 @@ if flags.do_pool % load also DTFs of SPs
   % sort acc. to ascending exp. PE
   data = data([12,1,10,3,14,16,8,9,4,2,7,15,17,5,11,6,13]); 
   
-  hpath = which('hrtfinit'); % find local path of hrtf repository
+  hpath = which('hrtfinit');  % find local path of hrtf repository
   hpath = hpath(1:end-10);
-
+  sl = hpath(end);            % slash sign (OS dependent)
+  
+  if exist([hpath 'hrtf_M_baumgartner2013'],'dir') ~= 7
+    fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from the webpage popped up, \n unzip it, and move it into  ' hpath ' .\n' ' Then, press any key to quit pausing. \n'])
+    web 'http://www.kfs.oeaw.ac.at/content/view/546/531/lang,8859-1/'
+    pause
+  end
+  
+  hpath = [hpath sl 'hrtf_M_baumgartner2013' sl];
+  
   for ii = 1:length(data)
     
     load([hpath 'hrtf_M_baumgartner2013 ' data(ii).id])
