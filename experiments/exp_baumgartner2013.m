@@ -569,7 +569,9 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
       subplot(1,3,ii)
     
       h = pcolor(D,s(ll).respangs,s(ll).p{ss});
-      axis equal
+      if not(isoctave) % does not work with x11 (mac osx)
+        axis equal
+      end
       if flags.do_fig23 || (flags.do_fig22 && ss > 1)
         set(gca,'XLim',[D(1)-3 D(end)+3],'XMinorTick','on',...
           'XTick',0:30:180,'XTickLabel',{0:30:150,180})

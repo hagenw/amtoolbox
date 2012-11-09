@@ -62,7 +62,7 @@ function varargout = baumgartner2013( target,template,varargin )
 %
 %   `baumgartner2013` accepts the following flags:
 %
-%     'gt'           Use the Gammatone filterbank for peripheral processing. 
+%     'gammatone'    Use the Gammatone filterbank for peripheral processing. 
 %                    This is the default.
 %
 %     'cqdft'        Use a filterbank approximation based on DFT with 
@@ -98,7 +98,7 @@ function varargout = baumgartner2013( target,template,varargin )
 
 %% Check input options 
 
-definput.flags.fbank = {'gt','cqdft','drnl'};
+definput.flags.fbank = {'gammatone','cqdft','drnl'};%'zilany2007humanized''
 definput.flags.headphonefilter = {'','headphone'};
 definput.flags.middleearfilter = {'','middleear'};
 definput.flags.ihc = {'ihc','noihc'};
@@ -167,12 +167,14 @@ if flags.do_cqdft
     ireptem = cqdft(template,kv.fs,kv.flow,kv.fhigh,bpo);
     ireptar = cqdft(target,kv.fs,kv.flow,kv.fhigh,bpo);
 
-elseif flags.do_gt
+elseif flags.do_gammatone
 
     % Determine filterbank
     fc = audspacebw(kv.flow,kv.fhigh,kv.space,'erb');
     Nfc = length(fc);   % # of bands
     [bgt,agt] = gammatone(fc,kv.fs,'classic');
+    bgt = real(bgt);  % to ensure octave compatibility
+    agt = real(agt);  % to ensure octave compatibility
     
     % Filtering
     ireptar = ufilterbankz(bgt,agt,target(:,:)); % channel (3rd) dimension resolved!
@@ -190,7 +192,7 @@ elseif flags.do_gt
     ireptem = reshape(ireptem,[size(template,1),Nfc,size(template,2),size(template,3)]);
     
     % Averaging over time (RMS)
-    ireptar = 20*log10(squeeze(rms(ireptar)));      % in dB !!!!!!
+    ireptar = 20*log10(squeeze(rms(ireptar)));      % in dB!
     ireptem = 20*log10(squeeze(rms(ireptem)));
         
 elseif flags.do_drnl   

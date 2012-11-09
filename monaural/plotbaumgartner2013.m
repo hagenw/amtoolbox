@@ -64,7 +64,10 @@ end
 
 %% Plot prediction matrix 
 h = pcolor(tang,rang,p);
-axis equal
+if not(isoctave) % does not work with x11 (mac osx)
+  axis equal
+end
+
 set(gca,'XTick',-60:30:240,...
     'YTick',-60:30:240,...
     'XMinorTick','on','YMinorTick','on')
@@ -73,7 +76,7 @@ colormap bone
 shading flat
 caxis([0 kv.cmax])
 if flags.do_colorbar
-    colorbar('location','southoutside')
+    colorbar('southoutside')
 end
 xlabel('Target Angle (°)')
 ylabel('Response Angle (°)')
