@@ -52,7 +52,7 @@ function y = dbspl(insig,varargin)
 definput.keyvals.dim=[];
 definput.flags.mean={'noac','ac'};
 definput.keyvals.dboffset=100;
-[flags,kv]=ltfatarghelper({},definput,varargin);
+[flags,kv]=ltfatarghelper({'dim','dboffset'},definput,varargin);
 
   
 % ------ Computation --------------------------
@@ -60,5 +60,5 @@ definput.keyvals.dboffset=100;
 % The level of a signal in dB SPL is given by the following formula:
 % level = 20*log10(p/p_0)
 % To get to the standard used in the toolbox.
-y = 20*log10( rms(insig,varargin{:}) )+kv.dboffset;
+y = 20*log10( rms(insig,flags.mean) )+kv.dboffset;
 
