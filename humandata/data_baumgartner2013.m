@@ -43,10 +43,6 @@ function data = data_baumgartner2013(varargin)
 %
 %     data_baumgartner2013('pool');
 %
-%   To get experimental data from Fig. 8 (XXX Does not work), use::
-%
-%     data_baumgartner2013('fig8');
-%
 %   See also: baumgartner2013, exp_baumgartner2013
 %
 %   References: baumgartner2013assessment baumgartner2012modelling

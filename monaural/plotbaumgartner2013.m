@@ -85,7 +85,7 @@ ylabel('Response Angle (°)')
 if length(kv.exptang)==length(kv.exprang)
     hold on 
     h1 = plot( kv.exptang, kv.exprang, 'wo');  % shadow
-    set(h1,'MarkerSize',kv.MarkerSize+1,'MarkerFaceColor','none') 
+    set(h1,'MarkerSize',kv.MarkerSize+2,'MarkerFaceColor','none') 
     h2 = plot( kv.exptang, kv.exprang, 'ko'); 
     set(h2,'MarkerSize',kv.MarkerSize,'MarkerFaceColor','none') 
     hold off

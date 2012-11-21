@@ -30,7 +30,7 @@ function varargout = extractsp(lat,hM,pos)
 dlat = 2;      % initial lateral tolerance (+/-) in deg
 pol = [0,0];   % initial polar angles
 
-while (min(pol) >= -30 || max(pol) <= 210 ... % ensure that important polar range is included
+while (min(pol) > -30 || max(pol) < 210 ... % ensure that important polar range is included
         || max(diff(pol))>30)...    % and gaps are <= 30°
         && dlat <= 5                % but keep tolerance smaller than 5 deg
 

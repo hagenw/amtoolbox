@@ -98,7 +98,7 @@ function varargout = baumgartner2013( target,template,varargin )
 
 %% Check input options 
 
-definput.flags.fbank = {'gammatone','cqdft','drnl'};%'zilany2007humanized''
+definput.flags.fbank = {'gammatone','cqdft','drnl','zilany2007humanized'};
 definput.flags.headphonefilter = {'','headphone'};
 definput.flags.middleearfilter = {'','middleear'};
 definput.flags.ihc = {'ihc','noihc'};
@@ -112,7 +112,7 @@ definput.keyvals.space=1;       % No. of ERBs (Cams)
 definput.keyvals.do=0;
 definput.keyvals.u=2;           % listener-specific uncertainty in dB
 definput.keyvals.lat=0;         % deg
-definput.keyvals.flow=1000;     % Hz
+definput.keyvals.flow=700;     % Hz
 definput.keyvals.fhigh=18000;   % Hz
 definput.keyvals.lvlstim = 40; 	% dBSPL
 definput.keyvals.lvltem = 40;  	% dBSPL
@@ -198,9 +198,11 @@ elseif flags.do_gammatone
 elseif flags.do_drnl   
     
     % Set level
+    idnztar = target~=0;    % to ignore pausings
+    idnztem = template~=0;  % to ignore pausings
     for ch = 1:size(template,3)
-        target(:,:,ch) = setdbspl(target(:,:,ch),kv.lvlstim);
-        template(:,:,ch) = setdbspl(template(:,:,ch),kv.lvltem);
+        target(idnztar(:,:,ch)) = setdbspl(target(idnztar(:,:,ch)),kv.lvlstim);
+        template(idnztem(:,:,ch)) = setdbspl(template(idnztem(:,:,ch)),kv.lvltem);
     end
     
     % Filtering
@@ -222,6 +224,42 @@ elseif flags.do_drnl
     ireptar = 20*log10(squeeze(rms(ireptar)));
     ireptem = 20*log10(squeeze(rms(ireptem)));
 
+elseif flags.do_zilany2007humanized
+    
+%     lvlref = 20*log10(1/20e-6);  % reference level: 20 micro Pascal
+  
+%     % Set level
+%     for ch = 1:size(template,3)
+%         target(:,:,ch) = setdbspl(target(:,:,ch),kv.lvlstim,'dboffset',lvlref);
+%         template(:,:,ch) = setdbspl(template(:,:,ch),kv.lvltem,'dboffset',lvlref);
+%     end
+  
+    fsmod = 100e3;  % Model sampling frequency in Hz
+    nf = 200;       % # of AN fibers
+    
+    fprintf('\n Compute internal representation of target set: \n');
+    target = [target ; zeros(1e3,size(target,2),size(target,3))]; % concatenate zeros, otherwise comp_zilany2007humanized complaines about: "reptime should be equal to or longer than the stimulus duration." 
+    ireptar = zeros(nf,size(target,2),size(target,3));
+    nt = size(target(:,:),2);
+    for ii = 1:nt
+      [ANout,vFreq] = zilany2007humanized(kv.lvlstim,target(:,ii),kv.fs,...
+        fsmod,'flow',kv.flow,'fhigh',kv.fhigh,'nfibers',nf);
+      ANout = ANout'-50; % subtract 50 due to spontaneous rate
+      ireptar(:,ii) = sum(ANout); % integrate over time
+%       ireptar(:,ii) = 20*log10(rms(ANout));
+      fprintf(' %2u of %2u done\n',ii,nt);
+    end
+    ireptem = ireptar;
+%     fprintf('\n Compute internal representation of template: \n');
+%     ireptem = zeros(nf,size(template,2),size(template,3));
+%     nt = size(template(:,:),2);
+%     for ii = 1:nt
+%       fprintf(' %2u of %2u done\n',ii,nt);
+%       ANtmp = zilany2007humanized(kv.lvltem,template(:,ii),kv.fs,...
+%         fsmod,'flow',kv.flow,'fhigh',kv.fhigh,'nfibers',nf);
+%       ireptem(:,ii) = 20*log10(rms(ANtmp'));
+%     end
+    
 end
 
 if size(ireptar,2) ~= size(target,2) % retreive polar dimension if squeezed out
