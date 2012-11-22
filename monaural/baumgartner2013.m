@@ -1,6 +1,6 @@
 function varargout = baumgartner2013( target,template,varargin )
 %BAUMGARTNER2013 Model for localization in saggital planes
-%   Usage:    [p,respang] = baumgartner2013( target,template,varargin )
+%   Usage:    [p,respang] = baumgartner2013( target,template )
 %
 %   Input parameters:
 %     target  : binaural impulse response(s) referring to the directional 
@@ -12,8 +12,8 @@ function varargout = baumgartner2013( target,template,varargin )
 %   Output parameters:
 %     p       : predicted probability mass vectors for response angles 
 %               with respect to target positions
-%               1st dim: polar response angle
-%               2nd dim: polar taget angle
+%               1st dim: response angle
+%               2nd dim: target angle
 %     respang : polar response angles (after regularization of angular 
 %               sampling)
 %
@@ -62,7 +62,7 @@ function varargout = baumgartner2013( target,template,varargin )
 %
 %   `baumgartner2013` accepts the following flags:
 %
-%     'gt'           Use the Gammatone filterbank for peripheral processing. 
+%     'gammatone'    Use the Gammatone filterbank for peripheral processing. 
 %                    This is the default.
 %
 %     'cqdft'        Use a filterbank approximation based on DFT with 
@@ -98,7 +98,7 @@ function varargout = baumgartner2013( target,template,varargin )
 
 %% Check input options 
 
-definput.flags.fbank = {'gt','cqdft','drnl'};
+definput.flags.fbank = {'gammatone','cqdft','drnl'};%'zilany2007humanized''
 definput.flags.headphonefilter = {'','headphone'};
 definput.flags.middleearfilter = {'','middleear'};
 definput.flags.ihc = {'ihc','noihc'};
@@ -124,6 +124,13 @@ definput.keyvals.polsamp=[-30:5:70 80 100 110:5:210];  % polar sampling (for reg
 [flags,kv]=ltfatarghelper(...
   {'fs','space','do','u','lat','flow','fhigh',...
   'lvlstim','lvltem','stim','fsstim','bwsteep','polsamp'},definput,varargin);
+
+
+%% Error handling
+if size(template,2) ~= length(kv.polsamp)
+  fprintf('\n Error: Second dimension of template and length of polsamp need to be of the same size! \n')
+  return
+end
 
 
 %% Stimulus 
@@ -160,12 +167,14 @@ if flags.do_cqdft
     ireptem = cqdft(template,kv.fs,kv.flow,kv.fhigh,bpo);
     ireptar = cqdft(target,kv.fs,kv.flow,kv.fhigh,bpo);
 
-elseif flags.do_gt
+elseif flags.do_gammatone
 
     % Determine filterbank
     fc = audspacebw(kv.flow,kv.fhigh,kv.space,'erb');
     Nfc = length(fc);   % # of bands
     [bgt,agt] = gammatone(fc,kv.fs,'classic');
+    bgt = real(bgt);  % to ensure octave compatibility
+    agt = real(agt);  % to ensure octave compatibility
     
     % Filtering
     ireptar = ufilterbankz(bgt,agt,target(:,:)); % channel (3rd) dimension resolved!
@@ -183,8 +192,8 @@ elseif flags.do_gt
     ireptem = reshape(ireptem,[size(template,1),Nfc,size(template,2),size(template,3)]);
     
     % Averaging over time (RMS)
-    ireptar = db(squeeze(rms(ireptar)));      % in dB !!!!!!
-    ireptem = db(squeeze(rms(ireptem)));
+    ireptar = 20*log10(squeeze(rms(ireptar)));      % in dB!
+    ireptem = 20*log10(squeeze(rms(ireptem)));
         
 elseif flags.do_drnl   
     
@@ -210,8 +219,8 @@ elseif flags.do_drnl
     ireptem = reshape(ireptem,[size(ireptem,1),length(fc),size(template,2),size(template,3)]);
     
     % Averaging over time (RMS)
-    ireptar = db(squeeze(rms(ireptar)));
-    ireptem = db(squeeze(rms(ireptem)));
+    ireptar = 20*log10(squeeze(rms(ireptar)));
+    ireptem = 20*log10(squeeze(rms(ireptem)));
 
 end
 

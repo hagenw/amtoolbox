@@ -55,9 +55,9 @@ for ind = jj(1)+1:jj(end)
     cqmaghr(idn,:,:) = repmat(cqmag(ind,:,:),[length(idn),1,1]);
 end
 
-cqmag = db(cqmag);
+cqmag = 20*log10(cqmag);
 cqmaghr(nfft/2+2:end,:,:) = cqmaghr(nfft/2:-1:2,:,:);
-cqmaghr = db(cqmaghr);
+cqmaghr = 20*log10(cqmaghr);
 
 end
 

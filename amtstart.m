@@ -75,24 +75,6 @@ end;
 % Print the banner at startup?
 printbanner=1;
 
-% --- Settings for plots ---
-
-% See the help on AUDSPECGRAM for a definition of each of the settings
-% below.
-
-% displayratio, frange and ytick must ALWAYS be set.
-
-plotdefaults = {'rectify',...
-                'adapt',...
-                'xres',800,...
-                'displayratio',3/4,...
-                'ytick',[100,250,500,1000,2000,4000,8000],...
-                'frange',[0,8000],...
-                'image',...
-                'mlp',50,...
-                };
-
-
 % ----------------------------------------------------
 % -------   do not edit below this line   ------------
 % ----------------------------------------------------
@@ -121,12 +103,6 @@ else
     amt_version = fgetl (FID);
     fclose(FID);
 end
-
-% Create and load the information.
-global AMT_CONF;
-AMT_CONF.basepath=bp;
-AMT_CONF.amt_version=amt_version;
-AMT_CONF.plotdefaults=plotdefaults;
 
 % -----------  install the modules -----------------
 
@@ -166,8 +142,6 @@ for ii=1:length(d)
   end;
 end;
 
-AMT_CONF.modules=modules;
-
 % Check if Octave was called using 'silent'
 %if isoctave
 %  args=argv;
@@ -182,3 +156,11 @@ AMT_CONF.modules=modules;
 if printbanner
   disp(['AMT version ',amt_version,'. Copyright 2012 Peter L. Soendergaard. For help, please type "amthelp".'])
 end;
+
+
+
+%% ---------- load information into ltfathelp ------------
+
+% As comp is now in the path, we can call ltfatarghelper
+ltfatsetdefaults('amthelp','versiondata',amt_version,...
+                 'modulesdata',modules);

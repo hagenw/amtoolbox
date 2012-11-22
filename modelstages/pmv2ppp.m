@@ -52,7 +52,10 @@ qet = zeros(nt,1); % QE for each target angle
 pet = zeros(nt,1); % PE for each target angle
 pbt = zeros(nt,1); % PB for each target angle
 for ii = 1:nt % for all target positions
-    d = abs(wrapTo180(tang(ii)-rang)); % unwraped angular distance between tang & rang
+    d = tang(ii)-rang;                 % wraped angular distance between tang & rang
+    iduw = (d < -180) | (180 < d);     % 180°-unwrap indices
+    d(iduw) = mod(d(iduw) + 180,360) - 180; % 180° unwrap
+    d = abs(d);                        % absolut distance
     qet(ii) = sum( p(d>=90,ii) );
     pc = p(d<90,ii);                   % pmv for conditional probability excluding QEs
     pc = pc/sum(pc);                   % normalization to sum=1
