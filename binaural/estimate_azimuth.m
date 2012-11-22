@@ -37,11 +37,13 @@ if nargin==2
     model = 'dietz';
     fs = 44100;
 elseif nargin==3
-    isargstring(model);
     fs = 44100;
-else
-    isargchar(model);
-    isargpositivescalar(fs);
+end
+if ~ischar(model)
+    error('%s: %s need to be a string.',upper(mfilename),model);
+end
+if ~isnumeric(fs) || ~isscalar(fs) || fs<0
+    error('%s: %s need to be a positive scalar.',upper(mfilename),fs);
 end
 
 
@@ -52,11 +54,6 @@ if strcmpi('dietz',model)
 
     ic_threshold=0.98;
     cn = 10; % channel number for time plot
-
-    % TODO: the new Matlab Syntax for dummy variables is:
-    % [~,idx] = max(a);
-    %max This should also work in Octave, but version 4.3 is needed. Check if this
-    % could be installed easily under Debian
 
     % Run the Dietz model on signal
     [fine, modulation, cfreqs, ild_tmp] = dietz2011(sig,fs);
@@ -109,9 +106,6 @@ elseif strcmpi('lindemann',model)
     azimuth = itd2azimuth(itd,lookup);
 end
 
-% NOTE: the last version used the mean instead of median, and no outliers had
-% been removed!
-%
 % Calculate mean about frequency channels
 % first remove outliers
 [azimuth,cfreqs] = remove_outlier(azimuth,itd,cfreqs);
@@ -132,16 +126,8 @@ function [azimuth,cfreqs] = remove_outlier(azimuth,itd,cfreqs)
     azimuth = azimuth(abs(itd(1:12))<0.001);
     % remove NaN
     azimuth = azimuth(~isnan(azimuth));
-    % remove azimuth with other sign than the mean
-    %azimuth = azimuth(sign(azimuth)==sign(median(azimuth)));
-    % remove outliers with 2*std
-    %azimuth = azimuth(abs(azimuth-median(azimuth))<std(azimuth));
+    % remove outliers more than 30deg away from median
     azimuth = azimuth(abs(azimuth-median(azimuth))<rad(30));
-    %idx = (( abs(itd(1:12))<0.001 && ...
-    %         ~isnan(azimuth) && ...
-    %         abs(azimuth-median(azimuth))<rad(30) ));
-    %azimuth = azimuth(idx);
-    %cfreqs = cfreqs(idx);
 end
 function w = spectral_weighting(f)
     % Calculate a spectral weighting after Stern1988, after the data of
