@@ -252,7 +252,7 @@ if flags.do_fig6
   
   % Calculate crosscorrelations for 21 ITD points between 0~ms and 1~ms
   nitds = 21; % number of used ITDs
-  ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
+  ndl = 2*round(fs/1000)+1;   % length of the delay line (see bincorr.m)
   itd = linspace(0,1,nitds);
   
   if amtredofile(s,flags.redomode)
