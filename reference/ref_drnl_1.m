@@ -97,10 +97,10 @@ function outsig = drnl_1(insig,fs,varargin)
 % 
 %   References: lopezpoveda2001hnc jepsen2008cmh
 
-% AUTHOR: Morten L�ve Jepsen
+% AUTHOR: Morten Løve Jepsen
   
 % Bugfix by Marton Marschall 9/2008
-% Cleanup by Peter L. Soendergaard.
+% Cleanup by Peter L. Søndergaard.
   
 %DRNL for normal hearing, Morten 2007
 

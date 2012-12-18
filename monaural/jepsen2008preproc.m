@@ -42,7 +42,7 @@ function [outsig, fc, mfc] = jepsen2008preproc(insig, fs, varargin);
 %
 %   References: jepsen2008cmh
 
-%   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Soendergaard
+%   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Søndergaard
   
 % ------ Checking of input parameters ------------
 

@@ -12,7 +12,7 @@ function fb=filterbank_init(b,a,varargin);
 %
 %   See also: ufilterbankz, filterbank_block
 
-%   AUTHOR : Peter L. Soendergaard
+%   AUTHOR : Peter L. Søndergaard
 
 % ------ Checking of input parameters ---------  
 

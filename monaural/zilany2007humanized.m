@@ -14,12 +14,12 @@ function [ANdata,vFreq] = zilany2007humanized(stim_level,stim,fsstim,fsmod,varar
 %     vFreq      : Frequency vector containing the 500 center frequencies
 %
 %   `zilany2007humanized(stim_lvl, stim, fsstim, fsmod)` returns simulations
-%   from Rønne et al. (2012). It calls the mex'ed C code containing the
+%   from RÃ¸nne et al. (2012). It calls the mex'ed C code containing the
 %   humanized version of Zilany et al. (2007)'s AN model. The humanization
-%   is described in Rønne et al. (2012). The AN model is called 500 times to
+%   is described in RÃ¸nne et al. (2012). The AN model is called 500 times to
 %   simulate 500 fibers tuned to different center frequencies.
 %
-%   Please cite Rønne et al (2012) and Zilany and Bruce (2007) if you use
+%   Please cite RÃ¸nne et al (2012) and Zilany and Bruce (2007) if you use
 %   this model.
 %
 %   This function takes the following optional parameters:

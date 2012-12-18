@@ -1,5 +1,5 @@
 % Get Gammatone filter coef for DRNL implementation
-% Morten Løve Jepsen
+% Morten LÃ¸ve Jepsen
 function [b,a]=coefGtDRNL(fc,BW,n,fs);
 
 theta = 2*pi*fc/fs;

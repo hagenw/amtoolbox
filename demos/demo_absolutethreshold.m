@@ -31,18 +31,23 @@ plotpoints=30;
 
 xrange=linspace(flow,fhigh,plotpoints);
 
-types   = {'iso226_2003','iso389_2005','map','er3a','er2a','hda200'};
-legends = {'iso226\_2003','iso389\_2005','map','er3a','er2a','hda200'};
-symbols = {'k-'          ,'m^',          'ro' ,'gx'  ,'b+',  'y*'  };
 
-hold on;
+types   = {'iso226_2003','map','er3a','er2a','hda200'};
+legends = {'THR (free field)','MAP (free-field)','THR (ER-3A)','THR (ER-2A)','THR (HDA 200)'};
+symbols = {'r-'         ,'k-' ,'g:'  ,'b-.','y--'  };
+lines   = {2            , 1   , 2    , 2   , 2   };
+ticks   = [125,250,500,1000,2000,4000,8000];
+
+hold all;
 for ii=1:numel(types)
-  semiaudplot(xrange,absolutethreshold(xrange,types{ii}),'opts',{symbols{ii}});
+  semiaudplot(xrange,absolutethreshold(xrange,types{ii}),...
+		'tick', ticks,...
+		'opts',{symbols{ii},'Linewidth',lines{ii}});
 end;
-hold off;
-legend(legends{:},'Location','SouthEast');
+legend(legends{:},'Location','North');
 xlabel('Frequency (Hz)');
 ylabel('Absolte threshold (dB SPL)');
+xlim([2 35]);
 
 
 figure(2);
@@ -57,11 +62,14 @@ types   = {'er2a','hda200'};
 legends = {'er2a','hda200'};
 symbols = {'b+','y*'  };
 
-hold on;
+hold all;
 for ii=1:numel(types)
-  semiaudplot(xrange,absolutethreshold(xrange,types{ii}),'opts',{symbols{ii}});
+  semiaudplot(xrange,absolutethreshold(xrange,types{ii}),...
+              'tick', ticks,...
+              'opts',{symbols{ii},'Linewidth',lines{ii}});
 end;
 hold off;
-legend(legends{:},'Location','SouthEast');
+legend(legends{:},'Location','North');
 xlabel('Frequency (Hz)');
 ylabel('Absolte threshold (dB SPL)');
+xlim([2 41]);

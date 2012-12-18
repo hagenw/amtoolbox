@@ -1,4 +1,4 @@
-% rev Morten Løve Jepsen, 2.nov 2005
+% rev Morten LÃ¸ve Jepsen, 2.nov 2005
 function [b,a]=coefLPDRNL(fc,fs);
 
     % This function computes [b,a]=butter(2,fc/(fs/2));

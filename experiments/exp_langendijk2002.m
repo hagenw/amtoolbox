@@ -21,7 +21,7 @@ function output = exp_langendijk2002(varargin)
 %   by using the data_langendijk2002('expdata') function. 
 %
 %   The following subfigures shows the probability density function (pdf)
-%   and actual responses(°) for the chosen listener as a function of the target
+%   and actual responses(Â°) for the chosen listener as a function of the target
 %   position for different conditions. The shading of each cell codes the
 %   probability density (light/dark is high/low probability):
 %

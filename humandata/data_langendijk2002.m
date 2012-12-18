@@ -342,7 +342,7 @@ function [med,pol]=bmp2gr(bmpname)
 % Output arguments:
 %       medir:   	gain response data (in dB) on median plane for 
 %                   53 polar angles defined in pol
-%       pol:     	53 equally spaced polar angles between -55° and 235°
+%       pol:     	53 equally spaced polar angles between -55Â° and 235Â°
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 % latest update: 2010-08-16

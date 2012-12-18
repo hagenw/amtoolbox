@@ -50,7 +50,7 @@ function b = middleearfilter(fs,varargin)
 % 
 %   References: goode1994nkf lopezpoveda2001hnc
 
-%   AUTHOR: Peter L. Soendergaard, Katharina Egger
+%   AUTHOR: Peter L. Søndergaard, Katharina Egger
 
 %% ------ Check input options --------------------------------------------
 

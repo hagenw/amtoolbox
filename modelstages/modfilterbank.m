@@ -27,7 +27,7 @@ function [outsig,mfc] = modfilterbank(insig,fs,fc,varargin)
   
 % AUTHOR: Stephan Ewert
 %
-% Modifications by Morten L. Jepsen and Peter L. Soendergaard.
+% Modifications by Morten L. Jepsen and Peter L. Søndergaard.
 
 definput.keyvals.mfc=[];
 [flags,kv]=ltfatarghelper({},definput,varargin);

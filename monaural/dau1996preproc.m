@@ -40,7 +40,7 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %
 %   References: dau1996qmeI dau1996qmeII dau1997mapI
 
-%   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Soendergaard
+%   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Søndergaard
   
 % ------ Checking of input parameters ------------
 

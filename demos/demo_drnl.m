@@ -45,9 +45,9 @@ dynrange=25;
 %% DRNL 
 % Change 'bwmul' to generate more channels, this make the visualization
 % pretty.
-[outsig1, fc1] = drnl(setdbspl(insig,lvl1), fs, 'jepsen2008','bwmul',.1);
-[outsig2, fc2] = drnl(setdbspl(insig,lvl2), fs, 'jepsen2008','bwmul',.1);
-[outsig3, fc3] = drnl(setdbspl(insig,lvl3), fs, 'jepsen2008','bwmul',.1);
+[outsig1, fc1] = drnl(setdbspl(insig,lvl1), fs, 'bwmul',.1);
+[outsig2, fc2] = drnl(setdbspl(insig,lvl2), fs, 'bwmul',.1);
+[outsig3, fc3] = drnl(setdbspl(insig,lvl3), fs, 'bwmul',.1);
 
 %% 'haircell' envelope extraction
 outsig1 = ihcenvelope(outsig1,fs,'ihc_dau');

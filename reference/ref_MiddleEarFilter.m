@@ -1,6 +1,6 @@
 % Make a filter to apply a headphone and outer ear transfer function to the input
 % generate filter (.mat file) by running this once
-% Morten Løve Jepsen, 16.nov 2005
+% Morten LÃ¸ve Jepsen, 16.nov 2005
 
 function stapes_data = MiddleEarFilter(fs)
 

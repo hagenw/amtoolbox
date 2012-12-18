@@ -13,7 +13,7 @@ function [outsig,fb]=filterbank_block(insig,fb)
 %
 %   See also: filterbank_init, ufilterbankz
   
-%   AUTHOR : Peter L. Soendergaard
+%   AUTHOR : Peter L. Søndergaard
 
 % ------ Checking of input parameters ---------  
 

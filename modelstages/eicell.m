@@ -30,7 +30,7 @@ function z = eicell(insig,fs,tau,ild,varargin)
 %
 %   See also: breebaart2001preproc
 
-% Author: Jeroen Breebaart and Peter L. Soendergaard
+% Author: Jeroen Breebaart and Peter L. Søndergaard
 
 if nargin<4
   error('%s: Too few input arguments.',upper(mfilename));

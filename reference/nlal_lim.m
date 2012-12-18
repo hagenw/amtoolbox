@@ -14,12 +14,12 @@
 %
 % References
 %
-% Dau, T. , Püschel, D. and Kohlrausch, A. (1996): "A quantitative model of the
+% Dau, T. , PÃ¼schel, D. and Kohlrausch, A. (1996): "A quantitative model of the
 %     `effective' signal processing in the auditory system: (I). Model structure", 
 %     J. Acoust. Soc. Am. 99, p. 3615-3622.
 %
-% Püschel, D. (1988): "Prinzipien der zeitlichan Analyse beim Hören," Doctoral Thesis, 
-%     Universität Göttingen 
+% PÃ¼schel, D. (1988): "Prinzipien der zeitlichan Analyse beim HÃ¶ren," Doctoral Thesis, 
+%     UniversitÃ¤t GÃ¶ttingen 
 %
 
 % Copyright (c) 1999 - 2004 Stephan Ewert. All rights reserved.

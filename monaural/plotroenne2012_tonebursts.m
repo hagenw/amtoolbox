@@ -1,13 +1,13 @@
 function plotroenne2012_tonebursts(waveVlat,click_latency)
-%PLOTROENNE2012_TONEBURSTS plots Rønne et al. (2012) Fig. 5
+%PLOTROENNE2012_TONEBURSTS plots RÃ¸nne et al. (2012) Fig. 5
 %   Usage: plotroenne2012_tonebursts(flag)
 %
 %   `plotroenne2012_tonebursts(waveVlat,click_latency)` plots the output
-%   from |roenne2012_tonebursts|_ in a similar way as Fig. 5 from the Rønne
+%   from |roenne2012_tonebursts|_ in a similar way as Fig. 5 from the RÃ¸nne
 %   et al. (2012) ABR model.
 %   ---------
 %
-%   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
+%   Please cite RÃ¸nne et al. (2012) and Zilany and Bruce (2007) if you use
 %   this model.
 %  
 %   References: roenne2012modeling neely1988latency harte2009comparison zilany2007representation

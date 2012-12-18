@@ -21,7 +21,7 @@ function outsig=filterbankz(b,a,insig,hopsize)
 %
 %   See also: gammatone, ufilterbankz, auditoryfilterbank
   
-%   AUTHOR : Peter L. Soendergaard
+%   AUTHOR : Peter L. Søndergaard
 
 %% ------ Checking of input parameters ---------  
 

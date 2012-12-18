@@ -1,14 +1,14 @@
 function [waveVamp, waveVlat] = exp_roenne2012(varargin)
-%EXP_ROENNE2012 Figures from Rønne et al. (2012)
+%EXP_ROENNE2012 Figures from RÃ¸nne et al. (2012)
 %   Usage: output = exp_roenne2012(flag)
 %
 %   `exp_roenne2012(flag)` reproduces the results for the figure given
-%   by flag from the Rønne et al. (2012) paper. Outputs are the ABR wave V
+%   by flag from the RÃ¸nne et al. (2012) paper. Outputs are the ABR wave V
 %   amplitude and latency of all datapoints in that given figure.
 %   
 %   The following flags can be specified;
 %
-%     'plot'     Plot the specified figure from Rønne et al. (2012). This is
+%     'plot'     Plot the specified figure from RÃ¸nne et al. (2012). This is
 %                the default. 
 %
 %     'noplot'   Don't plot, only return data.
@@ -25,14 +25,14 @@ function [waveVamp, waveVlat] = exp_roenne2012(varargin)
 %     'cached'   Always use the cached version. Throws an error if the
 %                file does not exist.
 %
-%     'fig5'     Plot Fig. 5 (Rønne et al., 2012). Latency of simulated ABR
+%     'fig5'     Plot Fig. 5 (RÃ¸nne et al., 2012). Latency of simulated ABR
 %                wave V's compared to Neely et al. (1988) and Harte et al.
 %                (2009) reference data.
 %
-%     'fig6'     Plot Fig. 6 (Rønne et al., 2012). Amplitude of simulated
+%     'fig6'     Plot Fig. 6 (RÃ¸nne et al., 2012). Amplitude of simulated
 %                wave V compared to Elberling et al. (2010) reference data.
 %
-%     'fig7'     Plot Fig. 7 (Rønne et al., 2012). Latency of simulated wave
+%     'fig7'     Plot Fig. 7 (RÃ¸nne et al., 2012). Latency of simulated wave
 %                V compared to Elberling et al. (2010) reference data.
 %
 %   Examples:
@@ -54,7 +54,7 @@ function [waveVamp, waveVlat] = exp_roenne2012(varargin)
 %
 %   ---------
 %
-%   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
+%   Please cite RÃ¸nne et al. (2012) and Zilany and Bruce (2007) if you use
 %   this model.
 %
 definput.import={'amtredofile'};

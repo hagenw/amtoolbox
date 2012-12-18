@@ -85,7 +85,7 @@ function varargout=audspecgram(insig,fs,varargin)
 %
 %   Demos:  demo_audspecgram
   
-%   AUTHOR : Peter Soendergaard.
+%   AUTHOR : Peter Søndergaard.
 %   TESTING: NA
 %   REFERENCE: NA
   

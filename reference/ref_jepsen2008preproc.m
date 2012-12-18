@@ -1,6 +1,6 @@
 function [out, CenterFreq, MF_CFs] = ref_jepsen2008preproc(insig, fs)
 %
-%  This is a trimmed down version of CASP_Preproc by Morten Løve Jepsen
+%  This is a trimmed down version of CASP_Preproc by Morten LÃ¸ve Jepsen
 %  to just reproduce the jepsen2008. All values are hardwired.
   
 CFlow=80;
@@ -23,7 +23,7 @@ baseF=1000;
 %           'HIx' = hearing impaired with lost compression and 20 dB flat
 %           IHC loss
 %
-% 2. feb 2009, Morten Løve Jepsen
+% 2. feb 2009, Morten LÃ¸ve Jepsen
 
 %function [out, CenterFreq, MF_CFs] = CASP_Preproc(in, fs, CFlow, CFhigh, baseF, BMtype, MFtype)
 

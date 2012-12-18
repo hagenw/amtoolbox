@@ -1,5 +1,5 @@
 % script for getting the (DRNL) filter parameters (Lopez-Poveda, meddis 2001)
-% Author: Morten Løve Jepsen, 2.nov 2005, rev. 15 feb 2006, 19 feb 2007
+% Author: Morten LÃ¸ve Jepsen, 2.nov 2005, rev. 15 feb 2006, 19 feb 2007
 %
 % usage:  [linDRNLparOut,nlinDRNLparOut] = getDRNLparam(CF);
 

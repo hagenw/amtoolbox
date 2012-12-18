@@ -1,6 +1,6 @@
 function [out, CenterFreq, MF_CFs] = ref_dau1997preproc(insig, fs)
 %
-%  This is a trimmed down version of CASP_Preproc by Morten Løve Jepsen
+%  This is a trimmed down version of CASP_Preproc by Morten LÃ¸ve Jepsen
 %  to just reproduce the dau1997 model. All values are hardwired.
 
 CFlow=80;

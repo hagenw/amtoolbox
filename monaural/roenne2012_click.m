@@ -9,17 +9,17 @@ function [waveVamp,waveVlat] = roenne2012_click(stim_level,varargin)
 %   Input parameters:
 %     stim_level      : Simulated levels. Default: Elberling et al. (2010)
 %                       stimulus levels (20, 40, 60 dB HL) calibrated to pe
-%                       SPL (+ 35.2 dB), see Rønne et al. (2012).   
+%                       SPL (+ 35.2 dB), see RÃ¸nne et al. (2012).   
 %
 %   `ronne2012_click(stim_level)` returns click evoked ABR wave V latencies
 %   and amplitudes for a range of given stimulus levels. It simulates ABR
-%   responses to click stimulus using the ABR model of Rønne et
+%   responses to click stimulus using the ABR model of RÃ¸nne et
 %   al. (2012). The click stimulus is defined similar to Elberling et
 %   al. (2010).
 %
 %   ---------
 %
-%   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
+%   Please cite RÃ¸nne et al. (2012) and Zilany and Bruce (2007) if you use
 %   this model.
 %
 %   References: roenne2012modeling elberling2010evaluating zilany2007representation

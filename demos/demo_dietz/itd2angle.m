@@ -12,7 +12,7 @@ angle = zeros(size(itd));
 for n = 1:size(itd,2)
     angle(:,n)=polyval(p(n,:),unwrapped_itd(:,n));
 end
-% neglect angles > 90°. WARNING => systematic underestimation for azi ~ 90°
+% neglect angles > 90Â°. WARNING => systematic underestimation for azi ~ 90Â°
 angle(abs(angle)>90) = NaN;
 %angle(abs(angle)>90) = 0*sign(angle(abs(angle)>90));
 %disp('warning: temporary change')

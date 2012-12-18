@@ -15,7 +15,7 @@
 %           'HIx' = hearing impaired with lost compression and 20 dB flat
 %           IHC loss
 %
-% 2. feb 2009, Morten Løve Jepsen
+% 2. feb 2009, Morten LÃ¸ve Jepsen
 
 function [out, CenterFreq, MF_CFs] = CASP_Preproc(in, fs, CFlow, CFhigh, baseF, BMtype, MFtype)
 

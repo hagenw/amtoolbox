@@ -9,7 +9,7 @@ function inoutsig = comp_adaptloop(inoutsig,fs,limit,minlvl,tau);
 
 % Copyright (c) 1999 - 2004 Stephan Ewert. All rights reserved.
 
-%   AUTHOR : Stephan Ewert, Morten L. Jepsen, Peter L. Soendergaard
+%   AUTHOR : Stephan Ewert, Morten L. Jepsen, Peter L. Søndergaard
 
 % -------- Computation ------------------
 

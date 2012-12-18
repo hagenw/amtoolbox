@@ -44,7 +44,7 @@ function inoutsig = adaptloop(inoutsig,fs,varargin);
 
 % Copyright (c) 1999 - 2004 Stephan Ewert. All rights reserved.
 
-%   AUTHOR : Stephan Ewert, Morten L. Jepsen, Peter L. Soendergaard
+%   AUTHOR : Stephan Ewert, Morten L. Jepsen, Peter L. Søndergaard
 
 % ------ Checking of input parameters and default parameters ---------
 

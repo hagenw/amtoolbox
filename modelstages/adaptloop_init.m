@@ -22,7 +22,7 @@ function s = adaptloop_init(nsigs,fs,varargin);
 %
 %   References:dau1996qmeI puschel1988pza
 
-%   AUTHOR: Peter L. Soendergaard
+%   AUTHOR: Peter L. Søndergaard
 
 % ------ Checking of input parameters and default parameters ---------
 

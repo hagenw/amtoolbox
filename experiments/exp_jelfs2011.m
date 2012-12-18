@@ -1,5 +1,5 @@
 function output = exp_jelfs2011(varargin)
-%EXP_JELFS2011  Figures from Hawley et al. (2004)
+%EXP_JELFS2011  Figures from Jelfs et al. (2011)
 %   Usage: output = exp_jelfs2011(flag);
 %
 %   `exp_jelfs2011` reproduces result from the paper Jelfs et al. (2011).
@@ -10,7 +10,8 @@ function output = exp_jelfs2011(varargin)
 %
 %     'noplot'   Don't plot, only return data.
 %
-%     'fig4'     Reproduce Fig. 4. XXX Description of fig 4 and the output format.
+%     'fig4'     Reproduce Fig. 4. The generated data is compared against
+%                data from Hawley et at. (2004). 
 %
 %   Examples:
 %   ---------
@@ -22,7 +23,10 @@ function output = exp_jelfs2011(varargin)
 %   See also: jelfs2011, culling2005bmld
 %
 %   References:  jelfs2011revision hawley2004benefit
-  
+
+% TODO: Extract the human data from this function and put it into a
+% dedicated function, either data_jelfs2011 or data_hawley2004
+
 definput.flags.type={'fig4'};
 definput.flags.plot={'plot','noplot'};
 

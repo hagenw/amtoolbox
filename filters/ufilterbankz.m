@@ -20,7 +20,7 @@ function outsig=ufilterbankz(b,a,insig,hopsize)
 %   correspond to the columns of the input signal
 %   See also: gammatone, filterbankz, auditoryfilterbank
   
-%   AUTHOR : Peter L. Soendergaard
+%   AUTHOR : Peter L. Søndergaard
 
 %% ------ Checking of input parameters ---------  
 

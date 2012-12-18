@@ -40,7 +40,7 @@ function varargout = baumgartner2013( target,template,varargin )
 %                    fhigh. Default value is 18000 Hz.
 %
 %     'lat',lat      Set the perceived lateral angle of the target sound to
-%                    lat. Default value is 0° (median SP).
+%                    lat. Default value is 0Â° (median SP).
 %
 %     'u',u          Set the listener-specific uncertainty (standard
 %                    deviation of the Gaussian transformation from the
@@ -53,7 +53,7 @@ function varargout = baumgartner2013( target,template,varargin )
 %
 %     'bwsteep',bws  Set the steepness factor bws of the sigmoid function 
 %                    applied for binaural weighting of monaural similarity 
-%                    indices. Default value is 13°.
+%                    indices. Default value is 13Â°.
 %
 %     'polsamp',ps   Define the the polar angular sampling of the current
 %                    SP. As default the sampling of ARI's HRTF format at
@@ -246,7 +246,7 @@ end
 
 %% Interpolation (regularize polar angular sampling)
 if flags.do_regular
-    respang0 = ceil(min(kv.polsamp)*0.2)*5;    % ceil to 5°
+    respang0 = ceil(min(kv.polsamp)*0.2)*5;    % ceil to 5Â°
     respangs = respang0:5:max(kv.polsamp);
     siint = zeros(length(respangs),size(si,2));
     for tt = 1:size(si,2)

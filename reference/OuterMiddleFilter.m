@@ -1,6 +1,6 @@
 % Combined outer and middle ear filter Filter for use with the DRNL
 % Use this script after having gernerated the filters
-% Morten Løve Jepsen, 2006
+% Morten LÃ¸ve Jepsen, 2006
 
 function y = OuterMiddleFilter(x);
 

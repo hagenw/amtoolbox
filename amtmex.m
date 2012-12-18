@@ -13,7 +13,7 @@ function amtmex(varargin)
 %
 %     'clean'    Removes the compiled functions.
 
-%   AUTHOR : Peter Soendergaard.
+%   AUTHOR : Peter Søndergaard.
 %   TESTING: NA
 %   REFERENCE: NA
 

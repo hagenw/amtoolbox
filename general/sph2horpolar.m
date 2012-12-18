@@ -8,8 +8,8 @@ function [lat,pol]=sph2horpolar(azi,ele)
 %     ele     : elevation in deg
 %
 % Output parameters:
-%     lat     : lateral angle in deg, [-90°,+90°]
-%     pol     : polar angle in deg, [-90°,270°]
+%     lat     : lateral angle in deg, [-90Â°,+90Â°]
+%     pol     : polar angle in deg, [-90Â°,270Â°]
 %
 %   `geo2horpolar(...)` converts spherical coordinates (azimuth and 
 %   elevation) into the coordinates of the horizontal-polar system, i.e.,

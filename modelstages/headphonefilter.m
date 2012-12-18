@@ -32,7 +32,7 @@ function b = headphonefilter(fs,order)
 %   
 %   References: pralong1996role lopezpoveda2001hnc
   
-% Author: Morten L�ve Jepsen, Peter L. Soendergaard
+% Author: Morten Løve Jepsen, Peter L. Søndergaard
 
 
 if nargin==1

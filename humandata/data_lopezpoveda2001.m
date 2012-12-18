@@ -36,7 +36,7 @@ function data = data_lopezpoveda2001(varargin)
 %
 %   References:lopezpoveda2001hnc
 
-%   AUTHOR: Peter L. Soendergaard, Katharina Egger
+%   AUTHOR: Peter L. Søndergaard, Katharina Egger
 
 
 %% ------ Check input options --------------------------------------------

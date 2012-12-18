@@ -74,7 +74,7 @@ function [b,a,delay]=gammatone(fc,fs,varargin)
 %  
 %   References: aertsen1980strI patterson1988efficient lyon1997all
   
-%   AUTHOR : Stephan Ewert, Peter L. Soendergaard
+%   AUTHOR : Stephan Ewert, Peter L. Søndergaard
 
 % ------ Checking of input parameters ---------
   
@@ -253,6 +253,11 @@ else
       a(ii,:)=a2;
       
     end;
+    
+    % Octave produces small imaginary values
+    b=real(b);
+    a=real(a);
+    
   end;
   
   

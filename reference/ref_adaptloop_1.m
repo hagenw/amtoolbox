@@ -8,7 +8,7 @@ function bigout = ref_adaptloop_1(bigin,fs,limit,minlvl,tau);
   
 % Copyright (c) 1999 - 2004 Stephan Ewert. All rights reserved.
 
-%   AUTHOR : Stephan Ewert, Morten L. Jepsen, Peter L. Soendergaard
+%   AUTHOR : Stephan Ewert, Morten L. Jepsen, Peter L. Søndergaard
 %   Last changed on $Date: 2009-01-14 17:46:50 +0100 (ons, 14 jan 2009) $
 %   Last change occured in $Rev: 1 $
 

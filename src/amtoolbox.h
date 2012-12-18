@@ -8,32 +8,6 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-  /* -------- Define the double precision routines ----- */
-
-#define AMT_H_REAL double
-#define AMT_H_COMPLEX ltfat_complex
-#define AMT_H_NAME(name) name
-
-#include "amt_typeindependent.h"
-
-#undef AMT_H_REAL
-#undef AMT_H_COMPLEX
-#undef AMT_H_NAME
-
-  /* -------- Define the single precision routines ----- */
-
-#define AMT_H_REAL float
-#define AMT_H_COMPLEX ltfat_scomplex
-#define AMT_H_NAME(name) s ## name
-
-#include "amt_typeindependent.h"
-
-#undef AMT_H_REAL
-#undef AMT_H_COMPLEX
-#undef AMT_H_NAME
-
-
-
 typedef struct adaptloopstatevar
 {
   int    loops;

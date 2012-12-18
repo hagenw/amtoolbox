@@ -8,7 +8,7 @@ function [ varargout ] = pmv2ppp( p,varargin )
 %     tang       : possible polar target angles. As default, ARI's MSP 
 %                  polar angles in the median SP is used.
 %     rang       : polar angles of possible response angles.
-%                  As default regular 5°-sampling is used (-30:5:210).    
+%                  As default regular 5Â°-sampling is used (-30:5:210).    
 %
 %   Output parameters:
 %     qe         : quadrant error rate
@@ -53,8 +53,8 @@ pet = zeros(nt,1); % PE for each target angle
 pbt = zeros(nt,1); % PB for each target angle
 for ii = 1:nt % for all target positions
     d = tang(ii)-rang;                 % wraped angular distance between tang & rang
-    iduw = (d < -180) | (180 < d);     % 180°-unwrap indices
-    d(iduw) = mod(d(iduw) + 180,360) - 180; % 180° unwrap
+    iduw = (d < -180) | (180 < d);     % 180Â°-unwrap indices
+    d(iduw) = mod(d(iduw) + 180,360) - 180; % 180Â° unwrap
     d = abs(d);                        % absolut distance
     qet(ii) = sum( p(d>=90,ii) );
     pc = p(d<90,ii);                   % pmv for conditional probability excluding QEs

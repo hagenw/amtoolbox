@@ -13,7 +13,7 @@ function op1=amthelp(varargin)
 %
 %   See also:  amtstart
 
-%   AUTHOR : Peter Soendergaard.  
+%   AUTHOR : Peter Søndergaard.  
 %   TESTING: NA
 %   REFERENCE: NA
 

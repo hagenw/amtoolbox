@@ -40,8 +40,8 @@ function out = plotlangendijk( p,rang,tang,varargin)
       'XLim',[tang(1)-5,tang(end)+5],'YLim',[rang(1)-5,rang(end)+5],...
       'Box','on')
     
-    xlabel('Target Angle (°)')
-    ylabel('Response Angle (°)')
+    xlabel('Target Angle (Â°)')
+    ylabel('Response Angle (Â°)')
     
     if flags.do_colorbar
         colorbar

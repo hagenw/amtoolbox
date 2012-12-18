@@ -6,10 +6,10 @@ function [waveVlat]  = roenne2012_tonebursts(stim_level,varargin)
 %     waveVlat   : Latency of simulated ABR wave V peak.
 %
 %   `roenne2012_tonebursts(stim_level)` simulates ABR responses to tone burst
-%   stimuli using the ABR model of Rønne et al. (2012) for a range of
+%   stimuli using the ABR model of RÃ¸nne et al. (2012) for a range of
 %   given stimulus levels.
 %
-%   Fig. 5 of Rønne et al. (2012) can be reproduced. Simulations are
+%   Fig. 5 of RÃ¸nne et al. (2012) can be reproduced. Simulations are
 %   compared to data from Neely et al. (1988) and Harte et al. (2009). Tone
 %   burst stimuli are defined similar to Harte et al. (2009). Tone burst
 %   center frequencies are: 1, 1.5, 2, 3, 6 and 8 kHz.
@@ -23,12 +23,12 @@ function [waveVlat]  = roenne2012_tonebursts(stim_level,varargin)
 %
 %     'noplot'  Do not plot main figure (fig 6 or 7). This is the default.
 %
-%     'fig5'    Plot Fig. 5 (Rønne et al., 2012). Latency of simulated ABR
+%     'fig5'    Plot Fig. 5 (RÃ¸nne et al., 2012). Latency of simulated ABR
 %               wave V's compared to Neely et al. (1988) and Harte et al.
 %               (2009) reference data.
 %
 %     'stim_level',sl  Simulated levels. Default: Stimulus levels as
-%                      chosen by Rønne et al. (2012), 40 to 100 dB pe SPL
+%                      chosen by RÃ¸nne et al. (2012), 40 to 100 dB pe SPL
 %                      in steps of 10 dB. 
 %
 %   Example:

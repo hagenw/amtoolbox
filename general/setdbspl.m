@@ -19,7 +19,7 @@ function inoutsig = setdbspl(inoutsig,lvl,varargin);
   
 %   See also: dbspl
   
-%   Author: Peter L. Soendergaard, 2009
+%   Author: Peter L. Søndergaard, 2009
 
 % ------ Checking of input parameters ---------
   

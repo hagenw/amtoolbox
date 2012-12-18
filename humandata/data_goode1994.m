@@ -24,7 +24,7 @@ function data = data_goode1994(varargin)
 %
 %   References: goode1994nkf
 
-%   AUTHOR: Peter L. Soendergaard
+%   AUTHOR: Peter L. Søndergaard
 
 
 %% ------ Check input options --------------------------------------------

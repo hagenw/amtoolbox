@@ -1,5 +1,5 @@
 % Make a filter to apply a headphone and outer ear transfer function to the input
-% Morten Løve Jepsen, 16.nov 2005
+% Morten LÃ¸ve Jepsen, 16.nov 2005
 % run this once to generate filter (.mat file)
 
 function y = HeadphoneFilter(fs)

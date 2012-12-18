@@ -4,7 +4,7 @@ function [inoutsig,s] = adaptloop_run(s,inoutsig);
 %
 %   See also: adaptloop
 
-%   AUTHOR : Peter L. Soendergaard
+%   AUTHOR : Peter L. Søndergaard
 
 % -------- Computation ------------------
 

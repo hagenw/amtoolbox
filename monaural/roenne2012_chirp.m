@@ -6,13 +6,13 @@ function [waveVamp, waveVlat]  = roenne2012_chirp(levels,chirps,varargin)
 %     waveVamp   : Amplitude of simulated ABR wave V.
 %     waveVlat   : Latency of simulated ABR wave V peak.
 %
-%   `ronne2012_chirp(levels,chirps)` returns simulations from Rønne et
+%   `ronne2012_chirp(levels,chirps)` returns simulations from RÃ¸nne et
 %   al. (2012) for a range of input levels *levels. The values of
 %   *chirps* selects which stimuli from Elberling et al. (2010) stimuli to
 %   simulate, *1* = click, *2* to *6* = chirp 1 to 5.
 %
 %   Simulates ABR responses to five chirps and one click using the ABR model
-%   of Rønne et al. (2012). Fig. 6 or 7 of Rønne et al. (2012) can be
+%   of RÃ¸nne et al. (2012). Fig. 6 or 7 of RÃ¸nne et al. (2012) can be
 %   reproduced based on these data - use `plot_roenne2012_chirp`.  Simulations
 %   can be compared to data from Elberling et al. (2010). Stimuli are
 %   defined similar to Elberling et al. (2010).
@@ -28,7 +28,7 @@ function [waveVamp, waveVlat]  = roenne2012_chirp(levels,chirps,varargin)
 %
 %   ---------
 %
-%   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
+%   Please cite RÃ¸nne et al. (2012) and Zilany and Bruce (2007) if you use
 %   this model.
 %
 %   See also: roenne2012, plotroenne2012_chirp, exp_roenne2012

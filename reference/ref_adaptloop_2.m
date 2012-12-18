@@ -6,7 +6,7 @@ function outsig = ref_adaptloop_2(insig,fs,limit,minlvl,tau);
 %
 %   This is an implementation in the style of difference equations.
   
-%   AUTHOR : Stephan Ewert, Morten L. Jepsen, Peter L. Soendergaard
+%   AUTHOR : Stephan Ewert, Morten L. Jepsen, Peter L. Søndergaard
 %   Last changed on $Date: 2009-01-14 17:46:50 +0100 (ons, 14 jan 2009) $
 %   Last change occured in $Rev: 1 $
 

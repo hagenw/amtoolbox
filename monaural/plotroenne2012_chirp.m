@@ -1,9 +1,9 @@
 function plotroenne2012_chirp(waveVamp, waveVlat, varargin)
-%PLOTROENNE2012_CHIRP  Plot Fig. 6 or 7 of Rønne et al. (2012)
+%PLOTROENNE2012_CHIRP  Plot Fig. 6 or 7 of RÃ¸nne et al. (2012)
 %   Usage: plotroenne2012_chirp(flag)
 %
 %   `plotroenne2012_chirp(waveVamp, waveVlat)` plots the output of
-%   |roenne2012_chirp|_ in the style of Fig. 6 or 7 of Rønne et al. (2012).
+%   |roenne2012_chirp|_ in the style of Fig. 6 or 7 of RÃ¸nne et al. (2012).
 %   Simulations are compared to data from Elberling et al. (2010).
 %
 %   The flag may be one of:
@@ -19,7 +19,7 @@ function plotroenne2012_chirp(waveVamp, waveVlat, varargin)
 %
 %   ---------
 %
-%   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
+%   Please cite RÃ¸nne et al. (2012) and Zilany and Bruce (2007) if you use
 %   this model.
 %
 %   See also: roenne2012_chirp, roenne2012, exp_roenne2012
@@ -67,7 +67,7 @@ if flags.do_twofig
   figure;
 end;
 
-%% Plot figure 6 from Rønne et al. (2012)
+%% Plot figure 6 from RÃ¸nne et al. (2012)
 if flags.do_amponly
   % Plot Elberling et al. (2010) reference data
   errorbar(Delay2',CEmean,CEstd/sqrt(20),'-', ...
@@ -110,7 +110,7 @@ if flags.do_twofig
   figure;
 end;
 
-%% Plot figure 7 from Rønne et al. (2012)
+%% Plot figure 7 from RÃ¸nne et al. (2012)
 if flags.do_latonly
     
   % Amplitude in nV

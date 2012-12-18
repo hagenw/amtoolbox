@@ -26,7 +26,7 @@ function amtstart()
 %
 %   References: ltfatnote015
   
-%   AUTHOR : Peter L. Soendergaard.  
+%   AUTHOR : Peter L. Søndergaard.  
 
 % Verify that LTFAT has been installed
 if ~exist('ltfatarghelper','file')  
@@ -154,7 +154,7 @@ end;
 %end;
 
 if printbanner
-  disp(['AMT version ',amt_version,'. Copyright 2012 Peter L. Soendergaard. For help, please type "amthelp".'])
+  disp(['AMT version ',amt_version,'. Copyright 2012 Peter L. Søndergaard. For help, please type "amthelp".'])
 end;
 
 

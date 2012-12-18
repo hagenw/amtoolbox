@@ -2,7 +2,7 @@ function out = ref_drnl(x,CF,fs)
 % script for pemo preprocessing using an implementation of the dual
 % resonance nonlinear (DRNL) filter (Lopez-Poveda, meddis 2001)
 % The filter models the BM non-linearity
-% Author: Morten Løve Jepsen, 2.nov 2005
+% Author: Morten LÃ¸ve Jepsen, 2.nov 2005
 %
 % usage: out = drnl(x,CF,fs)
 

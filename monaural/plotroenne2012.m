@@ -26,7 +26,7 @@ function plotroenne2012(stim_level,waveVamp,waveVlat, simpot, ANout,varargin)
 %
 %   ---------
 %
-%   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
+%   Please cite RÃ¸nne et al. (2012) and Zilany and Bruce (2007) if you use
 %   this model.
 %
 %   References: roenne2012modeling elberling2010evaluating zilany2007representation
