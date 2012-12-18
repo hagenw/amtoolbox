@@ -27,7 +27,7 @@ function outsig = transposedtone(siglen,fc,fm,fs,varargin)
 %
 %   References:kohlrausch1997detection oxenham2004correct
 
-% Author: Sébastien Santurette  2009
+% Author: SÃ©bastien Santurette  2009
 
 if nargin<4
   error('Too few input parameters.');
