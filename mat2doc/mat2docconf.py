@@ -9,23 +9,22 @@ conf=ConfType()
 
 conf.otherrefs=['ltfat.txt']
 
-conf.urlbase='http://ltfat.sourceforge.net/doc/'
-
-def mycopyrightfun(self):
-    vf=file(self.root+'amtoolbox_version');
-    v=vf.readline()
-    vf.close
-    
-    f=file(self.root+'mat2doc/copyrightplate')
+def copyrightfun():
+    f=file(localconf.projects['amtoolbox']+'amtoolbox_version');
+    versionstring=f.read()[:-1]
+    f.close
+        
+    f=file(localconf.projects['ltfat']+'mat2doc/copyrightplate')
     buf=f.readlines()
     f.close
 
-    copyright=[u'Copyright (C) 2012 Peter L. S\xf8ndergaard.\n','This file is part of AMT version '+v]
+    copyright=[u'Copyright (C) 2012 Peter L. S\xf8ndergaard.\n',
+               u'This file is part of AMToolbox version '+versionstring+'\n']
     copyright.extend(buf)
     
     return copyright
 
-conf.copyright=mycopyrightfun
+conf.copyright=copyrightfun
 
 allcontentsfiles=['Contents',
                   'general/Contents',
@@ -58,6 +57,7 @@ tex=TexConf()
 
 tex.indexfiles=allcontentsfiles
 tex.urlbase='http://amtoolbox.sourceforge.net/doc/'
+tex.codedir=localconf.outputdir+'amtoolbox-mat'+os.sep
     
 # ------------------------------------------
 # Configuration of Matlab

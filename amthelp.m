@@ -1,8 +1,8 @@
 function op1=amthelp(varargin)
 %AMTHELP Help on the AMToolbox
-%   Usage:  ltfathelp;
-%           v=ltfathelp('version');
-%           mlist=ltfathelp('modules');
+%   Usage:  amthelp;
+%           v=amthelp('version');
+%           mlist=amthelp('modules');
 %
 %   `amthelp` displays some general help on the AMToolbox.
 %

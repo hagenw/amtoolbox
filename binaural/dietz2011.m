@@ -143,8 +143,6 @@ function [hairc_fine, hairc_mod, fc, hairc_ild] = dietz2011(insig,fs,varargin)
 %
 %   See also: dietz_interaural_functions
 %
-%   Demos: demo_dietz
-%
 %   References: dietz2011auditory
 
 % AUTHOR: Mathias Dietz, Martin Klein-Hennig (implementation for AMT)

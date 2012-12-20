@@ -152,8 +152,7 @@ end
 
 %% DTF filtering
 if ~isequal(kv.fs,kv.fsstim)
-    disp('Sorry, sampling rate of stimulus and HRIRs must be equal!')
-    return
+    error('Sorry, sampling rate of stimulus and HRIRs must be equal!')
 end
 
 tmp = convolve(target,kv.stim);

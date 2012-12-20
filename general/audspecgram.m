@@ -81,9 +81,20 @@ function varargout=audspecgram(insig,fs,varargin)
 %
 %     'nocolorbar'  Do not display the colorbar.
 %
-%   See also:   dau1996preproc
+%   Examples:
+%   ---------
 %
-%   Demos:  demo_audspecgram
+%   The following figure shows a classic spectrogram on an Erb scale of a
+%   spoken word:::
+%
+%     audspecgram(greasy,16000,'classic','dynrange',50);
+%
+%   The next example shows a Dau-style spectrogram (including adaptation
+%   and modulation low-pass filtering) of the same word:::
+%
+%     audspecgram(greasy,16000);
+%
+%   See also:   dau1996preproc
   
 %   AUTHOR : Peter Søndergaard.
 %   TESTING: NA

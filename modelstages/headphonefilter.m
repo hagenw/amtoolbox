@@ -28,8 +28,6 @@ function b = headphonefilter(fs,order)
 %
 %   See also: middleearfilter, data_pralong1996, data_lopezpoveda2001
 %
-%   Demos: demo_outermiddle
-%   
 %   References: pralong1996role lopezpoveda2001hnc
   
 % Author: Morten Løve Jepsen, Peter L. Søndergaard
