@@ -44,10 +44,12 @@ definput.keyvals.fhigh   = 16000;
 definput.keyvals.nfibers = 500;
 [flags,kv]  = ltfatarghelper({'flow','fhigh','nfibers'},definput,varargin);
 
-stim    = resample(stim,fsmod,fsstim);              % stim fs = mod fs
-stim    = 20e-6*10^(stim_level/20)*stim;            % Calibrate level
+stim	= resample(stim,fsmod,fsstim);	% stim fs = mod fs
+idnz	= stim ~= 0;                    % ignore pauses
+lvlref = 20*log10(1/20e-6);           % Reference level: 20 micro Pa
+stim(idnz) = setdbspl(stim(idnz),stim_level,'dboffset',lvlref); % Calibrate level
 
-% stim must be a row vecto
+% stim must be a row vector
 if size(stim,2) == 1
     stim = stim';
 end

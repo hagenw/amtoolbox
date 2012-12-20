@@ -22,8 +22,12 @@ function inoutsig = setdbspl(inoutsig,lvl,varargin);
 %   Author: Peter L. Søndergaard, 2009
 
 % ------ Checking of input parameters ---------
-  
-error(nargchk(1,3,nargin));
+
+definput.flags.mean={'noac','ac'};
+definput.keyvals.dboffset=100;
+[flags,kv]=ltfatarghelper({'dboffset'},definput,varargin);
+
+error(nargchk(1,5,nargin));
 
 if ~isnumeric(inoutsig)
   error('%s: insig must be numeric.',upper(mfilename));
@@ -49,18 +53,20 @@ if ~isnumeric(lvl) || ~isscalar(lvl)
   error('%s: lvl must be a scalar.',upper(mfilename));
 end;
 
-if (nargin<3) || (~ischar(options))
-  options='';
-end;
+% if (nargin<3) || (~ischar(options))
+%   options='';
+% end;
 
 
 % ------ Computation --------------------------
 
 if isvector(inoutsig)
-  inoutsig = gaindb(inoutsig/rms(inoutsig,varargin{:}),lvl-dbspl(1));
+  inoutsig = gaindb(inoutsig/rms(inoutsig,flags.mean),...
+    lvl-dbspl(1,'dboffset',kv.dboffset));
 else
   % If we have a matrix, set the level for every column.
   for ii=1:size(inoutsig,2);
-    inoutsig(:,ii) = gaindb(inoutsig(:,ii)/rms(inoutsig(:,ii),varargin{:}),lvl-dbspl(1));
+    inoutsig(:,ii) = gaindb(inoutsig(:,ii)/rms(inoutsig(:,ii),flags.mean),...
+      lvl-dbspl(1,'dboffset',kv.dboffset));
   end;
 end;
