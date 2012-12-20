@@ -137,6 +137,8 @@ end
 if isempty(kv.stim) 
     kv.stim = [1;0];%[1;zeros(size(target,1),1)];    % impulse
     kv.fsstim = kv.fs;
+elseif isempty(kv.fsstim) 
+    kv.fsstim = kv.fs;
 end
 
 if flags.do_headphone% || flags.do_drnl
@@ -226,39 +228,32 @@ elseif flags.do_drnl
 
 elseif flags.do_zilany2007humanized
     
-%     lvlref = 20*log10(1/20e-6);  % reference level: 20 micro Pascal
-  
-%     % Set level
-%     for ch = 1:size(template,3)
-%         target(:,:,ch) = setdbspl(target(:,:,ch),kv.lvlstim,'dboffset',lvlref);
-%         template(:,:,ch) = setdbspl(template(:,:,ch),kv.lvltem,'dboffset',lvlref);
-%     end
-  
     fsmod = 100e3;  % Model sampling frequency in Hz
     nf = 200;       % # of AN fibers
-    
-    fprintf('\n Compute internal representation of target set: \n');
+  
+    fprintf('\n compute internal representation of target set: \n');
     target = [target ; zeros(1e3,size(target,2),size(target,3))]; % concatenate zeros, otherwise comp_zilany2007humanized complaines about: "reptime should be equal to or longer than the stimulus duration." 
     ireptar = zeros(nf,size(target,2),size(target,3));
     nt = size(target(:,:),2);
     for ii = 1:nt
-      [ANout,vFreq] = zilany2007humanized(kv.lvlstim,target(:,ii),kv.fs,...
+      [ANout,vfreq] = zilany2007humanized(kv.lvlstim,target(:,ii),kv.fs,...
         fsmod,'flow',kv.flow,'fhigh',kv.fhigh,'nfibers',nf);
       ANout = ANout'-50; % subtract 50 due to spontaneous rate
-      ireptar(:,ii) = sum(ANout); % integrate over time
-%       ireptar(:,ii) = 20*log10(rms(ANout));
+      ireptar(:,ii) = 20*log10(rms(ANout)); % integrate over time & in db
       fprintf(' %2u of %2u done\n',ii,nt);
     end
-    ireptem = ireptar;
-%     fprintf('\n Compute internal representation of template: \n');
-%     ireptem = zeros(nf,size(template,2),size(template,3));
-%     nt = size(template(:,:),2);
-%     for ii = 1:nt
-%       fprintf(' %2u of %2u done\n',ii,nt);
-%       ANtmp = zilany2007humanized(kv.lvltem,template(:,ii),kv.fs,...
-%         fsmod,'flow',kv.flow,'fhigh',kv.fhigh,'nfibers',nf);
-%       ireptem(:,ii) = 20*log10(rms(ANtmp'));
-%     end
+  
+    fprintf('\n Compute internal representation of template: \n');
+    template = [template ; zeros(1e3+1,size(template,2),size(template,3))]; % concatenate zeros, otherwise comp_zilany2007humanized complaines about: "reptime should be equal to or longer than the stimulus duration." 
+    ireptem = zeros(nf,size(template,2),size(template,3));
+    nt = size(template(:,:),2);
+    for ii = 1:nt
+      ANout = zilany2007humanized(kv.lvltem,template(:,ii),kv.fs,...
+        fsmod,'flow',kv.flow,'fhigh',kv.fhigh,'nfibers',nf);
+      ANout = ANout'-50; % subtract 50 due to spontaneous rate
+      ireptem(:,ii) = 20*log10(rms(ANout)); % integrate over time & in dB
+      fprintf(' %2u of %2u done\n',ii,nt);
+    end
     
 end
 

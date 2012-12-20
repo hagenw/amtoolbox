@@ -2,16 +2,12 @@ function data = data_baumgartner2013(varargin)
 %DATA_BAUMGARTNER2013  Data from Baumgartner et al. (2013)
 %   Usage: data = data_baumgartner2013(flag)
 %
-%   `data_baumgartner2013(flag)` returns data of figures, the table, or 
+%   `data_baumgartner2013(flag)` returns data of the table or 
 %   the pool of listener-specific models from Baumgartner et al. (2013) 
 %   describing a model for sound localization in sagittal planes (SPs) 
 %   on the basis of listener-specific directional transfer functions (DTFs).
 %
 %   The flag may be one of:
-%
-%     'noplot'     Don't plot, only return data. This is the default.
-%
-%     'plot'       Plot the data.
 %  
 %     'tab1'       Calibration data for listener pool listed in Table 1.
 %                  structure: 
@@ -52,7 +48,6 @@ function data = data_baumgartner2013(varargin)
 %% ------ Check input options --------------------------------------------
 
 % Define input flags
-% definput.flags.plot = {'noplot','plot'};
 definput.flags.type = {'missingflag','tab1','pool'};
 
 % Parse input options

@@ -32,6 +32,13 @@ function [ varargout ] = pmv2ppp( p,varargin )
 %
 %     'print'      Display the outcomes.
 %
+%   Example:
+%   ---------
+%
+%   To evaluate chance performance of QE and PE use :::
+%
+%     [qe,pe] = pmv2ppp(ones(49,44));
+%
 %   References: baumgartner2013assessment baumgartner2012modelling
 
 % AUTHOR : Robert Baumgartner
