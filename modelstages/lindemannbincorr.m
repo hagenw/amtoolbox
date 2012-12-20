@@ -202,18 +202,19 @@ ii = 1; % crosscorr index
 for n = 1:siglen
     
     % ------ Inhibition --------------------------------------------------
-    % Stationary inhibition after Lindemann (198
-    % 6a, p. 1612 eq. 13):
+    % Stationary inhibition after Lindemann (1986a, p. 1612 eq. 11a):
     % r(m+1,n+1) = r(m,n) * [1 - c_s l(m,n)]
-    % l(m+1,n+1) = l(m,n) * [1 - c_s r(m,n)]
+    % l(m-1,n+1) = l(m,n) * [1 - c_s r(m,n)]
     % The length of r and l are the same as the length of the delay line
     % (ndl = length(-M:M)). Also the signals are mirror-inverted, 
     % because of their different directions passing the delay line. l starts
     % on the right sight and r on the left side of the delay line. If you 
     % want to mirror the axes of the delay line, you have to exchange the
     % input direction of r and l into the delay line.
-    l = [ l(2:ndl,:) .* (1 - c_s .* r(2:ndl,:)); insig(n,:,1) ];
-    r = [ insig(n,:,2); r(1:ndl-1,:) .* (1 - c_s .* l(1:ndl-1,:)) ];
+    r_mn = r;
+    l_mn = l;
+    r = [ insig(n,:,2); r_mn(1:ndl-1,:) .* (1-c_s.*l_mn(1:ndl-1,:)) ];
+    l = [ l_mn(2:ndl,:) .* (1-c_s.*r_mn(2:ndl,:)); insig(n,:,1) ];
     % TODO: the spectral shape is also needed for some application, so we should
     % check if the following solution can be fixed to work as it should.
     % The normalization with max([r l]+eps) is done, to avoid a
