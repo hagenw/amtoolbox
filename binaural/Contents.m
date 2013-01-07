@@ -18,5 +18,9 @@
 %     JELFS2011             - Binaural speech advantage
 %     PLOTJELFS2011         - Polar plot, fixed target moving masker
 %
+%  Additional functions
+%     ESTIMATE_AZIMUTH      - Estimates the azimuth position for a given signal
+%                             using the Dietz or the Lindemann model
+%
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
