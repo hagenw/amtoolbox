@@ -1,6 +1,6 @@
 % AMT - General functions
 %
-%  The AMT team, 2012.
+%  The AMT team, 2012 - 2013.
 %
 %  General plotting
 %     AUDSPECGRAM      - Auditory spectrogram.

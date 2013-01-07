@@ -1,5 +1,7 @@
 % AMT - Signals
 %
+%  The AMT team, 2012 - 2013.
+%
 %  Monaural signal generators
 %    TRANSPOSEDTONE -  Transposed tone stimuli
 %    NOTCHEDNOISE   -  Notched noise

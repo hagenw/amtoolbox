@@ -1,6 +1,6 @@
 % AMT - Monaural models
 %
-%  The AMT team, 2012.
+%  The AMT team, 2012 - 2013.
 %
 %  Models
 %     VIEMEISTER79      - Viemeisters modulation detection model

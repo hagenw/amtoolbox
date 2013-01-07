@@ -1,6 +1,6 @@
 % AMT - Single stages of auditory models
 %
-%  The AMT team, 2011 - 2012.
+%  The AMT team, 2011 - 2013.
 %
 %  Peripheral stages
 %     HEADPHONEFILTER    - FIR filter to model headphones

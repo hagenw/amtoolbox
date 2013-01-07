@@ -18,7 +18,7 @@ def copyrightfun():
     buf=f.readlines()
     f.close
 
-    copyright=[u'Copyright (C) 2012 Peter L. S\xf8ndergaard.\n',
+    copyright=[u'Copyright (C) 2013 Peter L. S\xf8ndergaard.\n',
                u'This file is part of AMToolbox version '+versionstring+'\n']
     copyright.extend(buf)
     
