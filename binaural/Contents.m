@@ -19,8 +19,7 @@
 %     PLOTJELFS2011         - Polar plot, fixed target moving masker
 %
 %  Additional functions
-%     ESTIMATE_AZIMUTH      - Estimates the azimuth position for a given signal
-%                             using the Dietz or the Lindemann model
+%     ESTIMATE_AZIMUTH      - Azimuth position using the Dietz or the Lindemann model
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

@@ -1,11 +1,11 @@
-function [waveVlat]  = roenne2012_tonebursts(stim_level,varargin)
-%ROENNE2012_TONEBURSTS  Simulate tone burst evoked ABR wave V latencies
-%   Usage: [waveVamp, waveVlat]  = roenne2012_tonebursts(flag)
+function [waveVlat]  = roenne2012tonebursts(stim_level,varargin)
+%ROENNE2012TONEBURSTS  Simulate tone burst evoked ABR wave V latencies
+%   Usage: [waveVamp, waveVlat]  = roenne2012tonebursts(flag)
 %
 %   Output parameters:
 %     waveVlat   : Latency of simulated ABR wave V peak.
 %
-%   `roenne2012_tonebursts(stim_level)` simulates ABR responses to tone burst
+%   `roenne2012tonebursts(stim_level)` simulates ABR responses to tone burst
 %   stimuli using the ABR model of Rønne et al. (2012) for a range of
 %   given stimulus levels.
 %
@@ -36,7 +36,7 @@ function [waveVlat]  = roenne2012_tonebursts(stim_level,varargin)
 %
 %   Figure 5 of Roenne et al. (2012) can be displayed using::
 %
-%     roenne2012_tonebursts(40:10:100,'plot');
+%     roenne2012tonebursts(40:10:100,'plot');
 %
 %   References: roenne2012modeling elberling2010evaluating harte2009comparison zilany2007representation
 
@@ -148,9 +148,9 @@ waveVlat    = waveVlat*1000/fs-offset;
 
 if flags.do_plot
   
-  ClickLatency = roenne2012_click(stim_level); 
+  ClickLatency = roenne2012click(stim_level); 
   
   figure;
-  plotroenne2012_toneburst(waveVlat,click_latency);
+  plotroenne2012toneburst(waveVlat,click_latency);
   
 end

@@ -18,12 +18,12 @@
 %
 %  The Roenne 2012 model
 %     ROENNE2012                - Simulate ABR to given stimulus
-%     ROENNE2012_CHIRP          - Simulate chirp evoked ABRs
-%     ROENNE2012_CLICK          - Simulate ABR respone to click
-%     ROENNE2012_TONEBURSTS     - Simulate tone burst evoked ABR wave V latencies
+%     ROENNE2012CHIRP          - Simulate chirp evoked ABRs
+%     ROENNE2012CLICK          - Simulate ABR respone to click
+%     ROENNE2012TONEBURSTS     - Simulate tone burst evoked ABR wave V latencies
 %     PLOTROENNE2012            - Plot output of roenne2012
-%     PLOTROENNE2012_CHIRP      - Plot output of roenne2012_chirp
-%     PLOTROENNE2012_TONEBURSTS - Plot output of roenne2012_tonebursts
+%     PLOTROENNE2012CHIRP      - Plot output of roenne2012chirp
+%     PLOTROENNE2012TONEBURSTS - Plot output of roenne2012tonebursts
 %     ZILANY2007HUMANIZED       - Humanized auditory nerve model
 %
 %  For help, bug reports, suggestions etc. please send email to

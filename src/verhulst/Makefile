@@ -11,18 +11,21 @@ OBJS =  AllocationError.o CloseWrite.o cochlea.o \
 
 #.o:
 #	$(CC) $(OFLAGS)  
-#CC = /usr/local/bin/ifort
-#CC = /opt/intel/Compiler/11.0/074/bin/ia32/ifort
-#CC=/mnt/localhd/home/save/intel/composer_xe_2011_sp1.9.293/bin/ia32/ifort
-#CC = ifort
-OFLAGS = -c -ffixed-line-length-none -Wline-truncation
+
 EFLAGS = -o
-#now come the rules
-CC = gfortran
+
+# gfortran setting
+#OFLAGS = -c -ffixed-line-length-none -Wline-truncation
+#CC = gfortran
+
+# Intel Fotran setting
+CC = ifort
+OFLAGS = -c
 
 verhulst2012: $(OBJS)
 	$(CC) $(EFLAGS) verhulst2012 $(OBJS)
 	cp verhulst2012 ../../bin/
+	cp verhulst2012 ../../verhulst/coch
 
 cochlea.o: Declare.f90 filesmodule.mod cochlea.f90 wavereadmodule.mod messagemodule.mod graphsmodule.mod
 	$(CC) $(OFLAGS) cochlea.f90

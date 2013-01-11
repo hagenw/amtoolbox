@@ -1,5 +1,5 @@
-function [waveVamp, waveVlat]  = roenne2012_chirp(levels,chirps,varargin)
-%ROENNE2012_CHIRP Simulate chirp evoked ABRs
+function [waveVamp, waveVlat]  = roenne2012chirp(levels,chirps,varargin)
+%ROENNE2012CHIRP Simulate chirp evoked ABRs
 %   Usage: [waveVamp, waveVlat]  = ronne2012_chirp(flag)
 %
 %   Output parameters:
@@ -13,7 +13,7 @@ function [waveVamp, waveVlat]  = roenne2012_chirp(levels,chirps,varargin)
 %
 %   Simulates ABR responses to five chirps and one click using the ABR model
 %   of Rønne et al. (2012). Fig. 6 or 7 of Rønne et al. (2012) can be
-%   reproduced based on these data - use `plot_roenne2012_chirp`.  Simulations
+%   reproduced based on these data - use `plot_roenne2012chirp`.  Simulations
 %   can be compared to data from Elberling et al. (2010). Stimuli are
 %   defined similar to Elberling et al. (2010).
 %
@@ -24,14 +24,14 @@ function [waveVamp, waveVlat]  = roenne2012_chirp(levels,chirps,varargin)
 %
 %     'noplot'  Do not plot main figure (fig 6 or 7).
 % 
-%     'plot'    Plot main figure (fig 6 or 7). See |plotroenne2012_chirp|_.
+%     'plot'    Plot main figure (fig 6 or 7). See |plotroenne2012chirp|_.
 %
 %   ---------
 %
 %   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
 %   this model.
 %
-%   See also: roenne2012, plotroenne2012_chirp, exp_roenne2012
+%   See also: roenne2012, plotroenne2012chirp, exp_roenne2012
 %  
 %   References: roenne2012modeling elberling2010evaluating zilany2007representation
 
@@ -153,5 +153,5 @@ waveVlat = waveVlat*1000/fs-15;
 
 if flags.do_plot
   figure;
-  plotroenne2012_chirp(waveVamp, waveVlat);
+  plotroenne2012chirp(waveVamp, waveVlat);
 end

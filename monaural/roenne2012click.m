@@ -1,6 +1,6 @@
-function [waveVamp,waveVlat] = roenne2012_click(stim_level,varargin) 
-%ROENNE2012_CLICK  Simulate ABR respone to click
-%   Usage: [waveVlat]  = roenne2012_click(stim_level).
+function [waveVamp,waveVlat] = roenne2012click(stim_level,varargin) 
+%ROENNE2012CLICK  Simulate ABR respone to click
+%   Usage: [waveVlat]  = roenne2012click(stim_level).
 %
 %   Output parameters:
 %     waveVlat   : Latency of simulated ABR wave V peak.

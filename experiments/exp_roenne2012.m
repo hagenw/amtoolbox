@@ -17,12 +17,11 @@ function [waveVamp, waveVlat] = exp_roenne2012(varargin)
 %                Note that this creates lots of extra figures (3 for each
 %                simulated data point)
 %
-%     'auto '    Re-calculate the file if it does not exist. Return 1 if the
-%                file exist, otherwise 0. This is the default
+%     'auto '    Redo the experiment if a cached dataset does not exist. This is the default.
 %
-%     'refresh'  Always recalculate the file.
+%     'refresh'  Always recalculate the experiment.
 %
-%     'cached'   Always use the cached version. Throws an error if the
+%     'cached'   Always use the cached version. This throws an error if the
 %                file does not exist.
 %
 %     'fig5'     Plot Fig. 5 (Rønne et al., 2012). Latency of simulated ABR
@@ -76,9 +75,9 @@ if flags.do_fig5
   
   if amtredofile(s,flags.redomode);
 
-    [click_amplitude, click_latency]    = roenne2012_click(stim_level);     
+    [click_amplitude, click_latency]    = roenne2012click(stim_level);     
 
-    waveVlat = roenne2012_tonebursts(stim_level);
+    waveVlat = roenne2012tonebursts(stim_level);
     
     save(s,'waveVlat','click_latency',save_format);
   
@@ -91,7 +90,7 @@ if flags.do_fig5
   end;
   
   if flags.do_plot;
-    plotroenne2012_tonebursts(waveVlat,click_latency);
+    plotroenne2012tonebursts(waveVlat,click_latency);
   end  ;  
 
 end;
@@ -108,7 +107,7 @@ if flags.do_fig6;
 
   if amtredofile(s,flags.redomode)
 
-    [waveVamp, waveVlat] = roenne2012_chirp(stim_level, chirp_number);
+    [waveVamp, waveVlat] = roenne2012chirp(stim_level, chirp_number);
 
     save(s,'waveVamp','waveVlat',save_format);
   else
@@ -119,7 +118,7 @@ if flags.do_fig6;
   end;
         
   if flags.do_plot
-    plotroenne2012_chirp(waveVamp, waveVlat,'amponly');
+    plotroenne2012chirp(waveVamp, waveVlat,'amponly');
   end
 end;
 
@@ -135,7 +134,7 @@ if flags.do_fig7;
 
   if amtredofile(s,flags.redomode)
 
-    [waveVamp, waveVlat] = roenne2012_chirp(stim_level, chirp_number);
+    [waveVamp, waveVlat] = roenne2012chirp(stim_level, chirp_number);
 
     save(s,'waveVamp','waveVlat',save_format);
   else
@@ -146,7 +145,7 @@ if flags.do_fig7;
   end;
         
   if flags.do_plot
-    plotroenne2012_chirp(waveVamp, waveVlat,'latonly');
+    plotroenne2012chirp(waveVamp, waveVlat,'latonly');
   end
 end;
 
