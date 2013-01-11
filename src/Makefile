@@ -2,7 +2,7 @@
 CC = gcc
 CFLAGS=-O2 -Wall -fPIC -std=c99
 
-files = adaptloop.o meddishaircell.o
+files = adaptloop.o meddishaircell.o strube1985.o
 
 all: libamtoolbox.a verhulst2012
 

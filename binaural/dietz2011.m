@@ -141,7 +141,7 @@ function [hairc_fine, hairc_mod, fc, hairc_ild] = dietz2011(insig,fs,varargin)
 %                    Sound pressure level of left channel. Used for data
 %                    display and analysis. Default value is 70.
 %
-%   See also: dietz_interaural_functions
+%   See also: dietz2011interauralfunctions
 %
 %   References: dietz2011auditory
 
@@ -314,7 +314,7 @@ mod_filter_bandwidth_hz = kv.mod_center_frequency_hz/kv.mod_filter_finesse;
 
 % calculation of interaural functions from haircell modulation
 if displ disp('calculating interaural functions from haircell modulation'); end
-[hairc_mod] = dietz_interaural_functions(...
+[hairc_mod] = dietz2011interauralfunctions(...
     hairc_mod, hairc_sh_mod, tau,kv.mod_center_frequency_hz+0*fc,...
     kv.signal_level_dB_SPL, kv.compression_power, kv.coh_param.tau_cycles, fs);
 
@@ -328,7 +328,7 @@ if displ disp('deriving fine structure of haircell output -> hairc_fine'); end
 if displ 
   disp('calculating interaural functions from haircell fine structure');
 end
-hairc_fine = dietz_interaural_functions(...
+hairc_fine = dietz2011interauralfunctions(...
     hairc_fine, hairc_sh_fine, tau, fc,...
     kv.signal_level_dB_SPL, kv.compression_power, kv.coh_param.tau_cycles, fs);
 

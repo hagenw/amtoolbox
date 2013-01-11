@@ -12,7 +12,7 @@
 %
 %  The Dietz model
 %     DIETZ2011             - Dietz 2011 binaural model
-%     DIETZ_INTERAURAL_FUNCTIONS - Interaural stages of Dietz 2011
+%     DIETZ2011INTERAURALFUNCTIONS - Interaural stages of Dietz 2011
 %
 %  Binaural speech advantage models  
 %     JELFS2011             - Binaural speech advantage

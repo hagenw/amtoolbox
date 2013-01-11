@@ -3,19 +3,21 @@ function itd = unwrap_itd(itd,ild,f_inst)
 %   Usage: itd = unwrap(itd,ild)
 %
 %   Input parameters:
-%       itd    - itd to unwrap
-%       ild    - corresponding ild value
-%       f_inst - instantaneous frequency
+%       itd    : itd to unwrap
+%       ild    : corresponding ild value
+%       f_inst : instantaneous frequency
 %
 %   Output parameters:
-%       itd    - unwrapped itd
+%       itd    : unwrapped itd
 %
-%   UNWRAP_ITD(itd,ild) unwrapes the given itd using the sign of the
-%   corresponding ild value. Unwraping means, that the ild value is used to
+%   `unwrap_itd(itd,ild)` unwraps the given itd using the sign of the
+%   corresponding ild value. Unwrapping means, that the ild value is used to
 %   decide to which direction the itd belongs, which can be unclear for
-%   large values, because of the pi limit (Dietz2011).
+%   large values, because of the $\pi$ limit (see Dietz et al. 2011).
 %
-%   see also: dietz
+%   See also: dietz2011
+%
+%   References: dietz2011auditory
 
 % AUTHOR: Hagen Wierstorf
 
