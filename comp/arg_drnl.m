@@ -33,7 +33,9 @@ function definput=arg_drnl(definput)
   definput.flags.middleear={'middleear','nomiddleear','jepsenmiddleear'};
   
   definput.flags.path = {'bothparts','linonly','nlinonly'};
-    
+
+  % This parameter set is not supported anymore, as there is no evince as
+  % to whether or not this is actually the dataset that whas used in the paper.  
   definput.groups.jepsen2008={...
       'lin_bw',          [ .03728   .75 ],...
       'lin_lp_cutoff',   [-0.06762 1.01 ],...  

@@ -6,7 +6,15 @@ function [outsig, fc, mfc] = jepsen2008preproc(insig, fs, varargin);
 %   Input parameters:
 %     insig  : input acoustic signal.
 %     fs     : sampling rate.
-%  
+%
+%   **Warning:** This code cannot be verified. It has not been possible to
+%   tell from the desciption in the original paper nor from personal
+%   communication with the original authors what the correct parameter set
+%   used for the model is. This code is kept here as a reminder of the
+%   structure of the model, and may reappear in a future work if a
+%   verified parameter set can be established. The status of this piece
+%   of code is "not even wrong": `<http://en.wikipedia.org/wiki/Not_even_wrong>`_.
+%
 %   `jepsen2008preproc(insig,fs)` computes the internal representation of the signal insig
 %   sampled with a frequency of fs Hz as described in Jepsen, Ewert and
 %   Dau (2008).
@@ -45,6 +53,9 @@ function [outsig, fc, mfc] = jepsen2008preproc(insig, fs, varargin);
 %   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Søndergaard
   
 % ------ Checking of input parameters ------------
+
+error(['This code of this function is incorrect. Please see the description ' ...
+       'in the help text.']
 
 if nargin<2
   error('%s: Too few input arguments.',upper(mfilename));

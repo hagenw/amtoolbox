@@ -4,9 +4,7 @@
 %
 %  Models
 %     VIEMEISTER79      - Viemeisters modulation detection model
-%     DAU1996PREPROC    - Dau et. al. (1996a) peripheral processor
 %     DAU1997PREPROC    - Dau et. al. (1997a) peripheral processor
-%     JEPSEN2008PREPROC - Jepsen et. al. (2008) peripheral processor
 %     BAUMGARTNER2013   - Localization in saggital planes
 %     PLOTBAUMGARTNER2013 - plot probabilistic prediction matrixes
 %

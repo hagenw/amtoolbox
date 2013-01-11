@@ -9,8 +9,7 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %   membrane non-linearity.
 %
 %   This version of the DRNL incoorperate the middle-ear filter used in
-%   Lopez-Poveda and Meddis (2001), and the post-scaling propsed in
-%   Jepsen 2008. Both can be turned off by a flag (see below).
+%   Lopez-Poveda and Meddis (2001).
 %
 %   The DRNL takes a lot of parameters which vary over frequency. Such a
 %   parameter is described by a $1 \times 2$ vector `[b a]` and indicates
@@ -42,9 +41,6 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %                    as another scaling must then be perform to convert the
 %                    input to stapes movement.
 %  
-%     'jepsen'       Use the jepsen2008 variant of middleear filtering.  So far it
-%                    provides data which is 4dB apart (FIXME).
-%
 %     'bothparts'    Compute both the linear and the non-linear path of
 %                    the DRNL. This is the default.
 %
@@ -125,9 +121,9 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %   The output from DRNL can be conveniently visualized using the |plotfilterbank|_
 %   function from LTFAT.
 %
-%   See also: middleearfilter, jepsen2008preproc
+%   See also: middleearfilter
 % 
-%   References: meddis2001computational lopezpoveda2001hnc jepsen2008cmh
+%   References: meddis2001computational lopezpoveda2001hnc
 
 % AUTHOR: Morten Løve Jepsen
   

@@ -1,10 +1,8 @@
 function varargout = extractsp(lat,hM,pos)
-% EXTRACTSP extracts sagittal plane (SP) HRTFs from measurement data stored
-% in ARI's HRTF format
+%EXTRACTSP Sagittal plane (SP) HRTFs from measurement data
+%   Usage:    [sphrtfs,polangs] = extractsp( lat,hM,pos )
 %
-% Usage:    [sphrtfs,polangs] = extractsp( lat,hM,pos )
-%
-% Input parameters:
+%   Input parameters:
 %     lat     : lateral angle of the SP
 %     hM      : matrix containing head-related impulse responses.
 %               Dimensions: time,position,channel 
@@ -13,7 +11,7 @@ function varargout = extractsp(lat,hM,pos)
 %               formated acc. to meta.pos (ARI format).
 %               6th col: lateral angle. 7th col: polar angle
 %
-% Output parameters:
+%   Output parameters:
 %     sphrtfs : all available HRTFs in the current SP, sorted acc. to
 %               ascending polar angle
 %     polangs : corresponding polar angles
@@ -21,17 +19,21 @@ function varargout = extractsp(lat,hM,pos)
 %   `extractsp(...)` extracts all HRTFs available for a specific SP or
 %   lateral angle. In order to result in a representative HRTF template,
 %   demands are made on:
-%   1) lateral tolerance to be as small as possible, but min. 2 and max. 5,
-%   2) polar angles to range from max. -30째 to min. 210째,
-%   3) gaps of polar angles to be max. 30째 large.
 %
+%     1) lateral tolerance to be as small as possible, but min. 2 and
+%        max. 5.
+% 
+%     2) polar angles to range from max. -30째 to min. 210째,
+%
+%     3) gaps of polar angles to be max. 30째 large.
+    
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
 dlat = 2;      % initial lateral tolerance (+/-) in deg
 pol = [0,0];   % initial polar angles
 
 while (min(pol) > -30 || max(pol) < 210 ... % ensure that important polar range is included
-        || max(diff(pol))>30)...            % and gaps are <= 30�
+        || max(diff(pol))>30)...            % and gaps are <= 30째
         && dlat <= 5                        % but keep tolerance smaller than 5 deg
 
   idx=find(pos(:,6)>=-(dlat+0.01)/2+lat & pos(:,6)<=(dlat+0.01)/2+lat);
