@@ -1,8 +1,8 @@
 function output = exp_takanen2013(varargin)
 %EXP_TAKANEN2013 Figures from Takanen, Santala, Pulkki (2013a,2013b)
-%Usage: output = exp_takanen2013(flag)
+%   Usage: output = exp_takanen2013(flag)
 %
-%   EXP_TAKANEN2013(flag) reproduces the figure given by flag either from
+%   `exp_takanen2013(flag)` reproduces the figure given by flag either from
 %   the Takanen et al. (2013) book chapter or the Takanen et al. (2013)
 %   manuscript. The format of its output depends on the chosen figure.
 %   Optionally, pre-computed cochlear model outputs for the different
@@ -54,27 +54,27 @@ function output = exp_takanen2013(varargin)
 %   ---------
 %
 %   To display Figure 7 from the book chapter using pre-computed cochlea
-%   model outputs use:
+%   model outputs use:::
 %
 %     exp_takanen2013('fig7book','cochlea');
 %
 %   To display Figure 8 from the book chapter using pre-computed cochlea
-%   model outputs use:
+%   model outputs use:::
 %
 %     exp_takanen2013('fig8book','cochlea');
 %
 %   To display Figure 6 from the manuscript using pre-computed cochlea 
-%   model outputs use:
+%   model outputs use:::
 %
 %     exp_takanen2013('fig6art','cochlea');
 %
 %   To display Figure 6 from the manuscript using pre-computed cochlea 
-%   model outputs use:
+%   model outputs use:::
 %
 %     exp_takanen2013('fig7art','cochlea');
 %
 %   References: takanen2013a takanen2013b
-%
+
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %
 %   COPYRIGHT (C) 2013 Aalto University

@@ -12,6 +12,13 @@
 %   significantly reduce the required computation time. The pre-computed 
 %   cochlear model outputs can be obtained from the authors.
 %
+%   .. figure::
+%
+%     This is the headline of the figure, one line at most
+%
+%     This is the description of the figure. It can be
+%     several lines.
+%
 %   See also: takanen2013
 %
 %   References: takanen2013a santala2011

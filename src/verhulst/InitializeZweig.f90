@@ -13,13 +13,7 @@ SUBROUTINE InitializeZweig
         !determines the length of the buffers
         f_resonance = omega(1:n) / (2d0 * pi)
         exact_delay = SheraMuMax / (f_resonance(1:n) * dt) ![]
-        !exact_delay = ZweigFactor / (f_resonance(1:n) * dt) ![]
-        ! exact delay in (fraction of) number of samples
         delay = INT (exact_delay) + 1.d0 ! delay in integer number of samples
-           !debug(1:n)=0
-           !debug(1:n)=delay(1:n)
-           !delay_deviation = DFLOAT(delay) - exact_delay
-           !!comment this out when going with exact buffer!
  
         ALLOCATE (Ybuffer(SUM(delay)), STAT = err)
         IF (err/=0) CALL AllocationError

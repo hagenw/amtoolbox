@@ -9,6 +9,7 @@
 %       EXP_JELFS2011       - Binaural speech intelligibility
 %       EXP_ROENNE2012      - Auditory nerve latency
 %       EXP_BAUMGARTNER2013 - Figures from Baumgartner et al. (2013)
+%       EXP_TAKANEN2013     - Figures from Takanen et al. (2013)
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

@@ -78,8 +78,8 @@ caxis([0 kv.cmax])
 if flags.do_colorbar
     colorbar('southoutside')
 end
-xlabel('Target Angle (°)')
-ylabel('Response Angle (°)')
+xlabel('Target Angle (\circ)')
+ylabel('Response Angle (\circ)')
 
 %% Plot response pattern on top
 if length(kv.exptang)==length(kv.exprang)
