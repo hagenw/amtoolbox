@@ -4,7 +4,8 @@
 %
 %  Models
 %     VIEMEISTER79      - Viemeisters modulation detection model
-%     DAU1997PREPROC    - Dau et. al. (1997a) peripheral processor
+%     DAU1997PREPROC    - Dau et al. (1997a) peripheral processor
+%     VERHULST2012      - Verhulst et al. (2012) cochlea model
 %     BAUMGARTNER2013   - Localization in saggital planes
 %     PLOTBAUMGARTNER2013 - plot probabilistic prediction matrixes
 %

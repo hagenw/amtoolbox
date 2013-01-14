@@ -20,6 +20,17 @@
 %     ITD2AZIMUTH        - ITD to azimuth conversion for Dietz and Lindemann model
 %     LOOKUP_TABLE       - creating lookup tables for estimate_azimuth
 %
+%  The Takanen 2013 model   - XXX
+%     TAKANEN2013CONTRACOMPARISON - XXX
+%     TAKANEN2013CUECONSISTENCY - XXX
+%     TAKANEN2013DIRECTIONMAPPING - XXX
+%     TAKANEN2013FORMBINAURALACTIVITYMAP - XXX
+%     TAKANEN2013LSO        - XXX
+%     TAKANEN2013MSO        - XXX
+%     TAKANEN2013ONSETENHANCEMENT - XX
+%     TAKANEN2013PERIPHERY  - XXX
+%     TAKANEN2013WBMSO      - XXX
+%
 %  Utility
 %     PMV2PPP            - PMV to PPP conversion
 %

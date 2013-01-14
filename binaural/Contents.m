@@ -5,14 +5,17 @@
 %  The Breebaart model
 %     BREEBAART2001PREPROC  - EI-cell output
 %
-%  The Lindemann model
+%  The Lindemann 1986 model
 %     LINDEMANN             - Calculate a binaural activity map
 %     PLOTLINDEMANN         - Plot the binaural activity map
 %     LINDCENTROID          - Centroid of the cross-correlation activation
 %
-%  The Dietz model
+%  The Dietz 2011 model
 %     DIETZ2011             - Dietz 2011 binaural model
 %     DIETZ2011INTERAURALFUNCTIONS - Interaural stages of Dietz 2011
+%
+%  The Takanen 2013 model
+%     TAKANEN2013           - The Takanen 2013 XXX model
 %
 %  Binaural speech advantage models  
 %     JELFS2011             - Binaural speech advantage

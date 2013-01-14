@@ -19,6 +19,7 @@
 %      DATA_ELBERLING2010   - ABR wave V data as functon of level and sweeping rate.
 %      DATA_ROENNE2012      - Unitary response.
 %      DATA_BAUMGARTNER2013 - Data from Baumgartner et al. (2013)
+%      DATA_TAKANEN2013     - Data from Takanen et al. (2013)
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

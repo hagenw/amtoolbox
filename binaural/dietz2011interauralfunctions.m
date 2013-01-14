@@ -1,5 +1,5 @@
-function [outp] = dietz_interaural_functions(s1, s2, tau, fc, signal_level_dB_SPL, compr, coh_cycles, fs)
-%DIETZ_INTERAURAL_FUNCTIONS  Interaural stages of Dietz 2011
+function [outp] = dietz2011interauralfunctions(s1, s2, tau, fc, signal_level_dB_SPL, compr, coh_cycles, fs)
+%DIETZ2011INTERAURALFUNCTIONS  Interaural stages of Dietz 2011
 %
 %   Input parameters
 %     s1, s2 : input signals

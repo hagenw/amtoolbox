@@ -20,7 +20,10 @@
 %     GFB_FILTER_NEW              - XXX 
 %     GFB_FILTER_PROCESS          - XXX 
 %     GFB_MIXER_NEW               - XXX 
-%     GFB_SYNTHESIZER_NEW         - XXX 
+%     GFB_SYNTHESIZER_NEW         - XXX
+%
+%  Averaging
+%     WEIGHTEDAVERAGEFILTER       - XXX
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
