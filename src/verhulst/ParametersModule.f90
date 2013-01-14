@@ -63,7 +63,6 @@ INTEGER, PARAMETER :: DISP = 1
 INTEGER, PARAMETER :: VEL = 2
 INTEGER, PARAMETER :: ENV = 3
 REAL(8) SheraPo
-REAL(8) compressionslope
 
 
 ! Output parameters

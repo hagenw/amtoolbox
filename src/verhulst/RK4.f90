@@ -1,3 +1,13 @@
+!In this version all subroutines and functions that are used exclusively in this
+! computation kernell are included in the section CONTAINS, 
+!viz
+!  REAL(8) FUNCTION Stimulus (offset)
+!  REAL(8) FUNCTION ComposeStimulus (time)
+!  SUBROUTINE Calculate_g
+!  REAL(8) FUNCTION epsC(ix)
+!  REAL(8) FUNCTION epskT(ixy)
+!  REAL(8) FUNCTION deps(ix)
+!end
 
 subroutine RK4
 	use Declare

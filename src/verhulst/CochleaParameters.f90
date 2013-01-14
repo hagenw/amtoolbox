@@ -52,7 +52,7 @@ MODULE CochleaParameters
 	REAL(8), PARAMETER :: p0    = 2d-5  !Pa
 
         !Zweig parameters linear
-	REAL(8), PARAMETER :: ZweigQ = 1d0/(-0.0606d0) !pole at 0.061d0  !1.0d0 /-0.0802d0 !for passive:1/0.3197
+	REAL(8), PARAMETER :: ZweigQ = 1d0/-0.0606d0 !pole at 0.061d0  !1.0d0 /-0.0802d0 !for passive:1/0.3197
 	REAL(8), PARAMETER :: ZweigRho = 0.0935d0 ! 0.1041d0 !for passive: 0.0111
 	REAL(8), PARAMETER :: ZweigFactor = 1.7435d0!  !1.7441d0 !for passive: 1.7654
 	REAL(8), PARAMETER :: ZweigQAtBoundaries = 20d0

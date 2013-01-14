@@ -17,8 +17,7 @@
 %     EICELL             - Excitation-inhibition cell model by Breebaart.
 %     CULLING2005BMLD    - BMLD calculation from Culling et al. (2005).
 %     UNWRAP_ITD         - IPD to ITD transformation for the Dietz model
-%     ITD2AZIMUTH        - ITD to azimuth conversion for Dietz and Lindemann
-%                          model (used by estimate_azimuth)
+%     ITD2AZIMUTH        - ITD to azimuth conversion for Dietz and Lindemann model
 %     LOOKUP_TABLE       - creating lookup tables for estimate_azimuth
 %
 %  Utility

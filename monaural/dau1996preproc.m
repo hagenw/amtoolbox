@@ -6,7 +6,12 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %   Input parameters:
 %     insig  : input acoustic signal.
 %     fs     : sampling rate.
-%  
+%
+%   **Warning:** This code is incorrect, the Dau 1996 models uses a
+%   transmission-line model from Strube 1985, while this code erroneously
+%   uses the gammatone filters. If/when the Strube model is included in
+%   AMToolbox, this function will be fixed.
+%
 %   `dau1996preproc(insig,fs)` computes the internal representation of the
 %   signal *insig* sampled with a frequency of *fs* Hz as described in Dau,
 %   Puschel and Kohlrausch (1996a).
@@ -41,7 +46,10 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %   References: dau1996qmeI dau1996qmeII dau1997mapI
 
 %   AUTHOR : Torsten Dau, Morten Løve Jepsen, Peter L. Søndergaard
-  
+
+error(['This code of this function is incorrect. Please see the description ' ...
+       'in the help text.']
+
 % ------ Checking of input parameters ------------
 
 if nargin<2

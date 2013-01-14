@@ -1,9 +1,9 @@
-function plotroenne2012_chirp(waveVamp, waveVlat, varargin)
-%PLOTROENNE2012_CHIRP  Plot Fig. 6 or 7 of Rønne et al. (2012)
-%   Usage: plotroenne2012_chirp(flag)
+function plotroenne2012chirp(waveVamp, waveVlat, varargin)
+%PLOTROENNE2012CHIRP  Plot Fig. 6 or 7 of Rønne et al. (2012)
+%   Usage: plotroenne2012chirp(flag)
 %
-%   `plotroenne2012_chirp(waveVamp, waveVlat)` plots the output of
-%   |roenne2012_chirp|_ in the style of Fig. 6 or 7 of Rønne et al. (2012).
+%   `plotroenne2012chirp(waveVamp, waveVlat)` plots the output of
+%   |roenne2012chirp|_ in the style of Fig. 6 or 7 of Rønne et al. (2012).
 %   Simulations are compared to data from Elberling et al. (2010).
 %
 %   The flag may be one of:
@@ -22,7 +22,7 @@ function plotroenne2012_chirp(waveVamp, waveVlat, varargin)
 %   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
 %   this model.
 %
-%   See also: roenne2012_chirp, roenne2012, exp_roenne2012
+%   See also: roenne2012chirp, roenne2012, exp_roenne2012
 %  
 %   References: roenne2012modeling elberling2010evaluating zilany2007representation
 

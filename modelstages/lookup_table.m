@@ -1,21 +1,20 @@
 function lookup = lookup_table(irs,model,fs)
 %LOOKUP_TABLE generates an azimuth lookup table for the given irs set
-%
-%   Usage: lookup = lookup_table(irs,model,fs)
-%          lookup = lookup_table(irs,model)
-%          lookup = lookup_table(irs)
+%   Usage: lookup = lookup_table(irs,model,fs);
+%          lookup = lookup_table(irs,model);
+%          lookup = lookup_table(irs);
 %
 %   Input parameters:
-%       irs    - irs data set
-%       model  - binaural model to use:
+%       irs    : irs data set
+%       model  : binaural model to use:
 %                  'dietz' (default)
 %                  'lindemann'
-%       fs     - sampling rate 8default: 44100) (Hz)
+%       fs     : sampling rate, default: 44100) (Hz)
 %
 %   Output parameters:
 %       lookup - struct containing lookup data
 %
-%   LOOKUP_TABLE(irs) creates a lookup table from the given IR data set. This
+%   `lookup_table(irs)` creates a lookup table from the given IR data set. This
 %   lookup table can be used by the dietz binaural model to predict the
 %   perceived direction of arrival of an auditory event.
 %
