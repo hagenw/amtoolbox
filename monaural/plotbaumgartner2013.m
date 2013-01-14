@@ -68,10 +68,10 @@ if not(isoctave) % does not work with x11 (mac osx)
   axis equal
 end
 
-set(gca,'XTick',-60:30:240,...
-    'YTick',-60:30:240,...
-    'XMinorTick','on','YMinorTick','on')
-set(gca,'XLim',[tang(1)-5,tang(end)+5],'YLim',[rang(1)-5,rang(end)+5])
+set(gca,'XTick',-60:30:tang(end),'YTick',-60:30:rang(end),...    
+	'XLim',[tang(1)-5,tang(end)+5],'YLim',[rang(1)-5,rang(end)+5],...
+	'XMinorTick','on','YMinorTick','on')
+
 colormap bone
 shading flat
 caxis([0 kv.cmax])
@@ -85,7 +85,7 @@ ylabel('Response Angle (°)')
 if length(kv.exptang)==length(kv.exprang)
     hold on 
     h1 = plot( kv.exptang, kv.exprang, 'wo');  % shadow
-    set(h1,'MarkerSize',kv.MarkerSize+1,'MarkerFaceColor','none') 
+    set(h1,'MarkerSize',kv.MarkerSize+round(kv.MarkerSize/3),'MarkerFaceColor','none') 
     h2 = plot( kv.exptang, kv.exprang, 'ko'); 
     set(h2,'MarkerSize',kv.MarkerSize,'MarkerFaceColor','none') 
     hold off
