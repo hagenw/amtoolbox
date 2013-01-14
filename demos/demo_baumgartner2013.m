@@ -1,5 +1,4 @@
 %DEMO_BAUMGARTNER2013 Demo for sagittal-plane localization model from Baumgartner et al. (2013)
-%   Usage: p = demo_baumgartner2013( flag )
 %
 %   `demo_baumgartner2013(flag)` demonstrates how to compute and visualize 
 %   the baseline prediction (localizing broadband sounds with own ears) 
@@ -8,12 +7,12 @@
 %
 %   .. figure::
 %
-%     This is the headline of the figure, one line at most
+%     This demo computes the baseline prediction (localizing broadband 
+%     sounds with own ears) for an exemplary listener (NH58).
 %
-%     This is the description of the figure. It can be
-%     several lines.
-%
-%     and span several paragraphs.
+%     Predicted polar response angle probability of subject NH58 as a  
+%     function of the polar target angle with probabilities encoded by
+%     brigthness.
 %
 %   See also: baumgartner2013
 
