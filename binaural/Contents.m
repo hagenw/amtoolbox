@@ -17,10 +17,6 @@
 %  The Takanen 2013 model
 %     TAKANEN2013           - The Takanen 2013 XXX model
 %
-%  Binaural speech advantage models  
-%     JELFS2011             - Binaural speech advantage
-%     PLOTJELFS2011         - Polar plot, fixed target moving masker
-%
 %  Additional functions
 %     ESTIMATE_AZIMUTH      - Azimuth position using the Dietz or the Lindemann model
 %

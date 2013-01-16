@@ -10,6 +10,7 @@
 %     ADAPTLOOP          - Adaptation loops.
 %     DRNL               - Dual resonance non-linear filterbank.
 %     MODFILTERBANK      - Modulation filter bank.
+%     MODFILTERBANKEPSM  - Modulation filter bank from Joergensen model.
 %
 %  Binaural processing stages
 %     LANGENDIJKCOMP     - Comparison process from Langendijk 20002.

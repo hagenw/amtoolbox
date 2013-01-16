@@ -5,6 +5,7 @@
 %   Data on specific topics
 %      ABSOLUTETHRESHOLD    - Absolute threshold of hearing
 %      SIIWEIGHTINGS        - Speech intelligibility weighted by frequency
+%      IDEALOBSERVER        - 
 %
 %   Data from papers
 %      DATA_ZWICKER1961     - Definition of critical bands.

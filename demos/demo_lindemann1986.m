@@ -1,4 +1,4 @@
-%DEMO_LINDEMANN Demo of the Lindemann binaural model
+%DEMO_LINDEMANN1986 Demo of the Lindemann binaural model
 %
 %   This script generate a figure showing the result of the lindemann
 %   binaural model for a 2 Hz binaural modulated sinusoid with a frequency of

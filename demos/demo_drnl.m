@@ -40,7 +40,7 @@ lvl2=70;
 lvl3=90;
 
 % Set the dynamic range for plotting.
-dynrange=25;
+dynrange=30;
 
 %% DRNL 
 % Change 'bwmul' to generate more channels, this make the visualization
@@ -64,9 +64,12 @@ outsig3 = abs(filter(mlp_b,mlp_a,outsig3));
 
 figure(1);
 plotfilterbank(outsig1,1,fc1,fs,dynrange,'audtick');
+colormap(flipud(bone));
 
 figure(2);
 plotfilterbank(outsig2,1,fc1,fs,dynrange,'audtick');
+colormap(flipud(bone));
 
 figure(3);
 plotfilterbank(outsig3,1,fc1,fs,dynrange,'audtick');
+colormap(flipud(bone));
