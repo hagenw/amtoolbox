@@ -61,9 +61,12 @@ outsig2 = abs(filter(mlp_b,mlp_a,outsig2));
 outsig3 = abs(filter(mlp_b,mlp_a,outsig3));
 
 %% Visualization
+ftz=20;
 
 figure(1);
 plotfilterbank(outsig1,1,fc1,fs,dynrange,'audtick');
+xlabel('Time (s)','fontsize',ftz,'fontname','arial')
+ylabel('Frequency (Hz)','fontsize',ftz)
 colormap(flipud(bone));
 
 figure(2);
