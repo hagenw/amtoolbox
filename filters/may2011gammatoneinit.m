@@ -44,7 +44,7 @@ function GFB = may2011gammatoneinit(fs,lowFreq,upFreq,nFilter,bUseEar,bAlign,bIn
 
 %   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
 %   
-%   Author  :  Tobias May, © 2008 
+%   Author  :  Tobias May, Â© 2008 
 %              TUe Eindhoven and Philips Research  
 %              t.may@tue.nl      tobias.may@philips.com
 %

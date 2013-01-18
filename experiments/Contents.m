@@ -6,6 +6,7 @@
 %       EXP_LINDEMANN1986a  - Recreate plots from Lindemann (1986a)
 %       EXP_LOPEZPOVEDA2001 - Iso-itensity curves of the DRNL
 %       EXP_LANGENDIJK2002  - Recreate plots from Langedijk (2002)
+%       EXP_DIETZ2011       - Figures from Dietz et al. (2011)
 %       EXP_JELFS2011       - Binaural speech intelligibility advantage
 %       EXP_JOERGENSEN2011  - Monaural speech intellibility
 %       EXP_ROENNE2012      - Auditory nerve latency

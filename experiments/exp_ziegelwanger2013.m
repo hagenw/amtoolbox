@@ -98,7 +98,7 @@ if flags.do_fig2
     grid off
     legend(' MCM',' MAX',' CTD',' AGD','Location','NorthWest');
     legend boxoff
-    xlabel('Azimuth (°) ')
+    xlabel('Azimuth (Â°) ')
     ylabel('TOA (ms) ')
 %     set(gca,'FontSize',ticklabelsize,'LineWidth',bw,'LineWidth',bw);%,'YTick',[-0.8 -0.4 0 0.4 0.8]
     title('');
@@ -242,8 +242,8 @@ if flags.do_fig3 || flags.do_fig6
             plot(real(meta.pos(:,7)),abs(lin)/stimPar.SamplingRate*1000000,'b.');
             xlim([-98 278])
             ylim([-5 max(abs(lin)/stimPar.SamplingRate*1000000)+5])
-            xlabel('Polar angle (°)')
-            ylabel('Sagittal TOA deviation (µs)')
+            xlabel('Polar angle (Â°)')
+            ylabel('Sagittal TOA deviation (Âµs)')
             title('')
             set(gca,'XTick',[-90 0 90 180 270])
         end
@@ -264,7 +264,7 @@ if flags.do_fig3 || flags.do_fig6
             h=plotziegelwanger2013((-indicator1+1).*toaEst,3,'r',0,1,1,meta,stimPar,{'o'},4);
             set(h,'MarkerFaceColor','r','MarkerEdgeColor','r');
             ylabel('TOA (ms) ')
-            xlabel('Azimuth (°) ')
+            xlabel('Azimuth (Â°) ')
             grid off
             xlim([-10 370])
             ylim([2.65 3.65])
@@ -324,7 +324,7 @@ if flags.do_fig3 || flags.do_fig6
         set(h,'MarkerFaceColor','r','MarkerEdgeColor','r');
         plotziegelwanger2013(toa,4,'k',0,1,1,meta,stimPar,{'-'},1);
         ylabel('TOA (ms) ')
-        xlabel('Azimuth (°) ')
+        xlabel('Azimuth (Â°) ')
         grid off
         xlim([-10 370])
         ylim([2.65 3.65])
@@ -372,8 +372,8 @@ if flags.do_fig5
     var=[squeeze(p(2,1,:))/pi*180 squeeze(p(2,2,:))/pi*180 -s.phi+ones(length(s.phi),1)*90 -s.phi-ones(length(s.phi),1)*90];
     err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,4)]);
     err=reshape(err,numel(err),1);
-    fprintf(['Phi: average err is ' num2str(mean(err)) '°\n']);
-    fprintf(['     standard deviation is ' num2str(std(err)) '°\n']);
+    fprintf(['Phi: average err is ' num2str(mean(err)) 'Â°\n']);
+    fprintf(['     standard deviation is ' num2str(std(err)) 'Â°\n']);
     for ch=1:size(p,2)
         plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
         hold on
@@ -388,15 +388,15 @@ if flags.do_fig5
     end
     clear var;
     set(gca,'YTick',[-90 90])
-    ylabel('\phi_e (°) ')
+    ylabel('\phi_e (Â°) ')
 
     %theta
     subplot(313)
     var=[squeeze(p(3,1,:))/pi*180 squeeze(p(3,2,:))/pi*180 s.theta -s.theta];
     err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,4)]);
     err=reshape(err,numel(err),1);
-    fprintf(['Theta: average err is ' num2str(mean(err)) '°\n']);
-    fprintf(['       standard deviation is ' num2str(std(err)) '°\n']);
+    fprintf(['Theta: average err is ' num2str(mean(err)) 'Â°\n']);
+    fprintf(['       standard deviation is ' num2str(std(err)) 'Â°\n']);
     for ch=1:size(p,2)
         plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
         hold on
@@ -410,7 +410,7 @@ if flags.do_fig5
         plot(38:42,var(38:42,2+ch),'k--')
     end
     clear var;
-    ylabel('\theta_e (°) ')
+    ylabel('\theta_e (Â°) ')
     xlabel('Condition')
 end
 
@@ -651,7 +651,7 @@ if flags.do_fig8
     xlim([-5 365])
     ylim([-0.05 0.95])
     grid off
-    xlabel('Azimuth (°) ')
+    xlabel('Azimuth (Â°) ')
     ylabel('Relative TOA (ms) ');
     title('')
 end
@@ -719,128 +719,4 @@ if flags.do_fig9 || flags.do_fig11
         temp=1;
         ymax2=round(max(max(squeeze(p_offaxis(1,:,:)*100))))+1;
         var=[squeeze(p_offaxis(1,1,:))*100 squeeze(p_offaxis(1,2,:))*100 s.radius/10];
-        err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-        err=reshape(err,numel(err),1);
-        temp1=err;
-        fprintf(['Radius: average err is ' num2str(mean(err)) ' cm\n']);
-        fprintf(['        standard deviation is ' num2str(std(err)) ' cm\n']);
-        fprintf(['        maximum is ' num2str(max(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        fprintf(['        average is ' num2str(mean(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        for ch=1:size(pExtp_offaxisFull,2)
-            plot(1:temp-1,var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
-            hold on
-        end
-        plot(var(:,3),'k--')
-        clear var;
-        ylabel('r (cm) ')
-        xlim([-1 temp+1])
-        ylim([4.5 ymax2])
-
-        %xM
-        subplot(412)
-        var=[squeeze(p_offaxis(2,1,:))*100 squeeze(p_offaxis(2,2,:))*100 -s.xM*100];
-        err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-        err=reshape(err,numel(err),1);
-        fprintf(['xM: average err is ' num2str(mean(err)) ' cm\n']);
-        fprintf(['    standard deviation is ' num2str(std(err)) ' cm\n']);
-        fprintf(['    maximum is ' num2str(max(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        fprintf(['    average is ' num2str(mean(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        for ch=1:size(p_offaxis,2)
-            plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
-            hold on
-        end  
-        plot(var(:,3),'k--')
-        clear var;
-        ylabel('x_M (cm) ')
-        xlabel([-1 temp+1])
-        ylabel([-2.5 0.5])
-
-        %yM
-        subplot(413)
-        var=[squeeze(p_offaxis(3,1,:))*100 squeeze(p_offaxis(3,2,:))*100 -s.yM*100];
-        err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-        err=reshape(err,numel(err),1);
-        temp1=[temp1; err];
-        fprintf(['yM: average err is ' num2str(mean(err)) ' cm\n']);
-        fprintf(['    standard deviation is ' num2str(std(err)) ' cm\n']);
-        fprintf(['    maximum is ' num2str(max(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        fprintf(['    average is ' num2str(mean(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        for ch=1:size(p_offaxis,2)
-            plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
-            hold on
-        end
-        plot(var(:,3),'k--')
-        clear var;
-        ylabel('y_M (cm) ')
-        xlim([-1 temp+1])
-        ylim([-0.5 2.5])
-
-        %zM
-        subplot(414)
-        var=[squeeze(p_offaxis(4,1,:))*100 squeeze(p_offaxis(4,2,:))*100 -s.zM*100];
-        err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-        err=reshape(err,numel(err),1);
-        temp1=[temp1; err];
-        fprintf(['zM: average err is ' num2str(mean(err)) ' cm\n']);
-        fprintf(['    standard deviation is ' num2str(std(err)) ' cm\n']);
-        fprintf(['    maximum is ' num2str(max(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        fprintf(['    average is ' num2str(mean(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        for ch=1:size(p_offaxis,2)
-            plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
-            hold on
-        end
-        plot(var([1 3],3),'k--')
-        plot(var([2 4],3),'k--')
-        clear var;
-        set(gca,'YTick',[-1 0])
-        xlabel('Condition')
-        ylabel('z_M (cm) ')
-        xlim([-1 temp+1])
-        ylim([-1.5 0.5])
-
-        
-        fprintf(['offset: average err is ' num2str(mean(temp1)) ' cm\n']);
-        fprintf(['        standard deviation is ' num2str(std(temp1)) ' cm\n']);
-        fprintf(['        maximum is ' num2str(max(abs(temp1))) ' cm\n']);
-    end
-end
-
-end
-
-function idx=ARI_FindPosition(meta,azimuth,elevation)
-    psi=sin(elevation/180*pi).*sin(meta.pos(:,2)/180*pi) + ...
-        cos(elevation/180*pi).*cos(meta.pos(:,2)/180*pi).*...
-        cos(azimuth/180*pi-meta.pos(:,1)/180*pi);
-    [~,idx]=min(acos(psi));
-end
-
-function out=ARI_MinimalPhase(in)
-    n=size(in,1);
-    itnr=size(in,2);
-    rec=size(in,3);
-    out=zeros(size(in));
-
-    for jj=1:rec
-        for ii=1:itnr
-            h=squeeze(in(:,ii,jj));
-            % decompose signal
-            amp1=abs(fft(h));
-
-            % transform
-            amp2=amp1;
-            an2u=-imag(hilbert(log(amp1))); % minimal phase
-
-            % reconstruct signal from amp2 and an2u
-            % build a symmetrical phase 
-            an2u=an2u(1:floor(n/2)+1);
-            an2u=[an2u; -flipud(an2u(2:end+mod(n,2)-1))];
-            an2=an2u-round(an2u/2/pi)*2*pi;  % wrap around +/-pi: wrap(x)=x-round(x/2/pi)*2*pi
-            % amplitude
-            amp2=amp2(1:floor(n/2)+1);
-            amp2=[amp2; flipud(amp2(2:end+mod(n,2)-1))];
-            % back to time domain
-            h2=real(ifft(amp2.*exp(1i*an2)));
-            out(:,ii,jj)=h2;
-        end
-    end
-end
+        err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)])

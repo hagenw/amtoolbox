@@ -5,44 +5,41 @@ function [outp] = dietz2011interauralfunctions(s1, s2, tau, fc, signal_level_dB_
 %     s1, s2 : input signals
 %     tau    : lowpass filter parameter, such that a = exp(-1./(fs*tau)), 
 %              lowpass = filter([1-a], [1, -a], x)  
-%     fc     : central frequencies
+%     fc     : center frequencies
 %     fs     : sampling frequencies
 %
 %   Output parameters:
 %     outp   : Structure containing the output. See the description
-%              below. XXX Missing
+%              below.
 %
-%   XXX Description is missing. 
+%   XXX Description is missing. What does this function actually do?
 %
 %   **Note**: If *tau* is a scalar, lowpass is done on every channel
 %   with the value of *tau*. If the filter parameter *tau* is a vector, it has
 %   to have as many elements as the number of channels of *s1* and *s2*; each
 %   value *tau(i)* is applied to the signals in `s1(i,:)` and `s2(i,:)`.
 %
+%   The output structure *outp* contains the following fields:
+%     itf       : transfer function
+%     itf_equal : transfer function without amplitude
+%     ipd : phase difference in rad
+%     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
+%     ild : level difference in dB
+%     itd, itd_C, itd_lp, itd_C_lp - time difference based on instantaneous
+%                  and central frequencies, with and without low-passed itf
+%     f_inst_1 : instantaneous frequencies in the channels of the filtered s1
+%     f_inst_2 : instantaneous frequencies in the channels of the filtered s2
+%     f_inst   : instantaneous frequencies (average of f_inst1 and 2)
+%
 %   See also: dietz2011
 %
 %   References: dietz2011auditory
-
-%
-%     itf       : transfer function
-%     itf_equal : transfer function without amplitude
-%     ipd       : phase difference in rad
-%     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
-%     ild       : level difference in dB
-%     itd       itd_C, itd_lp, itd_C_lp : time difference based on instantaneous
-%                  and central frequencies, with and without low-passed itf
-%     f_inst_1  : instantaneous frequencies in the channels of the filtered s1
-%     f_inst_2  : instantaneous frequencies in the channels of the
-%                filtered s2
-%
 
   a = exp( -1./(fs*tau) );
 
   outp.itf = s2 .* conj(s1);
   
   outp.ipd_lp = zeros(size(s1));
-  f_inst_1 = zeros(size(s1));
-  f_inst_2 = zeros(size(s1));
   
   % interaural phase difference
   outp.ipd = angle(outp.itf);
@@ -55,8 +52,8 @@ function [outp] = dietz2011interauralfunctions(s1, s2, tau, fc, signal_level_dB_
   s1_low = lowpass(abs(s1),a);
   s2_low = lowpass(abs(s2),a);    % take envelope at higher frequencies
   
-  s1_low( find(abs(s1_low) < eps) ) = eps;    % avoid log(0)
-  s2_low( find(abs(s2_low) < eps) ) = eps;    % avoid division by zero
+  s1_low( abs(s1_low) < eps ) = eps;    % avoid log(0)
+  s2_low( abs(s2_low) < eps ) = eps;    % avoid division by zero
   
   outp.ild = 20*log10(s1_low./s2_low)./compr;
   if length(a) == 1
@@ -70,28 +67,25 @@ function [outp] = dietz2011interauralfunctions(s1, s2, tau, fc, signal_level_dB_
   
   % interaural time difference, based on central and instantaneous frequencies
   for k = 1:length(fc)
-    f_inst_1(:,k) = calc_f_inst(s1(:,k),fs,tau(k),0);
-    f_inst_2(:,k) = calc_f_inst(s2(:,k),fs,tau(k),0);
+    outp.f_inst_1(:,k) = calc_f_inst(s1(:,k),fs,tau(k),0);
+    outp.f_inst_2(:,k) = calc_f_inst(s2(:,k),fs,tau(k),0);
     outp.itd_C(:,k) = 1/(2*pi)*outp.ipd(:,k)/fc(k);
     outp.itd_C_lp(:,k) = 1/(2*pi)*outp.ipd_lp(:,k)/fc(k);
   end
-  outp.f_inst = max(eps,0.5*(f_inst_1 + f_inst_2));
-
-  % to avoid division by zero
+  outp.f_inst = max(eps,0.5*(outp.f_inst_1 + outp.f_inst_2)); % to avoid division by zero
   
   % based on instantaneous frequencies
   outp.itd = 1/(2*pi)*outp.ipd./outp.f_inst;    
   outp.itd_lp = 1/(2*pi)*outp.ipd_lp./outp.f_inst;
-  
-  %level = signal_level_dB_SPL*compr + 20*log10(abs(s1)+abs(s2));
-  
-  
   
   % weighting of channels for cumulative ixd determination
   % sqrt(2) is due to half-wave rectification (included 28th Sep 07)
   outp.rms = signal_level_dB_SPL*compr + 20*log10(sqrt(2)*min(rms(abs(s1)),rms(abs(s2))));
   outp.rms = max(outp.rms,0); % avoid negative weights
   
+  outp.s1 = s1; % put input in output structure
+  outp.s2 = s2;
+  outp.fc = fc;
 end
 
 %% lowpass
@@ -145,12 +139,11 @@ function f_inst = calc_f_inst(sig,fs,tau,norm)
 %          process(0: no level weigthing)
 %
 % output values:
-%   f_inst:   vector of estimated inst. frequency values (w temporal
-%            averaging
+%   f_inst:   vector of estimated inst. frequency values (with temporl averaging)
 %
 % copyright: Universitaet Oldenburg
-% author   : vh
-% date     : 12/04
+% author   : volker hohmann
+% date     : 12/2004
 %
 
 sig = sig';

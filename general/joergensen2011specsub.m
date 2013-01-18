@@ -15,7 +15,7 @@ function [output_Y output_N] = joergensen2011sepsub(input,noise,W,padz,SP,factor
 %   noisy signal (signal) and noise alone using spectral subtraction as
 %   defined by Berouti et al. (1979).
 
-% Søren Jørgensen Feb. 2011
+% SÃ¸ren JÃ¸rgensen Feb. 2011
 % 
 
 
