@@ -40,11 +40,7 @@ function exp_dietz2011(varargin)
 %
 %     exp_dietz2011('fig6');
 %
-%   To display Fig. 7 use :::
-%
-%     exp_dietz2011('fig7');
-%
-%   See also: dietz2011, data_dietz2011
+%   See also: dietz2011
 %
 %   References: dietz2011auditory
 

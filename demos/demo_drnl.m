@@ -26,7 +26,7 @@
 %     This figure shows the DRNL of an input speech signal with a level
 %     of 50 dB SPL.
 %
-%   See also: drnl, jepsen2008preproc
+%   See also: drnl
 
 
 fs=32000;

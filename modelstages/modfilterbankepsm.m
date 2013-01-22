@@ -1,5 +1,6 @@
 function [fcs powers] = modfilterbankepsm(data,fig,fs)
-%Usage: [fcs,powers] = modfilterbankepsm(data,fig,fs)
+%MODFILTERBANKEPSM  Modulation filterbank, EPSM version
+%   Usage: [fcs,powers] = modfilterbankepsm(data,fig,fs)
 %
 %   Input parameters:
 %    freqs  :  Frequencies of the data, starting from f = 0
