@@ -16,7 +16,7 @@ f.close
 
 conf=ConfType()
 
-#conf.otherrefs=['ltfat.txt']
+conf.otherrefs=['ltfat.txt']
 
 f=file(localconf.projects['amtoolbox']+'amtoolbox_version');
 versionstring=f.read()[:-1]

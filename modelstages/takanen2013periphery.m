@@ -46,7 +46,7 @@ function periphOutput = takanen2013periphery(insig,fs,outputPlot)
 %     4) the frequency-dependent delays of the cochlea model are
 %        compensated
 %
-%   See also: takanen2013, verhulst2012, data_takanen2013
+%   See also: takanen2013, verhulst2012
 
 %   References: takanen2013a pulkki2009 verhulst2012
 %

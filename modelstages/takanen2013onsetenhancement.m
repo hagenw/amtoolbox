@@ -33,7 +33,7 @@ function [thetaOut energyOut]= takanen2013onsetenhancement(thetaIn,energyIn,fs,c
 %             onsets
 %
 %   See also: takanen2013, takanen2013periphery, weightedaveragefilter,
-%             takanen2013formbinauralactivitymap, data_takanen2013
+%             takanen2013formbinauralactivitymap
 %
 %   References: takanen2013a
 

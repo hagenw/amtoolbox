@@ -81,7 +81,7 @@ function [crosscorr,t,ild,cfreq] = lindemann(insig,fs,varargin)
 %
 %   See also: lindemannbincorr, plotlindemann, gammatone, ufilterbankz
 %
-%   Demos: demo_lindemann
+%   Demos: demo_lindemann1986
 %
 %   References:lindemann1986a lindemann1986b gaik1993combined jeffress1948place hess2007phd
 
