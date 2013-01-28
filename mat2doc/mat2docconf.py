@@ -80,12 +80,10 @@ mat.urlbase='http://amtoolbox.sourceforge.net/doc/'
 # ------------------------------------------
 
 verify=ConfType()
-
 verify.basetype='verify'
+verify.sourcedir=outputdir+'amtoolbox-mat'+os.sep
 
-verify.targets=['AUTHOR','TESTING','REFERENCE']
+verify.targets=['AUTHOR']
+verify.notappears=['FIXME','BUG','XXX','TODO']
 
-verify.notappears=['FIXME','BUG','XXX']
-
-verify.ignore=["demo_","comp_","assert_","Contents.m","init.m"]
-
+verify.ignore=["comp_","assert_","Contents.m","init.m"]
