@@ -26,7 +26,7 @@ function exp_dietz2011(varargin)
 %
 %   To display Fig. 3 use :::
 %
-%     exp_dietz2011('fig4');
+%     exp_dietz2011('fig3');
 %
 %   To display Fig. 4 use :::
 %
