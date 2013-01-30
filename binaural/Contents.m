@@ -6,8 +6,8 @@
 %     BREEBAART2001PREPROC  - EI-cell output
 %
 %  The Lindemann 1986 model
-%     LINDEMANN             - Calculate a binaural activity map
-%     PLOTLINDEMANN         - Plot the binaural activity map
+%     LINDEMANN1986         - Calculate a binaural activity map
+%     PLOTLINDEMANN1986     - Plot the binaural activity map
 %     LINDCENTROID          - Centroid of the cross-correlation activation
 %
 %  The Dietz 2011 model

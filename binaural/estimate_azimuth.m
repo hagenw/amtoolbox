@@ -1,6 +1,5 @@
 function [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,fs)
-%ESTIMATE_AZIMUTH uses a binaural model to estimate the perceived azimuth angle
-%
+%ESTIMATE_AZIMUTH Estimate the perceived azimuth using a binaural model
 %   Usage: [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,fs)
 %          [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model)
 %          [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup)
@@ -19,9 +18,9 @@ function [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,fs)
 %       ild     - calculated ILD (dB)
 %       cfreqs  - center frequencies of used auditory filters (Hz)
 %
-%   ESTIMATE_AZIMUTH(sig,lookup) uses a binaural model to estimate the perceived
-%   direction for a given binaural signal. therefore it needs the struct lookup,
-%   which maps ITD values to the corresponding angles.
+%   `estimate_azimuth(sig,lookup)` uses a binaural model to estimate the
+%   perceived direction for a given binaural signal. therefore it needs the
+%   struct lookup, which maps ITD values to the corresponding angles.
 %
 %   see also: lookup
 
@@ -92,7 +91,7 @@ elseif strcmpi('lindemann',model)
     M_f = 6; % decrease of monaural sensitivity
     T_int = inf; % integration time
     N_1 = 1764; % sample at which first cross-correlation is calculated
-    [cc_tmp,dummy,ild,cfreqs] = lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1);
+    [cc_tmp,dummy,ild,cfreqs] = lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1);
     clear dummy;
     cc_tmp = squeeze(cc_tmp);
     % Calculate tau (delay line time) axes

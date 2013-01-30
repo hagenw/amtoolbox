@@ -93,9 +93,9 @@ elseif strcmpi('lindemann',model)
         M_f = 6; % decrease of monaural sensitivity
         T_int = inf; % integration time
         %N_1 = 1764; % sample at which first cross-correlation is calculated
-        %[cc_tmp,ild(ii,:),cfreqs] = lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1);
+        %[cc_tmp,ild(ii,:),cfreqs] = lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1);
         N_1 = 17640; % sample at which first cross-correlation is calculated
-        [cc_tmp,dummy,ild(ii,:),cfreqs] = lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1);
+        [cc_tmp,dummy,ild(ii,:),cfreqs] = lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1);
         clear dummy;
         cc_tmp = squeeze(cc_tmp);
         % Calculate tau (delay line time) axes

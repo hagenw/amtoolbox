@@ -8,7 +8,7 @@
 %
 %   Data from papers
 %      DATA_ZWICKER1961     - Definition of critical bands.
-%      DATA_LINDEMANN1986A  - Lindemann et al. 1986(a).
+%      DATA_LINDEMANN1986   - Lindemann et al. 1986.
 %      DATA_NEELY1988       - ABR wave V latency as function of center frequency.
 %      DATA_GLASBERG1990    - Notched noise thresholds.
 %      DATA_GOODE1994       - Stapes footplate diplacement.

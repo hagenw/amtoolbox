@@ -14,7 +14,7 @@
 %
 %  Binaural processing stages
 %     LANGENDIJKCOMP     - Comparison process from Langendijk 20002.
-%     LINDEMANNBINCORR   - Running cross-correlation between two signals.
+%     LINDEMANN1986BINCORR - Running cross-correlation between two signals.
 %     EICELL             - Excitation-inhibition cell model by Breebaart.
 %     CULLING2005BMLD    - BMLD calculation from Culling et al. (2005).
 %     UNWRAP_ITD         - IPD to ITD transformation for the Dietz model

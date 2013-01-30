@@ -1,14 +1,14 @@
-function data = data_lindemann1986a(varargin)
-%DATA_LINDEMANN1986a Data points from the Lindemann (1986a) paper
-%   Usage: data = data_lindemann1986a_data(flag)
+function data = data_lindemann1986(varargin)
+%DATA_LINDEMANN1986 Data points from the Lindemann (1986a) paper
+%   Usage: data = data_lindemann1986_data(flag)
 %
 %   Output parameters:
 %       data    : the data points from the given figure as a matrix with x and y
 %                 data or (in cases where no clear x values were given such as
 %                 T/2) as a vector containing only the y data
 %
-%   `data_lindemann1986a(flag)` returns data points from the Lindemann
-%   1986a paper. The flag may be one of:
+%   `data_lindemann1986(flag)` returns data points from the Lindemann
+%   1986 paper. The flag may be one of:
 %
 %     'noplot'        Don't plot, only return data. This is the default.
 %
@@ -45,31 +45,31 @@ function data = data_lindemann1986a(varargin)
 %
 %   Figure 11 with the "yost" condition can be displayed using :::
 %
-%     data_lindemann1986a('fig11_yost','plot');
+%     data_lindemann1986('fig11_yost','plot');
 %
 %   Figure 11 with the "sayers" condition can be displayed using :::
 %
-%     data_lindemann1986a('fig11_sayers','plot');
+%     data_lindemann1986('fig11_sayers','plot');
 %
 %   Figure 12 for a 400 Hz pure tone can be displayed using :::
 %
-%     data_lindemann1986a('fig12_400','plot');
+%     data_lindemann1986('fig12_400','plot');
 %
 %   Figure 12 for a 600 Hz pure tone can be displayed using :::
 %
-%     data_lindemann1986a('fig12_600','plot');
+%     data_lindemann1986('fig12_600','plot');
 %
 %   Figure 13 can be displayed by using :::
 %
-%     data_lindemann1986a('fig13','plot');
+%     data_lindemann1986('fig13','plot');
 %
 %   Figure 16 can be displayed using :::
 %
-%     data_lindemann1986a('fig16','plot');
+%     data_lindemann1986('fig16','plot');
 %
 %   Figure 17 can be displayed using :::
 %
-%     data_lindemann1986a('fig17','plot');
+%     data_lindemann1986('fig17','plot');
 % 
 %   References:lindemann1986a
 
@@ -100,7 +100,7 @@ end;
 
 %% ------ Data points from the paper ------------------------------------
 % The following data points are guessed after the plots in the paper from
-% Lindemann 1986a.
+% Lindemann 1986.
 %
 % Data for the given figure
 

@@ -1,9 +1,9 @@
-function output = exp_lindemann1986a(varargin)
-%EXP_LINDEMANN1986a Figures from Lindemann (1986a)
-%   Usage: output = exp_lindemann1986a(flag)
+function output = exp_lindemann1986(varargin)
+%EXP_LINDEMANN1986 Figures from Lindemann (1986)
+%   Usage: output = exp_lindemann1986(flag)
 %
-%   `exp_lindemann1986a(flag)` reproduces the results for the figure given
-%   by *flag* from the Lindemann (1986a) paper. It will also plot the
+%   `exp_lindemann1986(flag)` reproduces the results for the figure given
+%   by *flag* from the Lindemann (1986) paper. It will also plot the
 %   results.  The format of its output depends on the chosen figure. If not
 %   otherwise stated, the cross-correlation of a pure tone sinusoids with
 %   f=500 Hz and different ITDs, ILDs or a combination of both is
@@ -25,7 +25,7 @@ function output = exp_lindemann1986a(varargin)
 %     'cached'   Always use the cached version. Throws an error if the
 %                file does not exist.
 %
-%     'fig6'  Reproduce Fig.6 from Lindemann (1986a).  The cross-correlation is
+%     'fig6'  Reproduce Fig.6 from Lindemann (1986).  The cross-correlation is
 %             calculated for different ITDs and different inhibition factors
 %             $c_s=0,0.3,1$. Afterwards for every *c_s* the correlation is
 %             plotted for every used ITD dependend on the correlation-time
@@ -33,7 +33,7 @@ function output = exp_lindemann1986a(varargin)
 %             The output has dimensions: number of *c_s* conditions x
 %             nitds x delay line length
 %
-%     'fig7'  Reproduce Fig.7 from Lindemann (1986a).  The cross-correlation
+%     'fig7'  Reproduce Fig.7 from Lindemann (1986).  The cross-correlation
 %             is calculated for different ITDs and different inhibition
 %             factors $c_s=0,0.2,0.4,0.6,0.8,1.0$. Afterwards for every
 %             *c_s* the displacement of the centroid of the auditory image
@@ -41,14 +41,14 @@ function output = exp_lindemann1986a(varargin)
 %             the displacement of the centroid for different *c_s* values.
 %             The output has dimensions: *c_s* x nitds
 %
-%     'fig8'  Reproduce Fig.8 from Lindemann (1986a).  The cross-correlation
+%     'fig8'  Reproduce Fig.8 from Lindemann (1986).  The cross-correlation
 %             is calculated for different ILDs and different inhibition factors
 %             $c_s = 0.3, 1$. Afterwards for every *c_s* the ILD is plotted
 %             depending on the correlation time. The output is the
 %             cross-correlation result of the figure. The dimensions of the
 %             output are: number of *c_s* conditions x nilds x delay line length.
 %
-%     'fig10'  Reproduce Fig.10 from Lindemann (1986a). The
+%     'fig10'  Reproduce Fig.10 from Lindemann (1986). The
 %              cross-correlation is calculated for different ILDs with an
 %              inhibition factor of $c_s = 0.3$ and a monaural detector
 %              factor $w_f = 0.035$. Afterwards the ILD is plotted depending
@@ -56,7 +56,7 @@ function output = exp_lindemann1986a(varargin)
 %              result of the figure.  The output has dimensions:
 %              number of *c_s* conditions x nilds x delay line length
 %
-%     'fig11'  Reproduce Fig.11 from Lindemann (1986a).  The centroid
+%     'fig11'  Reproduce Fig.11 from Lindemann (1986).  The centroid
 %              position is calculated for different ILDs, an inhibition
 %              factor $c_s = 0.3$ and a monaural detector factor $w_f =
 %              0.035$. Afterwards for every *c_s* the displacement of the
@@ -65,7 +65,7 @@ function output = exp_lindemann1986a(varargin)
 %              the output are: number of *c_s* conditions x nilds x delay
 %              line length
 %
-%     'fig12'  Reproduce Fig.12 from Lindemann (1986a). The centroids are
+%     'fig12'  Reproduce Fig.12 from Lindemann (1986). The centroids are
 %              calculated for combinations of ITDs and ILDs.  After the
 %              calculation the values for the centroids of the stimuli are
 %              searched to find the nearest value to 0. The corresponding ILD
@@ -75,7 +75,7 @@ function output = exp_lindemann1986a(varargin)
 %              center for an combined ITD, ILD stimulus with a given ITD
 %              value.  The output has dimensions: number of ITDs x 1
 %
-%     'fig13'  Reproduce Fig.13 from Lindemann (1986a). The centroids are
+%     'fig13'  Reproduce Fig.13 from Lindemann (1986). The centroids are
 %              calculated for ILD only and ITD/ILD combination
 %              stimuli. After the calculation the values for the centroids
 %              of the ILD only stimuli are searched to find the nearest
@@ -86,7 +86,7 @@ function output = exp_lindemann1986a(varargin)
 %              stimulus compared to a stimulus with both ITD and ILD.
 %              The output has dimensions: number of ILDs x number of ITDs
 %
-%     'fig14a'  Reproduce fig.14 (a) from Lindemann (1986a). The
+%     'fig14a'  Reproduce fig.14 (a) from Lindemann (1986). The
 %               cross-correlations for a combination of ILDs and a ITD of
 %               ~1ms are calculated. This is done for different ILDs and
 %               different inhibition factors $c_s = 0,0.2,0.4,0.6,1$.
@@ -95,7 +95,7 @@ function output = exp_lindemann1986a(varargin)
 %               the displacement of the centroid for different *c_s* values
 %               and ILDs. The output has dimensions: *c_s* x nilds
 %
-%     'fig14b'  Reproduce Fig.14 (b) from Lindemann (1986a). The
+%     'fig14b'  Reproduce Fig.14 (b) from Lindemann (1986). The
 %               cross-correlations for a combination of ILDs and a ITD of ~1ms
 %               are calculated. This is done for different small ILDs with a
 %               standard deviation of 0-5. Afterwards for every standard
@@ -105,7 +105,7 @@ function output = exp_lindemann1986a(varargin)
 %               different small ILD with a standard deviation of $0,1,2,3,4,5$.
 %               The output has dimensions: nilds x nitds
 %
-%     'fig15'  Reproduce Fig.15 from Lindemann (1986a). The cross-correlation
+%     'fig15'  Reproduce Fig.15 from Lindemann (1986). The cross-correlation
 %              for an ITD of -0.5ms is calculated. This is done for
 %              different ILDs, an inhibition factor $c_s = 0.3$ and a
 %              monaural detector factor $w_f = 0.035$. Afterwards for every
@@ -114,7 +114,7 @@ function output = exp_lindemann1986a(varargin)
 %              has dimensions: number of *c_s* conditions x nilds x delay line
 %              length
 %
-%     'fig16'  Reproduces Fig.16 from Lindemann (1986a). The
+%     'fig16'  Reproduces Fig.16 from Lindemann (1986). The
 %              cross-correlations for combinations of ITDs and ILDs are
 %              calculated. Afterwards the combinations of ILD and ITD are
 %              looked for the ones that have two peaks in its
@@ -125,7 +125,7 @@ function output = exp_lindemann1986a(varargin)
 %              two peaks with the same (nearest) height, depending on the
 %              ITD. The output has dimensions: number of ITDs x 1
 %
-%     'fig17'  Reproduce Fig.17 from Lindemann (1986a). The
+%     'fig17'  Reproduce Fig.17 from Lindemann (1986). The
 %              cross-correlation for ITD/ILD combination and ITD only
 %              stimuli is calculated. Afterwards the values for the
 %              centroids and maxima of the ITD only stimuli are searched to
@@ -137,7 +137,7 @@ function output = exp_lindemann1986a(varargin)
 %              the centroid of the cross-correlation.  The output has
 %              dimensions: number of ITDs x number of ILDs. 
 %
-%     'fig18'  Reproduce Fig.18 from Lindemann (1986a). The cross-correlation
+%     'fig18'  Reproduce Fig.18 from Lindemann (1986). The cross-correlation
 %              of pink noise with different interaural coherence values is
 %              calculated.  Afterwards for every interaural coherence value
 %              the correlation is plotted dependend on the correlation-time
@@ -152,55 +152,55 @@ function output = exp_lindemann1986a(varargin)
 %
 %   To display Figure 6 use :::
 %
-%     exp_lindemann1986a('fig6');
+%     exp_lindemann1986('fig6');
 %
 %   To display Figure 7 use :::
 %
-%     exp_lindemann1986a('fig7');
+%     exp_lindemann1986('fig7');
 %
 %   To display Figure 8 use :::
 %
-%     exp_lindemann1986a('fig8');
+%     exp_lindemann1986('fig8');
 %
 %   To display Figure 10 use :::
 %
-%     exp_lindemann1986a('fig10');
+%     exp_lindemann1986('fig10');
 %
 %   To display Figure 11 use :::
 %
-%     exp_lindemann1986a('fig11');
+%     exp_lindemann1986('fig11');
 %
 %   To display Figure 12 use :::
 %
-%     exp_lindemann1986a('fig12');
+%     exp_lindemann1986('fig12');
 %
 %   To display Figure 13 use :::
 %
-%     exp_lindemann1986a('fig13');
+%     exp_lindemann1986('fig13');
 %
 %   To display Figure 14a use :::
 %
-%     exp_lindemann1986a('fig14a');
+%     exp_lindemann1986('fig14a');
 %
 %   To display Figure 14b use :::
 %
-%     exp_lindemann1986a('fig14b');
+%     exp_lindemann1986('fig14b');
 %
 %   To display Figure 15 use :::
 %
-%     exp_lindemann1986a('fig15');
+%     exp_lindemann1986('fig15');
 %
 %   To display Figure 16 use :::
 %
-%     exp_lindemann1986a('fig16');
+%     exp_lindemann1986('fig16');
 %
 %   To display Figure 17 use :::
 %
-%     exp_lindemann1986a('fig17');
+%     exp_lindemann1986('fig17');
 %
 %   To display Figure 18 use :::
 %
-%     exp_lindemann1986a('fig18');
+%     exp_lindemann1986('fig18');
 %
 %   References: lindemann1986a
 %
@@ -268,7 +268,7 @@ if flags.do_fig6
         % Calculate cross-correlation for different inhibition factor c_s
         for jj = 1:length(c_s)
             % Calculate cross-correlation (and squeeze due to T_int==inf)
-            tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
+            tmp = squeeze(lindemann1986(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
             % Store the needed frequency channel. NOTE: the cross-correlation
             % calculation starts with channel 5, so we have to subtract 4.
             output(jj,ii,:) =  tmp(:,fc-4);
@@ -344,7 +344,7 @@ if flags.do_fig7
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
           % Calculate cross-correlation (and squeeze due to T_int==inf)
-          tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
+          tmp = squeeze(lindemann1986(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
           % Store the needed frequency channel. NOTE: the cross-correlation
           % calculation starts with channel 5, so we have to subtract 4.
           cc = tmp(:,fc-4);
@@ -418,7 +418,7 @@ if flags.do_fig8
       % Calculate cross-correlation for different inhibition factor c_s 
       for jj = 1:length(c_s)
         % Calculate cross-correlation (and squeeze due to T_int==inf)
-          tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
+          tmp = squeeze(lindemann1986(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
           % Store the needed frequency channel. NOTE: the cross-correlation
           % calculation starts with channel 5, so we have to subtract 4.
           output(jj,ii,:) = tmp(:,fc-4);
@@ -495,7 +495,7 @@ if flags.do_fig10
       % Calculate cross-correlation for different inhibition factor c_s 
       for jj = 1:length(c_s)
         % Calculate cross-correlation (and squeeze due to T_int==inf)
-        tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
+        tmp = squeeze(lindemann1986(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
         % Store the needed frequency channel. NOTE: the cross-correlation
         % calculation starts with channel 5, so we have to subtract 4.
         output(jj,ii,:) = tmp(:,fc-4);
@@ -573,7 +573,7 @@ if flags.do_fig11
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
           % Calculate cross-correlation (and squeeze due to T_int==inf)
-          tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f(jj),M_f,T_int,N_1));
+          tmp = squeeze(lindemann1986(sig,fs,c_s(jj),w_f(jj),M_f,T_int,N_1));
           % Store the needed frequency channel
           cc = tmp(:,fc-4);
           % Calculate the position of the centroid
@@ -592,10 +592,10 @@ if flags.do_fig11
       % ------ Plotting ------
       figure;
       % Plot data from experiments
-      data = data_lindemann1986a('fig11_yost');
+      data = data_lindemann1986('fig11_yost');
       plot(data(:,1),data(:,2)*0.058,'+');
       hold on;
-      data = data_lindemann1986a('fig11_sayers');
+      data = data_lindemann1986('fig11_sayers');
       plot(data(:,1),data(:,2)*0.058,'*');
       % Plot line for every condition
       for jj = 1:length(c_s) 
@@ -655,7 +655,7 @@ if flags.do_fig12
           sig = sig(1:siglen,:);
           sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
           % Calculate cross-correlation (and squeeze due to T_int==inf)
-          tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+          tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
           % Store the needed frequency channel
           cc = tmp(:,fc-4);
           % Calculate the position of the centroid
@@ -682,10 +682,10 @@ if flags.do_fig12
     if flags.do_plot
       % ------ Plotting ------
       figure;
-      data = data_lindemann1986a('fig12_400');
+      data = data_lindemann1986('fig12_400');
       plot(data(:,1),data(:,2),'+');
       hold on;
-      data = data_lindemann1986a('fig12_600');
+      data = data_lindemann1986('fig12_600');
       plot(data(:,1),data(:,2),'*');
       plot(itd,output);
       axis([-1 0 0 10]);
@@ -744,7 +744,7 @@ if flags.do_fig13
         sig = sig(1:siglen,:);
         sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
-        tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+        tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
         % Store the needed frequency channel
         cc = tmp(:,fc-4);
         % Calculate the position of the centroid
@@ -758,7 +758,7 @@ if flags.do_fig13
           sig = itdildsin(f,itd_t(ii),ild_t(jj),fs);
           sig = sig(1:siglen,:);
           sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
-          tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+          tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
           cc = tmp(:,fc-4);
           cen_t(jj,ii) = lindcentroid(cc);
         end
@@ -785,7 +785,7 @@ if flags.do_fig13
       % ------ Plotting ------
       % First plot the only data from experiments
       figure;
-      d = data_lindemann1986a('fig13');
+      d = data_lindemann1986('fig13');
       plot(d(:,1),d(:,2),'x-r', ...   % -3dB
            d(:,1),d(:,3),'x-b', ...   %  3dB
            d(:,1),d(:,4),'x-g', ...   %  9dB
@@ -853,12 +853,12 @@ if flags.do_fig14a
         % the cross-correlation
         sig = sig(1:siglen,:);
         % Apply a linear onset window with length N_1/2 to minimize onset effects
-        % (see lindemann1986a p. 1614)
+        % (see lindemann1986 p. 1614)
         sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
           % Calculate cross-correlation (and squeeze due to T_int==inf)
-          tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
+          tmp = squeeze(lindemann1986(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
           % Store the needed frequency channel. NOTE: the cross-correlation
           % calculation starts with channel 5, so we have to subtract 4.
             cc = tmp(:,fc-4);
@@ -933,7 +933,7 @@ if flags.do_fig14b
         sig = itdsin(f,itd(ii),fs);
         sig = sig(1:siglen,:);
         sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
-        tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+        tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
         cc = tmp(:,fc-4);
         cen(1,ii) = lindcentroid(cc);
         % Generate results for std(ILD) ~= 0
@@ -948,7 +948,7 @@ if flags.do_fig14b
             sig = itdildsin(f,itd(ii),ild(jj),fs);
             sig = sig(1:siglen,:);
             sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
-            tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+            tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
             cc = tmp(:,fc-4);
             centmp(jj,ii) = lindcentroid(cc);
           end
@@ -1023,7 +1023,7 @@ if flags.do_fig15
         % Calculate cross-correlation for different inhibition factor c_s 
         for jj = 1:length(c_s)
           % Calculate cross-correlation (and squeeze due to T_int==inf)
-            tmp = squeeze(lindemann(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
+            tmp = squeeze(lindemann1986(sig,fs,c_s(jj),w_f,M_f,T_int,N_1));
             % Store the needed frequency channel. NOTE: the cross-correlation
             % calculation starts with channel 5, so we have to subtract 4.
             output(jj,ii,:) = tmp(:,fc-4);
@@ -1103,7 +1103,7 @@ if flags.do_fig16
           sig = sig(1:siglen,:);
           sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
           % Calculate cross-correlation (and squeeze due to T_int==inf)
-          tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+          tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
           % Store the needed frequency channel
           cc(ii,jj,:) = tmp(:,fc-4);
         end
@@ -1129,7 +1129,7 @@ if flags.do_fig16
     if flags.do_plot
       % ------ Plotting ------
       figure;
-      data = data_lindemann1986a('fig16');
+      data = data_lindemann1986('fig16');
       plot(data(:,1),data(:,2),'+');
       hold on;
       plot(itd,output);
@@ -1188,7 +1188,7 @@ if flags.do_fig17
         sig = sig(1:siglen,:);
         sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
-        tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+        tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
         % Store the needed frequency channel
         cc = tmp(:,fc-4);
         % Find the maximum position
@@ -1205,7 +1205,7 @@ if flags.do_fig17
           sig = itdildsin(f,itd_t(jj),ild_t(ii),fs);
           sig = sig(1:siglen,:);
           sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
-          tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+          tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
           cc = tmp(:,fc-4);
           max_t(jj,ii) = findmax(cc);
           cen_t(jj,ii) = lindcentroid(cc);
@@ -1237,7 +1237,7 @@ if flags.do_fig17
       % ------ Plotting ------
       % First plot the only data from experiments
       figure; % fig 17 (a)
-      d = data_lindemann1986a('fig17');
+      d = data_lindemann1986('fig17');
       plot(d(:,1),d(:,5),'x-r', ...   %  0 ms
            d(:,1),d(:,4),'x-b', ...   %  0.09 ms
            d(:,1),d(:,3),'x-g', ...   %  0.18 ms
@@ -1313,7 +1313,7 @@ if flags.do_fig18
         % Aplly onset window
         sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)
-        tmp = squeeze(lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1));
+        tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
         % Store the needed frequency channel. NOTE: the cross-correlation
         % calculation starts with channel 5, so we have to subtract 4.
         output(ii,:) =  tmp(:,fc-4);

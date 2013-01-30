@@ -1,11 +1,11 @@
-function [crosscorr,t,ild,cfreq] = lindemann(insig,fs,varargin)
-% LINDEMANN Calculates a binaural activation pattern
-%   Usage: [crosscorr,t] = lindemann(insig,fs,c_s,w_f,M_f,T_int,N_1)
-%          [crosscorr,t] = lindemann(insig,fs,c_s,w_f,M_f,T_int)
-%          [crosscorr,t] = lindemann(insig,fs,c_s,w_f,M_f)
-%          [crosscorr,t] = lindemann(insig,fs,c_s,w_f)
-%          [crosscorr,t] = lindemann(insig,fs,c_s)
-%          [crosscorr,t] = lindemann(insig,fs)
+function [crosscorr,t,ild,cfreq] = lindemann1986(insig,fs,varargin)
+%LINDEMANN1986 Calculates a binaural activation pattern
+%   Usage: [crosscorr,t] = lindemann1986(insig,fs,c_s,w_f,M_f,T_int,N_1)
+%          [crosscorr,t] = lindemann1986(insig,fs,c_s,w_f,M_f,T_int)
+%          [crosscorr,t] = lindemann1986(insig,fs,c_s,w_f,M_f)
+%          [crosscorr,t] = lindemann1986(insig,fs,c_s,w_f)
+%          [crosscorr,t] = lindemann1986(insig,fs,c_s)
+%          [crosscorr,t] = lindemann1986(insig,fs)
 %
 %   Input parameters:
 %       insig       : binaural signal for which the cross-correlation
@@ -22,7 +22,7 @@ function [crosscorr,t,ild,cfreq] = lindemann(insig,fs,varargin)
 %                     channel *fc*
 %       cfreq       : center frequencies of every frequency channel
 %
-%   `lindemann(insig,fs)` calculates a binaural activity map for the given
+%   `lindemann1986(insig,fs)` calculates a binaural activity map for the given
 %   insig using a cross-correlation (delay-line) mechanism. The calculation
 %   is done for every frequency band in the range 5-40 Erb.
 %
@@ -30,11 +30,11 @@ function [crosscorr,t,ild,cfreq] = lindemann(insig,fs,varargin)
 %   contralateral inhibition, which introduce the ILD to the model.  Also
 %   monaural detectors were extended, to handle monaural signals (and some
 %   stimuli with a split off of the lateralization image). Hess has
-%   extented the output from the lindemann model to a binaural activity map
+%   extented the output from the Lindemann model to a binaural activity map
 %   dependend on time, by using a running cross-correlation function.
 %   This has been done here by starting a new running cross-correlation
 %   every time step *T_int*.  A detailed description of these cross-
-%   correlation steps is given in the lindemannbincorr function.
+%   correlation steps is given in the |lindemann1986bincorr|_ function.
 %
 %   The steps of the binaural model to calculate the result are the
 %   following:
@@ -52,15 +52,15 @@ function [crosscorr,t,ild,cfreq] = lindemann(insig,fs,varargin)
 %        of Jeffres (1948).
 %
 %   You may supply any flags or key/value pairs of the |auditoryfilterbank|_,
-%   |ihcenvelope|_ or |lindemannbincorr|_ at the end of the line of input
+%   |ihcenvelope|_ or |lindemann1986bincorr|_ at the end of the line of input
 %   arguments.
 %
 %   Examples:
 %   ---------
 %
-%   This example shows how to the binaural activity map for one frequency channel of
-%   the lindemann binaural model for a sinusoid with a binaural modulation
-%   rate of 2 Hz. :::
+%   This example shows how to the binaural activity map for one frequency
+%   channel of the Lindemann binaural model for a sinusoid with a binaural
+%   modulation rate of 2 Hz. :::
 %     
 %     fs = 44100; % Sampling rate    
 %     f = 500;    % Frequency of the sinusoid
@@ -74,12 +74,12 @@ function [crosscorr,t,ild,cfreq] = lindemann(insig,fs,varargin)
 %     % non-stationary signal
 %
 %     % Calculate binaural cross-correlation
-%     [cc,t] = lindemann(sig,fs,'T_int',6);
+%     [cc,t] = lindemann1986(sig,fs,'T_int',6);
 %
 %     % Plot frequency channel 11, due to round(freqtoerb(500))==11
-%     plotlindemann(cc,t,'fc',f);
+%     plotlindemann1986(cc,t,'fc',f);
 %
-%   See also: lindemannbincorr, plotlindemann, gammatone, ufilterbankz
+%   See also: lindemann1986bincorr, plotlindemann1986, gammatone, ufilterbankz
 %
 %   Demos: demo_lindemann1986
 %
@@ -105,7 +105,7 @@ end
 % Parse the command line and load default parameters
 % For default values see lindemann1986a page 1613
 % NOTE: I modified the default value for T_int from 10 to 5.
-definput.import={'auditoryfilterbank','ihcenvelope','lindemannbincorr'};
+definput.import={'auditoryfilterbank','ihcenvelope','lindemann1986bincorr'};
 % Highest and lowest frequency to use for the erbfilterbank (this gives us
 % 36 frequency channels, channel 5-40)
 definput.importdefaults = ...
@@ -135,4 +135,4 @@ ild = dbspl(inoutsig(:,:,2))-dbspl(inoutsig(:,:,1));
 inoutsig = ihcenvelope(inoutsig,fs,'argimport',flags,keyvals);
 % ------ Cross-correlation ------
 % Calculate the cross-correlation after Lindemann (1986a).
-[crosscorr,t] = lindemannbincorr(inoutsig,fs,c_s,w_f,M_f,T_int,N_1);
+[crosscorr,t] = lindemann1986bincorr(inoutsig,fs,c_s,w_f,M_f,T_int,N_1);

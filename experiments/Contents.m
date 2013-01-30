@@ -3,7 +3,7 @@
 %   The AMT team, 2012.
 %
 %   Experiments
-%       EXP_LINDEMANN1986a  - Recreate plots from Lindemann (1986a)
+%       EXP_LINDEMANN1986   - Recreate plots from Lindemann (1986)
 %       EXP_LOPEZPOVEDA2001 - Iso-itensity curves of the DRNL
 %       EXP_LANGENDIJK2002  - Recreate plots from Langedijk (2002)
 %       EXP_DIETZ2011       - Figures from Dietz et al. (2011)
