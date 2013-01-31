@@ -19,10 +19,11 @@ function [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,fs)
 %       cfreqs  - center frequencies of used auditory filters (Hz)
 %
 %   `estimate_azimuth(sig,lookup)` uses a binaural model to estimate the
-%   perceived direction for a given binaural signal. therefore it needs the
-%   struct lookup, which maps ITD values to the corresponding angles.
+%   perceived direction for a given binaural signal. Therefore, it needs the
+%   struct lookup, which maps ITD values to the corresponding angles. This can
+%   be created with the `lookup_table` function.
 %
-%   see also: lookup
+%   see also: lookup_table
 
 % AUTHOR: Hagen Wierstorf
 
