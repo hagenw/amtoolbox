@@ -94,6 +94,7 @@ if strcmpi('dietz',model)
     % Calculate ITD and ILD values
     ild = median(ild_tmp,1);
     itd = median(itd,1);
+    size(azimuth)
 
 elseif strcmpi('lindemann',model)
 
@@ -123,22 +124,28 @@ end
 if length(azimuth)==0
     phi = rad(90);
 elseif do_spectral_weighting
-    w = spectral_weighting(cfreqs(1:12));
+    w = spectral_weighting(cfreqs);
     phi = sum(azimuth.*w)/sum(w);
 else
     phi = median(azimuth);
 end
 
+size(azimuth)
+
 end % of main function
 
 %% ===== Subfunctions ====================================================
 function [azimuth,cfreqs] = remove_outlier(azimuth,itd,cfreqs)
+    cfreqs = cfreqs(1:12);
     % remove unvalid ITDs
     azimuth = azimuth(abs(itd(1:12))<0.001);
+    cfreqs = cfreqs(abs(itd(1:12))<0.001);
     % remove NaN
     azimuth = azimuth(~isnan(azimuth));
+    cfreqs = cfreqs(~isnan(azimuth));
     % remove outliers more than 30deg away from median
     azimuth = azimuth(abs(azimuth-median(azimuth))<rad(30));
+    cfreqs = cfreqs(abs(azimuth-median(azimuth))<rad(30));
 end
 function w = spectral_weighting(f)
     % Calculate a spectral weighting after Stern1988, after the data of
