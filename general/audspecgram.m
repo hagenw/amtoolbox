@@ -94,11 +94,9 @@ function varargout=audspecgram(insig,fs,varargin)
 %
 %     audspecgram(greasy,16000);
 %
-%   See also:   dau1996preproc
+%   See also:   dau1997preproc
   
 %   AUTHOR : Peter Søndergaard.
-%   TESTING: NA
-%   REFERENCE: NA
   
 if nargin<2
   error('Too few input arguments.');

@@ -7,6 +7,8 @@
 %
 %   .. figure::
 %
+%     Baseline prediction
+%
 %     This demo computes the baseline prediction (localizing broadband 
 %     sounds with own ears) for an exemplary listener (NH58).
 %

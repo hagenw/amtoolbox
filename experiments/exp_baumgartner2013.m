@@ -6,22 +6,42 @@ function varargout=exp_baumgartner2013(varargin)
 %   chapter from Baumgartner et al. (2013).
 %
 %   Optional fields of output *data* structure:
-%      data.id        listener ID
-%      data.u         listener-specific uncertainty
-%      data.dtfs      matrix containing DTFs.
-%                     Dimensions: time, position, channel 
-%                     (more details see doc: HRTF format)
-%      data.fs        sampling rate of impulse responses
-%      data.pos       source-position matrix referring to 2nd dimension of 
-%                     hM and formated acc. to meta.pos (ARI format).
-%                     6th col: lateral angle 
-%                     7th col: polar angle
-%      data.spdtfs    DTFs of specific SPs
-%      data.polangs   polar angles corresponding to *data.spdtfs*
-%      data.p         predicted polar angular response PMVs
-%      data.respangs  polar response angules corresponding to *data.p*
-%      data.pe        predicted local polar RMS error in degrees
-%      data.qe        predicted quadrant error
+%
+%     `data.id`
+%        listener ID
+%
+%     `data.u`
+%        listener-specific uncertainty
+% 
+%     `data.dtfs`
+%        matrix containing DTFs dimensions: time, position, channel 
+%        (more details see doc: HRTF format)
+%
+%     `data.fs`
+%        sampling rate of impulse responses
+%
+%     `data.pos`
+%        source-position matrix referring to 2nd dimension of 
+%        hM and formated acc. to meta.pos (ARI format).
+%        6th col is the lateral angle. 7th col is the polar angle.
+% 
+%     `data.spdtfs`
+%        DTFs of specific SPs
+%  
+%     `data.polangs`
+%        polar angles corresponding to *data.spdtfs*
+%   
+%     `data.p`
+%        predicted polar angular response PMVs
+%
+%     `data.respangs`
+%        polar response angules corresponding to *data.p*
+%     
+%     `data.pe`
+%        predicted local polar RMS error in degrees
+% 
+%     `data.qe`
+%        predicted quadrant error
 %
 %   The following flags can be specified;
 %
@@ -107,9 +127,41 @@ function varargout=exp_baumgartner2013(varargin)
 %   Examples:
 %   ---------
 %
+%   To display Fig. 12 use :::
+%
+%     exp_baumgartner2013('fig12');
+%
 %   To display Fig. 13 use :::
 %
 %     exp_baumgartner2013('fig13');
+%
+%   To display Fig. 14 use :::
+%
+%     exp_baumgartner2013('fig14');
+%
+%   To display Fig. 15 use :::
+%
+%     exp_baumgartner2013('fig15');
+%
+%   To display Fig. 18 use :::
+%
+%     exp_baumgartner2013('fig18');
+%
+%   To display Fig. 19 use :::
+%
+%     exp_baumgartner2013('fig19');
+%
+%   To display Fig. 20 use :::
+%
+%     exp_baumgartner2013('fig20');
+%
+%   To display Fig. 22 use :::
+%
+%     exp_baumgartner2013('fig22');
+%
+%   To display Fig. 23 use :::
+%
+%     exp_baumgartner2013('fig23');
 %
 %   References: baumgartner2013assessment baumgartner2012modelling
 

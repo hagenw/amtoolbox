@@ -5,11 +5,11 @@ function lookup = lookup_table(irs,model,fs)
 %          lookup = lookup_table(irs);
 %
 %   Input parameters:
-%       irs    : irs data set
-%       model  : binaural model to use:
-%                  'dietz' (default)
-%                  'lindemann'
-%       fs     : sampling rate, default: 44100) (Hz)
+%       irs    - HRTF data set (TU Berlin irs format)
+%       model  - binaural model to use:
+%                   'dietz' (default)
+%                   'lindemann'
+%       fs     - sampling rate, default: 44100) (Hz)
 %
 %   Output parameters:
 %       lookup - struct containing lookup data
@@ -26,7 +26,6 @@ function lookup = lookup_table(irs,model,fs)
 nargmin = 1;
 nargmax = 3;
 error(nargchk(nargmin,nargmax,nargin));
-check_irs(irs);
 
 if nargin==1
     model = 'dietz';
@@ -34,8 +33,6 @@ if nargin==1
 elseif nargin==2
     fs = 44100;
 end
-isargchar(model);
-isargpositivescalar(fs);
 
 
 %% ===== Configuration ==================================================
@@ -92,10 +89,8 @@ elseif strcmpi('lindemann',model)
         w_f = 0; % monaural sensitivity
         M_f = 6; % decrease of monaural sensitivity
         T_int = inf; % integration time
-        %N_1 = 1764; % sample at which first cross-correlation is calculated
-        %[cc_tmp,ild(ii,:),cfreqs] = lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1);
         N_1 = 17640; % sample at which first cross-correlation is calculated
-        [cc_tmp,dummy,ild(ii,:),cfreqs] = lindemann(sig,fs,c_s,w_f,M_f,T_int,N_1);
+        [cc_tmp,dummy,ild(ii,:),cfreqs] = lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1);
         clear dummy;
         cc_tmp = squeeze(cc_tmp);
         % Calculate tau (delay line time) axes
@@ -109,15 +104,8 @@ elseif strcmpi('lindemann',model)
 
 end
 
-% Calculate a cross-frequency single value with weighting according to the
-% domincance region around 600Hz (see Raatgever 1980, p.48)
-w = spectral_weight(cfreqs(1:12));
-for ii=1:size(itd,1)
-    itd_mean(ii) = sum(w.*itd(ii,:))./sum(w);
-end
 % Create lookup struct
 lookup.itd = itd;
-lookup.itd_mean = itd_mean;
 lookup.ild = ild;
 lookup.mod_itd = mod_itd;
 lookup.cfreq = cfreqs;

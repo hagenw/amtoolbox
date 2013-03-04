@@ -24,8 +24,7 @@ OFLAGS = -c
 
 verhulst2012: $(OBJS)
 	$(CC) $(EFLAGS) verhulst2012 $(OBJS)
-	cp verhulst2012 ../../bin/
-	cp verhulst2012 ../../verhulst/coch
+	cp verhulst2012 ../../verhulst/
 
 cochlea.o: Declare.f90 filesmodule.mod cochlea.f90 wavereadmodule.mod messagemodule.mod graphsmodule.mod
 	$(CC) $(OFLAGS) cochlea.f90

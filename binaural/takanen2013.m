@@ -26,32 +26,46 @@ function output = takanen2013(insig,fs,computationType,printFigs,printMap)
 %                 the input arguments.
 %
 %   `takanen2013(insig,fs,computationType)` computes either the binaural
-%   activity map or the MSO, and LSO model outputs from the binaural input
-%   signal. Depending on the *computationType* argument, the output structure
-%   consists of either
-%   
-%     1) activityMap    : Matrix that describes in which of the six
-%                         frequency ranges there is activation on a given
-%                         location on the map at a specific time instant
-%        colorGains     : Matrix that describes the signal level dependent
-%                         gains for the different activation values on the
-%                         activityMap
-%        colorMtrx      : RGB color codes employed for the different
-%                         frequency ranges on the binaural activity map
-%        levels         : vector specifying the left/right location
+%   activity map or the MSO and LSO model outputs from the binaural input
+%   signal. 
 %
-%     2) leftMso        : output of the MSO model projecting to the left
-%                         hemisphere
-%        leftLso        : output of the LSO model projecting to the left
-%                         hemisphere
-%        leftWbMso      : output of the wideband MSO model projecting to 
-%                         the left hemisphere
-%        rightMso       : output of the MSO model projecting to the right
-%                         hemisphere
-%        rightLso       : output of the LSO model projecting to the right
-%                         hemisphere
-%        rightWbMso     : output of the wideband MSO model projecting to 
-%                         the right hemisphere
+%   If $computationType==1$, the output structure consists of:
+%   
+%      `output.activityMap`
+%         Matrix that describes in which of the six
+%         frequency ranges there is activation on a given
+%         location on the map at a specific time instant
+%
+%      `output.colorGains`
+%         Matrix that describes the signal level dependent gains for the
+%         different activation values on the activityMap
+%
+%      `output.colorMtrx`
+%         RGB color codes employed for the different
+%         frequency ranges on the binaural activity map
+%
+%      `output.levels`
+%         vector specifying the left/right location
+%
+%   If $computationType==2$, the output structure consists of:
+%
+%      `output.leftMso`
+%         output of the MSO model projecting to the left hemisphere
+%
+%      `output.leftLso`
+%         output of the LSO model projecting to the left hemisphere
+%
+%      `output.leftWbMso`
+%         output of the wideband MSO model projecting to the left hemisphere
+%
+%      `output.rightMso`
+%         output of the MSO model projecting to the right hemisphere
+%
+%      `output.rightLso`
+%         output of the LSO model projecting to the right hemisphere
+%
+%      `output.rightWbMso`
+%         output of the wideband MSO model projecting to the right hemisphere
 %
 %   Takanen, Santala and Pulkki presented a binaural auditory model that
 %   uses the outputs of models of the medial superior olive (MSO), lateral
@@ -78,17 +92,14 @@ function output = takanen2013(insig,fs,computationType,printFigs,printMap)
 %        topographically organized binaural activity map
 %
 %   See also: takanen2013periphery, takanen2013mso, takanen2013lso,
-%             takanen2013wbmso,takanen2013directionmapping,
+%             takanen2013wbmso, takanen2013directionmapping,
 %             takanen2013cueconsistency, takanen2013onsetenhancement,
-%             takanen2013formbinauralactivitymap, data_takanen2013
+%             takanen2013formbinauralactivitymap
 %
-%   Demos: demo_takanen2013
+%   XXX The demo needs cleanup: demo_takanen2013
 %
-%   Experiments: exp_takanen2013
-%
-%   References: takanen2013a takanen2013b pulkki2009 bekesy1930
-%   verhulst2012
-%
+%   References: takanen2013a takanen2013b pulkki2009 bekesy1930 verhulst2012
+
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %
 %   COPYRIGHT (C) 2013 Aalto University

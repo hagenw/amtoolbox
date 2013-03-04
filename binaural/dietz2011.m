@@ -1,4 +1,4 @@
-function [hairc_fine, hairc_mod, fc, hairc_ild] = dietz2011(insig,fs,varargin)
+function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
 %DIETZ2011  Dietz 2011 binaural model
 %   Usage: [...] = dietz(insig,fs);
 %
@@ -7,41 +7,28 @@ function [hairc_fine, hairc_mod, fc, hairc_ild] = dietz2011(insig,fs,varargin)
 %       fs          : sampling rate (Hz)
 %
 %   Output parameters:
-%       hairc_fine  : Structure containing the haircell information.
+%       fine        : Information about the fine structure (see below)
+%       env         : Information about the envelope (see below)
 %
 %   `dietz2011(insig,fs)` calculates interaural phase, time and level
 %   differences of fine- structure and envelope of the signal, as well as
 %   the interaural coherence, which can be used as a weighting function.
 %
-%   The output structures *hairc_fine* and *hairc_mod* have the following
-%   fields:
+%   The output structures *fine* and *env* have the following fields:
 %
-%     `fine_ipd`
-%        IPD in fine-structure channels
-%
-%     `mod_ipd`
-%        IPD in envelope channels
-%
-%     `fine_itd`
-%        ITD in fine-structure channels
-%
-%     `mod_itd`
-%        ITD in modulation channels
-%
-%     `ild`         
-%        Interaural level difference
-%  
-%     `fine_ic`     
-%        Interaural coherence in fine-structure channels
-%
-%     `mod_ic`      
-%        Interaural coherence in modulation channels
-%
-%     `fine_f_inst` 
-%        Instantaneous frequency in fine-structure channels
-%
-%     `mod_f_inst`
-%        Instantaneous frequency in modulation channels
+%     s1        : left signal as put in the binaural processor
+%     s2        : right signal as put in the binaural processor
+%     fc        : center frequencies of the channels (f_carrier or f_mod)
+%     itf       : transfer function
+%     itf_equal : transfer function without amplitude
+%     ipd : phase difference in rad
+%     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
+%     ild : level difference in dB
+%     itd, itd_C, itd_lp, itd_C_lp - time difference based on instantaneous
+%                  and central frequencies, with and without low-passed itf
+%     f_inst_1 : instantaneous frequencies in the channels of the filtered s1
+%     f_inst_2 : instantaneous frequencies in the channels of the filtered s2
+%     f_inst   : instantaneous frequencies (average of f_inst1 and 2)
 %  
 %   The steps of the binaural model to calculate the result are the
 %   following (see also Dietz et al., 2011):
@@ -113,7 +100,7 @@ function [hairc_fine, hairc_mod, fc, hairc_ild] = dietz2011(insig,fs,varargin)
 %                    Only for finestructure plugin. The default value is 3.
 %
 %     'mod_center_frequency_hz',mcf_hz
-%                    XXX. Only for envelope plugin. The default value is 216.
+%                    XXX. Only for envelope plugin. The default value is 135.
 %
 %     'mod_filter_finesse',mff
 %                    XXX. Only for envelope plugin. The default value is 8.
@@ -147,7 +134,7 @@ function [hairc_fine, hairc_mod, fc, hairc_ild] = dietz2011(insig,fs,varargin)
 
 % AUTHOR: Mathias Dietz, Martin Klein-Hennig (implementation for AMT)
 
-%   Copyright (C) 2002-2011   AG Medizinische Physik,
+%   Copyright (C) 2002-2012   AG Medizinische Physik,
 %                             Universitaet Oldenburg, Germany
 %                             http://www.physik.uni-oldenburg.de/docs/medi
 %
@@ -195,7 +182,7 @@ definput.keyvals.filter_attenuation_db = 10;  % Used for both mod and fine
 definput.keyvals.fine_filter_finesse = 3;
 
 % Only for envelope plugin
-definput.keyvals.mod_center_frequency_hz = 216;
+definput.keyvals.mod_center_frequency_hz = 135;
 definput.keyvals.mod_filter_finesse = 8;
 
 % For ild- or level-plugin
@@ -210,7 +197,7 @@ definput.keyvals.coh_param.tau_s       = 10e-3; % in s for faller
 % parameters for data display and analysis
 definput.keyvals.signal_level_dB_SPL = 70; % sound pressure level of left channel
 
-% debugging
+% display current process
 displ                = 0;   % display current process (0 = do not)
 
 
@@ -314,7 +301,7 @@ mod_filter_bandwidth_hz = kv.mod_center_frequency_hz/kv.mod_filter_finesse;
 
 % calculation of interaural functions from haircell modulation
 if displ disp('calculating interaural functions from haircell modulation'); end
-[hairc_mod] = dietz2011interauralfunctions(...
+env = dietz2011interauralfunctions(...
     hairc_mod, hairc_sh_mod, tau,kv.mod_center_frequency_hz+0*fc,...
     kv.signal_level_dB_SPL, kv.compression_power, kv.coh_param.tau_cycles, fs);
 
@@ -328,20 +315,20 @@ if displ disp('deriving fine structure of haircell output -> hairc_fine'); end
 if displ 
   disp('calculating interaural functions from haircell fine structure');
 end
-hairc_fine = dietz2011interauralfunctions(...
+fine = dietz2011interauralfunctions(...
     hairc_fine, hairc_sh_fine, tau, fc,...
     kv.signal_level_dB_SPL, kv.compression_power, kv.coh_param.tau_cycles, fs);
 
 % determine ILD of the hairc output
-if displ disp('determining ild of the haircell output -> hairc_ild'); end
-hairc_ild = ild_filter(hairc,hairc_sh,kv.level_filter_cutoff_hz,...
+if displ disp('determining ild of the haircell output -> ild'); end
+ild = ild_filter(hairc,hairc_sh,kv.level_filter_cutoff_hz,...
                        kv.level_filter_order,kv.compression_power,fs);
 
 % remove finestructure information > 1400 Hz
-hairc_fine.f_inst(:,fc>1400)=[];
-hairc_fine.ic(:,fc>1400)=[];
-hairc_fine.ipd_lp(:,fc>1400)=[];
-hairc_fine.itd_lp(:,fc>1400)=[];
+fine.f_inst(:,fc>1400)=[];
+fine.ic(:,fc>1400)=[];
+fine.ipd_lp(:,fc>1400)=[];
+fine.itd_lp(:,fc>1400)=[];
 
 
 if displ 

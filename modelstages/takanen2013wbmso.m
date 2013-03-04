@@ -49,8 +49,7 @@ function [output energy] = takanen2013wbmso(ipsilateral, contralateral, fs, widt
 %        the outputs of the coincidence detection and contralateral signal,
 %        respectively, and the output is limited.
 %
-%   See also: takanen2013, takanen2013periphery, weightedaveragefilter,
-%             data_takanen2013
+%   See also: takanen2013, takanen2013periphery, weightedaveragefilter
 %
 %   References: takanen2013a pulkki2009
 

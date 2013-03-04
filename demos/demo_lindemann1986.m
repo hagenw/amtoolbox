@@ -1,4 +1,4 @@
-%DEMO_LINDEMANN Demo of the Lindemann binaural model
+%DEMO_LINDEMANN1986 Demo of the Lindemann binaural model
 %
 %   This script generate a figure showing the result of the lindemann
 %   binaural model for a 2 Hz binaural modulated sinusoid with a frequency of
@@ -16,11 +16,11 @@
 %
 %     Sinusoid with ITD
 %
-%     This figure shows the result of the lindemann binaural model averaged over
-%     time for the desired frequency channel for a sinusoid with an ITD of 0.3
-%     ms.
+%     This figure shows the result of the Lindemann 1986 binaural model
+%     averaged over time for the desired frequency channel for a sinusoid
+%     with an ITD of 0.3 ms.
 %
-%   See also: lindemann, lindemannbincorr, plotlindemann
+%   See also: lindemann1986, lindemann1986bincorr, plotlindemann1986
 
 
 % Sampling rate
@@ -43,13 +43,13 @@ sig = bmsin(f,mf,fs);
 % non-stationary signal
 
 % Calculate binaural cross-correlation
-[cc,t] = lindemann(sig,fs,'T_int',6);
+[cc,t] = lindemann1986(sig,fs,'T_int',6);
 
 % Set title string for the plot
 tstr = sprintf(['Binaural modulated sinusoid\nf = %i Hz\nf_m = %i Hz\n',...
     'fc = %i\n'],f,mf,round(freqtoerb(f)));
 % Plot frequency channel 11, due to round(freqtoerb(500))==11
-plotlindemann(cc,t,'fc',f,'title',tstr);
+plotlindemann1986(cc,t,'fc',f,'title',tstr);
 
 
 % ------ Fig 2. ----------------------------------------------------------
@@ -63,10 +63,10 @@ sig = sig(1:fs/2,:);
 
 % Calculate binaural cross-correlation using the 'stationary' mode and
 % Lindemanns default model parameter
-[cc,t] = lindemann(sig,fs,'stationary');
+[cc,t] = lindemann1986(sig,fs,'stationary');
 
 % Set title string for the plot
 tstr = sprintf('Sinusoid with an ITD\nf = %i Hz\nitd = %.1f ms\nfc = %i\n',...
     f,itd,round(freqtoerb(f)));
 % Plot frequency channel 11, due to round(freqtoerb(500))==11
-plotlindemann(cc,t,'fc',f,'title',tstr);
+plotlindemann1986(cc,t,'fc',f,'title',tstr);

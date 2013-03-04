@@ -1,5 +1,7 @@
 %DATA_TAKANEN2013 Data applied in the model by Takanen, Santala and Pulkki
 %
+%   XXX This should be a function and not a script
+%
 %   This script describes and loads the pre-computed data structures that
 %   are applied in the different processing steps of the count-comparison
 %   based binaural auditory model by Takanen, Santala and Pulkki.
@@ -7,7 +9,7 @@
 %   See also: takanen2013
 %
 %   References: takanen2013a
-%
+
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %
 %   COPYRIGHT (C) 2013 Aalto University

@@ -26,7 +26,7 @@ function [msoAngles,lsoAngles,wbMsoAngles] = takanen2013directionmapping(mso,lso
 %   2013 (Sec. 3.2.5)
 %
 %   See also: takanen2013, takanen2013mso, takanen2013lso,
-%             takanen2013wbmso, data_takanen2013
+%             takanen2013wbmso
 %
 %   References: takanen2013a
 

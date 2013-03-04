@@ -51,6 +51,6 @@ if 'notestexclean' in todo:
         os.system('cd '+notesdir+notenumber+'; make texclean')
 
 if 'noteshtml' in todo:
-    printdoc.printnoteshtml('amtnote',notesdir,noteshtml)
+    notes.printnoteshtml('amtnote',notesdir,noteshtml)
         
     os.system('rsync -av '+noteshtml+' '+host+':'+noteswww);

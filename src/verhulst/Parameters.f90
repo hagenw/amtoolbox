@@ -21,7 +21,7 @@ SUBROUTINE Parameters (WriteRead, FileHandler)
 	NAMELIST /SIGNAL2/ useSignal2, signal2Frequency, signal2Phase, signal2Level
 	NAMELIST /SIGNAL3/ useSignal3, signal3Period, signal3Duration, signal3Level
 	NAMELIST /AUDIOFILE/ useAudiofile, useLeftChannel, audioFileName, audioFileLevel, audioFileRMS
-	NAMELIST /COCHLEA/ Rme, useZweigIrregularity, IrrPct, useLFirregularity, useKneeVar , KneeVar , Nonlinear, SheraNonlinearityType, SheraPo, Subjectnr			 
+	NAMELIST /COCHLEA/ Rme, useZweigIrregularity, IrrPct, useLFirregularity, useKneeVar , KneeVar , Nonlinear, SheraNonlinearityType, SheraPo, compressionslope, Subjectnr			 
 	NAMELIST /OUTPUT/ OutputDirectory, storePressureEarCanal, PressureEarCanalFileName, storeProfile, ProfileFileName, &
 													storeProbing, ProbingFileName, probes !!SV
 

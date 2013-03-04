@@ -6,8 +6,8 @@
 %     BREEBAART2001PREPROC  - EI-cell output
 %
 %  The Lindemann 1986 model
-%     LINDEMANN             - Calculate a binaural activity map
-%     PLOTLINDEMANN         - Plot the binaural activity map
+%     LINDEMANN1986         - Calculate a binaural activity map
+%     PLOTLINDEMANN1986     - Plot the binaural activity map
 %     LINDCENTROID          - Centroid of the cross-correlation activation
 %
 %  The Dietz 2011 model
@@ -16,10 +16,6 @@
 %
 %  The Takanen 2013 model
 %     TAKANEN2013           - The Takanen 2013 XXX model
-%
-%  Binaural speech advantage models  
-%     JELFS2011             - Binaural speech advantage
-%     PLOTJELFS2011         - Polar plot, fixed target moving masker
 %
 %  Additional functions
 %     ESTIMATE_AZIMUTH      - Azimuth position using the Dietz or the Lindemann model

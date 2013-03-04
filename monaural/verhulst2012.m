@@ -52,7 +52,9 @@ function output = verhulst2012(insig,fs,fc,spl)
 %
 %     3) the signal is processed by processing first the left ear canal
 %        signal
+%
 %             - the two frequency regions are measured separately
+%
 %             - the processing is done in 90-ms long non-overlapping time
 %               frames
 %
@@ -65,8 +67,7 @@ function output = verhulst2012(insig,fs,fc,spl)
 
 %   AUTHOR: Sarah Verhulst, Marko Takanen (MATLAB code to run the model)
 
-basedir = mfilename('fullpath');
-basedir = [basedir(1:end-16),'verhulst/'];
+basedir = [amtbasepath,filesep,'verhulst',filesep];
 
 oldpath = pwd;
 cd(basedir);
@@ -190,16 +191,14 @@ for ind=1:2*dims(2)
             end
             % the cochlear model is called here
             
-            akdjasdjklf
-            
-            system('./coch');
+            system('./verhulst2012');
             % and the model is set to continue from the membrane status at
             % the end of the current file when processing the next time
             % frame
             system('sed ''s/''''RETRIEVEMEMBRANESTATUS  = F''''/''''RETRIEVEMEMBRANESTATUS  = T''''/'' <parameters.dat> temp.dat');
             system('cp temp.dat parameters.dat');
         else
-            system('./coch');
+            system('./verhulst2012');
         end
         %the cochlear model outputs are loaded from a file and stored
         %to the corresponding locations in the output arrays

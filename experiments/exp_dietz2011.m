@@ -15,11 +15,7 @@ function exp_dietz2011(varargin)
 %
 %     'fig3'    Reproduce Fig. 3 panels a + b.
 %
-%     'fig4'    Reproduce Fig. 4.  The signals each have a pitch very
-%               similar to the original.  `mod_center_frequency_hz` has to be
-%               set to either *135* or *216* in order to simulate either panel a
-%               or panel b of the original.  However, it will always be
-%               displayed in panel a.
+%     'fig4'    Reproduce Fig. 4.
 %
 %     'fig5'    Reproduce Fig. 5.
 %
@@ -27,6 +23,10 @@ function exp_dietz2011(varargin)
 %
 %   Examples:
 %   ---------
+%
+%   To display Fig. 3 use :::
+%
+%     exp_dietz2011('fig3');
 %
 %   To display Fig. 4 use :::
 %
@@ -40,11 +40,7 @@ function exp_dietz2011(varargin)
 %
 %     exp_dietz2011('fig6');
 %
-%   To display Fig. 7 use :::
-%
-%     exp_dietz2011('fig7');
-%
-%   See also: dietz2011, data_dietz2011
+%   See also: dietz2011
 %
 %   References: dietz2011auditory
 
@@ -54,7 +50,6 @@ definput.flags.type = {'missingflag','fig3','fig4','fig5','fig6'};
 definput.flags.plot = {'plot','noplot'};
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
-
 
 if flags.do_missingflag
     flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...

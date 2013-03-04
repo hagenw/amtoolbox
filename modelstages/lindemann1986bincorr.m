@@ -1,5 +1,5 @@
-function [crosscorr,t] = lindemannbincorr(insig,fs,varargin)
-%LINDEMANNBINCORR Cross-correlation between two input signals a la Lindemann
+function [crosscorr,t] = lindemann1986bincorr(insig,fs,varargin)
+%LINDEMANN1986BINCORR Cross-correlation between two input signals a la Lindemann
 %   Usage: crosscorr = bincorr(insig,fs,c_s,w_f,M_f,T_int,N_1)
 %
 %   Input parameters:
@@ -10,7 +10,7 @@ function [crosscorr,t] = lindemannbincorr(insig,fs,varargin)
 %     crosscorr  : output matrix containing the correlations                     
 %     t          : time axis corresponding to the n time samples in crosscorr
 %
-%   `lindemannbincorr(insig,fs)` is an implementation of the Lindemann
+%   `lindemann1986bincorr(insig,fs)` is an implementation of the Lindemann
 %   cross-correlation algorithm to simulate a binaural delay line. The
 %   output is a matrix of size $n \times m \times amplitude$, where
 %   `n = length(t)/fs`.
@@ -27,7 +27,7 @@ function [crosscorr,t] = lindemannbincorr(insig,fs,varargin)
 %   where $T_{int}$ denotes an integration time constant and *R*, *L* the right and 
 %   left input signal.
 %
-%   `lindemannbincorr` takes the following key/value pairs at the end of
+%   `lindemann1986bincorr` takes the following key/value pairs at the end of
 %   the command line:
 %
 %     'c_s',c_s     Stationary inhibition factor, $0 \leq c_s \leq 1$ 
@@ -60,9 +60,9 @@ function [crosscorr,t] = lindemannbincorr(insig,fs,varargin)
 %   The key/values can also be specified first in the line of arguments
 %   in the following order: *c_s*, *w_f*, *M_f*, *T_int*, *N_1*.
 % 
-%   See also: lindemann
+%   See also: lindemann1986
 %
-%   References:lindemann1986a lindemann1986b
+%   References: lindemann1986a lindemann1986b
 
 % AUTHOR: Hagen Wierstorf
 
@@ -92,7 +92,7 @@ if nargin<2
   error('%s: Too few input parameters.',upper(mfilename));
 end;
 
-definput.import={'lindemannbincorr'};
+definput.import={'lindemann1986bincorr'};
 [flags,keyvals,c_s,w_f,M_f,T_int,N_1]  = ...
     ltfatarghelper({'c_s','w_f','M_f','T_int','N_1'},definput,varargin);
 

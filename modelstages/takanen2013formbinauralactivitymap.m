@@ -37,7 +37,7 @@ function [activityMap colorGains colorMtrx levels] = takanen2013formbinauralacti
 %   colors indicate the energy and the location indicates the direction of
 %   the activity.
 %
-%   See also: takanen2013, takanen2013contracomparison, data_takanen2013
+%   See also: takanen2013, takanen2013contracomparison
 %
 %   References: takanen2013a
 

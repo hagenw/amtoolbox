@@ -58,6 +58,7 @@ plotpoints=30;
 
 xrange=linspace(flow,fhigh,plotpoints);
 
+figure(3);
 types   = {'er2a','hda200'};
 legends = {'er2a','hda200'};
 symbols = {'b+','y*'  };
@@ -73,3 +74,14 @@ legend(legends{:},'Location','North');
 xlabel('Frequency (Hz)');
 ylabel('Absolte threshold (dB SPL)');
 xlim([2 41]);
+
+
+types = {'iso226_2003','map','er3a','er2a','hda200'};
+symbols = {'k' ,'r--' ,'g' ,'b:','y' };  
+fc=125:125:8000; hold on; box on;  
+for ii=1:numel(types),  opt={symbols{ii}, 'LineWidth', 3}; 
+    semiaudplot(fc,absolutethreshold(fc,types{ii}),'opts',opt);  
+end;
+legend(types); 
+xlabel('Frequency (Hz)');  
+ylabel('Absolute hearing threshold (dB re 20 µPa)');

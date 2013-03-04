@@ -87,7 +87,7 @@ function varargout = baumgartner2013( target,template,varargin )
 %   To compute and visualize the baseline prediction (localizing broadband  
 %   sounds with own ears) for listener NH58 and the median SP use :::
 %
-%     p = demo_baumgartner2013('NH58');
+%     demo_baumgartner2013;
 %
 %   See also: plotbaumgartner2013, data_baumgartner2013, exp_baumgartner2013
 %
