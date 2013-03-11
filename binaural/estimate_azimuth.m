@@ -1,4 +1,4 @@
-function [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)
+function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)
 %ESTIMATE_AZIMUTH Estimate the perceived azimuth using a binaural model
 %   Usage: [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)
 %          [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting)
@@ -94,7 +94,6 @@ if strcmpi('dietz',model)
     % Calculate ITD and ILD values
     ild = median(ild_tmp,1);
     itd = median(itd,1);
-    size(azimuth)
 
 elseif strcmpi('lindemann',model)
 
@@ -128,9 +127,8 @@ elseif do_spectral_weighting
     phi = sum(azimuth.*w)/sum(w);
 else
     phi = median(azimuth);
+    phi_std = std(azimuth);
 end
-
-size(azimuth)
 
 end % of main function
 
@@ -144,8 +142,10 @@ function [azimuth,cfreqs] = remove_outlier(azimuth,itd,cfreqs)
     azimuth = azimuth(~isnan(azimuth));
     cfreqs = cfreqs(~isnan(azimuth));
     % remove outliers more than 30deg away from median
-    azimuth = azimuth(abs(azimuth-median(azimuth))<rad(30));
-    cfreqs = cfreqs(abs(azimuth-median(azimuth))<rad(30));
+    if length(azimuth)>0
+        cfreqs = cfreqs(abs(azimuth-median(azimuth))<rad(30));
+        azimuth = azimuth(abs(azimuth-median(azimuth))<rad(30));
+    end
 end
 function w = spectral_weighting(f)
     % Calculate a spectral weighting after Stern1988, after the data of
