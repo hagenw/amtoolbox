@@ -58,6 +58,42 @@ function modspecgram(f,fs,varargin)
 %   The parameters `'dynrange'` and `'mfmax'` may be speficied first on the
 %   argument line, in that order.
 %
+%   Examples:
+%   ---------
+%
+%   The first example shows a Modulation spectrogram of modulated wide band
+%   noise. The modulation frequency is 50 Hz and the signal is sampled at
+%   44.1 kHz:::
+%
+%     fm = 50;    % Modulation frequency
+%     l = 2;      % Length of the signal in seconds
+%     fs = 44100; % Sampling frequency
+%     t = 0:1/fs:l;
+%     n = length(t);
+%     noise = 1-2*randn(1,n);
+%     modnoise = noise.*(1+cos(2*pi*t*fm));
+%     modspecgram(modnoise,fs,90)
+%     title('Sinusoidaly Modulated Noise')
+%
+%   The second example shows a modulation spectrogram of a speech signal
+%   sampled at 16 kHz:::
+%
+%     modspecgram(greasy,16000,60,500)
+%     title('Greasy')
+%
+%   The third example shows a modulation spectrogram of a modulated sinusoid
+%   with a carrier frequency of 5 kHz. FIXME: What is the modulation
+%   frequency:::
+%
+%     fm = 50;    % Modulation frequency
+%     l = 2;      % Length of the signal in seconds
+%     fs = 44100; % Sampling frequency
+%     fc = 5000;  % Carrier frequency
+%     t = 0:1/fs:l;
+%     s = sin(2*pi*t*fc);
+%     smod = s.*(1+0.5*cos(2*pi*t*fm));
+%     modspecgram(s,fs,50,2*fm,'fmax',2*fc)
+%
 %   See also:  audspecgram
   
 if nargin<2

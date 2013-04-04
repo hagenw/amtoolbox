@@ -7,8 +7,8 @@
 %
 %     Thresholds of hearing by standard
 %
-%     This demos generates a simple figure that shows the behaviour of
-%     the different absolute thresholds of hearing.    
+%     The figure shows the behaviour of the different absolute thresholds of
+%     hearing.
 %
 %   .. figure::
 %
@@ -57,8 +57,6 @@ fhigh=16000;
 plotpoints=30;
 
 xrange=linspace(flow,fhigh,plotpoints);
-
-figure(3);
 types   = {'er2a','hda200'};
 legends = {'er2a','hda200'};
 symbols = {'b+','y*'  };

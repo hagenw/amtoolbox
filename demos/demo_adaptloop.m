@@ -17,8 +17,11 @@
 %
 %     Noisy test signal
 %
-%     This figure shows the effect of adaptation on the noisy test signal with and
-%     without overshoot limiting.
+%     This figure shows the effect of adaptation on the noisy test signal
+%     with and without overshoot limiting. Notice that in the second plot,
+%     the initial spike at the beginning of the signal caused from the sharp
+%     transition from complete silence to noise is magnitudes larger than
+%     the values in the rest of the output.
 %
 %   See also: adaptloop
 
@@ -42,21 +45,25 @@ insig=[zeros(2*part,1);
 insig=max(insig,minlvl);
 
 figure(1);
+
+x=(0:siglen-1)/fs;
 subplot(3,1,1);
-plot(20*log10(insig));
+plot(x,20*log10(insig));
 title('Input signal');
+xlabel('time / s');
 ylabel('level / Db');
 
 subplot(3,1,2);
-plot(adaptloop(insig,fs,0));
+plot(x,adaptloop(insig,fs,0));
 title('Adaptation.');
+xlabel('time / s');
 ylabel('level / model units');
 
 subplot(3,1,3);
-plot(adaptloop(insig,fs));
+plot(x,adaptloop(insig,fs));
 title('Adaptation w. limiting.');
 ylabel('level / model units');
-
+xlabel('time / s');
 
 % Add a low level of noise
 insig=abs(insig+0.001*randn(siglen,1));
@@ -65,16 +72,19 @@ insig=max(insig,minlvl);
 figure(2);
 
 subplot(3,1,1);
-plot(20*log10(insig));
+plot(x,20*log10(insig));
 title('Input signal with added Gaussian noise.');
 ylabel('level / Db');
+xlabel('time / s');
 
 subplot(3,1,2);
-plot(adaptloop(insig,fs,0));
+plot(x,adaptloop(insig,fs,0));
 title('Adaptation.');
 ylabel('level / model units');
+xlabel('time / s');
 
 subplot(3,1,3);
-plot(adaptloop(insig,fs));
+plot(x,adaptloop(insig,fs));
 title('Adaptation w. limiting.');
 ylabel('level / model units');
+xlabel('time / s');

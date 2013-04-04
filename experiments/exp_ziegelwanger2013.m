@@ -720,3 +720,5 @@ if flags.do_fig9 || flags.do_fig11
         ymax2=round(max(max(squeeze(p_offaxis(1,:,:)*100))))+1;
         var=[squeeze(p_offaxis(1,1,:))*100 squeeze(p_offaxis(1,2,:))*100 s.radius/10];
         err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)])
+    end;
+end;
