@@ -5,18 +5,17 @@ function lookup = lookup_table(irs,model,fs)
 %          lookup = lookup_table(irs);
 %
 %   Input parameters:
-%       irs    - HRTF data set (TU Berlin irs format)
-%       model  - binaural model to use:
-%                   'dietz' (default)
-%                   'lindemann'
-%       fs     - sampling rate, default: 44100) (Hz)
+%       irs    : HRTF data set (TU Berlin irs format)
+%       model  : binaural model to use:%                   
+%       fs     : sampling rate, default: 44100) (Hz)
 %
 %   Output parameters:
-%       lookup - struct containing lookup data
+%       lookup : struct containing lookup data
 %
 %   `lookup_table(irs)` creates a lookup table from the given IR data set. This
 %   lookup table can be used by the dietz binaural model to predict the
 %   perceived direction of arrival of an auditory event.
+%   
 %
 
 % AUTHOR: Hagen Wierstorf

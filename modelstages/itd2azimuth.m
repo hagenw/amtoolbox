@@ -1,18 +1,17 @@
 function phi = itd2azimuth(itd,lookup)
 %ITD2AZIMUTH estimates the azimuth for the given itd
-%
 %   Usage: phi = itd2azimuth(itd,lookup);
 %
 %   Input parameters:
-%       itd    - interaural time difference, ITD (s)
-%       lookup - lookup table to use
+%       itd    : interaural time difference, ITD (s)
+%       lookup : lookup table to use
 %
 %   Output parameters:
-%       phi    - azimuth angle (rad)
+%       phi    : azimuth angle (rad)
 %
-%   ITD2AZIMUTH(ITD,LOOKUP) estimates the azimuth angle by the given
-%   interaural time difference (itd) and the given lookup table.
-%   Note: only the first 12 auditory channels are considered.
+%   `itd2azimuth(itd,lookup)` estimates the azimuth angle by the given
+%   interaural time difference (itd) and the given lookup table.  *Note*: only
+%   the first 12 auditory channels are considered.
 %
 %   see also: lookup_table
 
