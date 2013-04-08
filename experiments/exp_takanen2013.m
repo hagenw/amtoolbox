@@ -18,12 +18,12 @@ function output = exp_takanen2013(varargin)
 %     'cochlea'      use pre-computed cochlea model outputs in the
 %                    computation to reduce computation time. 
 %
-%     'fig8book'     Figure 7 from the book chapter. Binaural activity 
+%     'fig7book'     Figure 7 from the book chapter. Binaural activity 
 %                    maps obtained with the model for an off-sweet-spot 
 %                    listening scenario with different audio coding 
 %                    techniques.
 %
-%     'fig9book'     Figure 8 from the book chapter. Activation
+%     'fig8book'     Figure 8 from the book chapter. Activation
 %                    distributions obtained with the model for (a) the 
 %                    reference scenario of incoherent pink noise emitted 
 %                    from twelve azimuth directions, and (b)-(d) the 
@@ -56,12 +56,12 @@ function output = exp_takanen2013(varargin)
 %   To display Figure 7 from the book chapter using pre-computed cochlea
 %   model outputs use:::
 %
-%     exp_takanen2013('fig8book','cochlea');
+%     exp_takanen2013('fig7book','cochlea');
 %
 %   To display Figure 8 from the book chapter using pre-computed cochlea
 %   model outputs use:::
 %
-%     exp_takanen2013('fig9book','cochlea');
+%     exp_takanen2013('fig8book','cochlea');
 %
 %   To display Figure 6 from the manuscript using pre-computed cochlea 
 %   model outputs use:::
