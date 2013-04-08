@@ -204,7 +204,7 @@ if flags.do_fig2
     grid off
     legend(' MCM',' MAX',' CTD',' AGD','Location','NorthWest');
     legend boxoff
-    xlabel('Azimuth (Â°) ')
+    xlabel('Azimuth (in deg) ')
     ylabel('TOA (ms) ')
 %     set(gca,'FontSize',ticklabelsize,'LineWidth',bw,'LineWidth',bw);%,'YTick',[-0.8 -0.4 0 0.4 0.8]
     title('');
@@ -345,8 +345,8 @@ if flags.do_fig3 || flags.do_fig6
             plot(real(data.meta.pos(:,7)),abs(sag_dev)/data.stimPar.SamplingRate*1000000,'b.');
             xlim([-98 278])
             ylim([-5 max(abs(sag_dev)/data.stimPar.SamplingRate*1000000)+5])
-            xlabel('Polar angle (°)')
-            ylabel('Sagittal TOA deviation (µs)')
+            xlabel('Polar angle in degree')
+            ylabel('Sagittal TOA deviation in �s')
             title('')
             set(gca,'XTick',[-90 0 90 180 270])
         end
@@ -366,8 +366,8 @@ if flags.do_fig3 || flags.do_fig6
             set(h,'LineWidth',2);
             h=plotziegelwanger2013((-indicator+1).*toaEst,3,'r',0,1,1,data.meta,data.stimPar,{'o'},4);
             set(h,'MarkerFaceColor','r','MarkerEdgeColor','r');
-            ylabel('TOA (ms) ')
-            xlabel('Azimuth (Â°) ')
+            ylabel('TOA in ms')
+            xlabel('Azimuth in degree')
             grid off
             xlim([-10 370])
             ylim([2.65 3.65])
@@ -426,8 +426,8 @@ if flags.do_fig3 || flags.do_fig6
         h=plotziegelwanger2013((-indicator+1).*toaEst,3,'r',0,1,1,data.meta,data.stimPar,{'o'},4);
         set(h,'MarkerFaceColor','r','MarkerEdgeColor','r');
         plotziegelwanger2013(toa,4,'k',0,1,1,data.meta,data.stimPar,{'-'},1);
-        ylabel('TOA (ms) ')
-        xlabel('Azimuth (Â°) ')
+        ylabel('TOA ms ')
+        xlabel('Azimuth in degree')
         grid off
         xlim([-10 370])
         ylim([2.65 3.65])
@@ -462,15 +462,15 @@ if flags.do_fig5
     end
     plot(var(:,3),'k--')
     clear var;
-    ylabel('r (cm) ')
+    ylabel('r in cm')
 
     %phi
     subplot(312)
     var=[squeeze(data.results.p_onaxis(2,1,:))/pi*180 squeeze(data.results.p_onaxis(2,2,:))/pi*180 -data.phi+ones(length(data.phi),1)*90 -data.phi-ones(length(data.phi),1)*90];
     err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,4)]);
     err=reshape(err,numel(err),1);
-    fprintf(['Phi: average err is ' num2str(mean(err)) '°\n']);
-    fprintf(['     standard deviation is ' num2str(std(err)) '°\n']);
+    fprintf(['Phi: average err is ' num2str(mean(err)) 'deg\n']);
+    fprintf(['     standard deviation is ' num2str(std(err)) 'deg\n']);
     for ch=1:size(data.results.p_onaxis,2)
         plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
         hold on
@@ -485,15 +485,15 @@ if flags.do_fig5
     end
     clear var;
     set(gca,'YTick',[-90 90])
-    ylabel('\phi_e (Â°) ')
+    ylabel('\phi_e in deg')
 
     %theta
     subplot(313)
     var=[squeeze(data.results.p_onaxis(3,1,:))/pi*180 squeeze(data.results.p_onaxis(3,2,:))/pi*180 data.theta -data.theta];
     err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,4)]);
     err=reshape(err,numel(err),1);
-    fprintf(['Theta: average err is ' num2str(mean(err)) '°\n']);
-    fprintf(['       standard deviation is ' num2str(std(err)) '°\n']);
+    fprintf(['Theta: average err is ' num2str(mean(err)) 'deg\n']);
+    fprintf(['       standard deviation is ' num2str(std(err)) 'deg\n']);
     for ch=1:size(data.results.p_onaxis,2)
         plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
         hold on
@@ -507,7 +507,7 @@ if flags.do_fig5
         plot(38:42,var(38:42,2+ch),'k--')
     end
     clear var;
-    ylabel('\theta_e (Â°) ')
+    ylabel('\theta_e in deg')
     xlabel('Condition')
 end
 
@@ -578,7 +578,7 @@ if flags.do_fig7 || flags.do_fig12
         end
         clear var varl varr stm;
         xlabel('Listeners ')
-        ylabel('r (cm) ')
+        ylabel('r in cm')
         xlim([-1.5 temp+1.5])
         ylim([4.1 12+0.7])
         legend([h{1},h{2},h{3}],'ARI','CIPIC','LISTEN','Location','NorthWest');
@@ -619,7 +619,7 @@ if flags.do_fig7 || flags.do_fig12
             plot(varr(varr(:,2)==kk,3),varr(varr(:,2)==kk,1),sym(kk),'MarkerEdgeColor','g','MarkerFaceColor','g');
         end
         clear var varl varr;
-        ylabel('r (cm) ')
+        ylabel('r in cm')
         xlim([-1.5 temp+1.5])
         ylim([4.1 12+0.7])
         legend([h{1},h{2},h{3}],'ARI','CIPIC','LISTEN','Location','NorthWest');
@@ -654,7 +654,7 @@ if flags.do_fig7 || flags.do_fig12
             plot(varr(varr(:,2)==kk,3),varr(varr(:,2)==kk,1),sym(kk),'MarkerEdgeColor','g','MarkerFaceColor','g');
         end
         clear var varl varr;
-        ylabel('x_M (cm) ')
+        ylabel('x_M in cm')
         xlim([-1.5 temp+1.5])
         ylim([-4.5 4.5])
 
@@ -688,7 +688,7 @@ if flags.do_fig7 || flags.do_fig12
             plot(varr(varr(:,2)==kk,3),varr(varr(:,2)==kk,1),sym(kk),'MarkerEdgeColor','g','MarkerFaceColor','g');
         end
         clear var;
-        ylabel('y_M (cm) ')
+        ylabel('y_M in cm')
         xlim([-1.5 temp+1.5])
         ylim([-3.5 4.5])
 
@@ -721,7 +721,7 @@ if flags.do_fig7 || flags.do_fig12
         end
         clear var;
         xlabel('Listeners')
-        ylabel('z_M (cm) ')
+        ylabel('z_M in cm')
         xlim([-1.5 temp+1.5])
         ylim([-4.5 6.5])
     end
@@ -736,7 +736,7 @@ if flags.do_fig8
     temp=ziegelwanger2013(data.hM,data.meta,data.stimPar,4,1);
     data.meta.toa5=temp.toa;
     fprintf(['Radii for left and right ear: ' num2str(temp.p_onaxis(1,:)*100) ' cm\n'])
-    temp=TOA_Calc(data.hM,data.meta,data.stimPar,4,0,0);
+    temp=ziegelwanger2013(data.hM,data.meta,data.stimPar,4,0,0);
     data.meta.toa6=temp.toa;
     fprintf(['Maximum TOA difference left: ' num2str((max(data.meta.toa5(:,1))-min(data.meta.toa5(:,1)))/data.stimPar.SamplingRate*1000) ' ms\n'])
     fprintf(['Maximum TOA difference right: ' num2str((max(data.meta.toa5(:,2))-min(data.meta.toa5(:,2)))/data.stimPar.SamplingRate*1000) ' ms\n'])
@@ -749,8 +749,8 @@ if flags.do_fig8
     xlim([-5 365])
     ylim([-0.05 0.95])
     grid off
-    xlabel('Azimuth (Â°) ')
-    ylabel('Relative TOA (ms) ');
+    xlabel('Azimuth in degree')
+    ylabel('Relative TOA in ms');
     title('')
     
 end
@@ -783,14 +783,14 @@ if flags.do_fig9 || flags.do_fig11
         end
         plot(r1/10,'k--')
         clear var;
-        ylabel('r (cm) ')
+        ylabel('r in cm')
 
         %yM
         subplot(212)
         plot(-yM1*100,'k--')
         clear var;
         xlabel('Condition')
-        ylabel('y_M (cm) ')
+        ylabel('y_M in cm ')
     end
     
     if flags.do_fig11 %Figure 11
@@ -822,7 +822,7 @@ if flags.do_fig9 || flags.do_fig11
             hold on
         end
         plot(var(:,3),'k--')
-        ylabel('r (cm) ')
+        ylabel('r in cm')
         xlim([0 size(var,1)+1])
         ylim([4.5 ymax2])
         clear var;
@@ -841,9 +841,9 @@ if flags.do_fig9 || flags.do_fig11
             hold on
         end  
         plot(var(:,3),'k--')
-        ylabel('x_M (cm) ')
+        ylabel('x_M in cm ')
         xlabel([0 size(var,1)+1])
-        ylabel([-2.5 0.5])
+        ylim([-2.5 0.5])
         clear var;
 
         %yM
@@ -861,7 +861,7 @@ if flags.do_fig9 || flags.do_fig11
             hold on
         end
         plot(var(:,3),'k--')
-        ylabel('y_M (cm) ')
+        ylabel('y_M in cm ')
         xlim([0 size(var,1)+1])
         ylim([-0.5 2.5])
         clear var;
@@ -884,7 +884,7 @@ if flags.do_fig9 || flags.do_fig11
         plot(var([2 4],3),'k--')
         set(gca,'YTick',[-1 0])
         xlabel('Condition')
-        ylabel('z_M (cm) ')
+        ylabel('z_M in cm')
         xlim([0 size(var,1)+1])
         ylim([-1.5 0.5])
         clear var;
