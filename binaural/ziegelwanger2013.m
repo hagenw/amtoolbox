@@ -1,8 +1,6 @@
 function meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis)
-%ZIEGELWANGER2013
-%   meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis) 
-%   estimates the Time-of-Arrival for each column in input data hM and corrects 
-%   the results with a geometrical model of the head.
+%ZIEGELWANGER2013 Time of arrival estimates
+%   usage: meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis) 
 %
 %   Input:
 %       hM: data matrix with impulse respnoses (IR): 
@@ -53,14 +51,17 @@ function meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis)
 %                 azimut of ear in radiants,
 %                 elevation of ear in radiants]
 %           dim 2: each record channel
-% 
+%
+%   Estimates the Time-of-Arrival for each column in input data hM and corrects 
+%   the results with a geometrical model of the head.
+%
 %   Examples:
 %   ---------
 % 
 %   To calculate the model parameters for the on-axis time-of-arrival model
 %   (p_onaxis) and for the off-axis time-of-arrival model (p_offaxis) for a
 %   given HRTF set (hM,meta,stimPar) with the minimum-phase
-%   cross-correlation method, use:::
+%   cross-correlation method, use::
 %
 %       meta=ziegelwanger2013(hM,meta,stimPar,4,1);
 %

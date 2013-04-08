@@ -1,30 +1,9 @@
 function [h]=plotziegelwanger2013(data,type,color,ele,ch,time,meta,stimPar,style,width)
-%PLOTZIEGELWANGER2013
-%   plotziegelwanger2013(data,type,color,ele,ch,time,meta,stimPar,style,width)
+%PLOTZIEGELWANGER2013 XXX Headline missing
+%   Usage: plotziegelwanger2013(data,type,color,ele,ch,time,meta,stimPar,style,width)
 %
-%   Input:
-%       data:
-%
-%       type:
-%
-%       color:
-%
-%       ele:
-%   
-%       ch:
-%
-%       time:
-%
-%       meta:
-%
-%       stimPar:
-%
-%       style:
-%
-%       width:
-%
-%   Output:
-
+%   XXX Description missing
+    
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna, Austria
 
 

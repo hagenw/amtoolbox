@@ -21,7 +21,7 @@ function varargout=exp_ziegelwanger2013(varargin)
 %               
 %               Left panel: 
 %               Normalized HRIRs of NH64 (ARI database). Sound source was
-%               placed 45� left in the horizontal plane.
+%               placed 45° left in the horizontal plane.
 %               Solid line: for the left ear
 %               Dashed line: for the right ear
 %               Vertical lines: Estimated TOAs
@@ -113,9 +113,37 @@ function varargout=exp_ziegelwanger2013(varargin)
 %   Examples:
 %   ---------
 %
+%   To display Fig. 2, use :::
+%
+%     exp_ziegelwanger2013('fig2');
+%
 %   To display Fig. 3, use :::
 %
 %     exp_ziegelwanger2013('fig3');
+%
+%   To display Fig. 5, use :::
+%
+%     exp_ziegelwanger2013('fig5');
+%
+%   To display Fig. 7, use :::
+%
+%     exp_ziegelwanger2013('fig7');
+%
+%   To display Fig. 8, use :::
+%
+%     exp_ziegelwanger2013('fig8');
+%
+%   To display Fig. 9, use :::
+%
+%     exp_ziegelwanger2013('fig9');
+%
+%   To display Fig. 11, use :::
+%
+%     exp_ziegelwanger2013('fig11');
+%
+%   To display Fig. 12, use :::
+%
+%     exp_ziegelwanger2013('fig12');
 %
 %   See also: ziegelwanger2013, ziegelwanger2013onaxis,
 %   ziegelwanger2013offaxis, data_ziegelwanger2013
@@ -176,7 +204,7 @@ if flags.do_fig2
     grid off
     legend(' MCM',' MAX',' CTD',' AGD','Location','NorthWest');
     legend boxoff
-    xlabel('Azimuth (°) ')
+    xlabel('Azimuth (Â°) ')
     ylabel('TOA (ms) ')
 %     set(gca,'FontSize',ticklabelsize,'LineWidth',bw,'LineWidth',bw);%,'YTick',[-0.8 -0.4 0 0.4 0.8]
     title('');
@@ -317,8 +345,8 @@ if flags.do_fig3 || flags.do_fig6
             plot(real(data.meta.pos(:,7)),abs(sag_dev)/data.stimPar.SamplingRate*1000000,'b.');
             xlim([-98 278])
             ylim([-5 max(abs(sag_dev)/data.stimPar.SamplingRate*1000000)+5])
-            xlabel('Polar angle (�)')
-            ylabel('Sagittal TOA deviation (�s)')
+            xlabel('Polar angle (°)')
+            ylabel('Sagittal TOA deviation (µs)')
             title('')
             set(gca,'XTick',[-90 0 90 180 270])
         end
@@ -339,7 +367,7 @@ if flags.do_fig3 || flags.do_fig6
             h=plotziegelwanger2013((-indicator+1).*toaEst,3,'r',0,1,1,data.meta,data.stimPar,{'o'},4);
             set(h,'MarkerFaceColor','r','MarkerEdgeColor','r');
             ylabel('TOA (ms) ')
-            xlabel('Azimuth (°) ')
+            xlabel('Azimuth (Â°) ')
             grid off
             xlim([-10 370])
             ylim([2.65 3.65])
@@ -399,7 +427,7 @@ if flags.do_fig3 || flags.do_fig6
         set(h,'MarkerFaceColor','r','MarkerEdgeColor','r');
         plotziegelwanger2013(toa,4,'k',0,1,1,data.meta,data.stimPar,{'-'},1);
         ylabel('TOA (ms) ')
-        xlabel('Azimuth (°) ')
+        xlabel('Azimuth (Â°) ')
         grid off
         xlim([-10 370])
         ylim([2.65 3.65])
@@ -441,8 +469,8 @@ if flags.do_fig5
     var=[squeeze(data.results.p_onaxis(2,1,:))/pi*180 squeeze(data.results.p_onaxis(2,2,:))/pi*180 -data.phi+ones(length(data.phi),1)*90 -data.phi-ones(length(data.phi),1)*90];
     err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,4)]);
     err=reshape(err,numel(err),1);
-    fprintf(['Phi: average err is ' num2str(mean(err)) '�\n']);
-    fprintf(['     standard deviation is ' num2str(std(err)) '�\n']);
+    fprintf(['Phi: average err is ' num2str(mean(err)) '°\n']);
+    fprintf(['     standard deviation is ' num2str(std(err)) '°\n']);
     for ch=1:size(data.results.p_onaxis,2)
         plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
         hold on
@@ -457,15 +485,15 @@ if flags.do_fig5
     end
     clear var;
     set(gca,'YTick',[-90 90])
-    ylabel('\phi_e (°) ')
+    ylabel('\phi_e (Â°) ')
 
     %theta
     subplot(313)
     var=[squeeze(data.results.p_onaxis(3,1,:))/pi*180 squeeze(data.results.p_onaxis(3,2,:))/pi*180 data.theta -data.theta];
     err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,4)]);
     err=reshape(err,numel(err),1);
-    fprintf(['Theta: average err is ' num2str(mean(err)) '�\n']);
-    fprintf(['       standard deviation is ' num2str(std(err)) '�\n']);
+    fprintf(['Theta: average err is ' num2str(mean(err)) '°\n']);
+    fprintf(['       standard deviation is ' num2str(std(err)) '°\n']);
     for ch=1:size(data.results.p_onaxis,2)
         plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
         hold on
@@ -479,7 +507,7 @@ if flags.do_fig5
         plot(38:42,var(38:42,2+ch),'k--')
     end
     clear var;
-    ylabel('\theta_e (°) ')
+    ylabel('\theta_e (Â°) ')
     xlabel('Condition')
 end
 
@@ -721,7 +749,7 @@ if flags.do_fig8
     xlim([-5 365])
     ylim([-0.05 0.95])
     grid off
-    xlabel('Azimuth (°) ')
+    xlabel('Azimuth (Â°) ')
     ylabel('Relative TOA (ms) ');
     title('')
     

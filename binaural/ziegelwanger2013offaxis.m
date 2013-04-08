@@ -1,21 +1,16 @@
 function y=ziegelwanger2013offaxis(p,x)
-%ZIEGELWANGER2013OFFAXIS
-%   y=ziegelwanger2013offaxis(p,x) calculates time-of-arrivals for given
-%   model parameters (p) and directions (x) with an off-axis
-%   time-of-arrival model.
+%ZIEGELWANGER2013OFFAXIS XXX
+%   Usage: y=ziegelwanger2013offaxis(p,x) 
 %
 %   Input:
 %       p: off-axis time-of-arrival model parameters [SI-units]
 %       x: HRTF direction (azimuth,elevation) [rad]
 %   Output:
 %       y: time-of-arrival [s]
-% 
-%   Examples:
-%   ---------
-% 
-%   To calculate TOAs for given parameters p and directions x, use:::
 %
-%     toa=ziegelwanger2013offaxis(p,x);
+%   `toa=ziegelwanger2013offaxis(p,x)` calculates time-of-arrivals for given
+%   model parameters (p) and directions (x) with an off-axis time-of-arrival
+%   model.
 %
 %   See also: ziegelwanger2013, ziegelwanger2013onaxis,
 %   data_ziegelwanger2013, exp_ziegelwanger2013
