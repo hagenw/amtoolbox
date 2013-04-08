@@ -184,8 +184,8 @@ for ch=1:size(hM,3)
     for ii=1:20
         sag_dev=zeros(size(hM,2),1);
         for lat=-90:epsilon:90
-            idx=find(meta.pos(:,6)>lat-epsilon/2 & meta.pos(:,6)<=lat+epsilon/2 & indicator_hor(:,ch)==0);
-            idx2=find(meta.pos(:,6)>lat-epsilon/2 & meta.pos(:,6)<=lat+epsilon/2 & indicator_hor(:,ch) & indicator(:,ch)==0);
+            idx=find(meta.pos(:,6)>lat-epsilon/2 & meta.pos(:,6)<=lat+epsilon/2); 
+            idx2=find(meta.pos(:,6)>lat-epsilon/2 & meta.pos(:,6)<=lat+epsilon/2 & indicator_hor(:,ch)==0 & indicator(:,ch)==0);
             if length(idx2)>2
                 sag_dev(idx,1)=toaEst(idx,ch)-mean(toaEst(idx2,ch));
             end
