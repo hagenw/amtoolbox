@@ -4,11 +4,11 @@ function fb=filterbank_init(b,a,varargin);
 %          outsig=filterbank_init(b,a,nsigs,hopsize);
 %
 %   `fb=filterbank_init(b,a)` creates a filterbank structure *fb* for use with
-%   |filterbank_block|_. The filterbank will filter the input signals with the
+%   |filterbank_block|. The filterbank will filter the input signals with the
 %   filters described in *b* and *a*.
 %
 %   `fb=filterbank_init(b,a,nsigs)` does the same assuming that the input
-%   to |filterbank_block|_ will consist of *nsigs* signal at once.
+%   to |filterbank_block| will consist of *nsigs* signal at once.
 %
 %   See also: ufilterbankz, filterbank_block
 

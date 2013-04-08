@@ -29,7 +29,7 @@ function varargout=audspecgram(insig,fs,varargin)
 %                   display the output.
 %    
 %     'ihc',modelname
-%                   Pass modelname to |ihcenvelope|_ to determine the inner
+%                   Pass modelname to |ihcenvelope| to determine the inner
 %                   hair cell envelope extraction process to use. Default is to
 %                   use the `'dau'` model.
 %    

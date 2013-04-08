@@ -24,7 +24,7 @@ function [waveVamp, waveVlat]  = roenne2012chirp(levels,chirps,varargin)
 %
 %     'noplot'  Do not plot main figure (fig 6 or 7).
 % 
-%     'plot'    Plot main figure (fig 6 or 7). See |plotroenne2012chirp|_.
+%     'plot'    Plot main figure (fig 6 or 7). See |plotroenne2012chirp|.
 %
 %   ---------
 %

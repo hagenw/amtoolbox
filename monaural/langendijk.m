@@ -18,7 +18,7 @@ function p = langendijk(targets,template,varargin)
 %   respectively source positions. Consequently each column represents the
 %   predicted probability mass vector (PMV) of the polar response angle 
 %   distribution for one special target position. If you want to plot this 
-%   prediction matrix use |plotlangendijk|_.
+%   prediction matrix use |plotlangendijk|.
 %
 %   `langendijk` accepts the following optional parameters.
 %

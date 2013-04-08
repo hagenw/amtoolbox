@@ -27,8 +27,8 @@ function [outsig, fc, mfc] = dau1997preproc(insig, fs, varargin);
 %
 %     4) a modulation filterbank
 %
-%   Any of the optinal parameters for |auditoryfilterbank|_,
-%   |ihcenvelope|_ and |adaptloop|_ may be optionally specified for this
+%   Any of the optinal parameters for |auditoryfilterbank|,
+%   |ihcenvelope| and |adaptloop| may be optionally specified for this
 %   function. They will be passed to the corresponding functions.
 %
 %   See also: auditoryfilterbank, ihcenvelope, adaptloop, modfilterbank

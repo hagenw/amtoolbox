@@ -9,7 +9,7 @@ function op = plotjelfs2011(target_azim,database)
 %   a polar plot.
 %
 %   The *database*  parameter selects the HRIR database to use. Please
-%   see the help of |read_hrir|_.
+%   see the help of |read_hrir|.
 %
 %   Examples:
 %   ---------

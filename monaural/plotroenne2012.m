@@ -7,7 +7,7 @@ function plotroenne2012(stim_level,waveVamp,waveVlat, simpot, ANout,varargin)
 %     waveVlat   : Latency of simulated ABR wave V peak.
 %
 %   `plotroenne2012(stim_level,waveVamp,waveVlat)` plots the output from
-%   |roenne2012|_.
+%   |roenne2012|.
 %
 %   The flag may be one of:
 %

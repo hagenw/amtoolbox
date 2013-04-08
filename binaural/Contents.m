@@ -15,7 +15,13 @@
 %     DIETZ2011INTERAURALFUNCTIONS - Interaural stages of Dietz 2011
 %
 %  The Takanen 2013 model
-%     TAKANEN2013           - The Takanen 2013 XXX model
+%     TAKANEN2013           - Takanen 2013 binaural auditory model
+%
+%  The Ziegelwanger2013 model
+%     ZIEGELWANGER2013      - XXX
+%     PLOTZIEGELWANGER2013  - Plot the output of the Ziegelwanger 2013 model
+%     ZIEGELWANGER2013OFFAXIS - XXX
+%     ZIEGELWANGER2013ONAXIS  - XXX
 %
 %  Additional functions
 %     ESTIMATE_AZIMUTH      - Azimuth position using the Dietz or the Lindemann model

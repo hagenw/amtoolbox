@@ -68,7 +68,7 @@ function [b,a,delay]=gammatone(fc,fs,varargin)
 %     [b,a] = gammatone(erbspacebw(flow,fhigh),fs,'complex');
 %
 %   To apply the (complex valued) filters to an input signal, use
-%   |filterbankz|_::
+%   |filterbankz|::
 %
 %     outsig = 2*real(ufilterbankz(b,a,insig));
 %  

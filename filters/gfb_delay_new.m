@@ -4,7 +4,7 @@ function delay = gfb_delay_new(analyzer, delay_samples)
 %
 %   Input parameters:
 %     analyzer      : The gfb_analyzer structure as returned by
-%                     |gfb_analyzer_new|_.
+%                     |gfb_analyzer_new|.
 %     delay_samples : The desired group delay in samples. Must be at least 1,
 %                     because of the way the phase factors are computed. Larger
 %                     delays lead to better signal quality

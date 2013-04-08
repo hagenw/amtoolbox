@@ -34,7 +34,7 @@ function [crosscorr,t,ild,cfreq] = lindemann1986(insig,fs,varargin)
 %   dependend on time, by using a running cross-correlation function.
 %   This has been done here by starting a new running cross-correlation
 %   every time step *T_int*.  A detailed description of these cross-
-%   correlation steps is given in the |lindemann1986bincorr|_ function.
+%   correlation steps is given in the |lindemann1986bincorr| function.
 %
 %   The steps of the binaural model to calculate the result are the
 %   following:
@@ -51,8 +51,8 @@ function [crosscorr,t,ild,cfreq] = lindemann1986(insig,fs,varargin)
 %        (1986a) and Hess (2007). These are extensions to the delay line model
 %        of Jeffres (1948).
 %
-%   You may supply any flags or key/value pairs of the |auditoryfilterbank|_,
-%   |ihcenvelope|_ or |lindemann1986bincorr|_ at the end of the line of input
+%   You may supply any flags or key/value pairs of the |auditoryfilterbank|,
+%   |ihcenvelope| or |lindemann1986bincorr| at the end of the line of input
 %   arguments.
 %
 %   Examples:

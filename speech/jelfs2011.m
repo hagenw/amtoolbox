@@ -27,7 +27,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
 %   returns the benefit from the SII weighted SNR and the SII weighted BMLD.
 %
 %   If *target* or *interferer* are cell-arrays, they contents of these cell
-%   arrays will be passed as arguments to the |read_hrir|_. The first
+%   arrays will be passed as arguments to the |read_hrir|. The first
 %   argument in the cell-array is the azimuth angle, and the second
 %   parameter is the database type. The elevation is set to zer.
 %   function. This makes it possible to directly load HRIR from a
