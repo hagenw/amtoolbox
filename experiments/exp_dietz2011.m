@@ -93,20 +93,23 @@ if flags.do_fig3
               case 1
                 bar(-90:2:90,sum(h_all,2),'r')
                 title('Mean histogram of all fine-structure channels','Fontsize',fontsize)
+								axis([-90 90 0 21900]);
+								set(gca,'YTick',[5000 10000 15000 20000],'YTickLabel',{'5k','10k','15k','20k'});
                 ymax = max(sum(h_all,2));
               case 2
-            bar(-90:2:90,sum(h_ic,2))
-            title('Mean histogram with VS filter','Fontsize',fontsize)
-            ymax = max(sum(h_ic,2));
+								bar(-90:2:90,sum(h_ic,2))
+								title('Mean histogram with VS filter','Fontsize',fontsize)
+								axis([-90 90 0 5600]);
+								set(gca,'YTick',[1000:1000:5000],'YTickLabel',{'1k','2k','3k','4k','5k'});
+								ymax = max(sum(h_ic,2));
             end
             set(gca,'Fontsize',fontsize)
             set(gca,'XTick',s_pos)
-            xlim([-93 93])
-            ylim([0 ymax*1.1])
+%             xlim([-93 93])
+%             ylim([0 ymax*1.1])
             xlabel('Azimuth [deg]','Fontsize',fontsize)
             ylabel('Frequency of occurence','Fontsize',fontsize)
             text (-80,ymax*.95,panellabel(panel),'Fontsize',fontsize+1,'FontWeight','bold')
-            
         end
     end;
 end;
@@ -157,26 +160,32 @@ if flags.do_fig4
               case 1
                 bar(-60:2:60,sum(h_fmod216,2))
                 title('histogram of mod ITD channels 13-23','Fontsize',fontsize)
+								axis([-50 50 0 7600]);
+								set(gca,'YTick',[2500 5000 7500],'YTickLabel',{'2.5k','5k','7.5k'});
                 ymax = max(sum(h_fmod216,2));
-                ylim([0 ymax*1.15])
+%                 ylim([0 ymax*1.15])
               case 2
                 bar(-60:2:60,sum(h_fmod135,2))
+								axis([-50 50 0 7600]);
+								set(gca,'YTick',[2500 5000 7500],'YTickLabel',{'2.5k','5k','7.5k'});
                 title('histogram of mod ITD channels 13-23','Fontsize',fontsize)
                 ymax = max(sum(h_fmod135,2));
-                ylim([0 ymax*1.15])
+%                 ylim([0 ymax*1.15])
               case 3
                 bar(-60:2:60,sum(h_ic,2))
                 title('histogram of fine ITD channels 1-12','Fontsize',fontsize)
+								axis([-50 50 0 76000]);
+								set(gca,'YTick',[25000 50000 75000],'YTickLabel',{'25k','50k','75k'});
                 ymax = max(sum(h_ic,2));
-                ylim([0 ymax*1.15])
+%                 ylim([0 ymax*1.15])
             end
             set(gca,'Fontsize',fontsize)
             set(gca,'XTick',s_pos)
-            xlim([-63 63])
+%             xlim([-63 63])
             
             xlabel('Azimuth [deg]','Fontsize',fontsize)
             ylabel('Frequency of occurence','Fontsize',fontsize)
-            text (-50,ymax*.97,panellabel(panel),'Fontsize',fontsize+1,'FontWeight','bold')
+            text (-40,ymax*1.2,panellabel(panel),'Fontsize',fontsize+1,'FontWeight','bold')
             
         end
     end;
@@ -331,8 +340,11 @@ if flags.do_fig6
             end
             set(gca,'Fontsize',fontsize)
             set(gca,'XTick',s_pos)
-            xlim([-73 73])
-            ylim([0 ymax*1.1])
+%             xlim([-73 73])
+%             ylim([0 ymax*1.1])
+						axis([-73 73 0 5500]);
+						set(gca,'YTick',[1000:1000:5000],'YTickLabel',{'1k','2k','3k','4k','5k'});
+
             xlabel('Azimuth [deg]','Fontsize',fontsize)
             ylabel('Frequency of occurence','Fontsize',fontsize)
             text (-50,ymax*.97,panellabel(panel),'Fontsize',fontsize+1,'FontWeight','bold')
