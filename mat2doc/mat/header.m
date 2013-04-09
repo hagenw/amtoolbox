@@ -1,4 +1,4 @@
-% Copyright (C) 2009-2013 Peter L. Søndergaard.
+% Copyright (C) 2009-2013 Peter L. Søndergaard and others.
 % This file is part of AMToolbox version {VERSION}
 %
 % This program is free software: you can redistribute it and/or modify
