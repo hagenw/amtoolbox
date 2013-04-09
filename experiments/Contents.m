@@ -10,6 +10,7 @@
 %       EXP_JELFS2011        - Binaural speech intelligibility advantage
 %       EXP_ROENNE2012       - Auditory nerve latency
 %       EXP_BAUMGARTNER2013  - Figures from Baumgartner et al. (2013)
+%       EXP_SPILLE2013       - Figures from Spille et al. (2013)
 %       EXP_TAKANEN2013      - Figures from Takanen et al. (2013)
 %       EXP_ZIEGELWANGER2013 - Figures from Ziegelwanger et al. (2013)
 %

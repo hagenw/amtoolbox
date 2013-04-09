@@ -21,13 +21,24 @@ function example_output = exp_dietz2011(varargin)
 %
 %     'fig6'    Reproduce Fig. 6.
 %
-%   Example to display Fig. 5 use :
+%   Examples:
+%   ---------
+%
+%   To display Fig. 3 use :::
+%
+%     exp_dietz2011('fig3');
+%
+%   To display Fig. 4 use :::
+%
+%     exp_dietz2011('fig4');
+%
+%   To display Fig. 5 use :::
 %
 %     exp_dietz2011('fig5');
 %
-%   Output parameter:
+%   To display Fig. 6 use :::
 %
-%     example_output: stucture. Content depends on figure
+%     exp_dietz2011('fig6');
 %
 %   References: dietz2011auditory
 
