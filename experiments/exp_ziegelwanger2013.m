@@ -346,7 +346,7 @@ if flags.do_fig3 || flags.do_fig6
             xlim([-98 278])
             ylim([-5 max(abs(sag_dev)/data.stimPar.SamplingRate*1000000)+5])
             xlabel('Polar angle in degree')
-            ylabel('Sagittal TOA deviation in µs')
+            ylabel('Sagittal TOA deviation in Âµs')
             title('')
             set(gca,'XTick',[-90 0 90 180 270])
         end
