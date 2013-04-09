@@ -21,7 +21,7 @@ function d = lindcentroid(cc)
 %
 %   where *M* is half the length of the delay line $-M,...,M$.
 %
-%   See also: lindemann
+%   See also: lindemann1986
 %
 %   References: lindemann1986a
 %
