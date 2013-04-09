@@ -7,39 +7,40 @@ function data = data_ziegelwanger2013(varargin)
 %
 %   The flag may be one of:
 %  
-%     'ARI'         ARI database: 
-%                       data.results        Results for all HRTF sets
-%                       data.subjects       IDs for HRTF sets
+%     'ARI'         ARI database 
+%                       * data.results:     Results for all HRTF sets
+%
+%                       * data.subjects:    IDs for HRTF sets
 %  
-%     'CIPIC'       CIPIC database: 
-%                       data.results        Results for all HRTF sets
-%                       data.subjects       IDs for HRTF sets
+%     'CIPIC'       CIPIC database:
+%                       * data.results      Results for all HRTF sets
+%                       * data.subjects     IDs for HRTF sets
 %  
 %     'LISTEN'      LISTEN database: 
-%                       data.results        Results for all HRTF sets
-%                       data.subjects       IDs for HRTF sets
+%                       * data.results      Results for all HRTF sets
+%                       * data.subjects     IDs for HRTF sets
 %  
 %     'SPHERE_ROT'  HRTF sets for a rigid sphere placed in the center of
 %                   the measurement setup and varying rotation
-%                       data.results        Results for all HRTF sets
-%                       data.subjects       IDs for HRTF sets
-%                       data.phi            Azimuth of ear position
-%                       data.theta          Elevation of ear position
-%                       data.radius         sphere radius
+%                       * data.results      Results for all HRTF sets
+%                       * data.subjects     IDs for HRTF sets
+%                       * data.phi          Azimuth of ear position
+%                       * data.theta        Elevation of ear position
+%                       * data.radius       sphere radius
 %  
 %     'SPHERE_DIS'  HRTF sets for a rigid sphere with various positions in
 %                   the measurement setup
-%                       data.results        Results for all HRTF sets
-%                       data.subjects       IDs for HRTF sets
-%                       data.xM             x-coordinate of sphere center
-%                       data.yM             y-coordinate of sphere center
-%                       data.zM             z-coordinate of sphere center
-%                       data.radius         sphere radius
+%                       * data.results      Results for all HRTF sets
+%                       * data.subjects     IDs for HRTF sets
+%                       * data.xM           x-coordinate of sphere center
+%                       * data.yM           y-coordinate of sphere center
+%                       * data.zM           z-coordinate of sphere center
+%                       * data.radius       sphere radius
 %  
 %     'NH89'        HRTF set of listener NH89 of the ARI database
-%                       data.hM             Matrix of IRs
-%                       data.meta           Meta data
-%                       data.stimPar     
+%                       * data.hM           Matrix of IRs
+%                       * data.meta         Meta data
+%                       * data.stimPar     
 %  
 %     'reload'      Reload previously calculated results    
 %  

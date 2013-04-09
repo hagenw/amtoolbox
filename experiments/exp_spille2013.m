@@ -13,11 +13,13 @@ function example_output = exp_spille2013
 %      exp_spille2013;   
 %
 %   See also: exp_dietz2011
+%
+%   References: spille2013
 
 % AUTHOR: Mathias Dietz
 
 % choose input signal (e.g. spille2013_s123456)
-signal=wavread('spille2013_s123456');
+signal=wavread([amtbasepath,'humandata',filesep,'spille2013_s123456']);
 fs=44100;
 s_pos =[-75 -40 -10 10 40 75];
 
