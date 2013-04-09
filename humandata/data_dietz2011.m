@@ -3,9 +3,11 @@ function [stim,fs]  = data_dietz2011(varargin)
 %   Usage: [stim,fs] = data_dietz2011;
 %
 %   `[stim,fs]=data_dietz2011(flag)` returns the speech stimuli and sampling
-%   frequency from Dietz et al. 2011. The possible values of *flag* are:
+%   frequency from Dietz et al. 2011. The stimuli are speech signals from
+%   the TIMIT database, convolved with head-related impulse responses 
+%   from Kayser et al. 2009. The possible values of *flag* are:
 %   'five_speakers', 'one_of_three', 'one_speaker_reverb', 'three_of_three',
-%   'two_of_three' or 'two_speakers'.
+%   'bNoise', 'two_of_three', or 'two_speakers'.
 %
 %   See also: dietz2011, exp_dietz2011
 %
@@ -13,7 +15,7 @@ function [stim,fs]  = data_dietz2011(varargin)
 
 definput.flags.wavfile={'missingflag','five_speakers','one_of_three',...
                     'one_speaker_reverb','three_of_three',...
-                    'two_of_three','two_speakers'}
+                    'two_of_three','two_speakers','bNoise'};
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
