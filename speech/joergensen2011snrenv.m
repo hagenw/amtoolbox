@@ -14,7 +14,7 @@ function [fcs_EPSM outSNRenvs ] = joergensen2011snrenv(MixEnv,NoiseEnv,fs)
 %  `[fcs_EPSM,outSNRenvs]=joergensen2011snrenv(MixEnv,NoiseEnv,fs)`
 %  calculates the SNRenv for the processed signal.
 
-% AUTHOR: May 2012 S�ren J�rgensen 
+% AUTHOR: May 2012 Søren Jørgensen 
 
 % Center frequencies of the modulation filters
 % fcs = [1 2 4 8 16 32 64 ];
