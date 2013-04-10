@@ -4,6 +4,16 @@ function example_output = exp_spille2013
 %   `exp_spille2013` reproduce Fig. no. 6 from the Spille et
 %   al. 2013 AABBA chapter.
 %
+%   Examples:
+%   ---------
+%
+%   To display Fig. 6 use :::
+%
+%     exp_spille2013;
+%
+%   See also: exp_dietz2011
+
+
 % AUTHOR: Mathias Dietz
 
 % choose input signal (e.g. spille2013_s123456)
