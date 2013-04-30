@@ -31,13 +31,9 @@ function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spe
 %   lateralization by the ITD and found a region around 600 Hz. Stern et al.
 %   have fitted his data with a formula used in this function.
 %
-%   References:
-%       Raatgever (1980) - On the binaural processing of stimuli with different
-%           interaural phase relations, TU delft
-%       Stern et al. (1980) - Lateralization of complex binaural stimuli: A
-%           weighted-image model, JASA 84(1)
+%   See also: itdazimuthlookuptable
 %
-%   see also: itdazimuthlookuptable
+%   References: raatgever1980 stern1988
 
 % AUTHOR: Hagen Wierstorf
 
