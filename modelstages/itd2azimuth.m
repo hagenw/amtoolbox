@@ -13,7 +13,7 @@ function phi = itd2azimuth(itd,lookup)
 %   interaural time difference (itd) and the given lookup table.  *Note*: only
 %   the first 12 auditory channels are considered.
 %
-%   see also: lookup_table
+%   see also: itdazimuthlookuptable
 
 % AUTHOR: Hagen Wierstorf
 
@@ -22,8 +22,6 @@ function phi = itd2azimuth(itd,lookup)
 nargmin = 2;
 nargmax = 2;
 error(nargchk(nargmin,nargmax,nargin));
-isargmatrix(itd);
-isargstruct(lookup);
 
 
 %% ===== Computation ====================================================

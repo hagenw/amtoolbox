@@ -1,20 +1,20 @@
-function lookup = lookup_table(irs,model,fs)
-%LOOKUP_TABLE generates an azimuth lookup table for the given irs set
-%   Usage: lookup = lookup_table(irs,model,fs);
-%          lookup = lookup_table(irs,model);
-%          lookup = lookup_table(irs);
+function lookup = itdazimuthlookuptable(irs,varargin)
+%ITDAZIMUTHLOOKUPTABLE generates an ITD-azimuth lookup table for the given HRTF set
+%   Usage: lookup = itdazimuthlookuptable(irs,fs,model);
+%          lookup = itdazimuthlookuptable(irs,fs);
+%          lookup = itdazimuthlookuptable(irs);
 %
 %   Input parameters:
 %       irs    : HRTF data set (TU Berlin irs format)
-%       model  : binaural model to use:%                   
-%       fs     : sampling rate, default: 44100) (Hz)
+%       fs     : sampling rate, default: 44100 (Hz)
+%       model  : binaural model to use, default: 'dietz'                   
 %
 %   Output parameters:
 %       lookup : struct containing lookup data
 %
-%   `lookup_table(irs)` creates a lookup table from the given IR data set. This
-%   lookup table can be used by the dietz binaural model to predict the
-%   perceived direction of arrival of an auditory event.
+%   `itdazimuthlookuptable(irs)` creates a lookup table from the given IR data
+%   set. This lookup table can be used by the dietz binaural model to predict
+%   the perceived direction of arrival of an auditory event.
 %   
 %
 
@@ -26,17 +26,14 @@ nargmin = 1;
 nargmax = 3;
 error(nargchk(nargmin,nargmax,nargin));
 
-if nargin==1
-    model = 'dietz';
-    fs = 44100;
-elseif nargin==2
-    fs = 44100;
-end
+definput.flags.model = {'dietz','lindemann'};
+definput.keyvals.fs = 44100;
+[flags,kv]=ltfatarghelper({'fs'},definput,varargin);
 
 
 %% ===== Configuration ==================================================
 % time of noise used for the calculation (samples)
-nsamples = fs;
+nsamples = kv.fs;
 % noise type to use
 noise_type = 'white';
 
@@ -53,7 +50,7 @@ nangles = length(irs.apparent_azimuth);
 % create an empty mod_itd, because the lindemann model didn't use it
 mod_itd = [];
 
-if strcmpi('dietz',model)
+if flags.do_dietz
 
     itd = zeros(nangles,12);
     mod_itd = zeros(nangles,23);
@@ -73,7 +70,7 @@ if strcmpi('dietz',model)
         ild(ii,:) = median(ild_tmp,1);
     end
 
-elseif strcmpi('lindemann',model)
+elseif flags.do_lindemann
 
     itd = zeros(nangles,36);
     ild = zeros(nangles,36);
