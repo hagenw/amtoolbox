@@ -7,24 +7,24 @@
 %
 %   .. figure::
 %
-%     Greasy at 50 dB
+%      Greasy at 50 dB
 %
-%     This figure shows the DRNL of an input speech signal with a level
-%     of 50 dB SPL.
-%
-%   .. figure::
-%
-%     Greasy at 70 dB
-%
-%     This figure shows the DRNL of an input speech signal with a level
-%     of 50 dB SPL.
+%      This figure shows the DRNL of an input speech signal with a level
+%      of 50 dB SPL.
 %
 %   .. figure::
 %
-%     Greasy at 90 dB
+%      Greasy at 70 dB
 %
-%     This figure shows the DRNL of an input speech signal with a level
-%     of 50 dB SPL.
+%      This figure shows the DRNL of an input speech signal with a level
+%      of 50 dB SPL.
+%
+%   .. figure::
+%
+%      Greasy at 90 dB
+%
+%      This figure shows the DRNL of an input speech signal with a level
+%      of 50 dB SPL.
 %
 %   See also: drnl
 

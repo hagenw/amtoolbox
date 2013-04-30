@@ -14,9 +14,9 @@
 %
 %   .. figure::
 %
-%     Output of the audiory model
+%      Output of the audiory model
 %
-%     The activity map.
+%      The activity map.
 %
 %   See also: takanen2013
 %

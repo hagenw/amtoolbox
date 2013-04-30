@@ -7,14 +7,14 @@
 %
 %   .. figure::
 %
-%     Baseline prediction
+%      Baseline prediction
+% 
+%      This demo computes the baseline prediction (localizing broadband 
+%      sounds with own ears) for an exemplary listener (NH58).
 %
-%     This demo computes the baseline prediction (localizing broadband 
-%     sounds with own ears) for an exemplary listener (NH58).
-%
-%     Predicted polar response angle probability of subject NH58 as a  
-%     function of the polar target angle with probabilities encoded by
-%     brigthness.
+%      Predicted polar response angle probability of subject NH58 as a  
+%      function of the polar target angle with probabilities encoded by
+%      brigthness.
 %
 %   See also: baumgartner2013
 

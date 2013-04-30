@@ -7,48 +7,61 @@ function data = data_ziegelwanger2013(varargin)
 %
 %   The flag may be one of:
 %  
-%     'ARI'         ARI database: 
-%                       data.results        Results for all HRTF sets
-%                       data.subjects       IDs for HRTF sets
+%     'ARI'         ARI database. The output has the following
+%                   fields: `data.results` and `data.subjects`.
 %  
-%     'CIPIC'       CIPIC database: 
-%                       data.results        Results for all HRTF sets
-%                       data.subjects       IDs for HRTF sets
+%     'CIPIC'       CIPIC database. The output has the following fields: 
+%                   `data.results` and `data.subjects`.
 %  
-%     'LISTEN'      LISTEN database: 
-%                       data.results        Results for all HRTF sets
-%                       data.subjects       IDs for HRTF sets
+%     'LISTEN'      LISTEN database. The output has the following fields.
+%                   `data.results` and `data.subjects`.
 %  
 %     'SPHERE_ROT'  HRTF sets for a rigid sphere placed in the center of
-%                   the measurement setup and varying rotation
-%                       data.results        Results for all HRTF sets
-%                       data.subjects       IDs for HRTF sets
-%                       data.phi            Azimuth of ear position
-%                       data.theta          Elevation of ear position
-%                       data.radius         sphere radius
+%                   the measurement setup and varying rotation. The
+%                   output has the following fields: `data.results`,
+%                   `data.subjects`, `data.phi`, `data.theta` and `data.radius`.
 %  
 %     'SPHERE_DIS'  HRTF sets for a rigid sphere with various positions in
-%                   the measurement setup
-%                       data.results        Results for all HRTF sets
-%                       data.subjects       IDs for HRTF sets
-%                       data.xM             x-coordinate of sphere center
-%                       data.yM             y-coordinate of sphere center
-%                       data.zM             z-coordinate of sphere center
-%                       data.radius         sphere radius
+%                   the measurement setup. The output has the following fields: 
+%                   `data.results`, `data.subjects`, `data.xM`, `data.yM`,
+%                   `data.zM` and `data.radius`.
 %  
-%     'NH89'        HRTF set of listener NH89 of the ARI database
-%                       data.hM             Matrix of IRs
-%                       data.meta           Meta data
-%                       data.stimPar     
+%     'NH89'        HRTF set of listener NH89 of the ARI database: The
+%                   output has the following fields: `data.hM`,
+%                   `data.meta` and `data.stimPar`.
 %  
 %     'reload'      Reload previously calculated results    
 %  
 %     'recalc'      Recalculate the results  
+%
+%   The fields are given by:
+%
+%     `data.results`     Results for all HRTF sets
+%
+%     `data.subjects`    IDs for HRTF sets
+%
+%     `data.phi`         Azimuth of ear position
+%
+%     `data.theta`       Elevation of ear position
+%
+%     `data.radius`      sphere radius
+%
+%     `data.xM`          x-coordinate of sphere center
+%
+%     `data.yM`          y-coordinate of sphere center
+%
+%     `data.zM`          z-coordinate of sphere center
+%
+%     `data.hM`          Matrix of IRs
+%
+%     `data.meta`        Meta data
+%
+%     `data.stimPar`     XXX missing description
 % 
 %   Examples:
 %   ---------
 % 
-%   To get results fot the ARI database, use:::
+%   To get results from the ARI database, use::
 %
 %     data=data_ziegelwanger2013('ARI');
 %

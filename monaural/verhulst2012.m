@@ -67,7 +67,7 @@ function output = verhulst2012(insig,fs,fc,spl)
 
 %   AUTHOR: Sarah Verhulst, Marko Takanen (MATLAB code to run the model)
 
-basedir = [amtbasepath,filesep,'verhulst',filesep];
+basedir = [amtbasepath,'verhulst',filesep];
 
 oldpath = pwd;
 cd(basedir);

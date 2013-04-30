@@ -5,17 +5,17 @@
 %
 %   .. figure::
 %
-%     Thresholds of hearing by standard
+%      Thresholds of hearing by standard
 %
-%     The figure shows the behaviour of the different absolute thresholds of
-%     hearing.
+%      The figure shows the behaviour of the different absolute thresholds of
+%      hearing.
 %
 %   .. figure::
 %
-%     High frequencies
+%      High frequencies
 %
-%     Absolute thesholds for the ER2A and the Sennheiser HDA-200
-%     earphones are provided up to 16 kHz.
+%      Absolute thesholds for the ER2A and the Sennheiser HDA-200
+%      earphones are provided up to 16 kHz.
 %
 %   See also:  absolutethreshold
 

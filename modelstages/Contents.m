@@ -19,7 +19,7 @@
 %     CULLING2005BMLD    - BMLD calculation from Culling et al. (2005).
 %     UNWRAP_ITD         - IPD to ITD transformation for the Dietz model
 %     ITD2AZIMUTH        - ITD to azimuth conversion for Dietz and Lindemann model
-%     LOOKUP_TABLE       - creating lookup tables for estimate_azimuth
+%     ITDAZIMUTHLOOKUPTABLE - creating lookup tables for estimate_azimuth
 %
 %  The Takanen 2013 model   - Takanen 2013 binaural auditory model
 %     TAKANEN2013CONTRACOMPARISON - Enhance contrast between hemispheres

@@ -6,19 +6,19 @@
 %
 %   .. figure::
 %
-%     Binaural modulated sinusoid
+%      Binaural modulated sinusoid
 %
-%     This figure shows the binaural activity map for one frequency channel of
-%     the lindemann binaural model for a sinusoid with a binaural modulation
-%     rate of 2 Hz.
+%      This figure shows the binaural activity map for one frequency channel of
+%      the lindemann binaural model for a sinusoid with a binaural modulation
+%      rate of 2 Hz.
 %
 %   .. figure::
 %
-%     Sinusoid with ITD
+%      Sinusoid with ITD
 %
-%     This figure shows the result of the Lindemann 1986 binaural model
-%     averaged over time for the desired frequency channel for a sinusoid
-%     with an ITD of 0.3 ms.
+%      This figure shows the result of the Lindemann 1986 binaural model
+%      averaged over time for the desired frequency channel for a sinusoid
+%      with an ITD of 0.3 ms.
 %
 %   See also: lindemann1986, lindemann1986bincorr, plotlindemann1986
 

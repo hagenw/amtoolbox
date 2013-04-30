@@ -8,20 +8,20 @@
 %
 %   .. figure::
 %
-%     Clean test signal
+%      Clean test signal
 %
-%     This figure shows the effect of adaptation on the clean test signal with and
-%     without overshoot limiting.
+%      This figure shows the effect of adaptation on the clean test signal with and
+%      without overshoot limiting.
 %
 %   .. figure::
 %
-%     Noisy test signal
+%      Noisy test signal
 %
-%     This figure shows the effect of adaptation on the noisy test signal
-%     with and without overshoot limiting. Notice that in the second plot,
-%     the initial spike at the beginning of the signal caused from the sharp
-%     transition from complete silence to noise is magnitudes larger than
-%     the values in the rest of the output.
+%      This figure shows the effect of adaptation on the noisy test signal
+%      with and without overshoot limiting. Notice that in the second plot,
+%      the initial spike at the beginning of the signal caused from the sharp
+%      transition from complete silence to noise is magnitudes larger than
+%      the values in the rest of the output.
 %
 %   See also: adaptloop
 
