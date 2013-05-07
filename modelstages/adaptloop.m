@@ -23,24 +23,23 @@ function inoutsig = adaptloop(inoutsig,fs,varargin);
 %   `adaptloop` takes the following flags at the end of the line of input
 %   arguments:
 %
-%     'adt_dau'
-%           Choose the parameters as in the Dau 1996 and 1997 models. This
-%           consists of 5 adaptation loops with an overshoot limiting of 10
-%           and a minimum level of 1e-5. This is a correction in regard to
-%           the model described in Dau et al. (1996a), which did not use overshoot
-%           limiting. The adaptation loops have an exponential spacing. This
-%           flag is the default.
+%     'adt_dau'        Choose the parameters as in the Dau 1996 and 1997
+%                      models. This consists of 5 adaptation loops with
+%                      an overshoot limit of 10 and a minimum level of
+%                      1e-5. This is a correction in regard to the model
+%                      described in Dau et al. (1996a), which did not use 
+%                      overshoot limiting. The adaptation loops have an 
+%                      exponential spacing. This flag is the default.
 %
-%     'adt_puschel'
-%           Choose the parameters as in the original Puschel 1988
-%           model. This consists of 5 adaptation loops without overshoot
-%           limiting. The adapation loops have a linear spacing.
+%     'adt_puschel'    Choose the parameters as in the original Puschel 1988
+%                      model. This consists of 5 adaptation loops without
+%                      overshoot limiting. The adapation loops have a linear spacing.
 %
 %     'adt_breebaart'  As `'puschel'`, but with overshoot limiting.
 %
 %     'dim',d          Do the computation along dimension *d* of the input. 
 %
-%   References:puschel1988pza dau1996qmeI  breebaart2001a
+%   References: puschel1988pza dau1996qmeI  breebaart2001a
 
 % Copyright (c) 1999 - 2004 Stephan Ewert. All rights reserved.
 
