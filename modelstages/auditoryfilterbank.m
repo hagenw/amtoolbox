@@ -17,17 +17,17 @@ function [outsig, fc] = auditoryfilterbank(insig, fs, varargin);
 %   The following parameters may be passed at the end of the line of
 %   input arguments:
 %
-%      'flow',flow    Set the lowest frequency in the filterbank to
-%                     flow. Default value is 80 Hz.
+%     'flow',flow    Set the lowest frequency in the filterbank to
+%                    flow. Default value is 80 Hz.
 %
-%      'fhigh',fhigh  Set the highest frequency in the filterbank to
-%                     fhigh. Default value is 8000 Hz.
+%     'fhigh',fhigh  Set the highest frequency in the filterbank to
+%                    fhigh. Default value is 8000 Hz.
 %
-%      'basef',basef  Ensure that the frequency basef is a center frequency
-%                     in the filterbank. The default value of [] means
-%                     no default.
+%     'basef',basef  Ensure that the frequency basef is a center frequency
+%                    in the filterbank. The default value of [] means
+%                    no default.
 %
-%      'langendijk'   Use rectangular filters as in Langendijk (2002).        
+%     'langendijk'   Use rectangular filters as in Langendijk (2002).        
   
 %   AUTHOR : Peter L. Søndergaard
   
