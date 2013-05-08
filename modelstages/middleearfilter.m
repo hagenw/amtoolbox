@@ -23,9 +23,8 @@ function b = middleearfilter(fs,varargin)
 %                    data are in turn derived from Goode et al. (1994).
 %                    This is the default. 
 %
-%     'jepsenmiddleear'
-%                    Use the data originally used for the Jepsen 2008
-%                    model, |jepsen2008preproc|_.
+%     'jepsenmiddleear'  Use the data originally used for the Jepsen 2008
+%                        model.
 %
 %   `middleearfilter` without any input arguments returns a table describing
 %   the frequency response of the middle ear filter. First column of the
@@ -33,7 +32,7 @@ function b = middleearfilter(fs,varargin)
 %   (stapes peak velocity in m/s at 0dB SPL) of the frequency like in figure
 %   2b) of Lopez-Poveda and Meddis (2001).
 %
-%   'middleearfilter' is meant to be used in conjunction with the |drnl|_
+%   `middleearfilter` is meant to be used in conjunction with the |drnl|
 %   function, as the output is scaled to make DRNL work. If you are not
 %   using the DRNl, you probably do not want to call this function. The
 %   following code displays the magnitude response of the filter:::

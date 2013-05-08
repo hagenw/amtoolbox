@@ -1,8 +1,6 @@
 function meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis)
-%ZIEGELWANGER2013
-%   meta=ziegelwanger2013(hM,meta,stimPar,method,correct,plotdata,filt,opt,p0_onaxis) 
-%   estimates the Time-of-Arrival for each column in inputdata hM and corrects 
-%   the results with a geometrical model of the head.
+%ZIEGELWANGER2013 Time of arrival estimates
+%   usage: meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis) 
 %
 %   Input:
 %       hM: data matrix with impulse respnoses (IR): 
@@ -10,7 +8,7 @@ function meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis)
 %           dim 2: each IR
 %           dim 3: each record channel
 %
-%       meta: meta data
+%       meta:
 % 
 %       stimPar:
 % 
@@ -32,7 +30,7 @@ function meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis)
 %                 elevation of ear in radiants, 
 %                 direction-independent delay in seconds]
 %           dim 2: each record channel
-%
+% 
 %   Output:
 %       meta.toa: data matrix with time of arrival (TOA) for each impulse response (IR):
 %           dim 1: each toa in samples
@@ -53,9 +51,27 @@ function meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis)
 %                 azimut of ear in radiants,
 %                 elevation of ear in radiants]
 %           dim 2: each record channel
+%
+%   Estimates the Time-of-Arrival for each column in input data hM and corrects 
+%   the results with a geometrical model of the head.
+%
+%   Examples:
+%   ---------
+% 
+%   To calculate the model parameters for the on-axis time-of-arrival model
+%   (p_onaxis) and for the off-axis time-of-arrival model (p_offaxis) for a
+%   given HRTF set (hM,meta,stimPar) with the minimum-phase
+%   cross-correlation method, use::
+%
+%       meta=ziegelwanger2013(hM,meta,stimPar,4,1);
+%
+%   See also: ziegelwanger2013onaxis, ziegelwanger2013offaxis,
+%   data_ziegelwanger2013, exp_ziegelwanger2013
+%
+%   References: ziegelwanger2013
 
-% AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna, Austria
-
+% AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
+% Austria
 
 %% ----------------------------check variables-----------------------------
 if ~exist('method','var')
@@ -81,7 +97,6 @@ p0_onaxis=transpose(p0_onaxis);
 p_onaxis=zeros(size(p0_onaxis));
 p0_offaxis=zeros(2,7);
 p_offaxis=p0_offaxis;
-global ch
 
 toa=zeros(size(hM,2),size(hM,3));
 toaEst=zeros(size(hM,2),size(hM,3));
@@ -99,7 +114,7 @@ for ii=1:size(hM,2)
     end
 end
 
-%% -----------------------estimate time of arrival-------------------------
+%% -----------------------estimate time-of-arrival-------------------------
 switch method
     case 1 %---------------------------Threshold---------------------------
         for ii=1:size(hM,2)
@@ -138,7 +153,7 @@ for ch=1:size(hM,3)
     % Outlier detection: smooth TOA in horizontal planes
     epsilon=5;
     slope=zeros(size(hM,2),1);
-    for ele=min(meta.pos(:,2)):epsilon:max(meta.pos(:,2)) %calculate slope for each elevation along azimut
+    for ele=min(meta.pos(:,2)):epsilon:max(meta.pos(:,2)) %calculate slope for each elevation along azimuth
         idx=find(meta.pos(:,2)>ele-epsilon/2 & meta.pos(:,2)<=ele+epsilon/2);
         if numel(idx)>1
             idx(length(idx)+1)=idx(1);
@@ -170,8 +185,8 @@ for ch=1:size(hM,3)
     for ii=1:20
         sag_dev=zeros(size(hM,2),1);
         for lat=-90:epsilon:90
-            idx=find(meta.pos(:,6)>lat-epsilon/2 & meta.pos(:,6)<=lat+epsilon/2);
-            idx2=find(meta.pos(:,6)>lat-epsilon/2 & meta.pos(:,6)<=lat+epsilon/2 & indicator_hor(:,ch)==0);
+            idx=find(meta.pos(:,6)>lat-epsilon/2 & meta.pos(:,6)<=lat+epsilon/2); 
+            idx2=find(meta.pos(:,6)>lat-epsilon/2 & meta.pos(:,6)<=lat+epsilon/2 & indicator_hor(:,ch)==0 & indicator(:,ch)==0);
             if length(idx2)>2
                 sag_dev(idx,1)=toaEst(idx,ch)-mean(toaEst(idx2,ch));
             end
@@ -200,12 +215,16 @@ if correct
         idx=find(indicator(:,ch)==0);
         x=meta.pos(idx,1:2)*pi/180;
         y=toaEst(idx,ch)/stimPar.SamplingRate;
-        p_onaxis(ch,:)=lsqcurvefit(@ziegelwanger2013onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));%1e-4 for spheres
+        if isoctave
+            [~,p_onaxis(ch,:)]=leasqr(x,y,p0_onaxis(ch,:),@ziegelwanger2013onaxis);
+        else
+            p_onaxis(ch,:)=lsqcurvefit(@ziegelwanger2013onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
+        end
         toa(:,ch)=ziegelwanger2013onaxis(p_onaxis(ch,:),meta.pos(:,1:2)*pi/180)*stimPar.SamplingRate;
     end
 
     % Fit off-axis model to outlier adjusted set of estimated TOAs
-    TolFun=[1e-5 1e-6; 1e-6 1e-8];
+    TolFun=[1e-5; 1e-6];
     for ii=1:size(TolFun,1)
         for ch=1:size(hM,3)
             idx=find(indicator(:,ch)==0);
@@ -213,7 +232,11 @@ if correct
             y=toaEst(idx,ch)/stimPar.SamplingRate;
             p0_offaxis(ch,:)=[p0_onaxis(ch,1) 0 0 0 p0_onaxis(ch,4) p0_onaxis(ch,2) p0_onaxis(ch,3)];
             p0offset_offaxis=[0.05 0.05 0.05 0.05 0.001 pi pi];
-            p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));%1e-6 for spheres
+            if isoctave
+                [~,p_offaxis(ch,:)]=leasqr(x,y,p0_offaxis(ch,:),@ziegelwanger2013offaxis);
+            else
+                p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
+            end
             toa(:,ch)=ziegelwanger2013offaxis(p_offaxis(ch,:),meta.pos(:,1:2)*pi/180)*stimPar.SamplingRate;
         end
         if abs(diff(p_offaxis(:,1)))>0.003 || abs(diff(p_offaxis(:,3)))>0.003
@@ -224,7 +247,11 @@ if correct
                 y=toaEst(idx,ch)/stimPar.SamplingRate;
                 p0_offaxis(ch,:)=[p_offaxis(ch,1) mean(p_offaxis(:,2)) p_offaxis(ch,3) mean(p_offaxis(:,4)) mean(p_offaxis(:,5)) p_offaxis(ch,6) p_offaxis(ch,7)];
                 p0offset_offaxis=[0.05 0.05 0.05 0.05 0.001 pi/2 pi/2];
-                p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));%1e-8 for spheres 
+                if isoctave
+                    [~,p_offaxis(ch,:)]=leasqr(x,y,p0_offaxis(ch,:),@ziegelwanger2013offaxis);
+                else
+                    p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
+                end
                 toa(:,ch)=ziegelwanger2013offaxis(p_offaxis(ch,:),meta.pos(:,1:2)*pi/180)*stimPar.SamplingRate;
             end
         end
@@ -241,7 +268,6 @@ meta.toa=toa;
 meta.p_onaxis=transpose(p_onaxis);
 meta.p_offaxis=transpose(p_offaxis);
 meta.performance=performance;
-clear ch
 
 end %of function
 

@@ -4,7 +4,7 @@ function [outsig,fb]=filterbank_block(insig,fb)
 %
 %   `[outsig,fb]=filterbank_block(insig,fb)` filters a block of input using the
 %   filters described in the structrure *fb*. The structure *fb* must first
-%   have been created using |filterbank_init|_.
+%   have been created using |filterbank_init|.
 %
 %   If *insig* is a matrix then filtering is applied along the columns. In
 %   this case, the output will be 3-dimensional. First dimension

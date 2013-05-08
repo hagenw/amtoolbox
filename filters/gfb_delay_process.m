@@ -3,7 +3,7 @@ function [outsig, delay] = gfb_delay_process(delay, insig)
 %   Usage: [outsig, delay] = gfb_delay_process(delay, insig)
 %
 %   Input parameters:
-%     delay  : A `gfb_delay` structure created from |gfb_delay_new|_. The delay
+%     delay  : A `gfb_delay` structure created from |gfb_delay_new|. The delay
 %              will be returned with updated delayline states as the second
 %              return parameter
 %     insig  : A complex matrix containing the signal to delay.  Each row

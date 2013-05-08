@@ -19,7 +19,7 @@ function amtstart()
 %     amtstart;
 %     ltfatsetdefaults('audspecgram','classic');
 %
-%   The last command wil configure |audspecgram|_ to display a classic
+%   The last command wil configure |audspecgram| to display a classic
 %   auditory spectrogram by default.
 %
 %   See also:  amthelp

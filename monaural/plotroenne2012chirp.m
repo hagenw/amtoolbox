@@ -3,7 +3,7 @@ function plotroenne2012chirp(waveVamp, waveVlat, varargin)
 %   Usage: plotroenne2012chirp(flag)
 %
 %   `plotroenne2012chirp(waveVamp, waveVlat)` plots the output of
-%   |roenne2012chirp|_ in the style of Fig. 6 or 7 of Rønne et al. (2012).
+%   |roenne2012chirp| in the style of Fig. 6 or 7 of Rønne et al. (2012).
 %   Simulations are compared to data from Elberling et al. (2010).
 %
 %   The flag may be one of:

@@ -1,4 +1,4 @@
-function exp_dietz2011(varargin)
+function example_output = exp_dietz2011(varargin)
 %EXP_DIETZ2011 Experiments from Dietz et al. 2011
 %
 %   `exp_dietz2011(fig)` reproduce Fig. no. *fig* from the Dietz et
@@ -40,8 +40,6 @@ function exp_dietz2011(varargin)
 %
 %     exp_dietz2011('fig6');
 %
-%   See also: dietz2011
-%
 %   References: dietz2011auditory
 
 % AUTHOR: Mathias Dietz
@@ -51,6 +49,7 @@ definput.flags.plot = {'plot','noplot'};
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
+
 if flags.do_missingflag
     flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
                sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
@@ -59,8 +58,8 @@ end;
 
 if flags.do_fig3
 
-    load azi_lookup_4;
-    [signal,fs]=data_dietz2011('five_speakers');
+    signal=wavread('dietz2011_five_speakers');
+    fs = 16000;
     s_pos = [-80 -30 0 30 80];
     ic_threshold=0.98;
     panellabel = 'ab';
@@ -69,13 +68,18 @@ if flags.do_fig3
     [hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs);
 
     % convert interaural information into azimuth
-    angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,lookup,2.5);
+    angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
 
     h_ic=zeros(91,12);
     h_all=histc(angl,-90:2:90);
     for n=1:12
         h_ic(:,n)=histc(angl(hairc_fine.ic(:,n)>ic_threshold&[diff(hairc_fine.ic(:,n))>0; 0],n),-90:2:90);
     end
+    example_output.angle_fine = angl;
+    example_output.IVS_fine = hairc_fine.ic;
+    example_output.histogram_angle_label = -90:2:90;
+    example_output.histograms_with_IVS = h_ic;
+    example_output.histograms_without_IVS = h_all;
 
     if flags.do_plot
         figure;
@@ -89,20 +93,23 @@ if flags.do_fig3
               case 1
                 bar(-90:2:90,sum(h_all,2),'r')
                 title('Mean histogram of all fine-structure channels','Fontsize',fontsize)
+								axis([-90 90 0 21900]);
+								set(gca,'YTick',[5000 10000 15000 20000],'YTickLabel',{'5k','10k','15k','20k'});
                 ymax = max(sum(h_all,2));
               case 2
-            bar(-90:2:90,sum(h_ic,2))
-            title('Mean histogram with VS filter','Fontsize',fontsize)
-            ymax = max(sum(h_ic,2));
+								bar(-90:2:90,sum(h_ic,2))
+								title('Mean histogram with VS filter','Fontsize',fontsize)
+								axis([-90 90 0 5600]);
+								set(gca,'YTick',[1000:1000:5000],'YTickLabel',{'1k','2k','3k','4k','5k'});
+								ymax = max(sum(h_ic,2));
             end
             set(gca,'Fontsize',fontsize)
             set(gca,'XTick',s_pos)
-            xlim([-93 93])
-            ylim([0 ymax*1.1])
+%             xlim([-93 93])
+%             ylim([0 ymax*1.1])
             xlabel('Azimuth [deg]','Fontsize',fontsize)
             ylabel('Frequency of occurence','Fontsize',fontsize)
             text (-80,ymax*.95,panellabel(panel),'Fontsize',fontsize+1,'FontWeight','bold')
-            
         end
     end;
 end;
@@ -112,8 +119,7 @@ if flags.do_fig4
     
     % This reproduces Figure 4 from Dietz et al Speech Comm. 2011
 
-    load azi_lookup_4;
-    signal=data_dietz2011('two_speakers');
+    signal=wavread('dietz2011_two_speakers');
     fs = 16000;
     s_pos = [-80 -30 0 30 80];
     ic_threshold=0.98;
@@ -121,18 +127,26 @@ if flags.do_fig4
     panellabel = 'abc';
 
     % run IPD model on signal
-    disp('mod_center_frequency_hz could have been set to either 135 or 216')
-    [hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs);
+    [hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs,'mod_center_frequency_hz',216);
     % convert interaural information into azimuth
-    angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,lookup,2.5);
-    angl_fmod=hairc_mod.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
+    angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+    angl_fmod216=hairc_mod.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
+    [hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs,'mod_center_frequency_hz',135);
+    angl_fmod135=hairc_mod.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
 
     h_ic=zeros(61,12);
     h_all=histc(angl,-60:2:60);
-    h_fmod=histc(nonzeros(angl_fmod),-60:2:60);
+    h_fmod216=histc(nonzeros(angl_fmod216),-60:2:60);
+    h_fmod135=histc(nonzeros(angl_fmod135),-60:2:60);
     for n=1:12
         h_ic(:,n)=histc(angl(hairc_fine.ic(:,n)>ic_threshold&[diff(hairc_fine.ic(:,n))>0; 0],n),-60:2:60);
     end
+    example_output.angle_fine = angl;
+    example_output.IVS_fine = hairc_fine.ic;
+    example_output.histogram_angle_label = -60:2:60;
+    example_output.histogram_panel1 = h_fmod216;
+    example_output.histogram_panel2 = h_fmod135;
+    example_output.histogram_panel3 = sum(h_ic,2);
 
     if flags.do_plot
         figure;
@@ -144,44 +158,50 @@ if flags.do_fig4
             switch panel
                 
               case 1
-                bar(-60:2:60,sum(h_fmod,2))
+                bar(-60:2:60,sum(h_fmod216,2))
                 title('histogram of mod ITD channels 13-23','Fontsize',fontsize)
-                ymax = max(sum(h_fmod,2));
+								axis([-50 50 0 7600]);
+								set(gca,'YTick',[2500 5000 7500],'YTickLabel',{'2.5k','5k','7.5k'});
+                ymax = max(sum(h_fmod216,2));
+%                 ylim([0 ymax*1.15])
               case 2
-                axis;
-                text (-60,ymax*.7,'mod center frequency hz has to be','Fontsize',fontsize-3)
-            text (-60,ymax*.6,'set manually to either 135 or 216','Fontsize',fontsize-3)
-            text (-60,ymax*.5,'result will be displayed in panel a','Fontsize',fontsize-3)
+                bar(-60:2:60,sum(h_fmod135,2))
+								axis([-50 50 0 7600]);
+								set(gca,'YTick',[2500 5000 7500],'YTickLabel',{'2.5k','5k','7.5k'});
+                title('histogram of mod ITD channels 13-23','Fontsize',fontsize)
+                ymax = max(sum(h_fmod135,2));
+%                 ylim([0 ymax*1.15])
               case 3
                 bar(-60:2:60,sum(h_ic,2))
                 title('histogram of fine ITD channels 1-12','Fontsize',fontsize)
+								axis([-50 50 0 76000]);
+								set(gca,'YTick',[25000 50000 75000],'YTickLabel',{'25k','50k','75k'});
                 ymax = max(sum(h_ic,2));
+%                 ylim([0 ymax*1.15])
             end
             set(gca,'Fontsize',fontsize)
             set(gca,'XTick',s_pos)
-            xlim([-63 63])
-            ylim([0 ymax*1.1])
+%             xlim([-63 63])
+            
             xlabel('Azimuth [deg]','Fontsize',fontsize)
             ylabel('Frequency of occurence','Fontsize',fontsize)
-            text (-50,ymax*.97,panellabel(panel),'Fontsize',fontsize+1,'FontWeight','bold')
+            text (-40,ymax*1.2,panellabel(panel),'Fontsize',fontsize+1,'FontWeight','bold')
             
         end
     end;
-
 end;
 
 if flags.do_fig5
     % mix signals
-    signal1=data_dietz2011('one_of_three');
-    signal2=data_dietz2011('two_of_three');
-    signal3=data_dietz2011('three_of_three');
-    noise=wavread('bNoise2011');
+    signal1=wavread('dietz2011_one_of_three');
+    signal2=wavread('dietz2011_two_of_three');
+    signal3=wavread('dietz2011_three_of_three');
+    noise=wavread('dietz2011_bNoise');
     noise = noise(1:40000,:);
     fs = 16000;
 
     % derive histograms
     ic_threshold=0.98;
-    load azi_lookup_4;
     k = zeros(14,38);
     for n = 1:7
         switch n
@@ -204,7 +224,7 @@ if flags.do_fig5
         % run IPD model on signal
         [hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs);
         % convert interaural information into azimuth
-        angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,lookup,2.5);
+        angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
 
         h_ic=zeros(38,12);
         k(2*n,:)=sum(histc(angl,-92.5:5:92.5),2);
@@ -212,12 +232,17 @@ if flags.do_fig5
             h_ic(:,erb)=histc(angl(hairc_fine.ic(:,erb)>ic_threshold&[diff(hairc_fine.ic(:,erb))>0; 0],erb),-92.5:5:92.5);
         end
         k(2*n-1,:)=sum(h_ic,2);
+        example_output.angle_fine(:,:,n)=angl;
+        example_output.IVS_fine = hairc_fine.ic;
+        example_output.histogram_angle_label = -92.5:5:92.5;
+        example_output.histograms_with_IVS(:,n)=sum(h_ic,2);
+        example_output.histograms_without_IVS(:,n)=sum(histc(angl,-92.5:5:92.5),2);
     end
 
     if flags.do_plot
         % plot
         figure;
-        set(gcf,'Position',[100 100 980 500])
+        set(gcf,'Position',[100 100 990 500])
         y=[0.14 0.57];
         x=[0.1 0.22 0.34 0.49 0.61 0.73 0.88];
         cols = 2;
@@ -258,8 +283,7 @@ end;
 
 if flags.do_fig6
 
-    load azi_lookup_4;
-    signal=data_dietz2011('one_speaker_reverb');
+    signal=wavread('dietz2011_one_speaker_reverb');
     fs = 16000;
     s_pos = [-45 0 45];
     ic_threshold=0.98;
@@ -269,7 +293,7 @@ if flags.do_fig6
     % run IPD model on signal
     [hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs);
     % convert interaural information into azimuth
-    angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,lookup,2.5);
+    angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
     angl_fmod=hairc_mod.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
 
     h_ic=zeros(71,12);
@@ -278,6 +302,15 @@ if flags.do_fig6
     for n=1:12
         h_ic(:,n)=histc(angl(hairc_fine.ic(:,n)>ic_threshold&[diff(hairc_fine.ic(:,n))>0; 0],n),-70:2:70);
     end
+    example_output.angle_fine = angl;
+    example_output.IVS_fine = hairc_fine.ic;
+    example_output.histogram_angle_label = -70:2:70;
+    example_output.histograms_with_IVS = h_ic;
+    example_output.histograms_without_IVS = h_all;
+    example_output.histogram_panel1 = sum(h_ic,2);
+    example_output.histogram_panel2 = sum(h_ic(:,6:12),2);
+    example_output.histogram_panel3 = sum(h_ic(:,1:3),2);
+    example_output.histogram_panel4 = sum(h_fmod,2);
 
     if flags.do_plot
         figure;
@@ -307,8 +340,11 @@ if flags.do_fig6
             end
             set(gca,'Fontsize',fontsize)
             set(gca,'XTick',s_pos)
-            xlim([-73 73])
-            ylim([0 ymax*1.1])
+%             xlim([-73 73])
+%             ylim([0 ymax*1.1])
+						axis([-73 73 0 5500]);
+						set(gca,'YTick',[1000:1000:5000],'YTickLabel',{'1k','2k','3k','4k','5k'});
+
             xlabel('Azimuth [deg]','Fontsize',fontsize)
             ylabel('Frequency of occurence','Fontsize',fontsize)
             text (-50,ymax*.97,panellabel(panel),'Fontsize',fontsize+1,'FontWeight','bold')

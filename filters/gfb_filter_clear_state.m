@@ -4,7 +4,7 @@ function filter = gfb_filter_clear_state(filter)
 %
 %   Input parameters:
 %     filter : a `gfb_filter` structure as returned by
-%              |gfb_filter_new|_.
+%              |gfb_filter_new|.
 %
 %   `gfb_filter_clear_state(filter)` returns a copy of the filter, with the
 %   filter state cleared.

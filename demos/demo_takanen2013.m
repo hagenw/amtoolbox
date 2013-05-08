@@ -14,10 +14,9 @@
 %
 %   .. figure::
 %
-%     This is the headline of the figure, one line at most
+%      Output of the audiory model
 %
-%     This is the description of the figure. It can be
-%     several lines.
+%      The activity map.
 %
 %   See also: takanen2013
 %
@@ -31,29 +30,48 @@
 %                      Espoo, Finland
 
 %% Starting of the script
+% Use pre-computed cochlear model outputs, otherwise set preComp=0;
 preComp = 1;
 
 compType = 1;
 printFigs = 0;
 printMap = 1;
 
-f=[amtbasepath,filesep,'demos',filesep,'demo_takanen2013'];
-
 %if the user wishes to use pre-computed cochlea model outputs to reduce the
 %required computation time
 if preComp ==1
-    s=load([f, 'cochleadata.mat']);
-    tests=s.tests;
-    output= takanen2013(tests.cochlea,tests.fs,compType,printFigs,printMap);
-    title(tests.scenario);
-    set(gca,'Ytick',tests.ytickPos);set(gca,'YtickLabel',tests.ytickLab(end:-1:1));
-    ylabel(tests.ylab);
+    filename='demo_takanen2013cochleadata.mat';
+    try
+        data=load([amtbasepath,'demos',filesep,filename]);
+    catch exception
+        disp(['=============================================================';
+              'Please load the necessary mat-files from the companying page:';
+              '   www.acoustics.hut.fi/publications/papers/AMTool2013-bam/  ';
+              'and place them in the "demos" directory                      ';
+              '=============================================================']);
+        
+        error('Error: mat-file %s not found',filename);
+    end
+    output= takanen2013(data.tests.cochlea,data.tests.fs,compType,printFigs,printMap);
+    title(data.tests.scenario);
+    set(gca,'Ytick',data.tests.ytickPos);set(gca,'YtickLabel',data.tests.ytickLab(end:-1:1));
+    ylabel(data.tests.ylab);
 %otherwise, binaural input signals are used
 else
-   s=load([f,'binsignals.mat']);
-   tests=s.tests;
-   output= takanen2013(tests.insig,tests.fs,compType,printFigs,printMap);
-   title(tests.scenario);
-   set(gca,'Ytick',tests.ytickPos);set(gca,'YtickLabel',tests.ytickLab(end:-1:1));
-   ylabel(tests.ylab);
+    filename='demo_takanen2013binsignals.mat';
+    try
+        data=load([amtbasepath,'demos',filesep,filename]);
+    catch exception
+        disp(['=============================================================';
+              'Please load the necessary mat-files from the companying page:';
+              '   www.acoustics.hut.fi/publications/papers/AMTool2013-bam/  ';
+              'and place them in the "demos" directory                      ';
+              '=============================================================']);
+        
+        error('Error: mat-file %s not found',filename);
+    end
+    output= takanen2013(data.tests.insig,data.tests.fs,compType,printFigs,printMap);
+    title(data.tests.scenario);
+    set(gca,'Ytick',data.tests.ytickPos);set(gca,'YtickLabel',data.tests.ytickLab(end:-1:1));
+    ylabel(data.tests.ylab);
 end

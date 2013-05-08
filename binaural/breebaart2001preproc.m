@@ -34,8 +34,8 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %
 %     4) an excitation-inhibition (EI) cell model.
 %
-%   Parameters for |auditoryfilterbank|_, |ihcenvelope|_, |adaptloop|_ and
-%   |eicell|_ can be passed at the end of the line of input arguments.
+%   Parameters for |auditoryfilterbank|, |ihcenvelope|, |adaptloop| and
+%   |eicell| can be passed at the end of the line of input arguments.
 %
 %   Examples
 %   --------

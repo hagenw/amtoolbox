@@ -42,8 +42,8 @@ function [outsig, fc, mfc] = jepsen2008preproc(insig, fs, varargin);
 %
 %     7) a modulation filterbank.
 %
-%   Any of the optinal parameters for |drnl|_, |ihcenvelope|_ and
-%   |adaptloop|_ may be optionally specified for this function. They will be
+%   Any of the optinal parameters for |drnl|, |ihcenvelope| and
+%   |adaptloop| may be optionally specified for this function. They will be
 %   passed to the corresponding functions.
 %
 %   See also: drnl, ihcenvelope, adaptloop, modfilterbank, dau1997preproc

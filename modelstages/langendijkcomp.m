@@ -10,7 +10,7 @@ function [ si ] = langendijkcomp( target,template,varargin )
 %   Output parameters:
 %     si       :  monaural similarity indices (one for each template entry)
 %
-%   LANGENDIJKCOMP compares the spectral features of an internal spectral
+%   `langendijkcomp` compares the spectral features of an internal spectral
 %   representation of a target sound with an internal template. As spectral
 %   similarity criterion either the crosscorrelation coefficient ('xcorr') 
 %   or a mapped version of the standard deviation of inter-spectral 

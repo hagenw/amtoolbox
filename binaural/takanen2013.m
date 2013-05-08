@@ -31,10 +31,9 @@ function output = takanen2013(insig,fs,computationType,printFigs,printMap)
 %
 %   If $computationType==1$, the output structure consists of:
 %   
-%      `output.activityMap`
-%         Matrix that describes in which of the six
-%         frequency ranges there is activation on a given
-%         location on the map at a specific time instant
+%      `output.activityMap`  Matrix that describes in which of the six
+%                            frequency ranges there is activation on a given
+%                            location on the map at a specific time instant
 %
 %      `output.colorGains`
 %         Matrix that describes the signal level dependent gains for the

@@ -1,4 +1,4 @@
-function [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)
+function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)
 %ESTIMATE_AZIMUTH Estimate the perceived azimuth using a binaural model
 %   Usage: [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)
 %          [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting)
@@ -6,38 +6,34 @@ function [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_we
 %          [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup)
 %
 %   Input parameters:
-%       sig                   - binaural singal
-%       lookup                - lookup table to map ITDs to angles (struct)
-%       model                 - model to use:
+%       sig                   : binaural singal
+%       lookup                : lookup table to map ITDs to angles (struct)
+%       model                 : model to use:
 %                                   'dietz' (default)
 %                                   'lindemann'
-%       do_spectral_weighting - apply spectral weighting of ITD values after
+%       do_spectral_weighting : apply spectral weighting of ITD values after
 %                               Raatgever (1980) (default: false)
-%       fs                    - sampling rate (default: 44100) (Hz)
+%       fs                    : sampling rate (default: 44100) (Hz)
 %
 %   Output parameters:
-%       phi     - estimated azimuth (rad)
-%       itd     - calculated ITD (s)
-%       ild     - calculated ILD (dB)
-%       cfreqs  - center frequencies of used auditory filters (Hz)
+%       phi     : estimated azimuth (rad)
+%       itd     : calculated ITD (s)
+%       ild     : calculated ILD (dB)
+%       cfreqs  : center frequencies of used auditory filters (Hz)
 %
-%   `estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)` uses a binaural
-%   model to estimate the perceived direction for a given binaural signal.
-%   Therefore, it needs the struct lookup, which maps ITD values to the
-%   corresponding angles. This can be created with the |lookup_table|_ function.
-%   If do_spectral_weighting is set to true, a spectral weighting of the single
-%   ITD values after Raatgever is applied. He has done some measurements to see
-%   what is the spectral domincance region for lateralization by the ITD and
-%   found a region around 600 Hz. Stern et al. have fitted his data with a formula
-%   used in this function.
+%   `estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)` uses a
+%   binaural model to estimate the perceived direction for a given binaural
+%   signal.  Therefore, it needs the struct lookup, which maps ITD values to
+%   the corresponding angles. This can be created with the
+%   |itdazimuthlookuptable| function.  If do_spectral_weighting is set to true,
+%   a spectral weighting of the single ITD values after Raatgever is applied. He
+%   has done some measurements to see what is the spectral domincance region for
+%   lateralization by the ITD and found a region around 600 Hz. Stern et al.
+%   have fitted his data with a formula used in this function.
 %
-%   References:
-%       Raatgever (1980) - On the binaural processing of stimuli with different
-%           interaural phase relations, TU delft
-%       Stern et al. (1980) - Lateralization of complex binaural stimuli: A
-%           weighted-image model, JASA 84(1)
+%   See also: itdazimuthlookuptable
 %
-%   see also: lookup_table
+%   References: raatgever1980 stern1988
 
 % AUTHOR: Hagen Wierstorf
 
@@ -94,7 +90,6 @@ if strcmpi('dietz',model)
     % Calculate ITD and ILD values
     ild = median(ild_tmp,1);
     itd = median(itd,1);
-    size(azimuth)
 
 elseif strcmpi('lindemann',model)
 
@@ -128,9 +123,8 @@ elseif do_spectral_weighting
     phi = sum(azimuth.*w)/sum(w);
 else
     phi = median(azimuth);
+    phi_std = std(azimuth);
 end
-
-size(azimuth)
 
 end % of main function
 
@@ -144,8 +138,10 @@ function [azimuth,cfreqs] = remove_outlier(azimuth,itd,cfreqs)
     azimuth = azimuth(~isnan(azimuth));
     cfreqs = cfreqs(~isnan(azimuth));
     % remove outliers more than 30deg away from median
-    azimuth = azimuth(abs(azimuth-median(azimuth))<rad(30));
-    cfreqs = cfreqs(abs(azimuth-median(azimuth))<rad(30));
+    if length(azimuth)>0
+        cfreqs = cfreqs(abs(azimuth-median(azimuth))<rad(30));
+        azimuth = azimuth(abs(azimuth-median(azimuth))<rad(30));
+    end
 end
 function w = spectral_weighting(f)
     % Calculate a spectral weighting after Stern1988, after the data of

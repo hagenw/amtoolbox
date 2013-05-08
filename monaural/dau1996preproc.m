@@ -31,8 +31,8 @@ function [outsig, fc] = dau1996preproc(insig, fs, varargin);
 %
 %     4) a modulation low pass filter liming modulations to below 50 Hz.
 %
-%   Any of the optinal parameters for |auditoryfilterbank|_, |ihcenvelope|_
-%   and |adaptloop|_ may be specified for this function. They will be passed
+%   Any of the optinal parameters for |auditoryfilterbank|, |ihcenvelope|
+%   and |adaptloop| may be specified for this function. They will be passed
 %   to the corresponding functions.
 %
 %   The model implemented in this file is not identical to the model
