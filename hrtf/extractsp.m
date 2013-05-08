@@ -1,10 +1,13 @@
-function varargout = extractsp(lat,hM,pos)
+function varargout = extractsp(lat,varargin)
 %EXTRACTSP Sagittal plane (SP) HRTFs from measurement data
 %   Usage:    [sphrtfs,polangs] = extractsp( lat,hM,pos )
+%             [sphrtfs,polangs] = extractsp( lat,Obj )
 %
 %   Input parameters:
 %     lat     : lateral angle of the SP
-%     hM      : matrix containing head-related impulse responses.
+%     Obj     : HRIR Data in SOFA format
+%     hM      : matrix containing head-related impulse responses in ARI
+%               Format
 %               Dimensions: time,position,channel 
 %               (for more details see doc: HRTF format description)
 %     pos     : source-position matrix referring to 2nd dimension of hM and 
@@ -28,6 +31,28 @@ function varargout = extractsp(lat,hM,pos)
 %     3) gaps of polar angles to be max. 30° large.
     
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
+
+%% Check input options 
+
+if nargin == 2 || isstruct(varargin{1}) % SOFA input
+  
+  Obj = varargin{1};
+	hM = permute(double(Obj.Data.IR),[3 1 2]);
+
+  pos(:,1)=bsxfun(@times,Obj.ListenerRotation(:,1),ones(Obj.M,1));
+  pos(:,2)=bsxfun(@times,Obj.ListenerRotation(:,2),ones(Obj.M,1));
+  [pos(:,6), pos(:,7)]=sph2hor(pos(:,1),pos(:,2));
+  
+elseif nargin == 3 % aRI Format
+  
+  hM = varargin{1};
+  pos = varargin{2};
+  
+else return
+end
+  
+
+%% Extract SP
 
 dlat = 2;      % initial lateral tolerance (+/-) in deg
 pol = [0,0];   % initial polar angles

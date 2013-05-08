@@ -20,8 +20,14 @@
 
 % AUTHOR : Robert Baumgartner
 
-flag='NH58';
-    
+%% Settings
+
+flag='NH58';  % subject ID
+lateral = 0;  % lateral target angle in degrees
+   
+
+%% Search subject
+
 s = data_baumgartner2013('pool');
 for ids = 1:length(s)
     if strcmp(flag,s(ids).id)
@@ -29,8 +35,11 @@ for ids = 1:length(s)
     end
 end
 
-[spdtfs,tang] = extractsp(0,s(ids).dtfs,s(ids).pos);
-[p,rang] = baumgartner2013(spdtfs,spdtfs,'u',s(ids).u);
+
+%% Run model
+
+[targets,tang] = extractsp(lateral,s(ids).Obj);
+[p,rang] = baumgartner2013(targets,s(ids).Obj,'u',s(ids).u,'lat',lateral);
 
 figure;
 plotbaumgartner2013(p,tang,rang);

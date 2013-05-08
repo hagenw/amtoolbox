@@ -208,7 +208,7 @@ if flags.do_fig12
     
     s(ll).spdtfs = [];
     s(ll).polangs = [];
-    [s(ll).spdtfs,s(ll).polangs] = extractsp(lat,s(ll).dtfs,s(ll).pos);
+    [s(ll).spdtfs,s(ll).polangs] = extractsp(lat,s(ll).Obj);
     mag = 20*log10(abs(fft(s(ll).spdtfs,nfft)));
     mag = mag(1:nfft/2+1,:,:);
     maxmag = max(max(max(mag)));
@@ -264,7 +264,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
       s(ll).polangs{ii} = [];
       s(ll).spdtfs{ii} = [];
       [s(ll).spdtfs{ii},s(ll).polangs{ii}] = extractsp(...
-        s(ll).latang{ii},s(ll).dtfs,s(ll).pos);
+        s(ll).latang{ii},s(ll).Obj);
       
     end
   end
@@ -505,8 +505,8 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
     LSPsetup{3} = [ 30,0 ; 30,30 ; 110,30 ; 110,0 ]; % 9.1
   elseif flags.do_fig23
     LSPsetup{1} = [ 30,0 ; 30,30 ; 110,30 ; 110,0 ]; % 9.1
-    LSPsetup{2} = [ 30,0 ; 30,30 ; 135,30 ; 110,0 ]; % 9.1 (prop. LSH)
-    LSPsetup{3} = [ 30,0 ; 30,30 ; 135,30 ; 135,0 ]; % 9.1 (prop. LSH&LS)
+    LSPsetup{2} = [ 30,0 ; 30,30 ; 140,30 ; 110,0 ]; % 9.1 (prop. LSH)
+    LSPsetup{3} = [ 30,0 ; 30,30 ; 140,30 ; 140,0 ]; % 9.1 (prop. LSH&LS)
   end
   
   dpol = 5;    % step size in deg
@@ -528,7 +528,9 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
 
     fprintf('\n Please wait a little! \n');
     for ll = 1:ns
-
+      
+      s(ll).pos(:,1)=bsxfun(@times,s(ll).Obj.ListenerRotation(:,1),ones(s(ll).Obj.M,1));
+      s(ll).pos(:,2)=bsxfun(@times,s(ll).Obj.ListenerRotation(:,2),ones(s(ll).Obj.M,1));
       [poscart(:,1),poscart(:,2),poscart(:,3)] = ...
           sph2cart(s(ll).pos(:,1),s(ll).pos(:,2),ones(size(s(ll).pos,1),1));
 
@@ -566,9 +568,11 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
         phi0 = abs(lat1-lat2)/2;    % basis angle
         phiM = rad2deg( atan( tan(deg2rad(phi0)) * (1-2*M) ) );
         latM = lat0 - phiM;
-
+        
+        s(ll).dtfs = permute(double(s(ll).Obj.Data.IR),[3 1 2]);
+        
         dtfLSP = (1-M)*s(ll).dtfs(:,idLSP(Lp),:) + M*s(ll).dtfs(:,idLSP(Lp+1),:);
-        [spdtfs,polangs] = extractsp(latM,s(ll).dtfs,s(ll).pos);
+        [spdtfs,polangs] = extractsp(latM,s(ll).Obj);
 
         [pmv,respangs] = baumgartner2013(dtfLSP,spdtfs,s(ll).fs,...
             'lat',latM,'u',s(ll).u,...
@@ -603,7 +607,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
   if flags.do_plot
     
     if flags.do_fig18
-      subject = [2 10 18];
+      subject = [9 5 18];
       setup = [1 1 1];
     elseif flags.do_fig22
       subject = [18 18 18];
@@ -669,7 +673,7 @@ if flags.do_fig19 || flags.do_fig20
   lat = 0;
   
   s(1).spdtfs = [];
-  [s(1).spdtfs,polang] = extractsp(lat,s(1).dtfs,s(1).pos); 
+  [s(1).spdtfs,polang] = extractsp(lat,s(1).Obj); 
   qeI = zeros(length(s),length(dPol));
   peI = qeI;
   ii = 0;
@@ -691,10 +695,10 @@ if flags.do_fig19 || flags.do_fig20
     end
     pol2{ii} = (polang(id1)+polang(id2)) /2;
     
-    fprintf([' Span: ' num2str(dPol(ii)) 'Â° \n']);
+    fprintf([' Span: ' num2str(dPol(ii)) '° \n']);
     for ll = 1:length(s)
 
-        s(ll).spdtfs = extractsp(lat,s(ll).dtfs,s(ll).pos);
+        s(ll).spdtfs = extractsp(lat,s(ll).Obj);
 
         % superposition
         s(ll).dtfs2{ii} = s(ll).spdtfs(:,id1,:) + s(ll).spdtfs(:,id2,:);
@@ -730,15 +734,15 @@ if flags.do_fig19 || flags.do_fig20
       figure;
       subplot(1,3,1)
       plotbaumgartner2013(s(1).p1{1},polang,respang,'cmax',0.1,'nocolorbar');
-      title(['P: PE = ' num2str(s(1).pe1{1},2) 'Â°, QE = ' num2str(s(1).qe1{1},2) '%'])
+      title(['P: PE = ' num2str(s(1).pe1{1},2) '°, QE = ' num2str(s(1).qe1{1},2) '%'])
       
       subplot(1,3,2)
       plotbaumgartner2013(s(1).p2{2},pol2{2},respang,'cmax',0.1,'nocolorbar');
-      title(['P: PE = ' num2str(s(1).pe2{2},2) 'Â°, QE = ' num2str(s(1).qe2{2},2) '%'])
+      title(['P: PE = ' num2str(s(1).pe2{2},2) '°, QE = ' num2str(s(1).qe2{2},2) '%'])
             
       subplot(1,3,3)
       plotbaumgartner2013(s(1).p2{3},pol2{3},respang,'cmax',0.1,'nocolorbar');
-      title(['P: PE = ' num2str(s(1).pe2{3},2) 'Â°, QE = ' num2str(s(1).qe2{3},2) '%'])
+      title(['P: PE = ' num2str(s(1).pe2{3},2) '°, QE = ' num2str(s(1).qe2{3},2) '%'])
       
     elseif flags.do_fig20
       

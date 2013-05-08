@@ -14,7 +14,7 @@ function data = data_baumgartner2013(varargin)
 %                    data.id      listener ID
 %                    data.u       listener-specific uncertainty
 %
-%     'pool'       DTFs and calibration data of the pool.
+%     'ari'        DTFs and calibration data of the pool.
 %                  structure: 
 %                    data.id      listener ID
 %                    data.u       listener-specific uncertainty
@@ -27,6 +27,13 @@ function data = data_baumgartner2013(varargin)
 %                                 to meta.pos (ARI format).
 %                                 6th col: lateral angle 
 %                                 7th col: polar angle
+%
+%     'pool'       DTFs and calibration data of the pool.
+%                  structure: 
+%                    data.id      listener ID
+%                    data.u       listener-specific uncertainty
+%                    data.fs      sampling rate of impulse responses
+%                    data.Obj     DTF data in SOFA Format
 %
 %   Examples:
 %   ---------
@@ -49,6 +56,7 @@ function data = data_baumgartner2013(varargin)
 
 % Define input flags
 definput.flags.type = {'missingflag','tab1','pool'};
+definput.flags.HRTFformat = {'sofa','ari'};
 
 % Parse input options
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
@@ -94,24 +102,43 @@ if flags.do_pool % load also DTFs of SPs
   % sort acc. to ascending exp. PE
   data = data([12,1,10,3,14,16,8,9,4,2,7,15,17,5,11,6,13]); 
   
-  hpath = which('hrtfinit');  % find local path of hrtf repository
-  hpath = hpath(1:end-10);
-  sl = hpath(end);            % slash sign (OS dependent)
-  
-  if exist([hpath 'hrtf_M_baumgartner2013'],'dir') ~= 7
-    fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/hrtf_M_baumgartner2013.zip , \n unzip it, and move it into your HRTF repository \n ' hpath ' .\n' ' Then, press any key to quit pausing. \n'])
-    pause
+  if flags.do_ari
+
+    hpath = which('hrtfinit');  % find local path of hrtf repository
+    hpath = hpath(1:end-10);
+    sl = hpath(end);            % slash sign (OS dependent)
+
+    if exist([hpath 'hrtf_M_baumgartner2013'],'dir') ~= 7
+      fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/hrtf_M_baumgartner2013.zip , \n unzip it, and move it into your HRTF repository \n ' hpath ' .\n' ' Then, press any key to quit pausing. \n'])
+      pause
+    end
+
+    hpath = [hpath sl 'hrtf_M_baumgartner2013' sl];
+
+    for ii = 1:length(data)
+
+      load([hpath 'hrtf_M_baumgartner2013 ' data(ii).id])
+      data(ii).fs = stimPar.SamplingRate;
+      data(ii).pos = meta.pos;
+      data(ii).dtfs = double(hM);
+
+    end
   end
   
-  hpath = [hpath sl 'hrtf_M_baumgartner2013' sl];
-  
-  for ii = 1:length(data)
+  if flags.do_sofa
     
-    load([hpath 'hrtf_M_baumgartner2013 ' data(ii).id])
-    data(ii).fs = stimPar.SamplingRate;
-    data(ii).pos = meta.pos;
-    data(ii).dtfs = double(hM);
-
+    for ii = 1:length(data)
+      
+      filename = fullfile(SOFAdbPath,'SOFA',['ARI_' data(ii).id '_hrtf_M_dtf 256.sofa']);
+      if exist(filename,'file') ~= 2
+        fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database!'])
+        pause
+      end
+      
+      data(ii).Obj = SOFAload(filename);
+      data(ii).fs = data(ii).Obj.Data.SamplingRate;
+      
+    end
   end
 
 end

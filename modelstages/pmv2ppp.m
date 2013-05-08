@@ -71,13 +71,31 @@ for ii = 1:nt % for all target positions
 end
 
 if ~isempty(kv.exptang)
-    extang = [-90; tang(:); 270]; % extended tang for targets outside
+  
     qetb = (qet(1)+qet(end))/2;  % boundaries for extang
-    etb = (pet(1)+pet(end))/2;
+    petb = (pet(1)+pet(end))/2;
     pbtb = (pbt(1)+pbt(end))/2;
-    qet = interp1(extang,[qetb; qet(:); qetb],kv.exptang);
-    pet = interp1(extang,[etb; pet(:); etb],kv.exptang);
-    pbt = interp1(extang,[pbtb; pbt(:); pbtb],kv.exptang);
+    
+    extang = tang(:); % extended tang for targets outside
+    exqet = qet(:);
+    expet = pet(:);
+    expb = pbt(:);
+    if min(extang)>-90; 
+      extang = [-90; extang]; 
+      exqet = [qetb; exqet];
+      expet = [petb; expet];
+      expb = [pbtb; expb];
+    end
+    if max(extang)<270; 
+      extang = [extang; 270]; 
+      exqet = [exqet; qetb];
+      expet = [expet; petb];
+      expb = [expb; pbtb];
+    end
+    
+    qet = interp1(extang,exqet,kv.exptang);
+    pet = interp1(extang,expet,kv.exptang);
+    pbt = interp1(extang,expb,kv.exptang);
 end
 
 qe = mean(qet)*100;

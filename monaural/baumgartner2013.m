@@ -4,10 +4,13 @@ function varargout = baumgartner2013( target,template,varargin )
 %
 %   Input parameters:
 %     target  : binaural impulse response(s) referring to the directional 
-%               transfer function(s) (DFTs) of the target sound(s).
-%     template: binaural impulse responses of all available
-%               listener-specific DTFs of the sagittal plane referring to
-%               the perceived lateral angle of the target sound
+%               transfer function(s) (DFTs) of the target sound(s). Matrix
+%               dimensions: time x direction x channel/ear
+%     template: listener-specific template. Option 1: given in SOFA format 
+%               -> sagittal plane DTFs will be extracted internally. 
+%               Option 2: binaural impulse responses of all available
+%               listener-specific DTFs of the sagittal plane formated 
+%               similar to target (time x direction x ear)
 %
 %   Output parameters:
 %     p       : predicted probability mass vectors for response angles 
@@ -125,6 +128,14 @@ definput.keyvals.polsamp=[-30:5:70 80 100 110:5:210];  % polar sampling (for reg
   {'fs','space','do','u','lat','flow','fhigh',...
   'lvlstim','lvltem','stim','fsstim','bwsteep','polsamp'},definput,varargin);
 
+if isstruct(target) % Targets given in SOFA format
+  kv.fs = target.Data.SamplingRate;
+  target = extractsp( kv.lat,target );
+end
+
+if isstruct(template) % Template given in SOFA format
+  [template,kv.polsamp] = extractsp( kv.lat,template );
+end
 
 %% Error handling
 if size(template,2) ~= length(kv.polsamp)
