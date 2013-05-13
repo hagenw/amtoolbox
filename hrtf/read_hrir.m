@@ -15,7 +15,7 @@ function [outsig,fs] = read_hrir(elev_r,azim_r,database);
 %
 %   `read_hrir(elev,azim,database)` retrieves the HRIR closest to the
 %   specified azimuth and elevation from the MIT Kemar (Gardner and Martin,
-%   1995) or Oldenburg Siemens Acuris Kayser et al. (2009) databases.
+%   1995) or Oldenburg Siemens Acuris (Kayser et al., 2009) databases.
 %
 %   The value of the `database` parameter determines which dataset to
 %   access:
