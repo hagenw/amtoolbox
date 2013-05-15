@@ -115,9 +115,9 @@ end
 
 % Fit the lookup data
 for n = 1:12
-    [p(n,:),S,MU] = polyfit(itd(:,n),irs.apparent_azimuth',12);
+    [p(:,n),S{n},MU(:,n)] = polyfit(itd(:,n),irs.apparent_azimuth',12);
 end
 % Create lookup struct
 lookup.p = p;
-lookup.S = S;
 lookup.MU = MU;
+lookup.S = S;
