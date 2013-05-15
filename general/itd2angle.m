@@ -33,5 +33,5 @@ for n = 1:size(itd,2)
     phi(:,n)=polyval(lookup.p(:,n),itd(:,n),lookup.S{n},lookup.MU(:,n));
 end
 % neglect angles > 95°. WARNING => maybe systematic underestimation for azi ~ 90°
-phi(abs(angle)>95) = NaN;
+phi(abs(phi)>95) = NaN;
 
