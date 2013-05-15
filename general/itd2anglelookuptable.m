@@ -1,12 +1,12 @@
-function p = itdazimuthlookuptable(irs,varargin)
+function lookup = itd2anglelookuptable(irs,varargin)
 %ITD2ANGLELOOKUPTABLE generates an ITD-azimuth lookup table for the given HRTF set
-%   Usage: p = itd2anglelookuptable(irs,fs,model);
-%          p = itd2anglelookuptable(irs,fs);
-%          p = itd2anglelookuptable(irs);
+%   Usage: lookup = itd2anglelookuptable(irs,fs,model);
+%          lookup = itd2anglelookuptable(irs,fs);
+%          lookup = itd2anglelookuptable(irs);
 %
 %   Input parameters:
-%       irs    : HRTF data set (TU Berlin irs format)
-%       fs     : sampling rate, default: 44100 (Hz)
+%       irs    : HRTF data set (at the moment only TU Berlin irs format)
+%       fs     : sampling rate, (default: 44100) / Hz
 %       model  : binaural model to use:
 %                   'dietz2011' uses the Dietz binaural model (default)
 %                   'lindemann1986' uses the Lindemann binaural model
@@ -19,9 +19,15 @@ function p = itdazimuthlookuptable(irs,varargin)
 %   set. This lookup table can be used by the dietz2011 or lindemann1986 binaural
 %   models to predict the perceived direction of arrival of an auditory event.
 %
+%   For the handling of the HRTF file format this function depends on the
+%   Sound-Field-Synthesis Toolbox, which is available here:
+%   http://github.com/sfstoolbox/sfs. It runs under Matlab and Octave. The
+%   revision used to genrate the figures in the corressponding paper is
+%   a8914700a4.
+%
 %   See also: dietz2011, lindemann1986, wierstorf2013
 %
-%   References: dietz2011auditory wierstorf2013 
+%   References: dietz2011auditory wierstorf2013 wierstorf2011hrtf
 
 % AUTHOR: Hagen Wierstorf
 
@@ -37,8 +43,10 @@ definput.keyvals.fs = 44100;
 
 
 %% ===== Configuration ==================================================
+% Samplingrate
+fs = kv.fs;
 % time of noise used for the calculation (samples)
-nsamples = kv.fs;
+nsamples = fs;
 % noise type to use
 noise_type = 'white';
 
@@ -62,7 +70,7 @@ if flags.do_dietz2011
     ild = zeros(nangles,23);
     for ii = 1:nangles
         % generate noise coming from the given direction
-        ir = get_ir(irs,irs.apparent_azimuth(ii));
+        ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance]);
         sig = auralize_ir(ir,sig_noise);
         % calculate binaural parameters
         [fine, modulation, cfreqs, ild_tmp] = dietz2011(sig,fs);
@@ -105,15 +113,11 @@ elseif flags.do_lindemann1986
 
 end
 
-% Create lookup struct
-lookup.itd = itd;
-lookup.ild = ild;
-lookup.mod_itd = mod_itd;
-lookup.cfreq = cfreqs;
-lookup.azimuth = irs.apparent_azimuth;
-
 % Fit the lookup data
-p = zeros(12,13);
 for n = 1:12
-    p(n,:)=polyfit(lookup.itd(:,n),lookup.azimuth',12);
+    [p(n,:),S,MU] = polyfit(itd(:,n),irs.apparent_azimuth',12);
 end
+% Create lookup struct
+lookup.p = p;
+lookup.S = S;
+lookup.MU = MU;
