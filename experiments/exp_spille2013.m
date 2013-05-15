@@ -32,7 +32,7 @@ panellabel = 'acbd';
 itd_unwrapped = ...
     dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
 lookup = load('dietz2011itd2anglelookup.mat');
-angl=itd2angle(itd,lookup);
+angl=itd2angle(itd_unwrapped,lookup);
 
 h_ic=zeros(91,12);
 h_all=histc(angl,-90:2:90);
