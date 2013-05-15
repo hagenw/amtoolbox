@@ -56,6 +56,9 @@ if flags.do_missingflag
     error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
 
+% Load polynomial lookup data for converting ITD to azimuth
+lookup = load('dietz2011itd2anglelookup.mat');
+
 if flags.do_fig3
 
     signal=wavread('dietz2011_five_speakers');
@@ -68,7 +71,9 @@ if flags.do_fig3
     [hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs);
 
     % convert interaural information into azimuth
-    angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+    itd_unwrapped = ...
+        dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+    angl=itd2angle(itd_unwrapped,lookup);
 
     h_ic=zeros(91,12);
     h_all=histc(angl,-90:2:90);
@@ -129,7 +134,9 @@ if flags.do_fig4
     % run IPD model on signal
     [hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs,'mod_center_frequency_hz',216);
     % convert interaural information into azimuth
-    angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+    itd_unwrapped = ...
+        dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+    angl=itd2angle(itd_unwrapped,lookup);
     angl_fmod216=hairc_mod.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
     [hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs,'mod_center_frequency_hz',135);
     angl_fmod135=hairc_mod.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
@@ -224,7 +231,9 @@ if flags.do_fig5
         % run IPD model on signal
         [hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs);
         % convert interaural information into azimuth
-        angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+        itd_unwrapped = ...
+            dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+        angl=itd2angle(itd_unwrapped,lookup);
 
         h_ic=zeros(38,12);
         k(2*n,:)=sum(histc(angl,-92.5:5:92.5),2);
@@ -293,7 +302,9 @@ if flags.do_fig6
     % run IPD model on signal
     [hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs);
     % convert interaural information into azimuth
-    angl=itd2angle(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+    itd_unwrapped = ...
+        dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+    angl=itd2angle(itd_unwrapped,lookup);
     angl_fmod=hairc_mod.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
 
     h_ic=zeros(71,12);

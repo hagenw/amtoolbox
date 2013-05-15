@@ -1,22 +1,27 @@
-function lookup = itdazimuthlookuptable(irs,varargin)
-%ITDAZIMUTHLOOKUPTABLE generates an ITD-azimuth lookup table for the given HRTF set
-%   Usage: lookup = itdazimuthlookuptable(irs,fs,model);
-%          lookup = itdazimuthlookuptable(irs,fs);
-%          lookup = itdazimuthlookuptable(irs);
+function p = itdazimuthlookuptable(irs,varargin)
+%ITD2ANGLELOOKUPTABLE generates an ITD-azimuth lookup table for the given HRTF set
+%   Usage: p = itd2anglelookuptable(irs,fs,model);
+%          p = itd2anglelookuptable(irs,fs);
+%          p = itd2anglelookuptable(irs);
 %
 %   Input parameters:
 %       irs    : HRTF data set (TU Berlin irs format)
 %       fs     : sampling rate, default: 44100 (Hz)
-%       model  : binaural model to use, default: 'dietz'                   
+%       model  : binaural model to use:
+%                   'dietz2011' uses the Dietz binaural model (default)
+%                   'lindemann1986' uses the Lindemann binaural model
 %
 %   Output parameters:
-%       lookup : struct containing lookup data
+%       lookup : struct containing the polinomial fitting data for the
+%                ITD -> azimuth transformation, p,MU,S, see help polyfit
 %
-%   `itdazimuthlookuptable(irs)` creates a lookup table from the given IR data
-%   set. This lookup table can be used by the dietz binaural model to predict
-%   the perceived direction of arrival of an auditory event.
-%   
+%   `itd2anglelookuptable(irs)` creates a lookup table from the given IR data
+%   set. This lookup table can be used by the dietz2011 or lindemann1986 binaural
+%   models to predict the perceived direction of arrival of an auditory event.
 %
+%   See also: dietz2011, lindemann1986, wierstorf2013
+%
+%   References: dietz2011auditory wierstorf2013 
 
 % AUTHOR: Hagen Wierstorf
 
@@ -26,7 +31,7 @@ nargmin = 1;
 nargmax = 3;
 error(nargchk(nargmin,nargmax,nargin));
 
-definput.flags.model = {'dietz','lindemann'};
+definput.flags.model = {'dietz2011','lindemann1986'};
 definput.keyvals.fs = 44100;
 [flags,kv]=ltfatarghelper({'fs'},definput,varargin);
 
@@ -50,7 +55,7 @@ nangles = length(irs.apparent_azimuth);
 % create an empty mod_itd, because the lindemann model didn't use it
 mod_itd = [];
 
-if flags.do_dietz
+if flags.do_dietz2011
 
     itd = zeros(nangles,12);
     mod_itd = zeros(nangles,23);
@@ -62,7 +67,7 @@ if flags.do_dietz
         % calculate binaural parameters
         [fine, modulation, cfreqs, ild_tmp] = dietz2011(sig,fs);
         % unwrap ITD
-        itd_tmp = unwrap_itd(fine.itd(:,1:12),ild_tmp,fine.f_inst);
+        itd_tmp = dietz2011unwrapitd(fine.itd(:,1:12),ild_tmp(:,1:12),fine.f_inst,2.5);
         % calculate the mean about time of the binaural parameters and store
         % them
         itd(ii,:) = median(itd_tmp,1);
@@ -70,7 +75,7 @@ if flags.do_dietz
         ild(ii,:) = median(ild_tmp,1);
     end
 
-elseif flags.do_lindemann
+elseif flags.do_lindemann1986
 
     itd = zeros(nangles,36);
     ild = zeros(nangles,36);
@@ -106,3 +111,9 @@ lookup.ild = ild;
 lookup.mod_itd = mod_itd;
 lookup.cfreq = cfreqs;
 lookup.azimuth = irs.apparent_azimuth;
+
+% Fit the lookup data
+p = zeros(12,13);
+for n = 1:12
+    p(n,:)=polyfit(lookup.itd(:,n),lookup.azimuth',12);
+end
