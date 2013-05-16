@@ -7,6 +7,10 @@
 %     MODSPECGRAM      - Temporal modulation spectrogram
 %     STMODSPECGRAM    - Spectro-Temporal modulation spectrogram
 %
+%  ITD
+%     ITD2ANGLE        - Convert ITD to an angle using a lookup table
+%     ITD2ANGLELOOKUPTABLE - Create the lookup table
+%
 %  Signal levels
 %     DBSPL            - SPL of signal measured in dB.
 %     SETDBSPL         - Specify SPL of signal.

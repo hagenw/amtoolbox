@@ -13,13 +13,11 @@
 %     MODFILTERBANKEPSM  - Modulation filter bank from Joergensen model.
 %
 %  Binaural processing stages
-%     LANGENDIJKCOMP     - Comparison process from Langendijk 20002.
+%     LANGENDIJK2002COMP     - Comparison process from Langendijk 20002.
 %     LINDEMANN1986BINCORR - Running cross-correlation between two signals.
 %     EICELL             - Excitation-inhibition cell model by Breebaart.
 %     CULLING2005BMLD    - BMLD calculation from Culling et al. (2005).
-%     UNWRAP_ITD         - IPD to ITD transformation for the Dietz model
-%     ITD2AZIMUTH        - ITD to azimuth conversion for Dietz and Lindemann model
-%     ITDAZIMUTHLOOKUPTABLE - creating lookup tables for estimate_azimuth
+%     DIETZ2011UNWRAPITD - IPD to ITD transformation for the Dietz model
 %
 %  The Takanen 2013 model   - Takanen 2013 binaural auditory model
 %     TAKANEN2013CONTRACOMPARISON - Enhance contrast between hemispheres

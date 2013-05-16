@@ -1,7 +1,7 @@
-function [ si ] = langendijkcomp( target,template,varargin )
-%LANGENDIJKCOMP Comparison process according to Langendijk et al. (2002)
-%   Usage:        [ si ] = langendijkcomp( target,template )
-%                 [ si ] = langendijkcomp( target,template,s,do,flags )
+function [ si ] = langendijk2002comp( target,template,varargin )
+%LANGENDIJK2002COMP Comparison process according to Langendijk et al. (2002)
+%   Usage:        [ si ] = langendijk2002comp( target,template )
+%                 [ si ] = langendijk2002comp( target,template,s,do,flags )
 %
 %   Input parameters:
 %     target   :  modified DFT for one target position and both ears
@@ -10,7 +10,7 @@ function [ si ] = langendijkcomp( target,template,varargin )
 %   Output parameters:
 %     si       :  monaural similarity indices (one for each template entry)
 %
-%   `langendijkcomp` compares the spectral features of an internal spectral
+%   `langendijk2002comp` compares the spectral features of an internal spectral
 %   representation of a target sound with an internal template. As spectral
 %   similarity criterion either the crosscorrelation coefficient ('xcorr') 
 %   or a mapped version of the standard deviation of inter-spectral 
@@ -28,13 +28,13 @@ function [ si ] = langendijkcomp( target,template,varargin )
 %
 %     'xcorr'    Use the 'xcorr' comparison process. 
 %
-%   See also: langendijk
+%   See also: langendijk2002
   
   
 % AUTHOR: Robert Baumgartner, OEAW Acoustical Research Institute
 
 
-definput.import={'langendijkcomp'};
+definput.import={'langendijk2002comp'};
 [flags,kv]=ltfatarghelper({'s','do'},definput,varargin);
 
 

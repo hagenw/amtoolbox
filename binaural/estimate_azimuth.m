@@ -31,7 +31,7 @@ function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spe
 %   lateralization by the ITD and found a region around 600 Hz. Stern et al.
 %   have fitted his data with a formula used in this function.
 %
-%   See also: itdazimuthlookuptable
+%   See also: itd2anglelookuptable
 %
 %   References: raatgever1980 stern1988 dietz2011auditory lindemann1986a wierstorf2013
 

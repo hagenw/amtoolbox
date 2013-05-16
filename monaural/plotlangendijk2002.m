@@ -1,17 +1,17 @@
-function out = plotlangendijk( p,rang,tang,varargin)
-%PLOTLANGENDIJK plots pdf-matrixes with gray colormap according to Langendijk et al. (2002)
-%   Usage:    plotlangendijk(p,rang,tang)
+function out = plotlangendijk2002( p,rang,tang,varargin)
+%PLOTLANGENDIJK2002 plots pdf-matrixes with gray colormap according to Langendijk et al. (2002)
+%   Usage:  plotlangendijk2002(p,rang,tang);
 %
 %   Input parameters:
 %     p       : pdf-matrix for all target and response positions
 %     rang    : response angles
 %     tang    : target angles
 %
-%   `plotlangendijk(p,rang,tang)` plots predicted probability mass vectors
+%   `plotlangendijk2002(p,rang,tang)` plots predicted probability mass vectors
 %   as a function of response angles *rang* and target angles *tang* with
 %   gray color coded probabilities similar to Langendijk et al. (2002).
 %
-%   `h=plotlangendijk(...)` additionally returns the figure handle.
+%   `h=plotlangendijk2002(...)` additionally returns the figure handle.
 %
 %   `plotlagendijk` takes the following flags at the end of the line of input
 %   arguments:
@@ -20,7 +20,7 @@ function out = plotlangendijk( p,rang,tang,varargin)
 %    
 %     'nocolorbar'  Do not display the colorbar.
 %
-%   See also: langendijk
+%   See also: langendijk2002
 %
 %   References: langendijk2002contribution
   
