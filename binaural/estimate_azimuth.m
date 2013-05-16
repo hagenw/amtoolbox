@@ -33,7 +33,7 @@ function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spe
 %
 %   See also: itdazimuthlookuptable
 %
-%   References: raatgever1980 stern1988 dietz2011 lindemann1986 wierstorf2013
+%   References: raatgever1980 stern1988 dietz2011auditory lindemann1986a wierstorf2013
 
 % AUTHOR: Hagen Wierstorf
 
