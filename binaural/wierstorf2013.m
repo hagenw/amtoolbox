@@ -1,8 +1,8 @@
 function [localization_error,perceived_direction,desired_direction] = ...
-        wierstorf2013(X,phi,xs,src,method,L,number_of_speakers,array);
-%WIERSTORF2013 calculate the localization for a WFS or stereo setup
-%   Usage: [loc_error,...] = wierstorf2013(X,phi,xs,src,'wfs',L,nls,array);
-%          [loc_error,...] = wierstorf2013(X,phi,xs,src,'stereo');
+        wierstorf2013(X,phi,xs,src,L,method,number_of_speakers,array);
+%WIERSTORF2013 estimate the localization within a WFS or stereo setup
+%   Usage: [loc_error,...] = wierstorf2013(X,phi,xs,src,L,'wfs',nls,array);
+%          [loc_error,...] = wierstorf2013(X,phi,xs,src,L,'stereo');
 %
 %   Input parameters:
 %       X           : position of the listener [x,y] in m
@@ -10,13 +10,13 @@ function [localization_error,perceived_direction,desired_direction] = ...
 %                     of the x-axis
 %       xs          : position of the point source in m / direction of the 
 %                     plane wave
-%       src         : source type;
+%       src         : source type
 %                       'ps' for a point source
 %                       'pw' for a plane wave
+%       L           : length/diameter of the loudspeaker array (WFS only)
 %       method      : reproduction setup
 %                       'wfs' for wave field synthesis
 %                       'setreo' for stereophony
-%       L           : length/diameter of the loudspeaker array (WFS only)
 %       nls         : number of loudspeakers of the array (WFS only)
 %       array       : loudspeaker array type (WFS only);
 %                       'linear' for a linear loudspeaker array
@@ -24,11 +24,11 @@ function [localization_error,perceived_direction,desired_direction] = ...
 %
 %   Output parameters:
 %       localization_error  : deviation from the desired direction, defined as
-%                             perceived_direction - desired_direction
+%                             perceived_direction - desired_direction / rad
 %       perceived_direction : the direction of arrival the binaural model has
-%                             estimated for our given setup
+%                             estimated for our given setup / rad
 %       desired_direction   : the desired direction of arrival indicated by the
-%                             source position xs
+%                             source position xs / rad
 %
 %   `wierstorf2013(X,phi,xs,src,'wfs',L,nls,array)` calculates the localization
 %   error for the defined wave field synthesis or stereophony setup. The
@@ -56,6 +56,10 @@ function [localization_error,perceived_direction,desired_direction] = ...
 
 
 %% ===== Checking of input parameters and dependencies ===================
+nargmin = 6;
+nargmax = 8;
+narginchk(nargmin,nargmax);
+
 % Checking for the Sound-Field-Synthesis Toolbox
 if !which('SFS_start')
     error(['%s: you need to install the Sound-Field-Synthesis Toolbox.\n', ...
@@ -71,11 +75,12 @@ fs = 44100; % / Hz
 %% ===== Loading of additional data ======================================
 % load HRTFs, see:
 % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
-[~,path] = download_hrtfs('wierstorf2011_3m');
-hrtf = load([path 'wierstorf2011_3m.mat');
+[~,path] = download_hrtf('wierstorf2011_3m');
+load([path 'wierstorf2011_3m.mat']);
+hrtf = irs;
 % load lookup table to map ITD values of the model to azimuth angles.
 % the lookup table was created using the same HRTF database
-lookup = load();
+load([path(1:end-10) 'modelstages/wierstorf2013itd2anglelookup.mat']);
 
 
 %% ===== Simulate the binaural ear signals ===============================
@@ -88,9 +93,10 @@ if strcmpi('stereo',method)
 elseif !strcmpi('wfs',method)
     error('%s: %s is not a valid method.',upper(mfilename),method);
 end
+conf.array = array;
 % calculating the distance between the loudspeakers
-if strcmpi('circular',array)
-    conf.dx0 = L/number_of_speakers;
+if strcmpi('circle',array)
+    conf.dx0 = pi*L/number_of_speakers;
 elseif strcmpi('linear',array)
     conf.dx0 = L/(number_of_speakers-1);
 else
@@ -98,15 +104,16 @@ else
 end
 % get loudspeaker positions
 x0 = secondary_source_positions(L,conf);
-% selection of loudspeakers for WFS (for Stereo this has no influence on the two
-% speakers)
-x0 = secondary_source_selection(x0,xs,src);
+% selection of loudspeakers for WFS
+if strcmpi('wfs',method) && strcmpi('circle',array)
+    x0 = secondary_source_selection(x0,xs,src);
+end
 % simulate the binaural impulse response
 if strcmpi('stereo',method)
     % first loudspeaker
-    ir1 = ir_point_source(X,phi,x0(1:3,1),hrtf,conf);
+    ir1 = ir_point_source(X,phi,x0(1,1:3),hrtf,conf);
     % second loudspeaker
-    ir2 = ir_point_source(X,phi,x0(1:3,2),hrtf,conf);
+    ir2 = ir_point_source(X,phi,x0(2,1:3),hrtf,conf);
     % sum of both loudspeakers
     ir = (ir1+ir2)/2;
 else % WFS
@@ -126,12 +133,13 @@ sig = auralize_ir(ir,sig_noise);
 % then mapped to azimuth values with a lookup table
 %
 % estimate the perceived direction of arrival
-perceived_direction = estimate_azimuth(sig,lookup,'dietz',0);
+perceived_direction = estimate_azimuth(sig,lookup,'dietz2011',0);
 % calculate the desired direction
 desired_direction = source_direction(X,phi,xs,src);
 % calculate the localization error as the difference of both
 localization_error = perceived_direction - desired_direction;
 
+end % of main function
 
 
 %% ----- Subfunctions ----------------------------------------------------
