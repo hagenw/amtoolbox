@@ -9,8 +9,8 @@ function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spe
 %       sig                   : binaural singal
 %       lookup                : lookup table to map ITDs to angles (struct)
 %       model                 : model to use:
-%                                   'dietz' (default)
-%                                   'lindemann'
+%                                   'dietz2011' (default)
+%                                   'lindemann1986'
 %       do_spectral_weighting : apply spectral weighting of ITD values after
 %                               Raatgever (1980) (default: false)
 %       fs                    : sampling rate (default: 44100) (Hz)
@@ -31,9 +31,9 @@ function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spe
 %   lateralization by the ITD and found a region around 600 Hz. Stern et al.
 %   have fitted his data with a formula used in this function.
 %
-%   See also: itdazimuthlookuptable
+%   See also: itd2anglelookuptable
 %
-%   References: raatgever1980 stern1988
+%   References: raatgever1980 stern1988 dietz2011auditory lindemann1986a wierstorf2013
 
 % AUTHOR: Hagen Wierstorf
 
@@ -64,17 +64,16 @@ end
 %% ===== Computation ====================================================
 %
 % === Dietz model ===
-if strcmpi('dietz',model)
+if strcmpi('dietz2011',model)
 
     ic_threshold=0.98;
-    cn = 10; % channel number for time plot
 
     % Run the Dietz model on signal
-    [fine, modulation, cfreqs, ild_tmp] = dietz2011(sig,fs);
+    [fine,~,cfreqs,ild_tmp] = dietz2011(sig,fs);
 
     % Unwrap ITDs and get the azimuth values
-    itd = unwrap_itd(fine.itd(:,1:12),ild_tmp,fine.f_inst);
-    phi = itd2azimuth(itd,lookup);
+    itd = idietz2011unwrapitd(fine.itd(:,1:12),ild_tmp(:,1:12),fine.f_inst,2.5);
+    phi = itd2angle(itd,lookup);
 
     % Calculate the median over time for every frequency channel of the azimuth
     for n = 1:size(phi,2)
@@ -91,7 +90,7 @@ if strcmpi('dietz',model)
     ild = median(ild_tmp,1);
     itd = median(itd,1);
 
-elseif strcmpi('lindemann',model)
+elseif strcmpi('lindemann1986',model)
 
     % run Lindemann model on signal
     c_s = 0.3; % stationary inhibition
@@ -99,18 +98,17 @@ elseif strcmpi('lindemann',model)
     M_f = 6; % decrease of monaural sensitivity
     T_int = inf; % integration time
     N_1 = 1764; % sample at which first cross-correlation is calculated
-    [cc_tmp,dummy,ild,cfreqs] = lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1);
-    clear dummy;
+    [cc_tmp,~,ild,cfreqs] = lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1);
     cc_tmp = squeeze(cc_tmp);
     % Calculate tau (delay line time) axes
     tau = linspace(-1,1,size(cc_tmp,1));
     % find max in cc
     itd = zeros(1,size(cc_tmp,2));
     for jj = 1:size(cc_tmp,2)
-        [v,idx] = max(cc_tmp(:,jj));
+        [~,idx] = max(cc_tmp(:,jj));
         itd(jj) = tau(idx)/1000;
     end
-    azimuth = itd2azimuth(itd,lookup);
+    azimuth = itd2angle(itd,lookup);
 end
 
 % Remove outliers

@@ -6,9 +6,9 @@ else
     sf = 44100;
 end
 int_ir = [];
-target_ir = read_hrir(0,targ_azim,database); 
+target_ir = read_hrtf(0,targ_azim,database); 
 for i=1:length(int_azims)
-  int_ir = [int_ir; read_hrir(0,int_azims(i),database); padding];
+  int_ir = [int_ir; read_hrtf(0,int_azims(i),database); padding];
 end
 int_ir = int_ir/sqrt(length(int_azims));
 op = jelfs2011([target_ir; padding],int_ir,sf,mode);

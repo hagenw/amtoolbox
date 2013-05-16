@@ -1,6 +1,6 @@
-function [outsig,fs] = read_hrir(elev_r,azim_r,database);
-%READ_HRIR  Read HRIR from selected databases
-%   Usage:  hrir = read_hrir(elev,azim,database);
+function [outsig,fs] = read_hrtf(elev_r,azim_r,database);
+%READ_HRTF  Read HRTF from selected databases
+%   Usage:  hrtf = read_hrtf(elev,azim,database);
 %  
 %   Input parameters:
 %     elev : $(-90 -> +90)$ elevation of source with respect to head in degrees
@@ -11,11 +11,11 @@ function [outsig,fs] = read_hrir(elev_r,azim_r,database);
 %     database : Type of database (see below)
 %
 %   Output parameters:
-%     hrir : the requested HRIR 
+%     hrtf : the requested HRTF 
 %
-%   `read_hrir(elev,azim,database)` retrieves the HRIR closest to the
+%   `read_hrtf(elev,azim,database)` retrieves the HRTF closest to the
 %   specified azimuth and elevation from the MIT Kemar (Gardner and Martin,
-%   1995) or Oldenburg Siemens Acuris Kayser et al. (2009) databases.
+%   1995) or Oldenburg Siemens Acuris (Kayser et al., 2009) databases.
 %
 %   The value of the `database` parameter determines which dataset to
 %   access:

@@ -1,6 +1,6 @@
-function outsig = viemeister79(insig,fs)
-%VIEMEISTER79  The Viemeister (1979) leaky-integrator model
-%   Usage: outsig=viemeister79(insig,fs);
+function outsig = viemeister1979(insig,fs)
+%VIEMEISTER1979  The Viemeister (1979) leaky-integrator model
+%   Usage: outsig=viemeister1979(insig,fs);
 %
 %   This model is included mostly as a test, as it is so simple.
  

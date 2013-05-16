@@ -1,6 +1,7 @@
 function [fcs_EPSM outSNRenvs ] = joergensen2011snrenv(MixEnv,NoiseEnv,fs)
-%SNRENV  SNRenv of processed signal
-% 
+%JOERGENSEN2011SNRENV  SNRenv of processed signal
+%   Usage: [fcs_EPSM outSNRenvs ] = joergensen2011snrenv(MixEnv,NoiseEnv,fs);
+%
 %   Input parameters:
 %     MixEnv      : The envelope of a signal which have been processed
 %                   in some way
@@ -11,8 +12,8 @@ function [fcs_EPSM outSNRenvs ] = joergensen2011snrenv(MixEnv,NoiseEnv,fs)
 %    fcs_EPSM     : center-frequencies of the modulation filterbank
 %    sEPSM_ExPtns : Envelope power excitation patterns for of the input
 % 
-%  `[fcs_EPSM,outSNRenvs]=joergensen2011snrenv(MixEnv,NoiseEnv,fs)`
-%  calculates the SNRenv for the processed signal.
+%   `[fcs_EPSM,outSNRenvs]=joergensen2011snrenv(MixEnv,NoiseEnv,fs)`
+%   calculates the SNRenv for the processed signal.
 
 % AUTHOR: May 2012 Søren Jørgensen 
 

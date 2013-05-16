@@ -3,17 +3,17 @@
 %  The AMT team, 2012 - 2013.
 %
 %  Models
-%     VIEMEISTER79      - Viemeisters modulation detection model
+%     VIEMEISTER1979    - Viemeisters modulation detection model
 %     DAU1997PREPROC    - Dau et al. (1997a) peripheral processor
 %     VERHULST2012      - Verhulst et al. (2012) cochlea model
 %     BAUMGARTNER2013   - Localization in saggital planes
 %     PLOTBAUMGARTNER2013 - plot probabilistic prediction matrixes
 %
 %  The Langendijk model
-%     LANGENDIJK            - Langendijk & Bronkhorst 2002 auditory model 
-%     LIKELILANGENDIJK      - Likelihood estimation
-%     PLOTLANGENDIJK        - Plot the pdf-matrices with grey colormap
-%     PLOTLIKELILANGENDIJK  - Plot the likelihood statistics
+%     LANGENDIJK2002           - Langendijk & Bronkhorst 2002 auditory model 
+%     LANGENDIJK2002LIKELIHOOD - Likelihood estimation
+%     PLOTLANGENDIJK2002       - Plot the pdf-matrices with grey colormap
+%     PLOTLANGENDIJK2002LIKELIHOOD - Plot the likelihood statistics
 %
 %  The Roenne 2012 model
 %     ROENNE2012                - Simulate ABR to given stimulus

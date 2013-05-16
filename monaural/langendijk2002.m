@@ -1,7 +1,7 @@
-function p = langendijk(targets,template,varargin)
-%LANGENDIJK Localization model according to Langendijk et al. (2002)
-%   Usage:    p = langendijk(targets,template)
-%             p = langendijk(targets,template,fs,bw,s,do,flow,fhigh)
+function p = langendijk2002(targets,template,varargin)
+%LANGENDIJK2002 Localization model according to Langendijk et al. (2002)
+%   Usage:    p = langendijk2002(targets,template)
+%             p = langendijk2002(targets,template,fs,bw,s,do,flow,fhigh)
 %
 %   Input parameters:
 %     targets  : head-related impulse responses (HRIRs) of target sounds 
@@ -12,15 +12,15 @@ function p = langendijk(targets,template,varargin)
 %     p       : Predicted probability mass vectors (PMVs) of polar response
 %               angles as a function of the polar target angle.
 %
-%   `langendijk(targets,template,... )` results to a two dimensional matrix p.  The
+%   `langendijk2002(targets,template,... )` results to a two dimensional matrix p.  The
 %   first dimension represents all possible response positions in
 %   increasing order and the second dimension all possible target
 %   respectively source positions. Consequently each column represents the
 %   predicted probability mass vector (PMV) of the polar response angle 
 %   distribution for one special target position. If you want to plot this 
-%   prediction matrix use |plotlangendijk|.
+%   prediction matrix use |plotlangendijk2002|.
 %
-%   `langendijk` accepts the following optional parameters.
+%   `langendijk2002` accepts the following optional parameters.
 %
 %     'fs',fs        Sampling rate of the head-related impulse responses.
 %  
@@ -36,7 +36,7 @@ function p = langendijk(targets,template,varargin)
 %
 %     'fhigh',fhigh  End frequency of filter bank; default: 16kHz
 %
-%   `langendijk` accepts the following flags.
+%   `langendijk2002` accepts the following flags.
 %
 %     'std'          Apply Gaussian transformed standard deviation of 
 %                    inter-spectral differences for comparison process. 
@@ -44,14 +44,14 @@ function p = langendijk(targets,template,varargin)
 %  
 %     'xcorr'        Apply crosscorrelation for comparison process.
 %
-%   See also: plotlangendijk
+%   See also: plotlangendijk2002
 %
 %   References: langendijk2002contribution
 
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
   
   
-  definput.import={'langendijkcomp'};
+  definput.import={'langendijk2002comp'};
   definput.keyvals.bw=6;
   definput.keyvals.flow=2000;
   definput.keyvals.fhigh=16000;
@@ -73,7 +73,7 @@ function p = langendijk(targets,template,varargin)
   % Comparison process
   si=zeros(size(template,2),size(targets,2),size(template,3)); % initialisation
   for ii=1:size(targets,2)
-      si(:,ii,:) = langendijkcomp(x(:,ii,:),y,'argimport',flags,kv);
+      si(:,ii,:) = langendijk2002comp(x(:,ii,:),y,'argimport',flags,kv);
   end
   
   % Binaural average

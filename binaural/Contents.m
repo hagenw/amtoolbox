@@ -5,14 +5,13 @@
 %  The Breebaart model
 %     BREEBAART2001PREPROC  - EI-cell output
 %
-%  The Lindemann 1986 model
+%  Localization models
 %     LINDEMANN1986         - Calculate a binaural activity map
 %     PLOTLINDEMANN1986     - Plot the binaural activity map
-%     LINDCENTROID          - Centroid of the cross-correlation activation
-%
-%  The Dietz 2011 model
+%     LINDEMANN1986CENTROID - Centroid of the cross-correlation activation
 %     DIETZ2011             - Dietz 2011 binaural model
 %     DIETZ2011INTERAURALFUNCTIONS - Interaural stages of Dietz 2011
+%     WIERSTORF2013         - Localization for a WFS or stereo setup
 %
 %  The Takanen 2013 model
 %     TAKANEN2013           - Takanen 2013 binaural auditory model

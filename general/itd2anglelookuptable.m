@@ -1,22 +1,33 @@
-function lookup = itdazimuthlookuptable(irs,varargin)
-%ITDAZIMUTHLOOKUPTABLE generates an ITD-azimuth lookup table for the given HRTF set
-%   Usage: lookup = itdazimuthlookuptable(irs,fs,model);
-%          lookup = itdazimuthlookuptable(irs,fs);
-%          lookup = itdazimuthlookuptable(irs);
+function lookup = itd2anglelookuptable(irs,varargin)
+%ITD2ANGLELOOKUPTABLE generates an ITD-azimuth lookup table for the given HRTF set
+%   Usage: lookup = itd2anglelookuptable(irs,fs,model);
+%          lookup = itd2anglelookuptable(irs,fs);
+%          lookup = itd2anglelookuptable(irs);
 %
 %   Input parameters:
-%       irs    : HRTF data set (TU Berlin irs format)
-%       fs     : sampling rate, default: 44100 (Hz)
-%       model  : binaural model to use, default: 'dietz'                   
+%       irs    : HRTF data set (at the moment only TU Berlin irs format)
+%       fs     : sampling rate, (default: 44100) / Hz
+%       model  : binaural model to use:
+%                   'dietz2011' uses the Dietz binaural model (default)
+%                   'lindemann1986' uses the Lindemann binaural model
 %
 %   Output parameters:
-%       lookup : struct containing lookup data
+%       lookup : struct containing the polinomial fitting data for the
+%                ITD -> azimuth transformation, p,MU,S, see help polyfit
 %
-%   `itdazimuthlookuptable(irs)` creates a lookup table from the given IR data
-%   set. This lookup table can be used by the dietz binaural model to predict
-%   the perceived direction of arrival of an auditory event.
-%   
+%   `itd2anglelookuptable(irs)` creates a lookup table from the given IR data
+%   set. This lookup table can be used by the dietz2011 or lindemann1986 binaural
+%   models to predict the perceived direction of arrival of an auditory event.
 %
+%   For the handling of the HRTF file format this function depends on the
+%   Sound-Field-Synthesis Toolbox, which is available here:
+%   http://github.com/sfstoolbox/sfs. It runs under Matlab and Octave. The
+%   revision used to genrate the figures in the corressponding paper is
+%   a8914700a4.
+%
+%   See also: dietz2011, lindemann1986, wierstorf2013
+%
+%   References: dietz2011auditory wierstorf2013 wierstorf2011hrtf
 
 % AUTHOR: Hagen Wierstorf
 
@@ -26,14 +37,16 @@ nargmin = 1;
 nargmax = 3;
 error(nargchk(nargmin,nargmax,nargin));
 
-definput.flags.model = {'dietz','lindemann'};
+definput.flags.model = {'dietz2011','lindemann1986'};
 definput.keyvals.fs = 44100;
 [flags,kv]=ltfatarghelper({'fs'},definput,varargin);
 
 
 %% ===== Configuration ==================================================
+% Samplingrate
+fs = kv.fs;
 % time of noise used for the calculation (samples)
-nsamples = kv.fs;
+nsamples = fs;
 % noise type to use
 noise_type = 'white';
 
@@ -50,19 +63,19 @@ nangles = length(irs.apparent_azimuth);
 % create an empty mod_itd, because the lindemann model didn't use it
 mod_itd = [];
 
-if flags.do_dietz
+if flags.do_dietz2011
 
     itd = zeros(nangles,12);
     mod_itd = zeros(nangles,23);
     ild = zeros(nangles,23);
     for ii = 1:nangles
         % generate noise coming from the given direction
-        ir = get_ir(irs,irs.apparent_azimuth(ii));
+        ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance]);
         sig = auralize_ir(ir,sig_noise);
         % calculate binaural parameters
         [fine, modulation, cfreqs, ild_tmp] = dietz2011(sig,fs);
         % unwrap ITD
-        itd_tmp = unwrap_itd(fine.itd(:,1:12),ild_tmp,fine.f_inst);
+        itd_tmp = dietz2011unwrapitd(fine.itd(:,1:12),ild_tmp(:,1:12),fine.f_inst,2.5);
         % calculate the mean about time of the binaural parameters and store
         % them
         itd(ii,:) = median(itd_tmp,1);
@@ -70,7 +83,7 @@ if flags.do_dietz
         ild(ii,:) = median(ild_tmp,1);
     end
 
-elseif flags.do_lindemann
+elseif flags.do_lindemann1986
 
     itd = zeros(nangles,36);
     ild = zeros(nangles,36);
@@ -100,9 +113,11 @@ elseif flags.do_lindemann
 
 end
 
+% Fit the lookup data
+for n = 1:12
+    [p(:,n),S{n},MU(:,n)] = polyfit(itd(:,n),irs.apparent_azimuth',12);
+end
 % Create lookup struct
-lookup.itd = itd;
-lookup.ild = ild;
-lookup.mod_itd = mod_itd;
-lookup.cfreq = cfreqs;
-lookup.azimuth = irs.apparent_azimuth;
+lookup.p = p;
+lookup.MU = MU;
+lookup.S = S;

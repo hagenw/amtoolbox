@@ -1,6 +1,6 @@
-function [ la,le,ci ] = likelilangendijk( p,rang,tang,target,response )
-%LIKELILANGENDIJK   Likelihood estimation for evaluating model performance
-%   Usage: [la,le,ci] = likelilangendijk(p,rang,tang,target,response)
+function [ la,le,ci ] = langendijk2002likelihood( p,rang,tang,target,response )
+%LANGENDIJK2002LIKELIHOOD   Likelihood estimation for evaluating model performance
+%   Usage: [la,le,ci] = langendijk2002likelihood(p,rang,tang,target,response)
 %
 %   Input parameters:
 %     p         : pdf matrix
@@ -16,7 +16,7 @@ function [ la,le,ci ] = likelilangendijk( p,rang,tang,target,response )
 %
 %   XXX Describe the function.
 %
-%   See also: plotlikelilangendijk, langendijk
+%   See also: plotlangendijk2002likelihood, langendijk2002
 %
 %   References:langendijk2002contribution
 
