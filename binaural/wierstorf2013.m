@@ -1,4 +1,4 @@
-function [localization_error,perceived_direction,desired_direction] = ...
+function [localization_error,perceived_direction,desired_direction,x0] = ...
         wierstorf2013(X,phi,xs,src,L,method,number_of_speakers,array);
 %WIERSTORF2013 estimate the localization within a WFS or stereo setup
 %   Usage: [loc_error,...] = wierstorf2013(X,phi,xs,src,L,'wfs',nls,array);
@@ -29,6 +29,8 @@ function [localization_error,perceived_direction,desired_direction] = ...
 %                             estimated for our given setup / rad
 %       desired_direction   : the desired direction of arrival indicated by the
 %                             source position xs / rad
+%       x0                  : position and directions of the loudspeakers in the
+%                             form n x 6, where n is the number of loudspeakers
 %
 %   `wierstorf2013(X,phi,xs,src,'wfs',L,nls,array)` calculates the localization
 %   error for the defined wave field synthesis or stereophony setup. The
