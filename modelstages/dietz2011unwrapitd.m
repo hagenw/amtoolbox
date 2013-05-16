@@ -20,7 +20,7 @@ function itd = dietz2011unwrapitd(itd,ild,f_inst,tr)
 %
 %   See also: dietz2011, wierstorf2013
 %
-%   References: dietz2011auditory
+%   References: dietz2011auditory wierstorf2013
 
 % AUTHOR: Mathias Dietz, Hagen Wierstorf
 

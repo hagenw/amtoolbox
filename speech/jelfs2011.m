@@ -27,7 +27,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
 %   returns the benefit from the SII weighted SNR and the SII weighted BMLD.
 %
 %   If *target* or *interferer* are cell-arrays, they contents of these cell
-%   arrays will be passed as arguments to the |read_hrir|. The first
+%   arrays will be passed as arguments to the |read_hrtf|. The first
 %   argument in the cell-array is the azimuth angle, and the second
 %   parameter is the database type. The elevation is set to zer.
 %   function. This makes it possible to directly load HRIR from a
@@ -42,7 +42,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
 %
 %     jelfs2011({0,'kemar'},{[330 90],'kemar'})
 %
-%   See also: culling2005bmld, read_hrir, exp_jelfs2011
+%   See also: culling2005bmld, read_hrtf, exp_jelfs2011
 % 
 %   References:  jelfs2011revision culling2010mapping lavandier2012binaural
   
@@ -51,15 +51,15 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
   definput.keyvals.pad=1024;
   [flags,kv,fs]=ltfatarghelper({'fs'},definput,varargin);
   
-  % If target or interferer are cell arrays, call read_hrir to load the data.
+  % If target or interferer are cell arrays, call read_hrtf to load the data.
   if iscell(target)
-    [target,fs] = read_hrir(0,target{:});
+    [target,fs] = read_hrtf(0,target{:});
     target=postpad(target,size(target,1)+kv.pad);
   end;
   
   if iscell(interferer)
     azims=numel(interferer{1});
-    [interferer,fs2] = read_hrir(0,interferer{:});
+    [interferer,fs2] = read_hrtf(0,interferer{:});
     interferer=postpad(interferer,size(interferer,1)+kv.pad);
     if fs2~=fs
       error('%s: Mis-match between target and interferer sampling rate.',upper(mfilename));

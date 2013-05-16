@@ -9,7 +9,7 @@ function op = plotjelfs2011(target_azim,database)
 %   a polar plot.
 %
 %   The *database*  parameter selects the HRIR database to use. Please
-%   see the help of |read_hrir|.
+%   see the help of |read_hrtf|.
 %
 %   Examples:
 %   ---------
@@ -18,7 +18,7 @@ function op = plotjelfs2011(target_azim,database)
 %
 %     plotjelfs2011(0,'kemar');
 %
-%   See also: jelfs2011, culling2005bmld, read_hrir
+%   See also: jelfs2011, culling2005bmld, read_hrtf
   
   step = 5;
   n_op = 360/step+1;
@@ -42,10 +42,10 @@ function op = test_jelfs2011(targ_azim,int_azims,database)
   end
   
   int_ir = [];  
-  target_ir = read_hrir(0,targ_azim,database); 
+  target_ir = read_hrtf(0,targ_azim,database); 
   
   for i=1:length(int_azims)
-    int_ir = [int_ir; read_hrir(0,int_azims(i),database); padding];
+    int_ir = [int_ir; read_hrtf(0,int_azims(i),database); padding];
   end
   
   int_ir = int_ir/sqrt(length(int_azims));

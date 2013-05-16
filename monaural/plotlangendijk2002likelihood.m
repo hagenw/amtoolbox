@@ -1,8 +1,8 @@
-function plotlikelilangendijk(la,le,ci,tit,horlin)
-%PLOTLIKELILANGENDIJK likelihood statistics according to Langendijk et al. (2002)
-%   Usage:           plotlikelilangendijk(la,le,ci)
-%                    plotlikelilangendijk(la,le,ci,tit)
-%                    plotlikelilangendijk(la,le,ci,dynlin)
+function plotlangendijk2002likelihood(la,le,ci,tit,horlin)
+%PLOTLANGENDIJK2002LIKELIHOOD likelihood statistics according to Langendijk et al. (2002)
+%   Usage:  plotlangendijk2002likelihood(la,le,ci)
+%           plotlangendijk2002likelihood(la,le,ci,tit)
+%           plotlangendijk2002likelihood(la,le,ci,dynlin)
 %
 %   Input parameters:
 %     la     : actual likelihood
@@ -14,7 +14,7 @@ function plotlikelilangendijk(la,le,ci,tit,horlin)
 %   `plotlikelangendijk(la,le,ci)` plots likelihood statistics according to
 %   Langendijk et al. (2002). XXX DESCRIPTION OF PARAMETERS
 %
-%   See also: likelilangendijk, langendijk
+%   See also: langendijk2002likelihood, langendijk2002
 %
 %   References:langendijk2002contribution
  

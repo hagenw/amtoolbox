@@ -1,4 +1,4 @@
-function definput=arg_langendijkcomp(definput)
+function definput=arg_langendijk2002comp(definput)
 
   definput.flags.cp={'std','xcorr'};  
 
