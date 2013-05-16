@@ -1,14 +1,14 @@
-function d = lindcentroid(cc)
-%LINDCENTROID Calculates the lindcentroid for a cross-correlation
-%   Usage: d = lindcentroid(cc)
+function d = lindemann1986centroid(cc)
+%LINDEMANN1986CENTROID Calculates the centroid for a cross-correlation
+%   Usage: d = lindemann1986centroid(cc)
 %
 %   Input parameters:
 %       cc  : Lindemann cross-correlation. Dim: 1 x delay line length
 %
 %   Output parameters:
-%       d   : lindcentroid in the range -1..1~ms
+%       d   : lindemann1986centroid in the range -1..1~ms
 %
-%   `lindcentroid(cc)` calculates the centroid for a given cross-correlation
+%   `lindemann1986centroid(cc)` calculates the centroid for a given cross-correlation
 %   from the Lindemann model.
 %
 %   The centroid is computed by (see Lindemann (1986a), page 1613, eq. 22):
