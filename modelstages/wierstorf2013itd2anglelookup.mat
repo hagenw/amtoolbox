@@ -1,9 +1,4 @@
-# Created by Octave 3.6.2, Wed May 15 13:48:00 2013 CEST <hagen@audio>
-# name: lookup
-# type: scalar struct
-# ndims: 2
- 1 1
-# length: 3
+# Created by Octave 3.6.2, Fri May 17 11:05:28 2013 CEST <hagen@audio>
 # name: p
 # type: matrix
 # rows: 13
@@ -4914,8 +4909,6 @@
 # name: normr
 # type: scalar
 0.06751650879931814
-
-
 
 
 
