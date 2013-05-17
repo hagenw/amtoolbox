@@ -106,6 +106,28 @@ if !which('SFS_start')
 end
 
 
+%% ===== Configuration ===================================================
+% The following settings are all for the Sound Field Synthesis-Toolbox
+%
+% Binaural settings
+% length of impulse response; this has two influences: 
+% 1) longer impulse responses lead to a longer running time of the model
+% 2) shorter impulse responses will not work if your WFS setup needs really long
+% time shifting of single driving signals or you use HRTF with room reflections
+% that rest longer than conf.N samples.
+conf.N = 1024;
+% Use no headphone compensation because we are not trying to listening to the
+% signal
+conf.usehcomp = 0; 
+%
+% WFS settings
+% Use a WFS pre-equalization filter and specify its start frequency.
+% Note, that the stop frequency will be calculated later with the aliasing
+% frequency of your WFS setup.
+conf.usehpre = 1;
+conf.hpreflow = 50;
+
+
 %% ===== Loading of additional data ======================================
 % Load default 3m TU-Berlin KEMAR HRTF from the net if no one is given to the
 % function
@@ -140,6 +162,10 @@ elseif strcmpi('linear',array)
 else
     error('%s: %s is not a valid array.',upper(mfilename),array);
 end
+
+% calculate the stop frequency for the WFS pre-equalization filter
+conf.hprefhigh = aliasing_frequency(conf.dx0);
+
 % get loudspeaker positions
 x0 = secondary_source_positions(L,conf);
 % selection of loudspeakers for WFS
