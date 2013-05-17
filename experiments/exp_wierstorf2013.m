@@ -71,11 +71,9 @@ if flags.do_fig1
 
     s = [mfilename('fullpath'),'_fig1.mat'];
       
-    % listener positions
+    % listening area
     X = [-2 2];
-    Y = [0.15 -3.15];
-    conf.xyresolution = 21;
-    [xx,yy,x,y] = xy_grid(X,Y,conf);
+    Y = [-3.15 0.15];
     % orientation of the listener (always to the front)
     phi = -pi/2;
     % position of the virtual point source
@@ -83,28 +81,30 @@ if flags.do_fig1
     src = 'ps';
     % distance between the loudspeaker ion the stereo setup
     L = 2;
-    method = 'stereo';
+    % points in the listening area: resolution x resolution
+    resolution = 21;
   
     if amtredofile(s,flags.redomode)
-
-        % estimate the localization
-        for ii=1:length(x)
-            [loc_error(ii),aud_event(ii),sound_event(ii),x0] = ...
-                wierstorf2013([xx(ii) yy(ii)],phi,xs,src,L,'stereo');
-        end
-
-        save(s,'loc_error','aud_event','x0',save_format);
+        [loc_error,aud_event,sound_event,xaxis,yaxis,x0] = ...
+            wierstorf2013(X,Y,phi,xs,src,L,resolution,'stereo');
+        save(save_format,s,'loc_error','aud_event','xaxis','yaxis','x0');
     else
         s = load(s);
         loc_error = s.loc_error;
         aud_event = s.aud_event;
         x0 = s.x0;
     end;
-    
+
+    output.loc_error = loc_error;
+    output.aud_event = aud_event;
+    output.xaxis = xaxis;
+    output.yaxis = yaxis;
+    output.x0 = x0;
+
     if flags.do_plot
         % ------ Plotting ------
         figure;
-        imagesc(x,y,degree(loc_error));
+        imagesc(xaxis,yaxis,abs(degree(loc_error)));
         draw_loudspeakers(x0,[1 1]);
         xlabel('x/m');
         ylabel('y/m');
