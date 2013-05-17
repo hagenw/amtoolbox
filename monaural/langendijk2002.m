@@ -60,6 +60,11 @@ function p = langendijk2002(targets,template,varargin)
   
   [flags,kv]=ltfatarghelper({'fs','bw','s','do','flow','fhigh'},definput,varargin);
   
+  % Stimulus (not considered in original model)
+  if not(isempty(kv.stim))
+    tmp = convolve(kv.stim,targets);
+    targets = reshape(tmp,[size(tmp,1),size(targets,2),size(targets,3)]);
+  end
   
   % Filter bank
   x = cqdft(targets,kv.fs,kv.flow,kv.fhigh,kv.bw);
