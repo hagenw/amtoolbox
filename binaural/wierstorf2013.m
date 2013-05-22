@@ -1,4 +1,5 @@
-function [localization_error,perceived_direction,desired_direction,x,y,x0] = wierstorf2013(X,Y,phi,xs,src,L,resolution,varargin);
+function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
+        wierstorf2013(X,Y,phi,xs,src,L,resolution,varargin);
 %WIERSTORF2013 estimate the localization within a WFS or stereo setup
 %   Usage: [...] = wierstorf2013(X,Y,phi,xs,src,L,resolution,method,...);
 %
@@ -65,13 +66,13 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = wie
 %
 %   For the simulation of the wave field synthesis or stereophony setup this
 %   functions depends on the Sound-Field-Synthesis Toolbox, which is available
-%   here: http://github.com/sfstoolbox/sfs. It runs under Matlab and Octave. The
+%   here: `<http://github.com/sfstoolbox/sfs>`_. It runs under Matlab and Octave. The
 %   revision used to genrate the figures in the corresponding paper is
 %   a8914700a4.
 %
 %   See also: estimate_azimuth, dietz2011
 %
-%   References: wierstorf2013 wierstorf2011hrtf dietz2011
+%   References: wierstorf2013 wierstorf2011hrtf dietz2011auditory
 
 % AUTHOR: Hagen Wierstorf
 
