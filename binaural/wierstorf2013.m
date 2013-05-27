@@ -45,8 +45,14 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = wie
 %   The following parameters may be passed at the end of the line of
 %   input arguments:
 %
-%       'nls',nls        Number of loudspeaker of your WFS setup. Default value
-%                        is 2.
+%       'resolution',resolution     Resolution of the points in the listening
+%                        area. Number of points is resoluation x resolution. If
+%                        only one point in the listening area is given via single
+%                        values for X and Y, the resolution is automatically set
+%                        to 1.
+%
+%       'nls',nls        Number of loudspeaker of your WFS setup.
+%                        Default value is 2.
 %
 %       'array',array    Array type to use, could be 'linear' or 'circle'.
 %                        Default value is 'linear'.
@@ -81,19 +87,21 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = wie
 
 
 %% ===== Checking of input parameters and dependencies ===================
-nargmin = 8;
-nargmax = 16;
+nargmin = 7;
+nargmax = 17;
 narginchk(nargmin,nargmax);
 
 definput.flags.method = {'stereo','wfs'};
 definput.keyvals.array = 'linear';
-definput.keyvals.number_of_speakers = 2;
+definput.keyvals.nls = 2;
+definput.keyvals.resolution = 21;
 definput.keyvals.hrtf = [];
 definput.keyvals.lookup = [];
 [flags,kv] = ...
-    ltfatarghelper({'number_of_speakers','array','hrtf','lookup'},definput,varargin);
+    ltfatarghelper({'resolution','nls','array','hrtf','lookup'},definput,varargin);
 array = kv.array;
-number_of_speakers = kv.number_of_speakers;
+resolution = kv.resolution;
+number_of_speakers = kv.nls;
 hrtf = kv.hrtf;
 lookup = kv.lookup;
 
@@ -103,6 +111,17 @@ if !which('SFS_start')
         'You can download it at https://github.com/sfstoolbox/sfs.\n', ...
         'The results in the paper are verified up to revision a8914700a4'], ...
         upper(mfilename));
+end
+
+% Checking if we have only one position or if we have a whole listening area
+if length(X)==1 && length(Y)==1
+    resolution = 1;
+    X = [X X];
+    Y = [Y Y];
+elseif length(X)==1
+    X = [X X];
+elseif length(Y)==1
+    Y = [Y Y];
 end
 
 
@@ -228,7 +247,7 @@ function direction = source_direction(X,phi,xs,src)
         [direction,~,~] = cart2sph(x(1),x(2),0);
         % FIXME: this is not working with all points at the moment
         % For example place a stereo source at (0,0) and the listener at (0,-2)
-        direction = direction-pi;
+        %direction = direction-pi;
     end
-    direction = direction + phi;
+    direction = direction - phi;
 end
