@@ -25,7 +25,7 @@ function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spe
 %   binaural model to estimate the perceived direction for a given binaural
 %   signal.  Therefore, it needs the struct lookup, which maps ITD values to
 %   the corresponding angles. This can be created with the
-%   |itdazimuthlookuptable| function.  If do_spectral_weighting is set to true,
+%   |itd2anglelookuptable| function.  If do_spectral_weighting is set to true,
 %   a spectral weighting of the single ITD values after Raatgever is applied. He
 %   has done some measurements to see what is the spectral domincance region for
 %   lateralization by the ITD and found a region around 600 Hz. Stern et al.
