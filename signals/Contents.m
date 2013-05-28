@@ -13,6 +13,9 @@
 %    ITDILDSIN      -  Sinusoid with interaural time and level difference
 %    BINCORRNOISE   -  Interaurally correlated noise
 %
+%  Binaural test signals
+%    COMPETINGTALKERS - Several different competing talker signal
+%
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
 %

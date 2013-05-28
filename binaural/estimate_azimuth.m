@@ -25,7 +25,7 @@ function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spe
 %   binaural model to estimate the perceived direction for a given binaural
 %   signal.  Therefore, it needs the struct lookup, which maps ITD values to
 %   the corresponding angles. This can be created with the
-%   |itdazimuthlookuptable| function.  If do_spectral_weighting is set to true,
+%   |itd2anglelookuptable| function.  If do_spectral_weighting is set to true,
 %   a spectral weighting of the single ITD values after Raatgever is applied. He
 %   has done some measurements to see what is the spectral domincance region for
 %   lateralization by the ITD and found a region around 600 Hz. Stern et al.
@@ -41,7 +41,7 @@ function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spe
 %% ===== Checking of input  parameters ==================================
 nargmin = 2;
 nargmax = 5;
-error(nargchk(nargmin,nargmax,nargin));
+narginchk(nargmin,nargmax);
 
 if nargin==2
     model = 'dietz';
@@ -72,7 +72,7 @@ if strcmpi('dietz2011',model)
     [fine,~,cfreqs,ild_tmp] = dietz2011(sig,fs);
 
     % Unwrap ITDs and get the azimuth values
-    itd = idietz2011unwrapitd(fine.itd(:,1:12),ild_tmp(:,1:12),fine.f_inst,2.5);
+    itd = dietz2011unwrapitd(fine.itd(:,1:12),ild_tmp(:,1:12),fine.f_inst,2.5);
     phi = itd2angle(itd,lookup);
 
     % Calculate the median over time for every frequency channel of the azimuth
@@ -109,6 +109,8 @@ elseif strcmpi('lindemann1986',model)
         itd(jj) = tau(idx)/1000;
     end
     azimuth = itd2angle(itd,lookup);
+else
+    error('%s: %s is not a valid model to choose.',upper(mfilename),model);
 end
 
 % Remove outliers

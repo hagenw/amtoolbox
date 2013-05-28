@@ -1,5 +1,5 @@
 function d = lindemann1986centroid(cc)
-%LINDEMANN1986CENTROID Calculates the lindemann1986centroid for a cross-correlation
+%LINDEMANN1986CENTROID Calculates the centroid for a cross-correlation
 %   Usage: d = lindemann1986centroid(cc)
 %
 %   Input parameters:
