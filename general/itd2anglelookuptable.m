@@ -18,6 +18,7 @@ function lookup = itd2anglelookuptable(irs,varargin)
 %   `itd2anglelookuptable(irs)` creates a lookup table from the given IR data
 %   set. This lookup table can be used by the dietz2011 or lindemann1986 binaural
 %   models to predict the perceived direction of arrival of an auditory event.
+%   The azimuth angle is stored in degree in the lookup table.
 %
 %   For the handling of the HRTF file format this function depends on the
 %   Sound-Field-Synthesis Toolbox, which is available here:
@@ -115,7 +116,7 @@ end
 
 % Fit the lookup data
 for n = 1:12
-    [p(:,n),S{n},MU(:,n)] = polyfit(itd(:,n),irs.apparent_azimuth',12);
+    [p(:,n),S{n},MU(:,n)] = polyfit(itd(:,n),irs.apparent_azimuth'./pi*180,12);
 end
 % Create lookup struct
 lookup.p = p;
