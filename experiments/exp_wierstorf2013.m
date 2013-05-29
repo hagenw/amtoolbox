@@ -113,8 +113,7 @@ if flags.do_fig1
 elseif flags.do_fig3
 
     s = [mfilename('fullpath'),'_fig3.mat'];
-
-    conf = SFS_config;  
+ 
     % listening area
     X = [-2 2];
     Y = [-2 2];
@@ -126,6 +125,12 @@ elseif flags.do_fig3
     % plane wave travelling upwards
     xs = [0 1];
     src = 'pw';
+    % other neccessary settings
+    conf.usebandpass = 0;
+    conf.bandpassflow = 0;
+    conf.bandpassfhigh = 20000;
+    conf.plot.usedb = 0;
+    conf.plot.colormap = '';
   
     if amtredofile(s,flags.redomode)
         % get secondary sources and tapering window for plotting
