@@ -195,15 +195,15 @@ end
 
 % get a grid of the listening positions
 conf.xysamples = resolution;
-[xx,yy,x,y] = xy_grid(X,Y,conf);
+[~,~,x,y] = xy_grid(X,Y,conf);
 % simulate the binaural impulse response
-perceived_direction = zeros(size(xx));
-desired_direction = zeros(size(xx));
-localization_error = zeros(size(xx));
+perceived_direction = zeros(length(x),length(y));
+desired_direction = zeros(length(x),length(y));
+localization_error = zeros(length(x),length(y));
 for ii=1:length(x)
     progressbar(ii,length(x))
     for jj=1:length(y)
-        X = [xx(ii) y(jj)];
+        X = [x(ii) y(jj)];
         if flags.do_stereo
             % first loudspeaker
             ir1 = ir_point_source(X,phi,x0(1,1:3),hrtf,conf);
@@ -214,9 +214,6 @@ for ii=1:length(x)
         else % WFS
             ir = ir_wfs_25d(X,phi,xs,src,L,hrtf,conf);
         end
-        % FIXME: this should have no influence on the results
-        % scale impulse response
-        %ir = 0.9 * (ir ./ (max(abs(ir(:)))+eps));
         % generate a 0.1s noise signal
         sig_noise = noise(fs/10,1,'white');
         % convolve with impulse response
@@ -250,5 +247,5 @@ function direction = source_direction(X,phi,xs,src)
         % For example place a stereo source at (0,0) and the listener at (0,-2)
         %direction = direction-pi;
     end
-    direction = direction - phi;
+    direction = degree(direction - phi);
 end

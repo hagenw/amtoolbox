@@ -139,8 +139,8 @@ function [azimuth,cfreqs] = remove_outlier(azimuth,itd,cfreqs)
     cfreqs = cfreqs(~isnan(azimuth));
     % remove outliers more than 30deg away from median
     if length(azimuth)>0
-        cfreqs = cfreqs(abs(azimuth-median(azimuth))<rad(30));
-        azimuth = azimuth(abs(azimuth-median(azimuth))<rad(30));
+        cfreqs = cfreqs(abs(azimuth-median(azimuth))<30);
+        azimuth = azimuth(abs(azimuth-median(azimuth))<30);
     end
 end
 function w = spectral_weighting(f)
