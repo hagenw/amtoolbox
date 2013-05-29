@@ -26,9 +26,9 @@ function varargout = extractsp(lat,varargin)
 %     1) lateral tolerance to be as small as possible, but min. 2 and
 %        max. 5.
 % 
-%     2) polar angles to range from max. -30° to min. 210°,
+%     2) polar angles to range from max. -30 deg. to min. 210 deg.,
 %
-%     3) gaps of polar angles to be max. 30° large.
+%     3) gaps of polar angles to be max. 30 deg. large.
     
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
@@ -39,8 +39,8 @@ if nargin == 2 || isstruct(varargin{1}) % SOFA input
   Obj = varargin{1};
 	hM = permute(double(Obj.Data.IR),[3 1 2]);
 
-  pos(:,1)=bsxfun(@times,Obj.ListenerRotation(:,1),ones(Obj.M,1));
-  pos(:,2)=bsxfun(@times,Obj.ListenerRotation(:,2),ones(Obj.M,1));
+  pos(:,1)=bsxfun(@times,Obj.ListenerRotation(:,1),ones(Obj.DimSize.M,1));
+  pos(:,2)=bsxfun(@times,Obj.ListenerRotation(:,2),ones(Obj.DimSize.M,1));
   [pos(:,6), pos(:,7)]=sph2hor(pos(:,1),pos(:,2));
   
 elseif nargin == 3 % aRI Format
