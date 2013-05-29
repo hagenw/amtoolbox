@@ -66,7 +66,8 @@ if !which('SFS_start')
 end
 conf = SFS_config;
 
-%% ------ FIG 1 -----------------------------------------------------------
+
+%% ------ F I G U R E  1 -------------------------------------------------
 if flags.do_fig1
 
     s = [mfilename('fullpath'),'_fig1.mat'];
@@ -87,12 +88,7 @@ if flags.do_fig1
             wierstorf2013(X,Y,phi,xs,src,L,'stereo');
         save(save_format,s,'loc_error','aud_event','xaxis','yaxis','x0');
     else
-        s = load(s);
-        loc_error = s.loc_error;
-        aud_event = s.aud_event;
-        xaxis = s.xaxis;
-        yaxis = s.yaxis;
-        x0 = s.x0;
+        load(s);
     end;
 
     output.loc_error = loc_error;
@@ -113,6 +109,7 @@ if flags.do_fig1
         ylabel('y/m');
     end;
 
+%% ------ F I G U R E  3  ------------------------------------------------
 elseif flags.do_fig3
 
     s = [mfilename('fullpath'),'_fig3.mat'];
@@ -192,4 +189,230 @@ elseif flags.do_fig3
         ylabel('y/m');
         title('(d) t_{pw} = 4.8ms');
     end
+
+
+%% ------ F I G U R E  8 -------------------------------------------------
+elseif flags.do_fig8
+
+    s = [mfilename('fullpath'),'_fig8.mat'];
+
+    if amtredofile(s,flags.redomode)
+        % load HRTFs, see:
+        % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
+        [~,path] = download_hrtf('wierstorf2011_3m');
+        load([path 'wierstorf2011_3m.mat']);
+        % generate noise signal
+        sig_noise = noise(44100/5,1,'white');
+        % get only the -90 to 90 degree part of the hrtf set
+        idx = (( irs.apparent_azimuth>-pi/2 & irs.apparent_azimuth<pi/2 & ...
+            irs.apparent_elevation==0 ));
+        irs = slice_irs(irs,idx);
+        for ii=1:length(irs.apparent_azimuth)
+            % generate noise coming from the given direction
+            ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance]);
+            sig = auralize_ir(ir,sig_noise);
+            % calculate binaural parameters
+            [fine, modulation, cfreqs, ild_tmp] = dietz2011(sig,44100);
+            % unwrap ITD
+            itd_tmp = ...
+                dietz2011unwrapitd(fine.itd(:,1:12),ild_tmp(:,1:12),fine.f_inst,2.5);
+            % calculate the mean about time of the binaural parameters and store
+            % them
+            itd(ii,:) = median(itd_tmp,1);
+            phi(ii) = degree(irs.apparent_azimuth(ii));
+        end
+        save(save_format,s,'phi','itd');
+    else
+        load(s);
+    end;
+
+    output.phi = phi;
+    output.itd = itd;
+
+    if flags.do_plot
+        % ------ Plotting ------
+        figure;
+        plot(phi,itd.*1000);
+        axis([-90 0 0 0.9])
+        xlabel('phi_{sound event}/deg');
+        ylabel('interaural time difference/ms');
+    end;
+
 end;
+
+
+%% ------ F I G U R E  9 -------------------------------------------------
+if flags.do_fig9
+
+    s = [mfilename('fullpath'),'_fig9.mat'];
+      
+    if amtredofile(s,flags.redomode)
+        % load lookup table
+        path = which('amtstart');
+        lookup = ...
+            load([path(1:end-10) 'modelstages/wierstorf2013itd2anglelookup.mat']);
+        % load HRTFs, see:
+        % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
+        [~,path] = download_hrtf('wierstorf2011_3m');
+        load([path 'wierstorf2011_3m.mat']);
+        % generate noise signal
+        sig_noise = noise(44100/5,1,'white');
+        % get only the -90 to 90 degree part of the hrtf set
+        idx = (( irs.apparent_azimuth>-pi/2 & irs.apparent_azimuth<pi/2 & ...
+            irs.apparent_elevation==0 ));
+        irs = slice_irs(irs,idx);
+        for ii=1:length(irs.apparent_azimuth)
+            % generate noise coming from the given direction
+            ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance]);
+            sig = auralize_ir(ir,sig_noise);
+            phi_auditory_event(ii) = estimate_azimuth(sig,lookup,'dietz2011');
+            phi_sound_event(ii) = degree(irs.apparent_azimuth(ii));
+        end
+        save(save_format,s,'phi_auditory_event','phi_sound_event');
+    else
+        load(s);
+    end;
+
+    output.phi_auditory_event = phi_auditory_event;
+    output.phi_sound_event = phi_sound_event;
+
+    if flags.do_plot
+        % ------ Plotting ------
+        figure;
+        plot(phi_sound_event,phi_auditory_event-phi_sound_event);
+        axis([-90 90 -3 3])
+        xlabel('phi_{sound event}/deg');
+        ylabel('phi_{auditory event}-phi_{sound event}/deg');
+    end;
+end
+
+
+%% ------ F I G U R E  11a -----------------------------------------------
+if flags.do_fig11a
+
+    s = [mfilename('fullpath'),'_fig11a.mat'];
+      
+    % listening area
+    X = [-2 2];
+    Y = [-3.15 -0.15];
+    % orientation of the listener (always to the front)
+    phi = pi/2;
+    % position of the virtual point source
+    xs = [0 1];
+    src = 'ps';
+    % array size
+    L = 2.85;
+  
+    if amtredofile(s,flags.redomode)
+        fprintf(1,'\nWarning: this will take a long time!\n\n');
+        % 3 speakers
+        fprintf(1,'Calculating figure 1/6\n');
+        [~,aud_event_3,~,xaxis_31,yaxis_31,x0_3] = ...
+            wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
+                          'resolution',31, ...
+                          'nls',3, ...
+                          'array','linear');
+        fprintf(1,'Calculating figure 2/6\n');
+        [loc_error_3,~,~,xaxis_135,yaxis_135] = ...
+            wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
+                'resolution',135, ...
+                'nls',3, ...
+                'array','linear');
+        % 8 speakers
+        fprintf(1,'Calculating figure 3/6\n');
+        [~,aud_event_8,~,~,~,x0_8] = ...
+            wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
+                'resolution',31, ...
+                'nls',8, ...
+                'array','linear');
+        fprintf(1,'Calculating figure 4/6\n');
+        loc_error_8 = ...
+            wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
+                'resolution',135, ...
+                'nls',8, ...
+                'array','linear');
+        % 15 speakers
+        fprintf(1,'Calculating figure 5/6\n');
+        [~,aud_event_15,~,~,~,x0_15] = ...
+            wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
+                'resolution',31, ...
+                'nls',15, ...
+                'array','linear');
+        fprintf(1,'Calculating figure 6/6\n');
+        loc_error_15 = ...
+            wierstorf2013(X,Y,phi,xs,src,L,res,'wfs', ...
+                'resolution',135, ...
+                'nls',15, ...
+                'array','linear');
+        save(save_format,s,'loc_error_3','loc_error_8','loc_error_15', ...
+            'aud_event_3','aud_event_8','aud_event_15', ...
+            'x0_3','x0_8','x0_15', ...
+            'xaxis_31','yaxis_31','xaxis_135','yaxis_135');
+    else
+        load(s);
+    end;
+
+    output.loc_error_3 = loc_error_3;
+    output.loc_error_8 = loc_error_8;
+    output.loc_error_15 = loc_error_15;
+    output.aud_event_3 = aud_event_3;
+    output.aud_event_8 = aud_event_8;
+    output.aud_event_15 = aud_event_15;
+    output.x0_3 = x0_3;
+    output.x0_8 = x0_8;
+    output.x0_15 = x0_15;
+    output.xaxis_31 = xaxis_31;
+    output.yaxis_31 = yaxis_31;
+    output.xaxis_135 = xaxis_135;
+    output.yaxis_135 = yaxis_135;
+
+    if flags.do_plot
+        % ------ Plotting ------
+        figure;
+        subplot(2,3,1);
+        [u,v,~] = pol2cart(rad(aud_event_3+90),ones(size(aud_event_3)), ...
+            zeros(size(aud_event_3)));
+        quiver(xaxis_31,yaxis_31,u',v',0.5);
+        axis([-2.13 2.13 -3.3 0.2])
+        draw_loudspeakers(x0_3,1);
+        xlabel('x/m');
+        ylabel('y/m');
+        subplot(2,3,2);
+        [u,v,~] = pol2cart(rad(aud_event_8+90),ones(size(aud_event_8)), ...
+            zeros(size(aud_event_8)));
+        quiver(xaxis_31,yaxis_31,u',v',0.5);
+        axis([-2.13 2.13 -3.3 0.2])
+        draw_loudspeakers(x0_8,1);
+        xlabel('x/m');
+        ylabel('y/m');
+        subplot(2,3,3);
+        [u,v,~] = pol2cart(rad(aud_event_15+90),ones(size(aud_event_15)), ...
+            zeros(size(aud_event_15)));
+        quiver(xaxis_31,yaxis_31,u',v',0.5);
+        axis([-2.13 2.13 -3.3 0.2])
+        draw_loudspeakers(x0_15,1);
+        xlabel('x/m');
+        ylabel('y/m');
+        subplot(2,3,4)
+        imagesc(xaxis_135,yaxis_135,loc_error_3');
+        turn_imagesc;
+        axis([-2.13 2.13 -3.3 0.2])
+        draw_loudspeakers(x0_3,1);
+        xlabel('x/m');
+        ylabel('y/m');
+        subplot(2,3,5)
+        imagesc(xaxis_135,yaxis_135,loc_error_8');
+        turn_imagesc;
+        axis([-2.13 2.13 -3.3 0.2])
+        draw_loudspeakers(x0_8,1);
+        xlabel('x/m');
+        ylabel('y/m');
+        subplot(2,3,6)
+        imagesc(xaxis_135,yaxis_135,loc_error_15');
+        turn_imagesc;
+        axis([-2.13 2.13 -3.3 0.2])
+        draw_loudspeakers(x0_15,1);
+        xlabel('x/m');
+        ylabel('y/m');
+    end;
+end

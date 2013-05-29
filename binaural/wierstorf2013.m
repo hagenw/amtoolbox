@@ -1,5 +1,5 @@
 function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
-        wierstorf2013(X,Y,phi,xs,src,L,resolution,varargin);
+        wierstorf2013(X,Y,phi,xs,src,L,varargin);
 %WIERSTORF2013 estimate the localization within a WFS or stereo setup
 %   Usage: [...] = wierstorf2013(X,Y,phi,xs,src,L,resolution,method,...);
 %
