@@ -138,12 +138,19 @@ if flags.do_pool % load also DTFs of SPs
   end
   
   if flags.do_sofa
-    
+          
+% The following two lines will become be somehow incorporated to amtstart %
+      hpath = which('hrtfinit');  % find local path of hrtf repository
+      SOFAdbPath(hpath(1:end-10));
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
     for ii = 1:length(data)
       
-      filename = fullfile(SOFAdbPath,'SOFA',['ARI_' data(ii).id '_hrtf_M_dtf 256.sofa']);
+      filename = fullfile(SOFAdbPath,'hrtf_M_baumgartner2013',...
+        ['ARI_' data(ii).id '_hrtf_M_dtf 256.sofa']);
+      
       if exist(filename,'file') ~= 2
-        fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/hrtf_M_SOFA_baumgartner2013.zip , \n unzip it, and move the content of the folder into your SOFA HRTF repository \n ' SOFAdbPath ' .\n' ' Then, press any key to quit pausing. \n'])
+        fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/hrtf_M_SOFA_baumgartner2013.zip , \n unzip it, and move the folder into your HRTF repository \n ' SOFAdbPath ' .\n' ' Then, press any key to quit pausing. \n'])
         pause
       end
       

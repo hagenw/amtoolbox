@@ -81,7 +81,7 @@ function varargout=exp_baumgartner2013(varargin)
 %     'fig18'   Reproduce Fig. 18:
 %               Predicted response probabilities (PMVs) as a function of 
 %               the amplitude panning ratio between a rear and a front 
-%               loudspeaker in the same SP (lateral angle: 30Â°). 
+%               loudspeaker in the same SP (lateral angle: 30 deg.). 
 %               Left: Results for NH12. 
 %               Center: Results for NH15. 
 %               Right: Results for our pool of listeners.
@@ -92,9 +92,9 @@ function varargout=exp_baumgartner2013(varargin)
 %     'fig19'   Reproduce Fig. 19:
 %               Prediction matrices (PMVs) for different loudspeaker spans
 %               and NH12. 
-%               Left: Span of 0Â° (single-loudspeaker reproduction, baseline). 
-%               Center: Span of 30Â°. 
-%               Right: Span of 60Â°. 
+%               Left: Span of 0 deg. (single-loudspeaker reproduction, baseline). 
+%               Center: Span of 30 deg. 
+%               Right: Span of 60 deg. 
 %               P: Predicted performance.
 %
 %     'fig20'   Reproduce Fig. 20:
@@ -106,10 +106,10 @@ function varargout=exp_baumgartner2013(varargin)
 %     'fig22'   Reproduce Fig. 22:
 %               Predictions for the surround setups in the VBAP configuration. 
 %               Left: 5.1 setup, panning between the loudspeakers L and LS. 
-%               Center: 10.2 setup (DSX), panning from L (polar angle of 0Â°) 
-%               via LH2 (55Â°) to LS (180Â°). 
-%               Right: 9.1 setup (Auro-3D), panning from L (0Â°) via 
-%               LH1 (34Â°) and LSH (121Â°) to LS (180Â°). 
+%               Center: 10.2 setup (DSX), panning from L (polar angle of 0 deg.) 
+%               via LH2 (55 deg.) to LS (180 deg.)
+%               Right: 9.1 setup (Auro-3D), panning from L (0 deg.) via 
+%               LH1 (34 deg.) and LSH (121 deg.) to LS (180 deg.). 
 %               Desired polar angle: Continuous scale representing the VBAP 
 %               across pair-wise contributing loudspeakers. 
 %               All other conventions as in Fig. 18.
@@ -117,9 +117,9 @@ function varargout=exp_baumgartner2013(varargin)
 %     'fig23'   Reproduce Fig. 23:
 %               Predictions for two modifications to the 9.1 setup (Auro 3D). 
 %               Left: Original setup, loudspeakers LS and LSH 
-%               at the azimuth of 110Â°. 
-%               Center: LSH at the azimuth of 130Â°. 
-%               Right: LS and LSH at the azimuth of 130Â°. 
+%               at the azimuth of 110 deg.. 
+%               Center: LSH at the azimuth of 130 deg. 
+%               Right: LS and LSH at the azimuth of 130 deg. 
 %               All other conventions as in Fig. 22.
 %
 %   See also: baumgartner2013, data_baumgartner2013
@@ -228,7 +228,7 @@ if flags.do_fig12
     shading interp
     colormap('bone')
     xlabel('Frequency (kHz)')
-    ylabel('Polar Angle (Â°)')
+    ylabel('Polar Angle (\circ)')
     set(gca,...
         'XLim',[fp(1)-df,fp(end)+df],...
         'YLim',[polp(1)-da,polp(end)+da],...    
@@ -337,7 +337,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
 
       plot(0:ns+1,pechance*ones(ns+2,1),'k--')
 
-      ylabel('Local Polar RMS Error (Â°)')
+      ylabel('Local Polar RMS Error (\circ)')
       xlabel({'NH'})
 
       set(gca,'YLim',[20.1 48],'XLim',[0 ns+1],...
@@ -402,7 +402,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
           plot(ll+[-dx,+dx],ones(2,1)*peincchance(ll),'k--')
       end
 
-      ylabel('Increase in Local Polar RMS Error (Â°)')
+      ylabel('Increase in Local Polar RMS Error (\circ)')
       xlabel('NH')
       set(h,'FaceColor','white')
       set(gca,'XLim',[0 length(s)+1],...
@@ -466,7 +466,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
               'YLim',[20.1 48],'YMinorTick','on')
       set(h,'FaceColor','white')%,'BarWidth',0.5)
 
-      ylabel('Local Polar RMS Error (Â°)')
+      ylabel('Local Polar RMS Error (\circ)')
       xlabel('NH')
 
       % Quadrant error
@@ -498,7 +498,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
 
   % Coordinates (azi,ele) of loudspeakers
   if flags.do_fig18
-    LSPsetup{1} = [ 30,0 ; 150,0 ];                  % lat: 30Â°
+    LSPsetup{1} = [ 30,0 ; 150,0 ];                  % lat: 30 deg.
   elseif flags.do_fig22
     LSPsetup{1} = [ 30,0 ; 110,0 ];                  % 5.1
     LSPsetup{2} = [ 30,0 ; 45,45 ; 110,0 ];          % 10.2
@@ -631,7 +631,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
       if flags.do_fig23 || (flags.do_fig22 && ss > 1)
         set(gca,'XLim',[D(1)-3 D(end)+3],'XMinorTick','on',...
           'XTick',0:30:180,'XTickLabel',{0:30:150,180})
-        xlabel('Desired Polar Angle (Â°)')
+        xlabel('Desired Polar Angle (\circ)')
       else
         set(gca,'XLim',[D(1)-3 D(end)+3],'XMinorTick','on',...
           'XTick',18:36:180,'XTickLabel',{0.1:0.2:0.9})
@@ -642,7 +642,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
       colormap bone
       shading flat
       caxis([0 0.1])
-      ylabel('Response Angle (Â°)')
+      ylabel('Response Angle (\circ)')
 
       [tmp,Imax] = max(s(ll).p{ss});
       hold on
@@ -695,7 +695,7 @@ if flags.do_fig19 || flags.do_fig20
     end
     pol2{ii} = (polang(id1)+polang(id2)) /2;
     
-    fprintf([' Span: ' num2str(dPol(ii)) '° \n']);
+    fprintf([' Span: ' num2str(dPol(ii)) ' deg. \n']);
     for ll = 1:length(s)
 
         s(ll).spdtfs = extractsp(lat,s(ll).Obj);
@@ -734,15 +734,15 @@ if flags.do_fig19 || flags.do_fig20
       figure;
       subplot(1,3,1)
       plotbaumgartner2013(s(1).p1{1},polang,respang,'cmax',0.1,'nocolorbar');
-      title(['P: PE = ' num2str(s(1).pe1{1},2) '°, QE = ' num2str(s(1).qe1{1},2) '%'])
+      title(['P: PE = ' num2str(s(1).pe1{1},2) '\circ, QE = ' num2str(s(1).qe1{1},2) '%'])
       
       subplot(1,3,2)
       plotbaumgartner2013(s(1).p2{2},pol2{2},respang,'cmax',0.1,'nocolorbar');
-      title(['P: PE = ' num2str(s(1).pe2{2},2) '°, QE = ' num2str(s(1).qe2{2},2) '%'])
+      title(['P: PE = ' num2str(s(1).pe2{2},2) '\circ, QE = ' num2str(s(1).qe2{2},2) '%'])
             
       subplot(1,3,3)
       plotbaumgartner2013(s(1).p2{3},pol2{3},respang,'cmax',0.1,'nocolorbar');
-      title(['P: PE = ' num2str(s(1).pe2{3},2) '°, QE = ' num2str(s(1).qe2{3},2) '%'])
+      title(['P: PE = ' num2str(s(1).pe2{3},2) '\circ, QE = ' num2str(s(1).qe2{3},2) '%'])
       
     elseif flags.do_fig20
       
@@ -758,8 +758,8 @@ if flags.do_fig19 || flags.do_fig20
       errorbar(dPol,peIm,peIs,'ko-',...
           'MarkerSize',MarkerSize,...
           'MarkerFaceColor','k');
-      ylabel('Increase in Local Polar RMS Error (Â°)')
-      xlabel('Loudspeaker Span (Â°)')
+      ylabel('Increase in Local Polar RMS Error (\circ)')
+      xlabel('Loudspeaker Span (\circ)')
       set(gca,...
           'XLim',[dPol(1)-10 dPol(end)+10],...
           'XTick',dPol,...
@@ -772,7 +772,7 @@ if flags.do_fig19 || flags.do_fig20
           'MarkerSize',MarkerSize,...
           'MarkerFaceColor','k');
       ylabel('Increase in Quadrant Error (%)')
-      xlabel('Loudspeaker Span (Â°)')
+      xlabel('Loudspeaker Span (\circ)')
       set(gca,...
           'XLim',[dPol(1)-10 dPol(end)+10],...
           'XTick',dPol,...
