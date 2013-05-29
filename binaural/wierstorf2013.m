@@ -107,7 +107,7 @@ hrtf = kv.hrtf;
 lookup = kv.lookup;
 
 % Checking for the Sound-Field-Synthesis Toolbox
-if !which('SFS_start')
+if ~which('SFS_start')
     error(['%s: you need to install the Sound-Field-Synthesis Toolbox.\n', ...
         'You can download it at https://github.com/sfstoolbox/sfs.\n', ...
         'The results in the paper are verified up to revision a8914700a4'], ...
@@ -128,7 +128,6 @@ end
 
 %% ===== Configuration ===================================================
 % The following settings are all for the Sound Field Synthesis-Toolbox
-%
 % Binaural settings
 % length of impulse response; this has two influences: 
 % 1) longer impulse responses lead to a longer running time of the model
@@ -138,7 +137,9 @@ end
 conf.N = 1024;
 % Use no headphone compensation because we are not trying to listening to the
 % signal
-conf.usehcomp = 0; 
+conf.usehcomp = 0;
+conf.hcomplfile = '';
+conf.hcomprfile = '';
 %
 % WFS settings
 % Use a WFS pre-equalization filter and specify its start frequency.
@@ -146,6 +147,8 @@ conf.usehcomp = 0;
 % frequency of your WFS setup.
 conf.usehpre = 1;
 conf.hpreflow = 50;
+% misc settings
+conf.debug = 0;
 
 
 %% ===== Loading of additional data ======================================
@@ -170,10 +173,12 @@ end
 
 
 %% ===== Simulate the binaural ear signals ===============================
-% Setting up the configuration
-conf = SFS_config;
 % Simulate a stereo setup
 conf.array = array;
+% center of array
+conf.X0 = [0 0];
+% initialize empty array
+conf.x0 = [];
 % calculating the distance between the loudspeakers
 if strcmpi('circle',array)
     conf.dx0 = pi*L/number_of_speakers;
