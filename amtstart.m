@@ -50,7 +50,7 @@ s=ltfathelp('version');
 
 if isempty(s)
   error(['ltfathelp("version") returns an empty array. Please check your '...
-         installation.']);
+         'installation.']);
 end;
 
 % Split into major, minor and bugfix version.
@@ -71,6 +71,23 @@ if major_rq*1000000+minor_rq*1000+bugfix_rq>major_no*1000000+minor_no*1000+ ...
          'to function proberly. Your need at least version %i.%i.%i of LTFAT.'],major_rq,minor_rq,bugfix_rq);
 end;
           
+% Start SOFA
+disp('*** Starting SOFA ***'); 
+basepath=which('amtstart');
+basepath=basepath(1:end-11);
+if ~exist('SOFAstart','file')
+  sofapath=fullfile(basepath,'thirdparty','SOFA','API_MO');
+  if ~exist(sofapath,'dir')
+    error(['SOFA package is required. Please download ' ...
+          'it from http://sofacoustics.sourceforge.net ' ...
+         'and copy to ~/thirdparty/SOFA where ~ is the root directory of AMT.']); 
+  end
+  addpath(sofapath);
+end
+SOFAdbPath(fullfile(basepath,'hrtf'));
+SOFAdbURL('http://www.sofacoustics.org/data/amt');
+SOFAstart;
+disp('*** Starting AMT ***');  
 % --- general settings ---
 % Print the banner at startup?
 printbanner=1;
@@ -87,7 +104,7 @@ basepath=which('amtstart');
 basepath=basepath(1:end-11);
 
 % add the base path
-if exist('addpath')>0
+if exist('addpath','var')>0
   addpath(basepath);
 else
   path(path,basepath);
