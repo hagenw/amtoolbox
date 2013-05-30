@@ -147,8 +147,15 @@ conf.hcomprfile = '';
 % frequency of your WFS setup.
 conf.usehpre = 1;
 conf.hpreflow = 50;
+% Tapering window
+conf.usetapwin = 1;
+conf.tapwinlen = 0.3;
 % misc settings
 conf.debug = 0;
+conf.c = 343;
+conf.fs = 44100;
+conf.usefracdelay = 0;
+conf.fracdelay_method = '';
 
 
 %% ===== Loading of additional data ======================================
@@ -209,6 +216,7 @@ for ii=1:length(x)
     progressbar(ii,length(x))
     for jj=1:length(y)
         X = [x(ii) y(jj)];
+        conf.xref = X;
         if flags.do_stereo
             % first loudspeaker
             ir1 = ir_point_source(X,phi,x0(1,1:3),hrtf,conf);
