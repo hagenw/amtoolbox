@@ -215,10 +215,10 @@ if displ
         'charact. -> signal_me']); 
 end
 
-[b,a] = butter(kv.middle_ear_order,kv.middle_ear_thr(1)/(fs/2),'low');
+[b,a] = butter(kv.middle_ear_order,kv.middle_ear_thr(2)/(fs/2),'low');
 low_filtered= filter(b,a,insig);
 
-[b,a] = butter(kv.middle_ear_order,kv.middle_ear_thr(2)/(fs/2),'high');
+[b,a] = butter(kv.middle_ear_order,kv.middle_ear_thr(1)/(fs/2),'high');
 signal_me = filter(b,a,low_filtered);
 
 
