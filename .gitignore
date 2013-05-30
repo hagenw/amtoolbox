@@ -1,0 +1,4 @@
+# don't track stored figure data
+*_fig*.mat
+# vim tmp files
+*.swp
