@@ -71,22 +71,28 @@ if major_rq*1000000+minor_rq*1000+bugfix_rq>major_no*1000000+minor_no*1000+ ...
          'to function proberly. Your need at least version %i.%i.%i of LTFAT.'],major_rq,minor_rq,bugfix_rq);
 end;
           
-% Start SOFA
-disp('*** Starting SOFA ***'); 
+% Serch for SOFA package
 basepath=which('amtstart');
 basepath=basepath(1:end-11);
 if ~exist('SOFAstart','file')
   sofapath=fullfile(basepath,'thirdparty','SOFA','API_MO');
-  if ~exist(sofapath,'dir')
-    error(['SOFA package is required. Please download ' ...
-          'it from http://sofacoustics.sourceforge.net ' ...
-         'and copy to ~/thirdparty/SOFA where ~ is the root directory of AMT.']); 
+  if exist(sofapath,'dir')
+    addpath(sofapath);
   end
-  addpath(sofapath);
 end
-SOFAdbPath(fullfile(basepath,'hrtf'));
-SOFAdbURL('http://www.sofacoustics.org/data/amt');
-SOFAstart;
+
+% Start SOFA
+disp('*** Starting SOFA ***');
+if exist('SOFAstart','file')
+  SOFAdbPath(fullfile(basepath,'hrtf'));
+  SOFAdbURL('http://www.sofacoustics.org/data/amt');
+  SOFAstart;
+else
+  disp(['SOFA package could not be found. Continue without SOFA support.']);
+  disp(['For SOFA support please download the package ' ...
+        'from http://sofacoustics.sourceforge.net ' ...
+        'and copy to amtoolbox/thirdparty/SOFA.']); 
+end
 disp('*** Starting AMT ***');  
 % --- general settings ---
 % Print the banner at startup?
