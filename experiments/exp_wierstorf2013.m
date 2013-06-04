@@ -292,6 +292,93 @@ if flags.do_fig9
 end
 
 
+%% ------ F I G U R E  10 ------------------------------------------------
+if flags.do_fig10
+
+    s = [mfilename('fullpath'),'_fig10.mat'];
+
+    % orientation of the listener (always to the front)
+    phi = pi/2;
+    % position of the virtual point source
+    xs = [0 1];
+    src = 'ps';
+    % array size
+    L = 2.85;
+
+    % Y=1.5m
+    X = -1.75:0.25:0;
+    Y1 = 1.5;
+    Y2 = 2.0;
+
+    if amtredofile(s,flags.redomode)
+        for ii=1:length(X)
+            progressbar(ii,length(X));
+            model_3_Y1(ii) = wierstorf2013(X,Y1,phi,xs,src,L,'wfs', ...
+                                           'resolution',1, ...
+                                           'nls',3, ...
+                                           'array','linear', ...
+                                           'showprogress',0);
+            model_3_Y2(ii) = wierstorf2013(X,Y2,phi,xs,src,L,'wfs', ...
+                                           'resolution',1, ...
+                                           'nls',3, ...
+                                           'array','linear', ...
+                                           'showprogress',0);
+            model_8_Y1(ii) = wierstorf2013(X,Y1,phi,xs,src,L,'wfs', ...
+                                           'resolution',1, ...
+                                           'nls',8, ...
+                                           'array','linear', ...
+                                           'showprogress',0);
+            model_8_Y2(ii) = wierstorf2013(X,Y2,phi,xs,src,L,'wfs', ...
+                                           'resolution',1, ...
+                                           'nls',8, ...
+                                           'array','linear', ...
+                                           'showprogress',0);
+            model_15_Y1(ii) = wierstorf2013(X,Y1,phi,xs,src,L,'wfs', ...
+                                           'resolution',1, ...
+                                           'nls',15, ...
+                                           'array','linear', ...
+                                           'showprogress',0);
+            model_15_Y2(ii) = wierstorf2013(X,Y2,phi,xs,src,L,'wfs', ...
+                                           'resolution',1, ...
+                                           'nls',15, ...
+                                           'array','linear', ...
+                                           'showprogress',0);
+        end
+        save(save_format,s,'model_3_Y1','model_3_Y2','model_8_Y1','model_8_Y2','model_15_Y1','model_15_Y2');
+    else
+        load(s);
+    end
+
+    % get the human data
+    [data,description] = data_wierstorf2013('fig10','noplot');
+    
+    output.model_3_Y1 = model_3_Y1;
+    output.model_3_Y2 = model_3_Y2;
+    output.model_8_Y1 = model_8_Y1;
+    output.model_8_Y2 = model_8_Y2;
+    output.model_15_Y1 = model_15_Y1;
+    output.model_15_Y2 = model_15_Y2;
+    output.data = data;
+    output.description = description;
+
+    if flags.do_plot
+
+        data_wierstorf2013('fig10','plot');
+        hold on;
+        subplot(3,1,1)
+        plot(data(:,1),model_3_Y1,'-b');
+        plot(data(:,1),model_3_Y2,'-r');
+        subplot(3,1,2)
+        plot(data(:,1),model_8_Y1,'-b');
+        plot(data(:,1),model_8_Y2,'-r');
+        subplot(3,1,3)
+        plot(data(:,1),model_15_Y1,'-b');
+        plot(data(:,1),model_15_Y2,'-r');
+
+    end
+end
+
+
 %% ------ F I G U R E  11a -----------------------------------------------
 if flags.do_fig11a
 
@@ -694,7 +781,7 @@ if flags.do_fig12b
     phi = pi/2;
     % position of the virtual point source
     xs = [0 -1];
-    src = 'ps';
+    src = 'pw';
     % array size
     L = 3;
   
