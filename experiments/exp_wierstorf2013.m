@@ -22,10 +22,58 @@ function output = exp_wierstorf2013(varargin)
 %     'cached'   Always use the cached version. Throws an error if the
 %                file does not exist.
 %
-%     'fig1'  Reproduce Fig.1 from Wierstorf (2013). The localization error
-%             for a typical stereophony setup is calculated and shown for the
-%             whole listening are, sampled with 21x21 point.
+%     'fig1'     Reproduce Fig.1 from Wierstorf (2013). The localization error
+%                for a typical stereophony setup is calculated and shown for the
+%                whole listening are, sampled with 21x21 point.
 %
+%     'fig3'     Simulations of the sound field for Wave Field Synthesis for
+%                a mono-frequent virtual plane wave with three different
+%                frequencies of 1kHz, 2kHz, 5kHz. In addition a spatio-temporal
+%                impulse response of the sound field for a broadband plane wave
+%                is shown at the time 4.8ms after its start.
+%
+%     'fig6'     Results from an experiment comparing the localization accuracy
+%                for a real point source (loudspeaker) and a simulated point
+%                source (binaural synthesis).
+%
+%     'fig7'     Results from a localization experiment for a virtual point
+%                source in Wave Field Synthesis for different positions in the
+%                listening area (data are the same as in Fig.10). The line is
+%                always starting from a listener position and points towards the
+%                direction the listener perceived the auditory event.
+%
+%     'fig8'     Mapping of ITD values in the first twelve frequency channels to
+%                the corresponding azimuth angles in the range -90deg to 90deg.
+%                The ITD values are calculated from an HRTF data base with the
+%                binaural model after Dietz.
+%
+%     'fig9'     Deviation of the predicted sound source location with the
+%                mapping function from Fig.8 for the same HRTF data set as in
+%                Fig.8.
+%
+%     'fig10'    Results from a localization experiment for a virtual point
+%                source in Wave Field Synthesis for different positions in the
+%                listening area (data points are the same as in Fig.6). The
+%                signals were simulated by binaural synthesis and given also to
+%                the Dietz binaural model to predict the localization. The model
+%                results are shown as lines. Three different loudspeaker array
+%                setups were used.
+%
+%     'fig11a'   Prediction of the localization for a virtual point source in
+%                Wave Field Synthesis in the whole listening area for a linear
+%                loudspeaker array.
+%
+%     'fig11b'   Prediction of the localization for a virtual plane wave in Wave
+%                Field Synthesis in the whole listening area for a linear
+%                loudspeaker array.
+%
+%     'fig12a'   Prediction of the localization for a virtual point source in
+%                Wave Field Synthesis in the whole listening area for a circular
+%                loudspeaker array.
+%
+%     'fig12b'   Prediction of the localization for a virtual plane wave in Wave
+%                Field Synthesis in the whole listening area for a circular
+%                loudspeaker array.
 %
 %   If no flag is given, the function will print the list of valid flags.
 %
@@ -41,7 +89,7 @@ function output = exp_wierstorf2013(varargin)
 %   AUTHOR: Hagen Wierstorf
 
 definput.import={'amtredofile'};
-definput.flags.type={'missingflag','fig1','fig3','fig6','fig7','fig8',...
+definput.flags.type={'missingflag','fig1','fig3','fig6','fig7','fig8', ...
                     'fig9','fig10','fig11a','fig11b','fig12a','fig12b'};
 
 definput.flags.plot={'plot','noplot'};
@@ -193,6 +241,69 @@ elseif flags.do_fig3
         xlabel('x/m');
         ylabel('y/m');
         title('(d) t_{pw} = 4.8ms');
+    end
+
+
+%% ------ F I G U R E  6 -------------------------------------------------
+elseif flags.do_fig6
+
+    if flags.do_plot
+        [data,description] = data_wierstorf2013('fig6','plot');
+    else
+        [data,description] = data_wierstorf2013('fig6','noplot');
+    end
+    output.data = data;
+    output.description = description;
+
+
+%% ------ F I G U R E  7 -------------------------------------------------
+elseif flags.do_fig7
+
+    [data,description] = data_wierstorf2013('fig7','noplot');
+    output.data = data;
+    output.description = description;
+    if flags.do_plot
+        L = 2.85;
+        conf.array = 'linear';
+        conf.X0 = [0 0];
+        conf.x0 = [];
+        figure;
+        subplot(1,3,1);
+        conf.dx0 = L/2;
+        quiver(data(:,1),data(:,2),data(:,3),data(:,4),25,'.b');
+        hold on;
+        draw_loudspeakers(secondary_source_positions(L,conf));
+        hold on;
+        plot(0,1,'*r');
+        hold off;
+        title(description{3,1});
+        axis([-2.13 1.63 -2.2 1.2]);
+        xlabel('x/m');
+        ylabel('y/m');
+        subplot(1,3,2);
+        conf.dx0 = L/7;
+        quiver(data(:,1),data(:,2),data(:,5),data(:,6),25,'.b');
+        hold on;
+        draw_loudspeakers(secondary_source_positions(L,conf));
+        hold on;
+        plot(0,1,'*r');
+        hold off;
+        title(description{5,1});
+        axis([-2.13 1.63 -2.2 1.2]);
+        xlabel('x/m');
+        ylabel('y/m');
+        subplot(1,3,3);
+        conf.dx0 = L/14;
+        quiver(data(:,1),data(:,2),data(:,7),data(:,8),25,'.b');
+        hold on;
+        draw_loudspeakers(secondary_source_positions(L,conf));
+        hold on;
+        plot(0,1,'*r');
+        hold off;
+        title(description{7,1});
+        axis([-2.13 1.63 -2.2 1.2]);
+        xlabel('x/m');
+        ylabel('y/m');
     end
 
 
