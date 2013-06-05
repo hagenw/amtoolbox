@@ -418,8 +418,8 @@ if flags.do_fig10
 
     % Y=1.5m
     X = -1.75:0.25:0;
-    Y1 = 1.5;
-    Y2 = 2.0;
+    Y1 = -1.5;
+    Y2 = -2.0;
 
     if amtredofile(s,flags.redomode)
         for ii=1:length(X)
@@ -474,17 +474,37 @@ if flags.do_fig10
 
     if flags.do_plot
 
-        data_wierstorf2013('fig10','plot');
-        hold on;
+        figure; 
         subplot(3,1,1)
+        errorbar(data(:,1)-0.025,data(:,2),data(:,3),'ob'); hold on;
+        errorbar(data(:,1)+0.025,data(:,8),data(:,9),'or');
         plot(data(:,1),model_3_Y1,'-b');
         plot(data(:,1),model_3_Y2,'-r');
+        axis([-1.85 0.125 -16 7]);
+        legend(description{2,1},description{8,1});
+        title(description{2,2});
+        xlabel(description{1,3});
+        ylabel(description{2,3});
         subplot(3,1,2)
+        errorbar(data(:,1)-0.025,data(:,4),data(:,5),'ob'); hold on;
+        errorbar(data(:,1)+0.025,data(:,10),data(:,11),'or');
         plot(data(:,1),model_8_Y1,'-b');
         plot(data(:,1),model_8_Y2,'-r');
+        axis([-1.85 0.125 -16 7]);
+        legend(description{4,1},description{10,1});
+        title(description{4,2});
+        xlabel(description{1,3});
+        ylabel(description{2,3});
         subplot(3,1,3)
+        errorbar(data(:,1)-0.025,data(:,6),data(:,7),'ob'); hold on;
+        errorbar(data(:,1)+0.025,data(:,12),data(:,13),'or');
         plot(data(:,1),model_15_Y1,'-b');
         plot(data(:,1),model_15_Y2,'-r');
+        axis([-1.85 0.125 -16 7]);
+        legend(description{6,1},description{12,1});
+        title(description{6,2});
+        xlabel(description{1,3});
+        ylabel(description{2,3});
 
     end
 end
