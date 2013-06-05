@@ -22,7 +22,7 @@ function phi = itd2angle(itd,lookup)
 %% ===== Checking of input parameters ====================================
 nargmin = 2;
 nargmax = 2;
-narginchk(nargmin,nargmax);
+error(nargchk(nargmin,nargmax,nargin));
 
 
 %% ===== Computation =====================================================

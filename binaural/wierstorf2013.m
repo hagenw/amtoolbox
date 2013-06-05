@@ -90,7 +90,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %% ===== Checking of input parameters and dependencies ===================
 nargmin = 7;
 nargmax = 17;
-narginchk(nargmin,nargmax);
+error(nargchk(nargmin,nargmax,nargin));
 
 definput.flags.method = {'stereo','wfs'};
 definput.keyvals.array = 'linear';
@@ -216,7 +216,7 @@ desired_direction = zeros(length(x),length(y));
 localization_error = zeros(length(x),length(y));
 for ii=1:length(x)
     if showprogress progressbar(ii,length(x)) end
-    for jj=1:length(y)
+    parfor jj=1:length(y)
         X = [x(ii) y(jj)];
         conf.xref = X;
         if flags.do_stereo

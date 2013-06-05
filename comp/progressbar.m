@@ -13,7 +13,7 @@ function progressbar(ii,nii)
 
 
 % ------ Checking of input parameters ------------------------------------
-narginchk(2,2);
+error(nargchk(2,2,nargin));
 if ( ~isnumeric(ii) || ~isscalar(ii) )
     error('%s: ii has to be a scalar.',upper(mfilename));
 end

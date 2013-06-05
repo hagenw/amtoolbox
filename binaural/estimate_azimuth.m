@@ -41,7 +41,7 @@ function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spe
 %% ===== Checking of input  parameters ==================================
 nargmin = 2;
 nargmax = 5;
-narginchk(nargmin,nargmax);
+error(nargchk(nargmin,nargmax,nargin));
 
 if nargin==2
     model = 'dietz';
