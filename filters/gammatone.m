@@ -189,7 +189,9 @@ if flags.do_allpole
       phi   = 2*pi*ourbeta(ii)/fs;
       
       % Compute the position of the pole
-      atilde = exp(-2*pi*ourbeta(ii)/fs - 1i*2*pi*fc(ii)/fs);
+      % The commented line is the old code from the days of yore 
+      %atilde = exp(-2*pi*ourbeta(ii)/fs - 1i*2*pi*fc(ii)/fs);      
+      atilde = exp(-2*pi*ourbeta(ii)/fs + 1i*2*pi*fc(ii)/fs);
       
       % Repeat the pole n times, and expand the polynomial
       a2=poly(atilde*ones(1,n));
@@ -284,7 +286,10 @@ else
       a0 = abs( (1+b1*cos(theta)-1i*b1*sin(theta)+b2*cos(2*theta)-1i*b2*sin(2*theta)) / (1+alpha*cos(theta)-1i*alpha*sin(theta))  );
       
       % Compute the position of the pole
-      atilde = exp(-2*pi*ourbeta(ii)/fs - 1i*2*pi*fc(ii)/fs);
+      % The line commented line below is the old code that returned
+      % negative frequencies.
+      %atilde = exp(-2*pi*ourbeta(ii)/fs - 1i*2*pi*fc(ii)/fs);
+      atilde = exp(-2*pi*ourbeta(ii)/fs + 1i*2*pi*fc(ii)/fs);
       
       % Repeat the pole n times, and expand the polynomial
       a2=poly(atilde*ones(1,n));

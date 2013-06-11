@@ -61,7 +61,7 @@ lookup = load('dietz2011itd2anglelookup.mat');
 
 if flags.do_fig3
 
-    signal=wavread('dietz2011_five_speakers.wav');
+    signal=competingtalkers('five_speakers');
     fs = 16000;
     s_pos = [-80 -30 0 30 80];
     ic_threshold=0.98;
@@ -124,7 +124,7 @@ if flags.do_fig4
     
     % This reproduces Figure 4 from Dietz et al Speech Comm. 2011
 
-    signal=wavread('dietz2011_two_speakers.wav');
+    signal=competingtalkers('two_speakers');
     fs = 16000;
     s_pos = [-80 -30 0 30 80];
     ic_threshold=0.98;
@@ -200,10 +200,10 @@ end;
 
 if flags.do_fig5
     % mix signals
-    signal1=wavread('dietz2011_one_of_three.wav');
-    signal2=wavread('dietz2011_two_of_three.wav');
-    signal3=wavread('dietz2011_three_of_three.wav');
-    noise=wavread('dietz2011_bNoise.wav');
+    signal1=competingtalkers('one_of_three');
+    signal2=competingtalkers('two_of_three');
+    signal3=competingtalkers('three_of_three');
+    noise  =competingtalkers('bnoise');
     noise = noise(1:40000,:);
     fs = 16000;
 
@@ -292,7 +292,7 @@ end;
 
 if flags.do_fig6
 
-    signal=wavread('dietz2011_one_speaker_reverb');
+    signal=competingtalkers('one_speaker_reverb');
     fs = 16000;
     s_pos = [-45 0 45];
     ic_threshold=0.98;
