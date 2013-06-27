@@ -20,7 +20,7 @@ function varargout=exp_ziegelwanger2013(varargin)
 %     'fig2'    Reproduce Fig. 2:
 %               
 %               Left panel: 
-%               Normalized HRIRs of NH64 (ARI database). Sound source was
+%               Normalized HRIRs of NH89 (ARI database). Sound source was
 %               placed 45° left in the horizontal plane.
 %               Solid line: for the left ear
 %               Dashed line: for the right ear
@@ -32,7 +32,7 @@ function varargout=exp_ziegelwanger2013(varargin)
 %               Squares, Magenta: Average Group Delay (1-5 kHz)
 %               
 %               Right panel: 
-%               Estimated TOAs of NH64 (ARI database) in the horizontal
+%               Estimated TOAs of NH89 (ARI database) in the horizontal
 %               interaural plane.
 %               Black: Minimum-Phase Cross-Correlation Method
 %               Blue: Time-Position of the HRIR-Maximum
@@ -42,14 +42,14 @@ function varargout=exp_ziegelwanger2013(varargin)
 %     'fig3'    Reproduce Fig. 3:
 %               
 %               Left panel: 
-%               Sagittal TOA deviations and averaged TOA variance for NH64
+%               Sagittal TOA deviations and averaged TOA variance for NH89
 %               as function of the polar angle for all sagittal groups.
 %               Dots, Blue: Sagittal TOA deviations
 %               Line, Red: Averaged TOA variance
 %               
 %               Right panel: 
 %               Estimated TOAs, detected outliers and outlier adjusted set
-%               of TOAs for NH64 (ARI database) in the horizontal plane.
+%               of TOAs for NH89 (ARI database) in the horizontal plane.
 %               Line: Estimated TOAs
 %               Triangles (down), Blue: Detected outliers for the azimuthal
 %               slope criterion
@@ -67,7 +67,7 @@ function varargout=exp_ziegelwanger2013(varargin)
 %
 %     'fig6'    Reproduce Fig. 6:
 %               TOA in interaural horizontal plane for the left ear HRTFs
-%               of NH64.
+%               of NH89.
 %               Solid line, Black: On-axis model fitted to outlier-adjusted
 %               set of TOAs
 %               Circles, Red: Outlier-adjusted set of TOAs
@@ -84,7 +84,7 @@ function varargout=exp_ziegelwanger2013(varargin)
 %               Squares: LISTEN
 %
 %     'fig8'    Reproduce Fig. 8:
-%               Relative TOAs for NH64 (ARI database) in the interaural
+%               Relative TOAs for NH89 (ARI database) in the interaural
 %               horizontal plane.
 %               Dashed lines: for the right ear
 %               Solid lines: for the right ear
@@ -155,21 +155,20 @@ function varargout=exp_ziegelwanger2013(varargin)
 
 %% ------ Check input options --------------------------------------------
 
-  definput.flags.type = {'missingflag',...
+    definput.flags.type = {'missingflag',...
     'fig2','fig3','fig5','fig6',...
     'fig7','fig8','fig9','fig11','fig12'};
-  definput.flags.plot = {'plot','noplot'};
-  definput.flags.results = {'reload','recalc'};
+    definput.flags.plot = {'plot','noplot'};
+    definput.flags.results = {'reload','recalc'};
 
-  % Parse input options
-  [flags,kv]  = ltfatarghelper({},definput,varargin);
-        
-if flags.do_missingflag
-  flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
-             sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
-  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
-end;
+    % Parse input options
+    [flags,kv]  = ltfatarghelper({},definput,varargin);
 
+    if flags.do_missingflag
+        flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}), ...
+            sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+        error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+    end;
 
 %% Figure 2
 if flags.do_fig2
@@ -178,27 +177,27 @@ if flags.do_fig2
 
     subplot(122)
     %---------------------------Threshold---------------------------
-    temp=ziegelwanger2013(data.hM,data.meta,data.stimPar,1,0);
-    MAX=temp.toa;
+    [~,tmp]=ziegelwanger2013(data,1,0);
+    MAX=tmp.toa;
 
     %---------------------------Centroid----------------------------
-    temp=ziegelwanger2013(data.hM,data.meta,data.stimPar,2,0);
-    CTD=temp.toa;
+    [~,tmp]=ziegelwanger2013(data,2,0);
+    CTD=tmp.toa;
 
     %---------------------------Groupdelay--------------------------
-    temp=ziegelwanger2013(data.hM,data.meta,data.stimPar,3,0);
-    AGD=temp.toa;
+    [~,tmp]=ziegelwanger2013(data,3,0);
+    AGD=tmp.toa;
 
     %---------------------------Minimal-Phase-----------------------
-    temp=ziegelwanger2013(data.hM,data.meta,data.stimPar,4,0);
-    MCM=temp.toa;
-    clear temp
+    [~,tmp]=ziegelwanger2013(data,4,0);
+    MCM=tmp.toa;
+    clear tmp
 
-    plotziegelwanger2013(MCM(:,1),4,[0 0 0]/255,0,1,1,data.meta,data.stimPar,'-',1);
+    plotziegelwanger2013(data,MCM(:,1),4,[0 0 0]/255,0,1,1,'-',1);
     hold on
-    plotziegelwanger2013(MAX(:,1),4,[0 0 80]/255,0,1,1,data.meta,data.stimPar,'--',1);
-    plotziegelwanger2013(CTD(:,1),4,[50 220 50]/255,0,1,1,data.meta,data.stimPar,'-',1);
-    plotziegelwanger2013(AGD(:,1),4,[250 80 80]/255,0,1,1,data.meta,data.stimPar,'--',1);
+    plotziegelwanger2013(data,MAX(:,1),4,[0 0 80]/255,0,1,1,'--',1);
+    plotziegelwanger2013(data,CTD(:,1),4,[50 220 50]/255,0,1,1,'-',1);
+    plotziegelwanger2013(data,AGD(:,1),4,[250 80 80]/255,0,1,1,'--',1);
     xlim([-10 370])
     ylim([2.65 4.05])
     grid off
@@ -210,37 +209,37 @@ if flags.do_fig2
     title('');
     
     subplot(121)
-    time=(0:size(data.hM,1)-1)/data.stimPar.SamplingRate*1000;
+    time=(0:data.DimSize.N-1)/data.Data.SamplingRate*1000;
     MAX=round(MAX);
     CTD=round(CTD);
     AGD=round(AGD);
     MCM=round(MCM);
-    idx=ARI_FindPosition(data.meta,85,0);
+    idx=ARI_FindPosition(data,85,0);
 
-    fprintf(['MAX: ITD is ' num2str(time(diff(MCM(idx,:),1,2))) ' ms\n'])
-    fprintf(['CTD: ITD is ' num2str(time(diff(MAX(idx,:),1,2))) ' ms\n'])
-    fprintf(['AGD: ITD is ' num2str(time(diff(CTD(idx,:),1,2))) ' ms\n'])
-    fprintf(['MCM: ITD is ' num2str(time(diff(AGD(idx,:),1,2))) ' ms\n'])
+    fprintf(['MAX: ITD is ' num2str(time(diff(MAX(idx,:),1,2))) ' ms\n'])
+    fprintf(['CTD: ITD is ' num2str(time(diff(CTD(idx,:),1,2))) ' ms\n'])
+    fprintf(['AGD: ITD is ' num2str(time(diff(AGD(idx,:),1,2))) ' ms\n'])
+    fprintf(['MCM: ITD is ' num2str(time(diff(MCM(idx,:),1,2))) ' ms\n'])
 
-    plot(time,data.hM(:,idx,1)/max(abs(data.hM(:,idx,1))),'k-');
+    plot(time,squeeze(data.Data.IR(idx,1,:))/max(abs(data.Data.IR(idx,1,:))),'k-');
     hold on
-    plot(time,data.hM(:,idx,2)/max(abs(data.hM(:,idx,2))),'k--')
-    h=stem([time(MCM(idx,1)) time(MCM(idx,1))],[-2 data.hM(MCM(idx,1),idx,1)/max(abs(data.hM(:,idx,1)))],'r-','BaseValue',-1);
-    stem([time(CTD(idx,1)) time(CTD(idx,1))],[-2 data.hM(CTD(idx,1),idx,1)/max(abs(data.hM(:,idx,1)))],'g-','BaseValue',-1)
-    stem([time(MAX(idx,1)) time(MAX(idx,1))],[-2 data.hM(MAX(idx,1),idx,1)/max(abs(data.hM(:,idx,1)))],'b-','BaseValue',-1)
-    stem([time(AGD(idx,1)) time(AGD(idx,1))],[-2 data.hM(AGD(idx,1),idx,1)/max(abs(data.hM(:,idx,1)))],'m-','BaseValue',-1)
-    stem([time(MCM(idx,2)) time(MCM(idx,2))],[-2 data.hM(MCM(idx,2),idx,2)/max(abs(data.hM(:,idx,2)))],'r-','BaseValue',-1)
-    stem([time(CTD(idx,2)) time(CTD(idx,2))],[-2 data.hM(CTD(idx,2),idx,2)/max(abs(data.hM(:,idx,2)))],'g-','BaseValue',-1)
-    stem([time(AGD(idx,2)) time(AGD(idx,2))],[-2 data.hM(AGD(idx,2),idx,2)/max(abs(data.hM(:,idx,2)))],'m-','BaseValue',-1)
-    stem([time(MAX(idx,2)) time(MAX(idx,2))],[-2 data.hM(MAX(idx,2),idx,2)/max(abs(data.hM(:,idx,2)))],'b-','BaseValue',-1)
-    plot(time(MAX(idx,1)),data.hM(MAX(idx,1),idx,1)/max(abs(data.hM(:,idx,1))),'b^','MarkerFaceColor','b')
-    plot(time(MCM(idx,1)),data.hM(MCM(idx,1),idx,1)/max(abs(data.hM(:,idx,1))),'ro','MarkerFaceColor','r')
-    plot(time(CTD(idx,1)),data.hM(CTD(idx,1),idx,1)/max(abs(data.hM(:,idx,1))),'gd','MarkerFaceColor','g')
-    plot(time(AGD(idx,1)),data.hM(AGD(idx,1),idx,1)/max(abs(data.hM(:,idx,1))),'ms','MarkerFaceColor','m')
-    plot(time(MAX(idx,2)),data.hM(MAX(idx,2),idx,2)/max(abs(data.hM(:,idx,2))),'b^','MarkerFaceColor','b')
-    plot(time(MCM(idx,2)),data.hM(MCM(idx,2),idx,2)/max(abs(data.hM(:,idx,2))),'ro','MarkerFaceColor','r')
-    plot(time(CTD(idx,2)),data.hM(CTD(idx,2),idx,2)/max(abs(data.hM(:,idx,2))),'gd','MarkerFaceColor','g')
-    plot(time(AGD(idx,2)),data.hM(AGD(idx,2),idx,2)/max(abs(data.hM(:,idx,2))),'ms','MarkerFaceColor','m')
+    plot(time,squeeze(data.Data.IR(idx,2,:))/max(abs(data.Data.IR(idx,2,:))),'k--')
+    h=stem([time(MCM(idx,1)) time(MCM(idx,1))],[-2 data.Data.IR(idx,1,MCM(idx,1))/max(abs(data.Data.IR(idx,1,:)))],'r-','BaseValue',-1);
+    stem([time(CTD(idx,1)) time(CTD(idx,1))],[-2 data.Data.IR(idx,1,CTD(idx,1))/max(abs(data.Data.IR(idx,1,:)))],'g-','BaseValue',-1)
+    stem([time(MAX(idx,1)) time(MAX(idx,1))],[-2 data.Data.IR(idx,1,MAX(idx,1))/max(abs(data.Data.IR(idx,1,:)))],'b-','BaseValue',-1)
+    stem([time(AGD(idx,1)) time(AGD(idx,1))],[-2 data.Data.IR(idx,1,AGD(idx,1))/max(abs(data.Data.IR(idx,1,:)))],'m-','BaseValue',-1)
+    stem([time(MCM(idx,2)) time(MCM(idx,2))],[-2 data.Data.IR(idx,2,MCM(idx,2))/max(abs(data.Data.IR(idx,2,:)))],'r-','BaseValue',-1)
+    stem([time(CTD(idx,2)) time(CTD(idx,2))],[-2 data.Data.IR(idx,2,CTD(idx,2))/max(abs(data.Data.IR(idx,2,:)))],'g-','BaseValue',-1)
+    stem([time(AGD(idx,2)) time(AGD(idx,2))],[-2 data.Data.IR(idx,2,AGD(idx,2))/max(abs(data.Data.IR(idx,2,:)))],'m-','BaseValue',-1)
+    stem([time(MAX(idx,2)) time(MAX(idx,2))],[-2 data.Data.IR(idx,2,MAX(idx,2))/max(abs(data.Data.IR(idx,2,:)))],'b-','BaseValue',-1)
+    plot(time(MAX(idx,1)),data.Data.IR(idx,1,MAX(idx,1))/max(abs(data.Data.IR(idx,1,:))),'b^','MarkerFaceColor','b')
+    plot(time(MCM(idx,1)),data.Data.IR(idx,1,MCM(idx,1))/max(abs(data.Data.IR(idx,1,:))),'ro','MarkerFaceColor','r')
+    plot(time(CTD(idx,1)),data.Data.IR(idx,1,CTD(idx,1))/max(abs(data.Data.IR(idx,1,:))),'gd','MarkerFaceColor','g')
+    plot(time(AGD(idx,1)),data.Data.IR(idx,1,AGD(idx,1))/max(abs(data.Data.IR(idx,1,:))),'ms','MarkerFaceColor','m')
+    plot(time(MAX(idx,2)),data.Data.IR(idx,2,MAX(idx,2))/max(abs(data.Data.IR(idx,2,:))),'b^','MarkerFaceColor','b')
+    plot(time(MCM(idx,2)),data.Data.IR(idx,2,MCM(idx,2))/max(abs(data.Data.IR(idx,2,:))),'ro','MarkerFaceColor','r')
+    plot(time(CTD(idx,2)),data.Data.IR(idx,2,CTD(idx,2))/max(abs(data.Data.IR(idx,2,:))),'gd','MarkerFaceColor','g')
+    plot(time(AGD(idx,2)),data.Data.IR(idx,2,AGD(idx,2))/max(abs(data.Data.IR(idx,2,:))),'ms','MarkerFaceColor','m')
     xlim([2.4 4.1])
     ylim([-1.1 1.1])
     xlabel('Time (ms) ')
@@ -260,48 +259,36 @@ if flags.do_fig3 || flags.do_fig6
     p0_offaxis=zeros(2,7);
     p_offaxis=p0_offaxis;
 
-    toa=zeros(size(data.hM,2),size(data.hM,3));
-    toaEst=zeros(size(data.hM,2),size(data.hM,3));
-    indicator=zeros(size(data.hM,2),size(data.hM,3));
+    toa=zeros(data.DimSize.M,data.DimSize.R);
+    toaEst=zeros(data.DimSize.M,data.DimSize.R);
+    indicator=zeros(data.DimSize.M,data.DimSize.R);
     indicator_hor=indicator;
     indicator_sag=indicator;
-    data.meta.pos(:,8)=cumsum(ones(size(data.meta.pos,1),1));
-    hM_min=ARI_MinimalPhase([data.hM; zeros(4096-size(data.hM,1),size(data.hM,2),size(data.hM,3))]);
-    hM_min=hM_min(1:size(data.hM,1),:,:);
-    for ii=1:size(data.hM,2)
-        for jj=1:size(data.hM,3)
-            if isnan(hM_min(1,ii,jj))
-                hM_min(:,ii,jj)=ARI_MinimalPhase(data.hM(:,ii,jj));
-            end
-        end
-    end
-    corrcoeff=zeros(size(data.hM,2),size(data.hM,3));
-    for ii=1:size(data.hM,2)
-        for jj=1:size(data.hM,3)
-            [c,lag]=xcorr(transpose(squeeze(data.hM(:,ii,jj))),transpose(squeeze(hM_min(:,ii,jj))),size(data.hM,1)-1,'none');
-            [corrcoeff(ii,jj),idx]=max(abs(c));
-            corrcoeff(ii,jj)=corrcoeff(ii,jj)/sum(data.hM(:,ii,jj).^2);
-            toaEst(ii,jj)=lag(idx);
-        end
-    end
+    pos=zeros(data.DimSize.M,8);
+    pos(:,1:2)=data.ListenerRotation(:,1:2);
+    [pos(:,6),pos(:,7)]=sph2hor(data.ListenerRotation(:,1),data.ListenerRotation(:,2));
+    pos(:,8)=cumsum(ones(data.DimSize.M,1));
+    [~,tmp]=ziegelwanger2013(data,4,0);
+    toaEst=tmp.toa;
     
-    for ch=1:size(data.hM,3)
+    for ch=1:data.DimSize.R
+
         % Outlier detection: smooth TOA in horizontal planes
         epsilon=5;
-        slope=zeros(size(data.hM,2),1);
-        for ele=min(data.meta.pos(:,2)):epsilon:max(data.meta.pos(:,2)) %calculate slope for each elevation along azimut
-            idx=find(data.meta.pos(:,2)>ele-epsilon/2 & data.meta.pos(:,2)<=ele+epsilon/2);
+        slope=zeros(data.DimSize.M,1);
+        for ele=min(pos(:,2)):epsilon:max(pos(:,2)) %calculate slope for each elevation along azimuth
+            idx=find(pos(:,2)>ele-epsilon/2 & pos(:,2)<=ele+epsilon/2);
             if numel(idx)>1
                 idx(length(idx)+1)=idx(1);
-                slope(idx(1:end-1),1)=diff(toaEst(idx,ch))./abs(diff(data.meta.pos(idx,1)));
+                slope(idx(1:end-1),1)=diff(toaEst(idx,ch))./abs(diff(pos(idx,1)));
             end
         end
         sloperms=sqrt(sum(slope.^2)/length(slope));
-        if sloperms<30/(length(find(data.meta.pos(:,2)==0))/2)
-            sloperms=30/(length(find(data.meta.pos(:,2)==0))/2);
+        if sloperms<30/(length(find(pos(:,2)==0))/2)
+            sloperms=30/(length(find(pos(:,2)==0))/2);
         end
-        for ele=min(data.meta.pos(:,2)):epsilon:max(data.meta.pos(:,2))
-            idx=find(data.meta.pos(:,2)>ele-epsilon/2 & data.meta.pos(:,2)<=ele+epsilon/2);
+        for ele=min(pos(:,2)):epsilon:max(pos(:,2))
+            idx=find(pos(:,2)>ele-epsilon/2 & pos(:,2)<=ele+epsilon/2);
             for ii=1:length(idx)-1
                 if abs(slope(idx(ii)))>sloperms
                     for jj=0:1
@@ -315,15 +302,14 @@ if flags.do_fig3 || flags.do_fig6
             end
             clear idx
         end
-%         indicator2=indicator1(:,ch);
 
         % Outlier detection: constant TOA in sagittal planes
         epsilon=2;
         for ii=1:20
-            sag_dev=zeros(size(data.hM,2),1);
+            sag_dev=zeros(data.DimSize.M,1);
             for lat=-90:epsilon:90
-                idx=find(data.meta.pos(:,6)>lat-epsilon/2 & data.meta.pos(:,6)<=lat+epsilon/2 & indicator_hor(:,ch)==0);
-                idx2=find(data.meta.pos(:,6)>lat-epsilon/2 & data.meta.pos(:,6)<=lat+epsilon/2 & indicator(:,ch)==0 & indicator_hor(:,ch)==0);
+                idx=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2); 
+                idx2=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2 & indicator_hor(:,ch)==0 & indicator(:,ch)==0);
                 if length(idx2)>2
                     sag_dev(idx,1)=toaEst(idx,ch)-mean(toaEst(idx2,ch));
                 end
@@ -340,11 +326,11 @@ if flags.do_fig3 || flags.do_fig6
 
         if flags.do_fig3 && ch==1 %Figure 3
             subplot(121)
-            plot([-90; 270],[sag_var/data.stimPar.SamplingRate*1000000; sag_var/data.stimPar.SamplingRate*1000000],'r--');
+            plot([-90; 270],[sag_var/data.Data.SamplingRate*1000000; sag_var/data.Data.SamplingRate*1000000],'r--');
             hold on
-            plot(real(data.meta.pos(:,7)),abs(sag_dev)/data.stimPar.SamplingRate*1000000,'b.');
+            plot(real(pos(:,7)),abs(sag_dev)/data.Data.SamplingRate*1000000,'b.');
             xlim([-98 278])
-            ylim([-5 max(abs(sag_dev)/data.stimPar.SamplingRate*1000000)+5])
+            ylim([-5 max(abs(sag_dev)/data.Data.SamplingRate*1000000)+5])
             xlabel('Polar angle in degree')
             ylabel('Sagittal TOA deviation in µs')
             title('')
@@ -354,17 +340,17 @@ if flags.do_fig3 || flags.do_fig6
 
         if flags.do_fig3 && ch==1 %Figure 3
             subplot(122)
-            plotziegelwanger2013(toaEst,4,'k',0,1,1,data.meta,data.stimPar,{'-'},1);
+            plotziegelwanger2013(data,toaEst,4,'k',0,1,1,{'-'},1);
             hold on
-            h=plotziegelwanger2013(indicator_sag.*toaEst,3,'w',0,1,1,data.meta,data.stimPar,{'^'},4);
+            h=plotziegelwanger2013(data,indicator_sag.*toaEst,3,'w',0,1,1,{'^'},4);
             set(h,'MarkerFaceColor','w','MarkerEdgeColor','w');
-            h=plotziegelwanger2013(indicator_hor.*toaEst,3,'w',0,1,1,data.meta,data.stimPar,{'v'},4);
+            h=plotziegelwanger2013(data,indicator_hor.*toaEst,3,'w',0,1,1,{'v'},4);
             set(h,'MarkerFaceColor','w','MarkerEdgeColor','w');
-            h=plotziegelwanger2013(indicator_sag.*toaEst,3,'b',0,1,1,data.meta,data.stimPar,{'^'},4);
+            h=plotziegelwanger2013(data,indicator_sag.*toaEst,3,'b',0,1,1,{'^'},4);
             set(h,'LineWidth',2);
-            h=plotziegelwanger2013(indicator_hor.*toaEst,3,'b',0,1,1,data.meta,data.stimPar,{'v'},4);
+            h=plotziegelwanger2013(data,indicator_hor.*toaEst,3,'b',0,1,1,{'v'},4);
             set(h,'LineWidth',2);
-            h=plotziegelwanger2013((-indicator+1).*toaEst,3,'r',0,1,1,data.meta,data.stimPar,{'o'},4);
+            h=plotziegelwanger2013(data,(-indicator+1).*toaEst,3,'r',0,1,1,{'o'},4);
             set(h,'MarkerFaceColor','r','MarkerEdgeColor','r');
             ylabel('TOA in ms')
             xlabel('Azimuth in degree')
@@ -376,40 +362,38 @@ if flags.do_fig3 || flags.do_fig6
         end
     end
 
-    for ch=1:size(data.hM,3)
-        p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/data.stimPar.SamplingRate;
-        p0off_onaxis=[0.06 pi/4 pi/4 0.001];
+    for ch=1:data.DimSize.R
+        p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/data.Data.SamplingRate;
+        p0offset_onaxis=[0.06 pi/4 pi/4 0.001];
 
-        % Fit on-axis model to outlier adjusted set of estimated TOAs
         idx=find(indicator(:,ch)==0);
-        x=data.meta.pos(idx,1:2)*pi/180;
-        y=toaEst(idx,ch)/data.stimPar.SamplingRate;
-        p_onaxis(ch,:)=lsqcurvefit(@ziegelwanger2013onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0off_onaxis,p0_onaxis(ch,:)+p0off_onaxis,optimset('Display','off','TolFun',1e-6));
-        toa(:,ch)=ziegelwanger2013onaxis(p_onaxis(ch,:),data.meta.pos(:,1:2)*pi/180)*data.stimPar.SamplingRate;
+        x=pos(idx,1:2)*pi/180;
+        y=toaEst(idx,ch)/data.Data.SamplingRate;
+        p_onaxis(ch,:)=lsqcurvefit(@ziegelwanger2013onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
+        toa(:,ch)=ziegelwanger2013onaxis(p_onaxis(ch,:),pos(:,1:2)*pi/180)*data.Data.SamplingRate;
     end
 
     TolFun=[1e-5; 1e-6];
-    % Fit off-axis model to outlier adjusted set of estimated TOAs
     for ii=1:size(TolFun,1)
-        for ch=1:size(data.hM,3)
+        for ch=1:data.DimSize.R
             idx=find(indicator(:,ch)==0);
-            x=data.meta.pos(idx,1:2)*pi/180;
-            y=toaEst(idx,ch)/data.stimPar.SamplingRate;
+            x=pos(idx,1:2)*pi/180;
+            y=toaEst(idx,ch)/data.Data.SamplingRate;
             p0_offaxis(ch,:)=[p0_onaxis(ch,1) 0 0 0 p0_onaxis(ch,4) p0_onaxis(ch,2) p0_onaxis(ch,3)];
-            p0off_offaxis=[0.05 0.05 0.05 0.05 0.001 pi pi];
-            p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0off_offaxis,p0_offaxis(ch,:)+p0off_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
-            toa(:,ch)=ziegelwanger2013offaxis(p_offaxis(ch,:),data.meta.pos(:,1:2)*pi/180)*data.stimPar.SamplingRate;
+            p0offset_offaxis=[0.05 0.05 0.05 0.05 0.001 pi pi];
+            p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
+            toa(:,ch)=ziegelwanger2013offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*data.Data.SamplingRate;
         end
         if abs(diff(p_offaxis(:,1)))>0.003 || abs(diff(p_offaxis(:,3)))>0.003
             p_offaxis(:,[1 3])=p_offaxis([2 1],[1 3]);
-            for ch=1:size(data.hM,3)
+            for ch=1:data.DimSize.R
                 idx=find(indicator(:,ch)==0);
-                x=data.meta.pos(idx,1:2)*pi/180;
-                y=toaEst(idx,ch)/data.stimPar.SamplingRate;
+                x=pos(idx,1:2)*pi/180;
+                y=toaEst(idx,ch)/data.Data.SamplingRate;
                 p0_offaxis(ch,:)=[p_offaxis(ch,1) mean(p_offaxis(:,2)) p_offaxis(ch,3) mean(p_offaxis(:,4)) mean(p_offaxis(:,5)) p_offaxis(ch,6) p_offaxis(ch,7)];
-                p0off_offaxis=[0.05 0.05 0.05 0.05 0.001 pi/2 pi/2];
-                p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0off_offaxis,p0_offaxis(ch,:)+p0off_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
-                toa(:,ch)=ziegelwanger2013offaxis(p_offaxis(ch,:),data.meta.pos(:,1:2)*pi/180)*data.stimPar.SamplingRate;
+                p0offset_offaxis=[0.05 0.05 0.05 0.05 0.001 pi/2 pi/2];
+                p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
+                toa(:,ch)=ziegelwanger2013offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*data.Data.SamplingRate;
             end
         end
         if abs(diff(p_offaxis(:,1)))<0.003 && abs(diff(p_offaxis(:,2)))<0.003 && abs(diff(p_offaxis(:,3)))<0.003 && abs(diff(p_offaxis(:,4)))<0.003
@@ -418,14 +402,14 @@ if flags.do_fig3 || flags.do_fig6
     end
 
     if flags.do_fig6 %Figure 6
-        h=plotziegelwanger2013(indicator.*toaEst,3,'b',0,1,1,data.meta,data.stimPar,{'^'},4);
+        h=plotziegelwanger2013(data,indicator.*toaEst,3,'b',0,1,1,{'^'},4);
         set(h,'LineWidth',2);
         hold on
-        h=plotziegelwanger2013(indicator.*toaEst,3,'b',0,1,1,data.meta,data.stimPar,{'v'},4);
+        h=plotziegelwanger2013(data,indicator.*toaEst,3,'b',0,1,1,{'v'},4);
         set(h,'LineWidth',2);
-        h=plotziegelwanger2013((-indicator+1).*toaEst,3,'r',0,1,1,data.meta,data.stimPar,{'o'},4);
+        h=plotziegelwanger2013(data,(-indicator+1).*toaEst,3,'r',0,1,1,{'o'},4);
         set(h,'MarkerFaceColor','r','MarkerEdgeColor','r');
-        plotziegelwanger2013(toa,4,'k',0,1,1,data.meta,data.stimPar,{'-'},1);
+        plotziegelwanger2013(data,toa,4,'k',0,1,1,{'-'},1);
         ylabel('TOA ms ')
         xlabel('Azimuth in degree')
         grid off
@@ -786,20 +770,20 @@ end
 %% Figure 8
 if flags.do_fig8
     
-    data=data_ziegelwanger2013('NH89');
+    Obj=data_ziegelwanger2013('NH89');
     
-    temp=ziegelwanger2013(data.hM,data.meta,data.stimPar,4,1);
-    data.meta.toa5=temp.toa;
-    fprintf(['Radii for left and right ear: ' num2str(temp.p_onaxis(1,:)*100) ' cm\n'])
-    temp=ziegelwanger2013(data.hM,data.meta,data.stimPar,4,0,0);
-    data.meta.toa6=temp.toa;
-    fprintf(['Maximum TOA difference left: ' num2str((max(data.meta.toa5(:,1))-min(data.meta.toa5(:,1)))/data.stimPar.SamplingRate*1000) ' ms\n'])
-    fprintf(['Maximum TOA difference right: ' num2str((max(data.meta.toa5(:,2))-min(data.meta.toa5(:,2)))/data.stimPar.SamplingRate*1000) ' ms\n'])
+    [~,tmp]=ziegelwanger2013(Obj,4,1);
+    toa1=tmp.toa;
+    fprintf(['Radii for left and right ear: ' num2str(tmp.p_onaxis(1,:)*100) ' cm\n'])
+    [~,tmp]=ziegelwanger2013(Obj,4,0,0);
+    toa2=tmp.toa;
+    fprintf(['Maximum TOA difference left: ' num2str((max(toa1(:,1))-min(toa1(:,1)))/Obj.Data.SamplingRate*1000) ' ms\n'])
+    fprintf(['Maximum TOA difference right: ' num2str((max(toa2(:,2))-min(toa1(:,2)))/Obj.Data.SamplingRate*1000) ' ms\n'])
 
-    plotziegelwanger2013(data.meta.toa6-min(min(data.meta.toa5)),4,'k',0,1,1,data.meta,data.stimPar,'--',1);
-    plotziegelwanger2013(data.meta.toa5-min(min(data.meta.toa5)),4,'k',0,1,1,data.meta,data.stimPar,'--',2);
-    plotziegelwanger2013(data.meta.toa6-min(min(data.meta.toa5)),4,'k',0,2,1,data.meta,data.stimPar,'-',1);
-    plotziegelwanger2013(data.meta.toa5-min(min(data.meta.toa5)),4,'k',0,2,1,data.meta,data.stimPar,'-',2);
+    plotziegelwanger2013(Obj,toa2-min(min(toa1)),4,'k',0,1,1,'--',1);
+    plotziegelwanger2013(Obj,toa1-min(min(toa1)),4,'k',0,1,1,'--',2);
+    plotziegelwanger2013(Obj,toa2-min(min(toa1)),4,'k',0,2,1,'-',1);
+    plotziegelwanger2013(Obj,toa1-min(min(toa1)),4,'k',0,2,1,'-',2);
 
     xlim([-5 365])
     ylim([-0.05 0.95])
@@ -953,40 +937,9 @@ end
 
 end
 
-function idx=ARI_FindPosition(meta,azimuth,elevation)
-    psi=sin(elevation/180*pi).*sin(meta.pos(:,2)/180*pi) + ...
-        cos(elevation/180*pi).*cos(meta.pos(:,2)/180*pi).*...
-        cos(azimuth/180*pi-meta.pos(:,1)/180*pi);
+function idx=ARI_FindPosition(data,azimuth,elevation)
+    psi=sin(elevation/180*pi).*sin(data.ListenerRotation(:,2)/180*pi) + ...
+        cos(elevation/180*pi).*cos(data.ListenerRotation(:,2)/180*pi).*...
+        cos(azimuth/180*pi-data.ListenerRotation(:,1)/180*pi);
     [~,idx]=min(acos(psi));
-end
-
-function out=ARI_MinimalPhase(in)
-    n=size(in,1);
-    itnr=size(in,2);
-    rec=size(in,3);
-    out=zeros(size(in));
-
-    for jj=1:rec
-        for ii=1:itnr
-            h=squeeze(in(:,ii,jj));
-            % decompose signal
-            amp1=abs(fft(h));
-
-            % transform
-            amp2=amp1;
-            an2u=-imag(hilbert(log(amp1))); % minimal phase
-
-            % reconstruct signal from amp2 and an2u
-            % build a symmetrical phase 
-            an2u=an2u(1:floor(n/2)+1);
-            an2u=[an2u; -flipud(an2u(2:end+mod(n,2)-1))];
-            an2=an2u-round(an2u/2/pi)*2*pi;  % wrap around +/-pi: wrap(x)=x-round(x/2/pi)*2*pi
-            % amplitude
-            amp2=amp2(1:floor(n/2)+1);
-            amp2=[amp2; flipud(amp2(2:end+mod(n,2)-1))];
-            % back to time domain
-            h2=real(ifft(amp2.*exp(1i*an2)));
-            out(:,ii,jj)=h2;
-        end
-    end
 end

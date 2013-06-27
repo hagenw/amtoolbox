@@ -52,11 +52,7 @@ function data = data_ziegelwanger2013(varargin)
 %
 %     `data.zM`          z-coordinate of sphere center
 %
-%     `data.hM`          Matrix of IRs
-%
-%     `data.meta`        Meta data
-%
-%     `data.stimPar`     XXX missing description
+%     `data`             SOFA object
 % 
 %   Examples:
 %   ---------
@@ -90,10 +86,10 @@ else
     hpath = which('hrtfinit');  % find local path of hrtf repository
     hpath = hpath(1:end-10);
   
-    if exist([hpath 'ziegelwanger2013'],'dir') ~= 7
-        fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/ziegelwanger2013.zip , \n unzip it, and move it into your HRTF repository \n ' hpath ' .\n' ' Then, press any key to quit pausing. \n'])
-        pause
-    end
+%     if exist([hpath 'ziegelwanger2013'],'dir') ~= 7
+%         fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/ziegelwanger2013.zip , \n unzip it, and move it into your HRTF repository \n ' hpath ' .\n' ' Then, press any key to quit pausing. \n'])
+%         pause
+%     end
     
     hpath = [hpath 'ziegelwanger2013' filesep];
 end
@@ -101,29 +97,35 @@ end
 %% ARI database
 if flags.do_ARI
     
-    if flags.do_recalc || ~exist([hpath 'ARI' filesep 'results.mat'],'file')
-        data=load([hpath 'ARI' filesep 'subjects.mat']);
+    if flags.do_recalc || ~exist([hpath 'ARI_results.mat'],'file')
+        tmp=load([hpath 'info.mat']);
+        data=tmp.info.ARI;
         for ii=1:length(data.subjects)
-            load([hpath 'ARI' filesep data.subjects{ii} filesep 'hrtf_M_hrtf.mat'])
-            idx=find(mod(meta.pos(:,2),10)==0);
-            hM=hM(:,idx,:);
-            meta.pos=meta.pos(idx,:);
-
-            results(ii).meta=ziegelwanger2013(hM,meta,stimPar,4,1);
-            results(ii).meta.performance(4)=results(ii).meta.performance;
-            temp=ziegelwanger2013(hM,meta,stimPar,1,0,0);
-            results(ii).meta.performance(1)=temp.performance;
-            temp=ziegelwanger2013(hM,meta,stimPar,2,0,0);
-            results(ii).meta.performance(2)=temp.performance;
-            temp=ziegelwanger2013(hM,meta,stimPar,3,0,0);
-            results(ii).meta.performance(3)=temp.performance;
+            Obj=SOFAload([hpath 'ARI_' data.subjects{ii} '.sofa']);
+            idx=find(mod(Obj.ListenerRotation(:,2),10)==0);
+            Obj.Data.IR=Obj.Data.IR(idx,:,:);
+            Obj.ListenerRotation=Obj.ListenerRotation(idx,:);
+            Obj.MeasurementSourceAudioChannel=Obj.MeasurementSourceAudioChannel(idx,:);
+            Obj.MeasurementAudioLatency=Obj.MeasurementAudioLatency(idx,:);
+            Obj.DimSize.M=length(idx);
+            
+            [Obj,tmp]=ziegelwanger2013(Obj,4,1);
+            results(ii).meta=tmp;
+            results(ii).meta.performance(4)=tmp.performance;
+            [~,tmp]=ziegelwanger2013(Obj,1,0);
+            results(ii).meta.performance(1)=tmp.performance;
+            [~,tmp]=ziegelwanger2013(Obj,2,0);
+            results(ii).meta.performance(2)=tmp.performance;
+            [~,tmp]=ziegelwanger2013(Obj,3,0);
+            results(ii).meta.performance(3)=tmp.performance;
             clear hM; clear meta; clear stimPar;
         end
-        save([hpath 'ARI' filesep 'results.mat'],'results');
+        save([hpath 'ARI_results.mat'],'results');
         data.results=results;
     else
-        data=load([hpath 'ARI' filesep 'subjects.mat']);
-        load([hpath 'ARI' filesep 'results.mat']);
+        tmp=load([hpath 'info.mat']);
+        data=tmp.info.ARI;
+        load([hpath 'ARI_results.mat']);
         data.results=results;
     end
     
@@ -132,26 +134,29 @@ end
 %% CIPIC database
 if flags.do_CIPIC
     
-    if flags.do_recalc || ~exist([hpath 'CIPIC' filesep 'results.mat'],'file')
-        data=load([hpath 'CIPIC' filesep 'subjects.mat']);
+    if flags.do_recalc || ~exist([hpath 'CIPIC_results.mat'],'file')
+        tmp=load([hpath 'info.mat']);
+        data=tmp.info.CIPIC;
         for ii=1:length(data.subjects)
-            load([hpath 'CIPIC' filesep data.subjects{ii} filesep 'hrtf_M_hrtf.mat'])
+            Obj=SOFAload([hpath 'CIPIC_' data.subjects{ii} '.sofa']);
 
-            results(ii).meta=ziegelwanger2013(hM,meta,stimPar,4,1);
-            results(ii).meta.performance(4)=results(ii).meta.performance;
-            temp=ziegelwanger2013(hM,meta,stimPar,1,0,0);
-            results(ii).meta.performance(1)=temp.performance;
-            temp=ziegelwanger2013(hM,meta,stimPar,2,0,0);
-            results(ii).meta.performance(2)=temp.performance;
-            temp=ziegelwanger2013(hM,meta,stimPar,3,0,0);
-            results(ii).meta.performance(3)=temp.performance;
+            [Obj,tmp]=ziegelwanger2013(Obj,4,1);
+            results(ii).meta=tmp;
+            results(ii).meta.performance(4)=tmp.performance;
+            [~,tmp]=ziegelwanger2013(Obj,1,0);
+            results(ii).meta.performance(1)=tmp.performance;
+            [~,tmp]=ziegelwanger2013(Obj,2,0);
+            results(ii).meta.performance(2)=tmp.performance;
+            [~,tmp]=ziegelwanger2013(Obj,3,0);
+            results(ii).meta.performance(3)=tmp.performance;
             clear hM; clear meta; clear stimPar;
         end
-        save([hpath 'CIPIC' filesep 'results.mat'],'results');
+        save([hpath 'CIPIC_results.mat'],'results');
         data.results=results;
     else
-        data=load([hpath 'CIPIC' filesep 'subjects.mat']);
-        load([hpath 'CIPIC' filesep 'results.mat']);
+        tmp=load([hpath 'info.mat']);
+        data=tmp.info.CIPIC;
+        load([hpath 'CIPIC_results.mat']);
         data.results=results;
     end
     
@@ -160,29 +165,32 @@ end
 %% LISTEN database
 if flags.do_LISTEN
     
-    if flags.do_recalc || ~exist([hpath 'LISTEN' filesep 'results.mat'],'file')
-        data=load([hpath 'LISTEN' filesep 'subjects.mat']);
+    if flags.do_recalc || ~exist([hpath 'LISTEN_results.mat'],'file')
+        tmp=load([hpath 'info.mat']);
+        data=tmp.info.LISTEN;
         for ii=1:length(data.subjects)
             if ~strcmp(data.subjects{ii},'34')
-                load([hpath 'LISTEN' filesep data.subjects{ii} filesep 'hrtf_M_hrtf.mat'])
-                stimPar.SamplingRate=48000;
+                Obj=SOFAload([hpath 'LISTEN_' data.subjects{ii} '.sofa']);
+                Obj.Data.SamplingRate=48000;
                 
-                results(ii).meta=ziegelwanger2013(hM,meta,stimPar,4,1);
-                results(ii).meta.performance(4)=results(ii).meta.performance;
-                temp=ziegelwanger2013(hM,meta,stimPar,1,0,0);
-                results(ii).meta.performance(1)=temp.performance;
-                temp=ziegelwanger2013(hM,meta,stimPar,2,0,0);
-                results(ii).meta.performance(2)=temp.performance;
-                temp=ziegelwanger2013(hM,meta,stimPar,3,0,0);
-                results(ii).meta.performance(3)=temp.performance;
+                [Obj,tmp]=ziegelwanger2013(Obj,4,1);
+                results(ii).meta=tmp;
+                results(ii).meta.performance(4)=tmp.performance;
+                [~,tmp]=ziegelwanger2013(Obj,1,0);
+                results(ii).meta.performance(1)=tmp.performance;
+                [~,tmp]=ziegelwanger2013(Obj,2,0);
+                results(ii).meta.performance(2)=tmp.performance;
+                [~,tmp]=ziegelwanger2013(Obj,3,0);
+                results(ii).meta.performance(3)=tmp.performance;
                 clear hM; clear meta; clear stimPar;
             end
         end
-        save([hpath 'LISTEN' filesep 'results.mat'],'results');
+        save([hpath 'LISTEN_results.mat'],'results');
         data.results=results;
     else
-        data=load([hpath 'LISTEN' filesep 'subjects.mat']);
-        load([hpath 'LISTEN' filesep 'results.mat']);
+        tmp=load([hpath 'info.mat']);
+        data=tmp.info.LISTEN;
+        load([hpath 'LISTEN_results.mat']);
         data.results=results;
     end
     
@@ -191,21 +199,23 @@ end
 %% SPHERE (Displacement) database
 if flags.do_SPHERE_DIS
     
-    if flags.do_recalc || ~exist([hpath 'Sphere' filesep 'Displacement' filesep 'results.mat'],'file')
-        data=load([hpath 'Sphere' filesep 'Displacement' filesep 'subjects.mat']);
+    if flags.do_recalc || ~exist([hpath 'Sphere_Displacement_results.mat'],'file')
+        tmp=load([hpath 'info.mat']);
+        data=tmp.info.Sphere_Displacement;
         results.p_onaxis=zeros(4,2,length(data.subjects));
         results.p_offaxis=zeros(7,2,length(data.subjects));
         for ii=1:length(data.subjects)
-            load([hpath 'Sphere' filesep 'Displacement' filesep data.subjects{ii} filesep 'hrtf_M_hrtf.mat']);
-            meta=ziegelwanger2013(hM,meta,stimPar,4,1);
-            results.p_onaxis(:,:,ii)=meta.p_onaxis;
-            results.p_offaxis(:,:,ii)=meta.p_offaxis;
+            Obj=SOFAload([hpath 'Sphere_Displacement_' data.subjects{ii} '.sofa']);
+            [~,tmp]=ziegelwanger2013(Obj,4,1);
+            results.p_onaxis(:,:,ii)=tmp.p_onaxis;
+            results.p_offaxis(:,:,ii)=tmp.p_offaxis;
         end
-        save([hpath 'Sphere' filesep 'Displacement' filesep 'results.mat'],'results');
+        save([hpath 'Sphere_Displacement_results.mat'],'results');
         data.results=results;
     else
-        data=load([hpath 'Sphere' filesep 'Displacement' filesep 'subjects.mat']);
-        load([hpath 'Sphere' filesep 'Displacement' filesep 'results.mat']);
+        tmp=load([hpath 'info.mat']);
+        data=tmp.info.Sphere_Displacement;
+        load([hpath 'Sphere_Displacement_results.mat']);
         data.results=results;
     end
     
@@ -214,19 +224,21 @@ end
 %% SPHERE (Rotation) database
 if flags.do_SPHERE_ROT
     
-    if flags.do_recalc || ~exist([hpath 'Sphere' filesep 'Rotation' filesep 'results.mat'],'file')
-        data=load([hpath 'Sphere' filesep 'Rotation' filesep 'subjects.mat']);
+    if flags.do_recalc || ~exist([hpath 'Sphere_Rotation_results.mat'],'file')
+        tmp=load([hpath 'info.mat']);
+        data=tmp.info.Sphere_Rotation;
         results.p=zeros(4,2,length(data.phi));
         for ii=1:length(data.subjects)
-            load([hpath 'Sphere' filesep 'Rotation' filesep data.subjects{ii} filesep 'hrtf_M_hrtf.mat']);
-            meta=ziegelwanger2013(hM,meta,stimPar,4,1);
-            results.p_onaxis(:,:,ii)=meta.p_onaxis;
+            Obj=SOFAload([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa']);
+            [~,tmp]=ziegelwanger2013(Obj,4,1);
+            results.p_onaxis(:,:,ii)=tmp.p_onaxis;
         end
-        save([hpath 'Sphere' filesep 'Rotation' filesep 'results.mat'],'results');
+        save([hpath 'Sphere_Rotation_results.mat'],'results');
         data.results=results;
     else
-        data=load([hpath 'Sphere' filesep 'Rotation' filesep 'subjects.mat']);
-        load([hpath 'Sphere' filesep 'Rotation' filesep 'results.mat']);
+        tmp=load([hpath 'info.mat']);
+        data=tmp.info.Sphere_Rotation;
+        load([hpath 'Sphere_Rotation_results.mat']);
         data.results=results;
     end
     
@@ -235,6 +247,6 @@ end
 %% ARI database (NH89)
 if flags.do_NH89
     
-    data=load([hpath 'ARI' filesep 'NH89' filesep 'hrtf_M_hrtf.mat']);
+    data=SOFAload([hpath 'ARI_NH89.sofa']);
     
 end

@@ -1,15 +1,56 @@
-function [h]=plotziegelwanger2013(data,type,color,ele,ch,time,meta,stimPar,style,width)
+function [h]=plotziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)
 %PLOTZIEGELWANGER2013 XXX Headline missing
-%   Usage: plotziegelwanger2013(data,type,color,ele,ch,time,meta,stimPar,style,width)
+%   Usage: plotziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)
 %
-%   XXX Description missing
-    
-% AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna, Austria
+%   `plotziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)`
+%   plots TOA-data in horizontal planes.
+%
+%   Input:
+%       Obj: SOFA object
+% 
+%       data:
+% 
+%       type:
+%
+%       color:
+%
+%       ele:
+%
+%       ch:
+%
+%       time:
+%
+%       style:
+%
+%       width:
+%
+% 
+%   Output:
+%       h: figure handle
+%
+%   Estimates the Time-of-Arrival for each column in input data hM and corrects 
+%   the results with a geometrical model of the head.
+%
+%   Examples:
+%   ---------
+% 
+%   To plot the modelled TOA in the horizontal plane after using
+%   ziegelwanger2013, use::
+%
+%       plotziegelwanger2013((Obj,Obj.Data.Delay,1,'b',0,1,1);
+%
+%   See also: ziegelwanger2013onaxis, ziegelwanger2013offaxis,
+%   data_ziegelwanger2013, exp_ziegelwanger2013
+%
+%   References: ziegelwanger2013
+
+% AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
+% Austria
 
 
 %% ----------------------------check variables-----------------------------
 if time
-    data=data/stimPar.SamplingRate*1000;
+    data=data/Obj.Data.SamplingRate*1000;
 end
 
 if exist('style','var')
@@ -24,24 +65,24 @@ if ~ischar(color)
 end
 
 %% --------------------------------plot TOA--------------------------------
-[~,idx1]=sort(meta.pos(:,1));
-idx2=find(meta.pos(idx1,2)==ele);
+[~,idx1]=sort(Obj.ListenerRotation(:,1));
+idx2=find(Obj.ListenerRotation(idx1,2)==ele);
 
 for ii=1:length(type)
     switch type(ii)
         case 1
-            h=plot(meta.pos(idx1(idx2),1),data(idx1(idx2),ii*2-1+(ch-1)),[color(ii) '-']);
+            h=plot(Obj.ListenerRotation(idx1(idx2),1),data(idx1(idx2),ii*2-1+(ch-1)),[color(ii) '-']);
         case 2
-            h=plot(meta.pos(idx1(idx2),1),data(idx1(idx2),ii*2-1+(ch-1)),[color(ii) '--']);
+            h=plot(Obj.ListenerRotation(idx1(idx2),1),data(idx1(idx2),ii*2-1+(ch-1)),[color(ii) '--']);
         case 3
-            idx3=find(meta.pos(idx1(idx2),2)==ele & data(idx1(idx2),ii*2-1+(ch-1))~=0);
+            idx3=find(Obj.ListenerRotation(idx1(idx2),2)==ele & data(idx1(idx2),ii*2-1+(ch-1))~=0);
             if exist('style','var')
-                h=plot(meta.pos(idx1(idx2(idx3)),1),data(idx1(idx2(idx3)),ii*2-1+(ch-1)),[color(ii) style{ii}],'MarkerSize',width(ii));%,'MarkerFaceColor',color(ii)
+                h=plot(Obj.ListenerRotation(idx1(idx2(idx3)),1),data(idx1(idx2(idx3)),ii*2-1+(ch-1)),[color(ii) style{ii}],'MarkerSize',width(ii));%,'MarkerFaceColor',color(ii)
             else
-                h=plot(meta.pos(idx1(idx2(idx3)),1),data(idx1(idx2(idx3)),ii*2-1+(ch-1)),[color(ii) '.']);
+                h=plot(Obj.ListenerRotation(idx1(idx2(idx3)),1),data(idx1(idx2(idx3)),ii*2-1+(ch-1)),[color(ii) '.']);
             end
         case 4
-            h=plot(meta.pos(idx1(idx2),1),data(idx1(idx2),ii*2-1+(ch-1)),[color(ii) style{ii}],'LineWidth',width(ii));
+            h=plot(Obj.ListenerRotation(idx1(idx2),1),data(idx1(idx2),ii*2-1+(ch-1)),[color(ii) style{ii}],'LineWidth',width(ii));
     end
     if exist('rgbcolor','var')
         set(h,'color',rgbcolor(ii,:));
