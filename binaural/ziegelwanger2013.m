@@ -74,9 +74,6 @@ if ~isfield(Obj,'GLOBAL_Version')
 end
 
 %% ----------------------------check variables-----------------------------
-for ii=1:length(varargin)
-    
-end
 
 if ~exist('method','var')
     method=4;
@@ -311,6 +308,3 @@ function Obj=ARI_MinimalPhase(Obj)
     end
 end
 
-for kk=1:6
-    kk=kk+1
-end
