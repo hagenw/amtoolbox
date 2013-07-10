@@ -90,7 +90,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %% ===== Checking of input parameters and dependencies ===================
 nargmin = 7;
 nargmax = 17;
-narginchk(nargmin,nargmax);
+error(nargchk(nargmin,nargmax,nargin));
 
 definput.flags.method = {'stereo','wfs'};
 definput.keyvals.array = 'linear';
@@ -98,19 +98,21 @@ definput.keyvals.nls = 2;
 definput.keyvals.resolution = 21;
 definput.keyvals.hrtf = [];
 definput.keyvals.lookup = [];
+definput.keyvals.showprogress = 1;
 [flags,kv] = ...
-    ltfatarghelper({'resolution','nls','array','hrtf','lookup'},definput,varargin);
+    ltfatarghelper({'resolution','nls','array','hrtf','lookup','showprogress'},definput,varargin);
 array = kv.array;
 resolution = kv.resolution;
 number_of_speakers = kv.nls;
 hrtf = kv.hrtf;
 lookup = kv.lookup;
+showprogress = kv.showprogress;
 
 % Checking for the Sound-Field-Synthesis Toolbox
 if ~which('SFS_start')
     error(['%s: you need to install the Sound-Field-Synthesis Toolbox.\n', ...
         'You can download it at https://github.com/sfstoolbox/sfs.\n', ...
-        'The results in the paper are verified up to revision a8914700a4'], ...
+        'You need version 0.2.4 of the Toolbox (commit afe5c14359).'], ...
         upper(mfilename));
 end
 
@@ -213,8 +215,8 @@ perceived_direction = zeros(length(x),length(y));
 desired_direction = zeros(length(x),length(y));
 localization_error = zeros(length(x),length(y));
 for ii=1:length(x)
-    progressbar(ii,length(x))
-    for jj=1:length(y)
+    if showprogress progressbar(ii,length(x)) end
+    parfor jj=1:length(y)
         X = [x(ii) y(jj)];
         conf.xref = X;
         if flags.do_stereo
@@ -253,12 +255,12 @@ end % of main function
 function direction = source_direction(X,phi,xs,src)
     if strcmp('pw',src)
         [direction,~,~] = cart2sph(xs(1),xs(2),0);
+        direction = degree(direction+phi);
     elseif strcmp('ps',src)
         x = xs-X;
         [direction,~,~] = cart2sph(x(1),x(2),0);
         % FIXME: this is not working with all points at the moment
         % For example place a stereo source at (0,0) and the listener at (0,-2)
-        %direction = direction-pi;
+        direction = degree(direction-phi);
     end
-    direction = degree(direction - phi);
 end

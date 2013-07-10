@@ -38,7 +38,10 @@ function [outsig,fs] = read_hrtf(elev_r,azim_r,database);
   % Base path of where to store the data
   s=[amtbasepath,'hrtf/hrir/'];
 
-  [elev_r,azim_r]=scalardistribute(elev_r,azim_r);  
+  % Make elev and azim into the same shape, repeating elements if
+  % necessary  
+  elev_r=bsxfun(@times,elev_r,ones(size(azim_r));
+  azim_r=bsxfun(@times,azim_r,ones(size(elev_r));
   
   nexps=numel(elev_r);
   

@@ -1,16 +1,12 @@
-function meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis)
+function [Obj,results]=ziegelwanger2013(Obj,method,model,p0_onaxis)
 %ZIEGELWANGER2013 Time of arrival estimates
-%   usage: meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis) 
+%   usage: meta=ziegelwanger2013(data,method,correct,p0_onaxis) 
+%
+%   Estimates the Time-of-Arrival for each measurement in Obj (SOFA) and
+%   corrects the results with a geometrical model of the head.
 %
 %   Input:
-%       hM: data matrix with impulse respnoses (IR): 
-%           dim 1: time in samples
-%           dim 2: each IR
-%           dim 3: each record channel
-%
-%       meta:
-% 
-%       stimPar:
+%       Obj: SOFA object
 % 
 %       method (optional): select one of the estimation methods
 %           1: Threshold-Detection
@@ -20,9 +16,9 @@ function meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis)
 %           5: Minimal-Phase Cross-Correlation (Centroid)
 %           6: Zero-Crossing
 %
-%       correct (optional): correct estimated toa, using geometrical TOA-Model
-%           0:
-%           1: Correct TOA (default)
+%       model (optional): correct estimated toa, using geometrical TOA-Model
+%           0: TOA estimated
+%           1: TOA modeled (default)
 %
 %       p0_onaxis (optional): startvalues for lsqcurvefit
 %           dim 1: [sphere-radius in m,
@@ -32,16 +28,18 @@ function meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis)
 %           dim 2: each record channel
 % 
 %   Output:
-%       meta.toa: data matrix with time of arrival (TOA) for each impulse response (IR):
+%       Obj: SOFA Object
+% 
+%       results.toa: data matrix with time of arrival (TOA) for each impulse response (IR):
 %           dim 1: each toa in samples
 %           dim 2: each record channel
-%       meta.p_onaxis: estimated on-axis model-parameters
+%       results.p_onaxis: estimated on-axis model-parameters
 %           dim 1: [sphere-radius in m,
 %                 azimut of ear in radiants,
 %                 elevation of ear in radiants,
 %                 direction-independent delay in seconds]
 %           dim 2: each record channel
-%       meta.p_offaxis: estimated off-axis model-parameters
+%       results.p_offaxis: estimated off-axis model-parameters
 %           dim 1: [sphere-radius in m,
 %                 xM in m,
 %                 yM in m,
@@ -52,18 +50,15 @@ function meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis)
 %                 elevation of ear in radiants]
 %           dim 2: each record channel
 %
-%   Estimates the Time-of-Arrival for each column in input data hM and corrects 
-%   the results with a geometrical model of the head.
-%
 %   Examples:
 %   ---------
 % 
 %   To calculate the model parameters for the on-axis time-of-arrival model
 %   (p_onaxis) and for the off-axis time-of-arrival model (p_offaxis) for a
-%   given HRTF set (hM,meta,stimPar) with the minimum-phase
+%   given HRTF set (SOFA object, 'Obj') with the minimum-phase
 %   cross-correlation method, use::
 %
-%       meta=ziegelwanger2013(hM,meta,stimPar,4,1);
+%       [Obj,results]=ziegelwanger2013(Obj,4,1);
 %
 %   See also: ziegelwanger2013onaxis, ziegelwanger2013offaxis,
 %   data_ziegelwanger2013, exp_ziegelwanger2013
@@ -73,7 +68,13 @@ function meta=ziegelwanger2013(hM,meta,stimPar,method,correct,p0_onaxis)
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria
 
+%% ----------------------------convert to SOFA-----------------------------
+if ~isfield(Obj,'GLOBAL_Version')
+    Obj=SOFAconvertARI2SOFA(Obj.hM,Obj.meta,Obj.stimPar);
+end
+
 %% ----------------------------check variables-----------------------------
+
 if ~exist('method','var')
     method=4;
 else if isempty(method)
@@ -81,10 +82,10 @@ else if isempty(method)
     end
 end
 
-if ~exist('correct','var')
-    correct=1;
-else if isempty(correct)
-        correct=1;
+if ~exist('model','var')
+    model=1;
+else if isempty(model)
+        model=1;
     end
 end
 
@@ -98,74 +99,76 @@ p_onaxis=zeros(size(p0_onaxis));
 p0_offaxis=zeros(2,7);
 p_offaxis=p0_offaxis;
 
-toa=zeros(size(hM,2),size(hM,3));
-toaEst=zeros(size(hM,2),size(hM,3));
-indicator=zeros(size(hM,2),size(hM,3));
+toa=zeros(Obj.DimSize.M,Obj.DimSize.R);
+toaEst=zeros(Obj.DimSize.M,Obj.DimSize.R);
+indicator=zeros(Obj.DimSize.M,Obj.DimSize.R);
 indicator_hor=indicator;
 indicator_sag=indicator;
-meta.pos(:,8)=cumsum(ones(size(meta.pos,1),1));
-hM_min=ARI_MinimalPhase([hM; zeros(4096-size(hM,1),size(hM,2),size(hM,3))]);
-hM_min=hM_min(1:size(hM,1),:,:);
-for ii=1:size(hM,2)
-    for jj=1:size(hM,3)
-        if isnan(hM_min(1,ii,jj))
-            hM_min(:,ii,jj)=ARI_MinimalPhase(hM(:,ii,jj));
-        end
-    end
-end
+pos=zeros(Obj.DimSize.M,8);
+pos(:,1:2)=Obj.ListenerRotation(:,1:2);
+[pos(:,6),pos(:,7)]=sph2hor(Obj.ListenerRotation(:,1),Obj.ListenerRotation(:,2));
+pos(:,8)=cumsum(ones(Obj.DimSize.M,1));
+Obj=ARI_MinimalPhase(Obj);
+% for ii=1:Obj.DimSize.M
+%     for jj=1:Obj.DimSize.R
+%         if isnan(Obj.Data.IR_min(1,ii,jj))
+%             hM_min(:,ii,jj)=ARI_MinimalPhase(Obj.hM(:,ii,jj));
+%         end
+%     end
+% end
 
 %% -----------------------estimate time-of-arrival-------------------------
 switch method
     case 1 %---------------------------Threshold---------------------------
-        for ii=1:size(hM,2)
-            for jj=1:size(hM,3)
-                toaEst(ii,jj)=find(abs(hM(:,ii,jj))==max(abs(hM(:,ii,jj))),1);
+        for ii=1:Obj.DimSize.M
+            for jj=1:Obj.DimSize.R
+                toaEst(ii,jj)=find(abs(Obj.Data.IR(ii,jj,:))==max(abs(Obj.Data.IR(ii,jj,:))),1);
             end
         end
     case 2 %---------------------------Centroid----------------------------
-        for ii=1:size(hM,2)
-            for jj=1:size(hM,3)
-                toaEst(ii,jj)=find(cumsum(hM(:,ii,jj).^2)>(sum(hM(:,ii,jj).^2)/2),1);
+        for ii=1:Obj.DimSize.M
+            for jj=1:Obj.DimSize.R
+                toaEst(ii,jj)=find(cumsum(Obj.Data.IR(ii,jj,:).^2)>(sum(Obj.Data.IR(ii,jj,:).^2)/2),1);
             end
         end
     case 3 %---------------------------Groupdelay--------------------------
-        for ii=1:size(hM,2)
-            for jj=1:size(hM,3)
-                [Gd,F]=grpdelay(transpose(double(hM(:,ii,jj))),1,size(hM,1),stimPar.SamplingRate);
+        for ii=1:Obj.DimSize.M
+            for jj=1:Obj.DimSize.R
+                [Gd,F]=grpdelay(transpose(double(squeeze(Obj.Data.IR(ii,jj,:)))),1,Obj.DimSize.N,Obj.Data.SamplingRate);
                 toaEst(ii,jj)=median(Gd(find(F>500):find(F>2000)));
             end
         end
     case 4 %---------------------------Minimal-Phase-----------------------
-        corrcoeff=zeros(size(hM,2),size(hM,3));
-        for ii=1:size(hM,2)
-            for jj=1:size(hM,3)
-                [c,lag]=xcorr(transpose(squeeze(hM(:,ii,jj))),transpose(squeeze(hM_min(:,ii,jj))),size(hM,1)-1,'none');
+        corrcoeff=zeros(Obj.DimSize.M,Obj.DimSize.R);
+        for ii=1:Obj.DimSize.M
+            for jj=1:Obj.DimSize.R
+                [c,lag]=xcorr(squeeze(Obj.Data.IR(ii,jj,:)),squeeze(Obj.Data.IR_min(ii,jj,:)),Obj.DimSize.N-1,'none');
                 [corrcoeff(ii,jj),idx]=max(abs(c));
-                corrcoeff(ii,jj)=corrcoeff(ii,jj)/sum(hM(:,ii,jj).^2);
+                corrcoeff(ii,jj)=corrcoeff(ii,jj)/sum(Obj.Data.IR(ii,jj,:).^2);
                 toaEst(ii,jj)=lag(idx);
             end
         end
 end
 
 %% ----------------------Fit-Models-to-estimated-TOA-----------------------
-for ch=1:size(hM,3)
+for ch=1:Obj.DimSize.R
 
     % Outlier detection: smooth TOA in horizontal planes
     epsilon=5;
-    slope=zeros(size(hM,2),1);
-    for ele=min(meta.pos(:,2)):epsilon:max(meta.pos(:,2)) %calculate slope for each elevation along azimuth
-        idx=find(meta.pos(:,2)>ele-epsilon/2 & meta.pos(:,2)<=ele+epsilon/2);
+    slope=zeros(Obj.DimSize.M,1);
+    for ele=min(pos(:,2)):epsilon:max(pos(:,2)) %calculate slope for each elevation along azimuth
+        idx=find(pos(:,2)>ele-epsilon/2 & pos(:,2)<=ele+epsilon/2);
         if numel(idx)>1
             idx(length(idx)+1)=idx(1);
-            slope(idx(1:end-1),1)=diff(toaEst(idx,ch))./abs(diff(meta.pos(idx,1)));
+            slope(idx(1:end-1),1)=diff(toaEst(idx,ch))./abs(diff(pos(idx,1)));
         end
     end
     sloperms=sqrt(sum(slope.^2)/length(slope));
-    if sloperms<30/(length(find(meta.pos(:,2)==0))/2)
-        sloperms=30/(length(find(meta.pos(:,2)==0))/2);
+    if sloperms<30/(length(find(pos(:,2)==0))/2)
+        sloperms=30/(length(find(pos(:,2)==0))/2);
     end
-    for ele=min(meta.pos(:,2)):epsilon:max(meta.pos(:,2))
-        idx=find(meta.pos(:,2)>ele-epsilon/2 & meta.pos(:,2)<=ele+epsilon/2);
+    for ele=min(pos(:,2)):epsilon:max(pos(:,2))
+        idx=find(pos(:,2)>ele-epsilon/2 & pos(:,2)<=ele+epsilon/2);
         for ii=1:length(idx)-1
             if abs(slope(idx(ii)))>sloperms
                 for jj=0:1
@@ -183,10 +186,10 @@ for ch=1:size(hM,3)
     % Outlier detection: constant TOA in sagittal planes
     epsilon=2;
     for ii=1:20
-        sag_dev=zeros(size(hM,2),1);
+        sag_dev=zeros(Obj.DimSize.M,1);
         for lat=-90:epsilon:90
-            idx=find(meta.pos(:,6)>lat-epsilon/2 & meta.pos(:,6)<=lat+epsilon/2); 
-            idx2=find(meta.pos(:,6)>lat-epsilon/2 & meta.pos(:,6)<=lat+epsilon/2 & indicator_hor(:,ch)==0 & indicator(:,ch)==0);
+            idx=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2); 
+            idx2=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2 & indicator_hor(:,ch)==0 & indicator(:,ch)==0);
             if length(idx2)>2
                 sag_dev(idx,1)=toaEst(idx,ch)-mean(toaEst(idx2,ch));
             end
@@ -202,34 +205,34 @@ for ch=1:size(hM,3)
 end
 
 performance.indicator=indicator;
-performance.outliers=sum(sum(indicator))/size(hM,2)/2*100;
-performance.outliersl=sum(indicator(:,1))/size(hM,2)*100;
-performance.outliersr=sum(indicator(:,2))/size(hM,2)*100;
+performance.outliers=sum(sum(indicator))/Obj.DimSize.M/2*100;
+performance.outliersl=sum(indicator(:,1))/Obj.DimSize.M*100;
+performance.outliersr=sum(indicator(:,2))/Obj.DimSize.M*100;
 
-if correct
+if model
     % Fit on-axis model to outlier adjusted set of estimated TOAs
-    for ch=1:size(hM,3)
-        p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/stimPar.SamplingRate;
+    for ch=1:Obj.DimSize.R
+        p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/Obj.Data.SamplingRate;
         p0offset_onaxis=[0.06 pi/4 pi/4 0.001];
 
         idx=find(indicator(:,ch)==0);
-        x=meta.pos(idx,1:2)*pi/180;
-        y=toaEst(idx,ch)/stimPar.SamplingRate;
+        x=pos(idx,1:2)*pi/180;
+        y=toaEst(idx,ch)/Obj.Data.SamplingRate;
         if isoctave
             [~,p_onaxis(ch,:)]=leasqr(x,y,p0_onaxis(ch,:),@ziegelwanger2013onaxis);
         else
             p_onaxis(ch,:)=lsqcurvefit(@ziegelwanger2013onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
         end
-        toa(:,ch)=ziegelwanger2013onaxis(p_onaxis(ch,:),meta.pos(:,1:2)*pi/180)*stimPar.SamplingRate;
+        toa(:,ch)=ziegelwanger2013onaxis(p_onaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
     end
 
     % Fit off-axis model to outlier adjusted set of estimated TOAs
     TolFun=[1e-5; 1e-6];
     for ii=1:size(TolFun,1)
-        for ch=1:size(hM,3)
+        for ch=1:Obj.DimSize.R
             idx=find(indicator(:,ch)==0);
-            x=meta.pos(idx,1:2)*pi/180;
-            y=toaEst(idx,ch)/stimPar.SamplingRate;
+            x=pos(idx,1:2)*pi/180;
+            y=toaEst(idx,ch)/Obj.Data.SamplingRate;
             p0_offaxis(ch,:)=[p0_onaxis(ch,1) 0 0 0 p0_onaxis(ch,4) p0_onaxis(ch,2) p0_onaxis(ch,3)];
             p0offset_offaxis=[0.05 0.05 0.05 0.05 0.001 pi pi];
             if isoctave
@@ -237,14 +240,14 @@ if correct
             else
                 p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
             end
-            toa(:,ch)=ziegelwanger2013offaxis(p_offaxis(ch,:),meta.pos(:,1:2)*pi/180)*stimPar.SamplingRate;
+            toa(:,ch)=ziegelwanger2013offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
         end
         if abs(diff(p_offaxis(:,1)))>0.003 || abs(diff(p_offaxis(:,3)))>0.003
             p_offaxis(:,[1 3])=p_offaxis([2 1],[1 3]);
-            for ch=1:size(hM,3)
+            for ch=1:Obj.DimSize.R
                 idx=find(indicator(:,ch)==0);
-                x=meta.pos(idx,1:2)*pi/180;
-                y=toaEst(idx,ch)/stimPar.SamplingRate;
+                x=pos(idx,1:2)*pi/180;
+                y=toaEst(idx,ch)/Obj.Data.SamplingRate;
                 p0_offaxis(ch,:)=[p_offaxis(ch,1) mean(p_offaxis(:,2)) p_offaxis(ch,3) mean(p_offaxis(:,4)) mean(p_offaxis(:,5)) p_offaxis(ch,6) p_offaxis(ch,7)];
                 p0offset_offaxis=[0.05 0.05 0.05 0.05 0.001 pi/2 pi/2];
                 if isoctave
@@ -252,7 +255,7 @@ if correct
                 else
                     p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
                 end
-                toa(:,ch)=ziegelwanger2013offaxis(p_offaxis(ch,:),meta.pos(:,1:2)*pi/180)*stimPar.SamplingRate;
+                toa(:,ch)=ziegelwanger2013offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
             end
         end
         if abs(diff(p_offaxis(:,1)))<0.003 && abs(diff(p_offaxis(:,2)))<0.003 && abs(diff(p_offaxis(:,3)))<0.003 && abs(diff(p_offaxis(:,4)))<0.003
@@ -264,22 +267,25 @@ else
     p_offaxis=p0_offaxis;
 end
 
-meta.toa=toa;
-meta.p_onaxis=transpose(p_onaxis);
-meta.p_offaxis=transpose(p_offaxis);
-meta.performance=performance;
+Obj.Data.Delay=toa;
+Obj.Data.p_onaxis=transpose(p_onaxis);
+Obj.Data.p_offaxis=transpose(p_offaxis);
+Obj.Data.performance=performance;
+
+results.toa=toa;
+results.p_onaxis=transpose(p_onaxis);
+results.p_offaxis=transpose(p_offaxis);
+results.performance=performance;
 
 end %of function
 
-function out=ARI_MinimalPhase(in)
-    n=size(in,1);
-    itnr=size(in,2);
-    rec=size(in,3);
-    out=zeros(size(in));
+function Obj=ARI_MinimalPhase(Obj)
+    Obj.Data.IR_min=zeros(size(Obj.Data.IR));
 
-    for jj=1:rec
-        for ii=1:itnr
-            h=squeeze(in(:,ii,jj));
+    for jj=1:Obj.DimSize.R
+        for ii=1:Obj.DimSize.M
+%             h=squeeze(Obj.Data.IR(ii,jj,:));
+            h=[squeeze(Obj.Data.IR(ii,jj,:)); zeros(4096-Obj.DimSize.N,1)];
             % decompose signal
             amp1=abs(fft(h));
 
@@ -289,15 +295,16 @@ function out=ARI_MinimalPhase(in)
 
             % reconstruct signal from amp2 and an2u
             % build a symmetrical phase 
-            an2u=an2u(1:floor(n/2)+1);
-            an2u=[an2u; -flipud(an2u(2:end+mod(n,2)-1))];
+            an2u=an2u(1:floor(length(h)/2)+1);
+            an2u=[an2u; -flipud(an2u(2:end+mod(length(h),2)-1))];
             an2=an2u-round(an2u/2/pi)*2*pi;  % wrap around +/-pi: wrap(x)=x-round(x/2/pi)*2*pi
             % amplitude
-            amp2=amp2(1:floor(n/2)+1);
-            amp2=[amp2; flipud(amp2(2:end+mod(n,2)-1))];
+            amp2=amp2(1:floor(length(h)/2)+1);
+            amp2=[amp2; flipud(amp2(2:end+mod(length(h),2)-1))];
             % back to time domain
             h2=real(ifft(amp2.*exp(1i*an2)));
-            out(:,ii,jj)=h2;
+            Obj.Data.IR_min(ii,jj,:)=h2(1:Obj.DimSize.N);
         end
     end
 end
+
