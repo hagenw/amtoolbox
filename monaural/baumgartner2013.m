@@ -4,13 +4,15 @@ function varargout = baumgartner2013( target,template,varargin )
 %
 %   Input parameters:
 %     target  : binaural impulse response(s) referring to the directional 
-%               transfer function(s) (DFTs) of the target sound(s). Matrix
-%               dimensions: time x direction x channel/ear
-%     template: listener-specific template. Option 1: given in SOFA format 
-%               -> sagittal plane DTFs will be extracted internally. 
+%               transfer function(s) (DFTs) of the target sound(s). 
+%               Option 1: given in SOFA format -> sagittal plane DTFs will 
+%               be extracted internally. 
 %               Option 2: binaural impulse responses of all available
 %               listener-specific DTFs of the sagittal plane formated 
-%               similar to target (time x direction x ear)
+%               according to the following matrix dimensions: 
+%               time x direction x channel/ear
+%     template: listener-specific template. 
+%               Option 1 & 2: similar to 'target'
 %
 %   Output parameters:
 %     p       : predicted probability mass vectors for response angles 
@@ -43,7 +45,7 @@ function varargout = baumgartner2013( target,template,varargin )
 %                    fhigh. Default value is 18000 Hz.
 %
 %     'lat',lat      Set the perceived lateral angle of the target sound to
-%                    lat. Default value is 0° (median SP).
+%                    lat. Default value is 0 deg (midsagittal plane).
 %
 %     'u',u          Set the listener-specific uncertainty (standard
 %                    deviation of the Gaussian transformation from the
@@ -56,11 +58,11 @@ function varargout = baumgartner2013( target,template,varargin )
 %
 %     'bwsteep',bws  Set the steepness factor bws of the sigmoid function 
 %                    applied for binaural weighting of monaural similarity 
-%                    indices. Default value is 13°.
+%                    indices. Default value is 13 deg.
 %
 %     'polsamp',ps   Define the the polar angular sampling of the current
 %                    SP. As default the sampling of ARI's HRTF format at
-%                    the median SP is used, i.e.,
+%                    the midsagittal plane is used, i.e.,
 %                    ps = [-30:5:70,80,100,110:5:210] .
 %
 %   `baumgartner2013` accepts the following flags:
@@ -88,7 +90,7 @@ function varargout = baumgartner2013( target,template,varargin )
 %   ---------
 %
 %   To compute and visualize the baseline prediction (localizing broadband  
-%   sounds with own ears) for listener NH58 and the median SP use :::
+%   sounds with own ears) for listener NH58 and the midsagittal plane use :::
 %
 %     demo_baumgartner2013;
 %
@@ -115,7 +117,7 @@ definput.keyvals.space=1;       % No. of ERBs (Cams)
 definput.keyvals.do=0;
 definput.keyvals.u=2;           % listener-specific uncertainty in dB
 definput.keyvals.lat=0;         % deg
-definput.keyvals.flow=700;     % Hz
+definput.keyvals.flow=700;      % Hz
 definput.keyvals.fhigh=18000;   % Hz
 definput.keyvals.lvlstim = 40; 	% dBSPL
 definput.keyvals.lvltem = 40;  	% dBSPL
