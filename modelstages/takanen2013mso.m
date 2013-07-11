@@ -19,15 +19,15 @@ function output = takanen2013mso(ipsilateral, contralateral, fs, fc, printfigs)
 %   This function models the medial superior olive (MSO) by processing the 
 %   output of the periphery model with the following steps:
 %
-%     1) Delay and convolution is applied to the contralateral signal and
-%        the ipsilateral signal is limited and normalized.
+%   1) Delay and convolution is applied to the contralateral signal and
+%      the ipsilateral signal is limited and normalized.
 %
-%     2) Coincidence detection between the ipsilateral and contralateral
-%        signals.
+%   2) Coincidence detection between the ipsilateral and contralateral
+%      signals.
 %
-%     3) Weighted and self-weighted moving average filters are applied to
-%        the outputs of the coincidence detection and contralateral signal,
-%        respectively, and the output is limited.
+%   3) Weighted and self-weighted moving average filters are applied to
+%      the outputs of the coincidence detection and contralateral signal,
+%      respectively, and the output is limited.
 %
 %   See also: takanen2013, takanen2013periphery, weightedaveragefilter
 %

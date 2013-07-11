@@ -1,33 +1,21 @@
 function [Obj,results]=ziegelwanger2013(Obj,method,model,p0_onaxis)
 %ZIEGELWANGER2013 Time of arrival estimates
-%   usage: meta=ziegelwanger2013(data,method,correct,p0_onaxis) 
+%   Usage: meta=ziegelwanger2013(data,method,correct,p0_onaxis) 
 %
-%   Estimates the Time-of-Arrival for each measurement in Obj (SOFA) and
-%   corrects the results with a geometrical model of the head.
-%
-%   Input:
+%   Input parameters:
 %       Obj: SOFA object
-% 
-%       method (optional): select one of the estimation methods
-%           1: Threshold-Detection
-%           2: Centroid of squared IR
-%           3: Mean Groupdelay
-%           4: Minimal-Phase Cross-Correlation (Max) (default)
-%           5: Minimal-Phase Cross-Correlation (Centroid)
-%           6: Zero-Crossing
-%
-%       model (optional): correct estimated toa, using geometrical TOA-Model
-%           0: TOA estimated
-%           1: TOA modeled (default)
-%
-%       p0_onaxis (optional): startvalues for lsqcurvefit
+%       method : (Optional) Select one of the estimation methods
+%       model  : (Optional) Correct estimated toa, using geometrical
+%                TOA-Model. If $model=0$ use TOA estimated, 
+%                if $model=1$ use TOA modeled (default).
+%       p0_onaxis: (optional) Starting values for `lsqcurvefit`
 %           dim 1: [sphere-radius in m,
 %                 azimut of ear in radiants,
 %                 elevation of ear in radiants, 
 %                 direction-independent delay in seconds]
 %           dim 2: each record channel
 % 
-%   Output:
+%   Output parameters:
 %       Obj: SOFA Object
 % 
 %       results.toa: data matrix with time of arrival (TOA) for each impulse response (IR):
@@ -49,6 +37,24 @@ function [Obj,results]=ziegelwanger2013(Obj,method,model,p0_onaxis)
 %                 azimut of ear in radiants,
 %                 elevation of ear in radiants]
 %           dim 2: each record channel
+%
+%   Estimates the Time-of-Arrival for each measurement in Obj (SOFA) and
+%   corrects the results with a geometrical model of the head.
+%
+%   The value of *method* is an integer choosing one of the following
+%   methods. XXX Explain for each method a little about how they work:
+%
+%   1) Threshold-Detection
+%
+%   2) Centroid of squared IR
+%
+%   3) Mean Groupdelay
+%
+%   4) Minimal-Phase Cross-Correlation (Max) (default)
+%
+%   5) Minimal-Phase Cross-Correlation (Centroid)
+%
+%   6) Zero-Crossing
 %
 %   Examples:
 %   ---------

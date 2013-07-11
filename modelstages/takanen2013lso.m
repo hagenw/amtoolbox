@@ -16,15 +16,15 @@ function output = takanen2013lso(ipsilateral, contralateral, fs, fc)
 %   This function models the lateral superior olive (LSO) by processing the 
 %   output of the periphery model with the following steps:
 %
-%     1) First-order lowpass filter is applied to both the ipsilateral and
-%        contralateral sides, and the contralateral side is delayed
+%   1) First-order lowpass filter is applied to both the ipsilateral and
+%      contralateral sides, and the contralateral side is delayed
 %
-%     2) The output is saturated at a certain dB level and limited
-%        signals.
+%   2) The output is saturated at a certain dB level and limited
+%      signals.
 %
-%     3) Weighted moving average filters with a short and longer time
-%        constant are applied, the latter only below 1 kHz in order to slow
-%        the response
+%   3) Weighted moving average filters with a short and longer time
+%      constant are applied, the latter only below 1 kHz in order to slow
+%      the response
 %
 %   See also: takanen2013, takanen2013periphery, weightedaveragefilter
 %

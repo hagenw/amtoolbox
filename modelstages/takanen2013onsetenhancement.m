@@ -20,17 +20,20 @@ function [thetaOut energyOut]= takanen2013onsetenhancement(thetaIn,energyIn,fs,c
 %   are listed below and a more detailed describtion about the method can
 %   be found in in Takanen, Santala, Pulkki 2013 (Sec. 3.2.7)
 %   
-%     1) analyze the cues with two mechanisms
-%           - 50-ms long time window to evaluate the average information 
-%             over a longer time frame
-%           - 3-ms long time frame to analyze the gradients of the
-%             cues in order to be sensitive to the onsets
+%   1) analyze the cues with two mechanisms
 %
-%     2) combine the informations obtained with the two mechanisms to
-%        obtain the overall "where" and "what" cues
-%           - emphasize the information obtained with the mechanism
-%             employing shorter time frame to give more weight to the
-%             onsets
+%      * 50-ms long time window to evaluate the average information 
+%        over a longer time frame
+%      * 3-ms long time frame to analyze the gradients of the
+%        cues in order to be sensitive to the onsets
+%
+%   2) combine the informations obtained with the two mechanisms to
+%
+%      * obtain the overall "where" and "what" cues
+%
+%      * emphasize the information obtained with the mechanism
+%        employing shorter time frame to give more weight to the
+%        onsets
 %
 %   See also: takanen2013, takanen2013periphery, weightedaveragefilter,
 %             takanen2013formbinauralactivitymap

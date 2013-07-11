@@ -17,15 +17,15 @@ function [outsig, fc, mfc] = dau1997preproc(insig, fs, varargin);
 %  
 %   The Dau 1997 model consists of the following stages:
 %   
-%     1) a gammatone filter bank with 1-erb spaced filtes.
+%   1) a gammatone filter bank with 1-erb spaced filtes.
 %
-%     2) an envelope extraction stage done by half-wave rectification
-%        followed by low-pass filtering to 1000 Hz.
+%   2) an envelope extraction stage done by half-wave rectification
+%      followed by low-pass filtering to 1000 Hz.
 %
-%     3) an adaptation stage modelling nerve adaptation by a cascade of 5
-%        loops.
+%   3) an adaptation stage modelling nerve adaptation by a cascade of 5
+%      loops.
 %
-%     4) a modulation filterbank
+%   4) a modulation filterbank
 %
 %   Any of the optinal parameters for |auditoryfilterbank|,
 %   |ihcenvelope| and |adaptloop| may be optionally specified for this

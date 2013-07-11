@@ -11,8 +11,6 @@ function output = takanen2013(insig,fs,computationType,printFigs,printMap)
 %                          et. al. 2012 can be used as well
 %        fs              : sampling rate
 %        computationType : defines the type of output provided by the model
-%                             1 := the binaural activity map (default)
-%                             2 := the MSO and LSO model outputs
 %        printFigs       : boolean value that defines whether several
 %                          figures illustrating the processing steps in the
 %                          model are plotted or not. As default, no figures
@@ -26,45 +24,39 @@ function output = takanen2013(insig,fs,computationType,printFigs,printMap)
 %                 the input arguments.
 %
 %   `takanen2013(insig,fs,computationType)` computes either the binaural
-%   activity map or the MSO and LSO model outputs from the binaural input
-%   signal. 
+%   activity map (if $computationType=1$) or the MSO and LSO model outputs
+%   from the binaural input signal (if $computationType=2$).
 %
-%   If $computationType==1$, the output structure consists of:
+%   If $computationType=1$, the output structure has the following fields:
 %   
-%      `output.activityMap`  Matrix that describes in which of the six
-%                            frequency ranges there is activation on a given
-%                            location on the map at a specific time instant
+%     .activityMap  Matrix that describes in which of the six
+%                   frequency ranges there is activation on a given
+%                   location on the map at a specific time instant
 %
-%      `output.colorGains`
-%         Matrix that describes the signal level dependent gains for the
-%         different activation values on the activityMap
+%     .colorGains   Matrix that describes the signal level dependent
+%                   gains for the different activation values on the
+%                   activityMap
 %
-%      `output.colorMtrx`
-%         RGB color codes employed for the different
-%         frequency ranges on the binaural activity map
+%     .colorMtrx    RGB color codes employed for the different
+%                   frequency ranges on the binaural activity map
 %
-%      `output.levels`
-%         vector specifying the left/right location
+%     .levels       Vector specifying the left/right location
 %
-%   If $computationType==2$, the output structure consists of:
+%   If $computationType=2$, the output structure has the following fields:
 %
-%      `output.leftMso`
-%         output of the MSO model projecting to the left hemisphere
+%     .leftMso       Output of the MSO model projecting to the left hemisphere
 %
-%      `output.leftLso`
-%         output of the LSO model projecting to the left hemisphere
+%     .leftLso       Output of the LSO model projecting to the left hemisphere
 %
-%      `output.leftWbMso`
-%         output of the wideband MSO model projecting to the left hemisphere
+%     .leftWbMso     Output of the wideband MSO model projecting to
+%                    the left hemisphere
 %
-%      `output.rightMso`
-%         output of the MSO model projecting to the right hemisphere
+%     .rightMso      Output of the MSO model projecting to the right hemisphere
 %
-%      `output.rightLso`
-%         output of the LSO model projecting to the right hemisphere
+%     .rightLso      Output of the LSO model projecting to the right hemisphere
 %
-%      `output.rightWbMso`
-%         output of the wideband MSO model projecting to the right hemisphere
+%     .rightWbMso    Output of the wideband MSO model projecting to
+%                          the right hemisphere
 %
 %   Takanen, Santala and Pulkki presented a binaural auditory model that
 %   uses the outputs of models of the medial superior olive (MSO), lateral
@@ -75,20 +67,20 @@ function output = takanen2013(insig,fs,computationType,printFigs,printMap)
 %   The steps involved in the computation of the binaural activity map
 %   consist of:
 %
-%     1) the given stimulus is processed with a model of periphery that
-%        consists of a nonlinear time-domain model of cochlea by Verhulst
-%        et. al. (2012) and of a model of cochlear nucleus
+%   1) the given stimulus is processed with a model of periphery that
+%      consists of a nonlinear time-domain model of cochlea by Verhulst
+%      et. al. (2012) and of a model of cochlear nucleus
 %
-%     2) the binaural cues are decoded in the models of MSO, LSO and wide-
-%        band MSO from the dorsal stream output of the periphery model
+%   2) the binaural cues are decoded in the models of MSO, LSO and wide-
+%      band MSO from the dorsal stream output of the periphery model
 %
-%     3) the outputs of the MSO and LSO models are mapped into directions
-%        ranging from -90 to 90, and combined to form one set of "where"
-%        cues for each hemisphere
+%   3) the outputs of the MSO and LSO models are mapped into directions
+%      ranging from -90 to 90, and combined to form one set of "where"
+%      cues for each hemisphere
 %
-%     4) the "where" cues are used to map the "what" cues originating from
-%        the ventral stream output of the periphery models on a
-%        topographically organized binaural activity map
+%   4) the "where" cues are used to map the "what" cues originating from
+%      the ventral stream output of the periphery models on a
+%      topographically organized binaural activity map
 %
 %   See also: takanen2013periphery, takanen2013mso, takanen2013lso,
 %             takanen2013wbmso, takanen2013directionmapping,

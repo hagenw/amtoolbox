@@ -24,15 +24,15 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %  
 %   The Breebaart 2001 model consists of the following stages:
 %   
-%     1) a gammatone filter bank with 1-erb spaced filters.
+%   1) a gammatone filter bank with 1-erb spaced filters.
 %
-%     2) an envelope extraction stage done by half-wave rectification
-%        followed by low-pass filtering to 770 Hz.
+%   2) an envelope extraction stage done by half-wave rectification
+%      followed by low-pass filtering to 770 Hz.
 %
-%     3) an adaptation stage modelling nerve adaptation by a cascade of 5
-%        loops.
+%   3) an adaptation stage modelling nerve adaptation by a cascade of 5
+%      loops.
 %
-%     4) an excitation-inhibition (EI) cell model.
+%   4) an excitation-inhibition (EI) cell model.
 %
 %   Parameters for |auditoryfilterbank|, |ihcenvelope|, |adaptloop| and
 %   |eicell| can be passed at the end of the line of input arguments.

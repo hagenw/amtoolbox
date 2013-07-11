@@ -7,41 +7,41 @@ function varargout=exp_baumgartner2013(varargin)
 %
 %   Optional fields of output *data* structure:
 %
-%     `data.id`
-%        listener ID
+%   `data.id`
+%      listener ID
 %
-%     `data.u`
-%        listener-specific uncertainty
+%   `data.u`
+%      listener-specific uncertainty
 % 
-%     `data.dtfs`
-%        matrix containing DTFs dimensions: time, position, channel 
-%        (more details see doc: HRTF format)
+%   `data.dtfs`
+%      matrix containing DTFs dimensions: time, position, channel 
+%      (more details see doc: HRTF format)
 %
-%     `data.fs`
-%        sampling rate of impulse responses
+%   `data.fs`
+%      sampling rate of impulse responses
 %
-%     `data.pos`
-%        source-position matrix referring to 2nd dimension of 
-%        hM and formated acc. to meta.pos (ARI format).
-%        6th col is the lateral angle. 7th col is the polar angle.
+%   `data.pos`
+%      source-position matrix referring to 2nd dimension of 
+%      hM and formated acc. to meta.pos (ARI format).
+%      6th col is the lateral angle. 7th col is the polar angle.
 % 
-%     `data.spdtfs`
-%        DTFs of specific SPs
+%   `data.spdtfs`
+%      DTFs of specific SPs
 %  
-%     `data.polangs`
-%        polar angles corresponding to *data.spdtfs*
+%   `data.polangs`
+%      polar angles corresponding to *data.spdtfs*
 %   
-%     `data.p`
-%        predicted polar angular response PMVs
+%   `data.p`
+%      predicted polar angular response PMVs
 %
-%     `data.respangs`
-%        polar response angules corresponding to *data.p*
-%     
-%     `data.pe`
-%        predicted local polar RMS error in degrees
+%   `data.respangs`
+%      polar response angules corresponding to *data.p*
+%   
+%   `data.pe`
+%      predicted local polar RMS error in degrees
 % 
-%     `data.qe`
-%        predicted quadrant error
+%   `data.qe`
+%      predicted quadrant error
 %
 %   The following flags can be specified;
 %

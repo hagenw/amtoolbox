@@ -1,4 +1,4 @@
-function [b,a,delay]=gammatone(fc,fs,varargin)
+function [b,a,delay,z,p,k]=gammatone(fc,fs,varargin)
 %GAMMATONE  Gammatone filter coefficients
 %   Usage: [b,a] = gammatone(fc,fs,n,betamul);
 %          [b,a] = gammatone(fc,fs,n);
@@ -206,6 +206,11 @@ if flags.do_allpole
       % Place the result (a row vector) in the output matrices.
       b(ii,:)=b2;
       a(ii,:)=a2;
+      
+      % Compute the z,p,k representation
+      z=[];
+      p=atilde*ones(1,n);
+      k=1;
       
     end;
     

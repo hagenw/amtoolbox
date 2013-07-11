@@ -25,11 +25,15 @@ function output = exp_langendijk2002(varargin)
 %   position for different conditions. The shading of each cell codes the
 %   probability density (light/dark is high/low probability):
 %
-%     * Subfigure 1: Baseline condition
-%     * Subfigure 2: 2-octave condition (4-16kHz)
-%     * Subfigure 3: 1-octave condition (low 4-8kHz)
-%     * Subfigure 4: 1-octave condition (middle 5.7-11.3kHz)
-%     * Subfigure 5: 1-octave condition (high 8-16kHz)
+%   * Subfigure 1: Baseline condition
+%
+%   * Subfigure 2: 2-octave condition (4-16kHz)
+%
+%   * Subfigure 3: 1-octave condition (low 4-8kHz)
+%
+%   * Subfigure 4: 1-octave condition (middle 5.7-11.3kHz)
+%
+%   * Subfigure 5: 1-octave condition (high 8-16kHz)
 %   
 %   Subfigure 6 shows the likelihood statistics for the actual responses
 %   (bars), the average and the 99% confidence interval of the expected

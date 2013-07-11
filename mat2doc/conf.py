@@ -1,6 +1,11 @@
+# Mandatory settings
 outputdir='~/publish'
 plotengine='matlab'
-author=u'Peter L. S\xf8ndergaard'
-version="0.9.0"
 versionfile="amtoolbox_version"
+
+# Optional global settings
+author=u'Peter L. S\xf8ndergaard'
 year="2013"
+
+# Settings used by scripts just for this project
+username='soender'

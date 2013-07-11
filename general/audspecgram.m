@@ -45,8 +45,8 @@ function varargout=audspecgram(insig,fs,varargin)
 %    
 %     'image'       Use `imagesc` to display the spectrogram. This is the default.
 %    
-%     'clim',[clow,chigh]  Use a colormap ranging from *clow* to *chigh*. These              
-%                          values are passed to `imagesc`. See the help on `imagesc`.
+%     'clim',clim   Use a colormap ranging from $clim(1)$ to $clim(2)$. These              
+%                   values are passed to `imagesc`. See the help on `imagesc`.
 %    
 %     'dynrange',r  Limit the displayed dynamic range to r. This option
 %                   is especially usefull when displaying on a dB scale (no adaptation).
@@ -58,9 +58,9 @@ function varargout=audspecgram(insig,fs,varargin)
 %     'thr',r       Keep only the largest fraction *r* of the coefficients, and
 %                   set the rest to zero.
 %    
-%     'frange',[flow,fhigh]
-%                   Choose a frequency scale ranging from *flow* to
-%                   *fhigh*, values are entered in Hz. Default is to display from
+%     'frange',frange
+%                   Choose a frequency scale ranging from $frange(1)$ to
+%                   $frange(2)$, values are entered in Hz. Default is to display from
 %                   0 to 8000 Hz.
 %    
 %     'xres',xres   Approximate number of pixels along x-axis / time.

@@ -15,18 +15,18 @@ function output = verhulst2012(insig,fs,fc,spl)
 %                 below or of all the listed elements, depending on
 %                 whether the input is monaural or binaural
 %
-%                   * velocityLeft  : velocity of the basilar membrane
-%                                     movement at different positions in
-%                                     the left ear canal signal
-%                   * displaceLeft  : displacement of the basilar membrane
-%                                     movement at different positions in
-%                                     the left ear canal signal
-%                   * velocityRight : velocity of the basilar membrane
-%                                     movement at different positions in
-%                                     the right ear canal signal
-%                   * displaceRight : displacement of the basilar membrane
-%                                     movement at different positions in
-%                                     the right ear canal signal
+%                 * velocityLeft  : velocity of the basilar membrane
+%                                   movement at different positions in
+%                                   the left ear canal signal
+%                 * displaceLeft  : displacement of the basilar membrane
+%                                   movement at different positions in
+%                                   the left ear canal signal
+%                 * velocityRight : velocity of the basilar membrane
+%                                   movement at different positions in
+%                                   the right ear canal signal
+%                 * displaceRight : displacement of the basilar membrane
+%                                   movement at different positions in
+%                                   the right ear canal signal
 %
 %   This function divides the binaural or monaural input signal into non-
 %   overlapping time frames and computes the basilar membrane displacement
@@ -43,23 +43,23 @@ function output = verhulst2012(insig,fs,fc,spl)
 %
 %   The processing is implemented as follows:
 %
-%     1) the input signal is resampled to the 400 kHz sampling rate
-%        employed in the cochlea model
+%   1) the input signal is resampled to the 400 kHz sampling rate
+%      employed in the cochlea model
 %
-%     2) the list of frequencies in *fc* are converted in to probe
-%        positions in a manner that the frequencies are divided evenly into
-%        low and high frequency categories. 
+%   2) the list of frequencies in *fc* are converted in to probe
+%      positions in a manner that the frequencies are divided evenly into
+%      low and high frequency categories. 
 %
-%     3) the signal is processed by processing first the left ear canal
-%        signal
+%   3) the signal is processed by processing first the left ear canal
+%      signal
 %
-%             - the two frequency regions are measured separately
+%      * the two frequency regions are measured separately
 %
-%             - the processing is done in 90-ms long non-overlapping time
-%               frames
+%      * the processing is done in 90-ms long non-overlapping time
+%        frames
 %
-%     4) the values obtained are resampled back to the original sampling
-%        rate
+%   4) the values obtained are resampled back to the original sampling
+%      rate
 %               
 %   See also: verhulst2012
 %
