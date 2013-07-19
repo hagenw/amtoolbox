@@ -85,16 +85,10 @@ function varargout = baumgartner2013( target,template,varargin )
 %
 %     'noregular'    Disable regularization of angular sampling.
 %
+%   See also: plotbaumgartner2013, data_baumgartner2013,
+%   exp_baumgartner2013
 %
-%   Example:
-%   ---------
-%
-%   To compute and visualize the baseline prediction (localizing broadband  
-%   sounds with own ears) for listener NH58 and the midsagittal plane use :::
-%
-%     demo_baumgartner2013;
-%
-%   See also: plotbaumgartner2013, data_baumgartner2013, exp_baumgartner2013
+%   Demos: demo_baumgartner2013
 %
 %   References: baumgartner2013assessment baumgartner2012modelling langendijk2002contribution patterson1988efficient dau1996qmeI
 

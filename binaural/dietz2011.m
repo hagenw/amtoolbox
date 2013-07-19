@@ -33,19 +33,19 @@ function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
 %   The steps of the binaural model to calculate the result are the
 %   following (see also Dietz et al., 2011):
 %
-%     1) Middle ear filtering (500-2000 Hz 1st order bandpass)
+%   1) Middle ear filtering (500-2000 Hz 1st order bandpass)
 %
-%     2) Auditory bandpass filtering on the basilar membrane using a
-%        4th-order all-pole gammatone filterbank, employing 23 filter
-%        bands between 200 and 5000 Hz, with a 1 ERB spacing. The filter
-%        width was set to correspond to 1 ERB.
+%   2) Auditory bandpass filtering on the basilar membrane using a
+%      4th-order all-pole gammatone filterbank, employing 23 filter
+%      bands between 200 and 5000 Hz, with a 1 ERB spacing. The filter
+%      width was set to correspond to 1 ERB.
 %
-%     3) Cochlear compression was simulated by power-law compression with
-%        an exponent of 0.4.
+%   3) Cochlear compression was simulated by power-law compression with
+%      an exponent of 0.4.
 %
-%     4) The transduction process in the inner hair cells was modelled
-%        using half-wave rectification followed by filtering with a 770-Hz
-%        5th order lowpass.
+%   4) The transduction process in the inner hair cells was modelled
+%      using half-wave rectification followed by filtering with a 770-Hz
+%      5th order lowpass.
 %
 %   The interaural temporal disparities are then extracted using a
 %   second-order complex gammatone bandpass (see paper for details).

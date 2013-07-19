@@ -12,14 +12,14 @@ function output = joergensen2011combineinformation(input,SNRs,conditions,Nsp)
 %   Output parameters:
 %     output     : Structure containing the following fields:
 %
-%                    `output.combined_aud` 
-%                       [n,k] Matrix with overall SNRenv
-%                       for each processing condition and SNR
+%                  `output.combined_aud` 
+%                     [n,k] Matrix with overall SNRenv
+%                     for each processing condition and SNR
 % 
-%                    `output.SNRenvs`
-%                       Cell array {n,k,q} with entries for each
-%                       condition, SNR, and speech sample. Each entry
-%                       is Matrix with an SNRenv value for each XXX
+%                  `output.SNRenvs`
+%                     Cell array {n,k,q} with entries for each
+%                     condition, SNR, and speech sample. Each entry
+%                     is Matrix with an SNRenv value for each XXX
 %
 %   `joergensen2011combineinformation(input,SNRs,conditions,Nsp)` combines
 %   the SNRenv across modulation and audio filters. It is also possible to

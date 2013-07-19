@@ -39,17 +39,17 @@ function [crosscorr,t,ild,cfreq] = lindemann1986(insig,fs,varargin)
 %   The steps of the binaural model to calculate the result are the
 %   following:
 %
-%     1) The given stimulus is filtered using an erb bank to
-%        get 36 frequency bands containing a stimulus waveform.
+%   1) The given stimulus is filtered using an erb bank to
+%      get 36 frequency bands containing a stimulus waveform.
 %
-%     2) In a second step the auditory nerve is siumulated by extracting the
-%        envelope using a first order low pass filter with a cutoff frequency
-%        of 800 Hz and half-wave rectification.
+%   2) In a second step the auditory nerve is siumulated by extracting the
+%      envelope using a first order low pass filter with a cutoff frequency
+%      of 800 Hz and half-wave rectification.
 %
-%     3) Calculation of the cross-correlation between the left and right
-%        channel.  This is done using the model described in Lindemann
-%        (1986a) and Hess (2007). These are extensions to the delay line model
-%        of Jeffres (1948).
+%   3) Calculation of the cross-correlation between the left and right
+%      channel.  This is done using the model described in Lindemann
+%      (1986a) and Hess (2007). These are extensions to the delay line model
+%      of Jeffres (1948).
 %
 %   You may supply any flags or key/value pairs of the |auditoryfilterbank|,
 %   |ihcenvelope| or |lindemann1986bincorr| at the end of the line of input

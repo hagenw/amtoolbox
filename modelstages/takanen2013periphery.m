@@ -14,37 +14,37 @@ function periphOutput = takanen2013periphery(insig,fs,outputPlot)
 %   Output parameters:
 %        periphOutput : Structure consisting of the following elements
 %
-%                         `periphOutput.left`
-%                            Left ear "where" stream output
+%                       `periphOutput.left`
+%                          Left ear "where" stream output
 % 
-%                         `periphOutput.right`  
-%                             Right ear "where" stream output
+%                       `periphOutput.right`  
+%                           Right ear "where" stream output
 %
-%                         `periphOutput.fc`
-%                             Characteristic frequencies
+%                       `periphOutput.fc`
+%                           Characteristic frequencies
 %
-%                         `periphOutput.ventralLeft`
-%                             Left hemisphere "what" stream output 
+%                       `periphOutput.ventralLeft`
+%                           Left hemisphere "what" stream output 
 %
-%                         `periphOutput.ventralLeft`
-%                             Right hemisphere "what" stream output
+%                       `periphOutput.ventralLeft`
+%                           Right hemisphere "what" stream output
 %
 %   This function processes the binaural input signal through the model of
 %   periphery presented by Takanen, Santala, Pulkki 2013, the model which
 %   consists of a nonlinear time-domain model of cochlea and model of
 %   cochlear nucleus. The processing contains the following steps:
 %
-%     1) the binaural input signal is processed with the nonlinear time-
-%        domain model of cochlea by Verhulst et. al. 2013 to obtain the
-%        velocity of basilar membrane movement at different positions
+%   1) the binaural input signal is processed with the nonlinear time-
+%      domain model of cochlea by Verhulst et. al. 2013 to obtain the
+%      velocity of basilar membrane movement at different positions
 %
-%     2) the obtained velocity information is half-wave rectified
+%   2) the obtained velocity information is half-wave rectified
 %
-%     3) the half-waves are replaced with Gaussian pulses centered around
-%        the local maxima of the half-waves
+%   3) the half-waves are replaced with Gaussian pulses centered around
+%      the local maxima of the half-waves
 %
-%     4) the frequency-dependent delays of the cochlea model are
-%        compensated
+%   4) the frequency-dependent delays of the cochlea model are
+%      compensated
 %
 %   See also: takanen2013, verhulst2012
 

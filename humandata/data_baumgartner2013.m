@@ -2,50 +2,50 @@ function data = data_baumgartner2013(varargin)
 %DATA_BAUMGARTNER2013  Data from Baumgartner et al. (2013)
 %   Usage: data = data_baumgartner2013(flag)
 %
-%   `data_baumgartner2013(flag)` returns data of the table or 
-%   the pool of listener-specific models from Baumgartner et al. (2013) 
-%   describing a model for sound localization in sagittal planes (SPs) 
+%   `data_baumgartner2013(flag)` returns data of the table or
+%   the pool of listener-specific models from Baumgartner et al. (2013)
+%   describing a model for sound localization in sagittal planes (SPs)
 %   on the basis of listener-specific directional transfer functions (DTFs).
 %
 %   The flag may be one of:
-%  
-%     'tab1'       Calibration data for listener pool listed in Table 1.
-%                  Fields of *data* structure: 
-%                    .id          listener ID
-%                    .u           listener-specific uncertainty
-%                    .goupell10   boolean flag indicating whether listener
-%                                 participated in Goupell et al. (2010)
-%                    .walder10    boolean flag indicating whether listener
-%                                 participated in Walder (2010)
 %
-%     'ari'        DTFs and calibration data of the pool.
-%                  Fields of *data* structure: 
-%                    .id          listener ID
-%                    .u           listener-specific uncertainty
-%                    .goupell10   boolean flag indicating whether listener
-%                                 participated in Goupell et al. (2010)
-%                    .walder10    boolean flag indicating whether listener
-%                                 participated in Walder (2010)
-%                    .dtfs        matrix containing DTFs.
-%                                 Dimensions: time, position, channel 
-%                                 (more details see doc: HRTF format)
-%                    .fs          sampling rate of impulse responses
-%                    .pos         source-position matrix referring to 
-%                                 2nd dimension of hM and formated acc.
-%                                 to meta.pos (ARI format).
-%                                 6th col: lateral angle 
-%                                 7th col: polar angle
+%     'tab1'  Calibration data for listener pool listed in Table 1. The
+%             output contains the following fields: *id*, *u*, *goupell10* and
+%             *walder10*
 %
-%     'pool'       DTFs and calibration data of the pool.
-%                  Fields of *data* structure: 
-%                    .id          listener ID
-%                    .u           listener-specific uncertainty
-%                    .goupell10   boolean flag indicating whether listener
-%                                 participated in Goupell et al. (2010)
-%                    .walder10    boolean flag indicating whether listener
-%                                 participated in Walder (2010)
-%                    .fs          sampling rate of impulse responses
-%                    .Obj         DTF data in SOFA Format
+%     'ari'   DTFs and calibration data of the pool. The output contains the
+%             following fields: *id*, *u*, *goupell10*, *walder10*, *dtfs*,
+%             *fs* and *pos*
+%
+%     'pool'  DTFs and calibration data of the pool. The output contains the
+%             following fields: *id*, *u*, *goupell10*, *walder10*, *fs*
+%             and *Obj*.
+%
+%   The fields in the output contains the following information
+%
+%     .id         listener ID
+%
+%     .u          listener-specific uncertainty
+%
+%     .goupell10  boolean flag indicating whether listener
+%                 participated in Goupell et al. (2010)
+%
+%     .walder10   boolean flag indicating whether listener
+%                 participated in Walder (2010)
+%
+%     .dtfs       matrix containing DTFs.
+%                 Dimensions: time, position, channel
+%                 (more details see doc: HRTF format)
+%
+%     .fs         sampling rate of impulse responses
+%
+%     .pos        source-position matrix referring to
+%                 2nd dimension of hM and formated acc.
+%                 to meta.pos (ARI format).
+%                 6th col: lateral angle
+%                 7th col: polar angle
+%
+%     .Obj        DTF data in SOFA Format
 %
 %   Examples:
 %   ---------
@@ -78,11 +78,11 @@ if flags.do_missingflag
              sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
   error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
-    
 
-%% Table 1 (model calibration)  
+
+%% Table 1 (model calibration)
 if flags.do_tab1 || flags.do_pool
-  
+
     listeners={ ...
          'NH12'   1.6   true  true;  ...
          'NH15'   2.0   true  true;  ...
@@ -105,15 +105,15 @@ if flags.do_tab1 || flags.do_pool
 
     f={'id', 'u', 'goupell10', 'walder10'};
     data=cell2struct(listeners,f,2);
-    
+
 end
 
 %% Listener pool (listener-specific SP-DTFs)
 if flags.do_pool % load also DTFs of SPs
-  
+
   % sort acc. to ascending exp. PE
-  data = data([12,1,10,3,14,16,8,9,4,2,7,15,17,5,11,6,13]); 
-  
+  data = data([12,1,10,3,14,16,8,9,4,2,7,15,17,5,11,6,13]);
+
   if flags.do_ari
 
     hpath = which('hrtfinit');  % find local path of hrtf repository
@@ -136,27 +136,27 @@ if flags.do_pool % load also DTFs of SPs
 
     end
   end
-  
+
   if flags.do_sofa
-          
+
     for ii = 1:length(data)
-      
+
       filename = fullfile(SOFAdbPath,'baumgartner2013',...
         ['ARI_' data(ii).id '_hrtf_M_dtf 256.sofa']);
-      
+
 %       if exist(filename,'file') ~= 2
 %         fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/SOFA_baumgartner2013.zip , \n unzip it, and move the folder into your HRTF repository \n ' SOFAdbPath ' .\n' ' Then, press any key to quit pausing. \n'])
 %         pause
 %       end
-      
+
       data(ii).Obj = SOFAload(filename);
       data(ii).fs = data(ii).Obj.Data.SamplingRate;
-      
+
     end
   end
 
 end
-    
+
 
 
 end

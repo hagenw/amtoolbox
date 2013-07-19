@@ -20,14 +20,14 @@ function output=exp_lopezpoveda2001(varargin)
 %               0dB over frequency in one plot Fig. 2b shows for default 
 %               $fs = 22050 Hz$: 
 %               
-%                  * Data points directly derived from Goode et al. 1994 
+%               * Data points directly derived from Goode et al. 1994 
 %
-%                  * FIR filter with data points from Goode et al. 1994
+%               * FIR filter with data points from Goode et al. 1994
 %
-%                  * Data points of figure 2b from Lopez-Poveda and Meddis
-%                    2001 (read from fig 2b, actually also derived from Goode et
-%                    al. 1994) The output are the data points of the respective
-%                    figure.
+%               * Data points of figure 2b from Lopez-Poveda and Meddis
+%                 2001 (read from fig 2b, actually also derived from Goode et
+%                 al. 1994) The output are the data points of the respective
+%                 figure.
 %
 %               The dimensions of the output are: frequency values x data
 %               points  x figure no.
@@ -55,13 +55,13 @@ function output=exp_lopezpoveda2001(varargin)
 %               The dimensions of the output are: signal level x masker level x signal frequency
 %               masker level consists of 4 columns:
 %
-%                 1) Signal level in dB SPL (x axis in the plots)
-%                 
-%                 2) Results for parameter set of YO, table I
+%               1) Signal level in dB SPL (x axis in the plots)
+%               
+%               2) Results for parameter set of YO, table I
 %
-%                 3) Results for average parameter set, table II
+%               3) Results for average parameter set, table II
 % 
-%                 4) Results for regression lines, table III
+%               4) Results for regression lines, table III
 %
 %   See also: drnl, data_lopezpoveda2001, data_pralong1996, data_goode1994
 %

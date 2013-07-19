@@ -27,27 +27,27 @@ function [output energy] = takanen2013wbmso(ipsilateral, contralateral, fs, widt
 %   model. This is done by processing the output of the periphery model 
 %   with the following steps:
 %
-%     1) Delay the contralateral signal.
+%   1) Delay the contralateral signal.
 %
-%     2) Adjacent frequency bands are summed on both sides.
+%   2) Adjacent frequency bands are summed on both sides.
 %
-%     3) The average of the signal is removed to emphasize prominent peaks
-%        by applying a self-weighted moving average filter and delay to the
-%        signal and deducting this from the signal after summing over
-%        frequency bands.
+%   3) The average of the signal is removed to emphasize prominent peaks
+%      by applying a self-weighted moving average filter and delay to the
+%      signal and deducting this from the signal after summing over
+%      frequency bands.
 %
-%     4) Both sides are convolved with a Hanning window and a phase-locked
-%        impulse generator is applied.
+%   4) Both sides are convolved with a Hanning window and a phase-locked
+%      impulse generator is applied.
 %
-%     5) The contralateral side is convolved and the ipsilateral side is
-%        limited and normalized.
+%   5) The contralateral side is convolved and the ipsilateral side is
+%      limited and normalized.
 %
-%     6) Coincidence detection between the ipsilateral and contralateral
-%        signals.
+%   6) Coincidence detection between the ipsilateral and contralateral
+%      signals.
 %
-%     7) Weighted and self-weighted moving average filters are applied to
-%        the outputs of the coincidence detection and contralateral signal,
-%        respectively, and the output is limited.
+%   7) Weighted and self-weighted moving average filters are applied to
+%      the outputs of the coincidence detection and contralateral signal,
+%      respectively, and the output is limited.
 %
 %   See also: takanen2013, takanen2013periphery, weightedaveragefilter
 %

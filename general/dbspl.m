@@ -11,16 +11,16 @@ function y = dbspl(insig,varargin)
 %   convert between RMS and dB SPL. Default value is 100. Some commonly
 %   used values are:
 %
-%     * $dboffset = 0$. This convention was used for the development of the
-%       DRNL and Breebaart models.
+%   * $dboffset = 0$. This convention was used for the development of the
+%     DRNL and Breebaart models.
 %
-%     * $dboffset = -20*log10(20e-6) = 93.98$. This corresponds to the common
-%       convention of the reference being 20 micro Pa. Using this
-%       convention, the numerical values of signals is the sound pressure
-%       measured in Pascal.
+%   * $dboffset = -20*log10(20e-6) = 93.98$. This corresponds to the common
+%     convention of the reference being 20 micro Pa. Using this
+%     convention, the numerical values of signals is the sound pressure
+%     measured in Pascal.
 %
-%     * $dboffset = 100$. This convention was used for the development of the
-%       Dau and Jepsen models.
+%   * $dboffset = 100$. This convention was used for the development of the
+%     Dau and Jepsen models.
 %
 %   Globally changing the reference level for all functions in the
 %   toolbox can be done by the following code::

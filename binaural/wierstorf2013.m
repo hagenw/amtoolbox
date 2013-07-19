@@ -46,28 +46,29 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %   The following parameters may be passed at the end of the line of
 %   input arguments:
 %
-%       'resolution',resolution     Resolution of the points in the listening
-%                        area. Number of points is resoluation x resolution. If
-%                        only one point in the listening area is given via single
-%                        values for X and Y, the resolution is automatically set
-%                        to 1.
+%     'resolution',resolution
+%                      Resolution of the points in the listening
+%                      area. Number of points is resoluation x resolution. If
+%                      only one point in the listening area is given via single
+%                      values for X and Y, the resolution is automatically set
+%                      to 1.
 %
-%       'nls',nls        Number of loudspeaker of your WFS setup.
-%                        Default value is 2.
+%     'nls',nls        Number of loudspeaker of your WFS setup.
+%                      Default value is 2.
 %
-%       'array',array    Array type to use, could be 'linear' or 'circle'.
-%                        Default value is 'linear'.
+%     'array',array    Array type to use, could be 'linear' or 'circle'.
+%                      Default value is 'linear'.
 %
-%       'hrtf',hrtf      HRTF database. This have to be in the TU-Berlin
-%                        mat-format, see:
-%                        https://dev.qu.tu-berlin.de/projects/measurements/wiki/IRs_file_format
-%                        Default HRTF set is the 3m one from TU-Berlin measured
-%                        with the KEMAR.
+%     'hrtf',hrtf      HRTF database. This have to be in the TU-Berlin
+%                      mat-format, see:
+%                      https://dev.qu.tu-berlin.de/projects/measurements/wiki/IRs_file_format
+%                      Default HRTF set is the 3m one from TU-Berlin measured
+%                      with the KEMAR.
 %
-%       'lookup',lookup  Lookup table to map ITD values to angles. This can be
-%                        created by the `itd2anglelookuptable` function. Default
-%                        value is the lookup table
-%                        wierstorf2013itd2anglelookup.mat that comes with AMT.
+%     'lookup',lookup  Lookup table to map ITD values to angles. This can be
+%                      created by the `itd2anglelookuptable` function. Default
+%                      value is the lookup table
+%                      wierstorf2013itd2anglelookup.mat that comes with AMT.
 %
 %
 %   For the simulation of the wave field synthesis or stereophony setup this
