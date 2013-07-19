@@ -40,8 +40,7 @@ function [outsig,fs] = read_hrtf(elev_r,azim_r,database);
 
   % Make elev and azim into the same shape, repeating elements if
   % necessary  
-  elev_r=bsxfun(@times,elev_r,ones(size(azim_r));
-  azim_r=bsxfun(@times,azim_r,ones(size(elev_r));
+  [elev_r,azim_r]=scalardistribute(azim_r,elev_r);
   
   nexps=numel(elev_r);
   
