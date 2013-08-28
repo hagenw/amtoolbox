@@ -39,8 +39,8 @@ if nargin == 2 || isstruct(varargin{1}) % SOFA input
   Obj = varargin{1};
 	hM = permute(double(Obj.Data.IR),[3 1 2]);
 
-  pos(:,1)=bsxfun(@times,Obj.ListenerRotation(:,1),ones(Obj.DimSize.M,1));
-  pos(:,2)=bsxfun(@times,Obj.ListenerRotation(:,2),ones(Obj.DimSize.M,1));
+  pos(:,1)=bsxfun(@times,Obj.SourcePosition(:,1),ones(Obj.API.M,1));
+  pos(:,2)=bsxfun(@times,Obj.SourcePosition(:,2),ones(Obj.API.M,1));
   [pos(:,6), pos(:,7)]=sph2hor(pos(:,1),pos(:,2));
   
 elseif nargin == 3 % aRI Format

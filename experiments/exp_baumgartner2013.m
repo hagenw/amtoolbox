@@ -529,8 +529,8 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
     fprintf('\n Please wait a little! \n');
     for ll = 1:ns
       
-      s(ll).pos(:,1)=bsxfun(@times,s(ll).Obj.ListenerRotation(:,1),ones(s(ll).Obj.M,1));
-      s(ll).pos(:,2)=bsxfun(@times,s(ll).Obj.ListenerRotation(:,2),ones(s(ll).Obj.M,1));
+      s(ll).pos(:,1)=bsxfun(@times,s(ll).Obj.SourcePosition(:,1),ones(s(ll).Obj.API.M,1));
+      s(ll).pos(:,2)=bsxfun(@times,s(ll).Obj.SourcePosition(:,2),ones(s(ll).Obj.API.M,1));
       [poscart(:,1),poscart(:,2),poscart(:,3)] = ...
           sph2cart(s(ll).pos(:,1),s(ll).pos(:,2),ones(size(s(ll).pos,1),1));
 
