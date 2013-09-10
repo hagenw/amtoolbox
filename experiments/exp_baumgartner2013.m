@@ -14,7 +14,7 @@ function varargout=exp_baumgartner2013(varargin)
 %      listener-specific uncertainty
 % 
 %   `data.dtfs`
-%      matrix containing DTFs dimensions: time, position, channel 
+%      matrix containing DTFs. Dimensions: time, position, channel 
 %      (more details see doc: HRTF format)
 %
 %   `data.fs`
@@ -22,7 +22,7 @@ function varargout=exp_baumgartner2013(varargin)
 %
 %   `data.pos`
 %      source-position matrix referring to 2nd dimension of 
-%      hM and formated acc. to meta.pos (ARI format).
+%      hM and formated acc. to *meta.pos* (ARI format).
 %      6th col is the lateral angle. 7th col is the polar angle.
 % 
 %   `data.spdtfs`
@@ -31,7 +31,7 @@ function varargout=exp_baumgartner2013(varargin)
 %   `data.polangs`
 %      polar angles corresponding to *data.spdtfs*
 %   
-%   `data.p`
+%   `data.pmv`
 %      predicted polar angular response PMVs
 %
 %   `data.respangs`
@@ -117,7 +117,7 @@ function varargout=exp_baumgartner2013(varargin)
 %     'fig23'   Reproduce Fig. 23:
 %               Predictions for two modifications to the 9.1 setup (Auro 3D). 
 %               Left: Original setup, loudspeakers LS and LSH 
-%               at the azimuth of 110 deg.. 
+%               at the azimuth of 110 deg. 
 %               Center: LSH at the azimuth of 130 deg. 
 %               Right: LS and LSH at the azimuth of 130 deg. 
 %               All other conventions as in Fig. 22.
@@ -276,15 +276,15 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
       for jj = 1:ns    % ears
           for ii = 1:length(latdivision) % SPs
             
-            s(ll).p{jj,ii} = [];
+            s(ll).pmv{jj,ii} = [];
             s(ll).respangs{ii} = [];
-            [s(ll).p{jj,ii},s(ll).respangs{ii}] = baumgartner2013(...
+            [s(ll).pmv{jj,ii},s(ll).respangs{ii}] = baumgartner2013(...
                 s(jj).spdtfs{ii},s(ll).spdtfs{ii},s(ll).fs,...
                 'u',s(ll).u,'lat',s(ll).latang{ii},...
                 'polsamp',s(ll).polangs{ii});
 
             [ qe(ll,jj,ii),pe(ll,jj,ii) ] = pmv2ppp( ...
-                s(ll).p{jj,ii} , s(jj).polangs{ii} , s(ll).respangs{ii});
+                s(ll).pmv{jj,ii} , s(jj).polangs{ii} , s(ll).respangs{ii});
 
           end
       end
@@ -578,7 +578,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
             'lat',latM,'u',s(ll).u,...
             'polsamp',polangs);
         idP = respangs >= -30 & respangs <= 210;
-        s(ll).p{ss}(:,d) = pmv(idP)/sum(pmv(idP));
+        s(ll).pmv{ss}(:,d) = pmv(idP)/sum(pmv(idP));
         s(ll).respangs = respangs(idP);
 
       end
@@ -588,11 +588,11 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
     end
 
     % Pool
-    ppool = zeros(size(s(1).p{ss}));
+    ppool = zeros(size(s(1).pmv{ss}));
     for ll = 1:ns
-        ppool = ppool + s(ll).p{ss};
+        ppool = ppool + s(ll).pmv{ss};
     end
-    s(ns+1).p{ss} = ppool/length(s);
+    s(ns+1).pmv{ss} = ppool/length(s);
     s(ns+1).respangs = s(1).respangs;
     s(ns+1).id = 'Pool';
   
@@ -624,7 +624,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
       ss = setup(ii);
       subplot(1,3,ii)
     
-      h = pcolor(D,s(ll).respangs,s(ll).p{ss});
+      h = pcolor(D,s(ll).respangs,s(ll).pmv{ss});
       if not(isoctave) % does not work with x11 (mac osx)
         axis equal
       end
@@ -644,7 +644,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
       caxis([0 0.1])
       ylabel('Response Angle (\circ)')
 
-      [tmp,Imax] = max(s(ll).p{ss});
+      [tmp,Imax] = max(s(ll).pmv{ss});
       hold on
       h1 = plot( D,s(ll).respangs(Imax)+2.5, 'wo');  % shadow
       set(h1,'MarkerSize',4,'MarkerFaceColor','none') 
@@ -703,17 +703,17 @@ if flags.do_fig19 || flags.do_fig20
         % superposition
         s(ll).dtfs2{ii} = s(ll).spdtfs(:,id1,:) + s(ll).spdtfs(:,id2,:);
         
-        [s(ll).p1{ii},respang] = baumgartner2013(...
+        [s(ll).pmv1{ii},respang] = baumgartner2013(...
           s(ll).spdtfs(:,id0,:),s(ll).spdtfs,s(ll).fs,'u',s(ll).u,...
           'polsamp',polang);
-        s(ll).p2{ii} = baumgartner2013(...
+        s(ll).pmv2{ii} = baumgartner2013(...
           s(ll).dtfs2{ii},s(ll).spdtfs,s(ll).fs,'u',s(ll).u,...
           'polsamp',polang);
 
         [s(ll).qe1{ii},s(ll).pe1{ii}] = pmv2ppp(...
-          s(ll).p1{ii},polang(id0),respang);
+          s(ll).pmv1{ii},polang(id0),respang);
         [s(ll).qe2{ii},s(ll).pe2{ii}] = pmv2ppp(...
-          s(ll).p2{ii},pol2{ii},respang);
+          s(ll).pmv2{ii},pol2{ii},respang);
         
         % Increse of error
         qeI(ll,ii) = s(ll).qe2{ii} - s(ll).qe1{ii};
@@ -733,15 +733,15 @@ if flags.do_fig19 || flags.do_fig20
       
       figure;
       subplot(1,3,1)
-      plotbaumgartner2013(s(1).p1{1},polang,respang,'cmax',0.1,'nocolorbar');
+      plotbaumgartner2013(s(1).pmv1{1},polang,respang,'cmax',0.1,'nocolorbar');
       title(['P: PE = ' num2str(s(1).pe1{1},2) '\circ, QE = ' num2str(s(1).qe1{1},2) '%'])
       
       subplot(1,3,2)
-      plotbaumgartner2013(s(1).p2{2},pol2{2},respang,'cmax',0.1,'nocolorbar');
+      plotbaumgartner2013(s(1).pmv2{2},pol2{2},respang,'cmax',0.1,'nocolorbar');
       title(['P: PE = ' num2str(s(1).pe2{2},2) '\circ, QE = ' num2str(s(1).qe2{2},2) '%'])
             
       subplot(1,3,3)
-      plotbaumgartner2013(s(1).p2{3},pol2{3},respang,'cmax',0.1,'nocolorbar');
+      plotbaumgartner2013(s(1).pmv2{3},pol2{3},respang,'cmax',0.1,'nocolorbar');
       title(['P: PE = ' num2str(s(1).pe2{3},2) '\circ, QE = ' num2str(s(1).qe2{3},2) '%'])
       
     elseif flags.do_fig20

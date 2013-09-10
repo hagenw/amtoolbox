@@ -18,7 +18,7 @@ function output = exp_langendijk2002(varargin)
 %   You can choose between two of his listeners P3 and P6. The required
 %   data (DTF data and response patterns) will be provided by precalculated
 %   mat-files due to high computing time (optionally data can be 
-%   recalculated by using |data_langendijk2002('expdata')|_. 
+%   recalculated by using |data_langendijk2002|_. 
 %
 %   The following subfigures show the probability density functions (PDFs)
 %   and actual response angles as functions of the target angle for the 
@@ -58,113 +58,111 @@ function output = exp_langendijk2002(varargin)
 %
 %   References: langendijk2002contribution
 %
+
 % AUTHOR : Robert Baumgartner, OEAW Acoustic Research Institute
 
 
 %% ------ Check input options --------------------------------------------
 
-  definput.flags.type = {'missingflag','fig7','fig9'};
-  definput.flags.plot = {'plot','noplot'};
+definput.flags.type = {'missingflag','fig7','fig9'};
+definput.flags.plot = {'plot','noplot'};
 
-  % Parse input options
-  [flags,keyvals]  = ltfatarghelper({},definput,varargin);
-  
-  if flags.do_missingflag
-    flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
-               sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
-    error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
-  end;
+% Parse input options
+[flags]  = ltfatarghelper({},definput,varargin);
 
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %                               SETTINGS                                %
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  if flags.do_fig7
-    listener='P6';  % ID of listener (P3 or P6)
-  elseif flags.do_fig9
-    listener='P3';
-  end
-
-  fs = 48000;     % sampling frequency
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-  path = mfilename('fullpath');
-  dtfdata=load(['langendijk2002-' listener '.mat']);
-  % loads hM data for all conditions 
-  % data can be recalculated by calling data_langendijk2002('expdata')
-
-  % pdf calcualtion
-  %h = waitbar(0,'Please wait...');
-  pb  = langendijk2002( dtfdata.medir,dtfdata.medir,fs); % baseline
-  %waitbar(1/5)
-  p2o = langendijk2002( dtfdata.medir2o,dtfdata.medir,fs); % 2-oct (4-16kHz)
-  %waitbar(2/5)
-  p1ol= langendijk2002( dtfdata.medir1ol,dtfdata.medir,fs); % 1-oct (low:4-8kHz)
-  %waitbar(3/5)
-  p1om= langendijk2002( dtfdata.medir1om,dtfdata.medir,fs); % 1-oct (middle:5.7-11.3kHz)
-  %waitbar(4/5)
-  p1oh= langendijk2002( dtfdata.medir1oh,dtfdata.medir,fs); % 1-oct (high:8-16kHz)
-  %waitbar(5/5)
-
-  % likelihood estimations
-  la=zeros(5,1);le=zeros(5,1);ci=zeros(5,2);
-  idb=1:2:length(dtfdata.targetb); % in order to get comparable likelihoods
-  [la(1),le(1),ci(1,:)] = langendijk2002likelihood( pb,dtfdata.pol,dtfdata.pol,dtfdata.targetb(idb),dtfdata.responseb(idb) );
-  [la(2),le(2),ci(2,:)] = langendijk2002likelihood( p2o,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response2o );
-  [la(3),le(3),ci(3,:)] = langendijk2002likelihood( p1ol,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1ol );
-  [la(4),le(4),ci(4,:)] = langendijk2002likelihood( p1om,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1om );
-  [la(5),le(5),ci(5,:)] = langendijk2002likelihood( p1oh,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1oh );
-  %close(h)
-
-  output = pb;
-
-  if flags.do_plot
-    figure('Name',listener)
-    clf
-    % pdf plots with actual responses
-    subplot(2,3,1)
-    hold all;    
-    plotlangendijk2002(pb,dtfdata.pol,dtfdata.pol,'nocolorbar');
-    title(['Baseline']);    
-    h=plot( dtfdata.targetb, dtfdata.responseb, 'ko');
-    set(h, 'MarkerFaceColor','w');
-    
-    subplot(2,3,2)
-    hold all;
-    plotlangendijk2002(p2o,dtfdata.pol,dtfdata.pol,'nocolorbar');
-    title(['2-oct (4-16kHz)']);
-    h=plot( dtfdata.targetc, dtfdata.response2o, 'ko');
-    set(h, 'MarkerFaceColor','w');
-    
-    subplot(2,3,3)
-    hold all;
-    plotlangendijk2002(p1ol,dtfdata.pol,dtfdata.pol,'nocolorbar');
-    title(['1-oct (low: 4-8kHz)']);
-    h=plot( dtfdata.targetc, dtfdata.response1ol, 'ko');
-    set(h, 'MarkerFaceColor','w');
-    
-    subplot(2,3,4)
-    hold all;
-    plotlangendijk2002(p1om,dtfdata.pol,dtfdata.pol,'nocolorbar');
-    title(['1-oct (middle: 5.7-11.3kHz)']);
-    h=plot( dtfdata.targetc, dtfdata.response1om, 'ko');
-    set(h, 'MarkerFaceColor','w');
-    
-    subplot(2,3,5)
-    hold all;
-    plotlangendijk2002(p1oh,dtfdata.pol,dtfdata.pol,'nocolorbar');
-    title(['1-oct (high: 8-16kHz)']);
-    h=plot( dtfdata.targetc, dtfdata.response1oh, 'ko');
-    set(h,'MarkerFaceColor','w')
-    
-    % likelihood statistic
-    subplot(2,3,6)
-    plotlangendijk2002likelihood(la,le,ci);
-    set(gca,'XLim',[0.5 5.5])
-  end
+if flags.do_missingflag
+  flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+             sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end;
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                               SETTINGS                                %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if flags.do_fig7
+  listener='P6';  % ID of listener (P3 or P6)
+elseif flags.do_fig9
+  listener='P3';
 end
 
+fs = 48000;     % sampling frequency
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+path = mfilename('fullpath');
+dtfdata=load(['langendijk2002-' listener '.mat']);
+% loads hM data for all conditions 
+% data can be recalculated by calling data_langendijk2002('expdata')
+
+% pdf calcualtion
+%h = waitbar(0,'Please wait...');
+pb  = langendijk2002( dtfdata.medir,dtfdata.medir,fs); % baseline
+%waitbar(1/5)
+p2o = langendijk2002( dtfdata.medir2o,dtfdata.medir,fs); % 2-oct (4-16kHz)
+%waitbar(2/5)
+p1ol= langendijk2002( dtfdata.medir1ol,dtfdata.medir,fs); % 1-oct (low:4-8kHz)
+%waitbar(3/5)
+p1om= langendijk2002( dtfdata.medir1om,dtfdata.medir,fs); % 1-oct (middle:5.7-11.3kHz)
+%waitbar(4/5)
+p1oh= langendijk2002( dtfdata.medir1oh,dtfdata.medir,fs); % 1-oct (high:8-16kHz)
+%waitbar(5/5)
+
+% likelihood estimations
+la=zeros(5,1);le=zeros(5,1);ci=zeros(5,2);
+idb=1:2:length(dtfdata.targetb); % in order to get comparable likelihoods
+[la(1),le(1),ci(1,:)] = langendijk2002likelihood( pb,dtfdata.pol,dtfdata.pol,dtfdata.targetb(idb),dtfdata.responseb(idb) );
+[la(2),le(2),ci(2,:)] = langendijk2002likelihood( p2o,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response2o );
+[la(3),le(3),ci(3,:)] = langendijk2002likelihood( p1ol,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1ol );
+[la(4),le(4),ci(4,:)] = langendijk2002likelihood( p1om,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1om );
+[la(5),le(5),ci(5,:)] = langendijk2002likelihood( p1oh,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1oh );
+%close(h)
+
+output = pb;
+
+if flags.do_plot
+  figure('Name',listener)
+  clf
+  % pdf plots with actual responses
+  subplot(2,3,1)
+  hold all;    
+  plotlangendijk2002(pb,dtfdata.pol,dtfdata.pol,'nocolorbar');
+  title(['Baseline']);    
+  h=plot( dtfdata.targetb, dtfdata.responseb, 'ko');
+  set(h, 'MarkerFaceColor','w');
+
+  subplot(2,3,2)
+  hold all;
+  plotlangendijk2002(p2o,dtfdata.pol,dtfdata.pol,'nocolorbar');
+  title(['2-oct (4-16kHz)']);
+  h=plot( dtfdata.targetc, dtfdata.response2o, 'ko');
+  set(h, 'MarkerFaceColor','w');
+
+  subplot(2,3,3)
+  hold all;
+  plotlangendijk2002(p1ol,dtfdata.pol,dtfdata.pol,'nocolorbar');
+  title(['1-oct (low: 4-8kHz)']);
+  h=plot( dtfdata.targetc, dtfdata.response1ol, 'ko');
+  set(h, 'MarkerFaceColor','w');
+
+  subplot(2,3,4)
+  hold all;
+  plotlangendijk2002(p1om,dtfdata.pol,dtfdata.pol,'nocolorbar');
+  title(['1-oct (middle: 5.7-11.3kHz)']);
+  h=plot( dtfdata.targetc, dtfdata.response1om, 'ko');
+  set(h, 'MarkerFaceColor','w');
+
+  subplot(2,3,5)
+  hold all;
+  plotlangendijk2002(p1oh,dtfdata.pol,dtfdata.pol,'nocolorbar');
+  title(['1-oct (high: 8-16kHz)']);
+  h=plot( dtfdata.targetc, dtfdata.response1oh, 'ko');
+  set(h,'MarkerFaceColor','w')
+
+  % likelihood statistic
+  subplot(2,3,6)
+  plotlangendijk2002likelihood(la,le,ci);
+  set(gca,'XLim',[0.5 5.5])
+end
+
+end
