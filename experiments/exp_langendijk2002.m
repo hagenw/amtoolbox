@@ -1,9 +1,9 @@
 function output = exp_langendijk2002(varargin)
-%EXP_LANGENDIJK2002  Experiment from Langendijk & Bronkhorst 2002
-%   Usage: output = exp_langendijk2002(flags);
+%EXP_LANGENDIJK2002  Experiment from Langendijk & Bronkhorst (2002)
+%   Usage: output = exp_langendijk2002(flag);
 %
-%   `exp_langendijk2002(flags)` recreates figures from Langendijk & Bronkhorst
-%   (2002)
+%   `exp_langendijk2002(flags)` recreates figures from Langendijk &
+%   Bronkhorst (2002)
 %
 %   The following flags can be specified;
 %
@@ -17,13 +17,13 @@ function output = exp_langendijk2002(varargin)
 %
 %   You can choose between two of his listeners P3 and P6. The required
 %   data (DTF data and response patterns) will be provided by precalculated
-%   mat-files due to high computing time (optionally data can be calculated
-%   by using the data_langendijk2002('expdata') function. 
+%   mat-files due to high computing time (optionally data can be 
+%   recalculated by using |data_langendijk2002('expdata')|_. 
 %
-%   The following subfigures shows the probability density function (pdf)
-%   and actual responses(°) for the chosen listener as a function of the target
-%   position for different conditions. The shading of each cell codes the
-%   probability density (light/dark is high/low probability):
+%   The following subfigures show the probability density functions (PDFs)
+%   and actual response angles as functions of the target angle for the 
+%   exemplary listener and different conditions. The shading of each cell 
+%   codes the response probability (light/dark denotes high/low probability):
 %
 %   * Subfigure 1: Baseline condition
 %
@@ -36,8 +36,9 @@ function output = exp_langendijk2002(varargin)
 %   * Subfigure 5: 1-octave condition (high 8-16kHz)
 %   
 %   Subfigure 6 shows the likelihood statistics for the actual responses
-%   (bars), the average and the 99% confidence interval of the expected
-%   likelihood (dots and bars). See the paper for further details.
+%   (bars) in comparison to the means (dots) and the 99% confidence  
+%   intervals (whiskers) of the expected likelihood. See paper for further 
+%   details about the likelihood statistics.
 %
 %   The output are the pdfs for the baseline condition.
 %
@@ -52,8 +53,10 @@ function output = exp_langendijk2002(varargin)
 %
 %     exp_langendijk2002('fig9');
 %
-%   See also: langendijk2002, langendijk2002likelihood, plotlangendijk2002, plotlangendijk2002likelihood, data_langendijk2002
-
+%   See also: langendijk2002, langendijk2002likelihood, plotlangendijk2002, 
+%             plotlangendijk2002likelihood, data_langendijk2002
+%
+%   References: langendijk2002contribution
 %
 % AUTHOR : Robert Baumgartner, OEAW Acoustic Research Institute
 

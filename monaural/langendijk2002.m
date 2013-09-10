@@ -1,7 +1,7 @@
-function p = langendijk2002(targets,template,varargin)
+function pmv = langendijk2002(targets,template,varargin)
 %LANGENDIJK2002 Localization model according to Langendijk et al. (2002)
-%   Usage:    p = langendijk2002(targets,template)
-%             p = langendijk2002(targets,template,fs,bw,s,do,flow,fhigh)
+%   Usage:    pmv = langendijk2002(targets,template)
+%             pmv = langendijk2002(targets,template,fs,bw,s,do,flow,fhigh)
 %
 %   Input parameters:
 %     targets  : head-related impulse responses (HRIRs) of target sounds 
@@ -9,7 +9,7 @@ function p = langendijk2002(targets,template,varargin)
 %     template : HRIRs of template
 %
 %   Output parameters:
-%     p       : Predicted probability mass vectors (PMVs) of polar response
+%     pmv     : Predicted probability mass vectors (PMVs) of polar response
 %               angles as a function of the polar target angle.
 %
 %   `langendijk2002(targets,template,... )` results to a two dimensional matrix p.  The
@@ -30,11 +30,11 @@ function p = langendijk2002(targets,template,varargin)
 %     'do',do        Differential order. The default value is 0.
 %
 %     's',s          Standard deviation of transforming Gaussian
-%                    function, default value is 2.
+%                    function; default value is 2.
 %
-%     'flow',flow    Start frequency of filter bank. min: 0,5kHz; default: 2kHz
+%     'flow',flow    Lower cutoff frequency of filter bank. min: 0,5kHz; default: 2kHz
 %
-%     'fhigh',fhigh  End frequency of filter bank; default: 16kHz
+%     'fhigh',fhigh  Upper cutoff frequency of filter bank; default: 16kHz
 %
 %   `langendijk2002` accepts the following flags.
 %
@@ -80,7 +80,6 @@ function p = langendijk2002(targets,template,varargin)
   si = mean(si,3);
   
   % Normalization to PMV
-  p = si ./ repmat(sum(si),size(si,1),1);
-  
+  pmv = si ./ repmat(sum(si),size(si,1),1);
   
 end

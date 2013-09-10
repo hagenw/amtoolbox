@@ -1,6 +1,8 @@
 function varargout = baumgartner2013( target,template,varargin )
-%BAUMGARTNER2013 Model for localization in saggital planes
-%   Usage:    [p,respang] = baumgartner2013( target,template )
+%BAUMGARTNER2013 Model for sound localization in saggital planes
+%   Usage:    [pmv,respang] = baumgartner2013( target,template )
+%             [pmv,respang] =
+%             baumgartner2013(target,template,u,lat,flow,fhigh,stim,fsstim,polsamp)
 %
 %   Input parameters:
 %     target  : binaural impulse response(s) referring to the directional 
@@ -12,13 +14,13 @@ function varargout = baumgartner2013( target,template,varargin )
 %               according to the following matrix dimensions: 
 %               time x direction x channel/ear
 %     template: listener-specific template. 
-%               Option 1 & 2: similar to 'target'
+%               Options 1 & 2 equivalent to *target*
 %
 %   Output parameters:
-%     p       : predicted probability mass vectors for response angles 
-%               with respect to target positions
-%               1st dim: response angle
-%               2nd dim: target angle
+%     pmv     : predicted probability mass vectors for response angles 
+%               with respect to target positions.
+%               1st dim: response angle.
+%               2nd dim: target angle.
 %     respang : polar response angles (after regularization of angular 
 %               sampling)
 %
@@ -27,7 +29,7 @@ function varargout = baumgartner2013( target,template,varargin )
 %   representation with a template and results in a probabilistic
 %   prediction of polar angle response.
 %
-%   `baumgartner2013` accepts the following optional parameters:
+%   `baumgartner2013` accepts the following key/value pairs:
 %
 %     'fs',fs        Define the sampling rate of the impulse responses. 
 %                    Default value is 48000 Hz.
@@ -39,31 +41,31 @@ function varargout = baumgartner2013( target,template,varargin )
 %                    Default value is 48000 Hz.
 %
 %     'flow',flow    Set the lowest frequency in the filterbank to
-%                    flow. Default value is 700 Hz.
+%                    *flow*. Default value is 700 Hz.
 %
 %     'fhigh',fhigh  Set the highest frequency in the filterbank to
-%                    fhigh. Default value is 18000 Hz.
+%                    *fhigh*. Default value is 18000 Hz.
 %
 %     'lat',lat      Set the perceived lateral angle of the target sound to
-%                    lat. Default value is 0 deg (midsagittal plane).
+%                    *lat*. Default value is 0 deg (midsagittal plane).
 %
 %     'u',u          Set the listener-specific uncertainty (standard
 %                    deviation of the Gaussian transformation from the
 %                    distance metric of the comparison process to the
-%                    similarity index) to u. Default value is 2 dB.
+%                    similarity index) to *u*. Default value is 2 dB.
 %
-%     'space',s      Set spacing of auditory filter bands to s numbers of
+%     'space',s      Set spacing of auditory filter bands to *s* numbers of
 %                    equivalent rectangular bandwidths (ERBs). 
 %                    Default value is 1 ERB.
 %
-%     'bwsteep',bws  Set the steepness factor bws of the sigmoid function 
+%     'bwsteep',bws  Set the steepness factor *bws* of the sigmoid function 
 %                    applied for binaural weighting of monaural similarity 
 %                    indices. Default value is 13 deg.
 %
 %     'polsamp',ps   Define the the polar angular sampling of the current
-%                    SP. As default the sampling of ARI's HRTF format at
+%                    SP. As default the sampling of ARI's HRTF format along
 %                    the midsagittal plane is used, i.e.,
-%                    ps = [-30:5:70,80,100,110:5:210] .
+%                    $ps = [-30:5:70,80,100,110:5:210]$.
 %
 %   `baumgartner2013` accepts the following flags:
 %
@@ -86,7 +88,7 @@ function varargout = baumgartner2013( target,template,varargin )
 %     'noregular'    Disable regularization of angular sampling.
 %
 %   See also: plotbaumgartner2013, data_baumgartner2013,
-%   exp_baumgartner2013
+%             exp_baumgartner2013
 %
 %   Demos: demo_baumgartner2013
 %
@@ -106,23 +108,23 @@ definput.flags.regularization = {'regular','noregular'};
 % CP-Falgs:
 definput.flags.cp={'std','xcorr'};
 
-definput.keyvals.fs=48000;      % Hz
-definput.keyvals.space=1;       % No. of ERBs (Cams)
-definput.keyvals.do=0;
 definput.keyvals.u=2;           % listener-specific uncertainty in dB
 definput.keyvals.lat=0;         % deg
 definput.keyvals.flow=700;      % Hz
 definput.keyvals.fhigh=18000;   % Hz
-definput.keyvals.lvlstim = 40; 	% dBSPL
-definput.keyvals.lvltem = 40;  	% dBSPL
 definput.keyvals.stim=[];
 definput.keyvals.fsstim=[];
+definput.keyvals.polsamp=[-30:5:70 80 100 110:5:210];  % polar sampling (for regularization)
+definput.keyvals.fs=48000;      % Hz
+definput.keyvals.space=1;       % No. of ERBs (Cams)
+definput.keyvals.do=0;
+definput.keyvals.lvlstim = 40; 	% dBSPL
+definput.keyvals.lvltem = 40;  	% dBSPL
 definput.keyvals.bwsteep=13;    % steepness in degrees of binaural weighting function
-definput.keyvals.polsamp=[-30:5:70 80 100 110:5:210];  % polar sampling (for regular)
 
 [flags,kv]=ltfatarghelper(...
-  {'fs','space','do','u','lat','flow','fhigh',...
-  'lvlstim','lvltem','stim','fsstim','bwsteep','polsamp'},definput,varargin);
+  {'u','lat','flow','fhigh','stim','fsstim','polsamp',...
+  'fs','space','do','lvlstim','lvltem','bwsteep'},definput,varargin);
 
 if isstruct(target) % Targets given in SOFA format
   kv.fs = target.Data.SamplingRate;
@@ -299,11 +301,11 @@ end
 
 
 %% Normalization to PMV
-p = si ./ repmat(sum(si),size(si,1),1);
+pmv = si ./ repmat(sum(si),size(si,1),1);
 
 
 %% Output
-varargout{1} = p;
+varargout{1} = pmv;
 if nargout == 2
     varargout{2} = respangs;
 end
