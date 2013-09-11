@@ -20,7 +20,7 @@ function y = ffGn(N, tdres, Hinput, noiseType, mu, sigma)
 % % %	and a standard deviation of one or fractional Brownian motion derived from such
 % % %	fractional Gaussian noise.
 %
-% 	References: Davies & Harte (1987); Beran (1994); Bardet et al., 2002
+% 	references: Davies & Harte (1987); Beran (1994); Bardet et al., 2002
 %	This method is based on an embedding of the covariance matrix in a circulant matrix.	
 %
 %   Copyright © 2003-2005 by B. Scott Jackson
