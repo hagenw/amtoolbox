@@ -44,7 +44,7 @@ nargmax = 5;
 error(nargchk(nargmin,nargmax,nargin));
 
 if nargin==2
-    model = 'dietz';
+    model = 'dietz2011';
     do_spectral_weighting = false;
     fs = 44100;
 elseif nargin==3
