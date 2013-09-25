@@ -1,8 +1,7 @@
 function varargout = baumgartner2013( target,template,varargin )
 %BAUMGARTNER2013 Model for sound localization in saggital planes
 %   Usage:    [pmv,respang] = baumgartner2013( target,template )
-%             [pmv,respang] =
-%             baumgartner2013(target,template,u,lat,flow,fhigh,stim,fsstim,polsamp)
+%             [pmv,respang] = baumgartner2013(target,template,u,lat,flow,fhigh,stim,fsstim,polsamp)
 %
 %   Input parameters:
 %     target  : binaural impulse response(s) referring to the directional 

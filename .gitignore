@@ -2,3 +2,170 @@
 *_fig*.mat
 # vim tmp files
 *.swp
+demos/demo_takanen2013binsignals.mat
+demos/demo_takanen2013cochleadata.mat
+experiments/exp_takanen2013fig6artbinsignals.mat
+experiments/exp_takanen2013fig6artcochleadata.mat
+experiments/exp_takanen2013fig7artbinsignals.mat
+experiments/exp_takanen2013fig7artcochleadata.mat
+experiments/exp_takanen2013fig8bookbinsignals.mat
+experiments/exp_takanen2013fig8bookcochleadata.mat
+experiments/exp_takanen2013fig9bookbinsignals.mat
+experiments/exp_takanen2013fig9bookcochleadata.mat
+hrtf/baumgartner2013/ARI_NH12_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH15_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH21_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH22_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH33_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH39_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH41_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH42_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH43_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH46_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH53_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH55_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH58_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH62_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH64_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH68_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH71_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013/ARI_NH72_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH12_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH15_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH21_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH22_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH33_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH39_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH41_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH42_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH43_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH46_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH53_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH55_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH58_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH62_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH64_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH68_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH71_hrtf_M_dtf 256.sofa
+hrtf/baumgartner2013linstat/ARI_NH72_hrtf_M_dtf 256.sofa
+hrtf/ziegelwanger2013/ARI_NH89.sofa
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH12.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH15.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH21.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH22.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH33.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH39.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH41.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH42.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH43.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH46.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH55.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH58.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH62.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH64.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH68.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH71.mat
+hrtf/~hrtf_M_baumgartner2013/hrtf_M_baumgartner2013 NH72.mat
+mat2doc/ignore
+mat2doc/php/ref-amtoolbox.txt
+mat2doc/tex/ref-amtoolbox.txt
+thirdparty/SOFA/API_MO/SOFAaddVariable.m
+thirdparty/SOFA/API_MO/SOFAcalculateAPV.m
+thirdparty/SOFA/API_MO/SOFAcheckFilename.m
+thirdparty/SOFA/API_MO/SOFAcompileConventions.m
+thirdparty/SOFA/API_MO/SOFAdbPath.m
+thirdparty/SOFA/API_MO/SOFAdbURL.m
+thirdparty/SOFA/API_MO/SOFAdefinitions.m
+thirdparty/SOFA/API_MO/SOFAexpand.m
+thirdparty/SOFA/API_MO/SOFAgetConventions.m
+thirdparty/SOFA/API_MO/SOFAgetCoordinates.m
+thirdparty/SOFA/API_MO/SOFAgetVersion.m
+thirdparty/SOFA/API_MO/SOFAload.m
+thirdparty/SOFA/API_MO/SOFAmerge.m
+thirdparty/SOFA/API_MO/SOFAplotGeometry.m
+thirdparty/SOFA/API_MO/SOFAsave.m
+thirdparty/SOFA/API_MO/SOFAspat.m
+thirdparty/SOFA/API_MO/SOFAstart.m
+thirdparty/SOFA/API_MO/SOFAupdateDimensions.m
+thirdparty/SOFA/API_MO/SOFAupgradeConventions.m
+thirdparty/SOFA/API_MO/conventions/GeneralFIR-a.mat
+thirdparty/SOFA/API_MO/conventions/GeneralFIR-m.mat
+thirdparty/SOFA/API_MO/conventions/GeneralFIR-r.mat
+thirdparty/SOFA/API_MO/conventions/GeneralFIR.csv
+thirdparty/SOFA/API_MO/conventions/GeneralTF-a.mat
+thirdparty/SOFA/API_MO/conventions/GeneralTF-m.mat
+thirdparty/SOFA/API_MO/conventions/GeneralTF-r.mat
+thirdparty/SOFA/API_MO/conventions/GeneralTF.csv
+thirdparty/SOFA/API_MO/conventions/HeadphoneIR-a.mat
+thirdparty/SOFA/API_MO/conventions/HeadphoneIR-m.mat
+thirdparty/SOFA/API_MO/conventions/HeadphoneIR-r.mat
+thirdparty/SOFA/API_MO/conventions/HeadphoneIR.csv
+thirdparty/SOFA/API_MO/conventions/SimpleFreeFieldHRIR-0.2.csv
+thirdparty/SOFA/API_MO/conventions/SimpleFreeFieldHRIR-a.mat
+thirdparty/SOFA/API_MO/conventions/SimpleFreeFieldHRIR-m.mat
+thirdparty/SOFA/API_MO/conventions/SimpleFreeFieldHRIR-r.mat
+thirdparty/SOFA/API_MO/conventions/SimpleFreeFieldHRIR.csv
+thirdparty/SOFA/API_MO/conventions/SimpleFreeFieldTF-a.mat
+thirdparty/SOFA/API_MO/conventions/SimpleFreeFieldTF-m.mat
+thirdparty/SOFA/API_MO/conventions/SimpleFreeFieldTF-r.mat
+thirdparty/SOFA/API_MO/conventions/SimpleFreeFieldTF.csv
+thirdparty/SOFA/API_MO/conventions/SingleRoomDRIR-a.mat
+thirdparty/SOFA/API_MO/conventions/SingleRoomDRIR-m.mat
+thirdparty/SOFA/API_MO/conventions/SingleRoomDRIR-r.mat
+thirdparty/SOFA/API_MO/conventions/SingleRoomDRIR.csv
+thirdparty/SOFA/API_MO/converters/SOFAconvertARI2SOFA.m
+thirdparty/SOFA/API_MO/converters/SOFAconvertCIPIC2SOFA.m
+thirdparty/SOFA/API_MO/converters/SOFAconvertLISTEN2SOFA.m
+thirdparty/SOFA/API_MO/converters/SOFAconvertMIT2SOFA.m
+thirdparty/SOFA/API_MO/converters/SOFAconvertSOFA2ARI.m
+thirdparty/SOFA/API_MO/converters/SOFAconvertTUBerlin2SOFA.m
+thirdparty/SOFA/API_MO/coordinates/hor2sph.m
+thirdparty/SOFA/API_MO/coordinates/nav2sph.m
+thirdparty/SOFA/API_MO/coordinates/sph2hor.m
+thirdparty/SOFA/API_MO/coordinates/sph2nav.m
+thirdparty/SOFA/API_MO/demos/demo_ARI2SOFA.m
+thirdparty/SOFA/API_MO/demos/demo_CIPIC2SOFA.m
+thirdparty/SOFA/API_MO/demos/demo_LISTEN2SOFA.m
+thirdparty/SOFA/API_MO/demos/demo_MIT2SOFA.m
+thirdparty/SOFA/API_MO/demos/demo_SOFA2ARI.m
+thirdparty/SOFA/API_MO/demos/demo_SOFAload.m
+thirdparty/SOFA/API_MO/demos/demo_SOFAmerge.m
+thirdparty/SOFA/API_MO/demos/demo_SOFAsave.m
+thirdparty/SOFA/API_MO/demos/demo_SOFAspat.m
+thirdparty/SOFA/API_MO/demos/demo_SOFAvariables.m
+thirdparty/SOFA/API_MO/demos/demo_SimpleFreeFieldHRIR2TF.m
+thirdparty/SOFA/API_MO/demos/demo_SingleRoomDRIROldenburg.m
+thirdparty/SOFA/API_MO/demos/demo_TUBerlin2SOFA.m
+thirdparty/SOFA/API_MO/helper/deg2rad.m
+thirdparty/SOFA/API_MO/helper/fix_netcdf4_dimid.m
+thirdparty/SOFA/API_MO/helper/isargchar.m
+thirdparty/SOFA/API_MO/helper/isargfile.m
+thirdparty/SOFA/API_MO/helper/isargstruct.m
+thirdparty/SOFA/API_MO/helper/isoctave.m
+thirdparty/SOFA/API_MO/helper/rad2deg.m
+thirdparty/SOFA/API_MO/helper/rms.m
+thirdparty/SOFA/API_MO/history.txt
+thirdparty/SOFA/API_MO/matlab/NETCDFdisplay.m
+thirdparty/SOFA/API_MO/matlab/NETCDFload.m
+thirdparty/SOFA/API_MO/matlab/NETCDFsave.m
+thirdparty/SOFA/API_MO/octave/NETCDFdisplay.m
+thirdparty/SOFA/API_MO/octave/NETCDFload.m
+thirdparty/SOFA/API_MO/octave/NETCDFsave.m
+thirdparty/SOFA/API_MO/readme.txt
+thirdparty/SOFA/API_MO/test/test_SOFAall.m
+thirdparty/SOFA/CDL/SimpleDRIRMicArray/SimpleDRIRMicArray.cdl
+thirdparty/SOFA/CDL/SimpleDRIRMicArray/SimpleDRIRMicArray.nc
+thirdparty/SOFA/CDL/SimpleFreeFieldHRIR/SimpleFreeFieldHRIR.cdl
+thirdparty/SOFA/CDL/SimpleFreeFieldHRIR/SimpleFreeFieldHRIR.nc
+thirdparty/SOFA/CDL/SingleRoomDRIR/SingleRoomDRIR.cdl
+thirdparty/SOFA/CDL/SingleRoomDRIR/SingleRoomDRIR.nc
+thirdparty/SOFA/HRTFs/ARI/readme.txt
+thirdparty/SOFA/HRTFs/CIPIC/readme.txt
+thirdparty/SOFA/HRTFs/LISTEN/readme.txt
+thirdparty/SOFA/HRTFs/MIT KEMAR/readme.txt
+thirdparty/SOFA/HRTFs/Oldenburg/readme.txt
+thirdparty/SOFA/HRTFs/SOFA 0.3/readme.txt
+thirdparty/SOFA/HRTFs/SOFA/readme.txt
+thirdparty/SOFA/HRTFs/TU-Berlin KEMAR/readme.txt
+thirdparty/SOFA/doc/API_MO specs 0.3.pdf
+thirdparty/SOFA/doc/SOFA specs 0.5.pdf
