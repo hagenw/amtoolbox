@@ -23,9 +23,9 @@ function y = ffGn(N, tdres, Hinput, noiseType, mu, sigma)
 %		  mu      : is the mean of the noise. [default = 0]
 %		  sigma   : is the standard deviation of the noise. [default = 1]
 %
-%   References: Davies & Harte (1987); Beran (1994); Bardet et al., 2002
+%   References: davies1987 beran1994 bardet2002
 
-%   Copyright © 2003-2005 by B. Scott Jackson
+%   Copyright © 2003-2005 by B. Scott Jackson 
 %   History:
 %   Revision: 1.4    Date: November 27, 2012 by M. S. A. Zilany : noiseType
 %                       has been added
