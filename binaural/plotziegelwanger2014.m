@@ -1,5 +1,5 @@
 function [h]=plotziegelwanger2014(Obj,data,type,color,ele,ch,time,style,width)
-%PLOTZIEGELWANGER2013 XXX Headline missing
+%PLOTZIEGELWANGER2014   Plot time-of-arrival
 %   Usage: plotziegelwanger2014(Obj,data,type,color,ele,ch,time,style,width)
 %
 %   `plotziegelwanger2014(Obj,data,type,color,ele,ch,time,style,width)`

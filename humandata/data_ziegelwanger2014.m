@@ -1,9 +1,9 @@
 function data = data_ziegelwanger2014(varargin)
-%DATA_ZIEGELWANGER2013  Data from Ziegelwanger and Majdak (2013)
+%DATA_ZIEGELWANGER2014   Data from Ziegelwanger and Majdak (2014)
 %   Usage: data = data_ziegelwanger2014(flag)
 %
 %   `data_ziegelwanger2014(flag)` returns results for different HRTF
-%   databases from Ziegelwanger and Majdak (2013).
+%   databases from Ziegelwanger and Majdak (2014).
 %
 %   The flag may be one of:
 %  
@@ -25,6 +25,18 @@ function data = data_ziegelwanger2014(varargin)
 %                   the measurement setup. The output has the following fields: 
 %                   `data.results`, `data.subjects`, `data.xM`, `data.yM`,
 %                   `data.zM` and `data.radius`.
+%  
+%     'Sphere'      HRTF set for a rigid sphere: The
+%                   output has the following fields: `data.hM`,
+%                   `data.meta` and `data.stimPar`.
+%  
+%     'SAT'         HRTF set for a rigid sphere combined with a neck and a
+%                   torso: The output has the following fields: `data.hM`,
+%                   `data.meta` and `data.stimPar`.
+%  
+%     'STP'         HRTF set for a rigid sphere combined with a neck, a
+%                   torso and a pinna: The output has the following fields:
+%                   `data.hM`,`data.meta` and `data.stimPar`.
 %  
 %     'NH89'        HRTF set of listener NH89 of the ARI database: The
 %                   output has the following fields: `data.hM`,
@@ -72,11 +84,11 @@ function data = data_ziegelwanger2014(varargin)
 %% ------ Check input options --------------------------------------------
 
 % Define input flags
-definput.flags.type = {'missingflag','ARI','CIPIC','LISTEN','SPHERE_DIS','SPHERE_ROT','NH89'};
+definput.flags.type = {'missingflag','ARI','CIPIC','LISTEN','SPHERE_DIS','SPHERE_ROT','NH89','Sphere','SAT','STP','redo'};
 definput.flags.results = {'reload','recalc'};
 
 % Parse input options
-[flags,keyvals]  = ltfatarghelper({},definput,varargin);
+[flags,~]  = ltfatarghelper({},definput,varargin);
 
 if flags.do_missingflag
     flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
@@ -85,13 +97,11 @@ if flags.do_missingflag
 else
     hpath = which('hrtfinit');  % find local path of hrtf repository
     hpath = hpath(1:end-10);
-  
-%     if exist([hpath 'ziegelwanger2014'],'dir') ~= 7
-%         fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/ziegelwanger2014.zip , \n unzip it, and move it into your HRTF repository \n ' hpath ' .\n' ' Then, press any key to quit pausing. \n'])
-%         pause
-%     end
-    
     hpath = [hpath 'ziegelwanger2013' filesep];
+    
+    if ~exist([hpath 'info.mat'],'file')
+        urlwrite([SOFAdbURL '/ziegelwanger2013/info.mat'],[hpath 'info.mat']);
+    end
 end
 
 %% ARI database
@@ -103,33 +113,16 @@ if flags.do_ARI
         for ii=1:length(data.subjects)
             disp(['Recalculate data for sujbect ' num2str(ii) '/' num2str(length(data.subjects)) ' of ARI database']);
             Obj=SOFAload([hpath 'ARI_' data.subjects{ii} '.sofa']);
-            idx=find(mod(Obj.SourcePosition(:,2),10)==0);
-            Obj.Data.IR=Obj.Data.IR(idx,:,:);
-            Obj.SourcePosition=Obj.SourcePosition(idx,:);
-            Obj.API.M=length(idx);
-            Obj.MeasurementSourceAudioChannel=Obj.MeasurementSourceAudioChannel(idx,:);
-            Obj.MeasurementAudioLatency=Obj.MeasurementAudioLatency(idx,:);
-            Obj.DimSize.M=length(idx);
-                
-            [~,results(ii).MAX{1}]=ziegelwanger2014(Obj,1,0,1);
-            [~,results(ii).CTD{1}]=ziegelwanger2014(Obj,2,0,1);
-            [~,results(ii).AGD{1}]=ziegelwanger2014(Obj,3,0,1);
-            [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,4,0,1);
-
-            [~,results(ii).MAX{2}]=ziegelwanger2014(Obj,1,2,1);
-            [~,results(ii).CTD{2}]=ziegelwanger2014(Obj,2,2,1);
-            [~,results(ii).AGD{2}]=ziegelwanger2014(Obj,3,2,1);
-            [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,4,2,1);
-
-            [~,results(ii).MAX{3}]=ziegelwanger2014(Obj,1,3,1);
-            [~,results(ii).CTD{3}]=ziegelwanger2014(Obj,2,3,1);
-            [~,results(ii).AGD{3}]=ziegelwanger2014(Obj,3,3,1);
-            [~,results(ii).MCM{3}]=ziegelwanger2014(Obj,4,3,1);
-
-            [~,results(ii).MAX{4}]=ziegelwanger2014(Obj,1,1,1);
-            [~,results(ii).CTD{4}]=ziegelwanger2014(Obj,2,1,1);
-            [~,results(ii).AGD{4}]=ziegelwanger2014(Obj,3,1,1);
-            [~,results(ii).MCM{4}]=ziegelwanger2014(Obj,4,1,1);
+             
+            if exist([hpath 'ARI_' data.subjects{ii} '.sofa.MCM.mat'],'file')
+                load([hpath 'ARI_' data.subjects{ii} '.sofa.MCM.mat']);
+            else
+                [~,tmp]=ziegelwanger2014(Obj,4,0,0);
+                toaEst=tmp.toa;
+                save([hpath 'ARI_' data.subjects{ii} '.sofa.MCM.mat'],'toaEst');
+            end
+            [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
+            [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
         save([hpath 'ARI_results.mat'],'results');
         data.results=results;
@@ -151,26 +144,16 @@ if flags.do_CIPIC
         for ii=1:length(data.subjects)
             disp(['Recalculate data for sujbect ' num2str(ii) '/' num2str(length(data.subjects)) ' of CIPIC database']);
             Obj=SOFAload([hpath 'CIPIC_' data.subjects{ii} '.sofa']);
-                
-            [~,results(ii).MAX{1}]=ziegelwanger2014(Obj,1,0,1);
-            [~,results(ii).CTD{1}]=ziegelwanger2014(Obj,2,0,1);
-            [~,results(ii).AGD{1}]=ziegelwanger2014(Obj,3,0,1);
-            [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,4,0,1);
-
-            [~,results(ii).MAX{2}]=ziegelwanger2014(Obj,1,2,1);
-            [~,results(ii).CTD{2}]=ziegelwanger2014(Obj,2,2,1);
-            [~,results(ii).AGD{2}]=ziegelwanger2014(Obj,3,2,1);
-            [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,4,2,1);
-
-            [~,results(ii).MAX{3}]=ziegelwanger2014(Obj,1,3,1);
-            [~,results(ii).CTD{3}]=ziegelwanger2014(Obj,2,3,1);
-            [~,results(ii).AGD{3}]=ziegelwanger2014(Obj,3,3,1);
-            [~,results(ii).MCM{3}]=ziegelwanger2014(Obj,4,3,1);
-
-            [~,results(ii).MAX{4}]=ziegelwanger2014(Obj,1,1,1);
-            [~,results(ii).CTD{4}]=ziegelwanger2014(Obj,2,1,1);
-            [~,results(ii).AGD{4}]=ziegelwanger2014(Obj,3,1,1);
-            [~,results(ii).MCM{4}]=ziegelwanger2014(Obj,4,1,1);
+             
+            if exist([hpath 'CIPIC_' data.subjects{ii} '.sofa.MCM.mat'],'file')
+                load([hpath 'CIPIC_' data.subjects{ii} '.sofa.MCM.mat']);
+            else
+                [~,tmp]=ziegelwanger2014(Obj,4,0,0);
+                toaEst=tmp.toa;
+                save([hpath 'CIPIC_' data.subjects{ii} '.sofa.MCM.mat'],'toaEst');
+            end
+            [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
+            [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
         save([hpath 'CIPIC_results.mat'],'results');
         data.results=results;
@@ -193,27 +176,16 @@ if flags.do_LISTEN
             if ~strcmp(data.subjects{ii},'34')
                 disp(['Recalculate data for subject ' num2str(ii) '/' num2str(length(data.subjects)) ' of LISTEN database']);
                 Obj=SOFAload([hpath 'LISTEN_' data.subjects{ii} '.sofa']);
-                Obj.Data.SamplingRate=48000;
-                
-                [~,results(ii).MAX{1}]=ziegelwanger2014(Obj,1,0,1);
-                [~,results(ii).CTD{1}]=ziegelwanger2014(Obj,2,0,1);
-                [~,results(ii).AGD{1}]=ziegelwanger2014(Obj,3,0,1);
-                [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,4,0,1);
-
-                [~,results(ii).MAX{2}]=ziegelwanger2014(Obj,1,2,1);
-                [~,results(ii).CTD{2}]=ziegelwanger2014(Obj,2,2,1);
-                [~,results(ii).AGD{2}]=ziegelwanger2014(Obj,3,2,1);
-                [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,4,2,1);
-
-                [~,results(ii).MAX{3}]=ziegelwanger2014(Obj,1,3,1);
-                [~,results(ii).CTD{3}]=ziegelwanger2014(Obj,2,3,1);
-                [~,results(ii).AGD{3}]=ziegelwanger2014(Obj,3,3,1);
-                [~,results(ii).MCM{3}]=ziegelwanger2014(Obj,4,3,1);
-
-                [~,results(ii).MAX{4}]=ziegelwanger2014(Obj,1,1,1);
-                [~,results(ii).CTD{4}]=ziegelwanger2014(Obj,2,1,1);
-                [~,results(ii).AGD{4}]=ziegelwanger2014(Obj,3,1,1);
-                [~,results(ii).MCM{4}]=ziegelwanger2014(Obj,4,1,1);
+             
+                if exist([hpath 'LISTEN_' data.subjects{ii} '.sofa.MCM.mat'],'file')
+                    load([hpath 'LISTEN_' data.subjects{ii} '.sofa.MCM.mat']);
+                else
+                    [~,tmp]=ziegelwanger2014(Obj,4,0,0);
+                    toaEst=tmp.toa;
+                    save([hpath 'LISTEN_' data.subjects{ii} '.sofa.MCM.mat'],'toaEst');
+                end
+                [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
+                [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
             end
         end
         save([hpath 'LISTEN_results.mat'],'results');
@@ -238,16 +210,16 @@ if flags.do_SPHERE_DIS
         for ii=1:length(data.subjects)
             disp(['Recalculate data for subject ' num2str(ii) '/' num2str(length(data.subjects)) ' of SPHERE_DIS database']);
             Obj=SOFAload([hpath 'Sphere_Displacement_' data.subjects{ii} '.sofa']);
-                
-            [~,results(ii).MAX{1}]=ziegelwanger2014(Obj,1,0,1);
-            [~,results(ii).CTD{1}]=ziegelwanger2014(Obj,2,0,1);
-            [~,results(ii).AGD{1}]=ziegelwanger2014(Obj,3,0,1);
-            [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,4,0,1);
-                
-            [~,results(ii).MAX{2}]=ziegelwanger2014(Obj,1,1,1);
-            [~,results(ii).CTD{2}]=ziegelwanger2014(Obj,2,1,1);
-            [~,results(ii).AGD{2}]=ziegelwanger2014(Obj,3,1,1);
-            [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,4,1,1);
+             
+            if exist([hpath 'Sphere_Displacement_' data.subjects{ii} '.sofa.MCM.mat'],'file')
+                load([hpath 'Sphere_Displacement_' data.subjects{ii} '.sofa.MCM.mat']);
+            else
+                [~,tmp]=ziegelwanger2014(Obj,4,0,0);
+                toaEst=tmp.toa;
+                save([hpath 'Sphere_Displacement_' data.subjects{ii} '.sofa.MCM.mat'],'toaEst');
+            end  
+            [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
+            [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
         save([hpath 'Sphere_Displacement_results.mat'],'results');
         data.results=results;
@@ -271,15 +243,42 @@ if flags.do_SPHERE_ROT
             disp(['Recalculate data for subject ' num2str(ii) '/' num2str(length(data.subjects)) ' of SPHERE_ROT database']);
             Obj=SOFAload([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa']);
                 
-            [~,results(ii).MAX{1}]=ziegelwanger2014(Obj,1,0,1);
-            [~,results(ii).CTD{1}]=ziegelwanger2014(Obj,2,0,1);
-            [~,results(ii).AGD{1}]=ziegelwanger2014(Obj,3,0,1);
-            [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,4,0,1);
-                
-            [~,results(ii).MAX{2}]=ziegelwanger2014(Obj,1,1,1);
-            [~,results(ii).CTD{2}]=ziegelwanger2014(Obj,2,1,1);
-            [~,results(ii).AGD{2}]=ziegelwanger2014(Obj,3,1,1);
-            [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,4,1,1);
+            if exist([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MAX.mat'],'file')
+                load([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MAX.mat']);
+            else
+                [~,tmp]=ziegelwanger2014(Obj,1,0,0);
+                toaEst=tmp.toa;
+                save([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MAX.mat'],'toaEst');
+            end
+            [~,results(ii).MAX{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
+            
+            if exist([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.CTD.mat'],'file')
+                load([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.CTD.mat']);
+            else
+                [~,tmp]=ziegelwanger2014(Obj,2,0,0);
+                toaEst=tmp.toa;
+                save([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.CTD.mat'],'toaEst');
+            end
+            [~,results(ii).CTD{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
+            
+            if exist([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.AGD.mat'],'file')
+                load([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.AGD.mat']);
+            else
+                [~,tmp]=ziegelwanger2014(Obj,3,0,0);
+                toaEst=tmp.toa;
+                save([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.AGD.mat'],'toaEst');
+            end
+            [~,results(ii).AGD{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
+             
+            if exist([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MCM.mat'],'file')
+                load([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MCM.mat']);
+            else
+                [~,tmp]=ziegelwanger2014(Obj,4,0,0);
+                toaEst=tmp.toa;
+                save([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MCM.mat'],'toaEst');
+            end
+            [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
+            [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
         save([hpath 'Sphere_Rotation_results.mat'],'results');
         data.results=results;
@@ -296,5 +295,186 @@ end
 if flags.do_NH89
 
     data=SOFAload([hpath 'ARI_NH89.sofa']);
+    
+    if exist([hpath 'ARI_NH89.sofa.MAX.mat'],'file')
+        tmp=load([hpath 'ARI_NH89.sofa.MAX.mat']);
+        data.Data.toaEst{1}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,1,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'ARI_NH89.sofa.MAX.mat'],'toaEst');
+        data.Data.toaEst{1}=toaEst;
+    end
+    
+    if exist([hpath 'ARI_NH89.sofa.CTD.mat'],'file')
+        tmp=load([hpath 'ARI_NH89.sofa.CTD.mat']);
+        data.Data.toaEst{2}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,2,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'ARI_NH89.sofa.CTD.mat'],'toaEst');
+        data.Data.toaEst{2}=toaEst;
+    end
+    
+    if exist([hpath 'ARI_NH89.sofa.AGD.mat'],'file')
+        tmp=load([hpath 'ARI_NH89.sofa.AGD.mat']);
+        data.Data.toaEst{3}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,3,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'ARI_NH89.sofa.AGD.mat'],'toaEst');
+        data.Data.toaEst{3}=toaEst;
+    end
+    
+    if exist([hpath 'ARI_NH89.sofa.MCM.mat'],'file')
+        tmp=load([hpath 'ARI_NH89.sofa.MCM.mat']);
+        data.Data.toaEst{4}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,4,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'ARI_NH89.sofa.MCM.mat'],'toaEst');
+        data.Data.toaEst{4}=toaEst;
+    end
+    
+end
+
+%% Sphere
+if flags.do_Sphere
+
+    data=SOFAload([hpath 'Sphere.sofa']);
+    
+    if exist([hpath 'Sphere.sofa.MAX.mat'],'file')
+        tmp=load([hpath 'Sphere.sofa.MAX.mat']);
+        data.Data.toaEst{1}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,1,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'Sphere.sofa.MAX.mat'],'toaEst');
+        data.Data.toaEst{1}=toaEst;
+    end
+    
+    if exist([hpath 'Sphere.sofa.CTD.mat'],'file')
+        tmp=load([hpath 'Sphere.sofa.CTD.mat']);
+        data.Data.toaEst{2}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,2,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'Sphere.sofa.CTD.mat'],'toaEst');
+        data.Data.toaEst{2}=toaEst;
+    end
+    
+    if exist([hpath 'Sphere.sofa.AGD.mat'],'file')
+        tmp=load([hpath 'Sphere.sofa.AGD.mat']);
+        data.Data.toaEst{3}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,3,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'Sphere.sofa.AGD.mat'],'toaEst');
+        data.Data.toaEst{3}=toaEst;
+    end
+    
+    if exist([hpath 'Sphere.sofa.MCM.mat'],'file')
+        tmp=load([hpath 'Sphere.sofa.MCM.mat']);
+        data.Data.toaEst{4}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,4,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'Sphere.sofa.MCM.mat'],'toaEst');
+        data.Data.toaEst{4}=toaEst;
+    end
+    
+end
+
+%% Sphere and Torso
+if flags.do_SAT
+
+    data=SOFAload([hpath 'SAT.sofa']);
+    
+    if exist([hpath 'SAT.sofa.MAX.mat'],'file')
+        tmp=load([hpath 'SAT.sofa.MAX.mat']);
+        data.Data.toaEst{1}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,1,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'SAT.sofa.MAX.mat'],'toaEst');
+        data.Data.toaEst{1}=toaEst;
+    end
+    
+    if exist([hpath 'SAT.sofa.CTD.mat'],'file')
+        tmp=load([hpath 'SAT.sofa.CTD.mat']);
+        data.Data.toaEst{2}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,2,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'SAT.sofa.CTD.mat'],'toaEst');
+        data.Data.toaEst{2}=toaEst;
+    end
+    
+    if exist([hpath 'SAT.sofa.AGD.mat'],'file')
+        tmp=load([hpath 'SAT.sofa.AGD.mat']);
+        data.Data.toaEst{3}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,3,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'SAT.sofa.AGD.mat'],'toaEst');
+        data.Data.toaEst{3}=toaEst;
+    end
+    
+    if exist([hpath 'SAT.sofa.MCM.mat'],'file')
+        tmp=load([hpath 'SAT.sofa.MCM.mat']);
+        data.Data.toaEst{4}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,4,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'SAT.sofa.MCM.mat'],'toaEst');
+        data.Data.toaEst{4}=toaEst;
+    end
+    
+end
+
+%% Sphere, Torso and Pinna
+if flags.do_STP
+
+    data=SOFAload([hpath 'STP.sofa']);
+    
+    if exist([hpath 'STP.sofa.MAX.mat'],'file')
+        tmp=load([hpath 'STP.sofa.MAX.mat']);
+        data.Data.toaEst{1}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,1,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'STP.sofa.MAX.mat'],'toaEst');
+        data.Data.toaEst{1}=toaEst;
+    end
+    
+    if exist([hpath 'STP.sofa.CTD.mat'],'file')
+        tmp=load([hpath 'STP.sofa.CTD.mat']);
+        data.Data.toaEst{2}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,2,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'STP.sofa.CTD.mat'],'toaEst');
+        data.Data.toaEst{2}=toaEst;
+    end
+    
+    if exist([hpath 'STP.sofa.AGD.mat'],'file')
+        tmp=load([hpath 'STP.sofa.AGD.mat']);
+        data.Data.toaEst{3}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,3,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'STP.sofa.AGD.mat'],'toaEst');
+        data.Data.toaEst{3}=toaEst;
+    end
+    
+    if exist([hpath 'STP.sofa.MCM.mat'],'file')
+        tmp=load([hpath 'STP.sofa.MCM.mat']);
+        data.Data.toaEst{4}=tmp.toaEst;
+    else
+        [~,tmp]=ziegelwanger2014(data,4,0,0);
+        toaEst=tmp.toa;
+        save([hpath 'STP.sofa.MCM.mat'],'toaEst');
+        data.Data.toaEst{4}=toaEst;
+    end
     
 end

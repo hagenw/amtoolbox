@@ -1,5 +1,5 @@
 function y=ziegelwanger2014onaxis(p,x)
-%ZIEGELWANGER2013ONAXIS XXX
+%ZIEGELWANGER2014ONAXIS   On-axis time-of-arrival model
 %   Usage: y=ziegelwanger2014onaxis(p,x)
 %
 %   Input parameters:

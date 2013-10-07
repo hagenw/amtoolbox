@@ -1,17 +1,11 @@
-function varargout=exp_ziegelwanger2014(varargin)
-%EXP_ZIEGELWANGER2013   Figures from Ziegelwanger and Majdak (2013)
+function exp_ziegelwanger2014(varargin)
+%EXP_ZIEGELWANGER2014   Figures from Ziegelwanger and Majdak (2014)
 %   Usage: data = exp_ziegelwanger2014(flag)
 %
 %   `exp_ziegelwanger2014(flags)` reproduces figures of the paper from
-%   Ziegelwanger and Majdak (2013).
-%
-%   Optional fields of output *data* structure:
+%   Ziegelwanger and Majdak (2014).
 %
 %   The following flags can be specified:
-%
-%     'plot'    Plot the output of the experiment. This is the default.
-%
-%     'noplot'  Don't plot, print results in the console.
 % 
 %     'reload'	Reload previously calculated results. This is the default.
 %
@@ -19,96 +13,101 @@ function varargout=exp_ziegelwanger2014(varargin)
 %
 %     'fig2'    Reproduce Fig. 2:
 %               
-%               Left panel: 
-%               Normalized HRIRs of NH89 (ARI database). Sound source was
-%               placed 45째 left in the horizontal plane.
-%               Solid line: for the left ear
-%               Dashed line: for the right ear
-%               Vertical lines: Estimated TOAs
-%               Arrows: Resulting ITDs from the corresponding TOAs
-%               Circles, Red: Minimum-Phase Cross-Correlation Method
-%               Triangle, Green: Time-Position of the HRIR-Maximum
-%               Diamonds, Blue: Centroid of the HRIR
-%               Squares, Magenta: Average Group Delay (1-5 kHz)
-%               
-%               Right panel: 
-%               Estimated TOAs of NH89 (ARI database) in the horizontal
-%               interaural plane.
-%               Black: Minimum-Phase Cross-Correlation Method
-%               Blue: Time-Position of the HRIR-Maximum
-%               Green: Centroid of the HRIR
-%               Red: Average Group Delay (1-5 kHz)
+%               TOAs resulting from TOA estimators in the horizontal plane 
+%               applied on calculated HRTFs of the objects Sphere, SAT,
+%               STP, as well on measured HRTFs of an exemplary listener
+%               (NH89, ARI).
 %
-%     'fig3'    Reproduce Fig. 3:
-%               
-%               Left panel: 
-%               Sagittal TOA deviations and averaged TOA variance for NH89
-%               as function of the polar angle for all sagittal groups.
-%               Dots, Blue: Sagittal TOA deviations
-%               Line, Red: Averaged TOA variance
-%               
-%               Right panel: 
-%               Estimated TOAs, detected outliers and outlier adjusted set
-%               of TOAs for NH89 (ARI database) in the horizontal plane.
-%               Line: Estimated TOAs
-%               Triangles (down), Blue: Detected outliers for the azimuthal
-%               slope criterion
-%               Triangles (up), Blue: Detected outliers for the sagittal
-%               variance criterion
-%               Dots, Red: Outlier-adjusted set
+%     'fig4'    Reproduce Fig. 4:
+%
+%               Estimated on-axis model parameters from HRTFs calculated
+%               for the centered object Sphere. Condition: combination of
+%               actual parameters used in HRTF simulation. Circle and
+%               cross: Parameters estimated for the left and right ears,
+%               respectively. Gray lines: Actual parameters.
 %
 %     'fig5'    Reproduce Fig. 5:
-%               Model parameters (sphere radius, ear position) resulting
-%               from fitting the on-axis model to HRTFs of a rigid sphere.
-%               Squares: for the left ear
-%               Diamonds: for the right ear
-%               Dashed lines: set values used in the numerical HRTF
-%               calculation
+%
+%               Estimated on-axis model parameters from left-ear (top row)
+%               and right-ear (bottom row) HRTFs of human listeners. Lines:
+%               normal distribution fitted to the data. phi_e: Positive and
+%               negative values corresponding to the left and right ears,
+%               respectively.
 %
 %     'fig6'    Reproduce Fig. 6:
-%               TOA in interaural horizontal plane for the left ear HRTFs
-%               of NH89.
-%               Solid line, Black: On-axis model fitted to outlier-adjusted
-%               set of TOAs
-%               Circles, Red: Outlier-adjusted set of TOAs
-%               Hexagrams, Blue: Detected outliers
+%
+%               Relative TOAs (top row) and on-axis model fit residuals
+%               (bottom row) from HRTFs of STP (left column) and of an
+%               exemplary listener (NH89, ARI; right column). Black points:
+%               data classified as outliers by the ESD test with an upper
+%               bound of outlier rate of 1% (see ziegelwanger2014). The
+%               reference for the relative TOAs is the smallest TOA in each
+%               HRTF set. Horizontal lines: �1 sampling interval.
 %
 %     'fig7'    Reproduce Fig. 7:
-%               Model parameter (sphere radius) resulting from fitting the
-%               on-axis model to HRTFs of human listeners. The listeners
-%               are sorted by the ascending binaural average radius.
-%               Blue: for the left ear
-%               Green: for the right ear
-%               Circles: ARI
-%               Diamonds: CIPIC
-%               Squares: LISTEN
+%
+%               Estimated on-axis model IRDs from acoustically measured
+%               HRTFs of listeners. Line: normal distribution fitted to the
+%               data.
 %
 %     'fig8'    Reproduce Fig. 8:
-%               Relative TOAs for NH89 (ARI database) in the interaural
-%               horizontal plane.
-%               Dashed lines: for the right ear
-%               Solid lines: for the right ear
-%               Thin lines: TOAs estimated with the Minimum-phase
-%               Cross-Correlation method
-%               Thick lines: On-axis model fitted to the outlier-adjusted
-%               sets of TOAs
+%
+%               Relative TOAs of an exemplary listener (NH89, ARI) in the
+%               interaural horizontal plane for the left (black) and right
+%               (gray) ears as results from the MCM estimator (symbols) and
+%               the on-axis model (lines). The reference for the relative
+%               TOAs is the smallest TOA in HRTF sets of both ears.
 %
 %     'fig9'    Reproduce Fig. 9:
-%               Model parameters (sphere radius) resulting from fitting the
-%               on-axis model to HRTFs of an off-axis placed rigid sphere.
-%               All other conventions as in Fig. 5.
+%
+%               Estimated on-axis model parameters from HRTFs calculated
+%               for the non-centered object Sphere. Other details as in
+%               Fig. 4.
 %
 %     'fig11'   Reproduce Fig. 11:
-%               Model parameters (sphere radius, sphere center) resulting
-%               from fitting the off-axis model to HRTFs of a rigid
-%               sphere.
-%               All other conventions as in Fig. 5.
 %
-%     'fig12'   Reproduce Fig. 12:
-%               Model parameters (sphere radius, sphere center) resulting
-%               from fitting the off-axis model to HRTFs of human
-%               listeners.
-%               All other conventions as in Fig. 7.
+%               Estimated on-axis model parameters from HRTFs calculated
+%               for the non-centered object Sphere. Other details as in
+%               Fig. 4. phi_e: Positive and negative values correspond to
+%               the left and right ears, respectively.
+%
+%     'tab1'    Reproduce Tab. 1:
+%
+%               ANRs and parameter errors (average �1 standard deviation)
+%               resulting from fitting the on-axis model to TOAs estimated
+%               from HRTFs of the Sphere. Parameter errors: Differences
+%               between the estimated and actual parameters.
+%
+%     'tab2'    Reproduce Tab. 2:
+%
+%               Parameters and ANRs resulting from fitting the on-axis
+%               model to TOAs estimated from HRTFs of the objects Sphere,
+%               SAT, STP. Actual parameters: r=87,5 mm, phi_e=90deg, and
+%               theta_e=0deg.
+%
+%     'tab3'    Reproduce Tab. 3:
+%
+%               Parameters (average �1 standard deviation) and ANRs
+%               (median) resulting from fitting the on-axis model to TOAs
+%               estimated from acoustically measured HRTFs of human
+%               listeners. L: Left ear. R: Right ear. All: Results for all
+%               listeners. NH89: Results for a single listener (NH89, ARI).
+%
+%     'tab5'    Reproduce Tab. 5:
+%
+%               Parameters and ANRs (average �1 standard deviation)
+%               resulting from fitting the off-axis model to TOAs estimated
+%               from HRTFs of SAT, STP, and all listeners (All). Full: Fits
+%               to full TOA sets. O-A: Fits to the outlier-adjusted TOA
+%               sets. L: Left ear. R: Right ear.
+%
+%     'tab6'    Reproduce Tab. 6:
+%
+%               ANRs and parameter errors (average �1 standard deviation)
+%               resulting from fitting the off-axis model to TOAs estimated
+%               from HRTFs of the object Sphere. Centered: Conditions in
+%               which r and vec(e) varied from M=0. Non-centered:
+%               Conditions in which M varied. Other defails as in Tab. 5.
 %
 %   Examples:
 %   ---------
@@ -117,13 +116,17 @@ function varargout=exp_ziegelwanger2014(varargin)
 %
 %     exp_ziegelwanger2014('fig2');
 %
-%   To display Fig. 3, use :::
+%   To display Fig. 4, use :::
 %
-%     exp_ziegelwanger2014('fig3');
+%     exp_ziegelwanger2014('fig4');
 %
 %   To display Fig. 5, use :::
 %
 %     exp_ziegelwanger2014('fig5');
+%
+%   To display Fig. 6, use :::
+%
+%     exp_ziegelwanger2014('fig6');
 %
 %   To display Fig. 7, use :::
 %
@@ -141,9 +144,25 @@ function varargout=exp_ziegelwanger2014(varargin)
 %
 %     exp_ziegelwanger2014('fig11');
 %
-%   To display Fig. 12, use :::
+%   To display Tab. 1, use :::
 %
-%     exp_ziegelwanger2014('fig12');
+%     exp_ziegelwanger2014('tab1');
+%
+%   To display Tab. 2, use :::
+%
+%     exp_ziegelwanger2014('tab2');
+%
+%   To display Tab. 3, use :::
+%
+%     exp_ziegelwanger2014('tab3');
+%
+%   To display Tab. 5, use :::
+%
+%     exp_ziegelwanger2014('tab5');
+%
+%   To display Tab. 6, use :::
+%
+%     exp_ziegelwanger2014('tab6');
 %
 %   See also: ziegelwanger2014, ziegelwanger2014onaxis,
 %   ziegelwanger2014offaxis, data_ziegelwanger2014
@@ -155,850 +174,851 @@ function varargout=exp_ziegelwanger2014(varargin)
 
 %% ------ Check input options --------------------------------------------
 
-    definput.flags.type = {'missingflag',...
-    'fig2','fig3','fig5','fig6',...
-    'fig7','fig8','fig9','fig11','fig12','fig5new','fig6new','fig7new','fig8new','fig10new','fig12new','tab2'};
-    definput.flags.plot = {'plot','noplot'};
-    definput.flags.results = {'reload','recalc'};
+definput.flags.type = {'missingflag',...
+'fig2','fig4','fig5','fig6','fig7','fig8',...
+'fig9','fig11','tab1','tab2','tab3','tab5',...
+'tab6'};
+definput.flags.results = {'reload','recalc'};
 
-    % Parse input options
-    [flags,kv]  = ltfatarghelper({},definput,varargin);
+% Parse input options
+[flags,~]  = ltfatarghelper({},definput,varargin);
 
-    if flags.do_missingflag
-        flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}), ...
-            sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
-        error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
-    end;
+if flags.do_missingflag
+    flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}), ...
+        sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+    error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end;
 
 %% Figure 2
 if flags.do_fig2
+
+%load data
+    Obj{1}=data_ziegelwanger2014('Sphere');
+    Obj{2}=data_ziegelwanger2014('SAT');
+    Obj{3}=data_ziegelwanger2014('STP');
+    Obj{4}=data_ziegelwanger2014('NH89');
     
-    data=data_ziegelwanger2014('NH89');
-
-    subplot(122)
-    %---------------------------Threshold---------------------------
-    [~,tmp]=ziegelwanger2014(data,1,0,0);
-    MAX=tmp.toa;
-
-    %---------------------------Centroid----------------------------
-    [~,tmp]=ziegelwanger2014(data,2,0,0);
-    CTD=tmp.toa;
-
-    %---------------------------Groupdelay--------------------------
-    [~,tmp]=ziegelwanger2014(data,3,0,0);
-    AGD=tmp.toa;
-
-    %---------------------------Minimal-Phase-----------------------
-    [~,tmp]=ziegelwanger2014(data,4,0,0);
-    MCM=tmp.toa;
-    clear tmp
-
-    plotziegelwanger2014(data,MCM(:,1),4,[0 0 0]/255,0,1,1,'-',1);
-    hold on
-    plotziegelwanger2014(data,MAX(:,1),4,[0 0 80]/255,0,1,1,'--',1);
-    plotziegelwanger2014(data,CTD(:,1),4,[50 220 50]/255,0,1,1,'-',1);
-    plotziegelwanger2014(data,AGD(:,1),4,[250 80 80]/255,0,1,1,'--',1);
-    xlim([-10 370])
-    ylim([2.65 4.05])
-    grid off
-    legend(' MCM',' MAX',' CTD',' AGD','Location','NorthWest');
-    legend boxoff
-    xlabel('Azimuth (in deg) ')
-    ylabel('TOA (ms) ')
-%     set(gca,'FontSize',ticklabelsize,'LineWidth',bw,'LineWidth',bw);%,'YTick',[-0.8 -0.4 0 0.4 0.8]
-    title('');
+%plot figure
+    figure('Position',[ 520   221   732   577]);
     
-    subplot(121)
-    time=(0:data.DimSize.N-1)/data.Data.SamplingRate*1000;
-    MAX=round(MAX);
-    CTD=round(CTD);
-    AGD=round(AGD);
-    MCM=round(MCM);
-    idx=ARI_FindPosition(data,85,0);
+    methodLabel=['MAX';'CTD';'AGD';'MCM'];
+    sty=[': ';'-.';'- ';'--'];
+    clr=[0 0 0;...
+        0 0 0;...
+        0 0 0;...
+        0 0 0];
+    lw=[3 1 1 1];
 
-    fprintf(['MAX: ITD is ' num2str(time(diff(MAX(idx,:),1,2))) ' ms\n'])
-    fprintf(['CTD: ITD is ' num2str(time(diff(CTD(idx,:),1,2))) ' ms\n'])
-    fprintf(['AGD: ITD is ' num2str(time(diff(AGD(idx,:),1,2))) ' ms\n'])
-    fprintf(['MCM: ITD is ' num2str(time(diff(MCM(idx,:),1,2))) ' ms\n'])
+    for method=1:4
+        subplot(2,2,method)
+        for hrtf=1:4
+            if hrtf==4
+                Obj{4}.Data.toaEst{method}=Obj{4}.Data.toaEst{method}+110;
+            end
+            h=plotziegelwanger2014(Obj{hrtf},Obj{hrtf}.Data.toaEst{method},4,'k',0,1,1,sty(hrtf,:),lw(hrtf));
+            set(h,'color',clr(method,:));
+            hold on
+        end
+        ylabel('TOA (ms)','Fontname','Arial','Fontsize',14);
+        xlabel('');
+        grid off
+        ylim([2.9,4.3])
+        xlim([-10,370])
+        set(gca,'Fontname','Arial','Fontsize',10)
+        title('')
+        switch(method)
+            case 1
+                xlabel('')
+            case 2
+                ylabel('')
+                xlabel('')
+            case 3
+                l=legend('Sphere','SAT','STP','NH89','Location','NorthWest');
+                set(l,'Fontsize',9,'Fontname','Arial')
+            case 4
+                ylabel('')
+        end
 
-    plot(time,squeeze(data.Data.IR(idx,1,:))/max(abs(data.Data.IR(idx,1,:))),'k-');
-    hold on
-    plot(time,squeeze(data.Data.IR(idx,2,:))/max(abs(data.Data.IR(idx,2,:))),'k--')
-    h=stem([time(MCM(idx,1)) time(MCM(idx,1))],[-2 data.Data.IR(idx,1,MCM(idx,1))/max(abs(data.Data.IR(idx,1,:)))],'r-','BaseValue',-1);
-    stem([time(CTD(idx,1)) time(CTD(idx,1))],[-2 data.Data.IR(idx,1,CTD(idx,1))/max(abs(data.Data.IR(idx,1,:)))],'g-','BaseValue',-1)
-    stem([time(MAX(idx,1)) time(MAX(idx,1))],[-2 data.Data.IR(idx,1,MAX(idx,1))/max(abs(data.Data.IR(idx,1,:)))],'b-','BaseValue',-1)
-    stem([time(AGD(idx,1)) time(AGD(idx,1))],[-2 data.Data.IR(idx,1,AGD(idx,1))/max(abs(data.Data.IR(idx,1,:)))],'m-','BaseValue',-1)
-    stem([time(MCM(idx,2)) time(MCM(idx,2))],[-2 data.Data.IR(idx,2,MCM(idx,2))/max(abs(data.Data.IR(idx,2,:)))],'r-','BaseValue',-1)
-    stem([time(CTD(idx,2)) time(CTD(idx,2))],[-2 data.Data.IR(idx,2,CTD(idx,2))/max(abs(data.Data.IR(idx,2,:)))],'g-','BaseValue',-1)
-    stem([time(AGD(idx,2)) time(AGD(idx,2))],[-2 data.Data.IR(idx,2,AGD(idx,2))/max(abs(data.Data.IR(idx,2,:)))],'m-','BaseValue',-1)
-    stem([time(MAX(idx,2)) time(MAX(idx,2))],[-2 data.Data.IR(idx,2,MAX(idx,2))/max(abs(data.Data.IR(idx,2,:)))],'b-','BaseValue',-1)
-    plot(time(MAX(idx,1)),data.Data.IR(idx,1,MAX(idx,1))/max(abs(data.Data.IR(idx,1,:))),'b^','MarkerFaceColor','b')
-    plot(time(MCM(idx,1)),data.Data.IR(idx,1,MCM(idx,1))/max(abs(data.Data.IR(idx,1,:))),'ro','MarkerFaceColor','r')
-    plot(time(CTD(idx,1)),data.Data.IR(idx,1,CTD(idx,1))/max(abs(data.Data.IR(idx,1,:))),'gd','MarkerFaceColor','g')
-    plot(time(AGD(idx,1)),data.Data.IR(idx,1,AGD(idx,1))/max(abs(data.Data.IR(idx,1,:))),'ms','MarkerFaceColor','m')
-    plot(time(MAX(idx,2)),data.Data.IR(idx,2,MAX(idx,2))/max(abs(data.Data.IR(idx,2,:))),'b^','MarkerFaceColor','b')
-    plot(time(MCM(idx,2)),data.Data.IR(idx,2,MCM(idx,2))/max(abs(data.Data.IR(idx,2,:))),'ro','MarkerFaceColor','r')
-    plot(time(CTD(idx,2)),data.Data.IR(idx,2,CTD(idx,2))/max(abs(data.Data.IR(idx,2,:))),'gd','MarkerFaceColor','g')
-    plot(time(AGD(idx,2)),data.Data.IR(idx,2,AGD(idx,2))/max(abs(data.Data.IR(idx,2,:))),'ms','MarkerFaceColor','m')
-    xlim([2.4 4.1])
-    ylim([-1.1 1.1])
-    xlabel('Time (ms) ')
-    ylabel('Amplitude ')
-%     set(gca,'FontSize',ticklabelsize,'LineWidth',bw,'LineWidth',bw,'XTick',[2.5 3 3.5 4]);
-    set(get(h,'Baseline'),'Visible','off')
+        switch(method)
+            case 1
+                tmp=get(gca,'Position');
+                set(gca,'Position',tmp+[0 0.08 0.05 -0.08]);
+                set(gca,'xticklabel',[]);
+            case 2
+                tmp=get(gca,'Position');
+                set(gca,'Position',tmp+[-0.05 0.08 0.05 -0.08]);
+                set(gca,'yticklabel',[]);
+                set(gca,'xticklabel',[]);
+            case 3
+                tmp=get(gca,'Position');
+                set(gca,'Position',tmp+[0 0.285 0.05 -0.08]);
+                set(gca,'xticklabel',{'0' '90' '180' '270' '360 '});
+            case 4
+                tmp=get(gca,'Position');
+                set(gca,'Position',tmp+[-0.05 0.285 0.05 -0.08]);
+                set(gca,'yticklabel',[]);
+                set(gca,'xticklabel',{'0' '90' '180' '270' '360 '});
+        end
+
+        text(300,4.1,methodLabel(method,:),'Fontname','Arial','Fontsize',14)
+    end
+    
 end
 
-%% Figure 3, Figure 6
-if flags.do_fig3 || flags.do_fig6
-        
-    data=data_ziegelwanger2014('NH89');
+%% Figure 4
+if flags.do_fig4
 
-    p0_onaxis=[[0.0875; pi/2; 0; 0.0001] [0.0875; -pi/2; 0; 0.0001]];
-    p0_onaxis=transpose(p0_onaxis);
-    p_onaxis=zeros(size(p0_onaxis));
-    p0_offaxis=zeros(2,7);
-    p_offaxis=p0_offaxis;
+%load data
+    data=data_ziegelwanger2014('SPHERE_ROT');
+    for ii=1:length(data.results)
+        p_onaxis{1}(:,:,ii)=data.results(ii).MAX{1}.p_onaxis;
+        p_onaxis{2}(:,:,ii)=data.results(ii).CTD{1}.p_onaxis;
+        p_onaxis{3}(:,:,ii)=data.results(ii).AGD{1}.p_onaxis;
+        p_onaxis{4}(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
+    end
 
-    toa=zeros(data.DimSize.M,data.DimSize.R);
-    toaEst=zeros(data.DimSize.M,data.DimSize.R);
-    indicator=zeros(data.DimSize.M,data.DimSize.R);
-    indicator_hor=indicator;
-    indicator_sag=indicator;
-    pos=zeros(data.DimSize.M,8);
-    pos(:,1:2)=data.APV(:,1:2);
-    [pos(:,6),pos(:,7)]=sph2hor(data.APV(:,1),data.APV(:,2));
-    pos(:,8)=cumsum(ones(data.DimSize.M,1));
-    [~,tmp]=ziegelwanger2014(data,4,0,0);
-    toaEst=tmp.toa;
+%plot figure
+    figure
+    tmp=get(gcf,'Position');
+    set(gcf,'Position',tmp.*[1 1 1 2]);
+    sym='ox';%plot symbols
+    ms=8;%markersize
+    lw1=2;%linewidth1
+    lw2=2;%linewidth2
+    fs=18;%fontsize
+    ls='k-';%linestyle
+    lc=[0.5 0.5 0.5];
+    h=[];
     
-    for ch=1:data.DimSize.R
-
-        % Outlier detection: smooth TOA in horizontal planes
-        [~,idxSortHor]=sort(pos(:,1));
-        epsilon=5;
-        slope=zeros(data.DimSize.M,1);
-        for ele=min(pos(:,2)):epsilon:max(pos(:,2)) %calculate slope for each elevation along azimuth
-            idx=find(pos(idxSortHor,2)>ele-epsilon/2 & pos(idxSortHor,2)<=ele+epsilon/2);
-            if numel(idx)>1
-                idx(length(idx)+1)=idx(1);
-                slope(idxSortHor(idx(1:end-1)),1)=diff(toaEst(idxSortHor(idx),ch))./(abs(abs(abs(diff(pos(idxSortHor(idx),1)))-180)-180)+0.00000000001);
-            end
-        end
-        sloperms=sqrt(sum(slope.^2)/length(slope));
-        if sloperms<30/(length(find(pos(:,2)==0))/2)
-            sloperms=30/(length(find(pos(:,2)==0))/2);
-        end
-        for ele=min(pos(:,2)):epsilon:max(pos(:,2))
-            idx=find(pos(idxSortHor,2)>ele-epsilon/2 & pos(idxSortHor,2)<=ele+epsilon/2);
-            for ii=1:length(idx)-1
-                if abs(slope(idxSortHor(idx(ii))))>sloperms
-                    for jj=0:1
-                        if ii+jj==length(idx)
-                            indicator_hor(idxSortHor(idx(end)),ch)=1;
-                        else
-                            indicator_hor(idxSortHor(idx(mod(ii+jj,length(idx)))),ch)=1;
-                        end
-                    end
-                end
-            end
-            clear idx
-        end
-
-        % Outlier detection: constant TOA in sagittal planes
-        epsilon=2;
-        for ii=1:20
-            sag_dev=zeros(data.DimSize.M,1);
-            for lat=-90:epsilon:90
-                idx=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2); 
-                idx2=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2 & indicator_hor(:,ch)==0 & indicator(:,ch)==0);
-                if length(idx2)>2
-                    sag_dev(idx,1)=toaEst(idx,ch)-mean(toaEst(idx2,ch));
-                end
-            end
-            sag_var=sqrt(sum(sag_dev.^2)/length(sag_dev));
-            if sag_var<2
-                sag_var=2;
-            end
-            indicator(:,ch)=zeros(size(indicator,1),1);
-            indicator_sag(:,ch)=zeros(size(indicator_sag,1),1);
-            indicator_sag(abs(sag_dev)>sag_var,ch)=ones(length(find(abs(sag_dev)>sag_var)),1);
-            indicator(abs(sag_dev)>sag_var | indicator_hor(:,ch)==1,ch)=ones(length(find(abs(sag_dev)>sag_var | indicator_hor(:,ch)==1)),1);
-        end
-
-        if flags.do_fig3 && ch==1 %Figure 3
-            subplot(121)
-            plot([-90; 270],[sag_var/data.Data.SamplingRate*1000000; sag_var/data.Data.SamplingRate*1000000],'r--');
-            hold on
-            plot(real(pos(:,7)),abs(sag_dev)/data.Data.SamplingRate*1000000,'b.');
-            xlim([-98 278])
-            ylim([-5 max(abs(sag_dev)/data.Data.SamplingRate*1000000)+5])
-            xlabel('Polar angle in degree')
-            ylabel('Sagittal TOA deviation in 쨉s')
-            title('')
-            set(gca,'XTick',[-90 0 90 180 270])
-        end
-        clear sag_dev; clear sag_var;
-
-        if flags.do_fig3 && ch==1 %Figure 3
-            subplot(122)
-            plotziegelwanger2014(data,toaEst,4,'k',0,1,1,{'-'},1);
-            hold on
-            h=plotziegelwanger2014(data,indicator_sag.*toaEst,3,'w',0,1,1,{'^'},4);
-            set(h,'MarkerFaceColor','w','MarkerEdgeColor','w');
-            h=plotziegelwanger2014(data,indicator_hor.*toaEst,3,'w',0,1,1,{'v'},4);
-            set(h,'MarkerFaceColor','w','MarkerEdgeColor','w');
-            h=plotziegelwanger2014(data,indicator_sag.*toaEst,3,'b',0,1,1,{'^'},4);
-            set(h,'LineWidth',2);
-            h=plotziegelwanger2014(data,indicator_hor.*toaEst,3,'b',0,1,1,{'v'},4);
-            set(h,'LineWidth',2);
-            h=plotziegelwanger2014(data,(-indicator+1).*toaEst,3,'r',0,1,1,{'o'},4);
-            set(h,'MarkerFaceColor','r','MarkerEdgeColor','r');
-            ylabel('TOA in ms')
-            xlabel('Azimuth in degree')
-            grid off
-            xlim([-10 370])
-            ylim([2.65 3.65])
-            title('')
-            set(gca,'YTick',[2.7 3 3.3 3.6])
-        end
-    end
-
-    for ch=1:data.DimSize.R
-        p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/data.Data.SamplingRate;
-        p0offset_onaxis=[0.06 pi/4 pi/4 0.001];
-
-        idx=find(indicator(:,ch)==0);
-        x=pos(idx,1:2)*pi/180;
-        y=toaEst(idx,ch)/data.Data.SamplingRate;
-        p_onaxis(ch,:)=lsqcurvefit(@ziegelwanger2014onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
-        toa(:,ch)=ziegelwanger2014onaxis(p_onaxis(ch,:),pos(:,1:2)*pi/180)*data.Data.SamplingRate;
-    end
-
-    TolFun=[1e-5; 1e-6];
-    for ii=1:size(TolFun,1)
-        for ch=1:data.DimSize.R
-            idx=find(indicator(:,ch)==0);
-            x=pos(idx,1:2)*pi/180;
-            y=toaEst(idx,ch)/data.Data.SamplingRate;
-            p0_offaxis(ch,:)=[p0_onaxis(ch,1) 0 0 0 p0_onaxis(ch,4) p0_onaxis(ch,2) p0_onaxis(ch,3)];
-            p0offset_offaxis=[0.05 0.05 0.05 0.05 0.001 pi pi];
-            p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2014offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
-            toa(:,ch)=ziegelwanger2014offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*data.Data.SamplingRate;
-        end
-        if abs(diff(p_offaxis(:,1)))>0.003 || abs(diff(p_offaxis(:,3)))>0.003
-            p_offaxis(:,[1 3])=p_offaxis([2 1],[1 3]);
-            for ch=1:data.DimSize.R
-                idx=find(indicator(:,ch)==0);
-                x=pos(idx,1:2)*pi/180;
-                y=toaEst(idx,ch)/data.Data.SamplingRate;
-                p0_offaxis(ch,:)=[p_offaxis(ch,1) mean(p_offaxis(:,2)) p_offaxis(ch,3) mean(p_offaxis(:,4)) mean(p_offaxis(:,5)) p_offaxis(ch,6) p_offaxis(ch,7)];
-                p0offset_offaxis=[0.05 0.05 0.05 0.05 0.001 pi/2 pi/2];
-                p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2014offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
-                toa(:,ch)=ziegelwanger2014offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*data.Data.SamplingRate;
-            end
-        end
-        if abs(diff(p_offaxis(:,1)))<0.003 && abs(diff(p_offaxis(:,2)))<0.003 && abs(diff(p_offaxis(:,3)))<0.003 && abs(diff(p_offaxis(:,4)))<0.003
-            break
-        end
-    end
-
-    if flags.do_fig6 %Figure 6
-        h=plotziegelwanger2014(data,indicator.*toaEst,3,'b',0,1,1,{'^'},4);
-        set(h,'LineWidth',2);
+    % radii
+    h(end+1)=subplot(411);
+    var=[squeeze(p_onaxis{4}(1,1,:))*1000 squeeze(p_onaxis{4}(1,2,:))*1000 data.radius(:)];
+    for ch=1:size(p_onaxis{4},2)
+        plot(var(:,ch),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
         hold on
-        h=plotziegelwanger2014(data,indicator.*toaEst,3,'b',0,1,1,{'v'},4);
-        set(h,'LineWidth',2);
-        h=plotziegelwanger2014(data,(-indicator+1).*toaEst,3,'r',0,1,1,{'o'},4);
-        set(h,'MarkerFaceColor','r','MarkerEdgeColor','r');
-        plotziegelwanger2014(data,toa,4,'k',0,1,1,{'-'},1);
-        ylabel('TOA ms ')
-        xlabel('Azimuth in degree')
-        grid off
-        xlim([-10 370])
-        ylim([2.65 3.65])
-        title('')
-        set(gca,'YTick',[2.7 3 3.3 3.6])
     end
+    plot(1:14,var(1:14,3),ls,'Linewidth',lw2,'color',lc)
+    plot(15:28,var(15:28,3),ls,'Linewidth',lw2,'color',lc)
+    plot(29:42,var(29:42,3),ls,'Linewidth',lw2,'color',lc)
+    for ch=1:size(p_onaxis{4},2)
+        plot(var(:,ch),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
+        hold on
+    end
+    clear var;
+    ylabel('r (mm)','Fontname','Arial','Fontsize',fs)
+    ylim([72,105])
+    xlim([-1,44])
+    set(gca,'xtick',1:42)
+    set(gca,'ytick',[80 90 100])
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0 0 0]);
+
+    %phi
+    h(end+1)=subplot(412);
+    var=[squeeze(p_onaxis{4}(2,1,:))/pi*180 squeeze(p_onaxis{4}(2,2,:))/pi*180 data.phi+ones(length(data.phi),1)*90 data.phi-ones(length(data.phi),1)*90];
+    for ch=1:size(p_onaxis{4},2)
+        plot(var(:,ch),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
+        hold on
+    end
+    for ch=1:size(p_onaxis{4},2)
+        plot(1:9,var(1:9,2+ch),ls,'Linewidth',lw2,'color',lc)
+        plot(10:14,var(10:14,2+ch),ls,'Linewidth',lw2,'color',lc)
+        plot(15:23,var(15:23,2+ch),ls,'Linewidth',lw2,'color',lc)
+        plot(24:28,var(24:28,2+ch),ls,'Linewidth',lw2,'color',lc)
+        plot(29:37,var(29:37,2+ch),ls,'Linewidth',lw2,'color',lc)
+        plot(38:42,var(38:42,2+ch),ls,'Linewidth',lw2,'color',lc)
+    end
+    for ch=1:size(p_onaxis{4},2)
+        plot(var(:,ch),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
+        hold on
+    end
+    clear var;
+    set(gca,'YTick',[-90 90])
+    ylabel('   _e (deg)','Fontname','Arial','Fontsize',fs)
+    xlim([-1,44])
+    set(gca,'xtick',1:42)
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0.055 0 0]);
+
+    %theta
+    h(end+1)=subplot(413);
+    var=[squeeze(p_onaxis{4}(3,1,:))/pi*180 squeeze(p_onaxis{4}(3,2,:))/pi*180 data.theta -data.theta];
+    for ch=1:size(p_onaxis{4},2)
+        plot(var(:,ch),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
+        hold on
+    end
+    for ch=1:size(p_onaxis{4},2)
+        plot(1:9,var(1:9,2+ch),ls,'Linewidth',lw2,'color',lc)
+        plot(10:14,var(10:14,2+ch),ls,'Linewidth',lw2,'color',lc)
+        plot(15:23,var(15:23,2+ch),ls,'Linewidth',lw2,'color',lc)
+        plot(24:28,var(24:28,2+ch),ls,'Linewidth',lw2,'color',lc)
+        plot(29:37,var(29:37,2+ch),ls,'Linewidth',lw2,'color',lc)
+        plot(38:42,var(38:42,2+ch),ls,'Linewidth',lw2,'color',lc)
+    end
+    for ch=1:size(p_onaxis{4},2)
+        plot(var(:,ch),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
+        hold on
+    end
+    clear var;
+    ylabel('\theta_e (deg)','Fontname','Arial','Fontsize',fs)
+    xlabel('Condition','Fontname','Arial','Fontsize',fs)
+    ylim([-15,15])
+    xlim([-1,44])
+    set(gca,'xtick',1:42)
+    set(gca,'xticklabel',[])
+    set(gca,'ytick',[-10 0 10])
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0.11 0 0]);
+
+    for ii=1:length(h)
+        set(h(ii),'fontsize',14)
+        set(h(ii),'Linewidth',2)
+        tmp=findobj(h(ii),'Type','patch');
+        set(tmp,'EdgeColor','k');
+    end
+    set(gcf,'color',[1 1 1])
+    
 end
 
 %% Figure 5
 if flags.do_fig5
 
-    sym='sdo'; %plot symbols
-    clr=[0,0,255; 255,0,0; 255,255,67]/255; %plot colors
-    meclr=[0,0,255; 255,0,0; 255,255,67]/255; %marker edge colors
-    
-    if flags.do_recalc
-        data=data_ziegelwanger2014('SPHERE_ROT','recalc');
-    else
-        data=data_ziegelwanger2014('SPHERE_ROT');
-    end
-    
-    % radii
-    subplot(311)
-    var=[squeeze(data.results.p_onaxis(1,1,:))*100 squeeze(data.results.p_onaxis(1,2,:))*100 data.radius(:)/10];
-    err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-    err=reshape(err,numel(err),1);
-    fprintf(['Radius: average err is ' num2str(mean(err)) ' cm\n']);
-    fprintf(['        standard deviation is ' num2str(std(err)) ' cm\n']);
-    for ch=1:size(data.results.p_onaxis,2)
-        plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
-        hold on
-    end
-    plot(var(:,3),'k--')
-    clear var;
-    ylabel('r in cm')
-
-    %phi
-    subplot(312)
-    var=[squeeze(data.results.p_onaxis(2,1,:))/pi*180 squeeze(data.results.p_onaxis(2,2,:))/pi*180 -data.phi+ones(length(data.phi),1)*90 -data.phi-ones(length(data.phi),1)*90];
-    err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,4)]);
-    err=reshape(err,numel(err),1);
-    fprintf(['Phi: average err is ' num2str(mean(err)) 'deg\n']);
-    fprintf(['     standard deviation is ' num2str(std(err)) 'deg\n']);
-    for ch=1:size(data.results.p_onaxis,2)
-        plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
-        hold on
-    end
-    for ch=1:size(data.results.p_onaxis,2)
-        plot(1:9,var(1:9,2+ch),'k--')
-        plot(10:14,var(10:14,2+ch),'k--')
-        plot(15:23,var(15:23,2+ch),'k--')
-        plot(24:28,var(24:28,2+ch),'k--')
-        plot(29:37,var(29:37,2+ch),'k--')
-        plot(38:42,var(38:42,2+ch),'k--')
-    end
-    clear var;
-    set(gca,'YTick',[-90 90])
-    ylabel('\phi_e in deg')
-
-    %theta
-    subplot(313)
-    var=[squeeze(data.results.p_onaxis(3,1,:))/pi*180 squeeze(data.results.p_onaxis(3,2,:))/pi*180 data.theta -data.theta];
-    err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,4)]);
-    err=reshape(err,numel(err),1);
-    fprintf(['Theta: average err is ' num2str(mean(err)) 'deg\n']);
-    fprintf(['       standard deviation is ' num2str(std(err)) 'deg\n']);
-    for ch=1:size(data.results.p_onaxis,2)
-        plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
-        hold on
-    end
-    for ch=1:size(data.results.p_onaxis,2)
-        plot(1:9,var(1:9,2+ch),'k--')
-        plot(10:14,var(10:14,2+ch),'k--')
-        plot(15:23,var(15:23,2+ch),'k--')
-        plot(24:28,var(24:28,2+ch),'k--')
-        plot(29:37,var(29:37,2+ch),'k--')
-        plot(38:42,var(38:42,2+ch),'k--')
-    end
-    clear var;
-    ylabel('\theta_e in deg')
-    xlabel('Condition')
-end
-
-%% Figure 7, Figure 12
-if flags.do_fig7 || flags.do_fig12
-    
+%load data
     hrtf={'ARI','CIPIC','LISTEN'};
-    sym='ods'; %plot symbols
-
-    %-------------------------------Load Data----------------------------------
     for kk=1:length(hrtf)
-        if flags.do_recalc
-            data=data_ziegelwanger2014(hrtf{kk},'recalc');
-        else
-            data=data_ziegelwanger2014(hrtf{kk});
-        end
+        data=data_ziegelwanger2014(hrtf{kk});
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
-        temp1=zeros(size(data.results(1).meta.p_onaxis,1),size(data.results(1).meta.p_onaxis,2),length(data.results));
-        temp3=zeros(size(data.results(1).meta.p_offaxis,1),size(data.results(1).meta.p_offaxis,2),length(data.results));
-        temp4=zeros(length(data.results),4);
-        temp6=zeros(length(data.results),4);
-        temp7=zeros(length(data.results),4);
         for ii=1:length(data.results)
-            temp1(:,:,ii)=data.results(ii).meta.p_onaxis;
-            temp3(:,1:size(data.results(ii).meta.p_offaxis,2),ii)=data.results(ii).meta.p_offaxis;
-            temp4(ii,:)=[data.results(ii).meta.performanceOutliers(1).outlierRate data.results(ii).meta.performanceOutliers(2).outlierRate data.results(ii).meta.performanceOutliers(3).outlierRate data.results(ii).meta.performanceOutliers(4).outlierRate];
-            if isfield(data.results(ii).meta.performanceOutliers(1)','outliersl')
-                temp6(ii,:)=[data.results(ii).meta.performanceOutliers(1).outlierRateL data.results(ii).meta.performanceOutliers(2).outlierRateL data.results(ii).meta.performanceOutliers(3).outlierRateL data.results(ii).meta.performanceOutliers(4).outlierRateL];
-                temp7(ii,:)=[data.results(ii).meta.performanceOutliers(1).outlierRateR data.results(ii).meta.performanceOutliers(2).outlierRateR data.results(ii).meta.performanceOutliers(3).outlierRateR data.results(ii).meta.performanceOutliers(4).outlierRateR];
-            end
+            temp1(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
+            temp2(:,1:size(data.results(ii).MCM{1}.p_offaxis,2),ii)=data.results(ii).MCM{1}.p_offaxis;
+            temp3(ii)=mean([data.results(ii).MCM{1}.performance.on_axis{1}.resnormS ...
+                data.results(ii).MCM{1}.performance.on_axis{2}.resnormS]);
+            temp4(ii)=mean([data.results(ii).MCM{1}.performance.off_axis{1}.resnormS ...
+                data.results(ii).MCM{1}.performance.off_axis{2}.resnormS]);
+            temp5(ii)=mean([data.results(ii).MCM{1}.performance.on_axis{1}.resnormP ...
+                data.results(ii).MCM{1}.performance.on_axis{2}.resnormP]);
+            temp6(ii)=mean([data.results(ii).MCM{1}.performance.off_axis{1}.resnormP ...
+                data.results(ii).MCM{1}.performance.off_axis{2}.resnormP]);
+            temp8(ii)=data.results(ii).MCM{1}.performance.on_axis{1}.resnormS;
+            temp9(ii)=data.results(ii).MCM{1}.performance.on_axis{2}.resnormS;
+            temp10(ii)=data.results(ii).MCM{1}.performance.off_axis{1}.resnormS;
+            temp11(ii)=data.results(ii).MCM{1}.performance.off_axis{2}.resnormS;
         end
         p_onaxis{kk}=temp1;
-        p_offaxis{kk}=temp3;
-        outlierRate{kk}=temp4;
-        outliersear{kk}=[temp6; temp7];
+        p_offaxis{kk}=temp2;
+        resnormS_onaxis{kk}=temp3;
+        resnormS_offaxis{kk}=temp4;
+        resnormP_onaxis{kk}=temp5;
+        resnormP_offaxis{kk}=temp6;
+        resnormS_onaxis_left{kk}=temp8;
+        resnormS_onaxis_right{kk}=temp9;
+        resnormS_offaxis_left{kk}=temp10;
+        resnormS_offaxis_right{kk}=temp11;
+        clear temp1 temp2 temp3 temp4 temp5 temp6 temp7 temp8 temp9 temp10 temp11
     end
+
+%plot figure
+    figure('PaperUnits','centimeters','PaperType','A4','Paperposition',[0, 0, 21, 29.7],'Units','centimeters','Position',[0 0 21 29.7],'Resize','off')
+    fs=14;%fontsize
+    lw=1.1;%linewidth
+    h=[];
+
+    %radii
+    temp=1;
+    for kk=1:length(hrtf)
+        var(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
+            squeeze(mean(p_onaxis{kk}(1,:,:)*1000,2));
+        varl(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
+            squeeze(p_onaxis{kk}(1,1,:)*1000);
+        varr(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
+            squeeze(p_onaxis{kk}(1,2,:)*1000);
+        temp=size(var,1)+1;
+    end
+
+    h(1)=subplot(631);
+    colormap('gray');
+    binranges = 45:5:135;
+    bincounts=histc(varl,binranges);
+    bar(binranges,bincounts/sum(bincounts)*100,'Facecolor',[0.6 0.6 0.6],'edgecolor',[0 0 0]);
+    hold on
+    box on
+    [mu,sigma]=normfit(varl);
+    y=normpdf(binranges,mu,sigma);
+    plot(binranges,y*100*5,'k','linewidth',lw)
+    plot([-500 500],[0 0],'k');
+    xlim([45,135])
+    ylim([-1,25])
+    ylabel('Left ear ','Fontname','Arial','Fontsize',fs)
+    set(gca,'xtick',[60 80 100 120])
+    set(gca,'xticklabel',[]);
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0 0.04 0]);
+
+    h(2)=subplot(634);
+    binranges = 45:5:135;
+    bincounts=histc(varr,binranges);
+    bar(binranges,bincounts/sum(bincounts)*100,'Facecolor',[0.6 0.6 0.6],'edgecolor',[0 0 0]);
+    hold on
+    box on
+    [mu,sigma]=normfit(varr);
+    y=normpdf(binranges,mu,sigma);
+    plot(binranges,y*100*5,'k','linewidth',lw)
+    plot([-500 500],[0 0],'k');
+    xlim([45,135])
+    ylim([-1,25])
+    set(gca,'xtick',[60 80 100 120])
+    xlabel('r (mm)','Fontname','Arial','Fontsize',fs)
+    ylabel('Right ear ','Fontname','Arial','Fontsize',fs)
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0.03 0.04 0]);
+
+    clear var varl varr;
+
+    % phi_e
+    temp=1;
+    for kk=1:length(hrtf)
+        varl(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
+            squeeze(p_onaxis{kk}(2,1,:))*180/pi;
+        varr(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
+            mod(squeeze(p_onaxis{kk}(2,2,:))*180/pi,360);
+        temp=size(varl,1)+1;
+    end
+
+    h(3)=subplot(632);
+    binranges = 55:2:125;
+    bincounts=histc(varl,binranges);
+    bar(binranges,bincounts/sum(bincounts)*100,'Facecolor',[0.6 0.6 0.6],'edgecolor',[0 0 0]);
+    hold on
+    box on
+    [mu,sigma]=normfit(varl);
+    y=normpdf(binranges,mu,sigma);
+    plot(binranges,y*100*2,'k','linewidth',lw)
+    plot([-500 500],[0 0],'k');
+    xlim([55,125])
+    ylim([-1,25])
+    set(gca,'xticklabel',[]);
+    set(gca,'yticklabel',[]);
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[-0.02 0 0.04 0]);
+    clear y
+
+    varr=abs(varr-360);
+    h(4)=subplot(635);
+    binranges = 55:2:125;
+    bincounts=histc(varr,binranges);
+    bar(binranges,bincounts/sum(bincounts)*100,'Facecolor',[0.6 0.6 0.6],'edgecolor',[0 0 0]);
+    hold on
+    box on
+    [mu,sigma]=normfit(varr);
+    y=normpdf(binranges,mu,sigma);
+    plot(binranges,y*100*2,'k','linewidth',lw)
+    plot([-500 500],[0 0],'k');
+    xlim([55,125])
+    ylim([-1,25])
+    xlabel('   _e (deg)','Fontname','Arial','Fontsize',fs)
+    set(gca,'xtick',[60 80 100 120]);
+    set(gca,'xticklabel',{'�60','�80','�100','�120'});
+    set(gca,'yticklabel',[]);
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[-0.02 0.03 0.04 0]);
+    clear varl varr a
+
+    % theta_e
+    temp=1;
+    for kk=1:length(hrtf)
+        varl(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
+            squeeze(p_onaxis{kk}(3,1,:))*180/pi;
+        varr(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
+            squeeze(p_onaxis{kk}(3,2,:))*180/pi;
+        temp=size(varl,1)+1;
+    end
+
+    h(5)=subplot(633);
+    binranges = -25:2:15;
+    bincounts=histc(varl,binranges);
+    bar(binranges,bincounts/sum(bincounts)*100,'Facecolor',[0.6 0.6 0.6],'edgecolor',[0 0 0]);
+    hold on
+    box on
+    [mu,sigma]=normfit(varl);
+    y=normpdf(binranges,mu,sigma);
+    plot(binranges,y*100*2,'k','linewidth',lw)
+    plot([-500 500],[0 0],'k');
+    xlim([-25,15])
+    ylim([-1,25])
+    set(gca,'xticklabel',[]);
+    set(gca,'yticklabel',[]);
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[-0.04 0 0.04 0]);
+
+    h(6)=subplot(636);
+    binranges = -25:2:15;
+    bincounts=histc(varr,binranges);
+    bar(binranges,bincounts/sum(bincounts)*100,'Facecolor',[0.6 0.6 0.6],'edgecolor',[0 0 0]);
+    hold on
+    box on
+    [mu,sigma]=normfit(varr);
+    y=normpdf(binranges,mu,sigma);
+    plot(binranges,y*100*2,'k','linewidth',lw)
+    plot([-500 500],[0 0],'k');
+    xlim([-25,15])
+    ylim([-1,25])
+    xlabel('\theta_e (deg)','Fontname','Arial','Fontsize',fs)
+    set(gca,'yticklabel',[]);
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[-0.04 0.03 0.04 0]);
+    clear varl varr
+
+    for ii=1:length(h)
+        set(h(ii),'linewidth',lw)
+        set(h(ii),'TickLength',[0.015 0.015])
+        set(h(ii),'Fontname','Arial','Fontsize',12)
+        tmp=findobj(h(ii),'Type','patch');
+        set(tmp,'EdgeColor','k');
+    end
+    set(gcf,'color',[1 1 1])
+end
+
+%% Figure 6
+if flags.do_fig6
     
-    if flags.do_fig7 %Figure 7
-        fprintf('On-Axis Model:\n')
-        fprintf(['Average Radius: ' ...
-                 num2str(mean([mean(squeeze(p_onaxis{1}(1,:,:)*100)) ...
-                            mean(squeeze(p_onaxis{2}(1,:,:)*100)) ...
-                            mean(squeeze(p_onaxis{3}(1,:,:)*100))])) ' cm\n'])
-        fprintf(['Average Radius Difference: ' num2str(mean([mean(abs(diff(squeeze(p_onaxis{1}(1,:,:)*100)))) mean(abs(diff(squeeze(p_onaxis{2}(1,:,:)*100)))) mean(abs(diff(squeeze(p_onaxis{3}(1,:,:)*100))))])) 'cm\n'])
-        fprintf(['Maximum Radius Difference: ' num2str(max([max(abs(diff(squeeze(p_onaxis{1}(1,:,:)*100)))) max(abs(diff(squeeze(p_onaxis{2}(1,:,:)*100)))) max(abs(diff(squeeze(p_onaxis{3}(1,:,:)*100))))])) ' cm\n'])
-        temp=1;
-        for kk=1:length(hrtf)
-            var(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
-                [squeeze(mean(p_onaxis{kk}(1,:,:)*100,2)) kk* ...
-                 ones(size(p_onaxis{kk},3),1) transpose(1: ...
-                                                        size(p_onaxis{kk},3))];
-            varl(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
-                [squeeze(p_onaxis{kk}(1,1,:)*100) kk*ones(size(p_onaxis{kk},3),1) ...
-                 transpose(1:size(p_onaxis{kk},3))];
-            varr(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
-                [squeeze(p_onaxis{kk}(1,2,:)*100) kk*ones(size(p_onaxis{kk},3),1) ...
-                 transpose(1:size(p_onaxis{kk},3))];
-            temp=size(var,1)+1;
-        end
-        [~,idx]=sort(var(:,1));
-        var=var(idx,:);
-        varl=varl(idx,:);
-        varr=varr(idx,:);
-        var(:,3)=transpose(1:size(var,1));
-        varl(:,3)=transpose(1:size(var,1));
-        varr(:,3)=transpose(1:size(var,1));
-        for ii=1:size(varl,1)
-            stm=stem(ii,varl(ii,1),'--k','BaseValue',varr(ii,1));
-            hold on
-        end
-        baseline_handle = get(stm,'BaseLine');
-        set(baseline_handle,'LineStyle','none')
-        for kk=1:length(hrtf)
-            h{kk}=plot(varl(varl(:,2)==kk,3),varl(varl(:,2)==kk,1), ...
-                       sym(kk),'MarkerEdgeColor','b','MarkerFaceColor','b');
-            plot(varr(varr(:,2)==kk,3),varr(varr(:,2)==kk,1),sym(kk), ...
-                 'MarkerEdgeColor','g','MarkerFaceColor','g');
-        end
-        clear var varl varr stm;
-        xlabel('Listeners ')
-        ylabel('r in cm')
-        xlim([-1.5 temp+1.5])
-        ylim([4.1 12+0.7])
-        legend([h{1},h{2},h{3}],'ARI','CIPIC','LISTEN','Location','NorthWest');
-        legend boxoff
+    siglevel=0.05;
+    outlierrate=0.01; % upper bound for the outlier rate
+
+    Obj=data_ziegelwanger2014('STP');
+    idx=Obj.Data.toaEst{4}(:,1)>-100000;
+    stpEst=Obj.Data.toaEst{4}(idx,1);
+    [~,results]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,2);
+    stpMod=results.toa(idx,1);
+    stpRes=stpEst-stpMod;
+
+    Obj=data_ziegelwanger2014('NH89');
+    fs=Obj.Data.SamplingRate*1e-6;
+    idx=Obj.Data.toaEst{4}(:,1)>-100000;
+    sp=Obj.SourcePosition(idx,:);
+    [lat,~]=geo2horpolar(sp(:,1),sp(:,2));
+    nhEst=Obj.Data.toaEst{4}(idx,1);
+    [~,results]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,2);
+    nhMod=results.toa(idx,1);
+    nhRes=nhEst-nhMod;
+
+    res=stpRes;
+    est=stpEst;
+
+    [~,idx]=deleteoutliers(res,siglevel*outlierrate*length(stpEst));
+
+    figure('Position',[620   229   560*2   497],'resize','off');
+    h(1)=subplot(2,2,1);
+    box on; hold on;
+    plot(lat,est/fs-min(est/fs),'.','MarkerEdgeColor',[0.5 0.5 0.5],'MarkerSize',8);
+    plot(lat(idx),est(idx)/fs-min(est/fs),'.k','MarkerSize',24);
+    axis([-99 99 -50 995]);
+    set(gca,'XTickLabel',[],'FontName','Arial');
+    ylabel('Relative TOA (탎)','FontName','Arial','FontSize',18);
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0 0.06 0]);
+
+    h(2)=subplot(2,2,3);
+    box on; hold on;
+    plot(lat,res/fs,'.','MarkerEdgeColor',[0.5 0.5 0.5],'MarkerSize',8)
+    plot(lat(idx),res(idx)/fs,'.k','MarkerSize',24);
+    line([-99 99],1./[-fs -fs],'LineStyle','--','Color',[0 0 0]);
+    line([-99 99],1./[fs fs],'LineStyle','--','Color',[0 0 0]);
+    axis([-99 99 -80 195])
+    xlabel('\Phi_h (deg)','FontName','Arial','FontSize',18);
+    ylabel('Residual error (탎)','FontName','Arial','FontSize',18);
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0.11 0.06 0]);
+
+    res=nhRes;
+    est=nhEst;
+
+    [~,idx]=deleteoutliers(res,siglevel*outlierrate*length(nhEst));
+
+    h(3)=subplot(2,2,2);
+    box on; hold on;
+    plot(lat,est/fs-min(est/fs),'.','MarkerEdgeColor',[0.5 0.5 0.5],'MarkerSize',8);
+    plot(lat(idx),est(idx)/fs-min(est/fs),'.k','MarkerSize',24);
+    axis([-99 99 -50 995]);
+    set(gca,'XTickLabel',[],'FontName','Arial');
+    set(gca,'yticklabel',[]);
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[-0.03 0 0.06 0]);
+
+    h(4)=subplot(2,2,4);
+    box on; hold on;
+    plot(lat,res/fs,'.','MarkerEdgeColor',[0.5 0.5 0.5],'MarkerSize',8)
+    plot(lat(idx),res(idx)/fs,'.k','MarkerSize',24);
+    line([-99 99],1./[-fs -fs],'LineStyle','--','Color',[0 0 0]);
+    line([-99 99],1./[fs fs],'LineStyle','--','Color',[0 0 0]);
+    axis([-99 99 -80 195])
+    xlabel('\Phi_h (deg)','FontName','Arial','FontSize',18);
+    set(gca,'yticklabel',[]);
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[-0.03 0.11 0.06 0]);
+
+    for ii=1:length(h)
+        set(h(ii),'linewidth',1.1)
+        set(h(ii),'Fontname','Arial','Fontsize',14)
     end
+    set(gcf,'color',[1 1 1])
     
-    if flags.do_fig12 %Figure12
-        %radii
-        subplot(411)
-        fprintf('Off-Axis Model:\n')
-        fprintf(['Radius (Avg): ' ...
-                 num2str(mean([mean(squeeze(p_offaxis{1}(1,:,:)*100)) ...
-                            mean(squeeze(p_offaxis{2}(1,:,:)*100)) ...
-                            mean(squeeze(p_offaxis{3}(1,:,:)*100))])) ' cm\n'])
-        fprintf(['Radius (Std): ' num2str(std([reshape(p_offaxis{1}(1,:,: ...
-                                                          )*100,1, ...
-                                                       numel(p_offaxis{1}(1,:,:))) reshape(p_offaxis{2}(1,:,:)*100,1,numel(p_offaxis{2}(1,:,:))) reshape(p_offaxis{3}(1,:,:)*100,1,numel(p_offaxis{3}(1,:,:)))])) ' cm\n'])
-        fprintf(['Radius Difference (Avg): ' ...
-                 num2str(mean([mean(abs(diff(squeeze(p_offaxis{1}(1,:,:)*100)))) ...
-                            mean(abs(diff(squeeze(p_offaxis{2}(1,:,:)*100)))) ...
-                            mean(abs(diff(squeeze(p_offaxis{3}(1,:,:)*100))))])) ...
-                 'cm\n'])
-        fprintf(['Radius Difference (Std): ' ...
-                 num2str(std([abs(diff(squeeze(p_offaxis{1}(1,:,:)*100))) ...
-                            abs(diff(squeeze(p_offaxis{2}(1,:,:)*100))) ...
-                            abs(diff(squeeze(p_offaxis{3}(1,:,:)*100)))])) ...
-                 'cm\n'])
-        fprintf(['Radius Difference (Max): ' ...
-                 num2str(max([max(abs(diff(squeeze(p_offaxis{1}(1,:,:)*100)))) ...
-                            max(abs(diff(squeeze(p_offaxis{2}(1,:,:)*100)))) ...
-                            max(abs(diff(squeeze(p_offaxis{3}(1,:,:)*100))))])) ...
-                 ' cm\n'])
-        temp=1;
-        for kk=1:length(hrtf)
-            var(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
-                [squeeze(mean(p_offaxis{kk}(1,:,:)*100,2)) kk* ...
-                 ones(size(p_onaxis{kk},3),1) transpose(1: ...
-                                                        size(p_onaxis{kk},3))];
-            varl(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
-                [squeeze(p_offaxis{kk}(1,1,:)*100) kk* ...
-                 ones(size(p_onaxis{kk},3),1) transpose(1: ...
-                                                        size(p_onaxis{kk},3))];
-            varr(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
-                [squeeze(p_offaxis{kk}(1,2,:)*100) kk* ...
-                 ones(size(p_onaxis{kk},3),1) transpose(1: ...
-                                                        size(p_onaxis{kk},3))];
-            temp=size(var,1)+1;
-        end
-        [~,idx]=sort(var(:,1));
-        var=var(idx,:);
-        varl=varl(idx,:);
-        varr=varr(idx,:);
-        var(:,3)=transpose(1:size(var,1));
-        varl(:,3)=transpose(1:size(var,1));
-        varr(:,3)=transpose(1:size(var,1));
-        for ii=1:size(varl,1)
-            stm=stem(ii,varl(ii,1),'--k','BaseValue',varr(ii,1));
-            hold on
-        end
-        baseline_handle = get(stm,'BaseLine');
-        set(baseline_handle,'LineStyle','none')
-        for kk=1:length(hrtf)
-            h{kk}=plot(varl(varl(:,2)==kk,3),varl(varl(:,2)==kk,1),sym(kk),'MarkerEdgeColor','b','MarkerFaceColor','b');
-            plot(varr(varr(:,2)==kk,3),varr(varr(:,2)==kk,1),sym(kk),'MarkerEdgeColor','g','MarkerFaceColor','g');
-        end
-        clear var varl varr;
-        ylabel('r in cm')
-        xlim([-1.5 temp+1.5])
-        ylim([4.1 12+0.7])
-        legend([h{1},h{2},h{3}],'ARI','CIPIC','LISTEN','Location','NorthWest');
-        legend boxoff
+end
 
-        %lateral displacements
-        % xM
-        subplot(412)
-        fprintf(['Average xM: ' ...
-                 num2str(mean([mean(abs(squeeze(p_offaxis{1}(2,:,:)*100))) ...
-                            mean(abs(squeeze(p_offaxis{2}(2,:,:)*100))) ...
-                            mean(abs(squeeze(p_offaxis{3}(2,:,:)*100)))])) ...
-                 ' cm\n'])
-        fprintf(['Average xM Difference: ' ...
-                 num2str(mean([mean(abs(diff(squeeze(p_offaxis{1}(2,:,:)*100)))) ...
-                            mean(abs(diff(squeeze(p_offaxis{2}(2,:,:)*100)))) ...
-                            mean(abs(diff(squeeze(p_offaxis{3}(2,:,:)*100))))])) ...
-                 'cm\n'])
-        temp=1;
-        for kk=1:length(hrtf)
-            var(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
-                [squeeze(mean(p_offaxis{kk}(2,:,:)*100,2)) kk* ...
-                 ones(size(p_onaxis{kk},3),1) transpose(1: ...
-                                                        size(p_onaxis{kk},3))];
-            varl(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
-                [squeeze(p_offaxis{kk}(2,1,:)*100) kk* ...
-                 ones(size(p_onaxis{kk},3),1) transpose(1: ...
-                                                        size(p_onaxis{kk},3))];
-            varr(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
-                [squeeze(p_offaxis{kk}(2,2,:)*100) kk* ...
-                 ones(size(p_onaxis{kk},3),1) transpose(1: ...
-                                                        size(p_onaxis{kk},3))];
-            temp=size(var,1)+1;
+%% Figure 7
+if flags.do_fig7
+    
+%load data
+    hrtf={'ARI','CIPIC','LISTEN'};
+    for kk=1:length(hrtf)
+        data=data_ziegelwanger2014(hrtf{kk});
+        if kk==3
+            data.results=data.results([1:27 29:end]);
         end
-        var=var(idx,:);
-        varl=varl(idx,:);
-        varr=varr(idx,:);
-        var(:,3)=transpose(1:size(var,1));
-        varl(:,3)=transpose(1:size(var,1));
-        varr(:,3)=transpose(1:size(var,1));
-        for ii=1:size(varl,1)
-            stm=stem(ii,varl(ii,1),'--k','BaseValue',varr(ii,1));
-            hold on
+        for ii=1:length(data.results)
+            temp1(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
+            temp2(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
+            temp3(:,:,ii)=data.results(ii).MCM{2}.p_offaxis;
         end
-        baseline_handle = get(stm,'BaseLine');
-        set(baseline_handle,'LineStyle','none')
-        for kk=1:length(hrtf)
-            h{kk}=plot(varl(varl(:,2)==kk,3),varl(varl(:,2)==kk,1),sym(kk),'MarkerEdgeColor','b','MarkerFaceColor','b');
-            plot(varr(varr(:,2)==kk,3),varr(varr(:,2)==kk,1),sym(kk),'MarkerEdgeColor','g','MarkerFaceColor','g');
-        end
-        clear var varl varr;
-        ylabel('x_M in cm')
-        xlim([-1.5 temp+1.5])
-        ylim([-4.5 4.5])
-
-        % yM
-        subplot(413)
-        fprintf(['yM (Avg): ' num2str(mean([mean(abs(squeeze(p_offaxis{1}(3,:,:)*100))) mean(abs(squeeze(p_offaxis{2}(3,:,:)*100))) mean(abs(squeeze(p_offaxis{3}(3,:,:)*100)))])) ' cm\n'])
-        fprintf(['yM (Std): ' num2str(std([reshape(p_offaxis{1}(3,:,:)*100,1,numel(p_offaxis{1}(3,:,:))) reshape(p_offaxis{2}(3,:,:)*100,1,numel(p_offaxis{2}(3,:,:))) reshape(p_offaxis{3}(3,:,:)*100,1,numel(p_offaxis{3}(3,:,:)))])) ' cm\n'])
-        fprintf(['yM Difference (Avg): ' num2str(mean([mean(abs(diff(squeeze(p_offaxis{1}(3,:,:)*100)))) mean(abs(diff(squeeze(p_offaxis{2}(3,:,:)*100)))) mean(abs(diff(squeeze(p_offaxis{3}(3,:,:)*100))))])) 'cm\n'])
-        fprintf(['yM Difference (Std): ' num2str(std([abs(diff(squeeze(p_offaxis{1}(3,:,:)*100))) abs(diff(squeeze(p_offaxis{2}(3,:,:)*100))) abs(diff(squeeze(p_offaxis{3}(3,:,:)*100)))])) 'cm\n'])
-        temp=1;
-        for kk=1:length(hrtf)
-            var(temp:temp+size(p_onaxis{kk},3)-1,:)=[squeeze(mean(p_offaxis{kk}(3,:,:)*100,2)) kk*ones(size(p_onaxis{kk},3),1) transpose(1:size(p_onaxis{kk},3))];
-            varl(temp:temp+size(p_onaxis{kk},3)-1,:)=[squeeze(p_offaxis{kk}(3,1,:)*100) kk*ones(size(p_onaxis{kk},3),1) transpose(1:size(p_onaxis{kk},3))];
-            varr(temp:temp+size(p_onaxis{kk},3)-1,:)=[squeeze(p_offaxis{kk}(3,2,:)*100) kk*ones(size(p_onaxis{kk},3),1) transpose(1:size(p_onaxis{kk},3))];
-            temp=size(var,1)+1;
-        end
-        var=var(idx,:);
-        varl=varl(idx,:);
-        varr=varr(idx,:);
-        var(:,3)=transpose(1:size(var,1));
-        varl(:,3)=transpose(1:size(var,1));
-        varr(:,3)=transpose(1:size(var,1));
-        for ii=1:size(varl,1)
-            stm=stem(ii,varl(ii,1),'--k','BaseValue',varr(ii,1));
-            hold on
-        end
-        baseline_handle = get(stm,'BaseLine');
-        set(baseline_handle,'LineStyle','none')
-        for kk=1:length(hrtf)
-            h{kk}=plot(varl(varl(:,2)==kk,3),varl(varl(:,2)==kk,1),sym(kk),'MarkerEdgeColor','b','MarkerFaceColor','b');
-            plot(varr(varr(:,2)==kk,3),varr(varr(:,2)==kk,1),sym(kk),'MarkerEdgeColor','g','MarkerFaceColor','g');
-        end
-        clear var;
-        ylabel('y_M in cm')
-        xlim([-1.5 temp+1.5])
-        ylim([-3.5 4.5])
-
-        % zM
-        subplot(414)
-        fprintf(['Average zM: ' num2str(mean([mean(abs(squeeze(p_offaxis{1}(4,:,:)*100))) mean(abs(squeeze(p_offaxis{2}(4,:,:)*100))) mean(abs(squeeze(p_offaxis{3}(4,:,:)*100)))])) ' cm\n'])
-        fprintf(['Average zM Difference: ' num2str(mean([mean(abs(diff(squeeze(p_offaxis{1}(4,:,:)*100)))) mean(abs(diff(squeeze(p_offaxis{2}(4,:,:)*100)))) mean(abs(diff(squeeze(p_offaxis{3}(4,:,:)*100))))])) 'cm\n'])
-        temp=1;
-        for kk=1:length(hrtf)
-            var(temp:temp+size(p_onaxis{kk},3)-1,:)=[squeeze(mean(p_offaxis{kk}(4,:,:)*100,2)) kk*ones(size(p_onaxis{kk},3),1) transpose(1:size(p_onaxis{kk},3))];
-            varl(temp:temp+size(p_onaxis{kk},3)-1,:)=[squeeze(p_offaxis{kk}(4,1,:)*100) kk*ones(size(p_onaxis{kk},3),1) transpose(1:size(p_onaxis{kk},3))];
-            varr(temp:temp+size(p_onaxis{kk},3)-1,:)=[squeeze(p_offaxis{kk}(4,2,:)*100) kk*ones(size(p_onaxis{kk},3),1) transpose(1:size(p_onaxis{kk},3))];
-            temp=size(var,1)+1;
-        end
-        var=var(idx,:);
-        varl=varl(idx,:);
-        varr=varr(idx,:);
-        var(:,3)=transpose(1:size(var,1));
-        varl(:,3)=transpose(1:size(var,1));
-        varr(:,3)=transpose(1:size(var,1));
-        for ii=1:size(varl,1)
-            stm=stem(ii,varl(ii,1),'--k','BaseValue',varr(ii,1));
-            hold on
-        end
-        baseline_handle = get(stm,'BaseLine');
-        set(baseline_handle,'LineStyle','none')
-        for kk=1:length(hrtf)
-            h{kk}=plot(varl(varl(:,2)==kk,3),varl(varl(:,2)==kk,1),sym(kk),'MarkerEdgeColor','b','MarkerFaceColor','b');
-            plot(varr(varr(:,2)==kk,3),varr(varr(:,2)==kk,1),sym(kk),'MarkerEdgeColor','g','MarkerFaceColor','g');
-        end
-        clear var;
-        xlabel('Listeners')
-        ylabel('z_M in cm')
-        xlim([-1.5 temp+1.5])
-        ylim([-4.5 6.5])
+        p_onaxis{kk}=temp1;
+    %     p_offaxis{kk,1}=temp2;
+    %     p_offaxis{kk,2}=temp3;
+        clear data temp1 temp2 temp3
     end
+    data=data_ziegelwanger2014('SPHERE_ROT');
+    for ii=1:length(data.results)
+        temp(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
+    end
+    p_onaxis{4}=temp;
+    clear data temp
+    Obj=data_ziegelwanger2014('Sphere');
+    [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
+    p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
+    clear data temp Obj
+    Obj=data_ziegelwanger2014('SAT');
+    [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
+    p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
+    clear data temp Obj
+    Obj=data_ziegelwanger2014('STP');
+    [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
+    p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
+    clear data temp Obj
+    data=data_ziegelwanger2014('SPHERE_DIS');
+    for ii=1:length(data.results)
+        temp1(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
+        temp2(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
+    end
+    p_onaxis{5}=temp1;
+    p_offaxis{5}=temp2;
+    clear data temp1 temp2
+
+%plot figure
+    figure('PaperUnits','centimeters','PaperType','A4','Paperposition',[0, 0, 21, 29.7],'Units','centimeters','Position',[0 0 21 29.7],'Resize','off')
+    fs=14;%fontsize
+
+    temp=1;
+    for kk=1:3
+        varl(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
+            squeeze(p_onaxis{kk}(1,1,:)*1000);
+        varr(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
+            squeeze(p_onaxis{kk}(1,2,:)*1000);
+        temp=size(varl,1)+1;
+    end
+
+    h(1)=subplot(621);
+    binranges = -105:5:105;
+    bincounts=histc(varl(:,1)-varr(:,1),binranges);
+    bar(binranges,bincounts/sum(bincounts)*100,'Facecolor',[0.6 0.6 0.6]);
+    hold on
+    [mu,sigma]=normfit(varl(:,1)-varr(:,1));
+    y=normpdf(binranges,mu,sigma);
+    plot(binranges,y*100*5,'k','linewidth',1.1)
+    ylabel('Rel. Freq.','Fontname','Arial','Fontsize',fs)
+    xlabel('IRD (mm)','Fontname','Arial','Fontsize',fs)
+    xlim([-80,85])
+    ylim([-1,16])
+    set(gca,'xtick',[-60 -30 0 30 60])
+    clear varl varr y
+
+    for ii=1:length(h)
+        set(h(ii),'Linewidth',1.1)
+        set(h(ii),'TickLength',[0.015 0.015])
+        tmp=findobj(h(ii),'Type','patch');
+        set(tmp,'EdgeColor','k');
+    end
+    set(gcf,'color',[1 1 1])
     
 end
 
 %% Figure 8
 if flags.do_fig8
     
+%load data
     Obj=data_ziegelwanger2014('NH89');
-    
-    [~,tmp]=ziegelwanger2014(Obj,4,1);
-    toa1=tmp.toa;
-    fprintf(['Radii for left and right ear: ' num2str(tmp.p_onaxis(1,:)*100) ' cm\n'])
-    [~,tmp]=ziegelwanger2014(Obj,4,0,0);
+    toa1=Obj.Data.toaEst{4};
+    [~,tmp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
     toa2=tmp.toa;
-    fprintf(['Maximum TOA difference left: ' num2str((max(toa1(:,1))-min(toa1(:,1)))/Obj.Data.SamplingRate*1000) ' ms\n'])
-    fprintf(['Maximum TOA difference right: ' num2str((max(toa2(:,2))-min(toa1(:,2)))/Obj.Data.SamplingRate*1000) ' ms\n'])
 
-    plotziegelwanger2014(Obj,toa2-min(min(toa1)),4,'k',0,1,1,'--',1);
-    plotziegelwanger2014(Obj,toa1-min(min(toa1)),4,'k',0,1,1,'--',2);
-    plotziegelwanger2014(Obj,toa2-min(min(toa1)),4,'k',0,2,1,'-',1);
-    plotziegelwanger2014(Obj,toa1-min(min(toa1)),4,'k',0,2,1,'-',2);
+%plot figure
+    h=subplot(1,1,1);
+    plotziegelwanger2014(Obj,toa2-min(min(toa1))-1,4,'k',0,1,1,'-',3);
+    h2=plotziegelwanger2014(Obj,toa1-min(min(toa1))-1,4,'k',0,1,1,'o',1);
+    set(h2,'MarkerFaceColor',[0 0 0]);
+    h3=plotziegelwanger2014(Obj,toa2-min(min(toa1))-1,4,'k',0,2,1,'-',3);
+    set(h3,'Color',[0.5 0.5 0.5]);
+    h4=plotziegelwanger2014(Obj,toa1-min(min(toa1))-1,4,'k',0,2,1,'o',1);
+    set(h4,'MarkerFaceColor',[.5 .5 .5],'MarkerEdgeColor',[.5 .5 .5]);
 
-    xlim([-5 365])
-    ylim([-0.05 0.95])
+    xlim([-9 369])
+    ylim([-0.04 0.98])
     grid off
-    xlabel('Azimuth in degree')
-    ylabel('Relative TOA in ms');
+    xlabel(' ');
+    ylabel('Relative TOA (ms)','Fontname','Arial','Fontsize',22)
     title('')
+    set(gca,'xticklabel',{'0' '90' '180' '270' '360   '});
+    set(gca,'ytick',[0 0.2 0.4 0.6 0.8])
+    set(gca,'Fontname','Arial','fontsize',18)
+    set(h,'linewidth',2)
     
 end
 
-%% Figure 9, Figure 11
-if flags.do_fig9 || flags.do_fig11
-    
-    sym='sdo'; %plot symbols
-    clr=[0,0,255; 255,0,0; 255,255,67]/255; %plot colors
-    meclr=[0,0,255; 255,0,0; 255,255,67]/255; %marker edge colors
-    
-    if flags.do_recalc
-        data=data_ziegelwanger2014('SPHERE_DIS','recalc');
-    else
-        data=data_ziegelwanger2014('SPHERE_DIS');
+%% Figure 9
+if flags.do_fig9
+
+%load data
+    data=data_ziegelwanger2014('SPHERE_DIS');
+    for ii=1:length(data.results)
+        p_onaxis(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
     end
-    
-    if flags.do_fig9 %Figure 9
-        p1=data.results.p_onaxis(:,:,[1:3 length(data.xM)/3+1:length(data.xM)/3+3 length(data.xM)/3*2+1:length(data.xM)/3*2+3]);
-        r1=data.radius([1:3 length(data.xM)/3+1:length(data.xM)/3+3 length(data.xM)/3*2+1:length(data.xM)/3*2+3]);
-        yM1=data.yM([1:3 length(data.xM)/3+1:length(data.xM)/3+3 length(data.xM)/3*2+1:length(data.xM)/3*2+3]);
-        
-        %radii
-        subplot(211)
-%         ymax2=round(max(max(squeeze(p1(1,:,:)*100))))+1;
-        var=[squeeze(p1(1,1,:))*100 squeeze(p1(1,2,:))*100 r1/10];
-        for ch=1:size(p1,2)
-            plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
-            hold on
-        end
-        plot(r1/10,'k--')
-        clear var;
-        ylabel('r in cm')
+    p1=p_onaxis(:,:,[1:3 length(data.xM)/3+1:length(data.xM)/3+3 length(data.xM)/3*2+1:length(data.xM)/3*2+3]);
+    r1=data.radius([1:3 length(data.xM)/3+1:length(data.xM)/3+3 length(data.xM)/3*2+1:length(data.xM)/3*2+3]);
+    yM1=data.yM([1:3 length(data.xM)/3+1:length(data.xM)/3+3 length(data.xM)/3*2+1:length(data.xM)/3*2+3]);
 
-        %yM
-        subplot(212)
-        plot(-yM1*100,'k--')
-        clear var;
-        xlabel('Condition')
-        ylabel('y_M in cm ')
-    end
-    
-    if flags.do_fig11 %Figure 11
-        center=[data.xM(1:length(data.xM)/3) data.yM(1:length(data.yM)/3) data.zM(1:length(data.zM)/3)];
-        [~,idx3]=sort(squeeze(center(:,3)));
-        [~,idx2]=sort(squeeze(center(:,1)));
-        [~,idx1]=sort(squeeze(center(:,2)));
-        idx=idx3(idx2(idx1));
-        idx=[idx; idx+length(data.xM)/3; idx+length(data.xM)/3*2];
-        data.radius=data.radius(idx);
-        p_offaxis=data.results.p_offaxis(:,:,idx);
-        data.xM=data.xM(idx);
-        data.yM=data.yM(idx);
-        data.zM=data.zM(idx);
-
-        %radii
-        subplot(411)
-        ymax2=round(max(max(squeeze(p_offaxis(1,:,:)*100))))+1;
-        var=[squeeze(p_offaxis(1,1,:))*100 squeeze(p_offaxis(1,2,:))*100 data.radius/10];
-        err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-        err=reshape(err,numel(err),1);
-        temp1=err;
-        fprintf(['Radius: average err is ' num2str(mean(err)) ' cm\n']);
-        fprintf(['        standard deviation is ' num2str(std(err)) ' cm\n']);
-        fprintf(['        maximum is ' num2str(max(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        fprintf(['        average is ' num2str(mean(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        for ch=1:size(p_offaxis,2)
-            plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
-            hold on
-        end
-        plot(var(:,3),'k--')
-        ylabel('r in cm')
-        xlim([0 size(var,1)+1])
-        ylim([4.5 ymax2])
-        clear var;
-
-        %xM
-        subplot(412)
-        var=[squeeze(p_offaxis(2,1,:))*100 squeeze(p_offaxis(2,2,:))*100 -data.xM*100];
-        err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-        err=reshape(err,numel(err),1);
-        fprintf(['xM: average err is ' num2str(mean(err)) ' cm\n']);
-        fprintf(['    standard deviation is ' num2str(std(err)) ' cm\n']);
-        fprintf(['    maximum is ' num2str(max(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        fprintf(['    average is ' num2str(mean(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        for ch=1:size(p_offaxis,2)
-            plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
-            hold on
-        end  
-        plot(var(:,3),'k--')
-        ylabel('x_M in cm ')
-        xlabel([0 size(var,1)+1])
-        xlim([0 size(var,1)+1])
-        ylim([-2.5 0.5])
-        clear var;
-
-        %yM
-        subplot(413)
-        var=[squeeze(p_offaxis(3,1,:))*100 squeeze(p_offaxis(3,2,:))*100 -data.yM*100];
-        err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-        err=reshape(err,numel(err),1);
-        temp1=[temp1; err];
-        fprintf(['yM: average err is ' num2str(mean(err)) ' cm\n']);
-        fprintf(['    standard deviation is ' num2str(std(err)) ' cm\n']);
-        fprintf(['    maximum is ' num2str(max(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        fprintf(['    average is ' num2str(mean(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        for ch=1:size(p_offaxis,2)
-            plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
-            hold on
-        end
-        plot(var(:,3),'k--')
-        ylabel('y_M in cm ')
-        xlim([0 size(var,1)+1])
-        ylim([-0.5 2.5])
-        clear var;
-
-        %zM
-        subplot(414)
-        var=[squeeze(p_offaxis(4,1,:))*100 squeeze(p_offaxis(4,2,:))*100 -data.zM*100];
-        err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-        err=reshape(err,numel(err),1);
-        temp1=[temp1; err];
-        fprintf(['zM: average err is ' num2str(mean(err)) ' cm\n']);
-        fprintf(['    standard deviation is ' num2str(std(err)) ' cm\n']);
-        fprintf(['    maximum is ' num2str(max(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        fprintf(['    average is ' num2str(mean(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        for ch=1:size(p_offaxis,2)
-            plot(var(:,ch),sym(ch),'MarkerEdgeColor',meclr(ch,:),'MarkerFaceColor',clr(ch,:));
-            hold on
-        end
-        plot(var([1 3],3),'k--')
-        plot(var([2 4],3),'k--')
-        set(gca,'YTick',[-1 0])
-        xlabel('Condition')
-        ylabel('z_M in cm')
-        xlim([0 size(var,1)+1])
-        ylim([-1.5 0.5])
-        clear var;
-
-        
-        fprintf(['offset: average err is ' num2str(mean(temp1)) ' cm\n']);
-        fprintf(['        standard deviation is ' num2str(std(temp1)) ' cm\n']);
-        fprintf(['        maximum is ' num2str(max(abs(temp1))) ' cm\n']);
-    end
-end
-
-%% Figure 5 new
-if flags.do_fig5new
-    cd '/Volumes/ARI/Simulations/HRTF-TOA/SphereTorsoPinna/'
-    method=1;
-    methodLabel=['MAX';'CTD';'AGD';'MCM'];
-    clr='kbgr';
-    
-    load(['Sphere' filesep 'hrtf_M_hrtf_2ears.mat']);
-    Obj1=SOFAconvertARI2SOFA(hM,meta,stimPar);
-    load(['SphereTorso' filesep 'hrtf_M_hrtf_2ears.mat']);
-    Obj2=SOFAconvertARI2SOFA(hM,meta,stimPar);
-    load(['SphereTorsoPinna' filesep 'hrtf_M_hrtf_2ears.mat']);
-    Obj3=SOFAconvertARI2SOFA(hM,meta,stimPar);
-
+%plot figure
     figure
-    [Obj1,~]=ziegelwanger2014(Obj1,4,0,0);
-    plotziegelwanger2014(Obj1,Obj1.Data.Delay,1,clr(1),0,1,0);
-    hold on
-    [Obj2,~]=ziegelwanger2014(Obj2,4,0,0);
-    plotziegelwanger2014(Obj2,Obj2.Data.Delay,1,clr(2),0,1,0);
-    [Obj3,~]=ziegelwanger2014(Obj3,4,0,0);
-    plotziegelwanger2014(Obj3,Obj3.Data.Delay,1,clr(3),0,1,0);
-    legend('SPH','SPH+TOR','SPH+TOR+PIN','Location','NorthWest')
-    export_fig('~/Dropbox/HRTF-TOA (1)/Publications/Paper (Model)/2 Revision 1/Figures New/Fig5l.png','-png','-transparent','-m2')
-    close
-
-    figure
-    for method=1:4
-        [Obj3,results]=ziegelwanger2014(Obj3,method,0,0);
-        plotziegelwanger2014(Obj3,Obj3.Data.Delay,1,clr(method),0,1,0);
+    tmp=get(gcf,'Position');
+    set(gcf,'Position',tmp.*[1 1 1 2]);
+    sym='ox';%plot symbols
+    ms=8;%markersize
+    lw1=2;%linewidth
+    lw2=2;%linewidth
+    fs=18;%fontsize
+    ls='k-';%linestyle
+    lc=[0.5 0.5 0.5];
+    h=[];
+    
+    %radii
+    h(end+1)=subplot(611);
+    var=[squeeze(p1(1,1,:))*1000 squeeze(p1(1,2,:))*1000 r1];
+    for ch=1:size(p1,2)
+        plot(var(:,ch),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
         hold on
     end
-    legend('MAX','CTD','AGD','MCM','Location','NorthWest')
+    plot(1:3,r1(1:3),ls,'Linewidth',lw2,'color',lc)
+    hold on
+    plot(4:6,r1(4:6),ls,'Linewidth',lw2,'color',lc)
+    plot(7:9,r1(7:9),ls,'Linewidth',lw2,'color',lc)
+    set(gca,'xtick',1:9)
+    set(gca,'xticklabel',[])
+    clear var;
+    ylabel('r (mm)','Fontname','Arial','Fontsize',fs)
+    ylim([51,129])
+    xlim([0.5,9.5])
+
+    %yM
+    h(end+1)=subplot(612);
+    plot(1:3,-yM1(1:3)*1000,ls,'Linewidth',lw2,'color',lc)
+    hold on
+    plot(4:6,-yM1(4:6)*1000,ls,'Linewidth',lw2,'color',lc)
+    plot(7:9,-yM1(7:9)*1000,ls,'Linewidth',lw2,'color',lc)
+    set(gca,'xtick',1:9)
+    set(gca,'xticklabel',[])
+    clear var;
+    xlabel('Condition','Fontname','Arial','Fontsize',fs)
+    ylabel('y_M (mm) ','Fontname','Arial','Fontsize',fs)
+    ylim([-5 25])
+    xlim([0.5,9.5])
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0.02 0 0]);
+
+    for ii=1:length(h)
+        set(h(ii),'fontsize',14)
+        set(h(ii),'Linewidth',2)
+        tmp=findobj(h(ii),'Type','patch');
+        set(tmp,'EdgeColor','k');
+    end
+    set(gcf,'color',[1 1 1])
     
-    export_fig('~/Dropbox/HRTF-TOA (1)/Publications/Paper (Model)/2 Revision 1/Figures New/Fig5r.png','-png','-transparent','-m2')
-    close
 end
 
-%% Figure 6 new
-if flags.do_fig6new
-    figure('PaperUnits','centimeters','PaperType','A4','Paperposition',[0, 0, 21, 29.7],'Units','centimeters','Position',[0 0 21 29.7],'Resize','off')
-    colormap(gray);
-    xstepsize=2.5;
-    ystepsize=5;
-    methodLabel=['MAX';'CTD';'AGD';'MCM'];
-    
-    if flags.do_recalc
-        data=data_ziegelwanger2014('SPHERE_ROT','recalc');
-    else
-        data=data_ziegelwanger2014('SPHERE_ROT');
+%% Figure 11
+if flags.do_fig11
+
+%load data
+    data=data_ziegelwanger2014('SPHERE_DIS');
+    for ii=1:length(data.results)
+        p_offaxis(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
     end
+
+    center=[data.xM(1:length(data.xM)/3) data.yM(1:length(data.yM)/3) data.zM(1:length(data.zM)/3)];
+    [~,idx3]=sort(squeeze(center(:,3)));
+    [~,idx2]=sort(squeeze(center(:,1)));
+    [~,idx1]=sort(squeeze(center(:,2)));
+    idx=idx3(idx2(idx1));
+    idx=[idx; idx+length(data.xM)/3; idx+length(data.xM)/3*2];
+    data.radius=data.radius(idx);
+    p_offaxis=p_offaxis(:,:,idx);
+    data.xM=data.xM(idx);
+    data.yM=data.yM(idx);
+    data.zM=data.zM(idx);
+
+%plot figure
+    figure
+    tmp=get(gcf,'Position');
+    set(gcf,'Position',tmp.*[1 1 1.5 2]);
+    sym='ox';%plot symbols
+    ms=8;%markersize
+    lw1=2;%linewidth
+    lw2=2;%linewidth
+    fs=18;%fontsize
+    ls='k-';%linestyle
+    lc=[0.5 0.5 0.5];
+    h=[];
+
+    %radii
+    h(end+1)=subplot(611);
+    var=[squeeze(p_offaxis(1,1,:))*1000 squeeze(p_offaxis(1,2,:))*1000 data.radius];
+    plot(var(:,3),ls,'Linewidth',lw2,'color',lc)
+    hold on
+    for ch=1:size(p_offaxis,2)
+        plot(var(:,ch),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
+    end
+    ylabel('r (mm)','Fontname','Arial','Fontsize',fs)
+    xlim([-1 size(var,1)+2])
+    ylim([72 108])
+    set(gca,'xtick',1:size(var,1))
+    set(gca,'xticklabel',[])
+    clear var;
+
+    %xM
+    h(end+1)=subplot(612);
+    var=[squeeze(p_offaxis(2,1,:))*1000 squeeze(p_offaxis(2,2,:))*1000 -data.xM*1000];
+    plot(var(:,3),ls,'Linewidth',lw2,'color',lc)
+    hold on
+    for ch=1:size(p_offaxis,2)
+        plot(var(:,ch),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
+    end  
+    ylabel('x_M (mm) ','Fontname','Arial','Fontsize',fs)
+    xlim([-1 size(var,1)+2])
+    ylim([-28 8])
+    set(gca,'xtick',1:size(var,1))
+    set(gca,'xticklabel',[])
+    clear var;
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0.02 0 0]);
+
+    %yM
+    h(end+1)=subplot(613);
+    var=[squeeze(p_offaxis(3,1,:))*1000 squeeze(p_offaxis(3,2,:))*1000 -data.yM*1000];
+    plot(var(:,3),ls,'Linewidth',lw2,'color',lc)
+    hold on
+    for ch=1:size(p_offaxis,2)
+        plot(var(:,ch),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
+    end
+    ylabel('y_M (mm) ','Fontname','Arial','Fontsize',fs)
+    xlim([-1 size(var,1)+2])
+    ylim([-8 28])
+    set(gca,'xtick',1:size(var,1))
+    set(gca,'xticklabel',[])
+    clear var;
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0.04 0 0]);
+
+    %zM
+    h(end+1)=subplot(614);
+    var=[squeeze(p_offaxis(4,1,:))*1000 squeeze(p_offaxis(4,2,:))*1000 -data.zM*1000];
+    plot([1 size(var,1)],var([1 3],3),ls,'Linewidth',lw2,'color',lc)
+    hold on
+    plot([1 size(var,1)],var([2 4],3),ls,'Linewidth',lw2,'color',lc)
+    for ch=1:size(p_offaxis,2)
+        plot(var(:,ch),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
+    end
+    % set(gca,'YTick',[-10 0])
+    ylabel('z_M (mm)','Fontname','Arial','Fontsize',fs)
+    xlim([-1 size(var,1)+2])
+    ylim([-14 4])
+    set(gca,'xtick',1:size(var,1))
+    set(gca,'xticklabel',[])
+    clear var;
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0.06 0 0]);
+
+    %phi
+    h(end+1)=subplot(615);
+    var=[squeeze(p_offaxis(6,1,:))/pi*180 squeeze(p_offaxis(6,2,:))/pi*180 ones(length(data.zM),1)*90 -ones(length(data.zM),1)*90];
+    for ch=1:size(p_offaxis,2)
+        plot(abs(var(:,2+ch)),ls,'Linewidth',lw2,'color',lc)
+        hold on
+    end
+    for ch=1:size(p_offaxis,2)
+        plot(abs(var(:,ch)),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
+    end
+    set(gca,'YTick',[-90 90])
+    ylabel('   _e (deg)','Fontname','Arial','Fontsize',fs)
+    xlim([-1 size(var,1)+2])
+    ylim([82,98])
+    set(gca,'xtick',1:size(var,1))
+    set(gca,'xticklabel',[])
+    set(gca,'ytick',[85 90 95])
+    set(gca,'yticklabel',{'�85','�90','�95'})
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0.08 0 0]);
+    clear var;
+
+    %theta
+    h(end+1)=subplot(616);
+    var=[squeeze(p_offaxis(7,1,:))/pi*180 squeeze(p_offaxis(7,2,:))/pi*180 zeros(length(data.zM),1) zeros(length(data.zM),1)];
+    for ch=1:size(p_offaxis,2)
+        plot(var(:,2+ch),ls,'Linewidth',lw2,'color',lc)
+        hold on
+    end
+    for ch=1:size(p_offaxis,2)
+        plot(var(:,ch),['k' sym(ch)],'Markersize',ms,'Linewidth',lw1);
+    end
+    ylabel('\theta_e (deg)','Fontname','Arial','Fontsize',fs)
+    xlabel('Condition','Fontname','Arial','Fontsize',fs)
+    ylim([-7,7])
+    xlim([-1 size(var,1)+2])
+    set(gca,'xtick',1:size(var,1))
+    set(gca,'xticklabel',[])
+    set(gca,'ytick',[-5 0 5])
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0.10 0 0]);
+    clear var;
+
+    for ii=1:length(h)
+        set(h(ii),'fontsize',14)
+        set(h(ii),'Linewidth',2)
+        tmp=findobj(h(ii),'Type','patch');
+        set(tmp,'EdgeColor','k');
+    end
+    set(gcf,'color',[1 1 1])
+    
+end
+
+%% Table 1
+if flags.do_tab1
+    
+%load data
+    data=data_ziegelwanger2014('SPHERE_ROT');
     for ii=1:length(data.results)
         p_onaxis{1}(:,:,ii)=data.results(ii).MAX{1}.p_onaxis;
         p_onaxis{2}(:,:,ii)=data.results(ii).CTD{1}.p_onaxis;
         p_onaxis{3}(:,:,ii)=data.results(ii).AGD{1}.p_onaxis;
         p_onaxis{4}(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
-        p_onaxisbin{1}(:,1,ii)=data.results(ii).MAX{1}.p_onaxisbin;
-        p_onaxisbin{2}(:,1,ii)=data.results(ii).CTD{1}.p_onaxisbin;
-        p_onaxisbin{3}(:,1,ii)=data.results(ii).AGD{1}.p_onaxisbin;
-        p_onaxisbin{4}(:,1,ii)=data.results(ii).MCM{1}.p_onaxisbin;
     end
-    
+    resnormS=zeros(length(data.results),4);
     for ii=1:length(data.results)
         resnormS(ii,1)=mean([data.results(ii).MAX{1}.performance.on_axis{1}.resnormS ...
             data.results(ii).MAX{1}.performance.on_axis{2}.resnormS]);
@@ -1010,13 +1030,17 @@ if flags.do_fig6new
             data.results(ii).MCM{1}.performance.on_axis{2}.resnormS]);
     end
     
-    idx=find(abs(data.phi)~=40);
-    
-    fprintf(['Resnorm (MAX): ' num2str(mean(resnormS(:,1))) ' samples\n']);
-    fprintf(['Resnorm (CTD): ' num2str(mean(resnormS(:,2))) ' samples\n']);
-%     fprintf(['Resnorm (AGD): ' num2str(mean(resnormS(:,3))) ' samples\n']);
-    fprintf(['Resnorm (MCM): ' num2str(mean(resnormS(:,4))) ' samples\n']);
-    
+    out=zeros(4,8);
+    out(1,7)=mean(resnormS(:,1))*1e6;
+    out(2,7)=mean(resnormS(:,2))*1e6;
+    out(3,7)=mean(resnormS(:,3))*1e6;
+    out(4,7)=mean(resnormS(:,4))*1e6;
+    out(1,8)=std(resnormS(:,1))*1e6;
+    out(2,8)=std(resnormS(:,2))*1e6;
+    out(3,8)=std(resnormS(:,3))*1e6;
+    out(4,8)=std(resnormS(:,4))*1e6;
+
+    idx=1:size(p_onaxis{1},3);
     % radii
     varl=[[squeeze(p_onaxis{1}(1,1,idx)) ...
         squeeze(p_onaxis{2}(1,1,idx))...
@@ -1028,72 +1052,36 @@ if flags.do_fig6new
         squeeze(p_onaxis{3}(1,2,idx)) ...
         squeeze(p_onaxis{4}(1,2,idx))]*1000 ...
         data.radius(idx)];
-    var=[[squeeze(p_onaxisbin{1}(1,1,idx)) ...
-        squeeze(p_onaxisbin{2}(1,1,idx))...
-        squeeze(p_onaxisbin{3}(1,1,idx)) ...
-        squeeze(p_onaxisbin{4}(1,1,idx))]*1000 ...
-        data.radius(idx)];
     err=abs([varl(:,1:4); varr(:,1:4)]-[varl(:,5); varr(:,5)]*[1 1 1 1]);
-    fprintf(['Radius (MAX): average err is ' num2str(mean(err(:,1))) ' cm\n']);
-    fprintf(['              standard deviation is ' num2str(std(err(:,1))) ' cm\n']);
-    fprintf(['Radius (CTD): average err is ' num2str(mean(err(:,2))) ' cm\n']);
-    fprintf(['              standard deviation is ' num2str(std(err(:,2))) ' cm\n']);
-%     fprintf(['Radius (AGD): average err is ' num2str(mean(err(:,3))) ' cm\n']);
-%     fprintf(['              standard deviation is ' num2str(std(err(:,3))) ' cm\n']);
-    fprintf(['Radius (MCM): average err is ' num2str(mean(err(:,4))) ' cm\n']);
-    fprintf(['              standard deviation is ' num2str(std(err(:,4))) ' cm\n']);
-
-    h(1)=subplot(631);
-    hist(varl(:,[1 2 4]),0:xstepsize:200)
-    xlim([70,105])
-    xlabel('r in mm (left ear)')
-    ylabel('Relative Frequency')
-    set(h(1),'XTick',[77.5 87.5 97.5])
-    h(2)=subplot(632);
-    hist(varr(:,[1 2 4]),0:xstepsize:200)
-    xlim([70,105])
-    xlabel('r in mm (right ear)')
-    set(h(2),'XTick',[77.5 87.5 97.5])
-%     h(3)=subplot(633);
-%     hist(var(:,[1 2 4]),0:xstepsize:200)
-%     xlim([70,105])
-%     xlabel('r in mm')
-%     set(h(3),'XTick',[77.5 87.5 97.5])
-    clear var varl varr
+    out(1,1)=mean(err(:,1));
+    out(2,1)=mean(err(:,2));
+    out(3,1)=mean(err(:,3));
+    out(4,1)=mean(err(:,4));
+    out(1,2)=std(err(:,1));
+    out(2,2)=std(err(:,2));
+    out(3,2)=std(err(:,3));
+    out(4,2)=std(err(:,4));
 
     %phi
     varl=[[squeeze(p_onaxis{1}(2,1,idx)) ...
         squeeze(p_onaxis{2}(2,1,idx))...
         squeeze(p_onaxis{3}(2,1,idx)) ...
         squeeze(p_onaxis{4}(2,1,idx))]/pi*180 ...
-        -data.phi(idx)+ones(length(data.phi(idx)),1)*90];
+        data.phi(idx)+ones(length(data.phi(idx)),1)*90];
     varr=[mod([squeeze(p_onaxis{1}(2,2,idx)) ...
         squeeze(p_onaxis{2}(2,2,idx))...
         squeeze(p_onaxis{3}(2,2,idx)) ...
         squeeze(p_onaxis{4}(2,2,idx))]/pi*180,360) ...
-        mod(-data.phi(idx)-ones(length(data.phi(idx)),1)*90,360)];
+        mod(data.phi(idx)-ones(length(data.phi(idx)),1)*90,360)];
     err=abs([varl(:,1:4); varr(:,1:4)]-[varl(:,5); varr(:,5)]*[1 1 1 1]);
-    fprintf(['Phi (MAX): average err is ' num2str(mean(err(:,1))) 'deg\n']);
-    fprintf(['           standard deviation is ' num2str(std(err(:,1))) 'deg\n']);
-    fprintf(['Phi (CTD): average err is ' num2str(mean(err(:,2))) 'deg\n']);
-    fprintf(['           standard deviation is ' num2str(std(err(:,2))) 'deg\n']);
-%     fprintf(['Phi (AGD): average err is ' num2str(mean(err(:,3))) 'deg\n']);
-%     fprintf(['           standard deviation is ' num2str(std(err(:,3))) 'deg\n']);
-    fprintf(['Phi (MCM): average err is ' num2str(mean(err(:,4))) 'deg\n']);
-    fprintf(['           standard deviation is ' num2str(std(err(:,4))) 'deg\n']);
-
-    h(4)=subplot(6,3,4);
-    hist(varl(:,[1 2 4]),50:ystepsize:130)
-    xlim([55,125])
-    xlabel('phi_e in degree (left ear)')
-    ylabel('Relative Frequency')
-    set(h(4),'XTick',60:10:120)
-    h(5)=subplot(6,3,5);
-    hist(varr(:,[1 2 4]),230:ystepsize:310)
-    xlim([235,305])
-    xlabel('phi_e in degree (right ear)')
-    set(h(5),'XTick',240:10:300)
-    clear varl varr
+    out(1,3)=mean(err(:,1));
+    out(2,3)=mean(err(:,2));
+    out(3,3)=mean(err(:,3));
+    out(4,3)=mean(err(:,4));
+    out(1,4)=std(err(:,1));
+    out(2,4)=std(err(:,2));
+    out(3,4)=std(err(:,3));
+    out(4,4)=std(err(:,4));
 
     %theta
     varl=[[squeeze(p_onaxis{1}(3,1,idx)) ...
@@ -1107,1281 +1095,460 @@ if flags.do_fig6new
         squeeze(p_onaxis{4}(3,2,idx))]/pi*180 ...
         -data.theta(idx)];
     err=abs([varl(:,1:4); varr(:,1:4)]-[varl(:,5); varr(:,5)]*[1 1 1 1]);
-    fprintf(['Theta (MAX): average err is ' num2str(mean(err(:,1))) 'deg\n']);
-    fprintf(['             standard deviation is ' num2str(std(err(:,1))) 'deg\n']);
-    fprintf(['Theta (CTD): average err is ' num2str(mean(err(:,2))) 'deg\n']);
-    fprintf(['             standard deviation is ' num2str(std(err(:,2))) 'deg\n']);
-%     fprintf(['Theta (AGD): average err is ' num2str(mean(err(:,3))) 'deg\n']);
-%     fprintf(['             standard deviation is ' num2str(std(err(:,3))) 'deg\n']);
-    fprintf(['Theta (MCM): average err is ' num2str(mean(err(:,4))) 'deg\n']);
-    fprintf(['             standard deviation is ' num2str(std(err(:,4))) 'deg\n']);
-    
-    h(6)=subplot(6,3,7);
-    hist(varl(:,[1 2 4])-1,-20:xstepsize:20)
-    xlim([-15,15])
-    xlabel('\theta_e in degree (left ear)')
-    ylabel('Relative Frequency')
-    set(h(6),'XTick',-10:5:10)
-    h(7)=subplot(6,3,8);
-    hist(varr(:,[1 2 4])-1,-20:xstepsize:20)
-    xlim([-15,15])
-    xlabel('\theta_e in degree (right ear)')
-    set(h(7),'XTick',-10:5:10)
-    leg=legend('MAX','CTD','MCM');
-    XYData=get(leg,'Position');
-    XYData(1)=XYData(1)+XYData(3)/4*3;
-    XYData(3)=XYData(3)/4;
-    set(leg,'Position',XYData);
-    leg1=findobj(leg,'type','text');
-    set(leg1,'FontSize',8)
-    clear varl varr leg
-        
-    for ii=[1:2 4:7]
-        set(h(ii),'Linewidth',2)
-        tmp=findobj(h(ii),'Type','patch');
-        set(tmp,'EdgeColor','k');
+    out(1,5)=mean(err(:,1));
+    out(2,5)=mean(err(:,2));
+    out(3,5)=mean(err(:,3));
+    out(4,5)=mean(err(:,4));
+    out(1,6)=std(err(:,1));
+    out(2,6)=std(err(:,2));
+    out(3,6)=std(err(:,3));
+    out(4,6)=std(err(:,4));
+
+%display data
+    rows=['MAX ||';...
+        'CTD ||';...
+        'AGD ||';...
+        'MCM ||'];...
+    fprintf('\nTab. I.:\n')
+    fprintf('----------------------------------------------------------------------\n')
+    fprintf('EST || r error (mm) | phi_e error (deg) | theta_e errror |  ANR (탎)  \n')
+    fprintf('----------------------------------------------------------------------\n')
+    fprintf('----------------------------------------------------------------------\n')
+    for ii=1:4
+        fprintf(rows(ii,:))
+        fprintf('   %4.1f � %3.1f |        %4.1f � %3.1f |     %4.1f � %3.1f | %4.1f � %3.1f\n',out(ii,:)');
     end
-    
-    export_fig('~/Dropbox/HRTF-TOA (1)/Publications/Paper (Model)/2 Revision 1/Figures New/Fig6.png','-png','-r300')
-    close
+    fprintf('----------------------------------------------------------------------\n\n')
+
 end
 
-%% Figure 7, Figure 12 new
-if flags.do_fig7new || flags.do_fig12new
-    
-    hrtf={'ARI','CIPIC','LISTEN'};
+%% Table 2
+if flags.do_tab2
 
-    %-------------------------------Load Data----------------------------------
+%load data
+    out=zeros(3,16);
+    Obj1=data_ziegelwanger2014('Sphere');
+    for method=1:4
+        [Obj1,results]=ziegelwanger2014(Obj1,Obj1.Data.toaEst{method},0,1,[[0.08; pi/18*8; 0; 0] [0.08; -pi/18*10; 0; 0]]);
+        out(1,method+0)=results.p_onaxis(1,1)*1000;
+        out(1,method+4)=results.p_onaxis(2,1)*180/pi;
+        out(1,method+8)=results.p_onaxis(3,1)*180/pi-1;
+        out(1,method+12)=results.performance.on_axis{1}.resnormS*1e06;
+    end
+    Obj2=data_ziegelwanger2014('SAT');
+    for method=1:4
+        [Obj2,results]=ziegelwanger2014(Obj2,Obj2.Data.toaEst{method},0,1,[[0.08; pi/18*8; 0; 0] [0.08; -pi/18*10; 0; 0]]);
+        out(2,method+0)=results.p_onaxis(1,1)*1000;
+        out(2,method+4)=results.p_onaxis(2,1)*180/pi;
+        out(2,method+8)=results.p_onaxis(3,1)*180/pi-1;
+        out(2,method+12)=results.performance.on_axis{1}.resnormS*1e06;
+    end
+    Obj3=data_ziegelwanger2014('STP');
+    for method=1:4
+        [Obj3,results]=ziegelwanger2014(Obj3,Obj3.Data.toaEst{method},0,1,[[0.08; pi/18*8; 0; 0] [0.08; -pi/18*10; 0; 0]]);
+        out(3,method+0)=results.p_onaxis(1,1)*1000;
+        out(3,method+4)=results.p_onaxis(2,1)*180/pi;
+        out(3,method+8)=results.p_onaxis(3,1)*180/pi-1;
+        out(3,method+12)=results.performance.on_axis{1}.resnormS*1e06;
+    end
+
+%display data
+    rows=['Sphere ||';...
+        'SAT    ||';...
+        'STP    ||'];
+    fprintf('\nTab. II.:\n')
+    fprintf('----------------------------------------------------------------------------------------------------------\n')
+    fprintf('       ||     r error (mm)       |   phi_e error (deg)   |    theta_e errror     |       ANR (탎)        \n')
+    fprintf('       || MAX | CTD | AGD  | MCM | MAX | CTD | AGD | MCM | MAX | CTD | AGD | MCM | MAX | CTD | AGD | MCM \n')
+    fprintf('----------------------------------------------------------------------------------------------------------\n')
+    fprintf('----------------------------------------------------------------------------------------------------------\n')
+    for ii=1:3
+        fprintf(rows(ii,:))
+        fprintf(' %4.1f| %4.1f| %4.1f| %4.1f| %4.1f| %4.1f| %4.1f| %4.1f| %4.1f| %4.1f| %4.1f| %4.1f| %4.1f| %4.1f| %4.1f| %4.1f\n',out(ii,:)');
+    end
+    fprintf('----------------------------------------------------------------------------------------------------------\n\n')
+
+end
+
+%% Table 3
+if flags.do_tab3
+
+%load data
+    out=zeros(4,8);
+    hrtf={'ARI','CIPIC','LISTEN'};
     for kk=1:length(hrtf)
-        if flags.do_recalc
-            data=data_ziegelwanger2014(hrtf{kk},'recalc');
-        else
-            data=data_ziegelwanger2014(hrtf{kk});
-        end
+        data=data_ziegelwanger2014(hrtf{kk});
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
-        temp1=zeros(size(data.results(1).MCM{1}.p_onaxis,1),size(data.results(1).MCM{1}.p_onaxis,2),length(data.results));
-        temp3=zeros(size(data.results(1).MCM{1}.p_offaxis,1),size(data.results(1).MCM{1}.p_offaxis,2),length(data.results));
         for ii=1:length(data.results)
             temp1(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
-            temp3(:,1:size(data.results(ii).MCM{1}.p_offaxis,2),ii)=data.results(ii).MCM{1}.p_offaxis;
-            temp5(ii)=mean([data.results(ii).MCM{1}.performance.on_axis{1}.resnormS ...
+            temp3(ii)=mean([data.results(ii).MCM{1}.performance.on_axis{1}.resnormS ...
                 data.results(ii).MCM{1}.performance.on_axis{2}.resnormS]);
-            temp7(ii)=mean([data.results(ii).MCM{1}.performance.off_axis{1}.resnormS ...
-                data.results(ii).MCM{1}.performance.off_axis{2}.resnormS]);
-            temp9(ii)=mean([data.results(ii).MCM{1}.performance.on_axis{1}.resnormP ...
+            temp5(ii)=mean([data.results(ii).MCM{1}.performance.on_axis{1}.resnormP ...
                 data.results(ii).MCM{1}.performance.on_axis{2}.resnormP]);
-            temp11(ii)=mean([data.results(ii).MCM{1}.performance.off_axis{1}.resnormP ...
-                data.results(ii).MCM{1}.performance.off_axis{2}.resnormP]);
-            temp13(ii)=data.results(ii).MCM{1}.performance.outlierRate;
+            temp8(ii)=data.results(ii).MCM{1}.performance.on_axis{1}.resnormS;
+            temp9(ii)=data.results(ii).MCM{1}.performance.on_axis{2}.resnormS;
         end
-        p_onaxis{kk,1}=temp1;
-        p_offaxis{kk,1}=temp3;
-        resnormS_onaxis{kk,1}=temp5;
-        resnormS_offaxis{kk,1}=temp7;
-        resnormP_onaxis{kk,1}=temp9;
-        resnormP_offaxis{kk,1}=temp11;
-        outlierRate{kk,2}=temp13;
+        p_onaxis{kk}=temp1;
+        resnormS_onaxis{kk}=temp3;
+        resnormP_onaxis{kk}=temp5;
+        resnormS_onaxis_left{kk}=temp8;
+        resnormS_onaxis_right{kk}=temp9;
+        clear temp1 temp3 temp5 temp8 temp9
     end
-    
-    for kk=1:length(hrtf)
-        if flags.do_recalc
-            data=data_ziegelwanger2014(hrtf{kk},'recalc');
-        else
-            data=data_ziegelwanger2014(hrtf{kk});
-        end
-        if kk==3
-            data.results=data.results([1:27 29:end]);
-        end
-        temp1=zeros(size(data.results(1).MCM{2}.p_onaxis,1),size(data.results(1).MCM{2}.p_onaxis,2),length(data.results));
-        temp3=zeros(size(data.results(1).MCM{2}.p_offaxis,1),size(data.results(1).MCM{2}.p_offaxis,2),length(data.results));
-        for ii=1:length(data.results)
-            temp1(:,:,ii)=data.results(ii).MCM{2}.p_onaxis;
-            temp3(:,1:size(data.results(ii).MCM{2}.p_offaxis,2),ii)=data.results(ii).MCM{2}.p_offaxis;
-            temp5(ii)=mean([data.results(ii).MCM{2}.performance.on_axis{1}.resnormS ...
-                data.results(ii).MCM{2}.performance.on_axis{2}.resnormS]);
-            temp7(ii)=mean([data.results(ii).MCM{2}.performance.off_axis{1}.resnormS ...
-                data.results(ii).MCM{2}.performance.off_axis{2}.resnormS]);
-            temp9(ii)=mean([data.results(ii).MCM{2}.performance.on_axis{1}.resnormP ...
-                data.results(ii).MCM{2}.performance.on_axis{2}.resnormP]);
-            temp11(ii)=mean([data.results(ii).MCM{2}.performance.off_axis{1}.resnormP ...
-                data.results(ii).MCM{2}.performance.off_axis{2}.resnormP]);
-            temp13(ii)=data.results(ii).MCM{2}.performance.outlierRate;
-        end
-        p_onaxis{kk,2}=temp1;
-        p_offaxis{kk,2}=temp3;
-        resnormS_onaxis{kk,2}=temp5;
-        resnormS_offaxis{kk,2}=temp7;
-        resnormP_onaxis{kk,2}=temp9;
-        resnormP_offaxis{kk,2}=temp11;
-        outlierRate{kk,2}=temp13;
-    end
-    
-    if flags.do_fig7new %Figure 7
-        
-        figure('PaperUnits','centimeters','PaperType','A4','Paperposition',[0, 0, 21, 29.7],'Units','centimeters','Position',[0 0 21 29.7],'Resize','off')
-        colormap(gray);
-        xstepsize=2;
-        ystepsize=2;
-% % %         fprintf('\nOn-AxisBin Model:\n')
-% % %         fprintf(['\nResnormS (all,without outlier-detection):      ' num2str(mean([resnormS_onaxisbin{1,1} resnormS_onaxisbin{2,1} resnormS_onaxisbin{3,1}])) ' samples\n']);
-% % %         fprintf(['ResnormS (all,with outlier-detection:          ' num2str(mean([resnormS_onaxisbin{1,2} resnormS_onaxisbin{2,2} resnormS_onaxisbin{3,2}])) ' samples\n']);
-% % %         fprintf(['ResnormP (all,with outlier-detection:          ' num2str(mean([resnormP_onaxisbin{1,2} resnormP_onaxisbin{2,2} resnormP_onaxisbin{3,2}])) ' samples\n']);
-        
-        fprintf('\nOn-Axis Model:\n')
-        fprintf(['\nResnormS (all,without outlier-detection):      ' num2str(mean([resnormS_onaxis{1,1} resnormS_onaxis{2,1} resnormS_onaxis{3,1}])) ' samples\n']);
-        fprintf(['ResnormS (all,with outlier-detection:          ' num2str(mean([resnormS_onaxis{1,2} resnormS_onaxis{2,2} resnormS_onaxis{3,2}])) ' samples\n']);
-        fprintf(['ResnormP (all,with outlier-detection:          ' num2str(mean([resnormP_onaxis{1,2} resnormP_onaxis{2,2} resnormP_onaxis{3,2}])) ' samples\n']);
-        
-        fprintf(['\nResnormS (ARI,without outlier-detection):      ' num2str(mean(resnormS_onaxis{1,1})) ' samples\n']);
-        fprintf(['ResnormS (ARI,with outlier-detection:          ' num2str(mean(resnormS_onaxis{1,2})) ' samples\n']);
-        fprintf(['ResnormP (ARI,with outlier-detection:          ' num2str(mean(resnormP_onaxis{1,2})) ' samples\n']);
-        
-        fprintf(['\nResnormS (CIPIC,without outlier-detection):    ' num2str(mean(resnormS_onaxis{2,1})) ' samples\n']);
-        fprintf(['ResnormS (CIPIC,with outlier-detection:        ' num2str(mean(resnormS_onaxis{2,2})) ' samples\n']);
-        fprintf(['ResnormP (CIPIC,without outlier-detection):    ' num2str(mean(resnormP_onaxis{2,1})) ' samples\n']);
-        fprintf(['ResnormP (CIPIC,with outlier-detection:        ' num2str(mean(resnormP_onaxis{2,2})) ' samples\n']);
-        
-        fprintf(['\nResnormS (LISTEN,without outlier-detection):   ' num2str(mean(resnormS_onaxis{3,1})) ' samples\n']);
-        fprintf(['ResnormS (LISTEN,with outlier-detection:       ' num2str(mean(resnormS_onaxis{3,2})) ' samples\n']);
-        fprintf(['ResnormP (LISTEN,with outlier-detection:       ' num2str(mean(resnormP_onaxis{3,2})) ' samples\n']);
-        
-        % radii
-        fprintf(['\nr  (Avg): ' ...
-            num2str(mean([mean(squeeze(p_onaxis{1,1}(1,:,:)*1000)) ...
-            mean(squeeze(p_onaxis{2,1}(1,:,:)*1000)) ...
-            mean(squeeze(p_onaxis{3,1}(1,:,:)*1000))])) ' mm\n'])
-        fprintf(['r  (Std): ' ...
-            num2str(std([reshape(p_onaxis{1,1}(1,:,:)*1000,1,numel(p_onaxis{1,1}(1,:,:))) ...
-            reshape(p_onaxis{2,1}(1,:,:)*1000,1,numel(p_onaxis{2,1}(1,:,:))) ...
-            reshape(p_onaxis{3,1}(1,:,:)*1000,1,numel(p_onaxis{3,1}(1,:,:)))])) ' mm\n'])
-        fprintf(['r  Difference (Avg): ' ...
-            num2str(mean([mean(abs(diff(squeeze(p_onaxis{1,1}(1,:,:)*1000)))) ...
-            mean(abs(diff(squeeze(p_onaxis{2,1}(1,:,:)*1000)))) ...
-            mean(abs(diff(squeeze(p_onaxis{3,1}(1,:,:)*1000))))])) ' mm\n'])
-        fprintf(['r  Difference (Std): ' ...
-            num2str(std([abs(diff(squeeze(p_onaxis{1,1}(1,:,:)*1000))) ...
-            abs(diff(squeeze(p_onaxis{2,1}(1,:,:)*1000))) ...
-            abs(diff(squeeze(p_onaxis{3,1}(1,:,:)*1000)))])) ' mm\n'])
-        fprintf(['r  Difference (Max): ' ...
-            num2str(max([max(abs(diff(squeeze(p_onaxis{1,1}(1,:,:)*1000)))) ...
-            max(abs(diff(squeeze(p_onaxis{2,1}(1,:,:)*1000)))) ...
-            max(abs(diff(squeeze(p_onaxis{3,1}(1,:,:)*1000))))])) ' mm\n'])
-        temp=1;
-        for kk=1:length(hrtf)
-            var(temp:temp+size(p_onaxis{kk,1},3)-1,:)= ...
-                squeeze(mean(p_onaxis{kk,1}(1,:,:)*1000,2));
-            varl(temp:temp+size(p_onaxis{kk,1},3)-1,:)= ...
-                squeeze(p_onaxis{kk,1}(1,1,:)*1000);
-            varr(temp:temp+size(p_onaxis{kk,1},3)-1,:)= ...
-                squeeze(p_onaxis{kk,1}(1,2,:)*1000);
-            temp=size(var,1)+1;
-        end
-        
-        h(1)=subplot(631);
-        hist([varl(:,1) varr(:,1)],0:xstepsize:200)
-        xlim([50,130])
-        xlabel('r in mm')
-        ylabel('Relative Frequency')
-        h(2)=subplot(632);
-        hist(abs(varr(:,1)-varl(:,1)),0:ystepsize:100)
-        xlim([0,60])
-        xlabel('\Delta r in mm')
-        clear var varl varr;
-        
-        % phi_e
-        fprintf(['\nphi_e left  (Avg): ' ...
-            num2str(mean([mean(squeeze(p_onaxis{1,1}(2,1,:)*180/pi)) ...
-            mean(squeeze(p_onaxis{2,1}(2,1,:)*180/pi)) ...
-            mean(squeeze(p_onaxis{3,1}(2,1,:)*180/pi))])) '�\n'])
-        fprintf(['phi_e right (Avg): ' ...
-            num2str(mean([mean(squeeze(p_onaxis{1,1}(2,2,:)*180/pi)) ...
-            mean(squeeze(p_onaxis{2,1}(2,2,:)*180/pi)) ...
-            mean(squeeze(p_onaxis{3,1}(2,2,:)*180/pi))])) '�\n'])
-        fprintf(['phi_e left  (Std): ' ...
-            num2str(std([reshape(p_onaxis{1,1}(2,1,:)*180/pi,1,numel(p_onaxis{1,1}(2,1,:))) ...
-            reshape(p_onaxis{2,1}(2,1,:)*180/pi,1,numel(p_onaxis{2,1}(2,1,:))) ...
-            reshape(p_onaxis{3,1}(2,1,:)*180/pi,1,numel(p_onaxis{3,1}(2,1,:)))])) '�\n'])
-        fprintf(['phi_e right (Std): ' ...
-            num2str(std([reshape(p_onaxis{1,1}(2,2,:)*180/pi,1,numel(p_onaxis{1,1}(2,2,:))) ...
-            reshape(p_onaxis{2,1}(2,2,:)*180/pi,1,numel(p_onaxis{2,1}(2,2,:))) ...
-            reshape(p_onaxis{3,1}(2,2,:)*180/pi,1,numel(p_onaxis{3,1}(2,2,:)))])) '�\n'])
-        temp=1;
-        for kk=1:length(hrtf)
-            varl(temp:temp+size(p_onaxis{kk,1},3)-1,:)= ...
-                squeeze(p_onaxis{kk,1}(2,1,:))*180/pi;
-            varr(temp:temp+size(p_onaxis{kk,1},3)-1,:)= ...
-                mod(squeeze(p_onaxis{kk,1}(2,2,:))*180/pi,360);
-            temp=size(varl,1)+1;
-        end
-        
-        h(3)=subplot(634);
-        hist(varl(:,1),45:xstepsize:135)
-        xlim([45,135])
-        xlabel('phi_e in degree (left ear)')
-        ylabel('Relative Frequency')
-        h(4)=subplot(635);
-        hist(varr(:,1),225:xstepsize:315)
-        xlim([225,315])
-        xlabel('phi_e in degree (right ear)')
-        clear varl varr
-        
-        % theta_e
-        fprintf(['\ntheta_e left  (Avg): ' ...
-            num2str(mean([mean(squeeze(p_onaxis{1,1}(3,1,:)*180/pi)) ...
-            mean(squeeze(p_onaxis{2,1}(3,1,:)*180/pi)) ...
-            mean(squeeze(p_onaxis{3,1}(3,1,:)*180/pi))])) '�\n'])
-        fprintf(['theta_e right (Avg): ' ...
-            num2str(mean([mean(squeeze(p_onaxis{1,1}(3,2,:)*180/pi)) ...
-            mean(squeeze(p_onaxis{2,1}(3,2,:)*180/pi)) ...
-            mean(squeeze(p_onaxis{3,1}(3,2,:)*180/pi))])) '�\n'])
-        fprintf(['theta_e left  (Std): ' ...
-            num2str(std([reshape(p_onaxis{1,1}(3,1,:)*180/pi,1,numel(p_onaxis{1,1}(3,1,:))) ...
-            reshape(p_onaxis{2,1}(3,1,:)*180/pi,1,numel(p_onaxis{2,1}(3,1,:))) ...
-            reshape(p_onaxis{3,1}(3,1,:)*180/pi,1,numel(p_onaxis{3,1}(3,1,:)))])) '�\n'])
-        fprintf(['theta_e right (Std): ' ...
-            num2str(std([reshape(p_onaxis{1,1}(3,2,:)*180/pi,1,numel(p_onaxis{1,1}(3,2,:))) ...
-            reshape(p_onaxis{2,1}(3,2,:)*180/pi,1,numel(p_onaxis{2,1}(3,2,:))) ...
-            reshape(p_onaxis{3,1}(3,2,:)*180/pi,1,numel(p_onaxis{3,1}(3,2,:)))])) '�\n\n'])
-        temp=1;
-        for kk=1:length(hrtf)
-            varl(temp:temp+size(p_onaxis{kk,1},3)-1,:)= ...
-                squeeze(p_onaxis{kk,1}(3,1,:))*180/pi;
-            varr(temp:temp+size(p_onaxis{kk,1},3)-1,:)= ...
-                squeeze(p_onaxis{kk,1}(3,2,:))*180/pi;
-            temp=size(varl,1)+1;
-        end
-        
-        h(5)=subplot(637);
-        hist(varl(:,1),-45:xstepsize:45)
-        xlim([-45,45])
-        xlabel('\theta_e in degree (left ear)')
-        ylabel('Relative Frequency')
-        h(6)=subplot(638);
-        hist(varr(:,1),-45:xstepsize:45)
-        xlim([-45,45])
-        xlabel('\theta_e in degree (right ear)')
-        clear varl varr
-        
-        for ii=1:length(h)
-            set(h(ii),'Linewidth',2)
-            tmp=findobj(h(ii),'Type','patch');
-            set(tmp,'EdgeColor','k');
-        end
-        
-        export_fig('~/Dropbox/HRTF-TOA (1)/Publications/Paper (Model)/2 Revision 1/Figures New/Fig7.png','-png','-r300')
-        close
-    end
-    
-    if flags.do_fig12new %Figure12
-        figure('PaperUnits','centimeters','PaperType','A4','Paperposition',[0, 0, 21, 29.7],'Units','centimeters','Position',[0 0 21 29.7],'Resize','off')
-        colormap(gray);
-        xstepsize=2;
-        ystepsize=2;
-        
-% % %         fprintf('\nOff-AxisBin Model:\n')
-% % %         fprintf(['\nResnormS (all,without outlier-detection):    ' num2str(mean([resnormS_offaxisbin{1,1} resnormS_offaxisbin{2,1} resnormS_offaxisbin{3,1}])) ' samples\n']);
-% % %         fprintf(['ResnormS (all,with outlier-detection:        ' num2str(mean([resnormS_offaxisbin{1,2} resnormS_offaxisbin{2,2} resnormS_offaxisbin{3,2}])) ' samples\n']);
-% % %         fprintf(['ResnormP (all,with outlier-detection:        ' num2str(mean([resnormP_offaxisbin{1,2} resnormP_offaxisbin{2,2} resnormP_offaxisbin{3,2}])) ' samples\n']);
-        
-        fprintf('\nOff-Axis Model:\n')
-        fprintf(['\nResnormS (all,without outlier-detection):    ' num2str(mean([resnormS_offaxis{1,1} resnormS_offaxis{2,1} resnormS_offaxis{3,1}])) ' samples\n']);
-        fprintf(['ResnormS (all,with outlier-detection:        ' num2str(mean([resnormS_offaxis{1,2} resnormS_offaxis{2,2} resnormS_offaxis{3,2}])) ' samples\n']);
-        fprintf(['ResnormP (all,with outlier-detection:        ' num2str(mean([resnormP_offaxis{1,2} resnormP_offaxis{2,2} resnormP_offaxis{3,2}])) ' samples\n']);
-        fprintf(['OutlierRate (all):                           ' num2str(mean([outlierRate{1,2} outlierRate{2,2} outlierRate{3,2}])) ' samples\n']);
-        
-        fprintf(['\nResnormS (ARI,without outlier-detection):    ' num2str(mean(resnormS_offaxis{1,1})) ' samples\n']);
-        fprintf(['ResnormS (ARI,with outlier-detection:        ' num2str(mean(resnormS_offaxis{1,2})) ' samples\n']);
-        fprintf(['ResnormP (ARI,with outlier-detection:        ' num2str(mean(resnormP_offaxis{1,2})) ' samples\n']);
-        fprintf(['OutlierRate (ARI):                           ' num2str(mean(outlierRate{1,2})) ' samples\n']);
-        
-        fprintf(['\nResnormS (CIPIC,without outlier-detection):  ' num2str(mean(resnormS_offaxis{2,1})) ' samples\n']);
-        fprintf(['ResnormS (CIPIC,with outlier-detection:      ' num2str(mean(resnormS_offaxis{2,2})) ' samples\n']);
-        fprintf(['ResnormP (CIPIC,with outlier-detection:      ' num2str(mean(resnormP_offaxis{2,2})) ' samples\n']);
-        fprintf(['OutlierRate (CIPIC):                         ' num2str(mean(outlierRate{2,2})) ' samples\n']);
-        
-        fprintf(['\nResnormS (LISTEN,without outlier-detection): ' num2str(mean(resnormS_offaxis{3,1})) ' samples\n']);
-        fprintf(['ResnormS (LISTEN,with outlier-detection:     ' num2str(mean(resnormS_offaxis{3,2})) ' samples\n']);
-        fprintf(['ResnormP (LISTEN,with outlier-detection:     ' num2str(mean(resnormP_offaxis{3,2})) ' samples\n']);
-        fprintf(['OutlierRate (LISTEN):                        ' num2str(mean(outlierRate{3,2})) ' samples\n']);
-        
-        % radii
-        fprintf(['\nr  (Avg):            ' ...
-            num2str(mean([mean(squeeze(p_offaxis{1,2}(1,:,:)*1000)) ...
-            mean(squeeze(p_offaxis{2,2}(1,:,:)*1000)) ...
-            mean(squeeze(p_offaxis{3,2}(1,:,:)*1000))])) ' mm\n'])
-        fprintf(['r  (Std):            ' ...
-            num2str(std([reshape(p_offaxis{1,2}(1,:,:)*1000,1,numel(p_offaxis{1,2}(1,:,:))) ...
-            reshape(p_offaxis{2,2}(1,:,:)*1000,1,numel(p_offaxis{2,2}(1,:,:))) ...
-            reshape(p_offaxis{3,2}(1,:,:)*1000,1,numel(p_offaxis{3,2}(1,:,:)))])) ' mm\n'])
-        fprintf(['r  Difference (Avg): ' ...
-            num2str(mean([mean(abs(diff(squeeze(p_offaxis{1,2}(1,:,:)*1000)))) ...
-            mean(abs(diff(squeeze(p_offaxis{2,2}(1,:,:)*1000)))) ...
-            mean(abs(diff(squeeze(p_offaxis{3,2}(1,:,:)*1000))))])) ' mm\n'])
-        fprintf(['r  Difference (Std): ' ...
-            num2str(std([abs(diff(squeeze(p_offaxis{1,2}(1,:,:)*1000))) ...
-            abs(diff(squeeze(p_offaxis{2,2}(1,:,:)*1000))) ...
-            abs(diff(squeeze(p_offaxis{3,2}(1,:,:)*1000)))])) ' mm\n'])
-        fprintf(['r  Difference (Max): ' ...
-            num2str(max([max(abs(diff(squeeze(p_offaxis{1,2}(1,:,:)*1000)))) ...
-            max(abs(diff(squeeze(p_offaxis{2,2}(1,:,:)*1000)))) ...
-            max(abs(diff(squeeze(p_offaxis{3,2}(1,:,:)*1000))))])) ' mm\n'])
-        
-        temp=1;
-        for kk=1:length(hrtf)
-            varl(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-                squeeze(p_offaxis{kk,2}(1,1,:)*1000);
-            varr(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-                squeeze(p_offaxis{kk,2}(1,2,:)*1000);
-% % %             var(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-% % %                 squeeze(p_offaxisbin{kk,2}(1,:,:)*1000);
-            temp=size(varl,1)+1;
-        end
-        
-        h(1)=subplot(631);
-        hist([varl(:,1) varr(:,1)],0:xstepsize:200)
-        xlim([50,130])
-        xlabel('r in mm')
-        ylabel('Relative Frequency')
-        h(2)=subplot(632);
-        hist(abs(varr(:,1)-varl(:,1)),0:ystepsize:100)
-        xlim([0,60])
-        xlabel('\Delta r in mm')
-        h(3)=subplot(633);
-% % %         hist(var(:,1),0:xstepsize:200)
-% % %         xlim([50,130])
-% % %         xlabel('r in mm')
-        clear var varl varr
 
-        %lateral displacements
-        % xM
-        subplot(412)
-        fprintf(['\nxM (Avg):            ' ...
-            num2str(mean([mean(abs(squeeze(p_offaxis{1,2}(2,:,:)*1000))) ...
-            mean(abs(squeeze(p_offaxis{2,2}(2,:,:)*1000))) ...
-            mean(abs(squeeze(p_offaxis{3,2}(2,:,:)*1000)))])) ' mm\n'])
-        fprintf(['xM (Std):            ' ...
-            num2str(std([reshape(p_offaxis{1,2}(2,:,:)*1000,1,numel(p_offaxis{1,2}(2,:,:))) ...
-            reshape(p_offaxis{2,2}(2,:,:)*1000,1,numel(p_offaxis{2,2}(2,:,:))) ...
-            reshape(p_offaxis{3,2}(2,:,:)*1000,1,numel(p_offaxis{3,2}(2,:,:)))])) ' mm\n'])
-        fprintf(['xM Difference (Avg): ' ...
-            num2str(mean([mean(abs(diff(squeeze(p_offaxis{1,2}(2,:,:)*1000)))) ...
-            mean(abs(diff(squeeze(p_offaxis{2,2}(2,:,:)*1000)))) ...
-            mean(abs(diff(squeeze(p_offaxis{3,2}(2,:,:)*1000))))])) ' mm\n'])
-        fprintf(['xM Difference (Std): ' ...
-            num2str(std([abs(diff(squeeze(p_offaxis{1,2}(2,:,:)*1000))) ...
-            abs(diff(squeeze(p_offaxis{2,2}(2,:,:)*1000))) ...
-            abs(diff(squeeze(p_offaxis{3,2}(2,:,:)*1000)))])) ' mm\n'])
-        fprintf(['xM Difference (Max): ' ...
-            num2str(max([max(abs(diff(squeeze(p_offaxis{1,2}(2,:,:)*1000)))) ...
-            max(abs(diff(squeeze(p_offaxis{2,2}(2,:,:)*1000)))) ...
-            max(abs(diff(squeeze(p_offaxis{3,2}(2,:,:)*1000))))])) ' mm\n'])
-             
-        temp=1;
-        for kk=1:length(hrtf)
-            varl(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-                squeeze(p_offaxis{kk,2}(2,1,:)*1000);
-            varr(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-                squeeze(p_offaxis{kk,2}(2,2,:)*1000);
-% % %             var(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-% % %                 squeeze(p_offaxisbin{kk,2}(2,:,:)*1000);
-            temp=size(varl,1)+1;
-        end
-        
-        h(4)=subplot(634);
-        hist([varl(:,1) varr(:,1)],-100:xstepsize:100)
-        xlim([-40,40])
-        xlabel('x_M in mm')
-        ylabel('Relative Frequency')
-        h(5)=subplot(635);
-        hist(abs(varr(:,1)-varl(:,1)),0:ystepsize:100)
-        xlim([0,60])
-        xlabel('\Delta x_M in mm')
-        h(6)=subplot(636);
-% % %         hist(var,-100:xstepsize:100)
-% % %         xlim([-40,40])
-% % %         xlabel('x_M in mm')
-        clear var varl varr
-        
-        % yM
-        subplot(413)
-        fprintf(['\nyM (Avg):            ' ...
-            num2str(mean([mean(abs(squeeze(p_offaxis{1,2}(3,:,:)*1000))) ...
-            mean(abs(squeeze(p_offaxis{2,2}(3,:,:)*1000))) ...
-            mean(abs(squeeze(p_offaxis{3,2}(3,:,:)*1000)))])) ' mm\n'])
-        fprintf(['yM (Std):            ' ...
-            num2str(std([reshape(p_offaxis{1,2}(3,:,:)*1000,1,numel(p_offaxis{1,2}(3,:,:))) ...
-            reshape(p_offaxis{2,2}(3,:,:)*1000,1,numel(p_offaxis{2,2}(3,:,:))) ...
-            reshape(p_offaxis{3,2}(3,:,:)*1000,1,numel(p_offaxis{3,2}(3,:,:)))])) ' mm\n'])
-        fprintf(['yM Difference (Avg): ' ...
-            num2str(mean([mean(abs(diff(squeeze(p_offaxis{1,2}(3,:,:)*1000)))) ...
-            mean(abs(diff(squeeze(p_offaxis{2,2}(3,:,:)*1000)))) ...
-            mean(abs(diff(squeeze(p_offaxis{3,2}(3,:,:)*1000))))])) ' mm\n'])
-        fprintf(['yM Difference (Std): ' ...
-            num2str(std([abs(diff(squeeze(p_offaxis{1,2}(3,:,:)*1000))) ...
-            abs(diff(squeeze(p_offaxis{2,2}(3,:,:)*1000))) ...
-            abs(diff(squeeze(p_offaxis{3,2}(3,:,:)*1000)))])) ' mm\n'])
-        fprintf(['yM Difference (Max): ' ...
-            num2str(max([max(abs(diff(squeeze(p_offaxis{1,2}(3,:,:)*1000)))) ...
-            max(abs(diff(squeeze(p_offaxis{2,2}(3,:,:)*1000)))) ...
-            max(abs(diff(squeeze(p_offaxis{3,2}(3,:,:)*1000))))])) ' mm\n'])
-        
-        temp=1;
-        for kk=1:length(hrtf)
-            varl(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-                squeeze(p_offaxis{kk,2}(3,1,:)*1000);
-            varr(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-                squeeze(p_offaxis{kk,2}(3,2,:)*1000);
-% % %             var(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-% % %                 squeeze(p_offaxisbin{kk,2}(3,:,:)*1000);
-            temp=size(varl,1)+1;
-        end
-        
-        h(7)=subplot(637);
-        hist([varl(:,1) varr(:,1)],-100:xstepsize:100)
-        xlim([-40,40])
-        xlabel('y_M in mm')
-        ylabel('Relative Frequency')
-        h(8)=subplot(638);
-        hist(abs(varr(:,1)-varl(:,1)),0:ystepsize:100)
-        xlim([0,60])
-        xlabel('\Delta y_M in mm')
-        h(9)=subplot(639);
-% % %         hist(var,-100:xstepsize:100)
-% % %         xlim([-40,40])
-% % %         xlabel('y_M in mm')
-        clear var varl varr
-
-        % zM
-        subplot(414)
-        fprintf(['\nzM (Avg):            ' ...
-            num2str(mean([mean(abs(squeeze(p_offaxis{1,2}(4,:,:)*1000))) ...
-            mean(abs(squeeze(p_offaxis{2,2}(4,:,:)*1000))) ...
-            mean(abs(squeeze(p_offaxis{3,2}(4,:,:)*1000)))])) ' mm\n'])
-        fprintf(['zM (Std):            ' ...
-            num2str(std([reshape(p_offaxis{1,2}(4,:,:)*1000,1,numel(p_offaxis{1,2}(4,:,:))) ...
-            reshape(p_offaxis{2,2}(4,:,:)*1000,1,numel(p_offaxis{2,2}(4,:,:))) ...
-            reshape(p_offaxis{3,2}(4,:,:)*1000,1,numel(p_offaxis{3,2}(4,:,:)))])) ' mm\n'])
-        fprintf(['zM Difference (Avg): ' ...
-            num2str(mean([mean(abs(diff(squeeze(p_offaxis{1,2}(4,:,:)*1000)))) ...
-            mean(abs(diff(squeeze(p_offaxis{2,2}(4,:,:)*1000)))) ...
-            mean(abs(diff(squeeze(p_offaxis{3,2}(4,:,:)*1000))))])) ' mm\n'])
-        fprintf(['zM Difference (Std): ' ...
-            num2str(std([abs(diff(squeeze(p_offaxis{1,2}(4,:,:)*1000))) ...
-            abs(diff(squeeze(p_offaxis{2,2}(4,:,:)*1000))) ...
-            abs(diff(squeeze(p_offaxis{3,2}(4,:,:)*1000)))])) ' mm\n'])
-        fprintf(['zM Difference (Max): ' ...
-            num2str(max([max(abs(diff(squeeze(p_offaxis{1,2}(4,:,:)*1000)))) ...
-            max(abs(diff(squeeze(p_offaxis{2,2}(4,:,:)*1000)))) ...
-            max(abs(diff(squeeze(p_offaxis{3,2}(4,:,:)*1000))))])) ' mm\n'])
-        temp=1;
-        for kk=1:length(hrtf)
-            varl(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-                squeeze(p_offaxis{kk,2}(4,1,:)*1000);
-            varr(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-                squeeze(p_offaxis{kk,2}(4,2,:)*1000);
-% % %             var(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-% % %                 squeeze(p_offaxisbin{kk,2}(4,:,:)*1000);
-            temp=size(varl,1)+1;
-        end
-        
-        h(10)=subplot(6,3,10);
-        hist([varl(:,1) varr(:,1)],-100:xstepsize:100)
-        xlim([-40,40])
-        xlabel('z_M in mm')
-        ylabel('Relative Frequency')
-        h(11)=subplot(6,3,11);
-        hist(abs(varr(:,1)-varl(:,1)),0:ystepsize:100)
-        xlim([0,60])
-        xlabel('\Delta z_M in mm')
-        h(12)=subplot(6,3,12);
-% % %         hist(var,-100:xstepsize:100)
-% % %         xlim([-40,40])
-% % %         xlabel('z_M in mm')
-        clear var varl varr
-
-        %ear positions
-        % phi_e
-        fprintf(['\nphi_e left  (Avg):   ' ...
-            num2str(mean([mean(squeeze(p_offaxis{1,1}(6,1,:)*180/pi)) ...
-            mean(squeeze(p_offaxis{2,1}(6,1,:)*180/pi)) ...
-            mean(squeeze(p_offaxis{3,1}(6,1,:)*180/pi))])) '�\n'])
-        fprintf(['phi_e right (Avg):   ' ...
-            num2str(mean([mean(squeeze(p_offaxis{1,1}(6,2,:)*180/pi)) ...
-            mean(squeeze(p_offaxis{2,1}(6,2,:)*180/pi)) ...
-            mean(squeeze(p_offaxis{3,1}(6,2,:)*180/pi))])) '�\n'])
-        fprintf(['phi_e left  (Std):   ' ...
-            num2str(std([reshape(p_offaxis{1,1}(6,1,:)*180/pi,1,numel(p_offaxis{1,1}(6,1,:))) ...
-            reshape(p_offaxis{2,1}(6,1,:)*180/pi,1,numel(p_offaxis{2,1}(6,1,:))) ...
-            reshape(p_offaxis{3,1}(6,1,:)*180/pi,1,numel(p_offaxis{3,1}(6,1,:)))])) '�\n'])
-        fprintf(['phi_e right (Std):   ' ...
-            num2str(std([reshape(p_offaxis{1,1}(6,2,:)*180/pi,1,numel(p_offaxis{1,1}(6,2,:))) ...
-            reshape(p_offaxis{2,1}(6,2,:)*180/pi,1,numel(p_offaxis{2,1}(6,2,:))) ...
-            reshape(p_offaxis{3,1}(6,2,:)*180/pi,1,numel(p_offaxis{3,1}(6,2,:)))])) '�\n'])
-        temp=1;
-        for kk=1:length(hrtf)
-            varl(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-                squeeze(p_offaxis{kk,2}(6,1,:))*180/pi;
-            varr(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-                mod(squeeze(p_offaxis{kk,2}(6,2,:))*180/pi,360);
-            temp=size(varl,1)+1;
-        end
-        
-        h(13)=subplot(6,3,13);
-        hist(varl(:,1),45:xstepsize:135)
-        xlim([45,135])
-        xlabel('phi_e in degree (left ear)')
-        ylabel('Relative Frequency')
-        h(14)=subplot(6,3,14);
-        hist(varr(:,1),225:xstepsize:315)
-        xlim([225,315])
-        xlabel('phi_e in degree (right ear)')
-        clear varl varr
-
-        % theta_e
-        fprintf(['\nphi_e left  (Avg):   ' ...
-            num2str(mean([mean(squeeze(p_offaxis{1,1}(7,1,:)*180/pi)) ...
-            mean(squeeze(p_offaxis{2,1}(7,1,:)*180/pi)) ...
-            mean(squeeze(p_offaxis{3,1}(7,1,:)*180/pi))])) '�\n'])
-        fprintf(['phi_e right (Avg):   ' ...
-            num2str(mean([mean(squeeze(p_offaxis{1,1}(7,2,:)*180/pi)) ...
-            mean(squeeze(p_offaxis{2,1}(7,2,:)*180/pi)) ...
-            mean(squeeze(p_offaxis{3,1}(7,2,:)*180/pi))])) '�\n'])
-        fprintf(['phi_e left  (Std):   ' ...
-            num2str(std([reshape(p_offaxis{1,1}(7,1,:)*180/pi,1,numel(p_offaxis{1,1}(7,1,:))) ...
-            reshape(p_offaxis{2,1}(7,1,:)*180/pi,1,numel(p_offaxis{2,1}(6,1,:))) ...
-            reshape(p_offaxis{3,1}(7,1,:)*180/pi,1,numel(p_offaxis{3,1}(6,1,:)))])) '�\n'])
-        fprintf(['phi_e right (Std):   ' ...
-            num2str(std([reshape(p_offaxis{1,1}(7,2,:)*180/pi,1,numel(p_offaxis{1,1}(7,2,:))) ...
-            reshape(p_offaxis{2,1}(7,2,:)*180/pi,1,numel(p_offaxis{2,1}(6,2,:))) ...
-            reshape(p_offaxis{3,1}(7,2,:)*180/pi,1,numel(p_offaxis{3,1}(6,2,:)))])) '�\n\n'])
-        temp=1;
-        for kk=1:length(hrtf)
-            varl(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-                squeeze(p_offaxis{kk,2}(7,1,:))*180/pi;
-            varr(temp:temp+size(p_onaxis{kk,2},3)-1,:)= ...
-                squeeze(p_offaxis{kk,2}(7,2,:))*180/pi;
-            temp=size(varl,1)+1;
-        end
-        
-        h(15)=subplot(6,3,16);
-        hist(varl(:,1),-45:xstepsize:45)
-        xlim([-45,45])
-        xlabel('\theta_e in degree (left ear)')
-        ylabel('Relative Frequency')
-        h(16)=subplot(6,3,17);
-        hist(varr(:,1),-45:xstepsize:45)
-        xlim([-45,45])
-        xlabel('\theta_e in degree (right ear)')
-        clear varl varr
-        
-        for ii=1:length(h)
-            set(h(ii),'Linewidth',2)
-            tmp=findobj(h(ii),'Type','patch');
-            set(tmp,'EdgeColor','k');
-        end
-        
-        export_fig('~/Fig12.png','-png','-r300')
-        export_fig('~/Dropbox/HRTF-TOA (1)/Publications/Paper (Model)/2 Revision 1/Figures New/Fig12.png','-png','-r300')
-        close
-    end
-    
-end
-
-%% Figure 8 new
-if flags.do_fig8new 
-    figure('PaperUnits','centimeters','PaperType','A4','Paperposition',[0, 0, 21, 29.7],'Units','centimeters','Position',[0 0 21 29.7],'Resize','off')
-    clear h
-    colormap(gray);
-    xstepsize=2.5;
-    ystepsize=5;
-    methodLabel=['MAX';'CTD';'AGD';'MCM'];
-    
-    if flags.do_recalc
-        data=data_ziegelwanger2014('SPHERE_DIS','recalc');
-    else
-        data=data_ziegelwanger2014('SPHERE_DIS');
-    end
-    for ii=1:length(data.results)
-        p_onaxis{1}(:,:,ii)=data.results(ii).MAX{1}.p_onaxis;
-        p_onaxis{2}(:,:,ii)=data.results(ii).CTD{1}.p_onaxis;
-        p_onaxis{3}(:,:,ii)=data.results(ii).AGD{1}.p_onaxis;
-        p_onaxis{4}(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
-    end
-    
     % radii
-    varl=[[squeeze(p_onaxis{1}(1,1,:)) ...
-        squeeze(p_onaxis{2}(1,1,:))...
-        squeeze(p_onaxis{3}(1,1,:)) ...
-        squeeze(p_onaxis{4}(1,1,:))]*1000 ...
-        data.radius(:)];
-    varr=[[squeeze(p_onaxis{1}(1,2,:)) ...
-        squeeze(p_onaxis{2}(1,2,:))...
-        squeeze(p_onaxis{3}(1,2,:)) ...
-        squeeze(p_onaxis{4}(1,2,:))]*1000 ...
-        data.radius(:)];
-    err=abs([varl(:,1:4); varr(:,1:4)]-[varl(:,5); varr(:,5)]*[1 1 1 1]);
-    fprintf(['Radius: average err is ' num2str(mean(err(:,1))) ' cm\n']);
-    fprintf(['        standard deviation is ' num2str(std(err(:,1))) ' cm\n']);
-
-    h(1)=subplot(631);
-    hist(varl(:,[1 2 4]),0:xstepsize:200)
-    xlim([50,125])
-    xlabel('r in mm (left ear)')
-    set(gca,'XMinorTick','on')
-    ylabel('Relative Frequency')
-    leg=legend('MAX','CTD','MCM','Location','NorthWest');
-    leg1=findobj(leg,'type','text');
-    set(leg1,'FontSize',8)
-    set(h(1),'XTick',[77.5 87.5 97.5])
-    h(2)=subplot(632);
-    hist(varr(:,[1 2 4]),0:xstepsize:200)
-    xlim([50,125])
-    xlabel('r in mm (right ear)')
-    set(gca,'XMinorTick','on')
-    set(h(2),'XTick',[77.5 87.5 97.5])
-    clear var varl varr
-    
-    for ii=1:length(h)
-        set(h(ii),'Linewidth',2)
-        tmp=findobj(h(ii),'Type','patch');
-        set(tmp,'EdgeColor','k');
-    end
-    
-    export_fig('~/Dropbox/HRTF-TOA (1)/Publications/Paper (Model)/2 Revision 1/Figures New/Fig8.png','-png','-r300')
-    close
-end
-
-%% Figure 10 new
-if flags.do_fig10new
-    figure('PaperUnits','centimeters','PaperType','A4','Paperposition',[0, 0, 21, 29.7],'Units','centimeters','Position',[0 0 21 29.7],'Resize','off')
-    clear h
-    colormap(gray);
-    xstepsize=2.5;
-    ystepsize=5;
-    
-    if flags.do_recalc
-        data=data_ziegelwanger2014('SPHERE_DIS','recalc');
-    else
-        data=data_ziegelwanger2014('SPHERE_DIS');
-    end
-    for ii=1:length(data.results)
-        p_offaxis{1}(:,:,ii)=data.results(ii).MAX{1}.p_offaxis;
-        p_offaxis{2}(:,:,ii)=data.results(ii).CTD{1}.p_offaxis;
-        p_offaxis{3}(:,:,ii)=data.results(ii).AGD{1}.p_offaxis;
-        p_offaxis{4}(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
-        p_offaxisbin{1}(:,:,ii)=data.results(ii).MAX{1}.p_offaxisbin(1:7);
-        p_offaxisbin{2}(:,:,ii)=data.results(ii).CTD{1}.p_offaxisbin(1:7);
-        p_offaxisbin{3}(:,:,ii)=data.results(ii).AGD{1}.p_offaxisbin(1:7);
-        p_offaxisbin{4}(:,:,ii)=data.results(ii).MCM{1}.p_offaxisbin(1:7);
-        resnormS_offaxis{1}(ii)=mean([data.results(ii).MAX{1}.performance.off_axis{1}.resnormS ...
-            data.results(ii).MAX{1}.performance.off_axis{2}.resnormS]);
-        resnormS_offaxisbin{1}(ii)=data.results(ii).MAX{1}.performance.off_axisbin.resnormS;
-        resnormP_offaxis{1}(ii)=mean([data.results(ii).MAX{1}.performance.off_axis{1}.resnormP ...
-            data.results(ii).MAX{1}.performance.off_axis{2}.resnormP]);
-        resnormP_offaxisbin{1}(ii)=data.results(ii).MAX{1}.performance.off_axisbin.resnormP;
-        resnormS_offaxis{2}(ii)=mean([data.results(ii).CTD{1}.performance.off_axis{1}.resnormS ...
-            data.results(ii).CTD{1}.performance.off_axis{2}.resnormS]);
-        resnormS_offaxisbin{2}(ii)=data.results(ii).CTD{1}.performance.off_axisbin.resnormS;
-        resnormP_offaxis{2}(ii)=mean([data.results(ii).CTD{1}.performance.off_axis{1}.resnormP ...
-            data.results(ii).CTD{1}.performance.off_axis{2}.resnormP]);
-        resnormP_offaxisbin{2}(ii)=data.results(ii).CTD{1}.performance.off_axisbin.resnormP;
-        resnormS_offaxis{3}(ii)=mean([data.results(ii).AGD{1}.performance.off_axis{1}.resnormS ...
-            data.results(ii).AGD{1}.performance.off_axis{2}.resnormS]);
-        resnormS_offaxisbin{3}(ii)=data.results(ii).AGD{1}.performance.off_axisbin.resnormS;
-        resnormP_offaxis{3}(ii)=mean([data.results(ii).AGD{1}.performance.off_axis{1}.resnormP ...
-            data.results(ii).AGD{1}.performance.off_axis{2}.resnormP]);
-        resnormP_offaxisbin{3}(ii)=data.results(ii).AGD{1}.performance.off_axisbin.resnormP;
-        resnormS_offaxis{4}(ii)=mean([data.results(ii).MCM{1}.performance.off_axis{1}.resnormS ...
-            data.results(ii).MCM{1}.performance.off_axis{2}.resnormS]);
-        resnormS_offaxisbin{4}(ii)=data.results(ii).MCM{1}.performance.off_axisbin.resnormS;
-        resnormP_offaxis{4}(ii)=mean([data.results(ii).MCM{1}.performance.off_axis{1}.resnormP ...
-            data.results(ii).MCM{1}.performance.off_axis{2}.resnormP]);
-        resnormP_offaxisbin{4}(ii)=data.results(ii).MCM{1}.performance.off_axisbin.resnormP;
-    end
-    
-    center=[data.xM(1:length(data.xM)/3) data.yM(1:length(data.yM)/3) data.zM(1:length(data.zM)/3)];
-    [~,idx3]=sort(squeeze(center(:,3)));
-    [~,idx2]=sort(squeeze(center(:,1)));
-    [~,idx1]=sort(squeeze(center(:,2)));
-    idx=idx3(idx2(idx1));
-    idx=[idx; idx+length(data.xM)/3; idx+length(data.xM)/3*2];
-    data.radius=data.radius(idx);
-    data.xM=data.xM(idx);
-    data.yM=data.yM(idx);
-    data.zM=data.zM(idx);
-    
-    fprintf('\nOff-AxisBin Model:\n')
-    fprintf(['\nResnormS (MAX): ' num2str(mean(resnormS_offaxisbin{1})) ' samples\n']);
-    fprintf(['ResnormS (CTD): ' num2str(mean(resnormS_offaxisbin{2})) ' samples\n']);
-    fprintf(['ResnormS (MCM): ' num2str(mean(resnormS_offaxisbin{4})) ' samples\n']);
-
-    fprintf('\nOff-Axis Model:\n')
-    fprintf(['\nResnormS (MAX): ' num2str(mean(resnormS_offaxis{1})) ' samples\n']);
-    fprintf(['ResnormS (CTD): ' num2str(mean(resnormS_offaxis{2})) ' samples\n']);
-    fprintf(['ResnormS (MCM): ' num2str(mean(resnormS_offaxis{4})) ' samples\n']);
-
-    %radii
-    varl=[[squeeze(p_offaxis{1}(1,1,:)) ...
-        squeeze(p_offaxis{2}(1,1,:))...
-        squeeze(p_offaxis{3}(1,1,:)) ...
-        squeeze(p_offaxis{4}(1,1,:))]*1000 ...
-        data.radius];
-    varr=[[squeeze(p_offaxis{1}(1,2,:)) ...
-        squeeze(p_offaxis{2}(1,2,:))...
-        squeeze(p_offaxis{3}(1,2,:)) ...
-        squeeze(p_offaxis{4}(1,2,:))]*1000 ...
-        data.radius];
-    var=[[squeeze(p_offaxisbin{1}(1,:,:)) ...
-        squeeze(p_offaxisbin{2}(1,:,:))...
-        squeeze(p_offaxisbin{3}(1,:,:)) ...
-        squeeze(p_offaxisbin{4}(1,:,:))]*1000 ...
-        data.radius];
-%     err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-%     err=reshape(err,numel(err),1);
-%     temp1=err;
-%     fprintf(['Radius: average err is ' num2str(mean(err)) ' cm\n']);
-%     fprintf(['        standard deviation is ' num2str(std(err)) ' cm\n']);
-%     fprintf(['        maximum is ' num2str(max(abs(var(:,1)-var(:,2)))) ' cm\n']);
-%     fprintf(['        average is ' num2str(mean(abs(var(:,1)-var(:,2)))) ' cm\n']);
-
-    h(1)=subplot(631);
-    hist([varl(:,[1 2 4]); varr(:,[1 2 4])],0:xstepsize:200)
-    xlim([70,105])
-    xlabel('r in mm')
-    ylabel('Relative Frequency')
-    set(h(1),'XTick',[77.5 87.5 97.5])
-    h(2)=subplot(632);
-    hist(abs(varr(:,[1 2 4])-varl(:,[1 2 4])),0:xstepsize:200)
-    xlim([-5,35])
-    xlabel('\Delta r in mm')
-    legend('MAX','CTD','MCM')
-    set(h(2),'XTick',[0 10 20 30])
-    h(3)=subplot(633);
-    hist(var(:,[1 2 4]),0:xstepsize:200)
-    xlim([70,105])
-    xlabel('r in mm')
-    set(h(3),'XTick',[77.5 87.5 97.5])
-    clear var varl varr
-    
-
-    %xM
-    varl=[[squeeze(p_offaxis{1}(2,1,:)) ...
-        squeeze(p_offaxis{2}(2,1,:))...
-        squeeze(p_offaxis{3}(2,1,:)) ...
-        squeeze(p_offaxis{4}(2,1,:))]*1000 ...
-        -data.xM*1000];
-    varr=[[squeeze(p_offaxis{1}(2,2,:)) ...
-        squeeze(p_offaxis{2}(2,2,:))...
-        squeeze(p_offaxis{3}(2,2,:)) ...
-        squeeze(p_offaxis{4}(2,2,:))]*1000 ...
-        -data.xM*1000];
-    var=[[squeeze(p_offaxisbin{1}(2,:,:)) ...
-        squeeze(p_offaxisbin{2}(2,:,:))...
-        squeeze(p_offaxisbin{3}(2,:,:)) ...
-        squeeze(p_offaxisbin{4}(2,:,:))]*1000 ...
-        -data.xM*1000];
-%     err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-%     err=reshape(err,numel(err),1);
-%     fprintf(['xM: average err is ' num2str(mean(err)) ' cm\n']);
-%     fprintf(['    standard deviation is ' num2str(std(err)) ' cm\n']);
-%     fprintf(['    maximum is ' num2str(max(abs(var(:,1)-var(:,2)))) ' cm\n']);
-%     fprintf(['    average is ' num2str(mean(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        
-    h(4)=subplot(634);
-    hist([varl(:,[1 2 4]); varr(:,[1 2 4])],-100:xstepsize:100)
-    xlim([-30,10])
-    xlabel('x_M in mm')
-    ylabel('Relative Frequency')
-    set(h(4),'XTick',[-20 -10 0])
-    h(5)=subplot(635);
-    hist(abs(varr(:,[1 2 4])-varl(:,[1 2 4])),0:xstepsize:100)
-    xlim([-5,35])
-    xlabel('\Delta x_M in mm')
-    set(h(5),'XTick',[0 10 20 30])    
-    h(6)=subplot(636);
-    hist(var(:,[1 2 4]),-100:xstepsize:100)
-    xlim([-30,10])
-    xlabel('x_M in mm')
-    set(h(6),'XTick',[-20 -10 0])
-    clear var varl varr
-    
-
-    %yM
-    varl=[[squeeze(p_offaxis{1}(3,1,:)) ...
-        squeeze(p_offaxis{2}(3,1,:))...
-        squeeze(p_offaxis{3}(3,1,:)) ...
-        squeeze(p_offaxis{4}(3,1,:))]*1000 ...
-        -data.yM*1000];
-    varr=[[squeeze(p_offaxis{1}(3,2,:)) ...
-        squeeze(p_offaxis{2}(3,2,:))...
-        squeeze(p_offaxis{3}(3,2,:)) ...
-        squeeze(p_offaxis{4}(3,2,:))]*1000 ...
-        -data.yM*1000];
-    var=[[squeeze(p_offaxisbin{1}(3,:,:)) ...
-        squeeze(p_offaxisbin{2}(3,:,:))...
-        squeeze(p_offaxisbin{3}(3,:,:)) ...
-        squeeze(p_offaxisbin{4}(3,:,:))]*1000 ...
-        -data.yM*1000];
-%     err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-%     err=reshape(err,numel(err),1);
-%     temp1=[temp1; err];
-%     fprintf(['yM: average err is ' num2str(mean(err)) ' cm\n']);
-%     fprintf(['    standard deviation is ' num2str(std(err)) ' cm\n']);
-%     fprintf(['    maximum is ' num2str(max(abs(var(:,1)-var(:,2)))) ' cm\n']);
-%     fprintf(['    average is ' num2str(mean(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        
-    h(7)=subplot(637);
-    hist([varl(:,[1 2 4]); varr(:,[1 2 4])],-100:xstepsize:100)
-    xlim([-10,30])
-    xlabel('y_M in mm')
-    ylabel('Relative Frequency')
-    set(h(7),'XTick',[0 10 20])
-    h(8)=subplot(638);
-    hist(abs(varr(:,[1 2 4])-varl(:,[1 2 4])),0:xstepsize:100)
-    xlim([-5,35])
-    xlabel('\Delta y_M in mm')
-    set(h(8),'XTick',[0 10 20 30])    
-    h(9)=subplot(639);
-    hist(var(:,[1 2 4]),-100:xstepsize:100)
-    xlim([-10,30])
-    xlabel('y_M in mm')
-    set(h(9),'XTick',[0 10 20])
-    clear var varl varr
-    
-
-    %zM
-    varl=[[squeeze(p_offaxis{1}(4,1,:)) ...
-        squeeze(p_offaxis{2}(4,1,:))...
-        squeeze(p_offaxis{3}(4,1,:)) ...
-        squeeze(p_offaxis{4}(4,1,:))]*1000 ...
-        -data.zM*1000];
-    varr=[[squeeze(p_offaxis{1}(4,2,:)) ...
-        squeeze(p_offaxis{2}(4,2,:))...
-        squeeze(p_offaxis{3}(4,2,:)) ...
-        squeeze(p_offaxis{4}(4,2,:))]*1000 ...
-        -data.zM*1000];
-    var=[[squeeze(p_offaxisbin{1}(4,:,:)) ...
-        squeeze(p_offaxisbin{2}(4,:,:))...
-        squeeze(p_offaxisbin{3}(4,:,:)) ...
-        squeeze(p_offaxisbin{4}(4,:,:))]*1000 ...
-        -data.zM*1000];
-%     err=abs([var(:,1) var(:,2)]-[var(:,3) var(:,3)]);
-%     err=reshape(err,numel(err),1);
-%     temp1=[temp1; err];
-%     fprintf(['zM: average err is ' num2str(mean(err)) ' cm\n']);
-%     fprintf(['    standard deviation is ' num2str(std(err)) ' cm\n']);
-%     fprintf(['    maximum is ' num2str(max(abs(var(:,1)-var(:,2)))) ' cm\n']);
-%     fprintf(['    average is ' num2str(mean(abs(var(:,1)-var(:,2)))) ' cm\n']);
-        
-    h(10)=subplot(6,3,10);
-    hist([varl(:,[1 2 4]); varr(:,[1 2 4])],-100:xstepsize:100)
-    xlim([-20,10])
-    xlabel('z_M in mm')
-    ylabel('Relative Frequency')
-    set(h(10),'XTick',[-10 0])
-    h(11)=subplot(6,3,11);
-    hist(abs(varr(:,[1 2 4])-varl(:,[1 2 4])),0:xstepsize:100)
-    xlim([-5,35])
-    xlabel('\Delta z_M in mm')
-    set(h(11),'XTick',[0 10 20 30])    
-    h(12)=subplot(6,3,12);
-    hist(var(:,[1 2 4]),-100:xstepsize:100)
-    xlim([-20,10])
-    xlabel('z_M in mm')
-    set(h(12),'XTick',[-10 0])
-    clear var varl varr
-    
-
-
-%     fprintf(['offset: average err is ' num2str(mean(temp1)) ' cm\n']);
-%     fprintf(['        standard deviation is ' num2str(std(temp1)) ' cm\n']);
-%     fprintf(['        maximum is ' num2str(max(abs(temp1))) ' cm\n']);
+    out(1,1)=mean([mean(squeeze(p_onaxis{1}(1,1,:)*1000)) ...
+        mean(squeeze(p_onaxis{2}(1,1,:)*1000)) ...
+        mean(squeeze(p_onaxis{3}(1,1,:)*1000))]);
+    out(1,2)=std([reshape(p_onaxis{1}(1,1,:)*1000,1,numel(p_onaxis{1}(1,1,:))) ...
+        reshape(p_onaxis{2}(1,1,:)*1000,1,numel(p_onaxis{2}(1,1,:))) ...
+        reshape(p_onaxis{3}(1,1,:)*1000,1,numel(p_onaxis{3}(1,1,:)))]);
+    out(2,1)=mean([mean(squeeze(p_onaxis{1}(1,2,:)*1000)) ...
+        mean(squeeze(p_onaxis{2}(1,2,:)*1000)) ...
+        mean(squeeze(p_onaxis{3}(1,2,:)*1000))]);
+    out(2,2)=std([reshape(p_onaxis{1}(1,2,:)*1000,1,numel(p_onaxis{1}(1,2,:))) ...
+        reshape(p_onaxis{2}(1,2,:)*1000,1,numel(p_onaxis{2}(1,2,:))) ...
+        reshape(p_onaxis{3}(1,2,:)*1000,1,numel(p_onaxis{3}(1,2,:)))]);
 
     % phi_e
-    varl=[squeeze(p_offaxis{1}(6,1,:)) ...
-        squeeze(p_offaxis{2}(6,1,:))...
-        squeeze(p_offaxis{3}(6,1,:)) ...
-        squeeze(p_offaxis{4}(6,1,:))]*180/pi ...
-        ;
-    varr=mod([squeeze(p_offaxis{1}(6,2,:)) ...
-        squeeze(p_offaxis{2}(6,2,:))...
-        squeeze(p_offaxis{3}(6,2,:)) ...
-        squeeze(p_offaxis{4}(6,2,:))]*180/pi,360) ...
-        ;
-
-    h(13)=subplot(6,3,13);
-    hist(varl(:,[1 2 4]),45:ystepsize:135)
-    xlim([60,120])
-    xlabel('phi_e in degree (left ear)')
-    ylabel('Relative Frequency')
-    h(14)=subplot(6,3,14);
-    hist(varr(:,[1 2 4]),225:ystepsize:315)
-    xlim([240,300])
-    xlabel('phi_e in degree (right ear)')
-%         ylabel('Relative Frequency')
-    clear varl varr
+    out(1,3)=mean([mean(squeeze(p_onaxis{1}(2,1,:)*180/pi)) ...
+        mean(squeeze(p_onaxis{2}(2,1,:)*180/pi)) ...
+        mean(squeeze(p_onaxis{3}(2,1,:)*180/pi))]);
+    out(1,4)=std([reshape(p_onaxis{1}(2,1,:)*180/pi,1,numel(p_onaxis{1}(2,1,:))) ...
+        reshape(p_onaxis{2}(2,1,:)*180/pi,1,numel(p_onaxis{2}(2,1,:))) ...
+        reshape(p_onaxis{3}(2,1,:)*180/pi,1,numel(p_onaxis{3}(2,1,:)))]);
+    out(2,3)=mean([mean(squeeze(p_onaxis{1}(2,2,:)*180/pi)) ...
+        mean(squeeze(p_onaxis{2}(2,2,:)*180/pi)) ...
+        mean(squeeze(p_onaxis{3}(2,2,:)*180/pi))]);
+    out(2,4)=std([reshape(p_onaxis{1}(2,2,:)*180/pi,1,numel(p_onaxis{1}(2,2,:))) ...
+        reshape(p_onaxis{2}(2,2,:)*180/pi,1,numel(p_onaxis{2}(2,2,:))) ...
+        reshape(p_onaxis{3}(2,2,:)*180/pi,1,numel(p_onaxis{3}(2,2,:)))]);
 
     % theta_e
-    varl=[squeeze(p_offaxis{1}(7,1,:)) ...
-        squeeze(p_offaxis{2}(7,1,:))...
-        squeeze(p_offaxis{3}(7,1,:)) ...
-        squeeze(p_offaxis{4}(7,1,:))]*180/pi ...
-        ;
-    varr=[squeeze(p_offaxis{1}(6,2,:)) ...
-        squeeze(p_offaxis{2}(6,2,:))...
-        squeeze(p_offaxis{3}(6,2,:)) ...
-        squeeze(p_offaxis{4}(6,2,:))] ...
-        ;
+    out(1,5)=mean([mean(squeeze(p_onaxis{1}(3,1,:)*180/pi)) ...
+        mean(squeeze(p_onaxis{2}(3,1,:)*180/pi)) ...
+        mean(squeeze(p_onaxis{3}(3,1,:)*180/pi))]);
+    out(1,6)=std([reshape(p_onaxis{1}(3,1,:)*180/pi,1,numel(p_onaxis{1}(3,1,:))) ...
+        reshape(p_onaxis{2}(3,1,:)*180/pi,1,numel(p_onaxis{2}(3,1,:))) ...
+        reshape(p_onaxis{3}(3,1,:)*180/pi,1,numel(p_onaxis{3}(3,1,:)))]);
+    out(2,5)=mean([mean(squeeze(p_onaxis{1}(3,2,:)*180/pi)) ...
+        mean(squeeze(p_onaxis{2}(3,2,:)*180/pi)) ...
+        mean(squeeze(p_onaxis{3}(3,2,:)*180/pi))]);
+    out(2,6)=std([reshape(p_onaxis{1}(3,2,:)*180/pi,1,numel(p_onaxis{1}(3,2,:))) ...
+        reshape(p_onaxis{2}(3,2,:)*180/pi,1,numel(p_onaxis{2}(3,2,:))) ...
+        reshape(p_onaxis{3}(3,2,:)*180/pi,1,numel(p_onaxis{3}(3,2,:)))]);
 
-    h(15)=subplot(6,3,16);
-    hist(varl(:,[1 2 4]),-45:ystepsize:45)
-    xlim([-30,30])
-    xlabel('\theta_e in degree (left ear)')
-    ylabel('Relative Frequency')
-    h(16)=subplot(6,3,17);
-    hist(varr(:,[1 2 4]),-45:ystepsize:45)
-    xlim([-30,30])
-    xlabel('\theta_e in degree (right ear)')
-%         ylabel('Relative Frequency')
-    clear varl varr
+    out(1,7)=mean([resnormS_onaxis_left{1} resnormS_onaxis_left{2} resnormS_onaxis_left{3}])*1e6;
+    out(1,8)=std([resnormS_onaxis_left{1} resnormS_onaxis_left{2} resnormS_onaxis_left{3}])*1e6;
+    out(2,7)=mean([resnormS_onaxis_right{1} resnormS_onaxis_right{2} resnormS_onaxis_right{3}])*1e6;
+    out(2,8)=std([resnormS_onaxis_right{1} resnormS_onaxis_right{2} resnormS_onaxis_right{3}])*1e6;
 
-    for ii=1:length(h)
-        set(h(ii),'Linewidth',2)
-        tmp=findobj(h(ii),'Type','patch');
-        set(tmp,'EdgeColor','k');
+    Obj=data_ziegelwanger2014('NH89');
+    [~,results]=ziegelwanger2014(Obj,4,0,1);
+
+    out(3:4,[1 3 5])=results.p_onaxis(1:3,:)'.*([1;1]*[1000 180/pi 180/pi]);
+    out(3,7)=results.performance.on_axis{1}.resnormS*1e6;
+    out(4,7)=results.performance.on_axis{2}.resnormS*1e6;
+
+%display data
+    rows=['All  |  L  ||';...
+        '     |  R  ||';...
+        'NH89 |  L  ||';...
+        '     |  R  ||'];...
+    fprintf('\nTab. III.:\n')
+    fprintf('-----------------------------------------------------------------------\n')
+    fprintf('     | Ear || r (mm)       | phi_e (deg)  | theta_e (deg) |  ANR (탎)  \n')
+    fprintf('-----------------------------------------------------------------------\n')
+    fprintf('-----------------------------------------------------------------------\n')
+    for ii=1:4
+        fprintf(rows(ii,:))
+        fprintf(' %5.1f � %4.1f | %5.1f � %4.1f |   %5.1f � %3.1f | %4.1f � %4.1f\n',out(ii,:)');
     end
+    fprintf('-----------------------------------------------------------------------\n\n')
 
-    export_fig('~/Dropbox/HRTF-TOA (1)/Publications/Paper (Model)/2 Revision 1/Figures New/Fig10.png','-png','-r300')
-    close
 end
 
+%% Table 5
+if flags.do_tab5
+    
+%load data
+    out=zeros(12,14);
+    Obj=data_ziegelwanger2014('SAT');
+    [~,results]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
+    out(1:2,[1 7 9 11 3 5])=results.p_offaxis([1:4 6:7],:)'.*([1;1]*[1000 1000 1000 1000 180/pi 180/pi]);
+    out(1,13)=results.performance.off_axis{1}.resnormS*1e6;
+    out(2,13)=results.performance.off_axis{2}.resnormS*1e6;
 
-%% Table 2 new
-if flags.do_tab2
-    cd '/Volumes/ARI/Simulations/HRTF-TOA/SphereTorsoPinna/'
-    method=1;
-    methodLabel=['MAX';'CTD';'AGD';'MCM'];
+    [~,results]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},[0.05 0.01],1);
+    out(3:4,[1 7 9 11 3 5])=results.p_offaxis([1:4 6:7],:)'.*([1;1]*[1000 1000 1000 1000 180/pi 180/pi]);
+    out(3,13)=results.performance.off_axis{1}.resnormS*1e6;
+    out(4,13)=results.performance.off_axis{2}.resnormS*1e6;
 
-    %%-Sphere------------------------------------------------------------------
-    load(['Sphere' filesep 'hrtf_M_hrtf_2ears.mat']);
-    Obj1=SOFAconvertARI2SOFA(hM,meta,stimPar);
-    pos=zeros(Obj1.DimSize.M,8);
-    pos(:,1:2)=Obj1.SourcePosition(:,1:2);
-    [pos(:,6),pos(:,7)]=sph2hor(Obj1.SourcePosition(:,1),Obj1.SourcePosition(:,2));
-    clear hM meta stimPar
-    fprintf(['\n\nSphere:\n']);
-    if flags.do_tab2
-        for method=1:4
-            [Obj1,results]=ziegelwanger2014(Obj1,method,0,0);
-            %--------------------------------------------------------------------------
-            [~,idxHor]=sort(pos(:,1));
-            epsilon=5;
-            hor_slope=zeros(Obj1.DimSize.M,1);
-            for ele=min(pos(:,2)):epsilon:max(pos(:,2)) %calculate slope for each elevation along azimuth
-                idx=find(pos(idxHor,2)>ele-epsilon/2 & pos(idxHor,2)<=ele+epsilon/2);
-                if numel(idx)>1
-                    idx(length(idx)+1)=idx(1);
-                    hor_slope(idxHor(idx(1:end-1)),1)=diff(Obj1.Data.Delay(idxHor(idx),1))./(abs(abs(abs(diff(pos(idxHor(idx),1)))-180)-180)+0.00000000001);
-                end
-            end
-            hor_sloperms=sqrt(sum(hor_slope.^2)/length(hor_slope));
-            %--------------------------------------------------------------------------
-            epsilon=2;
-            sag_dev=zeros(Obj1.DimSize.M,1);
-            sag_mean=sag_dev;
-            for lat=-90:epsilon:90
-                idx=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2);
-                if length(idx)>2
-                    sag_mean(idx,1)=mean(Obj1.Data.Delay(idx,1));
-                    sag_dev(idx,1)=Obj1.Data.Delay(idx,1)-mean(Obj1.Data.Delay(idx,1));
-                end
-            end
-            sag_min=min(sag_dev);
-            sag_max=max(sag_dev);
-            sag_var=sqrt(sum(sag_dev.^2)/length(sag_dev));
-            %--------------------------------------------------------------------------
-            fprintf(['\n' methodLabel(method,:) '\n']);
-            fprintf(['Slope in horizontal planes (RMS): ' num2str(hor_sloperms) ' samples\n']);
-            fprintf(['Variance in sagittal planes: ' num2str(sag_var) ' samples\n']);
-            fprintf(['Min deviation in sagittal planes: ' num2str(sag_min) ' samples\n']);
-            fprintf(['Max deviation in sagittal planes: ' num2str(sag_max) ' samples\n']);
-            %--------------------------------------------------------------------------
-            [Obj1,results]=ziegelwanger2014(Obj1,method,0,1);
-            fprintf(['Radius: ' num2str(results.p_onaxis(1,1)*1000) ', ' num2str(results.p_onaxis(1,2)*1000) ' mm\n'])
-            fprintf(['phi_e: ' num2str(results.p_onaxis(2,1)*180/pi) ', ' num2str(results.p_onaxis(2,2)*180/pi) ' �\n'])
-            fprintf(['theta_e: ' num2str(results.p_onaxis(3,1)*180/pi) ', ' num2str(results.p_onaxis(3,2)*180/pi) ' �\n'])
-            fprintf(['Resnorm: ' num2str(results.performance.on_axis{1}.resnormS) ' samples\n']);
-            fprintf(['Resnorm: ' num2str(results.performance.off_axis{1}.resnormS) ' samples\n']);
-        end
-    end
+    Obj=data_ziegelwanger2014('STP');
+    [~,results]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
+    out(5:6,[1 7 9 11 3 5])=results.p_offaxis([1:4 6:7],:)'.*([1;1]*[1000 1000 1000 1000 180/pi 180/pi]);
+    out(5,13)=results.performance.off_axis{1}.resnormS*1e6;
+    out(6,13)=results.performance.off_axis{2}.resnormS*1e6;
 
+    [~,results]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},[0.05 0.01],1);
+    out(7:8,[1 7 9 11 3 5])=results.p_offaxis([1:4 6:7],:)'.*([1;1]*[1000 1000 1000 1000 180/pi 180/pi]);
+    out(7,13)=results.performance.off_axis{1}.resnormS*1e6;
+    out(8,13)=results.performance.off_axis{2}.resnormS*1e6;
 
+    out(1:8,5)=out(1:8,5)-1;
 
-    %%-SphereTorso-------------------------------------------------------------
-    load(['SphereTorso' filesep 'hrtf_M_hrtf_2ears.mat']);
-    Obj2=SOFAconvertARI2SOFA(hM,meta,stimPar);
-    clear hM meta stimPar
-    fprintf(['\n\nSphereTorso:\n\n']);
-    if flags.do_tab2
-        for method=1:4
-            [Obj2,results]=ziegelwanger2014(Obj2,method,0,0);
-            %--------------------------------------------------------------------------
-            [~,idxHor]=sort(pos(:,1));
-            epsilon=5;
-            hor_slope=zeros(Obj2.DimSize.M,1);
-            for ele=min(pos(:,2)):epsilon:max(pos(:,2)) %calculate slope for each elevation along azimuth
-                idx=find(pos(idxHor,2)>ele-epsilon/2 & pos(idxHor,2)<=ele+epsilon/2);
-                if numel(idx)>1
-                    idx(length(idx)+1)=idx(1);
-                    hor_slope(idxHor(idx(1:end-1)),1)=diff(Obj2.Data.Delay(idxHor(idx),1))./(abs(abs(abs(diff(pos(idxHor(idx),1)))-180)-180)+0.00000000001);
-                end
-            end
-            hor_sloperms=sqrt(sum(hor_slope.^2)/length(hor_slope));
-            %--------------------------------------------------------------------------
-            epsilon=2;
-            sag_dev=zeros(Obj2.DimSize.M,1);
-            sag_mean=sag_dev;
-            for lat=-90:epsilon:90
-                idx=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2);
-                if length(idx)>2
-                    sag_mean(idx,1)=mean(Obj2.Data.Delay(idx,1));
-                    sag_dev(idx,1)=Obj2.Data.Delay(idx,1)-mean(Obj2.Data.Delay(idx,1));
-                end
-            end
-            sag_min=min(sag_dev);
-            sag_max=max(sag_dev);
-            sag_var=sqrt(sum(sag_dev.^2)/length(sag_dev));
-            %--------------------------------------------------------------------------
-            fprintf(['\n' methodLabel(method,:) '\n']);
-            fprintf(['Slope in horizontal planes (RMS): ' num2str(hor_sloperms) ' samples\n']);
-            fprintf(['Variance in sagittal planes: ' num2str(sag_var) ' samples\n']);
-            fprintf(['Min deviation in sagittal planes: ' num2str(sag_min) ' samples\n']);
-            fprintf(['Max deviation in sagittal planes: ' num2str(sag_max) ' samples\n']);
-            %--------------------------------------------------------------------------
-            [Obj2,results]=ziegelwanger2014(Obj2,method,0,1);
-            fprintf(['Radius: ' num2str(results.p_onaxis(1,1)*1000) ', ' num2str(results.p_onaxis(1,2)*1000) ' mm\n'])
-            fprintf(['phi_e: ' num2str(results.p_onaxis(2,1)*180/pi) ', ' num2str(results.p_onaxis(2,2)*180/pi) ' �\n'])
-            fprintf(['theta_e: ' num2str(results.p_onaxis(3,1)*180/pi) ', ' num2str(results.p_onaxis(3,2)*180/pi) ' �\n'])
-            fprintf(['Resnorm: ' num2str(results.performance.on_axis{1}.resnormS) ' samples\n']);
-            fprintf(['Resnorm: ' num2str(results.performance.off_axis{1}.resnormS) ' samples\n']);
-        end
-    end
-
-
-
-    %%-SphereTorsoPinna--------------------------------------------------------
-    load(['SphereTorsoPinna' filesep 'hrtf_M_hrtf_2ears.mat']);
-    Obj3=SOFAconvertARI2SOFA(hM,meta,stimPar);
-    clear hM meta stimPar
-    fprintf(['\n\nSphereTorsoPinna:\n']);
-    if flags.do_tab2
-        for method=1:4
-            [Obj3,results]=ziegelwanger2014(Obj3,method,0,0);
-            %--------------------------------------------------------------------------
-            [~,idxHor]=sort(pos(:,1));
-            epsilon=5;
-            hor_slope=zeros(Obj3.DimSize.M,1);
-            for ele=min(pos(:,2)):epsilon:max(pos(:,2)) %calculate slope for each elevation along azimuth
-                idx=find(pos(idxHor,2)>ele-epsilon/2 & pos(idxHor,2)<=ele+epsilon/2);
-                if numel(idx)>1
-                    idx(length(idx)+1)=idx(1);
-                    hor_slope(idxHor(idx(1:end-1)),1)=diff(Obj3.Data.Delay(idxHor(idx),1))./(abs(abs(abs(diff(pos(idxHor(idx),1)))-180)-180)+0.00000000001);
-                end
-            end
-            hor_sloperms=sqrt(sum(hor_slope.^2)/length(hor_slope));
-            %--------------------------------------------------------------------------
-            epsilon=2;
-            sag_dev=zeros(Obj3.DimSize.M,1);
-            sag_mean=sag_dev;
-            for lat=-90:epsilon:90
-                idx=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2);
-                if length(idx)>2
-                    sag_mean(idx,1)=mean(Obj3.Data.Delay(idx,1));
-                    sag_dev(idx,1)=Obj3.Data.Delay(idx,1)-mean(Obj3.Data.Delay(idx,1));
-                end
-            end
-            sag_min=min(sag_dev);
-            sag_max=max(sag_dev);
-            sag_var=sqrt(sum(sag_dev.^2)/length(sag_dev));
-            %--------------------------------------------------------------------------
-            fprintf(['\n' methodLabel(method,:) '\n']);
-            fprintf(['Slope in horizontal planes (RMS): ' num2str(hor_sloperms) ' samples\n']);
-            fprintf(['Variance in sagittal planes: ' num2str(sag_var) ' samples\n']);
-            fprintf(['Min deviation in sagittal planes: ' num2str(sag_min) ' samples\n']);
-            fprintf(['Max deviation in sagittal planes: ' num2str(sag_max) ' samples\n']);
-            %--------------------------------------------------------------------------
-            [Obj3,results]=ziegelwanger2014(Obj3,method,0,1);
-            fprintf(['Radius: ' num2str(results.p_onaxis(1,1)*1000) ', ' num2str(results.p_onaxis(1,2)*1000) ' mm\n'])
-            fprintf(['phi_e: ' num2str(results.p_onaxis(2,1)*180/pi) ', ' num2str(results.p_onaxis(2,2)*180/pi) ' �\n'])
-            fprintf(['theta_e: ' num2str(results.p_onaxis(3,1)*180/pi) ', ' num2str(results.p_onaxis(3,2)*180/pi) ' �\n'])
-            fprintf(['Resnorm: ' num2str(results.performance.on_axis{1}.resnormS) ' samples\n']);
-            fprintf(['Resnorm: ' num2str(results.performance.off_axis{1}.resnormS) ' samples\n']);
-        end
-    end
-
-
-
-    % % % %%-Simulation-------------------------------------------------------------
-    % % % load(['Simulation' filesep 'hrtf_M_hrtf.mat']);
-    % % % meta.lat=0;
-    % % % Obj5=SOFAconvertARI2SOFA(hM,meta,stimPar);
-    % % % clear hM meta stimPar
-    % % % for method=1:4
-    % % %     [Obj5,results]=ziegelwanger2014(Obj5,method,0,0);
-    % % %     %--------------------------------------------------------------------------
-    % % %     [~,idxHor]=sort(pos(:,1));
-    % % %     epsilon=5;
-    % % %     hor_slope=zeros(Obj5.DimSize.M,1);
-    % % %     for ele=min(pos(:,2)):epsilon:max(pos(:,2)) %calculate slope for each elevation along azimuth
-    % % %         idx=find(pos(idxHor,2)>ele-epsilon/2 & pos(idxHor,2)<=ele+epsilon/2);
-    % % %         if numel(idx)>1
-    % % %             idx(length(idx)+1)=idx(1);
-    % % %             hor_slope(idxHor(idx(1:end-1)),1)=diff(Obj5.Data.Delay(idxHor(idx),1))./(abs(abs(abs(diff(pos(idxHor(idx),1)))-180)-180)+0.00000000001);
-    % % %         end
-    % % %     end
-    % % %     hor_sloperms=sqrt(sum(hor_slope.^2)/length(hor_slope));
-    % % %     %--------------------------------------------------------------------------
-    % % %     epsilon=2;
-    % % %     sag_dev=zeros(Obj5.DimSize.M,1);
-    % % %     sag_mean=sag_dev;
-    % % %     for lat=-90:epsilon:90
-    % % %         idx=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2);
-    % % %         if length(idx)>2
-    % % %             sag_mean(idx,1)=mean(Obj5.Data.Delay(idx,1));
-    % % %             sag_dev(idx,1)=Obj5.Data.Delay(idx,1)-mean(Obj5.Data.Delay(idx,1));
-    % % %         end
-    % % %     end
-    % % %     sag_min=min(sag_dev);
-    % % %     sag_max=max(sag_dev);
-    % % %     sag_var=sqrt(sum(sag_dev.^2)/length(sag_dev));
-    % % %     %--------------------------------------------------------------------------
-    % % %     fprintf(['\n\nSimulation:\n\n']);
-    % % %     fprintf(['Slope in horizontal planes (RMS): ' num2str(hor_sloperms) ' samples\n']);
-    % % %     fprintf(['Variance in sagittal planes: ' num2str(sag_var) ' samples\n']);
-    % % %     fprintf(['Min deviation in sagittal planes: ' num2str(sag_min) ' samples\n']);
-    % % %     fprintf(['Max deviation in sagittal planes: ' num2str(sag_max) ' samples\n']);
-    % % %     %--------------------------------------------------------------------------
-    % % % end
-
-    %%-Measurement-------------------------------------------------------------
     hrtf={'ARI','CIPIC','LISTEN'};
-
-    %-------------------------------Load Data----------------------------------
     for kk=1:length(hrtf)
-        if flags.do_recalc
-            data=data_ziegelwanger2014(hrtf{kk},'recalc');
-        else
-            data=data_ziegelwanger2014(hrtf{kk});
-        end
+        data=data_ziegelwanger2014(hrtf{kk});
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
-        if kk==1
-            results=data.results;
-        else
-            results=[results data.results];
+        for jj=1:2
+            for ii=1:length(data.results)
+                temp1(:,:,ii)=data.results(ii).MCM{jj}.p_offaxis;
+                temp3(ii)=mean([data.results(ii).MCM{jj}.performance.off_axis{1}.resnormS ...
+                    data.results(ii).MCM{jj}.performance.off_axis{2}.resnormS]);
+                temp5(ii)=mean([data.results(ii).MCM{jj}.performance.off_axis{1}.resnormP ...
+                    data.results(ii).MCM{jj}.performance.off_axis{2}.resnormP]);
+                temp8(ii)=data.results(ii).MCM{jj}.performance.off_axis{1}.resnormS;
+                temp9(ii)=data.results(ii).MCM{jj}.performance.off_axis{2}.resnormS;
+            end
+            p_offaxis{kk,jj}=temp1;
+            resnormS_offaxis{kk,jj}=temp3;
+            resnormP_offaxis{kk,jj}=temp5;
+            resnormS_offaxis_left{kk,jj}=temp8;
+            resnormS_offaxis_right{kk,jj}=temp9;
+            clear temp1 temp3 temp5 temp8 temp9
         end
     end
-    clear data
 
-    %MAX-------------------------------------------------------------------
-    for ii=1:length(results)
-        sloperms(ii)=mean(results(ii).MAX{2}.performance.sloperms(:));
-        sag_var(ii)=mean(results(ii).MAX{2}.performance.sag_var);
-        sag_max(ii)=max(results(ii).MAX{2}.performance.sag_max);
-        resnormPon(ii)=mean([results(ii).MAX{1}.performance.on_axis{1}.resnormP ...
-            results(ii).MAX{1}.performance.on_axis{2}.resnormP]);
-        resnormPoff(ii)=mean([results(ii).MAX{2}.performance.off_axis{1}.resnormP ...
-            results(ii).MAX{2}.performance.off_axis{2}.resnormP]);
-        resnormSon(ii)=mean([results(ii).MAX{1}.performance.on_axis{1}.resnormS ...
-            results(ii).MAX{1}.performance.on_axis{2}.resnormS]);
-        resnormSoff(ii)=mean([results(ii).MAX{2}.performance.off_axis{1}.resnormS ...
-            results(ii).MAX{2}.performance.off_axis{2}.resnormS]);
+    % radii
+    for jj=1:2
+        out(9+(jj-1)*2,1)=mean([mean(squeeze(p_offaxis{1,jj}(1,1,:)*1000)) ...
+            mean(squeeze(p_offaxis{2,jj}(1,1,:)*1000)) ...
+            mean(squeeze(p_offaxis{3,jj}(1,1,:)*1000))]);
+        out(9+(jj-1)*2,2)=std([reshape(p_offaxis{1,jj}(1,1,:)*1000,1,numel(p_offaxis{1,jj}(1,1,:))) ...
+            reshape(p_offaxis{2,jj}(1,1,:)*1000,1,numel(p_offaxis{2,jj}(1,1,:))) ...
+            reshape(p_offaxis{3,jj}(1,1,:)*1000,1,numel(p_offaxis{3,jj}(1,1,:)))]);
+        out(10+(jj-1)*2,1)=mean([mean(squeeze(p_offaxis{1,jj}(1,2,:)*1000)) ...
+            mean(squeeze(p_offaxis{2,jj}(1,2,:)*1000)) ...
+            mean(squeeze(p_offaxis{3,jj}(1,2,:)*1000))]);
+        out(10+(jj-1)*2,2)=std([reshape(p_offaxis{1,jj}(1,2,:)*1000,1,numel(p_offaxis{1,jj}(1,2,:))) ...
+            reshape(p_offaxis{2,jj}(1,2,:)*1000,1,numel(p_offaxis{2,jj}(1,2,:))) ...
+            reshape(p_offaxis{3,jj}(1,2,:)*1000,1,numel(p_offaxis{3,jj}(1,2,:)))]);
     end
-    %----------------------------------------------------------------------
-    fprintf(['\n\nMeasurement:\n\n']);
-    fprintf(['MAX:\n']);
-    fprintf(['Slope in horizontal planes (RMS): ' num2str(mean(sloperms)) ' samples\n']);
-    fprintf(['Variance in sagittal planes: ' num2str(mean(sag_var)) ' samples\n']);
-    fprintf(['Max deviation in sagittal planes: ' num2str(max(sag_max)) ' samples\n']);
-    fprintf(['Resnorm P (on-axis): ' num2str(mean(resnormPon)) ' samples\n']);
-    fprintf(['Resnorm P (off-axis):' num2str(mean(resnormPoff)) ' samples\n']);
-    fprintf(['Resnorm S (on-axis): ' num2str(mean(resnormSon)) ' samples\n']);
-    fprintf(['Resnorm S (off-axis):' num2str(mean(resnormSoff)) ' samples\n']);
 
-    %CTD-------------------------------------------------------------------
-    for ii=1:length(results)
-        sloperms(ii)=mean(results(ii).CTD{2}.performance.sloperms);
-        sag_var(ii)=mean(results(ii).CTD{2}.performance.sag_var);
-        sag_max(ii)=max(results(ii).CTD{2}.performance.sag_max);
-        resnormPon(ii)=mean([results(ii).CTD{1}.performance.on_axis{1}.resnormP ...
-            results(ii).CTD{1}.performance.on_axis{2}.resnormP]);
-        resnormPoff(ii)=mean([results(ii).CTD{2}.performance.off_axis{1}.resnormP ...
-            results(ii).CTD{2}.performance.off_axis{2}.resnormP]);
-        resnormSon(ii)=mean([results(ii).CTD{1}.performance.on_axis{1}.resnormS ...
-            results(ii).CTD{1}.performance.on_axis{2}.resnormS]);
-        resnormSoff(ii)=mean([results(ii).CTD{2}.performance.off_axis{1}.resnormS ...
-            results(ii).CTD{2}.performance.off_axis{2}.resnormS]);
+    % phi_e
+    for jj=1:2
+    out(9+(jj-1)*2,3)=mean([mean(squeeze(p_offaxis{1,jj}(6,1,:)*180/pi)) ...
+        mean(squeeze(p_offaxis{2,jj}(6,1,:)*180/pi)) ...
+        mean(squeeze(p_offaxis{3,jj}(6,1,:)*180/pi))]);
+    out(9+(jj-1)*2,4)=std([reshape(p_offaxis{1,jj}(6,1,:)*180/pi,1,numel(p_offaxis{1,jj}(6,1,:))) ...
+        reshape(p_offaxis{2,jj}(6,1,:)*180/pi,1,numel(p_offaxis{2,jj}(6,1,:))) ...
+        reshape(p_offaxis{3,jj}(6,1,:)*180/pi,1,numel(p_offaxis{3,jj}(6,1,:)))]);
+    out(10+(jj-1)*2,3)=mean([mean(squeeze(p_offaxis{1,jj}(6,2,:)*180/pi)) ...
+        mean(squeeze(p_offaxis{2,jj}(6,2,:)*180/pi)) ...
+        mean(squeeze(p_offaxis{3,jj}(6,2,:)*180/pi))]);
+    out(10+(jj-1)*2,4)=std([reshape(p_offaxis{1,jj}(6,2,:)*180/pi,1,numel(p_offaxis{1,jj}(6,2,:))) ...
+        reshape(p_offaxis{2,jj}(6,2,:)*180/pi,1,numel(p_offaxis{2,jj}(6,2,:))) ...
+        reshape(p_offaxis{3,jj}(6,2,:)*180/pi,1,numel(p_offaxis{3,jj}(6,2,:)))]);
     end
-    %----------------------------------------------------------------------
-    fprintf(['CTD:\n']);
-    fprintf(['Slope in horizontal planes (RMS): ' num2str(mean(sloperms)) ' samples\n']);
-    fprintf(['Variance in sagittal planes: ' num2str(mean(sag_var)) ' samples\n']);
-    fprintf(['Max deviation in sagittal planes: ' num2str(max(sag_max)) ' samples\n']);
-    fprintf(['Resnorm P (on-axis): ' num2str(mean(resnormPon)) ' samples\n']);
-    fprintf(['Resnorm P (off-axis):' num2str(mean(resnormPoff)) ' samples\n']);
-    fprintf(['Resnorm S (on-axis): ' num2str(mean(resnormSon)) ' samples\n']);
-    fprintf(['Resnorm S (off-axis):' num2str(mean(resnormSoff)) ' samples\n']);
 
-    %AGD-------------------------------------------------------------------
-    for ii=1:length(results)
-        sloperms(ii)=mean(results(ii).AGD{2}.performance.sloperms);
-        sag_var(ii)=mean(results(ii).AGD{2}.performance.sag_var);
-        sag_max(ii)=max(results(ii).AGD{2}.performance.sag_max);
-        resnormPon(ii)=mean([results(ii).AGD{1}.performance.on_axis{1}.resnormP ...
-            results(ii).AGD{1}.performance.on_axis{2}.resnormP]);
-        resnormPoff(ii)=mean([results(ii).AGD{2}.performance.off_axis{1}.resnormP ...
-            results(ii).AGD{2}.performance.off_axis{2}.resnormP]);
-        resnormSon(ii)=mean([results(ii).AGD{1}.performance.on_axis{1}.resnormS ...
-            results(ii).AGD{1}.performance.on_axis{2}.resnormS]);
-        resnormSoff(ii)=mean([results(ii).AGD{2}.performance.off_axis{1}.resnormS ...
-            results(ii).AGD{2}.performance.off_axis{2}.resnormS]);
+    % theta_e
+    for jj=1:2
+    out(9+(jj-1)*2,5)=mean([mean(squeeze(p_offaxis{1,jj}(7,1,:)*180/pi)) ...
+        mean(squeeze(p_offaxis{2,jj}(7,1,:)*180/pi)) ...
+        mean(squeeze(p_offaxis{3,jj}(7,1,:)*180/pi))]);
+    out(9+(jj-1)*2,6)=std([reshape(p_offaxis{1,jj}(7,1,:)*180/pi,1,numel(p_offaxis{1,jj}(7,1,:))) ...
+        reshape(p_offaxis{2,jj}(7,1,:)*180/pi,1,numel(p_offaxis{2,jj}(7,1,:))) ...
+        reshape(p_offaxis{3,jj}(7,1,:)*180/pi,1,numel(p_offaxis{3,jj}(7,1,:)))]);
+    out(10+(jj-1)*2,5)=mean([mean(squeeze(p_offaxis{1,jj}(7,2,:)*180/pi)) ...
+        mean(squeeze(p_offaxis{2,jj}(7,2,:)*180/pi)) ...
+        mean(squeeze(p_offaxis{3,jj}(7,2,:)*180/pi))]);
+    out(10+(jj-1)*2,6)=std([reshape(p_offaxis{1,jj}(7,2,:)*180/pi,1,numel(p_offaxis{1,jj}(7,2,:))) ...
+        reshape(p_offaxis{2,jj}(7,2,:)*180/pi,1,numel(p_offaxis{2,jj}(7,2,:))) ...
+        reshape(p_offaxis{3,jj}(7,2,:)*180/pi,1,numel(p_offaxis{3,jj}(7,2,:)))]);
     end
-    %----------------------------------------------------------------------
-    fprintf(['AGD:\n']);
-    fprintf(['Slope in horizontal planes (RMS): ' num2str(mean(sloperms)) ' samples\n']);
-    fprintf(['Variance in sagittal planes: ' num2str(mean(sag_var)) ' samples\n']);
-    fprintf(['Max deviation in sagittal planes: ' num2str(max(sag_max)) ' samples\n']);
-    fprintf(['Resnorm P (on-axis): ' num2str(mean(resnormPon)) ' samples\n']);
-    fprintf(['Resnorm P (off-axis):' num2str(mean(resnormPoff)) ' samples\n']);
-    fprintf(['Resnorm S (on-axis): ' num2str(mean(resnormSon)) ' samples\n']);
-    fprintf(['Resnorm S (off-axis):' num2str(mean(resnormSoff)) ' samples\n']);
 
-    %MCM-------------------------------------------------------------------
-    for ii=1:length(results)
-        sloperms(ii)=mean(results(ii).MCM{2}.performance.sloperms);
-        sag_var(ii)=mean(results(ii).MCM{2}.performance.sag_var);
-        sag_max(ii)=max(results(ii).MCM{2}.performance.sag_max);
-        resnormPon(ii)=mean([results(ii).MCM{1}.performance.on_axis{1}.resnormP ...
-            results(ii).MCM{1}.performance.on_axis{2}.resnormP]);
-        resnormPoff(ii)=mean([results(ii).MCM{2}.performance.off_axis{1}.resnormP ...
-            results(ii).MCM{2}.performance.off_axis{2}.resnormP]);
-        resnormSon(ii)=mean([results(ii).MCM{1}.performance.on_axis{1}.resnormS ...
-            results(ii).MCM{1}.performance.on_axis{2}.resnormS]);
-        resnormSoff(ii)=mean([results(ii).MCM{2}.performance.off_axis{1}.resnormS ...
-            results(ii).MCM{2}.performance.off_axis{2}.resnormS]);
+    % xM
+    for jj=1:2
+        out(9+(jj-1)*2,7)=mean([mean(squeeze(p_offaxis{1,jj}(2,1,:)*1000)) ...
+            mean(squeeze(p_offaxis{2,jj}(2,1,:)*1000)) ...
+            mean(squeeze(p_offaxis{3,jj}(2,1,:)*1000))]);
+        out(9+(jj-1)*2,8)=std([reshape(p_offaxis{1,jj}(2,1,:)*1000,1,numel(p_offaxis{1,jj}(2,1,:))) ...
+            reshape(p_offaxis{2,jj}(2,1,:)*1000,1,numel(p_offaxis{2,jj}(2,1,:))) ...
+            reshape(p_offaxis{3,jj}(2,1,:)*1000,1,numel(p_offaxis{3,jj}(2,1,:)))]);
+        out(10+(jj-1)*2,7)=mean([mean(squeeze(p_offaxis{1,jj}(2,2,:)*1000)) ...
+            mean(squeeze(p_offaxis{2,jj}(2,2,:)*1000)) ...
+            mean(squeeze(p_offaxis{3,jj}(2,2,:)*1000))]);
+        out(10+(jj-1)*2,8)=std([reshape(p_offaxis{1,jj}(2,2,:)*1000,1,numel(p_offaxis{1,jj}(2,2,:))) ...
+            reshape(p_offaxis{2,jj}(2,2,:)*1000,1,numel(p_offaxis{2,jj}(2,2,:))) ...
+            reshape(p_offaxis{3,jj}(2,2,:)*1000,1,numel(p_offaxis{3,jj}(2,2,:)))]);
     end
-    %--------------------------------------------------------------------------
-    fprintf(['MCM:\n']);
-    fprintf(['Slope in horizontal planes (RMS): ' num2str(mean(sloperms)) ' samples\n']);
-    fprintf(['Variance in sagittal planes: ' num2str(mean(sag_var)) ' samples\n']);
-    fprintf(['Max deviation in sagittal planes: ' num2str(max(sag_max)) ' samples\n']);
-    fprintf(['Resnorm P (on-axis): ' num2str(mean(resnormPon)) ' samples\n']);
-    fprintf(['Resnorm P (off-axis):' num2str(mean(resnormPoff)) ' samples\n']);
-    fprintf(['Resnorm S (on-axis): ' num2str(mean(resnormSon)) ' samples\n']);
-    fprintf(['Resnorm S (off-axis):' num2str(mean(resnormSoff)) ' samples\n']);
+
+    % yM
+    for jj=1:2
+        out(9+(jj-1)*2,9)=mean([mean(squeeze(p_offaxis{1,jj}(3,1,:)*1000)) ...
+            mean(squeeze(p_offaxis{2,jj}(3,1,:)*1000)) ...
+            mean(squeeze(p_offaxis{3,jj}(3,1,:)*1000))]);
+        out(9+(jj-1)*2,10)=std([reshape(p_offaxis{1,jj}(3,1,:)*1000,1,numel(p_offaxis{1,jj}(3,1,:))) ...
+            reshape(p_offaxis{2,jj}(3,1,:)*1000,1,numel(p_offaxis{2,jj}(3,1,:))) ...
+            reshape(p_offaxis{3,jj}(3,1,:)*1000,1,numel(p_offaxis{3,jj}(3,1,:)))]);
+        out(10+(jj-1)*2,9)=mean([mean(squeeze(p_offaxis{1,jj}(3,2,:)*1000)) ...
+            mean(squeeze(p_offaxis{2,jj}(3,2,:)*1000)) ...
+            mean(squeeze(p_offaxis{3,jj}(3,2,:)*1000))]);
+        out(10+(jj-1)*2,10)=std([reshape(p_offaxis{1,jj}(3,2,:)*1000,1,numel(p_offaxis{1,jj}(3,2,:))) ...
+            reshape(p_offaxis{2,jj}(3,2,:)*1000,1,numel(p_offaxis{2,jj}(3,2,:))) ...
+            reshape(p_offaxis{3,jj}(3,2,:)*1000,1,numel(p_offaxis{3,jj}(3,2,:)))]);
+    end
+
+    % zM
+    for jj=1:2
+        out(9+(jj-1)*2,11)=mean([mean(squeeze(p_offaxis{1,jj}(4,1,:)*1000)) ...
+            mean(squeeze(p_offaxis{2,jj}(4,1,:)*1000)) ...
+            mean(squeeze(p_offaxis{3,jj}(4,1,:)*1000))]);
+        out(9+(jj-1)*2,12)=std([reshape(p_offaxis{1,jj}(4,1,:)*1000,1,numel(p_offaxis{1,jj}(4,1,:))) ...
+            reshape(p_offaxis{2,jj}(4,1,:)*1000,1,numel(p_offaxis{2,jj}(4,1,:))) ...
+            reshape(p_offaxis{3,jj}(4,1,:)*1000,1,numel(p_offaxis{3,jj}(4,1,:)))]);
+        out(10+(jj-1)*2,11)=mean([mean(squeeze(p_offaxis{1,jj}(4,2,:)*1000)) ...
+            mean(squeeze(p_offaxis{2,jj}(4,2,:)*1000)) ...
+            mean(squeeze(p_offaxis{3,jj}(4,2,:)*1000))]);
+        out(10+(jj-1)*2,12)=std([reshape(p_offaxis{1,jj}(4,2,:)*1000,1,numel(p_offaxis{1,jj}(4,2,:))) ...
+            reshape(p_offaxis{2,jj}(4,2,:)*1000,1,numel(p_offaxis{2,jj}(4,2,:))) ...
+            reshape(p_offaxis{3,jj}(4,2,:)*1000,1,numel(p_offaxis{3,jj}(4,2,:)))]);
+    end
+
+    for jj=1:2
+        out(9+(jj-1)*2,13)=mean([resnormS_offaxis_left{1,jj} resnormS_offaxis_left{2,jj} resnormS_offaxis_left{3,jj}])*1e6;
+        out(9+(jj-1)*2,14)=std([resnormS_offaxis_left{1,jj} resnormS_offaxis_left{2,jj} resnormS_offaxis_left{3,jj}])*1e6;
+        out(10+(jj-1)*2,13)=mean([resnormS_offaxis_right{1,jj} resnormS_offaxis_right{2,jj} resnormS_offaxis_right{3,jj}])*1e6;
+        out(10+(jj-1)*2,14)=std([resnormS_offaxis_right{1,jj} resnormS_offaxis_right{2,jj} resnormS_offaxis_right{3,jj}])*1e6;
+    end
+
+%display data
+
+    rows=['SAT |  Full  |  L  ||';...
+        '    |  Full  |  R  ||';...
+        '    |  O-A   |  L  ||';...
+        '    |  O-A   |  R  ||';...
+        'STP |  Full  |  L  ||';...
+        '    |  Full  |  R  ||';...
+        '    |  O-A   |  L  ||';...
+        '    |  O-A   |  R  ||';...
+        'ALL |  Full  |  L  ||';...
+        '    |  Full  |  R  ||';...
+        '    |  O-A   |  L  ||';...
+        '    |  O-A   |  R  ||'];
+    fprintf('\nTab. V.:\n')
+    fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
+    fprintf('    | TOAset | Ear || r (mm)     | phi_e (deg) | theta_e (deg)| x_M (mm)    | y_M (mm)    | z_M (mm)    |  ANR (탎)  \n')
+    fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
+    fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
+    for ii=1:12
+        fprintf(rows(ii,:))
+        fprintf(' %4.1f � %3.1f | %5.1f � %3.1f |  %5.1f � %4.1f | %4.1f � %4.1f | %4.1f � %4.1f | %4.1f � %4.1f | %4.1f � %4.1f\n',out(ii,:)');
+    end
+    fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n\n')
+
+end
+
+%% Table 6
+if flags.do_tab6
+    
+%load data
+    out=zeros(8,14);
+
+    hrtf={'SPHERE_ROT','SPHERE_DIS'};
+    for kk=1:length(hrtf)
+        data=data_ziegelwanger2014(hrtf{kk});
+        for jj=1:2
+            for ii=1:length(data.results)
+                temp1(:,:,ii)=data.results(ii).MCM{jj}.p_offaxis;
+                temp3(ii)=mean([data.results(ii).MCM{jj}.performance.off_axis{1}.resnormS ...
+                    data.results(ii).MCM{jj}.performance.off_axis{2}.resnormS]);
+                temp8(ii)=data.results(ii).MCM{jj}.performance.off_axis{1}.resnormS;
+                temp9(ii)=data.results(ii).MCM{jj}.performance.off_axis{2}.resnormS;
+            end
+            p_offaxis{kk,jj}=temp1;
+            resnormS_offaxis{kk,jj}=temp3;
+            resnormS_offaxis_left{kk,jj}=temp8;
+            resnormS_offaxis_right{kk,jj}=temp9;
+            if kk==1
+                radius{kk,jj}=[data.radius data.radius];
+                phi{kk,jj}=[90+data.phi 270+data.phi];
+                theta{kk,jj}=[data.theta -data.theta];
+                xM{kk,jj}=zeros(length(data.radius),2);
+                yM{kk,jj}=zeros(length(data.radius),2);
+                zM{kk,jj}=zeros(length(data.radius),2);
+            else
+                radius{kk,jj}=[data.radius data.radius];
+                phi{kk,jj}=ones(length(data.radius),1)*[90 270];
+                theta{kk,jj}=zeros(length(data.radius),2);
+                xM{kk,jj}=-[data.xM data.xM];
+                yM{kk,jj}=-[data.yM data.yM];
+                zM{kk,jj}=-[data.zM data.zM];
+            end
+        end
+        clear data temp1 temp3 temp8 temp9
+    end
+
+    for kk=1:2
+        for jj=1:2
+            for ch=1:2
+                err=squeeze(p_offaxis{kk,jj}(1,ch,:))*1000-radius{kk,jj}(:,ch);
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),1)=mean(err);
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),2)=std(err);
+
+                err=mod(squeeze(p_offaxis{kk,jj}(6,ch,:))*180/pi,360)-phi{kk,jj}(:,ch);
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),3)=mean(err);
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),4)=std(err);
+
+                err=squeeze(p_offaxis{kk,jj}(7,ch,:))*180/pi-theta{kk,jj}(:,ch);
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),5)=mean(err);
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),6)=std(err);
+
+                err=(squeeze(p_offaxis{kk,jj}(2,ch,:))-xM{kk,jj}(:,ch))*1000;
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),7)=mean(err);
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),8)=std(err);
+
+                err=(squeeze(p_offaxis{kk,jj}(3,ch,:))-yM{kk,jj}(:,ch))*1000;
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),9)=mean(err);
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),10)=std(err);
+
+                err=(squeeze(p_offaxis{kk,jj}(4,ch,:))-zM{kk,jj}(:,ch))*1000;
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),11)=mean(err);
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),12)=std(err);
+
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),13)=mean(resnormS_offaxis_left{kk,jj})*1e6;
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),14)=std(resnormS_offaxis_left{kk,jj})*1e6;
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),13)=mean(resnormS_offaxis_right{kk,jj})*1e6;
+                out(1+(kk-1)*4+(jj-1)*2+(ch-1),14)=std(resnormS_offaxis_right{kk,jj})*1e6;
+            end
+        end
+    end
+
+%display data
+    rows=['Centered     |  Full  |  L  ||';...
+        '             |  Full  |  R  ||';...
+        '             |  O-A   |  L  ||';...
+        '             |  O-A   |  R  ||';...
+        'Non-centered |  Full  |  L  ||';...
+        '             |  Full  |  R  ||';...
+        '             |  O-A   |  L  ||';...
+        '             |  O-A   |  R  ||'];
+    fprintf('\nTab. V.:\n')
+    fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
+    fprintf('Condition    | TOAset | Ear || r error (mm) | phi_e error (deg) | theta_e errror | x_M error (mm) | y_M error (mm) | z_M error (mm) |  ANR (탎)  \n')
+    fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
+    fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
+    for ii=1:8
+        fprintf(rows(ii,:))
+        fprintf('   %4.1f � %3.1f |        %4.1f � %3.1f |     %4.1f � %3.1f |      %4.1f � %3.1f |     %4.1f � %3.1f |     %4.1f � %3.1f | %4.1f � %3.1f\n',out(ii,:)');
+    end
+    fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n\n')
+
 end
 
 end
@@ -2391,4 +1558,25 @@ function idx=ARI_FindPosition(data,azimuth,elevation)
         cos(elevation/180*pi).*cos(data.APV(:,2)/180*pi).*...
         cos(azimuth/180*pi-data.APV(:,1)/180*pi);
     [~,idx]=min(acos(psi));
+end
+
+function [lat,pol]=geo2horpolar(azi,ele)
+    warning('off');
+
+    azi=mod(azi+360,360);
+    ele=mod(ele+360,360);
+
+    razi = deg2rad(azi);
+    rele = deg2rad(ele);
+    rlat=asin(sin(razi).*cos(rele));
+    rpol=asin(sin(rele)./cos(rlat));
+    idx=find(cos(rlat)==0);
+    rpol(idx)=0;
+    pol = rad2deg(rpol);
+    lat = rad2deg(rlat);
+
+    idx = find(razi>pi/2 & razi < 3*pi/2 & (rele < pi/2 | rele > 3*pi/2));
+    pol(idx)=180-pol(idx);
+    idx = find(~(razi>pi/2 & razi < 3*pi/2) & rele > pi/2 & rele < 3*pi/2);
+    pol(idx)=180-pol(idx);
 end

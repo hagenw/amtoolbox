@@ -1,6 +1,6 @@
 function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0_onaxis)
-%ZIEGELWANGER2013 Time of arrival estimates
-%   usage: meta=ziegelwanger2014(data,estimation,correct,p0_onaxis) 
+%ZIEGELWANGER2014 Time of arrival estimates
+%   usage: [Obj,results]=ziegelwanger2014(data,estimation,outlierDetection,model,p0_onaxis) 
 %
 %   Estimates the Time-of-Arrival for each measurement in Obj (SOFA) and
 %   corrects the results with a geometrical model of the head.
@@ -13,12 +13,19 @@ function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0
 %           2: Centroid of squared IR
 %           3: Mean Groupdelay
 %           4: Minimal-Phase Cross-Correlation (Max) (default)
-%           5: Minimal-Phase Cross-Correlation (Centroid)
-%           6: Zero-Crossing
+%           [TOAest]: pre-estimated TOAs
+%
+%       outlierDetection (optional): detect outliers in estimated TOAs
+%           0: off
+%           1: on (default values: [0.05;0.01])
+%           [alpha r]: rejects outliers using the extreme Studentized
+%             deviance test with the significance level of ALPHA and upper
+%             bound of outlier rate R. 
 %
 %       model (optional): correct estimated toa, using geometrical TOA-Model
 %           0: TOA estimated
-%           1: TOA modeled (default)
+%           1: off-axis TOA modeled (default)
+%           2: on-axis TOA modeled
 %
 %       p0_onaxis (optional): startvalues for lsqcurvefit
 %           dim 1: [sphere-radius in m,
@@ -81,21 +88,25 @@ else if isempty(estimation)
 end
 
 if ~exist('outlierDetection','var')
-    outlierDetection=1;
-else if isempty(outlierDetection)
-        outlierDetection=1;
+    outlierDetection=[0.05;0.01];
+else if isempty(outlierDetection) || (isscalar(outlierDetection) && outlierDetection(1)>0)
+        outlierDetection=[0.05;0.01];
     end
 end
+outlierDetection=prod(outlierDetection);
 
 if ~exist('model','var')
-    model=1;
-else if isempty(model)
-        model=1;
+    model=1e-6;
+else if isempty(model) || model==1
+        model=1e-6;
     end
 end
 
 if ~exist('p0_onaxis','var')
     p0_onaxis=[[0.0875; pi/2; 0; 0] [0.0875; -pi/2; 0; 0]];
+else if isempty(p0_onaxis)
+        p0_onaxis=[[0.0875; pi/2; 0; 0] [0.0875; -pi/2; 0; 0]];
+    end
 end
 
 %% -------------------------initialize variables---------------------------
@@ -105,124 +116,76 @@ p0_offaxis=zeros(2,7);
 p_offaxis=p0_offaxis;
 
 toa=zeros(Obj.API.M,Obj.API.R);
-toaEst=zeros(Obj.API.M,Obj.API.R);
+toa_onaxis=toa;
+toa_offaxis=toa;
 indicator=zeros(Obj.API.M,Obj.API.R);
-indicator_hor=indicator;
-indicator_sag=indicator;
 
 pos(:,1:2)=Obj.SourcePosition(:,1:2);
-[pos(:,6),pos(:,7)]=sph2hor(Obj.SourcePosition(:,1),Obj.SourcePosition(:,2));
-pos(:,8)=cumsum(ones(Obj.API.M,1));
-
-rs=1;
-[hM,hMmin]=ARI_MinimalPhase(Obj,rs);
 
 %% -----------------------estimate time-of-arrival-------------------------
-switch estimation
-    case 1 %---------------------------Threshold---------------------------
-        for ii=1:Obj.API.M
-            for jj=1:Obj.API.R
-                toaEst(ii,jj)=find(abs(hM(ii,jj,:))==max(abs(hM(ii,jj,:))),1);
+if isscalar(estimation)
+    hM=Obj.Data.IR;
+    
+    toaEst=zeros(Obj.API.M,Obj.API.R);
+    switch estimation
+        case 1 %---------------------------Threshold---------------------------
+            for ii=1:Obj.API.M
+                for jj=1:Obj.API.R
+                    toaEst(ii,jj)=find(abs(hM(ii,jj,:))==max(abs(hM(ii,jj,:))),1);
+                end
             end
-        end
-    case 2 %---------------------------Centroid----------------------------
-        for ii=1:Obj.API.M
-            for jj=1:Obj.API.R
-                toaEst(ii,jj)=find(cumsum(hM(ii,jj,:).^2)>(sum(hM(ii,jj,:).^2)/2),1);
+        case 2 %---------------------------Centroid----------------------------
+            for ii=1:Obj.API.M
+                for jj=1:Obj.API.R
+                    toaEst(ii,jj)=find(cumsum(hM(ii,jj,:).^2)>(sum(hM(ii,jj,:).^2)/2),1);
+                end
             end
-        end
-    case 3 %---------------------------Groupdelay--------------------------
-        for ii=1:Obj.API.M
-            for jj=1:Obj.API.R
-                [Gd,F]=grpdelay(transpose(double(squeeze(hM(ii,jj,:)))),1,Obj.API.N*4,Obj.Data.SamplingRate*4);
-                toaEst(ii,jj)=median(Gd(find(F>500):find(F>2000)));
+        case 3 %---------------------------Groupdelay--------------------------
+            for ii=1:Obj.API.M
+                for jj=1:Obj.API.R
+                    [Gd,F]=grpdelay(transpose(double(squeeze(hM(ii,jj,:)))),1,Obj.API.N*4,Obj.Data.SamplingRate*4);
+                    toaEst(ii,jj)=mean(Gd(find(F>1000):find(F>5000)));
+                end
             end
-        end
-    case 4 %---------------------------Minimal-Phase-----------------------
-        corrcoeff=zeros(Obj.API.M,Obj.API.R);
-        for ii=1:Obj.API.M
-            for jj=1:Obj.API.R
-                [c,lag]=xcorr(squeeze(hM(ii,jj,:)),squeeze(hMmin(ii,jj,:)),Obj.API.N*4-1,'none');
-                [corrcoeff(ii,jj),idx]=max(abs(c));
-                corrcoeff(ii,jj)=corrcoeff(ii,jj)/sum(hM(ii,jj,:).^2);
-                toaEst(ii,jj)=lag(idx);
+        case 4 %---------------------------Minimal-Phase-----------------------
+            hMmin=ARI_MinimalPhase(Obj);
+            corrcoeff=zeros(Obj.API.M,Obj.API.R);
+            for ii=1:Obj.API.M
+                for jj=1:Obj.API.R
+                    [c,lag]=xcorr(squeeze(hM(ii,jj,:)),squeeze(hMmin(ii,jj,:)),Obj.API.N*4-1,'none');
+                    [corrcoeff(ii,jj),idx]=max(abs(c));
+                    corrcoeff(ii,jj)=corrcoeff(ii,jj)/sum(hM(ii,jj,:).^2);
+                    toaEst(ii,jj)=lag(idx);
+                end
             end
-        end
+    end
+else
+    toaEst=estimation;
 end
-toaEst=toaEst/rs;
 
 %% --------------------Detect-Outliers-in-estimated-TOA--------------------
-if outlierDetection
+if outlierDetection>0
     for ch=1:Obj.API.R
-        if outlierDetection==1 || outlierDetection==2
-            % Outlier detection: smooth TOA in horizontal planes
-            [~,idxSortHor]=sort(pos(:,1));
-            epsilon=5;
-            slope=zeros(Obj.API.M,1);
-            sloperms=[];
-            for ele=min(pos(:,2)):epsilon:max(pos(:,2)) %calculate slope for each elevation along azimuth
-                idx=find(pos(idxSortHor,2)>ele-epsilon/2 & pos(idxSortHor,2)<=ele+epsilon/2);
-                if numel(idx)>1
-                    idx(length(idx)+1)=idx(1);
-                    slope(idxSortHor(idx(1:end-1)),1)=diff(toaEst(idxSortHor(idx),ch))./(abs(abs(abs(diff(pos(idxSortHor(idx),1)))-180)-180)+0.1);
-                    sloperms(end+1)=sqrt(sum(slope(idxSortHor(idx)).^2)/length(slope(idxSortHor(idx))));
-                end
-            end
-%             idx=find(pos(:,2)==0);
-%             sloperms=sqrt(sum(slope(idx).^2)/length(slope(idx)))*1.4;
-            sloperms=max(sloperms);
-            performance.sloperms(ch)=sloperms;
-            performance.slopemax(ch)=max(abs(slope(:)));
-            for ele=min(pos(:,2)):epsilon:max(pos(:,2))
-                idx=find(pos(idxSortHor,2)>ele-epsilon/2 & pos(idxSortHor,2)<=ele+epsilon/2);
-                for ii=1:length(idx)
-                    if abs(slope(idxSortHor(idx(ii))))>sloperms*2
-                        for jj=0:1
-                            if ii+jj==length(idx)
-                                indicator_hor(idxSortHor(idx(end)),ch)=1;
-                            else
-                                indicator_hor(idxSortHor(idx(mod(ii+jj,length(idx)))),ch)=1;
-                            end
-                        end
-                    end
-                end
-                clear idx
-            end
-            indicator(:,ch)=indicator_hor(:,ch);
+        p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/Obj.Data.SamplingRate;
+        p0offset_onaxis=[0.06 pi pi/2 0.001];
+        x=pos(:,1:2)*pi/180;
+        y=toaEst(:,ch)/Obj.Data.SamplingRate;
+        if isoctave
+            [~,tmp]=leasqr(x,y,p0_onaxis(ch,:),@ziegelwanger2014onaxis);
+        else
+            tmp=lsqcurvefit(@ziegelwanger2014onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
         end
-        
-        if outlierDetection==1 || outlierDetection==3
-            % Outlier detection: constant TOA in sagittal planes
-            epsilon=2;
-            sag_dev=zeros(Obj.API.M,1);
-    %         sag_std=sag_dev;
-            for lat=-90:epsilon:90
-                idx=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2);
-                if length(idx)>2
-                    sag_dev(idx,1)=toaEst(idx,ch)-mean(toaEst(idx,ch));
-    %                 sag_std(idx,1)=sqrt(sum(sag_dev(idx,1).^2)/length(sag_dev(idx,1)))*ones(length(idx),1);
-                end
-            end
-            sag_std=sqrt(sum(sag_dev.^2)/length(sag_dev));
-%             if sag_std<0.6
-%                 sag_std=0.6;
-%             end
-            performance.sag_max(ch)=max(abs(sag_dev));
-            performance.sag_std(ch)=sag_std;
-            indicator_sag(:,ch)=abs(sag_dev)>2*sag_std;
-            indicator(:,ch)=(abs(sag_dev)>2*sag_std | indicator_hor(:,ch));
-            clear sag_dev;
-        end
+        [~,idx]=deleteoutliers(toaEst(:,ch)-ziegelwanger2014onaxis(tmp,pos(:,1:2)*pi/180)*Obj.Data.SamplingRate,outlierDetection*Obj.API.M);
+        indicator(idx,ch)=ones(length(idx),1);
     end
 end
-
+    
 %% ----------------------Fit-Models-to-estimated-TOA-----------------------
-if model
+if model>0
     % Fit on-axis model to outlier adjusted set of estimated TOAs
     for ch=1:Obj.API.R
         p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/Obj.Data.SamplingRate;
-        p0offset_onaxis=[0.06 pi pi 0.001];
-
+        p0offset_onaxis=[0.06 pi pi/2 0.001];
         idx=find(indicator(:,ch)==0);
         x=pos(idx,1:2)*pi/180;
         y=toaEst(idx,ch)/Obj.Data.SamplingRate;
@@ -233,63 +196,35 @@ if model
                 lsqcurvefit(@ziegelwanger2014onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
         end
         toa(:,ch)=ziegelwanger2014onaxis(p_onaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
+        performance.on_axis{ch}.resnormS=sqrt(performance.on_axis{ch}.resnormS/(Obj.API.M-sum(indicator(:,ch))));
+        performance.on_axis{ch}.resnormP=norm((toaEst(:,ch)-toa(:,ch))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);
     end
-    performance.on_axis{1}.resnormS=performance.on_axis{1}.resnormS*Obj.Data.SamplingRate^2/(Obj.API.M-sum(indicator(:,1)));
-    performance.on_axis{2}.resnormS=performance.on_axis{2}.resnormS*Obj.Data.SamplingRate^2/(Obj.API.M-sum(indicator(:,1)));
-    performance.on_axis{1}.resnormP=norm((toaEst(:,1)-toa(:,1))/Obj.Data.SamplingRate,2)^2*Obj.Data.SamplingRate^2/Obj.API.M;
-    performance.on_axis{2}.resnormP=norm((toaEst(:,2)-toa(:,2))/Obj.Data.SamplingRate,2)^2*Obj.Data.SamplingRate^2/Obj.API.M;
-    performance.on_axis{1}.residualS=performance.on_axis{1}.residualS*Obj.Data.SamplingRate;
-    performance.on_axis{2}.residualS=performance.on_axis{2}.residualS*Obj.Data.SamplingRate;
+    toa_onaxis=toa;
 
     % Fit off-axis model to outlier adjusted set of estimated TOAs
-    p0_offaxis(1,:)=[mean(p0_onaxis(:,1)) 0 0 0 mean(p0_onaxis(:,4)) p0_onaxis(1,2) p0_onaxis(1,3)];
-    p0_offaxis(2,:)=[mean(p0_onaxis(:,1)) 0 0 0 mean(p0_onaxis(:,4)) p0_onaxis(2,2) p0_onaxis(2,3)];
-    TolFun=[1e-5; 5e-7];
-    for ii=1:size(TolFun,1)
+    if model~=2
         for ch=1:Obj.API.R
             idx=find(indicator(:,ch)==0);
             x=pos(idx,1:2)*pi/180;
             y=toaEst(idx,ch)/Obj.Data.SamplingRate;
-            p0_offaxis(ch,:)=[mean(p0_offaxis(:,1)) mean(p0_offaxis(:,2)) mean(p0_offaxis(:,3)) mean(p0_offaxis(:,4)) mean(p0_offaxis(:,5)) p0_offaxis(ch,6) p0_offaxis(ch,7)];
-            p0offset_offaxis=[0.07/ii 0.07/ii 0.07/ii 0.07/ii 0.001 pi pi];
+            p0_offaxis(ch,:)=[mean(p_onaxis(:,1)) 0.001 -diff(p_onaxis(:,1))/2 0.001 mean(p_onaxis(:,4)) p_onaxis(ch,2) p_onaxis(ch,3)];
+            p0offset_offaxis=[abs(diff(p_onaxis(:,1))/4) 0.1 0.1 0.1 0.001 pi/4 pi/4];
             if isoctave
                 [~,p_offaxis(ch,:)]=leasqr(x,y,p0_offaxis(ch,:),@ziegelwanger2014offaxis);
             else
                 [p_offaxis(ch,:),performance.off_axis{ch}.resnormS,performance.off_axis{ch}.residualS,performance.off_axis{ch}.exitflag,performance.off_axis{ch}.output]=...
-                    lsqcurvefit(@ziegelwanger2014offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
+                    lsqcurvefit(@ziegelwanger2014offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',model));
             end
         end
-        tmp_p_offaxis=p_offaxis;
-        if abs(diff(p_offaxis(:,1)))>0.002 || abs(diff(p_offaxis(:,3)))>0.002
-            p_offaxis(:,[1 3])=p_offaxis([2 1],[1 3]);
-            for ch=1:Obj.API.R
-                idx=find(indicator(:,ch)==0);
-                x=pos(idx,1:2)*pi/180;
-                y=toaEst(idx,ch)/Obj.Data.SamplingRate;
-                p0_offaxis(ch,:)=[p_offaxis(ch,1) mean(p_offaxis(:,2)) p_offaxis(ch,3) mean(p_offaxis(:,4)) mean(p_offaxis(:,5)) p_offaxis(ch,6) p_offaxis(ch,7)];
-                p0offset_offaxis=[0.07/ii 0.07/ii 0.07/ii 0.07/ii 0.001 pi/2 pi/2];
-                if isoctave
-                    [~,p_offaxis(ch,:)]=leasqr(x,y,p0_offaxis(ch,:),@ziegelwanger2014offaxis);
-                else
-                    [p_offaxis(ch,:),performance.off_axis{ch}.resnormS,performance.off_axis{ch}.residualS,performance.off_axis{ch}.exitflag,performance.off_axis{ch}.output]=...
-                        lsqcurvefit(@ziegelwanger2014offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
-                end
-            end
-        end
-        if abs(diff(p_offaxis(:,1)))>abs(diff(tmp_p_offaxis(:,1))) && abs(diff(p_offaxis(:,3)))>abs(diff(tmp_p_offaxis(:,3)))
-            p_offaxis=tmp_p_offaxis;
-        end
-        if abs(diff(p_offaxis(:,1)))<0.002 && abs(diff(p_offaxis(:,2)))<0.002 && abs(diff(p_offaxis(:,3)))<0.002 && abs(diff(p_offaxis(:,4)))<0.002
-            break
-        end
+        toa(:,1)=ziegelwanger2014offaxis(p_offaxis(1,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
+        toa(:,2)=ziegelwanger2014offaxis(p_offaxis(2,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
+        toa_offaxis=toa;
+    
+        performance.off_axis{1}.resnormS=sqrt(performance.off_axis{1}.resnormS/(Obj.API.M-sum(indicator(:,1))));
+        performance.off_axis{2}.resnormS=sqrt(performance.off_axis{2}.resnormS/(Obj.API.M-sum(indicator(:,2))));
+        performance.off_axis{1}.resnormP=norm((toaEst(:,1)-toa(:,1))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);
+        performance.off_axis{2}.resnormP=norm((toaEst(:,2)-toa(:,2))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);
     end
-    toa(:,ch)=ziegelwanger2014offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
-    performance.off_axis{1}.resnormS=performance.off_axis{1}.resnormS*Obj.Data.SamplingRate^2/(Obj.API.M-sum(indicator(:,1)));
-    performance.off_axis{2}.resnormS=performance.off_axis{2}.resnormS*Obj.Data.SamplingRate^2/(Obj.API.M-sum(indicator(:,2)));
-    performance.off_axis{1}.resnormP=norm((toaEst(:,1)-toa(:,1))/Obj.Data.SamplingRate,2)^2*Obj.Data.SamplingRate^2/Obj.API.M;
-    performance.off_axis{2}.resnormP=norm((toaEst(:,2)-toa(:,2))/Obj.Data.SamplingRate,2)^2*Obj.Data.SamplingRate^2/Obj.API.M;
-    performance.off_axis{1}.residualS=performance.off_axis{1}.residualS*Obj.Data.SamplingRate;
-    performance.off_axis{2}.residualS=performance.off_axis{2}.residualS*Obj.Data.SamplingRate;
 else
     toa=toaEst;
     p_offaxis=p0_offaxis;
@@ -298,10 +233,13 @@ end
 %Save to output variables
 Obj.Data.Delay=toa;
 performance.outliers=indicator;
-performance.outlierRate=sum(sum(indicator))/Obj.API.M/2*100;
-performance.outlierRateL=sum(indicator(:,1))/Obj.API.M*100;
-performance.outlierRateR=sum(indicator(:,2))/Obj.API.M*100;
+for ii=1:size(indicator,2)
+  performance.outlierRate(ii)=sum(indicator(:,ii))/Obj.API.M*100;
+end
 results.toa=toa;
+results.toaEst=toaEst;
+results.toa_onaxis=toa_onaxis;
+results.toa_offaxis=toa_offaxis;
 results.p_onaxis=transpose(p_onaxis);
 results.p_offaxis=transpose(p_offaxis);
 results.performance=performance;
@@ -345,37 +283,23 @@ end
 
 end %of function
 
-function [hM,hMmin]=ARI_MinimalPhase(Obj,rs)
-    hM=zeros(size(Obj.Data.IR,1),size(Obj.Data.IR,2),size(Obj.Data.IR,3)*rs);
+function hMmin=ARI_MinimalPhase(Obj)
+    hM=Obj.Data.IR;
     hMmin=hM;
-    for ii=1:Obj.API.M
-        for jj=1:Obj.API.R
-            hM(ii,jj,:)=resample(Obj.Data.IR(ii,jj,:),rs,1);
-        end
-    end
 
     for jj=1:Obj.API.R
         for ii=1:Obj.API.M
-%             h=squeeze(Obj.Data.IR(ii,jj,:));
             h=[squeeze(hM(ii,jj,:)); zeros(4096*4-size(hM,3),1)];
-            % decompose signal
             amp1=abs(fft(h));
-
-            % transform
             amp2=amp1;
-            an2u=-imag(hilbert(log(amp1))); % minimal phase
-
-            % reconstruct signal from amp2 and an2u
-            % build a symmetrical phase 
+            an2u=-imag(hilbert(log(amp1)));
             an2u=an2u(1:floor(length(h)/2)+1);
             an3u=[an2u; -flipud(an2u(2:end+mod(length(h),2)-1))];
-            an3=an3u-round(an3u/2/pi)*2*pi;  % wrap around +/-pi: wrap(x)=x-round(x/2/pi)*2*pi
-            % amplitude
+            an3=an3u-round(an3u/2/pi)*2*pi;
             amp2=amp2(1:floor(length(h)/2)+1);
             amp3=[amp2; flipud(amp2(2:end+mod(length(h),2)-1))];
-            % back to time domain
             h2=real(ifft(amp3.*exp(1i*an3)));
-            hMmin(ii,jj,:)=h2(1:Obj.API.N*rs);
+            hMmin(ii,jj,:)=h2(1:Obj.API.N);
         end
     end
 end
