@@ -92,9 +92,9 @@ for ii=1:length(type)
     hold on
 end
 
-title(['Elevation: ' num2str(ele) '°'])
+title(['Elevation: ' num2str(ele) '\circ'])
 xlim([0 359])
-xlabel('Azimuth (°)')
+xlabel('Azimuth (\circ)')
 if time
     ylabel('Time (ms)')
 else
