@@ -20,13 +20,20 @@ function y=ziegelwanger2014offaxis(p,x)
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria
 
-r=p(1); ............. sphere radius [m]
-xM=p(2); ............ x-coordinate of the sphere center [m]
-yM=p(3); ............ y-coordinate of the sphere center [m]
-zM=p(4); ............ z-coordinate of the sphere center [m]
-delay=p(5); ......... constant dely [s]
-phi_ear=p(6); ....... position of the ear (azimuth angle) [rad]
-theta_ear=p(7); ..... position of the ear (elevation angle) [rad]
+if isoctave
+    tmp=p;
+    p=x;
+    x=tmp;
+    clear tmp
+end
+
+r=p(1); %............. sphere radius [m]
+xM=p(2); %............ x-coordinate of the sphere center [m]
+yM=p(3); %............ y-coordinate of the sphere center [m]
+zM=p(4); %............ z-coordinate of the sphere center [m]
+delay=p(5); %......... constant dely [s]
+phi_ear=p(6); %....... position of the ear (azimuth angle) [rad]
+theta_ear=p(7); %..... position of the ear (elevation angle) [rad]
 
 M=sqrt(xM^2+yM^2+zM^2);
 

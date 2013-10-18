@@ -190,12 +190,15 @@ if model>0
         x=pos(idx,1:2)*pi/180;
         y=toaEst(idx,ch)/Obj.Data.SamplingRate;
         if isoctave
-            [~,p_onaxis(ch,:)]=leasqr(x,y,p0_onaxis(ch,:),@ziegelwanger2014onaxis);
+            [toa(:,ch),p_onaxis(ch,:)]=leasqr(x,y,p0_onaxis(ch,:),@ziegelwanger2014onaxis,1e-6);
+            toa(:,ch)=toa(:,ch)*Obj.Data.SamplingRate;
+            performance.on_axis{ch}.residualS=toaEst(idx,ch)-toa(idx,ch);
+            performance.on_axis{ch}.resnormS=sum((performance.on_axis{ch}.residualS).^2);
         else
             [p_onaxis(ch,:),performance.on_axis{ch}.resnormS,performance.on_axis{ch}.residualS,performance.on_axis{ch}.exitflag,performance.on_axis{ch}.output]=...
                 lsqcurvefit(@ziegelwanger2014onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
+            toa(:,ch)=ziegelwanger2014onaxis(p_onaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
         end
-        toa(:,ch)=ziegelwanger2014onaxis(p_onaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
         performance.on_axis{ch}.resnormS=sqrt(performance.on_axis{ch}.resnormS/(Obj.API.M-sum(indicator(:,ch))));
         performance.on_axis{ch}.resnormP=norm((toaEst(:,ch)-toa(:,ch))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);
     end
@@ -210,20 +213,19 @@ if model>0
             p0_offaxis(ch,:)=[mean(p_onaxis(:,1)) 0.001 -diff(p_onaxis(:,1))/2 0.001 mean(p_onaxis(:,4)) p_onaxis(ch,2) p_onaxis(ch,3)];
             p0offset_offaxis=[abs(diff(p_onaxis(:,1))/4) 0.1 0.1 0.1 0.001 pi/4 pi/4];
             if isoctave
-                [~,p_offaxis(ch,:)]=leasqr(x,y,p0_offaxis(ch,:),@ziegelwanger2014offaxis);
+                [toa(:,ch),p_offaxis(ch,:)]=leasqr(x,y,p0_offaxis(ch,:),@ziegelwanger2014offaxis,1e-6);
+                toa(:,ch)=toa(:,ch)*Obj.Data.SamplingRate;
+                performance.off_axis{ch}.residualS=toaEst(idx,ch)-toa(idx,ch);
+                performance.off_axis{ch}.resnormS=sum((performance.off_axis{ch}.residualS).^2);
             else
                 [p_offaxis(ch,:),performance.off_axis{ch}.resnormS,performance.off_axis{ch}.residualS,performance.off_axis{ch}.exitflag,performance.off_axis{ch}.output]=...
                     lsqcurvefit(@ziegelwanger2014offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',model));
+                toa(:,ch)=ziegelwanger2014offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
             end
+            performance.off_axis{ch}.resnormS=sqrt(performance.off_axis{ch}.resnormS/(Obj.API.M-sum(indicator(:,ch))));
+            performance.off_axis{ch}.resnormP=norm((toaEst(:,ch)-toa(:,ch))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);
         end
-        toa(:,1)=ziegelwanger2014offaxis(p_offaxis(1,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
-        toa(:,2)=ziegelwanger2014offaxis(p_offaxis(2,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
         toa_offaxis=toa;
-    
-        performance.off_axis{1}.resnormS=sqrt(performance.off_axis{1}.resnormS/(Obj.API.M-sum(indicator(:,1))));
-        performance.off_axis{2}.resnormS=sqrt(performance.off_axis{2}.resnormS/(Obj.API.M-sum(indicator(:,2))));
-        performance.off_axis{1}.resnormP=norm((toaEst(:,1)-toa(:,1))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);
-        performance.off_axis{2}.resnormP=norm((toaEst(:,2)-toa(:,2))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);
     end
 else
     toa=toaEst;
@@ -231,7 +233,6 @@ else
 end
 
 %Save to output variables
-Obj.Data.Delay=toa;
 performance.outliers=indicator;
 for ii=1:size(indicator,2)
   performance.outlierRate(ii)=sum(indicator(:,ii))/Obj.API.M*100;
@@ -246,40 +247,6 @@ results.performance=performance;
 if exist('corrcoeff','var')
     results.performance.corrcoeff=corrcoeff;
 end
-
-% for ch=1:Obj.API.R
-%     ii=0;
-%     count=0;
-%     for ele=transpose(unique(Obj.SourcePosition(:,2)))
-%         ii=ii+1;
-%         if ii==9
-%             ii=1;
-%         end
-%         if ii==1
-%             figure('Position',[20 20 600 900]);
-%             count=count+1;
-%         end
-%         subplot(4,2,ii);
-%         plotziegelwanger2014(Obj,toaEst,2,'k',ele,ch,0);
-%         plotziegelwanger2014(Obj,indicator.*toaEst,3,'r',ele,ch,0);
-%         plotziegelwanger2014(Obj,toa,1,'g',ele,ch,0);
-% %             ylim([min(toaLIN(:,ch)-sync)/stimPar.SamplingRate*1000-0.5 max(toaLIN(:,ch)-sync)/stimPar.SamplingRate*1000+0.1])
-%         xlabel('')
-%         ylabel('')
-%         if count<3
-%             if ii==7 || ii==8
-%                 xlabel('Azimut in Grad')
-%             end
-%         else
-%             if ii==5 || ii==6
-%                 xlabel('Azimut in Grad')
-%             end
-%         end
-%         if ii==1 || ii==3 || ii==5 || ii==7
-%             ylabel('Zeit in ms')
-%         end
-%     end
-% end
 
 end %of function
 

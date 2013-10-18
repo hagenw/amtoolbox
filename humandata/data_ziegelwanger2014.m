@@ -97,10 +97,10 @@ if flags.do_missingflag
 else
     hpath = which('hrtfinit');  % find local path of hrtf repository
     hpath = hpath(1:end-10);
-    hpath = [hpath 'ziegelwanger2013' filesep];
+    hpath = [hpath 'ziegelwanger2014' filesep];
     
     if ~exist([hpath 'info.mat'],'file')
-        urlwrite([SOFAdbURL '/ziegelwanger2013/info.mat'],[hpath 'info.mat']);
+        urlwrite([SOFAdbURL '/ziegelwanger2014/info.mat'],[hpath 'info.mat']);
     end
 end
 

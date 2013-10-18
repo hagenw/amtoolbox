@@ -52,10 +52,6 @@ function [Obj,results]=ziegelwanger2013(Obj,method,model,p0_onaxis)
 %
 %   4) Minimal-Phase Cross-Correlation (Max) (default)
 %
-%   5) Minimal-Phase Cross-Correlation (Centroid)
-%
-%   6) Zero-Crossing
-%
 %   Examples:
 %   ---------
 % 
@@ -105,18 +101,18 @@ p_onaxis=zeros(size(p0_onaxis));
 p0_offaxis=zeros(2,7);
 p_offaxis=p0_offaxis;
 
-toa=zeros(Obj.DimSize.M,Obj.DimSize.R);
-toaEst=zeros(Obj.DimSize.M,Obj.DimSize.R);
-indicator=zeros(Obj.DimSize.M,Obj.DimSize.R);
+toa=zeros(Obj.API.M,Obj.API.R);
+toaEst=zeros(Obj.API.M,Obj.API.R);
+indicator=zeros(Obj.API.M,Obj.API.R);
 indicator_hor=indicator;
 indicator_sag=indicator;
-pos=zeros(Obj.DimSize.M,8);
-pos(:,1:2)=Obj.ListenerRotation(:,1:2);
-[pos(:,6),pos(:,7)]=sph2hor(Obj.ListenerRotation(:,1),Obj.ListenerRotation(:,2));
-pos(:,8)=cumsum(ones(Obj.DimSize.M,1));
+pos=zeros(Obj.API.M,8);
+pos(:,1:2)=Obj.SourcePosition(:,1:2);
+[pos(:,6),pos(:,7)]=sph2hor(Obj.SourcePosition(:,1),Obj.SourcePosition(:,2));
+pos(:,8)=cumsum(ones(Obj.API.M,1));
 Obj=ARI_MinimalPhase(Obj);
-% for ii=1:Obj.DimSize.M
-%     for jj=1:Obj.DimSize.R
+% for ii=1:Obj.API.M
+%     for jj=1:Obj.API.R
 %         if isnan(Obj.Data.IR_min(1,ii,jj))
 %             hM_min(:,ii,jj)=ARI_MinimalPhase(Obj.hM(:,ii,jj));
 %         end
@@ -126,29 +122,29 @@ Obj=ARI_MinimalPhase(Obj);
 %% -----------------------estimate time-of-arrival-------------------------
 switch method
     case 1 %---------------------------Threshold---------------------------
-        for ii=1:Obj.DimSize.M
-            for jj=1:Obj.DimSize.R
+        for ii=1:Obj.API.M
+            for jj=1:Obj.API.R
                 toaEst(ii,jj)=find(abs(Obj.Data.IR(ii,jj,:))==max(abs(Obj.Data.IR(ii,jj,:))),1);
             end
         end
     case 2 %---------------------------Centroid----------------------------
-        for ii=1:Obj.DimSize.M
-            for jj=1:Obj.DimSize.R
+        for ii=1:Obj.API.M
+            for jj=1:Obj.API.R
                 toaEst(ii,jj)=find(cumsum(Obj.Data.IR(ii,jj,:).^2)>(sum(Obj.Data.IR(ii,jj,:).^2)/2),1);
             end
         end
     case 3 %---------------------------Groupdelay--------------------------
-        for ii=1:Obj.DimSize.M
-            for jj=1:Obj.DimSize.R
-                [Gd,F]=grpdelay(transpose(double(squeeze(Obj.Data.IR(ii,jj,:)))),1,Obj.DimSize.N,Obj.Data.SamplingRate);
+        for ii=1:Obj.API.M
+            for jj=1:Obj.API.R
+                [Gd,F]=grpdelay(transpose(double(squeeze(Obj.Data.IR(ii,jj,:)))),1,Obj.API.N,Obj.Data.SamplingRate);
                 toaEst(ii,jj)=median(Gd(find(F>500):find(F>2000)));
             end
         end
     case 4 %---------------------------Minimal-Phase-----------------------
-        corrcoeff=zeros(Obj.DimSize.M,Obj.DimSize.R);
-        for ii=1:Obj.DimSize.M
-            for jj=1:Obj.DimSize.R
-                [c,lag]=xcorr(squeeze(Obj.Data.IR(ii,jj,:)),squeeze(Obj.Data.IR_min(ii,jj,:)),Obj.DimSize.N-1,'none');
+        corrcoeff=zeros(Obj.API.M,Obj.API.R);
+        for ii=1:Obj.API.M
+            for jj=1:Obj.API.R
+                [c,lag]=xcorr(squeeze(Obj.Data.IR(ii,jj,:)),squeeze(Obj.Data.IR_min(ii,jj,:)),Obj.API.N-1,'none');
                 [corrcoeff(ii,jj),idx]=max(abs(c));
                 corrcoeff(ii,jj)=corrcoeff(ii,jj)/sum(Obj.Data.IR(ii,jj,:).^2);
                 toaEst(ii,jj)=lag(idx);
@@ -157,11 +153,11 @@ switch method
 end
 
 %% ----------------------Fit-Models-to-estimated-TOA-----------------------
-for ch=1:Obj.DimSize.R
+for ch=1:Obj.API.R
 
     % Outlier detection: smooth TOA in horizontal planes
     epsilon=5;
-    slope=zeros(Obj.DimSize.M,1);
+    slope=zeros(Obj.API.M,1);
     for ele=min(pos(:,2)):epsilon:max(pos(:,2)) %calculate slope for each elevation along azimuth
         idx=find(pos(:,2)>ele-epsilon/2 & pos(:,2)<=ele+epsilon/2);
         if numel(idx)>1
@@ -192,7 +188,7 @@ for ch=1:Obj.DimSize.R
     % Outlier detection: constant TOA in sagittal planes
     epsilon=2;
     for ii=1:20
-        sag_dev=zeros(Obj.DimSize.M,1);
+        sag_dev=zeros(Obj.API.M,1);
         for lat=-90:epsilon:90
             idx=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2); 
             idx2=find(pos(:,6)>lat-epsilon/2 & pos(:,6)<=lat+epsilon/2 & indicator_hor(:,ch)==0 & indicator(:,ch)==0);
@@ -211,13 +207,13 @@ for ch=1:Obj.DimSize.R
 end
 
 performance.indicator=indicator;
-performance.outliers=sum(sum(indicator))/Obj.DimSize.M/2*100;
-performance.outliersl=sum(indicator(:,1))/Obj.DimSize.M*100;
-performance.outliersr=sum(indicator(:,2))/Obj.DimSize.M*100;
+performance.outliers=sum(sum(indicator))/Obj.API.M/2*100;
+performance.outliersl=sum(indicator(:,1))/Obj.API.M*100;
+performance.outliersr=sum(indicator(:,2))/Obj.API.M*100;
 
 if model
     % Fit on-axis model to outlier adjusted set of estimated TOAs
-    for ch=1:Obj.DimSize.R
+    for ch=1:Obj.API.R
         p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/Obj.Data.SamplingRate;
         p0offset_onaxis=[0.06 pi/4 pi/4 0.001];
 
@@ -235,7 +231,7 @@ if model
     % Fit off-axis model to outlier adjusted set of estimated TOAs
     TolFun=[1e-5; 1e-6];
     for ii=1:size(TolFun,1)
-        for ch=1:Obj.DimSize.R
+        for ch=1:Obj.API.R
             idx=find(indicator(:,ch)==0);
             x=pos(idx,1:2)*pi/180;
             y=toaEst(idx,ch)/Obj.Data.SamplingRate;
@@ -250,7 +246,7 @@ if model
         end
         if abs(diff(p_offaxis(:,1)))>0.003 || abs(diff(p_offaxis(:,3)))>0.003
             p_offaxis(:,[1 3])=p_offaxis([2 1],[1 3]);
-            for ch=1:Obj.DimSize.R
+            for ch=1:Obj.API.R
                 idx=find(indicator(:,ch)==0);
                 x=pos(idx,1:2)*pi/180;
                 y=toaEst(idx,ch)/Obj.Data.SamplingRate;
@@ -288,10 +284,10 @@ end %of function
 function Obj=ARI_MinimalPhase(Obj)
     Obj.Data.IR_min=zeros(size(Obj.Data.IR));
 
-    for jj=1:Obj.DimSize.R
-        for ii=1:Obj.DimSize.M
+    for jj=1:Obj.API.R
+        for ii=1:Obj.API.M
 %             h=squeeze(Obj.Data.IR(ii,jj,:));
-            h=[squeeze(Obj.Data.IR(ii,jj,:)); zeros(4096-Obj.DimSize.N,1)];
+            h=[squeeze(Obj.Data.IR(ii,jj,:)); zeros(4096-Obj.API.N,1)];
             % decompose signal
             amp1=abs(fft(h));
 
@@ -309,7 +305,7 @@ function Obj=ARI_MinimalPhase(Obj)
             amp2=[amp2; flipud(amp2(2:end+mod(length(h),2)-1))];
             % back to time domain
             h2=real(ifft(amp2.*exp(1i*an2)));
-            Obj.Data.IR_min(ii,jj,:)=h2(1:Obj.DimSize.N);
+            Obj.Data.IR_min(ii,jj,:)=h2(1:Obj.API.N);
         end
     end
 end

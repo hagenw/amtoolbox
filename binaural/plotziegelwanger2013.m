@@ -56,24 +56,24 @@ if ~ischar(color)
 end
 
 %% --------------------------------plot TOA--------------------------------
-[~,idx1]=sort(Obj.ListenerRotation(:,1));
-idx2=find(Obj.ListenerRotation(idx1,2)==ele);
+[~,idx1]=sort(Obj.SourcePosition(:,1));
+idx2=find(Obj.SourcePosition(idx1,2)==ele);
 
 for ii=1:length(type)
     switch type(ii)
         case 1
-            h=plot(Obj.ListenerRotation(idx1(idx2),1),data(idx1(idx2),ii*2-1+(ch-1)),[color(ii) '-']);
+            h=plot(Obj.SourcePosition(idx1(idx2),1),data(idx1(idx2),ii*2-1+(ch-1)),[color(ii) '-']);
         case 2
-            h=plot(Obj.ListenerRotation(idx1(idx2),1),data(idx1(idx2),ii*2-1+(ch-1)),[color(ii) '--']);
+            h=plot(Obj.SourcePosition(idx1(idx2),1),data(idx1(idx2),ii*2-1+(ch-1)),[color(ii) '--']);
         case 3
-            idx3=find(Obj.ListenerRotation(idx1(idx2),2)==ele & data(idx1(idx2),ii*2-1+(ch-1))~=0);
+            idx3=find(Obj.SourcePosition(idx1(idx2),2)==ele & data(idx1(idx2),ii*2-1+(ch-1))~=0);
             if exist('style','var')
-                h=plot(Obj.ListenerRotation(idx1(idx2(idx3)),1),data(idx1(idx2(idx3)),ii*2-1+(ch-1)),[color(ii) style{ii}],'MarkerSize',width(ii));%,'MarkerFaceColor',color(ii)
+                h=plot(Obj.SourcePosition(idx1(idx2(idx3)),1),data(idx1(idx2(idx3)),ii*2-1+(ch-1)),[color(ii) style{ii}],'MarkerSize',width(ii));%,'MarkerFaceColor',color(ii)
             else
-                h=plot(Obj.ListenerRotation(idx1(idx2(idx3)),1),data(idx1(idx2(idx3)),ii*2-1+(ch-1)),[color(ii) '.']);
+                h=plot(Obj.SourcePosition(idx1(idx2(idx3)),1),data(idx1(idx2(idx3)),ii*2-1+(ch-1)),[color(ii) '.']);
             end
         case 4
-            h=plot(Obj.ListenerRotation(idx1(idx2),1),data(idx1(idx2),ii*2-1+(ch-1)),[color(ii) style{ii}],'LineWidth',width(ii));
+            h=plot(Obj.SourcePosition(idx1(idx2),1),data(idx1(idx2),ii*2-1+(ch-1)),[color(ii) style{ii}],'LineWidth',width(ii));
     end
     if exist('rgbcolor','var')
         set(h,'color',rgbcolor(ii,:));
@@ -81,9 +81,9 @@ for ii=1:length(type)
     hold on
 end
 
-title(['Elevation: ' num2str(ele) '°'])
+title(['Elevation: ' num2str(ele) 'deg'])
 xlim([0 359])
-xlabel('Azimuth (°)')
+xlabel('Azimuth (deg)')
 if time
     ylabel('Time (ms)')
 else

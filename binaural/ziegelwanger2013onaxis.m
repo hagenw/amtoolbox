@@ -20,10 +20,10 @@ function y=ziegelwanger2013onaxis(p,x)
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria
     
-r=p(1); ............. sphere radius [m]
-phi_ear=p(2); ....... position of the ear (azimuth angle) [rad]
-theta_ear=p(3); ..... position of the ear (elevation angle) [rad]
-delay=p(4); ......... constant delay [s]
+r=p(1); %............. sphere radius [m]
+phi_ear=p(2); %....... position of the ear (azimuth angle) [rad]
+theta_ear=p(3); %..... position of the ear (elevation angle) [rad]
+delay=p(4); %......... constant delay [s]
 
 y=r/343.*( ...
        (sign(sin(theta_ear).*sin(x(:,2))+cos(theta_ear).*cos(x(:,2)).*cos(phi_ear-x(:,1)))/2+0.5).* ...
