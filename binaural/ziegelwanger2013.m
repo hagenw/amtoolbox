@@ -65,7 +65,7 @@ function [Obj,results]=ziegelwanger2013(Obj,method,model,p0_onaxis)
 %   See also: ziegelwanger2013onaxis, ziegelwanger2013offaxis,
 %   data_ziegelwanger2013, exp_ziegelwanger2013
 %
-%   References: ziegelwanger2013
+%   References: ziegelwanger2013 majdak2013
 
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria

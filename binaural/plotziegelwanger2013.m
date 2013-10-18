@@ -33,7 +33,7 @@ function [h]=plotziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)
 %   See also: ziegelwanger2013onaxis, ziegelwanger2013offaxis,
 %   data_ziegelwanger2013, exp_ziegelwanger2013
 %
-%   References: ziegelwanger2013
+%   References: ziegelwanger2013 majdak2013
 
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria
