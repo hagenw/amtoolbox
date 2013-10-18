@@ -42,7 +42,7 @@ function exp_ziegelwanger2014(varargin)
 %               data classified as outliers by the ESD test with an upper
 %               bound of outlier rate of 1% (see ziegelwanger2014). The
 %               reference for the relative TOAs is the smallest TOA in each
-%               HRTF set. Horizontal lines: ±1 sampling interval.
+%               HRTF set. Horizontal lines: $\pm1$ sampling interval.
 %
 %     'fig7'    Reproduce Fig. 7:
 %
@@ -73,7 +73,7 @@ function exp_ziegelwanger2014(varargin)
 %
 %     'tab1'    Reproduce Tab. 1:
 %
-%               ANRs and parameter errors (average ±1 standard deviation)
+%               ANRs and parameter errors (average $\pm1$ standard deviation)
 %               resulting from fitting the on-axis model to TOAs estimated
 %               from HRTFs of the Sphere. Parameter errors: Differences
 %               between the estimated and actual parameters.
@@ -87,7 +87,7 @@ function exp_ziegelwanger2014(varargin)
 %
 %     'tab3'    Reproduce Tab. 3:
 %
-%               Parameters (average ±1 standard deviation) and ANRs
+%               Parameters (average $\pm1$ standard deviation) and ANRs
 %               (median) resulting from fitting the on-axis model to TOAs
 %               estimated from acoustically measured HRTFs of human
 %               listeners. L: Left ear. R: Right ear. All: Results for all
@@ -95,7 +95,7 @@ function exp_ziegelwanger2014(varargin)
 %
 %     'tab5'    Reproduce Tab. 5:
 %
-%               Parameters and ANRs (average ±1 standard deviation)
+%               Parameters and ANRs (average $\pm1$ standard deviation)
 %               resulting from fitting the off-axis model to TOAs estimated
 %               from HRTFs of SAT, STP, and all listeners (All). Full: Fits
 %               to full TOA sets. O-A: Fits to the outlier-adjusted TOA
@@ -103,7 +103,7 @@ function exp_ziegelwanger2014(varargin)
 %
 %     'tab6'    Reproduce Tab. 6:
 %
-%               ANRs and parameter errors (average ±1 standard deviation)
+%               ANRs and parameter errors (average $\pm1$ standard deviation)
 %               resulting from fitting the off-axis model to TOAs estimated
 %               from HRTFs of the object Sphere. Centered: Conditions in
 %               which r and vec(e) varied from M=0. Non-centered:
@@ -519,7 +519,7 @@ if flags.do_fig5
     ylim([-1,25])
     xlabel('   _e (deg)','Fontname','Arial','Fontsize',fs)
     set(gca,'xtick',[60 80 100 120]);
-    set(gca,'xticklabel',{'±60','±80','±100','±120'});
+    set(gca,'xticklabel',{'Â±60','Â±80','Â±100','Â±120'});
     set(gca,'yticklabel',[]);
     tmp=get(gca,'Position');
     set(gca,'Position',tmp+[-0.02 0.03 0.04 0]);
@@ -615,7 +615,7 @@ if flags.do_fig6
     plot(lat(idx),est(idx)/fs-min(est/fs),'.k','MarkerSize',24);
     axis([-99 99 -50 995]);
     set(gca,'XTickLabel',[],'FontName','Arial');
-    ylabel('Relative TOA (µs)','FontName','Arial','FontSize',18);
+    ylabel('Relative TOA (Âµs)','FontName','Arial','FontSize',18);
     tmp=get(gca,'Position');
     set(gca,'Position',tmp+[0 0 0.06 0]);
 
@@ -627,7 +627,7 @@ if flags.do_fig6
     line([-99 99],1./[fs fs],'LineStyle','--','Color',[0 0 0]);
     axis([-99 99 -80 195])
     xlabel('\Phi_h (deg)','FontName','Arial','FontSize',18);
-    ylabel('Residual error (µs)','FontName','Arial','FontSize',18);
+    ylabel('Residual error (Âµs)','FontName','Arial','FontSize',18);
     tmp=get(gca,'Position');
     set(gca,'Position',tmp+[0 0.11 0.06 0]);
 
@@ -971,7 +971,7 @@ if flags.do_fig11
     set(gca,'xtick',1:size(var,1))
     set(gca,'xticklabel',[])
     set(gca,'ytick',[85 90 95])
-    set(gca,'yticklabel',{'±85','±90','±95'})
+    set(gca,'yticklabel',{'Â±85','Â±90','Â±95'})
     tmp=get(gca,'Position');
     set(gca,'Position',tmp+[0 0.08 0 0]);
     clear var;
@@ -1111,12 +1111,12 @@ if flags.do_tab1
         'MCM ||'];...
     fprintf('\nTab. I.:\n')
     fprintf('----------------------------------------------------------------------\n')
-    fprintf('EST || r error (mm) | phi_e error (deg) | theta_e errror |  ANR (µs)  \n')
+    fprintf('EST || r error (mm) | phi_e error (deg) | theta_e errror |  ANR (Âµs)  \n')
     fprintf('----------------------------------------------------------------------\n')
     fprintf('----------------------------------------------------------------------\n')
     for ii=1:4
         fprintf(rows(ii,:))
-        fprintf('   %4.1f ± %3.1f |        %4.1f ± %3.1f |     %4.1f ± %3.1f | %4.1f ± %3.1f\n',out(ii,:)');
+        fprintf('   %4.1f Â± %3.1f |        %4.1f Â± %3.1f |     %4.1f Â± %3.1f | %4.1f Â± %3.1f\n',out(ii,:)');
     end
     fprintf('----------------------------------------------------------------------\n\n')
 
@@ -1158,7 +1158,7 @@ if flags.do_tab2
         'STP    ||'];
     fprintf('\nTab. II.:\n')
     fprintf('----------------------------------------------------------------------------------------------------------\n')
-    fprintf('       ||     r error (mm)       |   phi_e error (deg)   |    theta_e errror     |       ANR (µs)        \n')
+    fprintf('       ||     r error (mm)       |   phi_e error (deg)   |    theta_e errror     |       ANR (Âµs)        \n')
     fprintf('       || MAX | CTD | AGD  | MCM | MAX | CTD | AGD | MCM | MAX | CTD | AGD | MCM | MAX | CTD | AGD | MCM \n')
     fprintf('----------------------------------------------------------------------------------------------------------\n')
     fprintf('----------------------------------------------------------------------------------------------------------\n')
@@ -1259,12 +1259,12 @@ if flags.do_tab3
         '     |  R  ||'];...
     fprintf('\nTab. III.:\n')
     fprintf('-----------------------------------------------------------------------\n')
-    fprintf('     | Ear || r (mm)       | phi_e (deg)  | theta_e (deg) |  ANR (µs)  \n')
+    fprintf('     | Ear || r (mm)       | phi_e (deg)  | theta_e (deg) |  ANR (Âµs)  \n')
     fprintf('-----------------------------------------------------------------------\n')
     fprintf('-----------------------------------------------------------------------\n')
     for ii=1:4
         fprintf(rows(ii,:))
-        fprintf(' %5.1f ± %4.1f | %5.1f ± %4.1f |   %5.1f ± %3.1f | %4.1f ± %4.1f\n',out(ii,:)');
+        fprintf(' %5.1f Â± %4.1f | %5.1f Â± %4.1f |   %5.1f Â± %3.1f | %4.1f Â± %4.1f\n',out(ii,:)');
     end
     fprintf('-----------------------------------------------------------------------\n\n')
 
@@ -1443,12 +1443,12 @@ if flags.do_tab5
         '    |  O-A   |  R  ||'];
     fprintf('\nTab. V.:\n')
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
-    fprintf('    | TOAset | Ear || r (mm)     | phi_e (deg) | theta_e (deg)| x_M (mm)    | y_M (mm)    | z_M (mm)    |  ANR (µs)  \n')
+    fprintf('    | TOAset | Ear || r (mm)     | phi_e (deg) | theta_e (deg)| x_M (mm)    | y_M (mm)    | z_M (mm)    |  ANR (Âµs)  \n')
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
     for ii=1:12
         fprintf(rows(ii,:))
-        fprintf(' %4.1f ± %3.1f | %5.1f ± %3.1f |  %5.1f ± %4.1f | %4.1f ± %4.1f | %4.1f ± %4.1f | %4.1f ± %4.1f | %4.1f ± %4.1f\n',out(ii,:)');
+        fprintf(' %4.1f Â± %3.1f | %5.1f Â± %3.1f |  %5.1f Â± %4.1f | %4.1f Â± %4.1f | %4.1f Â± %4.1f | %4.1f Â± %4.1f | %4.1f Â± %4.1f\n',out(ii,:)');
     end
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n\n')
 
@@ -1540,12 +1540,12 @@ if flags.do_tab6
         '             |  O-A   |  R  ||'];
     fprintf('\nTab. V.:\n')
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
-    fprintf('Condition    | TOAset | Ear || r error (mm) | phi_e error (deg) | theta_e errror | x_M error (mm) | y_M error (mm) | z_M error (mm) |  ANR (µs)  \n')
+    fprintf('Condition    | TOAset | Ear || r error (mm) | phi_e error (deg) | theta_e errror | x_M error (mm) | y_M error (mm) | z_M error (mm) |  ANR (Âµs)  \n')
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
     for ii=1:8
         fprintf(rows(ii,:))
-        fprintf('   %4.1f ± %3.1f |        %4.1f ± %3.1f |     %4.1f ± %3.1f |      %4.1f ± %3.1f |     %4.1f ± %3.1f |     %4.1f ± %3.1f | %4.1f ± %3.1f\n',out(ii,:)');
+        fprintf('   %4.1f Â± %3.1f |        %4.1f Â± %3.1f |     %4.1f Â± %3.1f |      %4.1f Â± %3.1f |     %4.1f Â± %3.1f |     %4.1f Â± %3.1f | %4.1f Â± %3.1f\n',out(ii,:)');
     end
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n\n')
 

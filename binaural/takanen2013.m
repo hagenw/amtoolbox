@@ -89,7 +89,7 @@ function output = takanen2013(insig,fs,computationType,printFigs,printMap)
 %
 %   XXX The demo needs cleanup: demo_takanen2013
 %
-%   References: takanen2013a takanen2013b pulkki2009 bekesy1930 verhulst2012
+%   References: takanen2013a takanen2013b pulkki2009 bekesy1930 verhulst2012 
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %
