@@ -225,7 +225,7 @@ if flags.do_SPHERE_DIS
         data.results=results;
     else
         tmp=load([hpath '../ziegelwanger2014/info.mat']);
-        data=tmp.info.Sphere_Displacement;
+        data=tmp.info.Displacement;
         load([hpath 'Sphere_Displacement_results.mat']);
         data.results=results;
     end
@@ -251,7 +251,7 @@ if flags.do_SPHERE_ROT
         data.results=results;
     else
         tmp=load([hpath '../ziegelwanger2014/info.mat']);
-        data=tmp.info.Sphere_Rotation;
+        data=tmp.info.Rotation;
         load([hpath 'Sphere_Rotation_results.mat']);
         data.results=results;
     end
