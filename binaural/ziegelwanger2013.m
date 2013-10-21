@@ -110,7 +110,6 @@ pos=zeros(Obj.API.M,8);
 pos(:,1:2)=Obj.SourcePosition(:,1:2);
 [pos(:,6),pos(:,7)]=sph2hor(Obj.SourcePosition(:,1),Obj.SourcePosition(:,2));
 pos(:,8)=cumsum(ones(Obj.API.M,1));
-Obj=ARI_MinimalPhase(Obj);
 % for ii=1:Obj.API.M
 %     for jj=1:Obj.API.R
 %         if isnan(Obj.Data.IR_min(1,ii,jj))
@@ -141,6 +140,7 @@ switch method
             end
         end
     case 4 %---------------------------Minimal-Phase-----------------------
+        Obj=ARI_MinimalPhase(Obj);
         corrcoeff=zeros(Obj.API.M,Obj.API.R);
         for ii=1:Obj.API.M
             for jj=1:Obj.API.R

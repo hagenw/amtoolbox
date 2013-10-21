@@ -96,17 +96,20 @@ end
 %% ARI database
 if flags.do_ARI
     
-    if flags.do_recalc || ~exist([hpath 'ARI_results.mat'],'file')
+    if ~flags.do_recalc && ~exist([hpath 'ARI_results.mat'],'file')
+        urlwrite([SOFAdbURL '/ziegelwanger2013/ARI_results.mat'],[hpath 'ARI_results.mat']);
+    end
+    if flags.do_recalc
         tmp=load([hpath '../ziegelwanger2014/info.mat']);
         data=tmp.info.ARI;
         for ii=1:length(data.subjects)
             Obj=SOFAload([hpath '../ziegelwanger2014/ARI_' data.subjects{ii} '.sofa']);
-            idx=find(mod(Obj.ListenerRotation(:,2),10)==0);
+            idx=find(mod(Obj.SourcePosition(:,2),10)==0);
             Obj.Data.IR=Obj.Data.IR(idx,:,:);
             Obj.SourcePosition=Obj.SourcePosition(idx,:);
             Obj.MeasurementSourceAudioChannel=Obj.MeasurementSourceAudioChannel(idx,:);
             Obj.MeasurementAudioLatency=Obj.MeasurementAudioLatency(idx,:);
-            Obj.DimSize.M=length(idx);
+            Obj.API.M=length(idx);
             
             [Obj,tmp]=ziegelwanger2013(Obj,4,1);
             results(ii).meta=tmp;
@@ -133,7 +136,10 @@ end
 %% CIPIC database
 if flags.do_CIPIC
     
-    if flags.do_recalc || ~exist([hpath 'CIPIC_results.mat'],'file')
+    if ~flags.do_recalc && ~exist([hpath 'CIPIC_results.mat'],'file')
+        urlwrite([SOFAdbURL '/ziegelwanger2013/CIPIC_results.mat'],[hpath 'CIPIC_results.mat']);
+    end
+    if flags.do_recalc
         tmp=load([hpath '../ziegelwanger2014/info.mat']);
         data=tmp.info.CIPIC;
         for ii=1:length(data.subjects)
@@ -164,7 +170,10 @@ end
 %% LISTEN database
 if flags.do_LISTEN
     
-    if flags.do_recalc || ~exist([hpath 'LISTEN_results.mat'],'file')
+    if ~flags.do_recalc && ~exist([hpath 'LISTEN_results.mat'],'file')
+        urlwrite([SOFAdbURL '/ziegelwanger2013/LISTEN_results.mat'],[hpath 'LISTEN_results.mat']);
+    end
+    if flags.do_recalc
         tmp=load([hpath '../ziegelwanger2014/info.mat']);
         data=tmp.info.LISTEN;
         for ii=1:length(data.subjects)
@@ -198,7 +207,10 @@ end
 %% SPHERE (Displacement) database
 if flags.do_SPHERE_DIS
     
-    if flags.do_recalc || ~exist([hpath 'Sphere_Displacement_results.mat'],'file')
+    if ~flags.do_recalc && ~exist([hpath 'Sphere_Displacement_results.mat'],'file')
+        urlwrite([SOFAdbURL '/ziegelwanger2013/Sphere_Displacement_results.mat'],[hpath 'ARI_reSphere_Displacement_resultssults.mat']);
+    end
+    if flags.do_recalc
         tmp=load([hpath '../ziegelwanger2014/info.mat']);
         data=tmp.info.Sphere_Displacement;
         results.p_onaxis=zeros(4,2,length(data.subjects));
@@ -223,7 +235,10 @@ end
 %% SPHERE (Rotation) database
 if flags.do_SPHERE_ROT
     
-    if flags.do_recalc || ~exist([hpath 'Sphere_Rotation_results.mat'],'file')
+    if ~flags.do_recalc && ~exist([hpath 'Sphere_Rotation_results.mat'],'file')
+        urlwrite([SOFAdbURL '/ziegelwanger2013/Sphere_Rotation_results.mat'],[hpath 'Sphere_Rotation_results.mat']);
+    end
+    if flags.do_recalc
         tmp=load([hpath '../ziegelwanger2014/info.mat']);
         data=tmp.info.Sphere_Rotation;
         results.p=zeros(4,2,length(data.phi));
