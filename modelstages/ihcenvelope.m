@@ -96,6 +96,8 @@ end;
 
 if flags.do_ihc_breebaart
   inoutsig = max( inoutsig, 0 );
+  % due to the successive application of the filter, the given 2000 Hz
+  % correspond to a cut off-frequency of 770 Hz after the five iterations
   cutofffreq=2000;
   [b, a] = butter(1, cutofffreq*2/fs);
   for ii=1:5

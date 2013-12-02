@@ -1,4 +1,4 @@
-function [outp] = dietz2011interauralfunctions(s1, s2, tau, fc, signal_level_dB_SPL, compr, coh_cycles, fs)
+function [outp] = dietz2011interauralfunctions(insig_left, insig_right, tau, fc, signal_level_dB_SPL, compr, coh_cycles, fs)
 %DIETZ2011INTERAURALFUNCTIONS  Interaural stages of Dietz 2011
 %
 %   Input parameters
@@ -35,57 +35,60 @@ function [outp] = dietz2011interauralfunctions(s1, s2, tau, fc, signal_level_dB_
 %
 %   References: dietz2011auditory
 
-  a = exp( -1./(fs*tau) );
+% allow five IPD cycles per center frequency
+tau = 5./fc;
+a = exp( -1./(fs.*tau) );
+% interaural transfer function, [ITF_2 in Dietz (2008)]
+outp.itf = insig_right .* conj(insig_left);
+% interaural phase difference
+outp.ipd = angle(outp.itf);
+% interaural coherence
+outp.ic = interaural_coherence(outp.itf, tau, fs);
 
-  outp.itf = s2 .* conj(s1);
-  
-  outp.ipd_lp = zeros(size(s1));
-  
-  % interaural phase difference
-  outp.ipd = angle(outp.itf);
-  
-  % interaural coherence
-  outp.ic = new_ic(outp.itf, coh_cycles./fc, fs);
-  
-  % interaural level difference for the case of tau - scalar
-  
-  s1_low = lowpass(abs(s1),a);
-  s2_low = lowpass(abs(s2),a);    % take envelope at higher frequencies
-  
-  s1_low( abs(s1_low) < eps ) = eps;    % avoid log(0)
-  s2_low( abs(s2_low) < eps ) = eps;    % avoid division by zero
-  
-  outp.ild = 20*log10(s1_low./s2_low)./compr;
-  if length(a) == 1
+% In the following the lowpass() function simulates a finite temporal resolution
+% of the binaural processor [compare Dietz (2008) p. 237 IPD formula]
+
+% interaural level difference (for the case of tau - scalar ???)
+s1_low = lowpass(abs(insig_left),a);
+s2_low = lowpass(abs(insig_right),a);    % take envelope at higher frequencies
+s1_low( abs(s1_low) < eps ) = eps;    % avoid log(0)
+s2_low( abs(s2_low) < eps ) = eps;    % avoid division by zero
+outp.ild = 20*log10(s1_low./s2_low)./compr;
+
+% this seems to be not neccessary
+if length(a) == 1
     a(1:length(fc)) = a;
     tau(1:length(fc)) = tau;
-  end
-  
-  for k = 1:length(fc);
+end
+
+% I think this can be done without a loop
+outp.ipd_lp = zeros(size(insig_left));
+for k = 1:length(fc);
     outp.ipd_lp(:,k) = angle(lowpass(outp.itf(:,k),a(k)))';
-  end
-  
-  % interaural time difference, based on central and instantaneous frequencies
-  for k = 1:length(fc)
-    outp.f_inst_1(:,k) = calc_f_inst(s1(:,k),fs,tau(k),0);
-    outp.f_inst_2(:,k) = calc_f_inst(s2(:,k),fs,tau(k),0);
+end
+
+
+% interaural time difference, based on central and instantaneous frequencies
+for k = 1:length(fc)
+    outp.f_inst_left(:,k) = calc_f_inst(insig_left(:,k),fs,tau(k),0);
+    outp.f_inst_right(:,k) = calc_f_inst(insig_right(:,k),fs,tau(k),0);
     outp.itd_C(:,k) = 1/(2*pi)*outp.ipd(:,k)/fc(k);
     outp.itd_C_lp(:,k) = 1/(2*pi)*outp.ipd_lp(:,k)/fc(k);
-  end
-  outp.f_inst = max(eps,0.5*(outp.f_inst_1 + outp.f_inst_2)); % to avoid division by zero
-  
-  % based on instantaneous frequencies
-  outp.itd = 1/(2*pi)*outp.ipd./outp.f_inst;    
-  outp.itd_lp = 1/(2*pi)*outp.ipd_lp./outp.f_inst;
-  
-  % weighting of channels for cumulative ixd determination
-  % sqrt(2) is due to half-wave rectification (included 28th Sep 07)
-  outp.rms = signal_level_dB_SPL*compr + 20*log10(sqrt(2)*min(rms(abs(s1)),rms(abs(s2))));
-  outp.rms = max(outp.rms,0); % avoid negative weights
-  
-  outp.s1 = s1; % put input in output structure
-  outp.s2 = s2;
-  outp.fc = fc;
+end
+outp.f_inst = max(eps,0.5*(outp.f_inst_left + outp.f_inst_right)); % to avoid division by zero
+
+% based on instantaneous frequencies
+outp.itd = 1/(2*pi)*outp.ipd./outp.f_inst;    
+outp.itd_lp = 1/(2*pi)*outp.ipd_lp./outp.f_inst;
+
+% weighting of channels for cumulative ixd determination
+% sqrt(2) is due to half-wave rectification (included 28th Sep 07)
+outp.rms = signal_level_dB_SPL*compr + 20*log10(sqrt(2)*min(rms(abs(insig_left)),rms(abs(insig_right))));
+outp.rms = max(outp.rms,0); % avoid negative weights
+
+outp.s1 = insig_left; % put input in output structure
+outp.s2 = insig_right;
+outp.fc = fc;
 end
 
 %% lowpass
@@ -108,7 +111,6 @@ function y = lowpass(x, a)
 %  y - filtered signal
 %
 % Example see ...\examples\example_lowpass_tester.m
-  
   [rows, columns] = size(x);
   if rows < columns
     x = x.';
@@ -116,8 +118,6 @@ function y = lowpass(x, a)
   else
     y = zeros(rows, columns);
   end
-  [rows, columns] = size(y);
-  
   y = filter([1-a], [1, -a], x);
 end
 
@@ -145,26 +145,20 @@ function f_inst = calc_f_inst(sig,fs,tau,norm)
 % author   : volker hohmann
 % date     : 12/2004
 %
-
-sig = sig';
-
-alpha = exp(-1/tau/fs);
-b = [1-alpha];
-a = [1 -alpha];
-
-f_inst = sig./(abs(sig)+eps);
-f_inst = abs(sig).^norm.*[0 f_inst(2:end).*conj(f_inst(1:end-1))];
-f_inst = filter(b,a,f_inst);
-f_inst = angle(f_inst')/2/pi*fs;
-
+    sig = sig';
+    alpha = exp(-1/tau/fs);
+    b = [1-alpha];
+    a = [1 -alpha];
+    f_inst = sig./(abs(sig)+eps);
+    f_inst = abs(sig).^norm.*[0 f_inst(2:end).*conj(f_inst(1:end-1))];
+    f_inst = filter(b,a,f_inst);
+    f_inst = angle(f_inst')/2/pi*fs;
 end
 
 
 
-function ic = new_ic(itf,tau_coherence,fs)
-
+function ic = interaural_coherence(itf,tau_coherence,fs)
 %tau_coherence = 15e-3; % good value for ipd_fine
-
 c_coh = exp(-1./(fs.*tau_coherence));
 if length(tau_coherence)==1
     ic = abs(filter(1-c_coh,[1 -c_coh],itf))./abs(filter(1-c_coh,[1 -c_coh],abs(itf)));
