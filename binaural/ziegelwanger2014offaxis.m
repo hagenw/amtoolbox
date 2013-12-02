@@ -1,6 +1,6 @@
-function y=ziegelwanger2013offaxis(p,x)
-%ZIEGELWANGER2013OFFAXIS XXX
-%   Usage: y=ziegelwanger2013offaxis(p,x) 
+function y=ziegelwanger2014offaxis(p,x)
+%ZIEGELWANGER2014OFFAXIS   Off-axis time-of-arrival model
+%   Usage: y=ziegelwanger2014offaxis(p,x) 
 %
 %   Input:
 %       p: off-axis time-of-arrival model parameters [SI-units]
@@ -8,17 +8,24 @@ function y=ziegelwanger2013offaxis(p,x)
 %   Output:
 %       y: time-of-arrival [s]
 %
-%   `toa=ziegelwanger2013offaxis(p,x)` calculates time-of-arrivals for given
+%   `toa=ziegelwanger2014offaxis(p,x)` calculates time-of-arrivals for given
 %   model parameters (p) and directions (x) with an off-axis time-of-arrival
 %   model.
 %
-%   See also: ziegelwanger2013, ziegelwanger2013onaxis,
-%   data_ziegelwanger2013, exp_ziegelwanger2013
+%   See also: ziegelwanger2014, ziegelwanger2014onaxis,
+%   data_ziegelwanger2014, exp_ziegelwanger2014
 %
-%   References: ziegelwanger2013 majdak2013
+%   References: ziegelwanger2014
 
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria
+
+if isoctave
+    tmp=p;
+    p=x;
+    x=tmp;
+    clear tmp
+end
 
 r=p(1); %............. sphere radius [m]
 xM=p(2); %............ x-coordinate of the sphere center [m]
@@ -39,12 +46,12 @@ else
     s1=M*cos(beta)./(2*(M+r).*tan(gamma/2));
 end
 
-y=1/343*((r* ...
+y=1/340*((r* ...
     ((sign(sin(theta_ear).*sin(x(:,2))+cos(theta_ear).*cos(x(:,2)).*cos(phi_ear-x(:,1)))/2+0.5).* ...
     (1-sin(theta_ear).*sin(x(:,2))-cos(theta_ear).*cos(x(:,2)).*cos(phi_ear-x(:,1)))+ ...
     (-sign(sin(theta_ear).*sin(x(:,2))+cos(theta_ear).*cos(x(:,2)).*cos(phi_ear-x(:,1)))/2+0.5).* ...
     (1+acos(sin(theta_ear).*sin(x(:,2))+cos(theta_ear)*cos(x(:,2)).*cos(phi_ear-x(:,1)))-pi/2))) ...
     +s1+s2) ...
-    +delay-(M+r)/343;
+    +delay-(M+r)/340;
 
 end
