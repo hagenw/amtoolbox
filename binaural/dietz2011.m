@@ -152,10 +152,10 @@ end
 definput.import={'auditoryfilterbank','ihcenvelope'};
 % changing default parameters
 definput.importdefaults = { ...
-    'flow',200, ...    % gammatone lowest frequency / Hz
-    'fhigh',5000, ...  % gammatone highest frequency / Hz
-    'basef',1000, ...  % auditory filter should be centered at basef / Hz
-    'ihc_breebart' ... % use haircell parameters as in Breebarts model
+    'flow',200, ...     % gammatone lowest frequency / Hz
+    'fhigh',5000, ...   % gammatone highest frequency / Hz
+    'basef',1000, ...   % auditory filter should be centered at basef / Hz
+    'ihc_breebaart' ... % use haircell parameters as in Breebarts model
 };
 
 % Gammatone filterbank parameters
@@ -221,71 +221,73 @@ inoutsig = filter(b,a,inoutsig);
 
 %% ---- inner ear filterbank ------
 if displ disp('splitting signal into frequency channels -> signal_filtered'); end
-%[inoutsig,fc] = auditoryfilterbank(inoutsig,fs,'argimport',flags,kv);
-% create filterbank
-analyzer = gfb_analyzer_new(fs, kv.flow, kv.basef, kv.fhigh, kv.filters_per_ERB);
-% center frequencies
-fc = analyzer.center_frequencies_hz;
-% get number of channels
-channels = length(fc);
+[inoutsig,fc] = auditoryfilterbank(inoutsig,fs,'argimport',flags,kv);
+%% create filterbank
+%analyzer = gfb_analyzer_new(fs, kv.flow, kv.basef, kv.fhigh, kv.filters_per_ERB);
+%% center frequencies
+%fc = analyzer.center_frequencies_hz;
+%% get number of channels
+%channels = length(fc);
 
 %% apply filterbank
-inoutsig_left = gfb_analyzer_process(analyzer,inoutsig(:,1))';
-inoutsig_right = gfb_analyzer_process(analyzer,inoutsig(:,2))';
+%inoutsig_left = gfb_analyzer_process(analyzer,inoutsig(:,1))';
+%inoutsig_right = gfb_analyzer_process(analyzer,inoutsig(:,2))';
 
 % determine lowpass parameter
 tau = kv.coh_param.tau_cycles./fc;
 
 % cochlea compression to the power of 0.4
-inoutsig_left = inoutsig_left.^kv.compression_power;
-inoutsig_right = inoutsig_right.^kv.compression_power;
+inoutsig = inoutsig.^kv.compression_power;
+%inoutsig_right = inoutsig_right.^kv.compression_power;
 
 % rectification and lowpass filtering of filtered signals
 % (haircell processing)
 if displ disp('haircell processing of frequency bands -> hairc'); end
-inoutsig_left = ihcenvelope(inoutsig_left,fs,'ihc_breebaart');
-inoutsig_right = ihcenvelope(inoutsig_right,fs,'ihc_breebaart');
+inoutsig_fine = max( inoutsig, 0 );
+inoutsig = ihcenvelope(inoutsig,fs,'ihc_breebaart');
+%inoutsig_right = ihcenvelope(inoutsig_right,fs,'ihc_breebaart');
 % only half-wave rectification for fine-structure channel
-inoutsig_fine_left = max( inoutsig_left, 0 );
-inoutsig_fine_right = max( inoutsig_right, 0 );
+%inoutsig_fine_right = max( inoutsig_right, 0 );
 
 % adding internal noise
 if flags.do_int_randn
   if displ disp('adding internal random noise -> hairc'); end
-  addnoise = randn(size(inoutsig_left))*kv.alpha;
-  inoutsig_left = inoutsig_left + addnoise;
-  inoutsig_right = inoutsig_right + addnoise;
-  inoutsig_fine_left = inoutsig_fine_left + addnoise;
-  inoutsig_fine_right = inoutsig_fine_right + addnoise;
+  addnoise = randn(size(inoutsig))*kv.alpha;
+  inoutsig = inoutsig + addnoise;
+  %inoutsig_right = inoutsig_right + addnoise;
+  inoutsig_fine = inoutsig_fine + addnoise;
+  %inoutsig_fine_right = inoutsig_fine_right + addnoise;
 end
 if flags.do_int_mini
   if displ disp('adding internal noise via minimum -> hairc'); end
-  inoutsig_left = max(inoutsig_left,kv.alpha);
-  inoutsig_right = max(inoutsig_right,kv.alpha);
-  inoutsig_fine_left = max(inoutsig_fine_left,kv.alpha);
-  inoutsig_fine_right = max(inoutsig_fine_right,kv.alpha);
+  inoutsig = max(inoutsig,kv.alpha);
+  %inoutsig_right = max(inoutsig_right,kv.alpha);
+  inoutsig_fine = max(inoutsig_fine,kv.alpha);
+  %inoutsig_fine_right = max(inoutsig_fine_right,kv.alpha);
 end
 
 %% === Binaural processor ===
 %
 % --- modulation filter ---
+% gammatone filter centered at a fixed frequency for every frequency channel
 mod_filter_bandwidth_hz = kv.mod_center_frequency_hz/kv.mod_filter_finesse;
-[inoutsig_mod_left, inoutsig_mod_right] = ... 
-    gfb_envelope_filter(inoutsig_left, inoutsig_right, fs,...
+inoutsig_mod = ... 
+    gfb_envelope_filter(inoutsig, fs,...
     kv.mod_center_frequency_hz, mod_filter_bandwidth_hz, ...
     kv.filter_attenuation_db, kv.filter_order);
 % binaural results for modulation filter
 env = dietz2011interauralfunctions(...
-    inoutsig_mod_left, inoutsig_mod_right,tau,kv.mod_center_frequency_hz+0*fc,...
+    inoutsig_mod,tau,kv.mod_center_frequency_hz+0*fc,...
     kv.signal_level_dB_SPL, kv.compression_power, kv.coh_param.tau_cycles, fs);
 %
 % --- fine structur filter ---
-[inoutsig_fine_left, inoutsig_fine_right] =...
-    gfb_envelope_filter(inoutsig_fine_left, inoutsig_fine_right, fs, fc,...
+% gammatone filter centered at the center frequency for every frequency channel
+inoutsig_fine =...
+    gfb_envelope_filter(inoutsig, fs, fc,...
     fc/kv.fine_filter_finesse, kv.filter_attenuation_db, kv.filter_order);
 % binaural results for fine structure filter 
 fine = dietz2011interauralfunctions(...
-    inoutsig_fine_left, inoutsig_fine_right, tau, fc,...
+    inoutsig_fine, tau, fc,...
     kv.signal_level_dB_SPL, kv.compression_power, kv.coh_param.tau_cycles, fs);
 % remove finestructure information > 1400 Hz
 fine.f_inst(:,fc>1400)=[];
@@ -293,19 +295,20 @@ fine.ic(:,fc>1400)=[];
 fine.ipd_lp(:,fc>1400)=[];
 fine.itd_lp(:,fc>1400)=[];
 %
-% --- ILD ---
-ild = ild_filter(inoutsig_left,inoutsig_right,kv.level_filter_cutoff_hz,...
-                       kv.level_filter_order,kv.compression_power,fs);
-
-
-if displ disp('finished'); end
+% --- ILD filter ---
+% low pass filter with a fixed cutoff frequency for every frequency channel
+[b,a] = butter(kv.level_filter_order,kv.level_filter_cutoff_hz/(fs/2),'low');
+inoutsig = filter(b,a,inoutsig);
+% interaural level difference, eq. 5 in Dietz (2011)
+% max(sig,1e-4) avoids division by zero
+ild = 20/compression*log10(max(inoutsig(:,:,2),1e-4)./max(inoutsig(:,:,1),1e-4));
 
 end
 
 
 
 %% gfb_envelope_filter %%%%%%%%%%%%%%%%%
-function [envelopes_left, envelopes_right] = gfb_envelope_filter(insig_left, insig_right, sampling_rate_hz, center_frequency_hz,...
+function envelopes = gfb_envelope_filter(insig, sampling_rate_hz, center_frequency_hz,...
     bandwidth_hz, attenuation_db, gamma_filter_order)
 % [envelopes_filtered, envelopes_sh_filtered] =...
 %   gfb_envelope_filter(insig_left, insig_right, sampling_rate_hz, center_frequency_hz, bandwidth_hz, attenuation_db, gamma_filter_order);
@@ -320,32 +323,18 @@ function [envelopes_left, envelopes_right] = gfb_envelope_filter(insig_left, ins
 %   bandwidth_hz - bandwidth of the gammatone filter at the level attenuation_db / Hz
 %   attenuation_db - attenuation in dB at which the filter has bandwidth_hz
 %   gamma_filter_order - order of the filter
-    [N, M] = size(insig_left);
+    channels = size(insig,2);
     if length(center_frequency_hz) == 1
-        center_frequency_hz = center_frequency_hz * ones(1,M);
+        center_frequency_hz = center_frequency_hz * ones(1,channels);
     end
-    if isempty(bandwidth_hz) % default: width = 1 ERB
-        recip_width1erb = diff(gfb_hz2erbscale(1:N/2));
-        bandwidth_hz = round(1./recip_width1erb(round(center_frequency_hz)));
-    elseif length(bandwidth_hz) == 1
-        bandwidth_hz = bandwidth_hz * ones(1,M);
+    if length(bandwidth_hz) == 1
+        bandwidth_hz = bandwidth_hz * ones(1,channels);
     end
 
-    for ii=1:M
+    for ii=1:channels
         analyzer = gfb_filter_new(sampling_rate_hz, center_frequency_hz(ii),...
             bandwidth_hz(ii), attenuation_db, gamma_filter_order);
-        envelopes_left(:,ii)  = gfb_filter_process(analyzer, insig_left(:,ii)');
-        envelopes_right(:,ii) = gfb_filter_process(analyzer, insig_right(:,ii)');
+        envelopes(:,ii,1) = gfb_filter_process(analyzer, insig(:,ii,1)');
+        envelopes(:,ii,2) = gfb_filter_process(analyzer, insig(:,ii,2)');
     end
-end
-
-
-%% ild_filter
-function ild = ild_filter(insig_left,insig_right,lp_threshold_freq,lp_order,compression,fs)
-    % calculation of ILD using the maxima of the envelopes
-    % lowpass filtering
-    [b,a] = butter(lp_order,lp_threshold_freq/(fs/2),'low');
-    inoutsig_left  = filter(b,a,insig_left);
-    inoutsig_right = filter(b,a,insig_right);
-    ild = 20*log10(max(inoutsig_right,1e-4)./max(inoutsig_left,1e-4))/compression;
 end

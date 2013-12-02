@@ -1,4 +1,4 @@
-function [outp] = dietz2011interauralfunctions(insig_left, insig_right, tau, fc, signal_level_dB_SPL, compr, coh_cycles, fs)
+function [outp] = dietz2011interauralfunctions(insig, tau, fc, signal_level_dB_SPL, compr, coh_cycles, fs)
 %DIETZ2011INTERAURALFUNCTIONS  Interaural stages of Dietz 2011
 %
 %   Input parameters
@@ -38,10 +38,33 @@ function [outp] = dietz2011interauralfunctions(insig_left, insig_right, tau, fc,
 % allow five IPD cycles per center frequency
 tau = 5./fc;
 a = exp( -1./(fs.*tau) );
-% interaural transfer function, [ITF_2 in Dietz (2008)]
-outp.itf = insig_right .* conj(insig_left);
-% interaural phase difference
+
+% interaural transfer function (ITF), eq. 2 in Dietz (2011)
+outp.itf = insig(:,:,2) .* conj(insig(:,:,1));
+% interaural phase difference (IPD), eq. 3 in Dietz (2011) but without low pass
+% filtering
 outp.ipd = angle(outp.itf);
+% interaural phase difference (IPD) of lowpassed signals, eq. 3 in Dietz (2011)
+outp.ipd_lp = zeros(size(insig(:,:,1)));
+for k = 1:length(fc);
+    outp.ipd_lp(:,k) = angle(lowpass(outp.itf(:,k),a(k)))';
+end
+% instantaneous frquency, eq. 4 in Dietz (2011)
+for k = 1:length(fc)
+    outp.f_inst_left(:,k) = calc_f_inst(insig(:,k,1),fs,tau(k),0);
+    outp.f_inst_right(:,k) = calc_f_inst(insig(:,k,2),fs,tau(k),0);
+end
+outp.f_inst = max(eps,0.5*(outp.f_inst_left + outp.f_inst_right)); % to avoid division by zero
+% interaural time difference (ITD), based on instantaneous frequencies
+outp.itd = 1/(2*pi)*outp.ipd./outp.f_inst;    
+outp.itd_lp = 1/(2*pi)*outp.ipd_lp./outp.f_inst;
+% interaural time difference (ITD), based on center frequencies
+for k = 1:length(fc)
+    outp.itd_C(:,k) = 1/(2*pi)*outp.ipd(:,k)/fc(k);
+    outp.itd_C_lp(:,k) = 1/(2*pi)*outp.ipd_lp(:,k)/fc(k);
+end
+
+
 % interaural coherence
 outp.ic = interaural_coherence(outp.itf, tau, fs);
 
@@ -49,8 +72,8 @@ outp.ic = interaural_coherence(outp.itf, tau, fs);
 % of the binaural processor [compare Dietz (2008) p. 237 IPD formula]
 
 % interaural level difference (for the case of tau - scalar ???)
-s1_low = lowpass(abs(insig_left),a);
-s2_low = lowpass(abs(insig_right),a);    % take envelope at higher frequencies
+s1_low = lowpass(abs(insig(:,:,1)),a);
+s2_low = lowpass(abs(insig(:,:,2)),a);    % take envelope at higher frequencies
 s1_low( abs(s1_low) < eps ) = eps;    % avoid log(0)
 s2_low( abs(s2_low) < eps ) = eps;    % avoid division by zero
 outp.ild = 20*log10(s1_low./s2_low)./compr;
@@ -61,33 +84,14 @@ if length(a) == 1
     tau(1:length(fc)) = tau;
 end
 
-% I think this can be done without a loop
-outp.ipd_lp = zeros(size(insig_left));
-for k = 1:length(fc);
-    outp.ipd_lp(:,k) = angle(lowpass(outp.itf(:,k),a(k)))';
-end
-
-
-% interaural time difference, based on central and instantaneous frequencies
-for k = 1:length(fc)
-    outp.f_inst_left(:,k) = calc_f_inst(insig_left(:,k),fs,tau(k),0);
-    outp.f_inst_right(:,k) = calc_f_inst(insig_right(:,k),fs,tau(k),0);
-    outp.itd_C(:,k) = 1/(2*pi)*outp.ipd(:,k)/fc(k);
-    outp.itd_C_lp(:,k) = 1/(2*pi)*outp.ipd_lp(:,k)/fc(k);
-end
-outp.f_inst = max(eps,0.5*(outp.f_inst_left + outp.f_inst_right)); % to avoid division by zero
-
-% based on instantaneous frequencies
-outp.itd = 1/(2*pi)*outp.ipd./outp.f_inst;    
-outp.itd_lp = 1/(2*pi)*outp.ipd_lp./outp.f_inst;
 
 % weighting of channels for cumulative ixd determination
 % sqrt(2) is due to half-wave rectification (included 28th Sep 07)
-outp.rms = signal_level_dB_SPL*compr + 20*log10(sqrt(2)*min(rms(abs(insig_left)),rms(abs(insig_right))));
+outp.rms = signal_level_dB_SPL*compr + 20*log10(sqrt(2)*min(rms(abs(insig(:,:,1))),rms(abs(insig(:,:,2)))));
 outp.rms = max(outp.rms,0); % avoid negative weights
 
-outp.s1 = insig_left; % put input in output structure
-outp.s2 = insig_right;
+outp.s1 = insig(:,:,1); % put input in output structure
+outp.s2 = insig(:,:,2);
 outp.fc = fc;
 end
 
@@ -151,7 +155,7 @@ function f_inst = calc_f_inst(sig,fs,tau,norm)
     a = [1 -alpha];
     f_inst = sig./(abs(sig)+eps);
     f_inst = abs(sig).^norm.*[0 f_inst(2:end).*conj(f_inst(1:end-1))];
-    f_inst = filter(b,a,f_inst);
+    %f_inst = filter(b,a,f_inst);
     f_inst = angle(f_inst')/2/pi*fs;
 end
 
