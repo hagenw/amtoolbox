@@ -1,6 +1,6 @@
 function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
 %DIETZ2011  Dietz 2011 binaural model
-%   Usage: [...] = dietz(insig,fs);
+%   Usage: [...] = dietz2011(insig,fs);
 %
 %   Input parameters:
 %       insig       : binaural signal for which values should be calculated
@@ -9,27 +9,28 @@ function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
 %   Output parameters:
 %       fine        : Information about the fine structure (see below)
 %       env         : Information about the envelope (see below)
+%       fc          : center frequencies of gammatone filterbank
+%       ild         : interaural level difference in dB
 %
 %   `dietz2011(insig,fs)` calculates interaural phase, time and level
 %   differences of fine- structure and envelope of the signal, as well as
 %   the interaural coherence, which can be used as a weighting function.
 %
 %   The output structures *fine* and *env* have the following fields:
-%
-%     s1        : left signal as put in the binaural processor
-%     s2        : right signal as put in the binaural processor
-%     fc        : center frequencies of the channels (f_carrier or f_mod)
 %     itf       : transfer function
-%     itf_equal : transfer function without amplitude
-%     ipd : phase difference in rad
+%     ipd       : phase difference in rad
+%     itd       : interaural time difference based on instantaneous frequency
+%     itd_C     : interaural time difference based on center frequency
+%     ild       : level difference in dB
 %     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
-%     ild : level difference in dB
-%     itd, itd_C, itd_lp, itd_C_lp - time difference based on instantaneous
-%                  and central frequencies, with and without low-passed itf
-%     f_inst_1 : instantaneous frequencies in the channels of the filtered s1
-%     f_inst_2 : instantaneous frequencies in the channels of the filtered s2
-%     f_inst   : instantaneous frequencies (average of f_inst1 and 2)
-%  
+%     itd_lp    : based on lowpass-filtered itf, interaural time difference
+%     itd_C_lp  : based on lowpass-filtered itf, interaural time difference
+%     f_inst_1  : instantaneous frequencies of left ear signal
+%     f_inst_2  : instantaneous frequencies of right ear canal signal
+%     f_inst    : instantaneous frequencies (average of f_inst1 and 2)
+%     ic        : interaural coherence
+%     rms       : rms value of frequency channels for weighting
+%
 %   The steps of the binaural model to calculate the result are the
 %   following (see also Dietz et al., 2011):
 %
@@ -47,8 +48,16 @@ function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
 %      using half-wave rectification followed by filtering with a 770-Hz
 %      5th order lowpass.
 %
-%   The interaural temporal disparities are then extracted using a
-%   second-order complex gammatone bandpass (see paper for details).
+%   5) Modulationfilterbank with three different filters applied to every
+%      frequency channel. One 2nd order gammatone filter for the fine structure
+%      centered at the center frequency of the frequency channel. One 2nd order
+%      gammatone filter for the envelope of the signal centered at 135 Hz.
+%      And a 2nd order lowpass filter with a cutoff frequency of 30 Hz to
+%      extract the ILD of the signal.
+%
+%   6) Calculation of binaural parameters such as IPD, ITD, IC for fine
+%      structure and envelope filter signals and ILD for the ILD filter.
+%
 %
 %   `dietz2011` accepts the following optional parameters:
 %
@@ -73,55 +82,58 @@ function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
 %                    possible. The default value is 2.
 %
 %     'compression_power',cpwr
-%                    XXX. The default value is 0.4.
+%                    Applied compression of the signal on the cochlea with
+%                    ^compression_power. The default value is 0.4.
 %
 %     'alpha',alpha  Internal noise strength. Convention FIXME 65dB =
 %                    0.0354. The default value is 0.
 %
-%     'int_randn'    Internal noise XXX. This is the default.
+%     'int_randn'    Internal noise by adding random noise with rms = alpha.
+%                    This is the default.
 %
-%     'int_mini'     Internal noise XXX.
+%     'int_mini'     Internal noise by setting all values < alpha to alpha.
 %
 %     'filter_order',fo
-%                    Filter order for output XXX. Used for both 'mod' and 'fine'.
-%                    The default value is 2.
+%                    Filter order for the two gammatone filter used for the fine
+%                    structure and envelope of the modulation filter bank. The
+%                    default value is 2.
 %
 %     'filter_attenuation_db',fadb
-%                    XXX. Used for both 'mod' and 'fine'. The default value is 10.
-% 
+%                    Filter attenuation for the two gammatone filter used for the fine
+%                    structure and envelope of the modulation filter bank. The
+%                    default value is 10.
+%                     
 %     'fine_filter_finesse',fff
-%                    Only for finestructure plugin. The default value is 3.
+%                    Filter finesse (determines the bandwidth with fc/finesse)
+%                    for the fine structure gammatone filter. The defulat value
+%                    is 3.
 %
 %     'mod_center_frequency_hz',mcf_hz
-%                    XXX. Only for envelope plugin. The default value is 135.
+%                    Center frequency of the gammatone envelope filter. The
+%                    default value is 135.
 %
 %     'mod_filter_finesse',mff
-%                    XXX. Only for envelope plugin. The default value is 8.
+%                    Filter finesse (determines the bandwidth with fc/finesse)
+%                    for the envelope gammatone filter. The defulat value is 8.
 % 
 %     'level_filter_cutoff_hz',lfc_hz
-%                    XXX. For ild- or level-plugin. The default value is 30.
+%                    Cutoff frequency off the low pass filter used for ILD
+%                    calculation. The default value is 30.
 %
 %     'level_filter_order',lforder
-%                    XXX. For ild- or level-plugin. The default value is 2.
+%                    Order of low pass filter for the ILD calculation. The
+%                    default value is 2.
 %
-%     'coh_param',coh_param
-%                    This is a structure used for the localization
-%                    plugin. It has the following fields:
-%  
-%                      `max_abs_itd`
-%                         XXX. The default value is 1e-3.
-%
-%                      `tau_cycles`
-%                         XXX. The default value is 5. 
-%
-%                      `tau_s`
-%                         XXX. The default value is 10e-3.
+%     'tau_cycles',tau_cycles
+%                    Temporal resolution of binaural processor in terms of
+%                    cycles per frequency channel. The default value is 5.
 %
 %     'signal_level_dB_SPL',signal_level
 %                    Sound pressure level of left channel. Used for data
 %                    display and analysis. Default value is 70.
 %
-%   See also: dietz2011interauralfunctions
+%   See also: dietz2011interauralfunctions, dietz2011modulationfilter,
+%     ihcenvelope
 %
 %   References: dietz2011auditory
 
@@ -149,7 +161,7 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
 end
 
 % import default arguments from other functions
-definput.import={'auditoryfilterbank','ihcenvelope'};
+definput.import={'auditoryfilterbank','ihcenvelope','dietz2011modulationfilter','dietz2011interauralfunctions'};
 % changing default parameters
 definput.importdefaults = { ...
     'flow',200, ...     % gammatone lowest frequency / Hz
@@ -157,184 +169,80 @@ definput.importdefaults = { ...
     'basef',1000, ...   % auditory filter should be centered at basef / Hz
     'ihc_breebaart' ... % use haircell parameters as in Breebarts model
 };
-
-% Gammatone filterbank parameters
-%definput.keyvals.flow = 200;
-%definput.keyvals.fhigh = 5000;
-%definput.keyvals.basef = 1000;
-%definput.keyvals.filters_per_ERB = 1;
-
 % Preprocessing parameters
 definput.keyvals.middle_ear_thr = [500 2000]; % Bandpass freqencies for middle ear transfer
 definput.keyvals.middle_ear_order = 2;        % Only even numbers possible
-definput.keyvals.compression_power = 0.4;
 definput.keyvals.alpha = 0;                   % Internal noise strength
                                               % 65dB = 0.0354
 % randn: add random noise with rms = alpha
 % mini: set all values < alpha to alpha
 definput.flags.int_noise_case = {'int_randn','int_mini'};
 
-% === Binaural processor ===
-% Parameters for filtering the haircell output
-definput.keyvals.filter_order = 2;            % Used for both mod and fine
-definput.keyvals.filter_attenuation_db = 10;  % Used for both mod and fine
-% Finestructure filter
-definput.keyvals.fine_filter_finesse = 3;
-% Modulation filter
-definput.keyvals.mod_center_frequency_hz = 135;
-definput.keyvals.mod_filter_finesse = 8; % => bandwidth: 16.9 Hz
-
-% For ild- or level-plugin
-definput.keyvals.level_filter_cutoff_hz = 30;
-definput.keyvals.level_filter_order = 2;
-
-% Parameters for localization plugin
-definput.keyvals.coh_param.max_abs_itd = 1e-3;
-definput.keyvals.coh_param.tau_cycles  = 5;   % in cycles
-definput.keyvals.coh_param.tau_s       = 10e-3; % in s for faller
-
-% parameters for data display and analysis
-definput.keyvals.signal_level_dB_SPL = 70; % sound pressure level of left channel
-
-% display current process
-displ                = 0;   % display current process (0 = do not)
-
 [flags,kv]  = ltfatarghelper({},definput,varargin);
 
 
 
 %% Model processing starts here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-siglen=length(insig);
-t = (0:siglen-1)/fs.';
 
 %% ---- middle ear band pass filtering ------
 % TODO: test middleear() function
-if displ 
-  disp(['band pass filtering of input according to middle ear transfer ' ...
-        'charact. -> signal_me']); 
-end
 [b,a] = butter(kv.middle_ear_order,kv.middle_ear_thr(2)/(fs/2),'low');
 inoutsig = filter(b,a,insig);
 [b,a] = butter(kv.middle_ear_order,kv.middle_ear_thr(1)/(fs/2),'high');
 inoutsig = filter(b,a,inoutsig);
 
 
-%% ---- inner ear filterbank ------
-if displ disp('splitting signal into frequency channels -> signal_filtered'); end
+%% ---- inner ear ------
+% gammatone filterbank
 [inoutsig,fc] = auditoryfilterbank(inoutsig,fs,'argimport',flags,kv);
-%% create filterbank
-%analyzer = gfb_analyzer_new(fs, kv.flow, kv.basef, kv.fhigh, kv.filters_per_ERB);
-%% center frequencies
-%fc = analyzer.center_frequencies_hz;
-%% get number of channels
-%channels = length(fc);
-
-%% apply filterbank
-%inoutsig_left = gfb_analyzer_process(analyzer,inoutsig(:,1))';
-%inoutsig_right = gfb_analyzer_process(analyzer,inoutsig(:,2))';
-
-% determine lowpass parameter
-tau = kv.coh_param.tau_cycles./fc;
-
 % cochlea compression to the power of 0.4
 inoutsig = inoutsig.^kv.compression_power;
-%inoutsig_right = inoutsig_right.^kv.compression_power;
-
 % rectification and lowpass filtering of filtered signals
-% (haircell processing)
-if displ disp('haircell processing of frequency bands -> hairc'); end
-inoutsig_fine = max( inoutsig, 0 );
 inoutsig = ihcenvelope(inoutsig,fs,'ihc_breebaart');
-%inoutsig_right = ihcenvelope(inoutsig_right,fs,'ihc_breebaart');
-% only half-wave rectification for fine-structure channel
-%inoutsig_fine_right = max( inoutsig_right, 0 );
 
-% adding internal noise
+%% ---- internal noise ------
 if flags.do_int_randn
-  if displ disp('adding internal random noise -> hairc'); end
   addnoise = randn(size(inoutsig))*kv.alpha;
   inoutsig = inoutsig + addnoise;
-  %inoutsig_right = inoutsig_right + addnoise;
-  inoutsig_fine = inoutsig_fine + addnoise;
-  %inoutsig_fine_right = inoutsig_fine_right + addnoise;
 end
 if flags.do_int_mini
-  if displ disp('adding internal noise via minimum -> hairc'); end
   inoutsig = max(inoutsig,kv.alpha);
-  %inoutsig_right = max(inoutsig_right,kv.alpha);
-  inoutsig_fine = max(inoutsig_fine,kv.alpha);
-  %inoutsig_fine_right = max(inoutsig_fine_right,kv.alpha);
 end
 
-%% === Binaural processor ===
-%
-% --- modulation filter ---
-% gammatone filter centered at a fixed frequency for every frequency channel
-mod_filter_bandwidth_hz = kv.mod_center_frequency_hz/kv.mod_filter_finesse;
-inoutsig_mod = ... 
-    gfb_envelope_filter(inoutsig, fs,...
-    kv.mod_center_frequency_hz, mod_filter_bandwidth_hz, ...
-    kv.filter_attenuation_db, kv.filter_order);
-% binaural results for modulation filter
-env = dietz2011interauralfunctions(...
-    inoutsig_mod,tau,kv.mod_center_frequency_hz+0*fc,...
-    kv.signal_level_dB_SPL, kv.compression_power, kv.coh_param.tau_cycles, fs);
-%
-% --- fine structur filter ---
-% gammatone filter centered at the center frequency for every frequency channel
-inoutsig_fine =...
-    gfb_envelope_filter(inoutsig, fs, fc,...
-    fc/kv.fine_filter_finesse, kv.filter_attenuation_db, kv.filter_order);
-% binaural results for fine structure filter 
-fine = dietz2011interauralfunctions(...
-    inoutsig_fine, tau, fc,...
-    kv.signal_level_dB_SPL, kv.compression_power, kv.coh_param.tau_cycles, fs);
+%% ---- modulation filterbank ------
+% filter signals with three different filters to get fine structure, envelope
+% and low pass for ILD calculation
+[inoutsig_fine,inoutsig_env,inoutsig_ild] = ...
+  dietz2011modulationfilter(inoutsig,fs,fc, ...
+    'filter_order',kv.filter_order, ...
+    'filter_attenuation_db',kv.filter_attenuation_db, ...
+    'fine_filter_finesse',kv.fine_filter_finesse, ...
+    'mod_center_frequency_hz',kv.mod_center_frequency_hz, ...
+    'mod_filter_finesse',kv.mod_filter_finesse, ...
+    'level_filter_order',kv.level_filter_order, ...
+    'level_filter_cutoff_hz',kv.level_filter_cutoff_hz);
+
+%% ---- binaural processor ------
+% calculate interaural parameters for fine structure and envelope and calculate
+% ILD
+% -- fine structure
+fine = dietz2011interauralfunctions(inoutsig_fine,fs,fc, ...
+  'signal_level_dB_SPL',kv.signal_level_dB_SPL, ...
+  'compression_power',kv.compression_power, ...
+  'tau_cycles',kv.tau_cycles);
 % remove finestructure information > 1400 Hz
 fine.f_inst(:,fc>1400)=[];
 fine.ic(:,fc>1400)=[];
 fine.ipd_lp(:,fc>1400)=[];
 fine.itd_lp(:,fc>1400)=[];
-%
-% --- ILD filter ---
-% low pass filter with a fixed cutoff frequency for every frequency channel
-[b,a] = butter(kv.level_filter_order,kv.level_filter_cutoff_hz/(fs/2),'low');
-inoutsig = filter(b,a,inoutsig);
+% --envelope
+env = dietz2011interauralfunctions(inoutsig_env,fs,kv.mod_center_frequency_hz+0*fc, ...
+  'signal_level_dB_SPL',kv.signal_level_dB_SPL, ...
+  'compression_power',kv.compression_power, ...
+  'tau_cycles',kv.tau_cycles);
+% -- ILD
 % interaural level difference, eq. 5 in Dietz (2011)
 % max(sig,1e-4) avoids division by zero
-ild = 20/compression*log10(max(inoutsig(:,:,2),1e-4)./max(inoutsig(:,:,1),1e-4));
+ild = 20/kv.compression_power*log10(max(inoutsig(:,:,2),1e-4)./max(inoutsig(:,:,1),1e-4));
 
-end
-
-
-
-%% gfb_envelope_filter %%%%%%%%%%%%%%%%%
-function envelopes = gfb_envelope_filter(insig, sampling_rate_hz, center_frequency_hz,...
-    bandwidth_hz, attenuation_db, gamma_filter_order)
-% [envelopes_filtered, envelopes_sh_filtered] =...
-%   gfb_envelope_filter(insig_left, insig_right, sampling_rate_hz, center_frequency_hz, bandwidth_hz, attenuation_db, gamma_filter_order);
-%
-% Filters each row of s1 and s2 with the gammatone filter defined by the input parameters.
-% Takes both vectors and matrices.
-%
-% Input
-%   insig_left, insig_right - signals to be filtered
-%   sampling_rate_hz - sampling frequency / Hz
-%   center_frequency_hz - centre frequency of the gammatone filter / Hz
-%   bandwidth_hz - bandwidth of the gammatone filter at the level attenuation_db / Hz
-%   attenuation_db - attenuation in dB at which the filter has bandwidth_hz
-%   gamma_filter_order - order of the filter
-    channels = size(insig,2);
-    if length(center_frequency_hz) == 1
-        center_frequency_hz = center_frequency_hz * ones(1,channels);
-    end
-    if length(bandwidth_hz) == 1
-        bandwidth_hz = bandwidth_hz * ones(1,channels);
-    end
-
-    for ii=1:channels
-        analyzer = gfb_filter_new(sampling_rate_hz, center_frequency_hz(ii),...
-            bandwidth_hz(ii), attenuation_db, gamma_filter_order);
-        envelopes(:,ii,1) = gfb_filter_process(analyzer, insig(:,ii,1)');
-        envelopes(:,ii,2) = gfb_filter_process(analyzer, insig(:,ii,2)');
-    end
-end
+% vim: set sw=2 ts=2 expandtab textwidth=80:
