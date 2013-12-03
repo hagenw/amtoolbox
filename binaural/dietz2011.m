@@ -169,6 +169,8 @@ definput.importdefaults = { ...
     'basef',1000, ...   % auditory filter should be centered at basef / Hz
     'ihc_breebaart' ... % use haircell parameters as in Breebarts model
 };
+% TODO: check if can change the used haircell model via input parameter or does
+% this interact with the internal noise switch?
 % Preprocessing parameters
 definput.keyvals.middle_ear_thr = [500 2000]; % Bandpass freqencies for middle ear transfer
 definput.keyvals.middle_ear_order = 2;        % Only even numbers possible
@@ -185,12 +187,11 @@ definput.flags.int_noise_case = {'int_randn','int_mini'};
 %% Model processing starts here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% ---- middle ear band pass filtering ------
-% TODO: test middleear() function
+% TODO: add reference
 [b,a] = butter(kv.middle_ear_order,kv.middle_ear_thr(2)/(fs/2),'low');
 inoutsig = filter(b,a,insig);
 [b,a] = butter(kv.middle_ear_order,kv.middle_ear_thr(1)/(fs/2),'high');
 inoutsig = filter(b,a,inoutsig);
-
 
 %% ---- inner ear ------
 % gammatone filterbank
@@ -198,13 +199,15 @@ inoutsig = filter(b,a,inoutsig);
 % cochlea compression to the power of 0.4
 inoutsig = inoutsig.^kv.compression_power;
 % rectification and lowpass filtering of filtered signals
-inoutsig = ihcenvelope(inoutsig,fs,'ihc_breebaart');
+inoutsig = ihcenvelope(inoutsig,fs,'argimport',flags,kv);
 
 %% ---- internal noise ------
+% additive white noise
 if flags.do_int_randn
   addnoise = randn(size(inoutsig))*kv.alpha;
   inoutsig = inoutsig + addnoise;
 end
+% replace values<kv.alpha with kv.alpha
 if flags.do_int_mini
   inoutsig = max(inoutsig,kv.alpha);
 end
@@ -221,6 +224,9 @@ end
     'mod_filter_finesse',kv.mod_filter_finesse, ...
     'level_filter_order',kv.level_filter_order, ...
     'level_filter_cutoff_hz',kv.level_filter_cutoff_hz);
+% maybe replace it with
+%[inoutsig_fine,inoutsig_env,inoutsig_ild] = ...
+%  dietz2011modulationfilter(inoutsig,fs,fc,'argimport',flags,kv);
 
 %% ---- binaural processor ------
 % calculate interaural parameters for fine structure and envelope and calculate
@@ -230,7 +236,9 @@ fine = dietz2011interauralfunctions(inoutsig_fine,fs,fc, ...
   'signal_level_dB_SPL',kv.signal_level_dB_SPL, ...
   'compression_power',kv.compression_power, ...
   'tau_cycles',kv.tau_cycles);
-% remove finestructure information > 1400 Hz
+% maybe replace it with
+%fine = dietz2011interauralfunctions(inoutsig_fine,fs,fc,'argimport',flags,kv);
+% remove finestructure information > 1400 Hz <== TODO: is this needed?
 fine.f_inst(:,fc>1400)=[];
 fine.ic(:,fc>1400)=[];
 fine.ipd_lp(:,fc>1400)=[];
@@ -240,6 +248,9 @@ env = dietz2011interauralfunctions(inoutsig_env,fs,kv.mod_center_frequency_hz+0*
   'signal_level_dB_SPL',kv.signal_level_dB_SPL, ...
   'compression_power',kv.compression_power, ...
   'tau_cycles',kv.tau_cycles);
+% maybe replace it with
+%env = dietz2011interauralfunctions(inoutsig_env,fs, ...
+%  kv.mod_center_frequency_hz+0*fc,'argimport',flags,kv);
 % -- ILD
 % interaural level difference, eq. 5 in Dietz (2011)
 % max(sig,1e-4) avoids division by zero
