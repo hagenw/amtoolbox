@@ -166,7 +166,7 @@ function f_inst = calc_f_inst(sig,fs)
   % copyright: Universitaet Oldenburg
   % author   : volker hohmann
   % date     : 12/2004
-  f_inst = zeros(sig);
+  f_inst = zeros(size(sig));
   for ii=1:size(sig,2)
     f_inst(:,ii) = sig(:,ii)./(abs(sig(:,ii))+eps);
     f_inst(:,ii) = [0; f_inst(2:end,ii).*conj(f_inst(1:end-1,ii))];
