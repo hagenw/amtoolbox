@@ -78,8 +78,10 @@ outp.itf = insig(:,:,2) .* conj(insig(:,:,1));
 % filtering
 outp.ipd = angle(outp.itf);
 % instantaneous frequency (f_inst), eq. 4 in Dietz (2011)
-outp.f_inst_left  = calc_f_inst(insig(:,:,1),fs);
-outp.f_inst_right = calc_f_inst(insig(:,:,2),fs);
+for k = 1:length(fc)
+  outp.f_inst_left(:,k)  = calc_f_inst(insig(:,k,1),fs);
+  outp.f_inst_right(:,k) = calc_f_inst(insig(:,k,2),fs);
+end
 outp.f_inst = max(eps,0.5*(outp.f_inst_left + outp.f_inst_right)); % to avoid division by zero
 % interaural time difference (ITD), based on instantaneous frequencies
 outp.itd = 1/(2*pi)*outp.ipd./outp.f_inst;
@@ -166,12 +168,10 @@ function f_inst = calc_f_inst(sig,fs)
   % copyright: Universitaet Oldenburg
   % author   : volker hohmann
   % date     : 12/2004
-  f_inst = zeros(size(sig));
-  for ii=1:size(sig,2)
-    f_inst(:,ii) = sig(:,ii)./(abs(sig(:,ii))+eps);
-    f_inst(:,ii) = [0; f_inst(2:end,ii).*conj(f_inst(1:end-1,ii))];
-    f_inst = angle(f_inst)./2/pi*fs;
-  end
+  %sig = sig';
+  sig = sig./(abs(sig)+eps);
+  f_inst = [0; sig(2:end).*conj(sig(1:end-1))];
+  f_inst = angle(f_inst)/2/pi*fs;
 end
 
 
