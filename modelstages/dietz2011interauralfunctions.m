@@ -23,15 +23,16 @@ function [outp] = dietz2011interauralfunctions(insig,fs,fc,varargin)
 %     ipd       : phase difference in rad
 %     itd       : interaural time difference based on instantaneous frequency
 %     itd_C     : interaural time difference based on center frequency
-%     ild       : level difference in dB
-%     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
-%     itd_lp    : based on lowpass-filtered itf, interaural time difference
-%     itd_C_lp  : based on lowpass-filtered itf, interaural time difference
 %     f_inst_1  : instantaneous frequencies of left ear signal
 %     f_inst_2  : instantaneous frequencies of right ear canal signal
 %     f_inst    : instantaneous frequencies (average of f_inst1 and 2)
 %     ic        : interaural coherence
 %     rms       : rms value of frequency channels for weighting
+%     ild_lp    : based on low passed-filtered insig, level difference in dB
+%     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
+%     itd_lp    : based on lowpass-filtered itf, interaural time difference
+%     itd_C_lp  : based on lowpass-filtered itf, interaural time difference
+%   The *_lp values are not returned if the 'nolowpass' flag is set.
 %
 %   `dietz2011interauralfunctions` accepts the following optional parameters:
 %
@@ -47,7 +48,13 @@ function [outp] = dietz2011interauralfunctions(insig,fs,fc,varargin)
 %                    Sound pressure level of left channel. Used for data
 %                    display and analysis. Default value is 70.
 %
-%   See also: dietz2011, dietz2011modulationfilter
+%     'lowpass'      Calculate the interaural parameters of the lowpassed
+%                    signal/ITF (*_lp return values). This is the default.
+%
+%     'nolowpass'    Don't calculate the lowpass based interaural parameters.
+%                    The *_lp values are not returned.
+%
+%   See also: dietz2011, dietz2011modulationfilterbank
 %
 %   References: dietz2011auditory
 
@@ -94,18 +101,20 @@ end
 % The low pass is simulating a finite time resolution of the binaural system and
 % is given by the coh_cycles parameter
 tau = kv.tau_cycles./fc;
-a = exp( -1./(fs.*tau) );
-% interaural phase difference (IPD) of lowpassed signals, eq. 3 in Dietz (2011)
-outp.ipd_lp = angle(lowpass(outp.itf,a));
-outp.f_inst_lp = lowpass(outp.f_inst,a);
-outp.itd_lp = 1/(2*pi)*outp.ipd_lp./outp.f_inst_lp;
-for k = 1:length(fc)
-  outp.itd_C_lp(:,k) = 1/(2*pi)*outp.ipd_lp(:,k)/fc(k);
+if flags.do_lowpass
+  a = exp( -1./(fs.*tau) );
+  % interaural phase difference (IPD) of lowpassed signals, eq. 3 in Dietz (2011)
+  outp.ipd_lp = angle(lowpass(outp.itf,a));
+  outp.f_inst_lp = lowpass(outp.f_inst,a);
+  outp.itd_lp = 1/(2*pi)*outp.ipd_lp./outp.f_inst_lp;
+  for k = 1:length(fc)
+    outp.itd_C_lp(:,k) = 1/(2*pi)*outp.ipd_lp(:,k)/fc(k);
+  end
+  % interaural level difference
+  inoutsig = lowpass(abs(insig),a);
+  inoutsig(abs(inoutsig)<eps) = eps; % avoid division by zero and log(0)
+  outp.ild_lp = 20./kv.compression_power.*log10(inoutsig(:,:,2)./inoutsig(:,:,1));
 end
-% interaural level difference
-inoutsig = lowpass(abs(insig),a);
-inoutsig(abs(inoutsig)<eps) = eps; % avoid division by zero and log(0)
-outp.ild = 20./kv.compression_power.*log10(inoutsig(:,:,2)./inoutsig(:,:,1));
 
 % interaural coherence (IC) estimated by interaural vector strength (IVS), see
 % eq. 7 in Dietz (2011)
@@ -168,7 +177,6 @@ function f_inst = calc_f_inst(sig,fs)
   % copyright: Universitaet Oldenburg
   % author   : volker hohmann
   % date     : 12/2004
-  %sig = sig';
   sig = sig./(abs(sig)+eps);
   f_inst = [0; sig(2:end).*conj(sig(1:end-1))];
   f_inst = angle(f_inst)/2/pi*fs;

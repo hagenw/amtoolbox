@@ -1,6 +1,6 @@
-function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
+function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %DIETZ2011  Dietz 2011 binaural model
-%   Usage: [...] = dietz2011(insig,fs);
+%   Usage: [fine,fc,ild,env] = dietz2011(insig,fs);
 %
 %   Input parameters:
 %       insig       : binaural signal for which values should be calculated
@@ -8,9 +8,9 @@ function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
 %
 %   Output parameters:
 %       fine        : Information about the fine structure (see below)
-%       env         : Information about the envelope (see below)
 %       fc          : center frequencies of gammatone filterbank
 %       ild         : interaural level difference in dB
+%       env         : Information about the envelope (see below)
 %
 %   `dietz2011(insig,fs)` calculates interaural phase, time and level
 %   differences of fine- structure and envelope of the signal, as well as
@@ -21,15 +21,17 @@ function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
 %     ipd       : phase difference in rad
 %     itd       : interaural time difference based on instantaneous frequency
 %     itd_C     : interaural time difference based on center frequency
-%     ild       : level difference in dB
-%     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
-%     itd_lp    : based on lowpass-filtered itf, interaural time difference
-%     itd_C_lp  : based on lowpass-filtered itf, interaural time difference
 %     f_inst_1  : instantaneous frequencies of left ear signal
 %     f_inst_2  : instantaneous frequencies of right ear canal signal
 %     f_inst    : instantaneous frequencies (average of f_inst1 and 2)
 %     ic        : interaural coherence
 %     rms       : rms value of frequency channels for weighting
+%     ild_lp    : based on low passed-filtered insig, level difference in dB
+%     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
+%     itd_lp    : based on lowpass-filtered itf, interaural time difference
+%     itd_C_lp  : based on lowpass-filtered itf, interaural time difference
+%     f_inst_lp : lowpass instantaneous frequencies
+%   The *_lp values are not returned if the 'nolowpass' flag is set.
 %
 %   The steps of the binaural model to calculate the result are the
 %   following (see also Dietz et al., 2011):
@@ -132,8 +134,20 @@ function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
 %                    Sound pressure level of left channel. Used for data
 %                    display and analysis. Default value is 70.
 %
-%   See also: dietz2011interauralfunctions, dietz2011modulationfilter,
-%     ihcenvelope
+%     'lowpass'      Calculate the interaural parameters of the lowpassed
+%                    signal/ITF (*_lp return values). This is the default.
+%
+%     'nolowpass'    Don't calculate the lowpass based interaural parameters.
+%                    The *_lp values are not returned.
+%
+%     'env'          Calculate the interaural parameter also for the envelpe of
+%                    the signal. This is the default.
+%
+%     'noenv'        Don't create the envelope filter and don't calculate
+%                    interaural parameter for the envelope.
+%
+%   See also: dietz2011interauralfunctions, dietz2011modulationfilterbank,
+%     ihcenvelope, auditoryfilterbank
 %
 %   References: dietz2011auditory
 
@@ -187,7 +201,7 @@ definput.flags.int_noise_case = {'int_randn','int_mini'};
 %% Model processing starts here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% ---- middle ear band pass filtering ------
-% TODO: add reference
+% Compare Puria et al. (1997)
 [b,a] = butter(kv.middle_ear_order,kv.middle_ear_thr(2)/(fs/2),'low');
 inoutsig = filter(b,a,insig);
 [b,a] = butter(kv.middle_ear_order,kv.middle_ear_thr(1)/(fs/2),'high');
@@ -196,7 +210,7 @@ inoutsig = filter(b,a,inoutsig);
 %% ---- inner ear ------
 % gammatone filterbank
 [inoutsig,fc] = auditoryfilterbank(inoutsig,fs,'argimport',flags,kv);
-% cochlea compression to the power of 0.4
+% cochlea compression
 inoutsig = inoutsig.^kv.compression_power;
 % rectification and lowpass filtering of filtered signals
 inoutsig = ihcenvelope(inoutsig,fs,'argimport',flags,kv);
@@ -214,26 +228,25 @@ end
 
 %% ---- modulation filterbank ------
 % filter signals with three different filters to get fine structure, envelope
-% and low pass for ILD calculation
-[inoutsig_fine,inoutsig_env,inoutsig_ild] = ...
-  dietz2011modulationfilter(inoutsig,fs,fc,'argimport',flags,kv);
+% and ILD low pass
+[inoutsig_fine,inoutsig_ild,inoutsig_env] = ...
+  dietz2011modulationfilterbank(inoutsig,fs,fc,'argimport',flags,kv);
 
 %% ---- binaural processor ------
 % calculate interaural parameters for fine structure and envelope and calculate
 % ILD
 % -- fine structure
 fine = dietz2011interauralfunctions(inoutsig_fine,fs,fc,'argimport',flags,kv);
-% remove finestructure information > 1400 Hz <== TODO: is this needed?
-fine.f_inst(:,fc>1400)=[];
-fine.ic(:,fc>1400)=[];
-fine.ipd_lp(:,fc>1400)=[];
-fine.itd_lp(:,fc>1400)=[];
-% --envelope
-env = dietz2011interauralfunctions(inoutsig_env,fs, ...
-  kv.mod_center_frequency_hz+0*fc,'argimport',flags,kv);
 % -- ILD
 % interaural level difference, eq. 5 in Dietz (2011)
 % max(sig,1e-4) avoids division by zero
-ild = 20/kv.compression_power*log10(max(inoutsig(:,:,2),1e-4)./max(inoutsig(:,:,1),1e-4));
+ild = 20/kv.compression_power*log10(max(inoutsig_ild(:,:,2),1e-4)./max(inoutsig_ild(:,:,1),1e-4));
+% --envelope
+if flags.do_env
+  env = dietz2011interauralfunctions(inoutsig_env,fs, ...
+    kv.mod_center_frequency_hz+0*fc,'argimport',flags,kv);
+else
+  env = [];
+end
 
 % vim: set sw=2 ts=2 expandtab textwidth=80:
