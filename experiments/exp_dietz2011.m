@@ -132,21 +132,25 @@ if flags.do_fig4
     panellabel = 'abc';
 
     % run IPD model on signal
-    [hairc_fine, fc, hairc_ild, hairc_mod]=dietz2011(signal,fs,'mod_center_frequency_hz',216);
+    [hairc_fine, fc, hairc_ild, hairc_mod216]=dietz2011(signal,fs,'mod_center_frequency_hz',216);
+    [~, ~, ~, hairc_mod135]=dietz2011(signal,fs,'mod_center_frequency_hz',135);
     % convert interaural information into azimuth
     itd_unwrapped = ...
         dietz2011unwrapitd(hairc_fine.itd_lp(:,1:12),hairc_ild(:,1:12),hairc_fine.f_inst(:,1:12),2.5);
     angl=itd2angle(itd_unwrapped,lookup);
-    angl_fmod216=hairc_mod.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
-    [hairc_fine, fc, hairc_ild, hairc_mod]=dietz2011(signal,fs,'mod_center_frequency_hz',135);
-    angl_fmod135=hairc_mod.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
+    angl_fmod216=hairc_mod216.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
+    angl_fmod135=hairc_mod135.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
 
     h_ic=zeros(61,12);
+    h_fmod216=zeros(61,11);
+    h_fmod135=zeros(61,11);
     h_all=histc(angl,-60:2:60);
-    h_fmod216=histc(nonzeros(angl_fmod216),-60:2:60);
-    h_fmod135=histc(nonzeros(angl_fmod135),-60:2:60);
     for n=1:12
         h_ic(:,n)=histc(angl(hairc_fine.ic(:,n)>ic_threshold&[diff(hairc_fine.ic(:,n))>0; 0],n),-60:2:60);
+    end
+    for n=1:11
+        h_fmod216(:,n)=histc(angl_fmod216(hairc_mod216.ic(:,n+12)>ic_threshold&[diff(hairc_mod216.ic(:,n+12))>0; 0],n),-60:2:60);
+        h_fmod135(:,n)=histc(angl_fmod135(hairc_mod135.ic(:,n+12)>ic_threshold&[diff(hairc_mod135.ic(:,n+12))>0; 0],n),-60:2:60);
     end
     example_output.angle_fine = angl;
     example_output.IVS_fine = hairc_fine.ic;
@@ -308,10 +312,13 @@ if flags.do_fig6
     angl_fmod=hairc_mod.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
 
     h_ic=zeros(71,12);
+    h_fmod=zeros(71,11);
     h_all=histc(angl,-70:2:70);
-    h_fmod=histc(nonzeros(angl_fmod),-70:2:70);
     for n=1:12
         h_ic(:,n)=histc(angl(hairc_fine.ic(:,n)>ic_threshold&[diff(hairc_fine.ic(:,n))>0; 0],n),-70:2:70);
+    end
+    for n=1:11
+        h_fmod(:,n)=histc(angl(hairc_mod.ic(:,n+12)>ic_threshold&[diff(hairc_mod.ic(:,n+12))>0; 0],n),-70:2:70);
     end
     example_output.angle_fine = angl;
     example_output.IVS_fine = hairc_fine.ic;
