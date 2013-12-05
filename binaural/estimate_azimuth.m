@@ -69,15 +69,15 @@ if strcmpi('dietz2011',model)
     ic_threshold=0.98;
 
     % Run the Dietz model on signal
-    [fine,~,cfreqs,ild_tmp] = dietz2011(sig,fs);
+    [fine,cfreqs,ild] = dietz2011(sig,fs,'nolowpass','noenv','fhigh',1400);
 
     % Unwrap ITDs and get the azimuth values
-    itd = dietz2011unwrapitd(fine.itd(:,1:12),ild_tmp(:,1:12),fine.f_inst,2.5);
+    itd = dietz2011unwrapitd(fine.itd,ild,fine.f_inst,2.5);
     phi = itd2angle(itd,lookup);
 
     % Calculate the median over time for every frequency channel of the azimuth
     for n = 1:size(phi,2)
-        idx = fine.ic(:,n)>ic_threshold&[diff(fine.ic(:,n))>0; 0];
+        idx = fine.ic(:,n)>ic_threshold&[diff(fine.ic(:,n))>0; 0]; % compare eq. 9 in Dietz (2011)
         angle = phi(idx,n);
         idx = ~isnan(angle);
         if size(angle(idx),1)==0
@@ -87,7 +87,7 @@ if strcmpi('dietz2011',model)
         end
     end
     % Calculate ITD and ILD values
-    ild = median(ild_tmp,1);
+    %ild = median(ild_tmp,1);
     itd = median(itd,1);
 
 elseif strcmpi('lindemann1986',model)
@@ -117,10 +117,12 @@ end
 [azimuth,cfreqs] = remove_outlier(azimuth,itd,cfreqs);
 % Calculate mean about frequency channels
 if length(azimuth)==0
-    phi = rad(90);
+    phi = NaN;
+    phi_std = NaN;
 elseif do_spectral_weighting
     w = spectral_weighting(cfreqs);
     phi = sum(azimuth.*w)/sum(w);
+    phi_std = [];
 else
     phi = median(azimuth);
     phi_std = std(azimuth);
