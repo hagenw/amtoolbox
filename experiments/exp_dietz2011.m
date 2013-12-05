@@ -138,7 +138,7 @@ if flags.do_fig4
         dietz2011unwrapitd(hairc_fine.itd_lp(:,1:12),hairc_ild(:,1:12),hairc_fine.f_inst(:,1:12),2.5);
     angl=itd2angle(itd_unwrapped,lookup);
     angl_fmod216=hairc_mod.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
-    [hairc_fine, fc, hairc_ild, haric_mod]=dietz2011(signal,fs,'mod_center_frequency_hz',135);
+    [hairc_fine, fc, hairc_ild, hairc_mod]=dietz2011(signal,fs,'mod_center_frequency_hz',135);
     angl_fmod135=hairc_mod.itd_lp(:,13:23)*140000; %linear approximation. paper version is better than this
 
     h_ic=zeros(61,12);
