@@ -1,4 +1,4 @@
-function definput=arg_dietz2011modulationfilter(definput)
+function definput=arg_dietz2011filterbank(definput)
  
   % Parameters for filtering the haircell output
   definput.keyvals.filter_order = 2;            % used for both env and fine
@@ -11,6 +11,3 @@ function definput=arg_dietz2011modulationfilter(definput)
   % ILD filter
   definput.keyvals.level_filter_order = 2;
   definput.keyvals.level_filter_cutoff_hz = 30;
-
-  % do envelope filter of modulation filter bank
-  definput.flags.env_case = {'env','noenv'};

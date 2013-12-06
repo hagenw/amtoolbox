@@ -54,7 +54,7 @@ function [outp] = dietz2011interauralfunctions(insig,fs,fc,varargin)
 %     'nolowpass'    Don't calculate the lowpass based interaural parameters.
 %                    The *_lp values are not returned.
 %
-%   See also: dietz2011, dietz2011modulationfilterbank
+%   See also: dietz2011, dietz2011filterbank
 %
 %   References: dietz2011auditory
 
@@ -77,6 +77,8 @@ end
 definput.import = {'dietz2011interauralfunctions'};
 [flags,kv]  = ltfatarghelper({},definput,varargin);
 
+% if signal contains no frequency channels return empty
+if size(insig,2)==0, outp = []; return; end
 
 % ----- interaural parameters -----
 % interaural transfer function (ITF), eq. 2 in Dietz (2011)

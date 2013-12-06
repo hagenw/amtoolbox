@@ -140,13 +140,7 @@ function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %     'nolowpass'    Don't calculate the lowpass based interaural parameters.
 %                    The *_lp values are not returned.
 %
-%     'env'          Calculate the interaural parameter also for the envelpe of
-%                    the signal. This is the default.
-%
-%     'noenv'        Don't create the envelope filter and don't calculate
-%                    interaural parameter for the envelope.
-%
-%   See also: dietz2011interauralfunctions, dietz2011modulationfilterbank,
+%   See also: dietz2011interauralfunctions, dietz2011filterbank,
 %     ihcenvelope, auditoryfilterbank
 %
 %   References: dietz2011auditory
@@ -175,7 +169,7 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
 end
 
 % import default arguments from other functions
-definput.import={'auditoryfilterbank','ihcenvelope','dietz2011modulationfilter','dietz2011interauralfunctions'};
+definput.import={'auditoryfilterbank','ihcenvelope','dietz2011filterbank','dietz2011interauralfunctions'};
 % changing default parameters
 definput.importdefaults = { ...
     'flow',200, ...     % gammatone lowest frequency / Hz
@@ -229,24 +223,20 @@ end
 %% ---- modulation filterbank ------
 % filter signals with three different filters to get fine structure, envelope
 % and ILD low pass
-[inoutsig_fine,inoutsig_ild,inoutsig_env] = ...
-  dietz2011modulationfilterbank(inoutsig,fs,fc,'argimport',flags,kv);
+[inoutsig_fine,fc_fine,inoutsig_env,fc_env,inoutsig_ild] = ...
+  dietz2011filterbank(inoutsig,fs,fc,'argimport',flags,kv);
 
 %% ---- binaural processor ------
 % calculate interaural parameters for fine structure and envelope and calculate
 % ILD
 % -- fine structure
-fine = dietz2011interauralfunctions(inoutsig_fine,fs,fc,'argimport',flags,kv);
+fine = dietz2011interauralfunctions(inoutsig_fine,fs,fc_fine,'argimport',flags,kv);
+% --envelope
+env = dietz2011interauralfunctions(inoutsig_env,fs, ...
+  kv.mod_center_frequency_hz+0*fc_env,'argimport',flags,kv);
 % -- ILD
 % interaural level difference, eq. 5 in Dietz (2011)
 % max(sig,1e-4) avoids division by zero
 ild = 20/kv.compression_power*log10(max(inoutsig_ild(:,:,2),1e-4)./max(inoutsig_ild(:,:,1),1e-4));
-% --envelope
-if flags.do_env
-  env = dietz2011interauralfunctions(inoutsig_env,fs, ...
-    kv.mod_center_frequency_hz+0*fc,'argimport',flags,kv);
-else
-  env = [];
-end
 
 % vim: set sw=2 ts=2 expandtab textwidth=80:
