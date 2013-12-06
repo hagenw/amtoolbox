@@ -69,7 +69,7 @@ if strcmpi('dietz2011',model)
     ic_threshold=0.98;
 
     % Run the Dietz model on signal
-    [fine,cfreqs,ild] = dietz2011(sig,fs,'nolowpass','noenv','fhigh',1400);
+    [fine,cfreqs,ild] = dietz2011(sig,fs,'nolowpass','fhigh',1400);
 
     % Unwrap ITDs and get the azimuth values
     itd = dietz2011unwrapitd(fine.itd,ild,fine.f_inst,2.5);
