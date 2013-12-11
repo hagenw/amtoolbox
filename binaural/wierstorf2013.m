@@ -74,7 +74,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %   For the simulation of the wave field synthesis or stereophony setup this
 %   functions depends on the Sound-Field-Synthesis Toolbox, which is available
 %   here: `<http://github.com/sfstoolbox/sfs>`_. It runs under Matlab and Octave. The
-%   revision used to genrate the figures in the corresponding paper is
+%   revision used to generate the figures in the corresponding paper is
 %   a8914700a4.
 %
 %   See also: estimate_azimuth, dietz2011
@@ -140,18 +140,28 @@ end
 conf.N = 1024;
 % Use no headphone compensation because we are not trying to listening to the
 % signal
-conf.usehcomp = 0;
-conf.hcomplfile = '';
-conf.hcomprfile = '';
+conf.ir.usehcomp = false;
+conf.ir.hcompfile = '';
+conf.ir.useinterpolation = true;
+conf.ir.speechfile = '';
+conf.ir.cellofile = '';
+conf.ir.castanetsfile = '';
+conf.ir.noisefile = '';
+conf.ir.pinknoisefile = '';
 %
 % WFS settings
+% dimensionality of the setup
+conf.dimension = '2.5D';
+% driving functions
+conf.driving_functions = 'default';
 % Use a WFS pre-equalization filter and specify its start frequency.
 % Note, that the stop frequency will be calculated later with the aliasing
 % frequency of your WFS setup.
-conf.usehpre = 1;
-conf.hpreflow = 50;
+conf.wfs.usehpre = true;
+conf.wfs.hpretype = 'FIR';
+conf.wfs.hpreflow = 50;
 % Tapering window
-conf.usetapwin = 1;
+conf.usetapwin = true;
 conf.tapwinlen = 0.3;
 % misc settings
 conf.debug = 0;
@@ -184,32 +194,27 @@ end
 
 %% ===== Simulate the binaural ear signals ===============================
 % Simulate a stereo setup
-conf.array = array;
+conf.secondary_sources.geometry = array;
 % center of array
-conf.X0 = [0 0];
+conf.secondary_sources.center = [0 0 0];
 % initialize empty array
-conf.x0 = [];
-% calculating the distance between the loudspeakers
-if strcmpi('circle',array)
-    conf.dx0 = pi*L/number_of_speakers;
-elseif strcmpi('linear',array)
-    conf.dx0 = L/(number_of_speakers-1);
-else
-    error('%s: %s is not a valid array.',upper(mfilename),array);
-end
-
-% calculate the stop frequency for the WFS pre-equalization filter
-conf.hprefhigh = aliasing_frequency(conf.dx0);
-
+conf.secondary_sources.x0 = [];
+% number of loudspeakers
+conf.secondary_sources.number = number_of_speakers;
+% length of array
+conf.secondary_sources.size = L;
 % get loudspeaker positions
-x0 = secondary_source_positions(L,conf);
+x0 = secondary_source_positions(conf);
 % selection of loudspeakers for WFS
 if flags.do_wfs && strcmpi('circle',array)
     x0 = secondary_source_selection(x0,xs,src);
 end
 
+% calculate the stop frequency for the WFS pre-equalization filter
+conf.wfs.hprefhigh = aliasing_frequency(x0,conf);
+
 % get a grid of the listening positions
-conf.xysamples = resolution;
+conf.resolution = resolution;
 [~,~,x,y] = xy_grid(X,Y,conf);
 % simulate the binaural impulse response
 perceived_direction = zeros(length(x),length(y));
@@ -218,7 +223,7 @@ localization_error = zeros(length(x),length(y));
 for ii=1:length(x)
     if showprogress progressbar(ii,length(x)) end
     parfor jj=1:length(y)
-        X = [x(ii) y(jj)];
+        X = [x(ii) y(jj) 0];
         conf.xref = X;
         if flags.do_stereo
             % first loudspeaker
@@ -228,12 +233,12 @@ for ii=1:length(x)
             % sum of both loudspeakers
             ir = (ir1+ir2)/2;
         else % WFS
-            ir = ir_wfs_25d(X,phi,xs,src,L,hrtf,conf);
+            ir = ir_wfs(X,phi,xs,src,hrtf,conf);
         end
         % generate a 0.1s noise signal
         sig_noise = noise(fs/10,1,'white');
         % convolve with impulse response
-        sig = auralize_ir(ir,sig_noise);
+        sig = auralize_ir(ir,sig_noise,1,conf);
 
 
         %% ===== Estimate the direction of arrival for the listener ==============
@@ -256,12 +261,12 @@ end % of main function
 function direction = source_direction(X,phi,xs,src)
     if strcmp('pw',src)
         [direction,~,~] = cart2sph(xs(1),xs(2),0);
-        direction = degree(direction+phi);
+        direction = deg(direction+phi);
     elseif strcmp('ps',src)
         x = xs-X;
         [direction,~,~] = cart2sph(x(1),x(2),0);
         % FIXME: this is not working with all points at the moment
         % For example place a stereo source at (0,0) and the listener at (0,-2)
-        direction = degree(direction-phi);
+        direction = deg(direction-phi);
     end
 end
