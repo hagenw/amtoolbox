@@ -21,6 +21,7 @@
 %      DATA_BAUMGARTNER2013 - Data from Baumgartner et al. (2013)
 %      DATA_TAKANEN2013     - Data from Takanen et al. (2013)
 %      DATA_ZIEGELWANGER2013 - Data from Ziegelwanger et al. (2013)
+%      DATA_ZIEGELWANGER2014 - Data from Ziegelwanger and Majdak (2014)
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

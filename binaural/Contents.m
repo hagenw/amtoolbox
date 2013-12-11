@@ -17,10 +17,16 @@
 %     TAKANEN2013           - Takanen 2013 binaural auditory model
 %
 %  The Ziegelwanger2013 model
-%     ZIEGELWANGER2013      - XXX
-%     PLOTZIEGELWANGER2013  - Plot the output of the Ziegelwanger 2013 model
-%     ZIEGELWANGER2013OFFAXIS - XXX
-%     ZIEGELWANGER2013ONAXIS  - XXX
+%     ZIEGELWANGER2013      - Compute time-of-arrival (TOA) estimates
+%     PLOTZIEGELWANGER2013  - Plot the output of the Ziegelwanger2013 model
+%     ZIEGELWANGER2013OFFAXIS - off-axis TOA model
+%     ZIEGELWANGER2013ONAXIS  - on-axi TOA model
+%
+%  The Ziegelwanger2014 model
+%     ZIEGELWANGER2014      - Compute time-of-arrival (TOA) estimates
+%     PLOTZIEGELWANGER2014  - Plot the output of the Ziegelwanger2014 model
+%     ZIEGELWANGER2014OFFAXIS - off-axis TOA model
+%     ZIEGELWANGER2014ONAXIS  - on-axi TOA model
 %
 %  Additional functions
 %     ESTIMATE_AZIMUTH      - Azimuth position using the Dietz or the Lindemann model
