@@ -212,8 +212,7 @@ inoutsig = ihcenvelope(inoutsig,fs,'argimport',flags,kv);
 %% ---- internal noise ------
 % additive white noise
 if flags.do_int_randn
-  addnoise = randn(size(inoutsig))*kv.alpha;
-  inoutsig = inoutsig + addnoise;
+  inoutsig = inoutsig + kv.alpha*randn(size(inoutsig));
 end
 % replace values<kv.alpha with kv.alpha
 if flags.do_int_mini
