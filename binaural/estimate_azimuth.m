@@ -64,12 +64,9 @@ definput.flags.spectral_weighting = {'no_spectral_weighting','rms_weighting','ra
 if flags.do_dietz
     ic_threshold=0.98;
     % Run the Dietz model on signal
-    [fine,cfreqs,ild] = dietz2011(insig,kv.fs,'nolowpass','fhigh',1400,'signal_level_dB_SPL',90);
-    %[fine,cfreqs,ild,env] = dietz2011(insig,kv.fs,'nolowpass','fhigh',5000);
-    %[~,cfreqs,ild,env] = dietz2011(insig,kv.fs,'nolowpass','flow',1400,'fhigh',5000);
+    [fine,cfreqs,ild] = dietz2011(insig,kv.fs,'nolowpass','fhigh',1400);
     % Unwrap ITDs and get the azimuth values
     itd = dietz2011unwrapitd(fine.itd,ild,fine.f_inst,2.5);
-    %itd = [dietz2011unwrapitd(fine.itd,ild(:,1:12),fine.f_inst,2.5) dietz2011unwrapitd(env.itd,ild(:,13:23),env.f_inst,2.5)];
     phi = itd2angle(itd,lookup);
     % Calculate the median over time for every frequency channel of the azimuth
     for n = 1:size(phi,2)
@@ -83,7 +80,6 @@ if flags.do_dietz
         end
     end
     % Calculate ITD and ILD values
-    %ild = median(ild_tmp,1);
     itd = median(itd,1);
     % weights for rms-weighting
     rms_weights = fine.rms;
@@ -126,12 +122,12 @@ end
 
 % Remove outliers
 [azimuth,cfreqs,w] = remove_outlier(azimuth,itd,cfreqs,w);
-%[azimuth_env,~,~] = remove_outlier(azimuth_itd(:,13:23),itd,cfreqs,w);
 % Calculate mean about frequency channels
 if length(azimuth)==0
     phi = NaN;
     phi_std = NaN;
 else
+    % TODO: add weighted median
     phi = median(azimuth);
     %phi = sum(azimuth.*w)/sum(w);
     phi_std = std(azimuth);
@@ -141,7 +137,6 @@ end % of main function
 
 %% ===== Subfunctions ====================================================
 function [azimuth,cfreqs,w] = remove_outlier(azimuth,itd,cfreqs,w)
-    %cfreqs = cfreqs(1:12);
     % remove unvalid ITDs
     %azimuth = azimuth(abs(itd(1:12))<0.001);
     %cfreqs = cfreqs(abs(itd(1:12))<0.001);
