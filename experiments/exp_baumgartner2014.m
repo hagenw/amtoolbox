@@ -2327,7 +2327,7 @@ function autorefreshnotification(fn,flags)
 if flags.do_autorefresh
   disp(['Calculation of ' fn ' started.'])
   disp('Results can be also downloaded here:') 
-  disp(' http://www.kfs.oeaw.ac.at/hrtf/database/amt/exp_baumgartner2014.zip')
+  disp(' http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/exp_baumgartner2014.zip')
   disp('Unzip the folder and move the single files into:')
   disp([' ' fullfile(amtbasepath,'experiments')])
 end
