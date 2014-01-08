@@ -62,7 +62,9 @@ while (min(pol) > -30 || max(pol) < 210 ... % ensure that important polar range 
         && dlat <= 5                        % but keep tolerance smaller than 5 deg
 
   idx=find(pos(:,6)>=-(dlat+0.01)/2+lat & pos(:,6)<=(dlat+0.01)/2+lat);
+  latActual = pos(idx,6); % actual lateral angles
   [pol,polidx]=unique(real(pos(idx,7)));   % sorted polar angles
+  latActual = latActual(polidx);
   sphrtfs=double(hM(:,idx,:));  % unsorted DTFs of SP
   sphrtfs=sphrtfs(:,polidx,:);          % sorted DTFs of SP
 
@@ -71,8 +73,11 @@ while (min(pol) > -30 || max(pol) < 210 ... % ensure that important polar range 
 end
 
 varargout{1} = sphrtfs;
-if nargout == 2
+if nargout >= 2
   varargout{2} = pol;
+  if nargout == 3
+    varargout{3} = latActual;
+  end
 end
 
 end

@@ -121,7 +121,7 @@ if flags.do_pool % load also DTFs of SPs
     sl = hpath(end);            % slash sign (OS dependent)
 
     if exist([hpath 'hrtf_M_baumgartner2013'],'dir') ~= 7
-      fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/hrtf_M_baumgartner2013.zip , \n unzip it, and move it into your HRTF repository \n ' hpath ' .\n' ' Then, press any key to quit pausing. \n'])
+      fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/baumgartner2013.zip , \n unzip it, and move it into your HRTF repository \n ' hpath ' .\n' ' Then, press any key to quit pausing. \n'])
       pause
     end
 
