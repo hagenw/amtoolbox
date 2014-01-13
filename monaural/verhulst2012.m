@@ -1,62 +1,46 @@
-function output = verhulst2012(insig,fs,fc,spl)
+function [V,Y,E,CF]=verhulst2012(sign,fs,fc,spl,normalizeRMS,subject,irregularities)
 %VERHULST2012 Process a signal with the cochlear model by Verhulst et. al. 2012
-%   Usage: output = verhulst2012(insig,fs,fc,spl)
+%   Usage: output = verhulst2012(insig,fs,fc,spl,normalizeRMS,subject,irregularities,sheraPo)
 %
 %   Input parameters:
-%        insig : the monaural/binaural input signal to be processed
-%        fs    : sampling rate
-%        fc    : list of frequencies specifying the probe positions on
-%                the basilar membrane
-%        spl   : the sound pressure level that corresponds to the rms of
-%                one of the input signal
+%        sign           : the input signal to be processed. Each column is processed
+%                         in parallel, so it is possible to run several
+%                         simulation in parallel
+%        fs             : sampling rate
+%        fc             : list of frequencies specifying the probe positions on
+%                         the basilar membrane, or 'all' to probe all 1000
+%                         cochlear sections
+%        spl            : array of the sound pressure levels that correspond to
+%                         value 1 of the correspondent input signal
+%        normalizeRms   : arry to control the normalization of each signal. With value 1 normalize the energy of the signal, so the
+%                         relative spl value correspond to the rms of the signal (default 0)
+%        subject        : the subject number controls the cochlear irregulatiries (default 1)
+%        irregularities : array that enable (1) or disable (0) irregularities and nonlinearities for each simulation (default 1)                
+%       
+%      
 %
 %   Output parameters:
-%        output : structure consisting of either two of the first listed
-%                 below or of all the listed elements, depending on
-%                 whether the input is monaural or binaural
 %
-%                 * velocityLeft  : velocity of the basilar membrane
-%                                   movement at different positions in
-%                                   the left ear canal signal
-%                 * displaceLeft  : displacement of the basilar membrane
-%                                   movement at different positions in
-%                                   the left ear canal signal
-%                 * velocityRight : velocity of the basilar membrane
-%                                   movement at different positions in
-%                                   the right ear canal signal
-%                 * displaceRight : displacement of the basilar membrane
-%                                   movement at different positions in
-%                                   the right ear canal signal
+%       V  : velocity of the basilar membrane sections V(time,section,channel) 
+%       Y  : displacement of the basilar membrane sections Y(time,section,channel)
+%       E  : sound pressure at the middle ear
+%       CF : center frequencies of the probed basiliar membrane sections
 %
-%   This function divides the binaural or monaural input signal into non-
-%   overlapping time frames and computes the basilar membrane displacement
-%   and the velocity of the movement at different positions employing the 
+%   This function computes the basilar membrane displacement
+%   and the velocity of the movement at different positions employing a faster implementation of the 
 %   nonlinear time-domain model of cochlea by Verhulsts, Dau, Shera 2012.
 %
-%   It shold be noted that this MATLAB code needs to be in the same folder 
-%   as the cochlear model as the model is called from this function and the
-%   parameters of the function are modified during the processing of this
-%   function. Moreover, the subfolders *stim* and *out* must exist in the 
-%   same folder as well. Furthermore, one is advised to remove the
-%   separation into two freqeuncy regions if a maximum of 20 probe
-%   frequencies are required.
 %
 %   The processing is implemented as follows:
 %
-%   1) the input signal is resampled to the 400 kHz sampling rate
+%   1) the input signal is resampled to the 96 kHz sampling rate
 %      employed in the cochlea model
 %
 %   2) the list of frequencies in *fc* are converted in to probe
 %      positions in a manner that the frequencies are divided evenly into
 %      low and high frequency categories. 
 %
-%   3) the signal is processed by processing first the left ear canal
-%      signal
-%
-%      * the two frequency regions are measured separately
-%
-%      * the processing is done in 90-ms long non-overlapping time
-%        frames
+%   3) the signals are processed in parallel
 %
 %   4) the values obtained are resampled back to the original sampling
 %      rate
@@ -64,177 +48,79 @@ function output = verhulst2012(insig,fs,fc,spl)
 %   See also: verhulst2012
 %
 %   References: verhulst2012
+%
+%   AUTHOR: Alessandro Altoè 
 
-%   AUTHOR: Sarah Verhulst, Marko Takanen (MATLAB code to run the model)
-
-basedir = [amtbasepath,'verhulst',filesep];
-
-oldpath = pwd;
-cd(basedir);
-
-%% ------ Set the parameters ---------------------------------------------
-% the cochlear model applies a sampling rate of 400 kHz, hence the input is
-% resampled while maintaining the level of the input as original
-fsNew = 400000; % sampling rate employed in the cochlear model
-maxStimLength = 0.09;%length of the time frame in seconds
-%as the T_MAX setting in the parameters.dat
-
-% maximum of 20 probe positions are used in each run
-nProbes = round(length(fc)/2); 
-nRemProbes = length(fc)-nProbes;
-dims = size(insig);
-
-
-%% ------ Resample the input ---------------------------------------------
-sigResampled = resample(insig,fsNew,fs);
-scale1= max(abs(insig(:)));scale2=max(abs(sigResampled(:)));
-%ensure that the resampling did not change the level of the signal
-sigResampled = sigResampled.*(scale1/scale2);
-
-%count the number of non-overlapping time frames
-ncol= max(1,ceil(length(sigResampled)/(maxStimLength*fsNew)));
-
-%the input signal can be either monaural or binaural signal
-output.velocityLeft = zeros(size(sigResampled,1),length(fc));
-output.displaceLeft = zeros(size(sigResampled,1),length(fc));
-if (dims(2)>1)
-    output.velocityRight = zeros(size(sigResampled,1),length(fc));
-    output.displaceRight = zeros(size(sigResampled,1),length(fc));
+if nargin<5
+    [channels,idx]=min(size(sign));
+    normalizeRMS=zeros(channels,1);
 end
-
-%% ------ Specify the measurement positions ------------------------------
-% this is a modified version of the one in probepointgenerator by Verhulst
-Csections=1000;
-% start with highest freq first and fill in in decending order
-%the program then calculates the probing points that correspond to these
-%frequencies, with the Greenwood map for a human cochlea!
-BMlength=35e-3 - 1e-3;
-dx=BMlength/Csections;
-Ga=20682;
-Galpha=61.765;
-Gbeta=140.6;
-
-%this gives the location in meters
-loc=(log10((sort(fc,'descend')+Gbeta)/Ga))/-Galpha; %turned around
-%this is then converted in a section
-probes=round(loc/dx);
-
-
-%check the amount of probe frequencies
-if(length(fc)<=40)
-        %two character arrays are generated for the low and high frequencies
-        probListHigh = [];
-        for ind = 1:nProbes
-            if(ind<nProbes)
-                probListHigh = [probListHigh num2str(probes(ind)) ', '];
-            else
-                probListHigh = [probListHigh num2str(probes(ind))];
-            end
-        end
-        probListLow = [];
-        for ind = (nProbes+1):length(fc)
-            if(ind<length(fc))
-                probListLow = [probListLow num2str(probes(ind)) ', '];
-            else
-                probListLow = [probListLow num2str(probes(ind))];
-            end
-        end
-else
-    disp('The maximum number of probe frequencies (40) was exceeded');
-    return;
+if nargin < 6
+    subject = 1;
 end
+if nargin<7
+    [channels,idx]=min(size(sign));
+    irregularities=ones(1,channels);
 
-
-%% ------ Start the actual processing ------------------------------------
-for ind=1:2*dims(2)
-    %the output parameters are computed separately for the low and high
-    %frequency areas, and the (left and right) channel(s) of the input are
-    %also processed separately
-    
-    %at the beginning of each run, the original parameters of the cochlear
-    %model are stored into a backup file
-    system('cp parameters.dat parameters2.dat.old');
-    
-    startP =1;
-    endP = min(maxStimLength*fsNew,size(sigResampled,1));
-    for frameInd=1:ncol
-        sLength = endP-startP+1;
-        % the 90 ms long sample of the input is stored to a wav-file for
-        % processing
-        sample = sigResampled(startP:endP,:);
-        % the first two values of the parameter ind refer to the left ear
-        % signals and the last two to the right ear signals
-        if ind<=2
-            %note that the name of the file in the parameters.dat file is
-            %modified to match this
-            wavwrite(sample(:,1),fsNew,[basedir,'stim/sig1L.wav']);
-        else
-            wavwrite(sample(:,2),fsNew,[basedir,'stim/sig1L.wav']);
-        end
-        %the cochlear model parameters are modified during the first run
-        if frameInd==1
-            %set the spl level that the rms of signal equals to
-            system(['sed ''s/''''AUDIOFILELEVEL = 80''''/''''AUDIOFILELEVEL = ' num2str(round(spl)) '''''/'' <parameters.dat> temp1.dat']);
-            %set the file name to match the one used above
-            system('sed ''s/.*AUDIOFILENAME.*/'''' AUDIOFILENAME   = "stim\/sig1L.wav",/'' <temp1.dat> temp.dat');
-            %ensure that the length of the time frame is correct
-            system('sed ''s/.*T_MAX.*/'''' T_MAX   =  90.00000000000000E-003,/'' <temp.dat> temp1.dat');
-            %the cochlear model is set to store the membrane status for the
-            %next time frame
-            system('sed ''s/''''STOREMEMBRANESTATUS     = F''''/''''STOREMEMBRANESTATUS  = T''''/'' <temp1.dat> temp.dat');
-            %how the parameters are modified depends on whether the low or
-            %high frequencies are analyzed on left or right ear signals
-            if mod(ind,2)==1
-                system(['sed ''s/.*PROBES.*/'''' PROBES = ' probListLow '/'' <temp.dat> parameters.dat']);
-            else
-                system(['sed ''s/.*PROBES.*/'''' PROBES = ' probListHigh '/'' <temp.dat> parameters.dat']);
-            end
-            % the cochlear model is called here
-            
-            system('./verhulst2012');
-            % and the model is set to continue from the membrane status at
-            % the end of the current file when processing the next time
-            % frame
-            system('sed ''s/''''RETRIEVEMEMBRANESTATUS  = F''''/''''RETRIEVEMEMBRANESTATUS  = T''''/'' <parameters.dat> temp.dat');
-            system('cp temp.dat parameters.dat');
-        else
-            system('./verhulst2012');
-        end
-        %the cochlear model outputs are loaded from a file and stored
-        %to the corresponding locations in the output arrays
-        load 'out/probing.dat';
-        temp = probing;
-        
-        %make sure that the upsampling has not increased the size
-        temp = temp(1:sLength,:);
-        switch ind
-            case 1
-                output.displaceLeft(startP:endP,1:nRemProbes) = temp(:,nRemProbes:-1:1);
-                output.velocityLeft(startP:endP,1:nRemProbes) = temp(:,(2*nRemProbes):-1:(nRemProbes+1));
-            case 2
-                output.displaceLeft(startP:endP,(nRemProbes+1):length(fc)) = temp(:,nProbes:-1:1);
-                output.velocityLeft(startP:endP,(nRemProbes+1):length(fc)) = temp(:,(2*nProbes):-1:(nProbes+1));
-            case 3
-                output.displaceRight(startP:endP,1:nRemProbes) = temp(:,nProbes:-1:1);
-                output.velocityRight(startP:endP,1:nRemProbes) = temp(:,(2*nRemProbes):-1:(nRemProbes+1));
-            case 4
-                output.displaceRight(startP:endP,(nRemProbes+1):length(fc)) = temp(:,nProbes:-1:1);
-                output.velocityRight(startP:endP,(nRemProbes+1):length(fc)) = temp(:,(2*nProbes):-1:(nProbes+1));
-        end
-        startP = endP+1;
-        endP = min(endP+maxStimLength*fsNew,size(sigResampled,1));
+end
+% sign=double(sign); %force to write signal as double array
+Fs=96000;
+sectionsNo=1000;
+[channels,idx]=min(size(sign));
+if(idx==2) %transpose it (python C-style row major order)
+    sign=sign';
+end
+stim=zeros(channels,length(sign(1,:))*Fs/fs);
+for i=1:channels
+    stim(i,:)=resample(sign(i,:),Fs,fs);
+    if normalizeRMS(i)
+        s_rms=rms(stim(i,:));
+        stim(i,:)=stim(i,:)./s_rms;
     end
-    %the parameter values are reset before the next frequency area or
-    %channel is processed
-    system('cp parameters2.dat.old parameters.dat');
 end
-
-%% ------ Resample the output back to original rate -----------------------
-output.velocityLeft = resample(output.velocityLeft,fs,fsNew);
-output.displaceLeft = resample(output.displaceLeft,fs,fsNew);
-if (dims(2)>1)
-    output.displaceRight = resample(output.displaceRight,fs,fsNew);
-    output.velocityRight = resample(output.velocityRight,fs,fsNew);
+sheraPo=0.061;
+if(isstr(fc) && strcmp(fc,'all')) %if probing all sections 1001 output (1000 sections plus the middle ear)
+    p=sectionsNo+1;
+else %else pass it as a column vector
+    [p,idx]=max(size(fc));
+    if(idx==2)
+        fc=fc'; 
+    end
+    fc=round(fc);
 end
-
-cd(oldpath);
+probes=fc;
+[path,name,ext]=fileparts(which('verhulst2012'));
+[path,name,ext]=fileparts(path);
+act_path=pwd;
+cd(strcat(path,'/src/Verhulst_Altoe/')); 
+save('input.mat','stim','Fs','channels','spl','subject','sheraPo','irregularities','probes','-v7');
+system('python run_cochlear_model.py');
+l=length(stim(1,:));
+rl=length(sign(1,:));
+V=zeros(rl,p,channels);
+Y=zeros(rl,p,channels);
+E=zeros(rl,channels);
+CF=zeros(p,1);
+for i=1:channels
+    fname=strcat('out/v',int2str(i),'.np');
+    f=fopen(fname,'r');
+    tmpV=fread(f,[p,l],'double')';
+    V(:,:,i)=resample(tmpV,fs,Fs);
+    fclose(f);
+    fname=strcat('out/y',int2str(i),'.np');
+    f=fopen(fname,'r');
+    tmpY=fread(f,[p,l],'double')';
+    Y(:,:,i)=resample(tmpY,fs,Fs);
+    fclose(f);
+    fname=strcat('out/E',int2str(i),'.np');
+    f=fopen(fname,'r');
+    E(:,i)=resample(fread(f,[l,1],'double'),fs,Fs);
+    fclose(f);
+    if(i==1)
+    fname=strcat('out/F',int2str(i),'.np');
+    f=fopen(fname,'r');
+    CF=fread(f,[p,1],'double');
+    fclose(f);
+    end
+end
+cd(act_path);
