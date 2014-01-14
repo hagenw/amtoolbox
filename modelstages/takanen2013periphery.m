@@ -72,9 +72,9 @@ if isstruct(insig)
     % cochlear model
     cochlear = insig;
 else
-    rms_factor=rms(insig(:,1));     %first channel as reference for rms normalization
-    insig(:,1)=insig(:,1)./rms_factor;
-    insig(:,2)=insig(:,2)./rms_factor;
+    norm_factor=max(abs(insig(:,1)));     %first channel as reference for rms normalization
+    insig(:,1)=insig(:,1)./norm_factor;
+    insig(:,2)=insig(:,2)./norm_factor;
     [V,Y,E,CF] = verhulst2012(insig,fs,fc,[spl spl]);
     cochlear.velocityLeft=V(:,:,1);
     cochlear.velocityRight=V(:,:,2);

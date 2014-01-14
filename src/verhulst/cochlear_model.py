@@ -165,9 +165,9 @@ class cochlea_model ():
         ################################
         #PURIAM1 FILTER             ###
         ###############################
-        puria_gain=10**(18./20.)*2.;
-        b,a=signal.butter(1,[100./samplerate,3000./samplerate],'bandpass') #second order butterworth
-        self.stim=signal.lfilter(b*puria_gain,a,stim)
+        puria_gain=2*10**(18./20.);
+        b,a=signal.butter(2,[100./samplerate/2,3000./samplerate/2],'bandpass') #second order butterworth
+        self.stim=signal.lfilter(b,a,stim)*puria_gain
 
 	
       
@@ -402,7 +402,7 @@ class cochlea_model ():
         self.time_axis=np.linspace(0,time_length,length)
         #constructor to ode
         #set integrator ('dopri5')=RK45 ('vode',method='adams')=explicit(no more the fastest one, DO NOT WORK FOR PARALLEL CALL) ('vode',method='bdf')=implicit
-        r=ode(TLsolver).set_integrator('dopri5',rtol=0.01,max_step=self.dt)  #max_step=dt force to evaluate the input for every sample
+        r=ode(TLsolver).set_integrator('dopri5',rtol=0.0001,max_step=self.dt)  #max_step=dt force to evaluate the input for every sample
         r.set_f_params(self)
         r.set_initial_value(np.concatenate([np.zeros_like(self.x),np.zeros_like(self.x)]))
         r.t=0
@@ -438,6 +438,6 @@ class cochlea_model ():
            j=j+1
 	#### filter out the otoacoustic emission ####
 	samplerate=self.fs
-	b,a=signal.butter(1,[600./samplerate,3000./samplerate],'bandpass')
+	b,a=signal.butter(2,[600./samplerate/2,3000./samplerate/2],'bandpass')
 	self.oto_emission=signal.lfilter(b*self.q0_factor,a,self.oto_emission)
         #END

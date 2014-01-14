@@ -45,11 +45,14 @@ function [V,Y,E,CF]=verhulst2012(sign,fs,fc,spl,normalizeRMS,subject,irregularit
 %   4) the values obtained are resampled back to the original sampling
 %      rate
 %               
-%   See also: verhulst2012
 %
-%   References: verhulst2012
+%   References: Verhulst, Sarah, Torsten Dau, and Christopher A. Shera. 
+%   "Nonlinear time-domain cochlear model for transient stimulation and human otoacoustic emission." 
+%   The Journal of the Acoustical Society of America 132.6 (2012): 3842-3848.
+%
 %
 %   AUTHOR: Alessandro Altoè 
+%
 
 if nargin<5
     [channels,idx]=min(size(sign));
@@ -78,7 +81,7 @@ for i=1:channels
         stim(i,:)=stim(i,:)./s_rms;
     end
 end
-sheraPo=0.061;
+sheraPo=0.0610;
 if(isstr(fc) && strcmp(fc,'all')) %if probing all sections 1001 output (1000 sections plus the middle ear)
     p=sectionsNo+1;
 else %else pass it as a column vector
