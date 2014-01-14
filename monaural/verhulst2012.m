@@ -92,7 +92,7 @@ probes=fc;
 [path,name,ext]=fileparts(which('verhulst2012'));
 [path,name,ext]=fileparts(path);
 act_path=pwd;
-cd(strcat(path,'/src/Verhulst_Altoe/')); 
+cd(strcat(path,'/src/verhulst/')); 
 save('input.mat','stim','Fs','channels','spl','subject','sheraPo','irregularities','probes','-v7');
 system('python run_cochlear_model.py');
 l=length(stim(1,:));
