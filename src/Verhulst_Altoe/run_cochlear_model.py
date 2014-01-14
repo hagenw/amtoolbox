@@ -60,8 +60,8 @@ def solve_one_cochlea(model): #definition here, to have all the parameter implic
     coch.cf.tofile(f)
     f.close()
 
-
-p=mp.Pool(int(channels))
-p.map(solve_one_cochlea,cochlear_list)
+if __name__ == "__main__":
+    p=mp.Pool(int(channels))
+    p.map(solve_one_cochlea,cochlear_list)
 
     
