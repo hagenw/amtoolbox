@@ -29,7 +29,7 @@ channels=channels[0][0]
 subjectNo=int(par['subject'])
 lgt=len(stim[0])
 norm_factor=p0*10.**(spl/20.)
-sheraPo=0.061
+sheraPo=0.0600
 irr_on=np.array(par['irregularities'])
 d=len(stim[0].transpose())
 print("running cochlear simulation")

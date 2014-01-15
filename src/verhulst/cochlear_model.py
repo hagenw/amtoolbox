@@ -165,11 +165,9 @@ class cochlea_model ():
         ################################
         #PURIAM1 FILTER             ###
         ###############################
-        puria_gain=2*10**(18./20.);
-        b,a=signal.butter(2,[100./samplerate/2,3000./samplerate/2],'bandpass') #second order butterworth
+        puria_gain=2.*10.**(18./20.);
+        b,a=signal.butter(1,[100./(samplerate/2.),3000./(samplerate/2.)],'bandpass') #second order butterworth
         self.stim=signal.lfilter(b,a,stim)*puria_gain
-
-	
       
     #from intializeCochlea.f90
     def initCochlea(self):
@@ -438,6 +436,6 @@ class cochlea_model ():
            j=j+1
 	#### filter out the otoacoustic emission ####
 	samplerate=self.fs
-	b,a=signal.butter(2,[600./samplerate/2,3000./samplerate/2],'bandpass')
+	b,a=signal.butter(1,[600./(samplerate/2),3000./(samplerate/2)],'bandpass')
 	self.oto_emission=signal.lfilter(b*self.q0_factor,a,self.oto_emission)
         #END
