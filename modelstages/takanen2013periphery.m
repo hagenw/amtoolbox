@@ -72,7 +72,12 @@ if isstruct(insig)
     % cochlear model
     cochlear = insig;
 else
-    cochlear = verhulst2012(insig,fs,fc,spl);
+    norm_factor=max(abs(insig(:,1)));     %first channel as reference for rms normalization
+    insig(:,1)=insig(:,1)./norm_factor;
+    insig(:,2)=insig(:,2)./norm_factor;
+    [V,Y,E,CF] = verhulst2012(insig,fs,fc,[spl spl]);
+    cochlear.velocityLeft=V(:,:,1);
+    cochlear.velocityRight=V(:,:,2);
 end
 
 %load a vector of frequency specific delays computed for the Verhulst model
