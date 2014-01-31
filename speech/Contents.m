@@ -5,6 +5,7 @@
 %  Monaural speech intelligibility models
 %    JOERGENSEN2011COMBINEINFORMATION - XXX
 %    JOERGENSEN2011SNRENV             - XXX
+%    TAAL2011              - Short-time Speech Objectinve Index
 %
 %  Binaural speech advantage models  
 %    JELFS2011             - Binaural speech advantage
