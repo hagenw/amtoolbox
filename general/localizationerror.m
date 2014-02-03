@@ -17,7 +17,7 @@ function [varargout] = localizationerror(m,errorflag)
 %   precL:      precision (std. dev.) in the lateral dimension
 %   accP:       accuracy (average) in the polar dimension
 %   precP:      precision (circular std. dev.) in the polar dimension 
-%   querr:      percentage of weighted polar errors > 45°: 
+%   querr:      percentage of weighted polar errors > 45Â°: 
 %               [querr number_of_corrects total_number] = CalcAccPrec...
 %   accE:       accuracy in the elevation
 %   absaccE:    absolute accuracy in the elevation
@@ -25,24 +25,24 @@ function [varargout] = localizationerror(m,errorflag)
 %   accabsL:    mean absolute lateral error
 %   accPnoquerr:accP with quadrant errors removed
 %   precE:      precision in the elevation
-%   querr90:    precentage of weighted polar errors > 90°
+%   querr90:    precentage of weighted polar errors > 90Â°
 %   precPmedian:unweighted polar precision error considering targets around
-%                   the median plane only (+/-30° lateral) 
-%   precPmedianlocal: basing on precPmedian, quadrant errors (polar error > 90°)
+%                   the median plane only (+/-30Â° lateral) 
+%   precPmedianlocal: basing on precPmedian, quadrant errors (polar error > 90Â°)
 %                   are excluded. Similar to RMS local polar error (Middlebrooks, 1999)
 %   precPnoquerr:precP with quadrant errors removed
 %   rmsL:       lateral RMS error according to Middlebrooks (1999)
 %   rmsPmedianlocal: unweighted polar RMS considering targets around
-%                   the median plane only (+/-30° lateral) and excluding quadrant
-%                   errors (polar error > 90°). Identical to RMS local polar
+%                   the median plane only (+/-30Â° lateral) and excluding quadrant
+%                   errors (polar error > 90Â°). Identical to RMS local polar
 %                   error in Middlebrooks (1999).
 %   rmsPmedian: unweighted polar RMS considering targets around the median plane 
-%                   only (+/-30° lateral). Includes quadrant errors.
+%                   only (+/-30Â° lateral). Includes quadrant errors.
 %   querrMiddlebrooks: quadrant errors as in Middlebrooks (1999). Use
-%                   central positions within +/-30°, querr is when polar error is >90°
+%                   central positions within +/-30Â°, querr is when polar error is >90Â°
 %                   [querr number_of_corrects total_number] = CalcAccPrec...
 %   corrcoefL:  lateral correlation coeffficient [cc, p] = CalcAccPrec...
-%   corrcoefP:  polar correlation coeffficient, Only data within lateral +/-30° 
+%   corrcoefP:  polar correlation coeffficient, Only data within lateral +/-30Â° 
 %                   are considered. [corr_coeff, p_of_significant_corr] = CalcAccPrec...
 %   SCC:        spherical/spatial correlation coefficient 
 %                   (Carlile et al., 1997; Fisher et al., 1987)
@@ -167,8 +167,8 @@ if size(m,2)==1,   m=m'; end
         meta.par1='Number of correct responses';
         par.par2=totals;
         meta.par2='Number of responses within the lateral range'; 
-        par.par3=wrongrate; % valid only for targets between 0 and 180°
-        meta.par3='Wrong rate, valid only for targets between 0 and 180°';
+        par.par3=wrongrate; % valid only for targets between 0 and 180Â°
+        meta.par3='Wrong rate, valid only for targets between 0 and 180Â°';
       case 'querrMiddlebrooks' % as in Middlebrooks (199); comparable to COC from Best et al. (2005)
         idx=find(abs(m(:,7))<=30);
         m=m(idx,:);
