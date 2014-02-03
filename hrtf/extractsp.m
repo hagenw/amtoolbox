@@ -58,7 +58,7 @@ dlat = 2;      % initial lateral tolerance (+/-) in deg
 pol = [0,0];   % initial polar angles
 
 while (min(pol) > -30 || max(pol) < 210 ... % ensure that important polar range is included
-        || max(diff(pol))>30)...            % and gaps are <= 30°
+        || max(diff(pol))>30)...            % and gaps are <= 30deg
         && dlat <= 5                        % but keep tolerance smaller than 5 deg
 
   idx=find(pos(:,6)>=-(dlat+0.01)/2+lat & pos(:,6)<=(dlat+0.01)/2+lat);
