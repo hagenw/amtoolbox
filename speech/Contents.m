@@ -1,6 +1,6 @@
 % AMT - Binaural models
 %
-%  The AMT team, 2012 - 2013.
+%  The AMT team, 2012 - 2014.
 %
 %  Monaural speech intelligibility models
 %    JOERGENSEN2011COMBINEINFORMATION - XXX

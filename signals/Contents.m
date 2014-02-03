@@ -1,6 +1,6 @@
 % AMT - Signals
 %
-%  The AMT team, 2012 - 2013.
+%  The AMT team, 2012 - 2014.
 %
 %  Monaural signal generators
 %    TRANSPOSEDTONE -  Transposed tone stimuli

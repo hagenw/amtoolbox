@@ -1,6 +1,6 @@
 % AMT - Experimentally recorded human data
 %
-%   The AMT team, 2012 - 2013.
+%   The AMT team, 2012 - 2014.
 %
 %   Data on specific topics
 %      ABSOLUTETHRESHOLD    - Absolute threshold of hearing
