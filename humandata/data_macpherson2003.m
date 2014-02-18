@@ -1,7 +1,5 @@
 function data = data_macpherson2003
-%DATA_MACPHERSON2003  Listener averages of polar error rates (PERs in %) from 
-% Macpherson & Middlebrooks (2003).
-%
+%DATA_MACPHERSON2003  Listener averages of polar error rates
 %   Usage: data = data_macpherson2003
 %
 %   Output parameters:
@@ -18,6 +16,9 @@ function data = data_macpherson2003
 %     data.pe_exp3  : increase in PER as a function of ripple phase at a 
 %                     ripple density of 1 ripple/octave and a ripple depth 
 %                     of 40dB
+%
+%   `data_macpherson2003` returns listener averages of polar error rates
+%   (PERs in %) from Macpherson & Middlebrooks (2003).
 %
 %   References: macpherson2003ripples
 

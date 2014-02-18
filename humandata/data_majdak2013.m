@@ -1,16 +1,7 @@
 function data = data_majdak2013(varargin)
-%DATA_majdak2013 Listener-specific experimental data from Majdak et al.
-%(2013) testing localization performance in sagittal planes for low-pass
-%filtered and spectrally warped DTFs.
-%
+%DATA_MAJDAK2013 Listener specific localization in saggital planes
 %   Usage: data = data_majdak2013(condition)
 %          data = data_majdak2013(lat, dlat, condition)
-%
-%   The *condition* flag may be one of:
-%
-%     'BB'   Broadband DTFs (baseline condition). This is the default.
-%     'LP'   Low-pass filtered (at 8.5kHz) DTFs
-%     'W'    Spectrally warped (2.8-16kHz warped to 2.8-8.5kHz) DTFs
 %
 %   Output parameters:
 %     data.id    : listener ID
@@ -23,6 +14,16 @@ function data = data_majdak2013(varargin)
 %                  col 6: polar angle of target
 %                  col 7: lateral angle of response
 %                  col 8: polar angle of response
+%
+%   `data_majdak2013(condition)` returns listener-specific experimental data
+%   from Majdak et al.  (2013) testing localization performance in sagittal
+%   planes for low-pass filtered and spectrally warped DTFs.
+%
+%   The *condition* flag may be one of:
+%
+%     'BB'   Broadband DTFs (baseline condition). This is the default.
+%     'LP'   Low-pass filtered (at 8.5kHz) DTFs
+%     'W'    Spectrally warped (2.8-16kHz warped to 2.8-8.5kHz) DTFs
 %
 %   References: majdak2013spatstrat
 

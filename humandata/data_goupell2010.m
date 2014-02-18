@@ -1,10 +1,11 @@
 function data = data_goupell2010(varargin)
-%DATA_GOUPELL2010 Listener-specific experimental data from Goupell et al.
-%(2010) testing localization performance in sagittal planes for various
-%numbers of channels of a GET vocoder.
-%
+%DATA_GOUPELL2010 Localization performance in sagittal planes
 %   Usage: data = data_goupell2010(condition)
 %          data = data_goupell2010(lat, dlat, condition)
+%
+%   Listener-specific experimental data from Goupell et al. (2010) testing
+%   localization performance in sagittal planes for various numbers of
+%   channels of a GET vocoder.
 %
 %   The *condition* flag may be one of:
 %
@@ -29,7 +30,7 @@ function data = data_goupell2010(varargin)
 %                  col 7: lateral angle of response
 %                  col 8: polar angle of response
 %
-%   References: goupell2010numchan
+%   References goupell2010numchan
 
 % AUTHOR: Robert Baumgartner
 

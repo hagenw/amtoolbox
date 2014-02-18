@@ -8,6 +8,7 @@
 %     AUDITORYFILTERBANK - Linear auditory filterbank.
 %     IHCENVELOPE        - Inner hair cell envelope extration.
 %     ADAPTLOOP          - Adaptation loops.
+%     KARJALAINEN1996    - Adaptation network.
 %     DRNL               - Dual resonance non-linear filterbank.
 %     MODFILTERBANK      - Modulation filter bank.
 %     MODFILTERBANKEPSM  - Modulation filter bank from Joergensen model.

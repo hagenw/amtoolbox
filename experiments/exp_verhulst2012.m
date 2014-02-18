@@ -1,11 +1,13 @@
-% ex_verhulst
-% this script compute and plot figures 2.a and 2.c of:
-%    Verhulst, Sarah, Torsten Dau, and Christopher A. Shera. 
-%   "Nonlinear time-domain cochlear model for transient stimulation and human otoacoustic emission." 
-%   The Journal of the Acoustical Society of America 132.6 (2012): 3842-3848.
+%EXP_VERHULST2012 Compute figurs from the Verhulst paper
 %
-%   AUTHOR: Alessandro Altoè 
+%    this script compute and plot figures 2.a and 2.c of: Verhulst, Sarah,
+%   Torsten Dau, and Christopher A. Shera.  "Nonlinear time-domain cochlear
+%   model for transient stimulation and human otoacoustic emission."  The
+%   Journal of the Acoustical Society of America 132.6 (2012): 3842-3848.
 %
+
+%   AUTHOR: Alessandro AltoÃ¨ 
+
 close all;
 clear all;
 clc;

@@ -1,7 +1,5 @@
 function data = data_best2005
-%DATA_BEST2005  Listener averages of absolute polar angle error and SCCs from 
-% Best et al. (2005): Fig.5(b), Fig.10(b), and Tab.2
-%
+%DATA_BEST2005  Listener averages of absolute polar angle error and SCC
 %   Usage: data = data_best2005
 %
 %   Output parameters:
@@ -10,7 +8,11 @@ function data = data_best2005
 %     data.seape  : standard error of absolute polar angle error
 %     data.meta   : condition labels corresponding to data entries
 %
-%   References: best2005highfrequency
+%   `data_best2005` returns listener averages of absolute polar angle error
+%   and SCCs from Best et al. (2005): Fig.5(b), Fig.10(b), and Tab.2
+%
+%
+%   References best2005highfrequency
 
 % AUTHOR: Robert Baumgartner
 

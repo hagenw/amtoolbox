@@ -8,6 +8,7 @@
 %     VERHULST2012      - Verhulst et al. (2012) cochlea model
 %     BAUMGARTNER2013   - Localization in saggital planes
 %     PLOTBAUMGARTNER2013 - plot probabilistic prediction matrixes
+%     BAUMGARTNER2014     - Localization in saggital planes
 %
 %  The Langendijk model
 %     LANGENDIJK2002           - Langendijk & Bronkhorst 2002 auditory model 

@@ -1,15 +1,6 @@
 function data = data_majdak2010(varargin)
-%DATA_majdak2010 Listener-specific experimental data from Majdak et al.
-%(2010) testing localization performance for various experimental methods.
-%
+%DATA_MAJDAK2010 Listener specific localization performance
 %   Usage: data = data_majdak2010(condition)
-%
-%   The *condition* flag may be one of:
-%
-%     'HMD_M'   Head-mounted display and manual pointing. This is the default.
-%     'HMD_H'   Head-mounted display and head pointing.
-%     'Dark_M'  Dark room and manual pointing.
-%     'Dark_H'  Dark room and head pointing.
 %
 %   Output parameters:
 %     data.id    : listener ID
@@ -23,7 +14,18 @@ function data = data_majdak2010(varargin)
 %                  col 7: lateral angle of response
 %                  col 8: polar angle of response
 %
-%   References: majdak2010
+%   `data_majdak2010(condition)` returns listener-specific experimental data
+%   from Majdak et al. (2010) testing localization performance for various
+%   experimental methods.
+% 
+%   The *condition* flag may be one of:
+%
+%     'HMD_M'   Head-mounted display and manual pointing. This is the default.
+%     'HMD_H'   Head-mounted display and head pointing.
+%     'Dark_M'  Dark room and manual pointing.
+%     'Dark_H'  Dark room and head pointing.
+%
+%   References: majdak2010methods
 
 % AUTHOR: Robert Baumgartner
 

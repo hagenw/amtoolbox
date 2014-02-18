@@ -1,5 +1,8 @@
 addpath ~/nw/ltfat
-addpath ~/nw/amtoolbox
-
 ltfatstart;
+
+addpath ~/nw/amtoolbox
+addpath ~/nw/amtoolbox/thirdparty/API_MO
+
 amtstart;
+SOFAstart;

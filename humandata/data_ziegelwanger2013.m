@@ -64,7 +64,7 @@ function data = data_ziegelwanger2013(varargin)
 %   See also: ziegelwanger2013, ziegelwanger2013onaxis,
 %   ziegelwanger2013offaxis, exp_ziegelwanger2013
 %
-%   References: ziegelwanger2013 majdak2013
+%   References: ziegelwanger2013 majdak2013toa
 
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria
