@@ -19,8 +19,6 @@ void trans(double *sig, double fs, long int len, long int dim,
 	   double *SLOW, double *FAST)
 {
  long int q, w, ind;
- int m,n;
- double x, cc;
  double kup1,kdown1,kup2,kdown2,thres,peak,wy1,wy2,wy,wx,k1,k2,y;
  double *y1,*y2;
 
@@ -63,9 +61,9 @@ void mexFunction(
 	const mxArray    *prhs[]
 	)
 {
-  long int len, dim, m, n;
+  long int len, dim;
   double *sig, *SLOW, *FAST;
-  double yy, fs;
+  double fs;
  
         sig = mxGetPr(prhs[0]);
       	len = (long int)mxGetM(prhs[0]);

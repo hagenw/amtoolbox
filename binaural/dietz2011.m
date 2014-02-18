@@ -16,19 +16,36 @@ function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
 %
 %   The output structures *fine* and *env* have the following fields:
 %
-%     s1        : left signal as put in the binaural processor
-%     s2        : right signal as put in the binaural processor
-%     fc        : center frequencies of the channels (f_carrier or f_mod)
-%     itf       : transfer function
-%     itf_equal : transfer function without amplitude
-%     ipd : phase difference in rad
-%     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
-%     ild : level difference in dB
-%     itd, itd_C, itd_lp, itd_C_lp - time difference based on instantaneous
-%                  and central frequencies, with and without low-passed itf
-%     f_inst_1 : instantaneous frequencies in the channels of the filtered s1
-%     f_inst_2 : instantaneous frequencies in the channels of the filtered s2
-%     f_inst   : instantaneous frequencies (average of f_inst1 and 2)
+%     .s1        Left signal as put in the binaural processor
+%  
+%     .s2        Right signal as put in the binaural processor
+%
+%     .fc        Center frequencies of the channels (*f_carrier* or
+%                *f_mod*)
+%  
+%     .itf       Transfer function
+%
+%     .itf_equal  Transfer function without amplitude
+%
+%     .ipd       Phase difference in rad
+%
+%     .ipd_lp    Based on lowpass-filtered itf, phase difference in rad
+%
+%     .ild       Level difference in dB
+%
+%     .itd       Time difference based on instantaneous frequencies
+%
+%     .itd_C     Time difference based on central frequencies
+%  
+%     .itd_lp    As *.itd*, with low-passed itf
+%
+%     .itd_C_lp  As *.itd_C*, with low-passed itf
+%
+%     .f_inst_1  Instantaneous frequencies in the channels of the filtered s1
+%
+%     .f_inst_2  Instantaneous frequencies in the channels of the filtered s2
+%
+%     .f_inst    Instantaneous frequencies (average of f_inst1 and 2)
 %  
 %   The steps of the binaural model to calculate the result are the
 %   following (see also Dietz et al., 2011):
