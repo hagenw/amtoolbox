@@ -2,7 +2,6 @@ function data = data_baumgartner2014(varargin)
 %DATA_BAUMGARTNER2014  Data from Baumgartner et al. (2014)
 %   Usage: data = data_baumgartner2014(flag)
 %
-%
 %   `data_baumgartner2014(flag)` returns data from Baumgartner et al. (2014)
 %   describing a model for sound localization in sagittal planes (SPs)
 %   on the basis of listener-specific directional transfer functions (DTFs).
@@ -63,8 +62,6 @@ function data = data_baumgartner2014(varargin)
 %     data_baumgartner2014('baseline');
 %
 %   See also: baumgartner2014, exp_baumgartner2014
-%
-%   References: baumgartner2014
 
 % AUTHOR : Robert Baumgartner
 

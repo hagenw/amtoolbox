@@ -1,15 +1,7 @@
 function data = data_majdak2013ctc(varargin)
-%DATA_majdak2013CTC Listener-specific experimental data from Majdak et al.
-%(2013) testing localization performance in sagittal planes for repeated
-%HRTF measurements motivated by CTC binaural synthesis.
-%
+%DATA_MAJDAK2013CTC Listener-specific localization in sagittal planes
 %   Usage: data = data_majdak2013ctc(condition)
-%          data = data_majdak2013(lat, dlat, condition)
-%
-%   The *condition* flag may be one of:
-%
-%     'A'   First HRTF measurement. This is the default.
-%     'B'   Second HRTF measurement.
+%          data = data_majdak2013ctc(lat, dlat, condition)
 %
 %   Output parameters:
 %     data.id    : listener ID
@@ -22,6 +14,17 @@ function data = data_majdak2013ctc(varargin)
 %                  col 6: polar angle of target
 %                  col 7: lateral angle of response
 %                  col 8: polar angle of response
+%
+%   `data_majdak2013ctc(condition)` returns listener-specific experimental
+%   data from Majdak et al. (2013) testing localization performance in
+%   sagittal planes for repeated HRTF measurements motivated by CTC binaural
+%   synthesis.
+%
+%   The *condition* flag may be one of:
+%
+%     'A'   First HRTF measurement. This is the default.
+%     'B'   Second HRTF measurement.
+%
 %
 %   References: majdak2013ctc
 

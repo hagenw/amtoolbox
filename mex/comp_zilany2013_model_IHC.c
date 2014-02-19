@@ -41,7 +41,7 @@
 #include <time.h>
 /* #include <iostream.h>  This file may be needed for some C compilers - Not needed for lcc */
 
-#include "complex.hpp"
+#include "comp_zilany2013_complex.hpp"
 
 #define MAXSPIKES 1000000
 #ifndef TWOPI

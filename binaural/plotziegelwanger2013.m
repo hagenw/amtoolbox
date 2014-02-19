@@ -31,9 +31,9 @@ function [h]=plotziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)
 %       plotziegelwanger2013(Obj,Obj.Data.Delay,1,'b',0,1,1);
 %
 %   See also: ziegelwanger2013onaxis, ziegelwanger2013offaxis,
-%   data_ziegelwanger2013, exp_ziegelwanger2013
+%             data_ziegelwanger2013, exp_ziegelwanger2013
 %
-%   References: ziegelwanger2013 majdak2013
+%   References: ziegelwanger2013 majdak2013toa
 
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria

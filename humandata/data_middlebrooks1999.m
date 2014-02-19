@@ -1,19 +1,20 @@
 function data = data_middlebrooks1999
-%DATA_MIDDLEBROOKS1999 Statistics summary from Fig. 13 (Middlebrooks,
-%1999b) showing the effect of non-individualized HRTFs
-%
+%DATA_MIDDLEBROOKS1999 Statistics about non-individualized HRTFs
 %   Usage: data = data_middlebrooks1999
 %
 %   Output parameters:
 %     data.qe_own   : quadrant error rate (QE) when localizing with own
 %                     HRTFs
-%     data.qe_other	: QE when localizing with others' HRTFs
+%     data.qe_other : QE when localizing with others' HRTFs
 %     data.pe_own   : local polar RMS error (PE) when localizing with own
 %                     HRTFs
-%     data.pe_other	: PE when localizing with others' HRTFs
+%     data.pe_other : PE when localizing with others' HRTFs
 %     data.pb_own   : magnitude of polar bias (PB) when localizing with own
 %                     HRTFs; upper-rear quadrant excluded from analysis
-%     data.pb_other	: PB when localizing with others' HRTFs
+%     data.pb_other : PB when localizing with others' HRTFs
+%
+%   `data_middlebrooks1999` returns statistics summary from Fig. 13
+%   (Middlebrooks, 1999b) showing the effect of non-individualized HRTFs.
 %
 %   Statistics of those parameters are stored as *.mean* and *.quantiles*
 %   representing the arithmetic mean and {0,5,25,50,75,95,100} quantiles,

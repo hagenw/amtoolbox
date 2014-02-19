@@ -24,6 +24,30 @@ function d = taal2011(sigclean, sigproc, fs)
 %   3) The output *d* is computed by a correlation process. See the
 %      referenced papers for more details.
 %
+%   Examples:
+%   ---------
+%
+%   The following example shows a simple comparison between the
+%   intelligibility of a noisy speech signal and the same signal after
+%   noise reduction using a simple soft thresholding (spectral
+%   subtraction):::
+%  
+%     % Get a clean and noisy test signal
+%     [f,fs]=cocktailparty;
+%     Ls=length(f);
+%     f_noisy=f+0.01*randn(Ls,1);
+%
+%     % Simple spectral subtraction to remove the noise
+%     a=128; M=256; g=gabtight('hann',a,M);
+%     c_noise   = dgtreal(f,g,a,M);
+%     c_removed = thresh(c_noise,0.01);
+%     f_removed = idgtreal(c_removed,g,a,M);
+%     f_removed = f_removed(1:Ls);
+%
+%     % Compute the STOI of noisy vs. removed
+%     d_noisy   = taal2011(f, f_noisy, fs)
+%     d_removed = taal2011(f, f_removed, fs)
+%
 %   The original STOI model can be downloaded from
 %   `<http://msp.ewi.tudelft.nl/content/short-time-objective-intelligibility-measure>`_
 %   This is a standalone version not depending on LTFAT and AMToolbox,

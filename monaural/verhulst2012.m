@@ -12,24 +12,23 @@ function [V,Y,E,CF]=verhulst2012(sign,fs,fc,spl,normalizeRMS,subject,irregularit
 %                         cochlear sections
 %        spl            : array of the sound pressure levels that correspond to
 %                         value 1 of the correspondent input signal
-%        normalizeRms   : arry to control the normalization of each signal. With value 1 normalize the energy of the signal, so the
+%        normalizeRms   : arry to control the normalization of each
+%                         signal. With value 1 normalize the energy of the signal, so the
 %                         relative spl value correspond to the rms of the signal (default 0)
 %        subject        : the subject number controls the cochlear irregulatiries (default 1)
-%        irregularities : array that enable (1) or disable (0) irregularities and nonlinearities for each simulation (default 1)                
+%        irregularities : array that enable (1) or disable (0)
+%                         irregularities and nonlinearities for each simulation (default 1)                
 %       
-%      
-%
 %   Output parameters:
-%
 %       V  : velocity of the basilar membrane sections V(time,section,channel) 
 %       Y  : displacement of the basilar membrane sections Y(time,section,channel)
 %       E  : sound pressure at the middle ear
 %       CF : center frequencies of the probed basiliar membrane sections
 %
-%   This function computes the basilar membrane displacement
-%   and the velocity of the movement at different positions employing a faster implementation of the 
-%   nonlinear time-domain model of cochlea by Verhulsts, Dau, Shera 2012.
-%
+%   This function computes the basilar membrane displacement and the
+%   velocity of the movement at different positions employing a faster
+%   implementation of the nonlinear time-domain model of cochlea by
+%   Verhulsts, Dau, Shera 2012.
 %
 %   The processing is implemented as follows:
 %
@@ -45,14 +44,9 @@ function [V,Y,E,CF]=verhulst2012(sign,fs,fc,spl,normalizeRMS,subject,irregularit
 %   4) the values obtained are resampled back to the original sampling
 %      rate
 %               
-%
-%   References: Verhulst, Sarah, Torsten Dau, and Christopher A. Shera. 
-%   "Nonlinear time-domain cochlear model for transient stimulation and human otoacoustic emission." 
-%   The Journal of the Acoustical Society of America 132.6 (2012): 3842-3848.
-%
-%
-%   AUTHOR: Alessandro Altoè 
-%
+%   References: verhulst2012
+  
+%   AUTHOR: Alessandro AltoÃ¨ 
 
 if nargin<5
     [channels,idx]=min(size(sign));

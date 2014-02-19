@@ -1,6 +1,6 @@
 % AMT - Single stages of auditory models
 %
-%  The AMT team, 2011 - 2013.
+%  The AMT team, 2011 - 2014.
 %
 %  Peripheral stages
 %     HEADPHONEFILTER    - FIR filter to model headphones
@@ -8,6 +8,7 @@
 %     AUDITORYFILTERBANK - Linear auditory filterbank.
 %     IHCENVELOPE        - Inner hair cell envelope extration.
 %     ADAPTLOOP          - Adaptation loops.
+%     KARJALAINEN1996    - Adaptation network.
 %     DRNL               - Dual resonance non-linear filterbank.
 %     MODFILTERBANK      - Modulation filter bank.
 %     MODFILTERBANKEPSM  - Modulation filter bank from Joergensen model.

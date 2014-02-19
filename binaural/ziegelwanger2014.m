@@ -1,11 +1,8 @@
 function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0_onaxis)
 %ZIEGELWANGER2014 Time of arrival estimates
-%   usage: [Obj,results]=ziegelwanger2014(data,estimation,outlierDetection,model,p0_onaxis) 
+%   Usage: [Obj,results]=ziegelwanger2014(data,estimation,outlierDetection,model,p0_onaxis) 
 %
-%   Estimates the Time-of-Arrival for each measurement in Obj (SOFA) and
-%   corrects the results with a geometrical model of the head.
-%
-%   Input:
+%   Input parameters:
 %       Obj: SOFA object
 % 
 %       estimation (optional): select one of the estimation methods
@@ -34,7 +31,7 @@ function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0
 %                 direction-independent delay in seconds]
 %           dim 2: each record channel
 % 
-%   Output:
+%   Output parameters:
 %       Obj: SOFA Object
 % 
 %       results.toa: data matrix with time of arrival (TOA) for each impulse response (IR):
@@ -56,6 +53,9 @@ function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0
 %                 elevation of ear in radiants]
 %           dim 2: each record channel
 %
+%   Estimates the Time-of-Arrival for each measurement in Obj (SOFA) and
+%   corrects the results with a geometrical model of the head.
+%
 %   Examples:
 %   ---------
 % 
@@ -67,7 +67,7 @@ function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0
 %       [Obj,results]=ziegelwanger2014(Obj,4,1);
 %
 %   See also: ziegelwanger2014onaxis, ziegelwanger2014offaxis,
-%   data_ziegelwanger2014, exp_ziegelwanger2014
+%             data_ziegelwanger2014, exp_ziegelwanger2014
 %
 %   References: ziegelwanger2014
 

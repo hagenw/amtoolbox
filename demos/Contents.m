@@ -1,6 +1,6 @@
 % AMT - Demos
 %
-%   The AMT team, 2012 - 2013.
+%   The AMT team, 2012 - 2014.
 %
 %   This page documents the demos.
 %

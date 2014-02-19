@@ -1,6 +1,6 @@
 % AMT - Base routines
 %
-%  The AMT team, 2012 - 2013.
+%  The AMT team, 2012 - 2014.
 %
 %  Basic routines
 %    AMTSTART     -  Start the toolbox

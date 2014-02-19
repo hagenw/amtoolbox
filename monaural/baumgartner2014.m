@@ -38,7 +38,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %                    Default value is 1.
 %
 %     'lat',lat      Set the apparent lateral angle of the target sound to
-%                    *lat*. Default value is 0° (median SP).
+%                    *lat*. Default value is 0Â° (median SP).
 %
 %     'stim',stim    Define the stimulus (source signal without directional
 %                    features). As default an impulse is used.
@@ -67,7 +67,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %                    ps = [-30:5:70,80,100,110:5:210] degrees.
 %
 %     'mrsmsp',mrs   Set the motoric response scatter mrs within the median 
-%                    sagittal plane. Default value is 17° in accordance
+%                    sagittal plane. Default value is 17Â° in accordance
 %                    with scatter of unimodal response distribution
 %                    proposed in Langendijk and Bronkhorst (2002).
 %
@@ -92,7 +92,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %     'noregular'    Disable regularization of angular sampling.
 %
 %
-%   See also: plotbaumgartner2013, data_baumgartner2013linstat
+%   See also: plotbaumgartner2013, data_baumgartner2014
 %
 %   References: baumgartner2013assessment baumgartner2012modelling langendijk2002contribution patterson1988efficient dau1996qmeI
 
@@ -282,7 +282,7 @@ end
 
 %% Interpolation (regularize polar angular sampling)
 if flags.do_regular
-    respang0 = ceil(min(kv.polsamp)*0.2)*5;    % ceil to 5°
+    respang0 = ceil(min(kv.polsamp)*0.2)*5;    % ceil to 5Â°
     respangs = respang0:5:max(kv.polsamp);
     siint = zeros(length(respangs),size(si,2));
     for tt = 1:size(si,2)
@@ -309,7 +309,8 @@ if flags.do_mrs && flags.do_regular && kv.mrsmsp > 0
     kappa = 1/deg2rad(mrs)^2; % concentration parameter (~1/sigma^2 of normpdf)
     mrspdf = exp(kappa*cos(x)) / (2*pi*besseli(0,kappa)); % von Mises PDF 
     for tt = 1:size(si,2)
-      si(:,tt) = circonv(si(:,tt),mrspdf,360/5);
+      %si(:,tt) = circonv(si(:,tt),mrspdf,360/5);
+      si(:,tt) = pconv(si(:,tt),mrspdf(:));
     end
     
 end

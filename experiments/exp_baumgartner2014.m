@@ -116,8 +116,6 @@ function varargout = exp_baumgartner2014(varargin)
 %               angle errors (top) and QEs (bottom) averaged across listeners 
 %               are shown.  
 %
-%   See also: baumgartner2013, data_baumgartner2013
-%
 %   Examples:
 %   ---------
 %
@@ -125,51 +123,53 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %     exp_baumgartner2014('fig2');
 %
-%   To display Fig.3 use :::
+%   To display Fig.3 use ::
 %
 %     exp_baumgartner2014('fig3');
 %
-%   To display Fig.4 use :::
+%   To display Fig.4 use ::
 %
 %     exp_baumgartner2014('fig4');
 %
-%   To display Fig.5 use :::
+%   To display Fig.5 use ::
 %
 %     exp_baumgartner2014('fig5');
 %
-%   To display Fig.6 use :::
+%   To display Fig.6 use ::
 %
 %     exp_baumgartner2014('fig6');
 %
-%   To display Fig.7 use :::
+%   To display Fig.7 use ::
 %
 %     exp_baumgartner2014('fig7');
 %
-%   To display Fig.8 use :::
+%   To display Fig.8 use ::
 %
 %     exp_baumgartner2014('fig8');
 %
-%   To display Fig.9 use :::
+%   To display Fig.9 use ::
 %
 %     exp_baumgartner2014('fig9');
 %
-%   To display Fig.10 use :::
+%   To display Fig.10 use ::
 %
 %     exp_baumgartner2014('fig10');
 %
-%   To display Fig.11 use :::
+%   To display Fig.11 use ::
 %
 %     exp_baumgartner2014('fig11');
 %
-%   To display Fig.12 use :::
+%   To display Fig.12 use ::
 %
 %     exp_baumgartner2014('fig12');
 %
-%   To display Fig.13 use :::
+%   To display Fig.13 use ::
 %
 %     exp_baumgartner2014('fig13');
 %
-%   References: morimoto2001 macpherson2007
+%   See also: baumgartner2013, data_baumgartner2013
+%
+%   References morimoto2001 macpherson2007
 
   
 % AUTHOR: Robert Baumgartner
@@ -1929,7 +1929,7 @@ if flags.do_fig12
 
         [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
 
-        % target elevation range of +-60°
+        % target elevation range of +-60Â°
         idt = find( polang<=60 | polang>=120 );
         targets = spdtfs(:,idt,:);
         tang = polang(idt);
@@ -2679,7 +2679,7 @@ function per = pemacpherson2003(mmod,mflat)
 %   shaped-spectrum targets by measuring the deviation of responses from 
 %   the linear predictors obtained by and ad hoc selective, iterative 
 %   regression procedure. Polar errors are defined by showing a deviation 
-%   of >45° with respect to the linear flat stimulus prediction.
+%   of >45Â° with respect to the linear flat stimulus prediction.
 %
 %   See also: sirproceduremacpherson2000
 
@@ -2736,7 +2736,7 @@ function [f,r] = sirproceduremacpherson2000(m)
 %   `sirproceduremacpherson2000()` performs an ad hoc selective, iterative
 %   regression procedure in order to exclude outliers and reversals and 
 %   isolate the main concentration of responses in the computation of the 
-%   linear fits. Outlier distance criterion: 40°
+%   linear fits. Outlier distance criterion: 40Â°
 %
 %   See also: regress
 
@@ -2816,7 +2816,7 @@ function m = virtualexp(p,tang,rang,varargin)
 %                    	As default 'tang' is used.
 %
 %     'lat',lat     	Define the lateral target angles. 
-%                    	Default value is 0°.
+%                    	Default value is 0Â°.
 %
 %   See also: baumgartner2013, plotbaumgartner2013
 %
@@ -2897,7 +2897,7 @@ function ape = apebest2005(p,tang,rang)
 %     tang       : possible polar target angles. As default, ARI's MSP 
 %                  polar angles in the median SP is used.
 %     rang       : polar angles of possible response angles.
-%                  As default regular 5°-sampling is used (-30:5:210).    
+%                  As default regular 5Â°-sampling is used (-30:5:210).    
 %
 %   Output parameter:
 %     ape        : absolute polar angle error in degrees
@@ -2911,8 +2911,8 @@ apet = zeros(nt,1);
 for ii = 1:nt % for all target positions
   
     d = tang(ii)-rang;                 % wraped angular distance between tang & rang
-    iduw = (d < -180) | (180 < d);     % 180°-unwrap indices
-    d(iduw) = mod(d(iduw) + 180,360) - 180; % 180° unwrap
+    iduw = (d < -180) | (180 < d);     % 180Â°-unwrap indices
+    d(iduw) = mod(d(iduw) + 180,360) - 180; % 180Â° unwrap
     d = abs(d);                        % absolut distance
     apet(ii) = sum( p(:,ii) .* d');     % absolut polar angle error for target ii
     
