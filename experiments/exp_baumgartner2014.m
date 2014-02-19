@@ -718,7 +718,7 @@ if flags.do_fig5
         'YLim',ylim,'YMinorTick','on','FontSize',FontSize-2)
       plot([0,Ns+1],[ylim(1),ylim(1)]+0.03,'k')
     set(h,'FaceColor','white')
-    xlabel('Listener (NH{\itl})','FontSize',FontSize)
+    xlabel('Listener (NH)','FontSize',FontSize)
     ylabel('Local Polar RMS Error (deg)','FontSize',FontSize)
 
       l = legend('Actual','Predicted');
@@ -741,7 +741,7 @@ if flags.do_fig5
     set(gca,'XLim',[0 Ns+1],'XTick',1:Ns,'XTickLabel',NHs(idsort,3:4),...
         'YLim',ylim,'YMinorTick','on','FontSize',FontSize-2)
     set(h,'FaceColor','white')
-    xlabel('Listener (NH{\itl})','FontSize',FontSize)
+    xlabel('Listener (NH)','FontSize',FontSize)
     ylabel('Quadrant Error (%)','FontSize',FontSize)
 
     title(['e_{QE} = ' num2str(dqe,'%0.1f') '% ; r_{QE} = ' num2str(r_qe,'%0.2f')],...

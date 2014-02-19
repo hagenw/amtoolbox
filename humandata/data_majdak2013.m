@@ -1,7 +1,6 @@
 function data = data_majdak2013(varargin)
 %DATA_MAJDAK2013 Listener specific localization in saggital planes
 %   Usage: data = data_majdak2013(condition)
-%          data = data_majdak2013(lat, dlat, condition)
 %
 %   Output parameters:
 %     data.id    : listener ID
