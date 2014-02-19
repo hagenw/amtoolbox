@@ -4,7 +4,6 @@ function data = data_majdak2013(varargin)
 %filtered and spectrally warped DTFs.
 %
 %   Usage: data = data_majdak2013(condition)
-%          data = data_majdak2013(lat, dlat, condition)
 %
 %   The *condition* flag may be one of:
 %
