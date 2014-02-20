@@ -20,7 +20,8 @@ DEFUN_DLD (comp_meddishaircell, args, ,
    meddishaircell((double*)insig.data(),
 		  fs,
 		  siglen,
-		  (double*)outsig.data());
+          nsigs,
+		  (double*)outsig.fortran_vec());
 
    return octave_value (outsig);
 }

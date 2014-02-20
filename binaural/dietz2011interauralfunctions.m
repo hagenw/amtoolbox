@@ -2,11 +2,12 @@ function [outp] = dietz2011interauralfunctions(s1, s2, tau, fc, signal_level_dB_
 %DIETZ2011INTERAURALFUNCTIONS  Interaural stages of Dietz 2011
 %
 %   Input parameters
-%     s1, s2 : input signals
-%     tau    : lowpass filter parameter, such that a = exp(-1./(fs*tau)), 
-%              lowpass = filter([1-a], [1, -a], x)  
-%     fc     : center frequencies
-%     fs     : sampling frequencies
+%     s1     : Input signal
+%     s2     : Input signal
+%     tau    : Lowpass filter parameter, such that `a = exp(-1./(fs*tau))`,
+%              `lowpass = filter([1-a], [1, -a], x)`
+%     fc     : Center frequencies
+%     fs     : Sampling frequencies
 %
 %   Output parameters:
 %     outp   : Structure containing the output. See the description
@@ -20,17 +21,31 @@ function [outp] = dietz2011interauralfunctions(s1, s2, tau, fc, signal_level_dB_
 %   value *tau(i)* is applied to the signals in `s1(i,:)` and `s2(i,:)`.
 %
 %   The output structure *outp* contains the following fields:
-%     itf       : transfer function
-%     itf_equal : transfer function without amplitude
-%     ipd : phase difference in rad
-%     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
-%     ild : level difference in dB
-%     itd, itd_C, itd_lp, itd_C_lp - time difference based on instantaneous
-%                  and central frequencies, with and without low-passed itf
-%     f_inst_1 : instantaneous frequencies in the channels of the filtered s1
-%     f_inst_2 : instantaneous frequencies in the channels of the filtered s2
-%     f_inst   : instantaneous frequencies (average of f_inst1 and 2)
 %
+%     .itf       Transfer function
+%
+%     .itf_equal  Transfer function without amplitude
+%
+%     .ipd       Phase difference in rad
+%
+%     .ipd_lp    Based on lowpass-filtered itf, phase difference in rad
+%
+%     .ild       Level difference in dB
+%
+%     .itd       Time difference based on instantaneous frequencies
+%
+%     .itd_C     Time difference based on central frequencies
+%  
+%     .itd_lp    As *.itd*, with low-passed itf
+%
+%     .itd_C_lp  As *.itd_C*, with low-passed itf
+%
+%     .f_inst_1  Instantaneous frequencies in the channels of the filtered *s1*
+%
+%     .f_inst_2  Instantaneous frequencies in the channels of the filtered *s2*
+%
+%     .f_inst    Instantaneous frequencies (average of *f_inst1* and *f_inst_2*)
+%  
 %   See also: dietz2011
 %
 %   References: dietz2011auditory

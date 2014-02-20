@@ -78,7 +78,7 @@ function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
 %     'basef',basef  Ensure that the frequency basef is a center frequency
 %                    in the filterbank. The default value  is 1000.
 %
-%     'filters_per_ERB', filters_per_erb
+%     'filters_per_ERB',filters_per_erb
 %                    Filters per erb. The default value is 1.
 %
 %     'middle_ear_thr',r
@@ -132,14 +132,14 @@ function [fine, env, fc, ild] = dietz2011(insig,fs,varargin)
 %                    This is a structure used for the localization
 %                    plugin. It has the following fields:
 %  
-%                      `max_abs_itd`
-%                         XXX. The default value is 1e-3.
+%                    `max_abs_itd`
+%                       XXX. The default value is 1e-3.
 %
-%                      `tau_cycles`
-%                         XXX. The default value is 5. 
+%                    `tau_cycles`
+%                       XXX. The default value is 5. 
 %
-%                      `tau_s`
-%                         XXX. The default value is 10e-3.
+%                    `tau_s`
+%                       XXX. The default value is 10e-3.
 %
 %     'signal_level_dB_SPL',signal_level
 %                    Sound pressure level of left channel. Used for data

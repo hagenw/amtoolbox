@@ -40,7 +40,8 @@
 #include <time.h>
 /* #include <iostream.h> */
 
-#include "comp_zilany2013_complex.hpp"
+/* #include "zilany2013_complex.hpp" */
+#include "../src/zilany_complex.c"
 
 #define MAXSPIKES 1000000
 #ifndef TWOPI
