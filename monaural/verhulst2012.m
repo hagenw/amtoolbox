@@ -44,9 +44,11 @@ function [V,Y,E,CF]=verhulst2012(sign,fs,fc,spl,normalizeRMS,subject,irregularit
 %   4) the values obtained are resampled back to the original sampling
 %      rate
 %               
+%   See also: verhulst2012
+%
 %   References: verhulst2012
-  
-%   AUTHOR: Alessandro Altoè 
+%
+%   AUTHOR: Alessandro Altoe 
 
 if nargin<5
     [channels,idx]=min(size(sign));
@@ -67,17 +69,18 @@ sectionsNo=1000;
 if(idx==2) %transpose it (python C-style row major order)
     sign=sign';
 end
-stim=zeros(channels,length(sign(1,:))*Fs/fs);
+stim=zeros(channels,length(resample(sign(1,:),Fs,fs)));
 for i=1:channels
     stim(i,:)=resample(sign(i,:),Fs,fs);
+%     figure; plot(stim(i,:));
     if normalizeRMS(i)
         s_rms=rms(stim(i,:));
         stim(i,:)=stim(i,:)./s_rms;
     end
 end
-sheraPo=0.0610;
+sheraPo=0.061;
 if(isstr(fc) && strcmp(fc,'all')) %if probing all sections 1001 output (1000 sections plus the middle ear)
-    p=sectionsNo+1;
+    p=sectionsNo;
 else %else pass it as a column vector
     [p,idx]=max(size(fc));
     if(idx==2)
@@ -93,7 +96,7 @@ cd(strcat(path,'/src/verhulst/'));
 save('input.mat','stim','Fs','channels','spl','subject','sheraPo','irregularities','probes','-v7');
 system('python run_cochlear_model.py');
 l=length(stim(1,:));
-rl=length(sign(1,:));
+rl=length(resample(stim(1,:),fs,Fs));
 V=zeros(rl,p,channels);
 Y=zeros(rl,p,channels);
 E=zeros(rl,channels);
@@ -101,22 +104,20 @@ CF=zeros(p,1);
 for i=1:channels
     fname=strcat('out/v',int2str(i),'.np');
     f=fopen(fname,'r');
-    tmpV=fread(f,[p,l],'double')';
-    V(:,:,i)=resample(tmpV,fs,Fs);
+    V(:,:,i)=resample(fread(f,[p,l],'double','n')',fs,Fs);
     fclose(f);
     fname=strcat('out/y',int2str(i),'.np');
     f=fopen(fname,'r');
-    tmpY=fread(f,[p,l],'double')';
-    Y(:,:,i)=resample(tmpY,fs,Fs);
+    Y(:,:,i)=resample(fread(f,[p,l],'double','n')',fs,Fs);
     fclose(f);
     fname=strcat('out/E',int2str(i),'.np');
     f=fopen(fname,'r');
-    E(:,i)=resample(fread(f,[l,1],'double'),fs,Fs);
+    E(:,i)=resample(fread(f,[l,1],'double','n'),fs,Fs);
     fclose(f);
     if(i==1)
     fname=strcat('out/F',int2str(i),'.np');
     f=fopen(fname,'r');
-    CF=fread(f,[p,1],'double');
+    CF=fread(f,[p,1],'double','n');
     fclose(f);
     end
 end

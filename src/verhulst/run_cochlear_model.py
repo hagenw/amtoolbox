@@ -29,7 +29,7 @@ channels=channels[0][0]
 subjectNo=int(par['subject'])
 lgt=len(stim[0])
 norm_factor=p0*10.**(spl/20.)
-sheraPo=0.0600
+sheraPo=0.06
 irr_on=np.array(par['irregularities'])
 d=len(stim[0].transpose())
 print("running cochlear simulation")
@@ -46,18 +46,17 @@ def solve_one_cochlea(model): #definition here, to have all the parameter implic
     coch=model[0]
     coch.init_model(model[1],Oversampling*Fs,sectionsNo,probe_points,Zweig_irregularities=model[2],sheraPo=sheraPo,subject=subjectNo) #model needs to be init here because if not pool.map crash
     coch.solve()
-    s=time.clock()
     f=open("out/v"+str(i+1)+".np",'wb')
-    coch.Vsolution.tofile(f)
+    np.array(coch.Vsolution,dtype='=d').tofile(f)
     f.close()
     f=open("out/y"+str(i+1)+".np",'wb')
-    coch.Ysolution.tofile(f)
+    np.array(coch.Ysolution,dtype='=d').tofile(f)
     f.close()
     f=open("out/E"+str(i+1)+".np",'wb')
-    coch.oto_emission.tofile(f)
+    np.array(coch.oto_emission,dtype='=d').tofile(f)
     f.close()
     f=open("out/F"+str(i+1)+".np",'wb')
-    coch.cf.tofile(f)
+    np.array(coch.cf,dtype='=d').tofile(f)
     f.close()
 
 if __name__ == "__main__":

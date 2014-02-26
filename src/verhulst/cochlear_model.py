@@ -48,16 +48,28 @@ def TLsolver(t,y,model): #y''=dv/dt y'=v
     c=model.interplPoint3
     d=model.interplPoint4
     cminusb=c-b
-    F0=b + frac * (cminusb - 0.1666667* (1.-frac) * ((d - a - 3.0 * cminusb) * frac + (d + 2.0*a - 3.0*b))) #cubic spline interpolation
+    F0=b + frac * (cminusb - 0.1666667* (1.-frac) * ((d - a - 3.0 * cminusb) * frac + (d + 2.0*a - 3.0*b))) #fast cubic interpolation
     model.Vtmp=y[0:n]
     model.Ytmp=y[n:2*n]
+    if(model.use_Zweig): #non-linearities here
+        factor=100
+        Vvect=np.abs(model.Vtmp)/model.RthV1
+        Sxp=(Vvect-1.)*model.const_nl1
+        Syp=model.Sb*np.sqrt(1+(Sxp/model.Sa)**2)
+        Sy=Sxp*model.sinTheta+Syp*model.cosTheta
+        SheraP=model.PoleS+Sy/factor
+        SheraP=np.fmin(SheraP,model.PoleE)
+        if( np.max(abs(SheraP[1:n]-model.SheraP[1:n])/abs(model.SheraP[1:n]))>0.01): #update non-linear parameters here only if the pole displacement is larger than 1%
+            model.SheraP=SheraP
+            model.SheraParameters()
+            model.ZweigImpedance()
+            model.current_t=t
     model.Dev[0:n]=model.Dev[0:n]+frac
     libtrisolv.delay_line(model.Ybuffer_pointer,model.Zrp_pointer,model.Zrp1_pointer,model.Zrp2_pointer,model.Zrp3_pointer,model.Dev_pointer,model.YZweig_pointer,ctypes.c_int(model.YbufferLgt),ctypes.c_int(model.n+1))
     model.Dev[0:n]=model.Dev[0:n]-frac
     model.calculate_g()
     model.calculate_right(F0)
-    model.count=model.count+1
-    libtrisolv.solve_tridiagonal(ctypes.byref(model.tridata),model.r_pointer,model.Qpointer,ctypes.c_int(n))#compute q 
+    libtrisolv.solve_tridiagonal(ctypes.byref(model.tridata),model.r_pointer,model.Qpointer,ctypes.c_int(n))#compute q
     zero_val=(model.RK4_0*model.Qsol[0]+model.RK4G_0*(model.g[0]+model.p0x*F0)) #ME equation
     Vderivative=(model.Qsol-model.g)  
     Vderivative[0]=zero_val
@@ -107,8 +119,7 @@ class cochlea_model ():
         self.interplPoint2=0
         self.interplPoint3=0
         self.interplPoint4=0
-        self.count=0
-     
+    
 
                
 #function to intitialize all the parameters        
@@ -146,6 +157,7 @@ class cochlea_model ():
         self.Rth_norm=10**(self.Rth/20./self.KneeVar)
         lf_limit=self.ctr
         if(self.use_Zweig):
+            factor=100
             n=self.n+1
             Rth=self.Rth
             Rth_norm=self.Rth_norm
@@ -162,12 +174,25 @@ class cochlea_model ():
             self.RthV1[lf_limit:n]=self.Vknee1
             self.RthV2[lf_limit:n]=self.Vknee2
             self.PoleS[lf_limit:n]=self.SheraPo
+            Theta0=np.arctan(((self.PoleE-self.PoleS)*factor)/((self.RthV2/self.RthV1)-1.))
+            Theta=Theta0/2.
+            Sfoc=(self.PoleS*factor)/(self.RthV2/self.RthV1)
+            Se=np.cos((np.pi-Theta0)*0.5)
+            self.Sb=Sfoc*Se
+            self.Sa=Sfoc*np.sqrt(1.-((Se**2)))
+            self.const_nl1=np.cos(Theta)/np.cos(2*Theta)
+            self.cosTheta=np.cos(Theta)
+            self.sinTheta=np.sin(Theta)
+        
+        #print(self.PoleS)
         ################################
         #PURIAM1 FILTER             ###
         ###############################
-        puria_gain=2.*10.**(18./20.);
-        b,a=signal.butter(1,[100./(samplerate/2.),3000./(samplerate/2.)],'bandpass') #second order butterworth
-        self.stim=signal.lfilter(b,a,stim)*puria_gain
+        puria_gain=10**(18./20.)*2.;
+        b,a=signal.butter(1,[100./(samplerate/2.),3000./(samplerate/2)],'bandpass') #second order butterworth
+        self.stim=signal.lfilter(b*puria_gain,a,stim)
+
+	
       
     #from intializeCochlea.f90
     def initCochlea(self):
@@ -223,11 +248,11 @@ class cochlea_model ():
         #PROBE POINTS               ##
         ##############################
         if(self.probe_freq=='all'):
-            self.probe_points=np.zeros_like(self.f_resonance)
-            for i in range(len(self.f_resonance)):
-                self.probe_points[i]=i
+            self.probe_points=np.zeros(len(self.f_resonance)-1)
+            for i in range(len(self.f_resonance)-1):
+                self.probe_points[i]=i+1
             self.probe_points=(self.probe_points)
-            self.cf=(self.f_resonance)
+            self.cf=(self.f_resonance[0:len(self.f_resonance)])
         else:
             self.probe_points=np.zeros_like(self.probe_freq)
             for i in range(len(self.probe_freq)):
@@ -286,6 +311,7 @@ class cochlea_model ():
         dtot=self.Sherad_factor*self.SheraD
         stot=(self.omega2)*(self.Ytmp+(self.SheraRho*self.YZweig))
         self.g[1:n]=(dtot[1:n]*self.Vtmp[1:n])+stot[1:n]
+        self.passive=(dtot[0:n]*self.Vtmp+self.SheraRho*self.YZweig*self.omega2)
         
         
     def calculate_right(self,F0): #same as in fortran
@@ -296,13 +322,13 @@ class cochlea_model ():
     def SheraParameters(self): #same as in fortran
         a=(self.SheraP+np.sqrt((self.SheraP**2.)+self.c*(1.0-self.SheraP**2)))/self.c
         self.SheraD=2.0*(self.SheraP-a)
-        self.SheraMu=1./(2*np.pi*a)
+        self.SheraMu=1./(a)
         self.SheraRho=2.* a * np.sqrt(1.-(self.SheraD/2.)**2.) * np.exp(-self.SheraP/a)
         
     
     def ZweigImpedance(self):
         n=self.n+1
-        MudelayExact=self.SheraMu*2*np.pi/(self.omega*self.dt)
+        MudelayExact=self.SheraMu/(self.omega*self.dt)
         Mudelay=np.floor(MudelayExact)+1.
         self.Dev[:]=Mudelay-MudelayExact
         self.Zrp1[0:n]=((self.Zwp+self.YbufferLgt)-Mudelay[0:n])%self.YbufferLgt
@@ -310,8 +336,8 @@ class cochlea_model ():
         self.Zrp[0:n]=(self.Zrp1[0:n]+const)%self.YbufferLgt
         self.Zrp2[0:n]=(self.Zrp1[0:n]+1)%self.YbufferLgt
         self.Zrp3[0:n]=(self.Zrp2[0:n]+1)%self.YbufferLgt
-        libtrisolv.delay_line(self.Ybuffer_pointer,self.Zrp_pointer,self.Zrp1_pointer,self.Zrp2_pointer,self.Zrp3_pointer,self.Dev_pointer,self.YZweig_pointer,ctypes.c_int(self.YbufferLgt),ctypes.c_int(self.n+1))
-        
+
+
     def compression_slope_param(self,slope):
         self.Yknee1=float(6.9183e-10)
         self.Vknee1=float(4.3652e-6)
@@ -340,8 +366,7 @@ class cochlea_model ():
             Ax=(0.7-0.06)/(97.4-30.)
             Bx=self.SheraPo-Ax*30.
             self.PoleE=self.PoleE+Ax*97.4+Bx
-        
-                    
+    
     def polecalculation(self): #TODO
         #non-linearities  can be Wrapped from C for an additional boost, but must be done carefully (efficient memory allocation)
         factor=100. 
@@ -349,7 +374,7 @@ class cochlea_model ():
         n=self.n+1
         if(self.use_Zweig):
 	    if(self.non_linearity==1): #To check
-		    #non-linearity DISP cost about three times more than in fortran
+		    #non-linearity DISP cost about three times more than in fortran (Not implemented now)
 		    Yknee1CST=self.RthY1*self.omega[self.onek]
 		    Yknee2CST=self.RthY2*self.omega[self.onek]
 		    Yknee1F=Yknee1CST/self.omega
@@ -361,7 +386,7 @@ class cochlea_model ():
 		    sin_Theta=np.sin(Theta)
 		    cos_Theta0=2*cos_Theta**2-1
 		    Sfoc=self.PoleS*factor*(Yknee2F/Yknee1F)
-		    Se=sin_Theta #In original implementation Se=1./Se. replace division with multiplication and save some microseconds
+		    Se=sin_Theta
 		    Sb=Sfoc*Se
 		    Sa=Sfoc*np.sqrt(1.-(1.*(Se**2)))
 		    Sxp=(Yvect-1.)*cos_Theta/cos_Theta0
@@ -371,20 +396,13 @@ class cochlea_model ():
 		    
 	    elif(self.non_linearity==2):  #non-linearity VEL
 		    Vvect=np.abs(self.Vtmp)/self.RthV1
-		    Theta0=np.arctan(((self.PoleE-self.PoleS)*factor)/((self.RthV2/self.RthV1)-1.))
-		    Theta=Theta0/2.
-		    Sfoc=(self.PoleS*factor)/(self.RthV2/self.RthV1)
-		    Se=np.cos((np.pi-Theta0)*0.5)
-		    Sb=Sfoc*Se
-		    Sa=Sfoc*np.sqrt(1.-((Se**2)))
-		    Sxp=(Vvect-1.)*np.cos(Theta)/np.cos(2*Theta)
-		    Syp=Sb*np.sqrt(1+(Sxp/Sa)**2)
-		    Sy=Sxp*np.sin(Theta)+Syp*np.cos(Theta)
+		    Sxp=(Vvect-1.)*self.const_nl1
+		    Syp=self.Sb*np.sqrt(1+(Sxp/self.Sa)**2)
+		    Sy=Sxp*self.sinTheta+Syp*self.cosTheta
 		    self.SheraP=self.PoleS+Sy/factor
-                
-            self.SheraP=np.fmin(self.SheraP,self.PoleE) #as for loop. fmin instead of minimum, to be sure that non Nan impair the computation
-            
-            
+
+        self.SheraP=np.fmin(self.SheraP,self.PoleE)
+
                 
   
     def solve(self):
@@ -396,19 +414,22 @@ class cochlea_model ():
         time_length=length*self.dt
         self.Vsolution=np.zeros([length+2,len(self.probe_points)]) #each probe point signal in a row
         self.Ysolution=np.zeros([length+2,len(self.probe_points)])
+        self.organ_of_corti_acceleration=np.zeros([length+2,len(self.probe_points)]) 
         self.oto_emission=np.zeros(length+2)
         self.time_axis=np.linspace(0,time_length,length)
         #constructor to ode
         #set integrator ('dopri5')=RK45 ('vode',method='adams')=explicit(no more the fastest one, DO NOT WORK FOR PARALLEL CALL) ('vode',method='bdf')=implicit
-        r=ode(TLsolver).set_integrator('dopri5',rtol=0.0001,max_step=self.dt)  #max_step=dt force to evaluate the input for every sample
+        r=ode(TLsolver).set_integrator('dopri5',rtol=1e-2,atol=1e-13)
         r.set_f_params(self)
         r.set_initial_value(np.concatenate([np.zeros_like(self.x),np.zeros_like(self.x)]))
         r.t=0
         j=0
-        self.last_t=0
+        self.last_t=0.0
+        self.current_t=r.t
+        self.polecalculation()
+        self.SheraParameters()
+        self.ZweigImpedance()
         while(j<length):
-           self.ZweigImpedance()
-           self.SheraParameters()
            if(j>0):
                self.interplPoint1=self.stim[j-1]
            self.interplPoint2=self.stim[j]    #assign the stimulus points and interpolation parameters
@@ -418,24 +439,26 @@ class cochlea_model ():
            self.lastT=r.t
            self.Vtmp=r.y[0:n]
            self.Ytmp=r.y[n:2*n] #Non linearities HERE
-           self.polecalculation()
            self.Zwp=(self.Zwp+1)%self.YbufferLgt #update Zweig Buffer
            self.Ybuffer[:,self.Zwp]=self.Ytmp
-           self.calculate_g();
-          # if(j<np.size(self.Vsolution)):  #store displacement and velocity for probe points, included in r.y
+           self.ZweigImpedance()
+           self.current_t=r.t
+
            if(self.probe_freq=='all'):
-            self.Vsolution[j,:]=self.Vtmp #storing all probe points (Debug)
-            self.Ysolution[j,:]=self.Ytmp
-	   else:
+            self.Vsolution[j,:]=self.Vtmp[1:n] #storing all probe points (Debug)
+            self.Ysolution[j,:]=self.Ytmp[1:n]
+            self.organ_of_corti_acceleration[j,:]=self.passive[1:n]
+           else:
               k=0
               for i in self.probe_points:
                 self.Vsolution[j,k]=self.Vtmp[i] 
                 self.Ysolution[j,k]=self.Ytmp[i]
-	        k=k+1
+                self.organ_of_corti_acceleration[j,k]=self.passive[i]
+                k=k+1
            self.oto_emission[j]=self.Qsol[0]
            j=j+1
-	#### filter out the otoacoustic emission ####
-	samplerate=self.fs
-	b,a=signal.butter(1,[600./(samplerate/2),3000./(samplerate/2)],'bandpass')
-	self.oto_emission=signal.lfilter(b*self.q0_factor,a,self.oto_emission)
+    #### filter out the otoacoustic emission ####
+        samplerate=self.fs
+        b,a=signal.butter(1,[600./(samplerate/2),3000./(samplerate/2)],'bandpass')
+        self.oto_emission=signal.lfilter(b*self.q0_factor,a,self.oto_emission)
         #END
