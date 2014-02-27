@@ -1,3 +1,4 @@
+function exp_verhulst2012
 %EXP_VERHULST2012 Compute figurs from the Verhulst paper
 %
 %    this script compute and plot figures 2.a and 2.c of: Verhulst, Sarah,
@@ -8,9 +9,9 @@
 
 %   AUTHOR: Alessandro Altoè 
 
-close all;
-clear all;
-clc;
+% close all;
+% clear all;
+% clc;
 fs=48000;
 f0=1e3;
 t=0:1/fs:0.05;

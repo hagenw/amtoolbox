@@ -381,7 +381,7 @@ if flags.do_fig9
             % generate noise coming from the given direction
             ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance]);
             sig = auralize_ir(ir,sig_noise);
-            phi_auditory_event(ii) = estimate_azimuth(sig,lookup,'dietz2011');
+            phi_auditory_event(ii) = wierstorf2013estimateazimuth(sig,lookup,'dietz2011');
             phi_sound_event(ii) = degree(irs.apparent_azimuth(ii));
         end
         save(save_format,s,'phi_auditory_event','phi_sound_event');

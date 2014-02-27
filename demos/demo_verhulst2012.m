@@ -1,4 +1,4 @@
-%DEMO_OTOACOUSTICEMISSION Demo of the OtoacousticEmission
+%DEMO_VERHULST2012 Demo of the OtoacousticEmission
 %  
 %   This script computes and plot the otoacoustic emission for a 500 Hz sinusoid,
 %   This is generated using the cochlear model described in verhulst2012
