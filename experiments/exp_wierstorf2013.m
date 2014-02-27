@@ -335,7 +335,7 @@ elseif flags.do_fig8
             % calculate the mean about time of the binaural parameters and store
             % them
             itd(ii,:) = median(itd_tmp,1);
-            phi(ii) = degree(irs.apparent_azimuth(ii));
+            phi(ii) = deg(irs.apparent_azimuth(ii));
         end
         save(save_format,s,'phi','itd');
     else
@@ -382,7 +382,7 @@ if flags.do_fig9
             ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance]);
             sig = auralize_ir(ir,sig_noise);
             phi_auditory_event(ii) = wierstorf2013estimateazimuth(sig,lookup,'dietz2011');
-            phi_sound_event(ii) = degree(irs.apparent_azimuth(ii));
+            phi_sound_event(ii) = deg(irs.apparent_azimuth(ii));
         end
         save(save_format,s,'phi_auditory_event','phi_sound_event');
     else
