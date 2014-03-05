@@ -29,7 +29,7 @@
 %     ZIEGELWANGER2014ONAXIS  - on-axi TOA model
 %
 %  Additional functions
-%     ESTIMATE_AZIMUTH      - Azimuth position using the Dietz or the Lindemann model
+%     WIERSTORF2013ESTIMATEAZIMUTH - Azimuth position estimation based on dietz2011 or lindemann1986
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

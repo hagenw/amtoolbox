@@ -13,7 +13,7 @@ inline
 double interpl_4(double a,double b,double c,double d,double frac){
     double cminusb = c-b;
     return b + frac * (
-                       cminusb - 0.1666667 * (1.-frac) * (
+                       cminusb - 0.166666667 * (1.-frac) * (
                                                            (d - a - 3.0 * cminusb) * frac + (d + 2.0*a - 3.0*b)
                                                            )
                        );

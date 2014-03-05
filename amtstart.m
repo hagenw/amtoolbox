@@ -28,50 +28,41 @@ function amtstart()
   
 %   AUTHOR : Peter L. Søndergaard.  
 
-% Verify that LTFAT has been installed
-if ~exist('ltfatarghelper','file')  
-    disp('');
-    disp('--- AMTOOLBOX - The Auditory Modelling toolbox. ---');
-    disp('')
-    error(['The toolbox require the LTFAT toolbox to properly function. ' ...
-         'Please download and install it from http://ltfat.sourceforge.net,' ...
-         'and then call the LTFATSTART command BEFORE you call ' ...
-          'AMTSTART.'])
-end;
+%% LTFAT package
 
-% Check for the correct version
-% Required version is given by:
-major_rq  = 1;
-minor_rq  = 0;
-bugfix_rq = 9;
+% Search for LTAFT package
+basepath=which('amtstart');
+basepath=basepath(1:end-11);
+if ~exist('ltfatstart','file')
+  ltfatpath=fullfile(basepath,'thirdparty','LTFAT');
+  if exist(ltfatpath,'dir')
+    addpath(ltfatpath);
+  end
+end
 
-
-s=ltfathelp('version');
-
-if isempty(s)
-  error(['ltfathelp("version") returns an empty array. Please check your '...
-         'installation.']);
-end;
-
-% Split into major, minor and bugfix version.
-stops=find(s=='.');
-major_no  = str2num(s(1:stops(1)));
-if numel(stops)==1
-  minor_no  = str2num(s(stops(1)+1:end));
-  bugfix_no = 0;
+% Start LTFAT
+disp('*** Starting LTFAT ***');
+if exist('ltfatstart','file')
+  ltfatstart;
 else
-  minor_no  = str2num(s(stops(1)+1:stops(2)));
-  bugfix_no = str2num(s(stops(2)+1:end));
-end;
+  error(['LTFAT package could not be found. Unable to continue.' 10 ...
+        'Download LTFAT from http://ltfat.sourceforge.net ' 10 ...
+        'and copy to amtoolbox/thirdparty/LTFAT.']); 
+end
 
-% Do the check, multiply by some big number to make the check easy
-if major_rq*1000000+minor_rq*1000+bugfix_rq>major_no*1000000+minor_no*1000+ ...
-            bugfix_no
-  error(['Your version of LTFAT is too old for this version of AMToolbox ' ...
-         'to function proberly. Your need at least version %i.%i.%i of LTFAT.'],major_rq,minor_rq,bugfix_rq);
-end;
-          
-% Serch for SOFA package
+% Check for the correct version. 
+s=ltfathelp('version'); 
+s_r='1.0.9'; % set the required version
+v=sscanf(s,'%d.%d.%d'); v(4)=0;
+v_r=sscanf(s_r,'%d.%d.%d');
+if ~(v(1)>v_r(1) || (v(1)>=v_r(1) && v(2)>v_r(2)) || (v(1)>=v_r(1) && v(2)>=v_r(2) && v(3)>=v_r(3)) ),
+    error(['You need LTFAT >= ' s_r ' to work with AMT. ' ...
+      'Please update your package from http://ltfat.sourceforge.net ']);
+end  
+     
+%% SOFA package
+
+% Search for SOFA package
 basepath=which('amtstart');
 basepath=basepath(1:end-11);
 if ~exist('SOFAstart','file')
@@ -93,29 +84,54 @@ else
         'from http://sofacoustics.sourceforge.net ' ...
         'and copy to amtoolbox/thirdparty/SOFA.']); 
 end
+
+%% SFS package
+
+% Search for the package
+basepath=which('amtstart');
+basepath=basepath(1:end-11);
+if ~exist('SFS_start','file')
+  sfspath=fullfile(basepath,'thirdparty','SFS');
+  if exist(sfspath,'dir')
+    addpath(sfspath);
+  end
+end
+
+% Start 
+disp('*** Starting SFS ***');
+if exist('SFS_start','file')
+  SFS_start;
+  s=SFS_version; s_r='0.2.4'; % set the required version
+  disp(['SFS, version ' s]);
+  v=sscanf(s,'%d.%d.%d'); v(4)=0;
+  v_r=sscanf(s_r,'%d.%d.%d');
+  if ~(v(1)>v_r(1) || (v(1)>=v_r(1) && v(2)>v_r(2)) || (v(1)>=v_r(1) && v(2)>=v_r(2) && v(3)>=v_r(3)) ),
+      error(['You need SFS >= ' s_r ' to work with AMT. ' ...
+        'Please update your package from https://github.com/sfstoolbox/sfs ']);
+  end  
+else
+  disp(['SFS package could not be found. Continue without SFS support.']);
+  disp(['For SFS support please download the package ' ...
+        'from https://github.com/sfstoolbox/sfs ' ...
+        'and copy to amtoolbox/thirdparty/SFS.']); 
+end
+
+%% Start AMT
 disp('*** Starting AMT ***');  
 % --- general settings ---
 % Print the banner at startup?
 printbanner=1;
 
-% ----------------------------------------------------
-% -------   do not edit below this line   ------------
-% ----------------------------------------------------
-
 % Get the basepath as the directory this function resides in.
 % The 'which' solution below is more portable than 'mfilename'
 % becase old versions of Matlab does not have "mfilename('fullpath')"
 basepath=which('amtstart');
-% Kill the function name from the path.
 basepath=basepath(1:end-11);
-
-% add the base path
 if exist('addpath','var')>0
   addpath(basepath);
 else
   path(path,basepath);
 end
-
 bp=[basepath,filesep];
 
 % Load the version number

@@ -1,4 +1,4 @@
-%DEMO_HOHMANNFILTERBANK  Filterbank example
+%DEMO_HOHMANN2007  Filterbank example
 %
 %   This example program demonstrates how to create and use an analysis
 %   gammatone filterbank

@@ -1,9 +1,9 @@
-function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)
-%ESTIMATE_AZIMUTH Estimate the perceived azimuth using a binaural model
-%   Usage: [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)
-%          [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting)
-%          [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model)
-%          [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup)
+function [phi,phi_std,itd,ild,cfreqs] = wierstorf2013estimateazimuth(sig,lookup,model,do_spectral_weighting,fs)
+%wierstorf2013estimateazimuth Estimate the perceived azimuth using a binaural model
+%   Usage: [phi,itd,ild,cfreqs] = wierstorf2013estimateazimuth(sig,lookup,model,do_spectral_weighting,fs)
+%          [phi,itd,ild,cfreqs] = wierstorf2013estimateazimuth(sig,lookup,model,do_spectral_weighting)
+%          [phi,itd,ild,cfreqs] = wierstorf2013estimateazimuth(sig,lookup,model)
+%          [phi,itd,ild,cfreqs] = wierstorf2013estimateazimuth(sig,lookup)
 %
 %   Input parameters:
 %       sig                   : binaural singal
@@ -21,7 +21,7 @@ function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spe
 %       ild     : calculated ILD (dB)
 %       cfreqs  : center frequencies of used auditory filters (Hz)
 %
-%   `estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)` uses a
+%   `wierstorf2013estimateazimuth(sig,lookup,model,do_spectral_weighting,fs)` uses a
 %   binaural model to estimate the perceived direction for a given binaural
 %   signal.  Therefore, it needs the struct lookup, which maps ITD values to
 %   the corresponding angles. This can be created with the

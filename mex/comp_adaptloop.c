@@ -8,7 +8,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
    double *insig, *outsig, limit, minlvl;
    double *tau;
-   int siglen, nsigs, fs, taulen, nloops;
+   int siglen, nsigs, fs, nloops;
    adaptloopstate s;
    
    /* Check for proper number of arguments. */

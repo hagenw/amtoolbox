@@ -28,10 +28,8 @@ curdir=pwd;
 
 if isoctave
   extname='oct';
-  ext='oct';
 else
   extname='mex';
-  ext=mexext;
 end;
 
 % -------------- Handle cleaning --------------------------------
@@ -48,6 +46,7 @@ if flags.do_clean
   if isoctave
     deletefiles([bp,'oct'],'*.oct');
     deletefiles([bp,'oct'],'*.o');
+    deletefiles([bp,'oct'],'*.mex');
   else
     deletefiles([bp,'mex'],['*.',mexext]);
   end;
@@ -63,16 +62,51 @@ end;
 if flags.do_compile
 
   fprintf('========= Compiling %s interfaces ==========\n', extname);
-  if compile_amt(bp)>1;                
+  
+  if isoctave
+    ext='oct';
+    L=dir([bp,filesep,'oct',filesep,'*.cc']);
+  else
+    ext=mexext;
+    % Get the list of files.
+    L=dir([bp,filesep,'mex',filesep,'comp_*.c']);
+  end;
+    filenames = arrayfun(@(lEl) lEl.name,L,'UniformOutput',0);
+  
+  if compile_amt(bp,ext,filenames)>1;                
     fprintf('ERROR: The %s interfaces was not built.\n', extname);
   else
     disp('Done.');
   end;
-
-end;
+  
+  if isoctave
+     % Compile MEXs instead of missing OCTs
+    Lmex=dir([bp,filesep,'mex',filesep,'comp_*.c']); 
+    mexnamesstrip = arrayfun(@(lEl) lEl.name(1:end-2),Lmex,'UniformOutput',0);
+    octnamesstrip = cellfun(@(lEl) lEl(1:end-3),filenames,'UniformOutput',0);
+    
+    mexdiffstrip = setdiff(mexnamesstrip,octnamesstrip);
+    
+    mexdiff = cellfun(@(lEl) [lEl,'.c'],mexdiffstrip,'UniformOutput',0);
+    if ~isempty(mexdiff)
+        disp('========= Compiling MEX interfaces ==========\n')
+        if compile_amt(bp,'mex',mexdiff)>1;                
+            fprintf('ERROR: The %s interfaces was not built.\n', extname);
+        else
+            if movefile([bp,filesep,'mex',filesep,'*.mex'],...
+                        [bp,filesep,'oct'],'f');
+               disp('Done.');
+            else
+               error(['ERROR: Compilation sucessful, but MEX files were not '...
+               'moved from mex to oct directory. Check your write permissions.\n']); 
+            end
+        end;
+    end
+ end;
 
 % Jump back to the original directory.
 cd(curdir);
+end
 
 
 function deletefiles(base,files)
@@ -84,52 +118,54 @@ for ii=1:numel(L)
 end;
 
 
-function status=compile_amt(bp)
+
+function status=compile_amt(bp,ext,filenames)
 
 % If we exit early, it is because of an error, so set status=1
 status=1;
 
-if isoctave
-    cd([bp,'oct']);
-    
-    ext='oct';
-    
-    % Get the list of files.
-    L=dir('*.cc');
-    
-    endchar=2;
-else
-    
-    cd([bp,'mex']);
-    
-    ext=mexext;
-    
-    % Get the list of files.
-    L=dir('comp_*.c');
-    
-    endchar=1;
-end;
+    if strcmpi(ext(1:3),'oct')
+        cd([bp,'oct']); 
+    else
+        cd([bp,'mex']);
+    end
 
-for ii=1:numel(L)
-    filename = L(ii).name;
-    objname  = [filename(1:end-endchar),ext];
+for ii=1:numel(filenames)
+    filename = filenames{ii};
+    dotPos = strfind(filename,'.');
+    objname  = [filename(1:dotPos(end)),ext];
     objdirinfo = dir(objname);
     
     % Make-like behaviour: build only the files where the src file is
     % newer than the object file, or the object file is missing.
-    
-    if isempty(objdirinfo) || (objdirinfo.datenum<L(ii).datenum)
+    L = dir(filename);
+    if isempty(objdirinfo) || (objdirinfo.datenum<L(1).datenum)
         
         fprintf('Compiling %s\n',filename);
         
         if isoctave
-          mkoctfile('-I.','-I../src','-L../src',filename);
+          if ~strcmpi(ext(1:3),'oct')
+              mkoctfile('-mex','-I.','-I../src',filename);
+          else
+              mkoctfile('-I.','-I../src',filename);
+          end
         else
-          mex('-I.','-I../src','-L../src',filename);
+          mex('-I.','-I../src',filename);
         end;                
         
     end;        
-    
+    status=0;
 end;
 
-status=0;
+
+
+
+
+                    
+
+    
+    
+    
+    
+
+

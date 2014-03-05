@@ -221,8 +221,8 @@ perceived_direction = zeros(length(x),length(y));
 desired_direction = zeros(length(x),length(y));
 localization_error = zeros(length(x),length(y));
 for ii=1:length(x)
-    if showprogress progressbar(ii,length(x)) end
-    parfor jj=1:length(y)
+    if showprogress progressbar(ii,length(x)), end
+    for jj=1:length(y)
         X = [x(ii) y(jj) 0];
         conf.xref = X;
         if flags.do_stereo
@@ -246,7 +246,7 @@ for ii=1:length(x)
         % then mapped to azimuth values with a lookup table
         %
         % estimate the perceived direction of arrival
-        perceived_direction(ii,jj) = estimate_azimuth(sig,lookup,'dietz2011',0);
+        perceived_direction(ii,jj) = wierstorf2013estimateazimuth(sig,lookup,'dietz2011',0);
         % calculate the desired direction
         desired_direction(ii,jj) = source_direction(X,phi,xs,src);
         % calculate the localization error as the difference of both

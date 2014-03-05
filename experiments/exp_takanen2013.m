@@ -18,12 +18,12 @@ function output = exp_takanen2013(varargin)
 %     'cochlea'      use pre-computed cochlea model outputs in the
 %                    computation to reduce computation time. 
 %
-%     'fig7book'     Figure 7 from the book chapter. Binaural activity 
+%     'fig8'     Figure 7 from the book chapter. Binaural activity 
 %                    maps obtained with the model for an off-sweet-spot 
 %                    listening scenario with different audio coding 
 %                    techniques.
 %
-%     'fig8book'     Figure 8 from the book chapter. Activation
+%     'fig9'     Figure 8 from the book chapter. Activation
 %                    distributions obtained with the model for (a) the 
 %                    reference scenario of incoherent pink noise emitted 
 %                    from twelve azimuth directions, and (b)-(d) the 
@@ -53,15 +53,15 @@ function output = exp_takanen2013(varargin)
 %   Examples:
 %   ---------
 %
-%   To display Figure 7 from the book chapter using pre-computed cochlea
-%   model outputs use:::
-%
-%     exp_takanen2013('fig7book','cochlea');
-%
 %   To display Figure 8 from the book chapter using pre-computed cochlea
 %   model outputs use:::
 %
-%     exp_takanen2013('fig8book','cochlea');
+%     exp_takanen2013('fig8','cochlea');
+%
+%   To display Figure 9 from the book chapter using pre-computed cochlea
+%   model outputs use:::
+%
+%     exp_takanen2013('fig9','cochlea');
 %
 %   To display Figure 6 from the manuscript using pre-computed cochlea 
 %   model outputs use:::
@@ -83,7 +83,7 @@ function output = exp_takanen2013(varargin)
 %                      Espoo, Finland
 
 definput.import={'amtredofile'};
-definput.flags.type={'missingflag','fig7book','fig8book','fig6art','fig7art'};
+definput.flags.type={'missingflag','fig8','fig9','fig6art','fig7art'};
 
 definput.flags.dataType={'binsig','cochlea'};
 
@@ -102,8 +102,8 @@ printFigs = 0;
 printMap =0;
 compType =1;
 h = figure;
-%% Figure 7 from the book chapter
-if flags.do_fig7book
+%% Figure 8 from the book chapter
+if flags.do_fig8
     % if the user wishes to compute the cochlear model outputs, binaural
     % input signals are used
     if flags.do_binsig
@@ -158,7 +158,7 @@ if flags.do_fig7book
     end
 end
 %% Figure 8 from the book chapter
-if flags.do_fig8book
+if flags.do_fig9
     probDist = zeros(6,19);
     % if the user wishes to compute the cochlear model outputs, binaural
     % input signals are used
@@ -399,13 +399,13 @@ output = g;
 
 function data=safe_load(filename)
   try
-      data=load([amtbasepath,'experiments',filesep,filename]);
+      data=load([amtbasepath,'humandata',filesep,filename]);
   catch exception
-      disp(['=============================================================';
-            'Please load the necessary mat-files from the companying page:';
-            '   www.acoustics.hut.fi/publications/papers/AMTool2013-bam/  ';
-            'and place them in the "experiments" directory                ';
-            '=============================================================']);
+    disp('=============================================================');
+    disp('Please load the necessary mat-files from the companying page:');
+    disp('   www.acoustics.hut.fi/publications/papers/AMTool2013-bam/  ');
+    disp('and place them in the "humandata" directory                ');
+    disp('=============================================================');
             
       error('Error: mat-file %s not found',filename);
   end

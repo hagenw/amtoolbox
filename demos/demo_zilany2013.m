@@ -1,4 +1,8 @@
-%% Parameter Settings
+%DEMO_ZILANY2013  Demo of the Zilany 2013 model
+%
+%   XXX Description is missing
+
+%Parameter Settings
 
 % model fiber parameters
 CF    = 1.5e3;   % CF in Hz;   
