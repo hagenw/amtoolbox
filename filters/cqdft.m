@@ -50,7 +50,7 @@ cqmaghr = zeros(size(y));                         % same but for all freq. bins 
 for ind = jj(1)+1:jj(end)
     nj = n(ind+1)-n(ind);
     idn = n(ind):n(ind+1)-1;
-    fc(ind) = geomean(fvec(n(ind:ind+1)));
+    fc(ind) = sqrt(fvec(n(ind))*fvec(n(ind+1)));  % geometric mean
     cqmag(ind,:,:) = sqrt(1/(nj)*sum(y(idn,:,:).^2,1));
     cqmaghr(idn,:,:) = repmat(cqmag(ind,:,:),[length(idn),1,1]);
 end
