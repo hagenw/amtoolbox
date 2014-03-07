@@ -100,7 +100,7 @@ else
     hpath = [hpath 'ziegelwanger2014' filesep];
     
     if ~exist([hpath 'info.mat'],'file')
-        urlwrite([SOFAdbURL filesep 'ziegelwanger2014/info.mat'],[hpath 'info.mat']);
+        urlwrite([SOFAdbURL '/ziegelwanger2014/info.mat'],[hpath 'info.mat']);
     end
 end
 
@@ -108,13 +108,13 @@ end
 if flags.do_ARI
     
     if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_ARI.mat'],'file')
-        urlwrite([SOFAdbURL filesep 'ziegelwanger2014' filesep 'exp_ziegelwanger2014_ARI.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_ARI.mat']);
+        urlwrite([SOFAdbURL '/ziegelwanger2014/exp_ziegelwanger2014_ARI.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_ARI.mat']);
     end
     if flags.do_recalc
         tmp=load([hpath 'info.mat']);
         data=tmp.info.ARI;
         for ii=1:length(data.subjects)
-            disp(['Recalculate data for sujbect ' num2str(ii) filesep num2str(length(data.subjects)) ' of ARI database']);
+            disp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of ARI database']);
             Obj=SOFAload([hpath 'ARI_' data.subjects{ii} '.sofa']);
              
             if exist([hpath 'ARI_' data.subjects{ii} '.sofa.MCM.mat'],'file')
@@ -142,13 +142,13 @@ end
 if flags.do_CIPIC
     
     if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_CIPIC.mat'],'file')
-        urlwrite([SOFAdbURL filesep 'ziegelwanger2014' filesep 'exp_ziegelwanger2014_CIPIC.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_CIPIC.mat']);
+        urlwrite([SOFAdbURL '/ziegelwanger2014/exp_ziegelwanger2014_CIPIC.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_CIPIC.mat']);
     end
     if flags.do_recalc
         tmp=load([hpath 'info.mat']);
         data=tmp.info.CIPIC;
         for ii=1:length(data.subjects)
-            disp(['Recalculate data for sujbect ' num2str(ii) filesep num2str(length(data.subjects)) ' of CIPIC database']);
+            disp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of CIPIC database']);
             Obj=SOFAload([hpath 'CIPIC_' data.subjects{ii} '.sofa']);
              
             if exist([hpath 'CIPIC_' data.subjects{ii} '.sofa.MCM.mat'],'file')
@@ -176,7 +176,7 @@ end
 if flags.do_LISTEN
     
     if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_LISTEN.mat'],'file')
-        urlwrite([SOFAdbURL filesep 'ziegelwanger2014' filesep 'exp_ziegelwanger2014_LISTEN.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_LISTEN.mat']);
+        urlwrite([SOFAdbURL '/ziegelwanger2014/exp_ziegelwanger2014_LISTEN.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_LISTEN.mat']);
     end
     if flags.do_recalc
         tmp=load([hpath 'info.mat']);
@@ -212,7 +212,7 @@ end
 if flags.do_SPHERE_DIS
     
     if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_DIS.mat'],'file')
-        urlwrite([SOFAdbURL filesep 'ziegelwanger2014' filesep 'exp_ziegelwanger2014_SPHERE_DIS.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_DIS.mat']);
+        urlwrite([SOFAdbURL '/ziegelwanger2014/exp_ziegelwanger2014_SPHERE_DIS.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_DIS.mat']);
     end
     if flags.do_recalc
         tmp=load([hpath 'info.mat']);
@@ -248,7 +248,7 @@ end
 if flags.do_SPHERE_ROT
     
     if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_ROT.mat'],'file')
-        urlwrite([SOFAdbURL filesep 'ziegelwanger2014' filesep 'exp_ziegelwanger2014_SPHERE_ROT.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_ROT.mat']);
+        urlwrite([SOFAdbURL '/ziegelwanger2014/exp_ziegelwanger2014_SPHERE_ROT.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_ROT.mat']);
     end
     if flags.do_recalc
         tmp=load([hpath 'info.mat']);

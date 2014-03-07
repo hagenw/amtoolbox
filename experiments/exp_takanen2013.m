@@ -18,12 +18,12 @@ function output = exp_takanen2013(varargin)
 %     'cochlea'      use pre-computed cochlea model outputs in the
 %                    computation to reduce computation time. 
 %
-%     'fig8'     Figure 7 from the book chapter. Binaural activity 
+%     'fig8'     Figure 8 from the book chapter. Binaural activity 
 %                    maps obtained with the model for an off-sweet-spot 
 %                    listening scenario with different audio coding 
 %                    techniques.
 %
-%     'fig9'     Figure 8 from the book chapter. Activation
+%     'fig9'     Figure 9 from the book chapter. Activation
 %                    distributions obtained with the model for (a) the 
 %                    reference scenario of incoherent pink noise emitted 
 %                    from twelve azimuth directions, and (b)-(d) the 

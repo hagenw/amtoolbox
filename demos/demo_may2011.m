@@ -1,3 +1,12 @@
+%DEMO_MAY2011 Demo of the May et al. (2011)
+%  
+%   This script does not work unless speakers1234 is provided
+%
+%   %   .. figure::
+%
+%   See also: may2011
+
+
 % Load example
 
 % load speakers24
