@@ -1937,8 +1937,9 @@ if flags.do_fig12
         [pflat,rang] = baumgartner2014(targets,spdtfs,...
             'S',s(ss).S,'polsamp',polang,...
             'lat',latseg(ll),'stim',[1;0],'do',do); % Impulse
-        mflat = virtualexp(pflat,tang,rang,'runs',runs);
-        pe_flat(ll,ss) = pemacpherson2003(mflat,mflat);
+        mflat = baumgartner2014virtualexp(pflat,tang,rang,'runs',runs);
+        [f,r] = localizationerror(mflat,'sirpMacpherson2000');
+        pe_flat(ll,ss) = localizationerror(mflat,f,r,'perMacpherson2003');
 
         if plotpmv; plotbaumgartner2013(pflat,tang,rang,mflat(:,6),mflat(:,8));title(num2str(pe_flat(ll,ss),2));pause(0.5); end 
 
@@ -1948,8 +1949,8 @@ if flags.do_fig12
           [p,rang] = baumgartner2014(targets,spdtfs,...
             'S',s(ss).S,'polsamp',polang,...
             'lat',latseg(ll),'stim',sexp1(:,ii),'do',do);
-          m = virtualexp(p,tang,rang,'runs',runs);
-          pe_exp1(ll,ss,ii) = pemacpherson2003(m,mflat);% - pe_flat(ll,ss);
+          m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
+          pe_exp1(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
           if plotpmv; plotbaumgartner2013(p,tang,rang,m(:,6),m(:,8));title([num2str(density(mod(ii-1,10)+1)) 'ripples/oct; PE:' num2str(pe_exp1(ll,ss,ii),2) '%']);pause(0.5); end
 
@@ -1962,8 +1963,8 @@ if flags.do_fig12
           [p,rang] = baumgartner2014(targets,spdtfs,...
             'S',s(ss).S,'polsamp',polang,...
             'lat',latseg(ll),'stim',sexp2(:,ii),'do',do);
-          m = virtualexp(p,tang,rang,'runs',runs);
-          pe_exp2(ll,ss,ii) = pemacpherson2003(m,mflat);% - pe_flat(ll,ss);
+          m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
+          pe_exp2(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
           if plotpmv; plotbaumgartner2013(p,tang,rang,m(:,6),m(:,8));title([num2str(depth(mod(ii-1,4)+1)) 'dB; PE:' num2str(pe_exp2(ll,ss,ii),2) '%']);pause(0.5); end
 
@@ -2664,230 +2665,6 @@ line([x,x]+lilen,quantiles([3,5]),'Color','k') % left box edge
 
 end
 
-function per = pemacpherson2003(mmod,mflat)
-%PEMACPHERSON2003 polar error rate used in Macpherson & Middlebrooks (2000)
-%   Usage: per = pemacpherson2003(mmod,mflat)
-%
-%   Input parameters:
-%     mmod  : localization responses to modified spectra
-%     mflat : localization responses to flat spectra (baseline)
-%
-%   Output parameters:
-%     per   : polar error rate in %
-%
-%   `pemacpherson2003()` assesses localization accuracy for flat- and 
-%   shaped-spectrum targets by measuring the deviation of responses from 
-%   the linear predictors obtained by and ad hoc selective, iterative 
-%   regression procedure. Polar errors are defined by showing a deviation 
-%   of >45° with respect to the linear flat stimulus prediction.
-%
-%   See also: sirproceduremacpherson2000
-
-% AUTHOR: Robert Baumgartner
-
-plotflag = false;
-tol = 45; % tolerance of polar angle to be not counted as polar error
-
-mflatf = mflat( abs(mflat(:,7))<=30 & mflat(:,6)< 90 ,:); % frontal central data only
-mflatr = mflat( abs(mflat(:,7))<=30 & mflat(:,6)>=90 ,:); % rear central data only
-
-mmodf = mmod( abs(mmod(:,7))<=30 & mmod(:,6)< 90 ,:); % frontal central data only
-mmodr = mmod( abs(mmod(:,7))<=30 & mmod(:,6)>=90 ,:); % rear central data only
-
-[f,r] = sirproceduremacpherson2000(mflat);
-yf=f.b(2)*mflatf(:,6)+f.b(1); % linear prediction for flat, frontal targets
-yr=r.b(2)*mflatr(:,6)+r.b(1); % linear prediction for flat, rear targets
-
-f.pe = sum(abs(wrapTo180(mmodf(:,8)-yf)) > tol);
-r.pe = sum(abs(wrapTo180(mmodr(:,8)-yr)) > tol);
-
-per = (f.pe + r.pe) / size(mmod,1) * 100; % polar error rate
-
-if plotflag 
-  
-  Loca_PlotResponse(mmod(:,6),mmod(:,8),'polar');
-  hold on
-  plot(mflatf(:,6),yf,'LineWidth',2);
-  plot(mflatr(:,6),yr,'LineWidth',2);
-  plot(mflatf(:,6),yf+45,'r','LineWidth',2);
-  plot(mflatf(:,6),yf-45,'r','LineWidth',2);
-  plot(mflatr(:,6),yr+45,'r','LineWidth',2);
-  plot(mflatr(:,6),yr-45,'r','LineWidth',2);
-  title(['PER: ' num2str(per,2) '%'])
-  
-end
-
-end
-
-function [f,r] = sirproceduremacpherson2000(m)
-%SIRPROCEDUREMACPHERSON2003 ad hoc selective, iterative regression
-%procedure proposed in Macpherson & Middlebrooks (2000)
-%   Usage: [f,r] = sirproceduremacpherson2000(m)
-%
-%   Input parameters:
-%     m: data matrix
-%
-%   Output parameters:
-%     f : structure containing regression results the procedure converged 
-%         to for the frontal hemisphere. For detailed description of the
-%         fields see help of `regress()`
-%     r : structure for rear hemisphere
-%
-%   `sirproceduremacpherson2000()` performs an ad hoc selective, iterative
-%   regression procedure in order to exclude outliers and reversals and 
-%   isolate the main concentration of responses in the computation of the 
-%   linear fits. Outlier distance criterion: 40°
-%
-%   See also: regress
-
-% AUTHOR: Robert Baumgartner
-
-delta = 40; % outlier tolerance in degrees
-plotflag = false;
-
-%% Front
-mf = m( abs(m(:,7))<=30 & m(:,6)<90 ,:); % frontal central data only
-idf = find(mf(:,8)<90);   % indices correct forntal responses (init)
-if plotflag; Loca_PlotResponse(mf(:,6),mf(:,8),'polar'); end
-
-if length(idf)<2
-  f.b = zeros(1,2);
-  f.stats = zeros(1,4);
-else
-  old=[];
-  while not(isequal(idf,old))
-    [f.b,f.bint,f.r,f.rint,f.stats]=regress(mf(idf,8),[ones(length(idf),1) mf(idf,6)]);
-    y=f.b(2)*mf(:,6)+f.b(1);
-    if plotflag;  hold on; plot(mf(:,6),y); end
-    old = idf;
-    idf=find( abs(wrapTo180(mf(:,8)-y)) < delta); 
-  end	
-end
-
-%% Rear
-mr = m( abs(m(:,7))<=30 & m(:,6)>=90 ,:); % rear central data only
-idr = find(mr(:,8)>=90);  % indices correct rear responses (init)
-if plotflag; Loca_PlotResponse(mr(:,6),mr(:,8),'polar'); end
-
-if length(idr)<2
-  r.b = zeros(1,2);
-  r.stats = zeros(1,4);
-else
-  old=[];
-  while not(isequal(idr,old))	
-    [r.b,r.bint,r.r,r.rint,r.stats]=regress(mr(idr,8),[ones(length(idr),1) mr(idr,6)]);
-    y=r.b(2)*mr(:,6)+r.b(1);
-    if plotflag;  hold on; plot(mr(:,6),y); end
-    old = idr;
-    idr=find( abs(wrapTo180(mr(:,8)-y)) < delta);
-  end	
-end
-
-end
-
-function m = virtualexp(p,tang,rang,varargin)
-%VIRTUALEXP Response patterns of virtual localization experiments
-%   Usage:    m = virtualexp(p,tang,rang)
-%
-%   Input parameters:
-%     p       : prediction matrix containing probability mass vectors (PMVs) 
-%               for the polar response angle as a function of the polar  
-%               target angle (1st dim: response angle, 2nd dim: target
-%               angle)
-%     rang    : polar response angles
-%     tang    : polar target angles
-%
-%   Output parameter:
-%     m       : item list of virtual experiment
-%               Columns: 
-%                1:4 ...   azi_target,ele_target,azi_response,ele_response
-%                5:8 ...   lat_target,pol_target,lat_response,pol_response
-%                9   ...   F/B-C resolved pol_response
-%
-%   `virtualexp(...)` runs virtual localization experiments where the
-%   response behavior is based on (predicted) polar response PMVs.
-%
-%   `virtualexp` accepts the following optional parameters:
-%
-%     'runs',runs    	Define the number of runs. 
-%                    	Default value is 1.
-%
-%     'targetset',ts  Define the set of polar target angles.
-%                    	As default 'tang' is used.
-%
-%     'lat',lat     	Define the lateral target angles. 
-%                    	Default value is 0°.
-%
-%   See also: baumgartner2013, plotbaumgartner2013
-%
-%   References: baumgartner2013assessment baumgartner2012modelling langendijk2002contribution patterson1988efficient dau1996qmeI
-
-    
-% AUTHOR: Robert Baumgartner
-
-definput.keyvals.runs = 1;
-definput.keyvals.targetset = [];
-definput.keyvals.lat = 0;
-% definput.flags.colorbar = {'colorbar','nocolorbar'};
-[flags,kv]=ltfatarghelper({'runs','targetset'},definput,varargin);
-
-if isempty(kv.targetset)
-  kv.targetset = tang;
-end
-
-
-%% Run experiments
-nt=length(kv.targetset);
-m = nan(nt*kv.runs,9);
-m(:,5) = kv.lat;
-m(:,6) = repmat(kv.targetset(:),kv.runs,1);
-m(:,7) = kv.lat;
-% kv.targetset = round(kv.targetset);
-if length(tang) > 1
-  tangbound = tang(:)+0.5*diff([tang(1)-diff(tang(1:2));tang(:)]);
-else
-  tangbound = tang;
-end
-post=zeros(nt,1); % indices of target positions
-for ii = 1:nt
-    post(ii) = find(tangbound>=kv.targetset(ii),1);
-end
-
-posr=zeros(nt,1);
-for rr=1:kv.runs
-  for jj = 1:nt 
-    posr(jj) = discreteinvrnd(p(:,post(jj)),1);
-    m(jj+(rr-1)*nt,8) = rang(posr(jj));
-  end
-end
-
-
-
-end
-
-function [ X ] = discreteinvrnd(p,n,m)
-% DISCRETEINVRND implements an inversion method for a discrete distribution
-% with probability mass vector p for n trials
-% Usage:    [ X ] = discreteinvrnd(p,n)
-%
-% AUTHOR : Robert Baumgartner
-
-if ~exist('m','var')
-    m=1;
-end
-
-p = p/sum(p);   % ensure probability mass vector
-c = cumsum(p);
-t = max(c)*rand(n,m); % rand returns ]0,1]
-X = zeros(n,m);
-for jj = 1:m
-    for ii = 1:n
-        X(ii,jj) = find(c >= t(ii,jj) ,1);
-    end
-end
-
-end
-
 function ape = apebest2005(p,tang,rang)
 %APEBEST2005 PMV to PPP conversion
 %   Usage:  [ ape ] = apebest2005( p,tang,rang );
@@ -2897,7 +2674,7 @@ function ape = apebest2005(p,tang,rang)
 %     tang       : possible polar target angles. As default, ARI's MSP 
 %                  polar angles in the median SP is used.
 %     rang       : polar angles of possible response angles.
-%                  As default regular 5°-sampling is used (-30:5:210).    
+%                  As default regular 5deg-sampling is used (-30:5:210).    
 %
 %   Output parameter:
 %     ape        : absolute polar angle error in degrees
@@ -2912,7 +2689,7 @@ for ii = 1:nt % for all target positions
   
     d = tang(ii)-rang;                 % wraped angular distance between tang & rang
     iduw = (d < -180) | (180 < d);     % 180°-unwrap indices
-    d(iduw) = mod(d(iduw) + 180,360) - 180; % 180° unwrap
+    d(iduw) = mod(d(iduw) + 180,360) - 180; % 180deg unwrap
     d = abs(d);                        % absolut distance
     apet(ii) = sum( p(:,ii) .* d');     % absolut polar angle error for target ii
     
