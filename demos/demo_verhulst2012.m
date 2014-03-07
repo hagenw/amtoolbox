@@ -6,7 +6,7 @@
 %   sound pressure at the middle ear with model non linearities and irregularities enabled,
 %   and the sound pressure at the middle ear in case of linear model.
 %
-%   %   .. figure::
+%   .. figure::
 %
 %   See also: verhulst2012
 
