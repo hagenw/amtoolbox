@@ -2,7 +2,6 @@
 %  
 %   This script does not work unless speakers1234 is provided
 %
-%   %   .. figure::
 %
 %   See also: may2011
 
