@@ -8,6 +8,9 @@
 %
 %   .. figure::
 %
+%      Output of the cochlear model.
+%
+%
 %   See also: verhulst2012
 
 fs=48000;
