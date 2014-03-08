@@ -63,7 +63,7 @@ COMPLEX comp3sum(COMPLEX summand1, COMPLEX summand2, COMPLEX summand3);
 /* subtraction: complexA - complexB */
 COMPLEX compsubtract(COMPLEX complexA, COMPLEX complexB);
 /* Get the real part of the complex */
-double  REAL(COMPLEX compnum); //{double(compnum.x);};
+double  REAL(COMPLEX compnum); /* {double(compnum.x);}; */
 /* Get the imaginary part of the complex */
 double IMAG(COMPLEX compnum);
 /* Get the conjugate of the complex  */
