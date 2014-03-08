@@ -5,16 +5,8 @@
 %
 %   See also: may2011
 
-
-% Load example
-
-% load speakers24
-% load speakers123
-load speakers1234
-% load speakers12345
-
-% Sampling frequency
-fs = 16000;
+% Load a test signal.
+[signal,fs]=competingtalkers('five_speakers');
 
 % Perform localization
 out = may2011(signal,fs);
