@@ -24,8 +24,7 @@ if ~exist('ltfatarghelper','file')
     disp('')
     error(['The toolbox require the LTFAT toolbox to properly function. ' ...
          'Please download and install it from http://ltfat.sourceforge.net,' ...
-         'and then call the LTFATSTART command BEFORE you call ' ...
-          'AMTSTART.'])
+         'and then call the LTFATSTART command BEFORE you use the AMT.'])
 end;
 
 bp=amtbasepath;

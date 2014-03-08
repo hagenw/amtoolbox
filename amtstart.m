@@ -34,7 +34,7 @@ function amtstart()
 basepath=which('amtstart');
 basepath=basepath(1:end-11);
 if ~exist('ltfatstart','file')
-  ltfatpath=fullfile(basepath,'thirdparty','LTFAT');
+  ltfatpath=fullfile(basepath,'thirdparty','ltfat');
   if exist(ltfatpath,'dir')
     addpath(ltfatpath);
   end
@@ -47,7 +47,7 @@ if exist('ltfatstart','file')
 else
   error(['LTFAT package could not be found. Unable to continue.' 10 ...
         'Download LTFAT from http://ltfat.sourceforge.net ' 10 ...
-        'and copy to amtoolbox/thirdparty/LTFAT.']); 
+        'and copy to amtoolbox/thirdparty/ltfat.']); 
 end
 
 % Check for the correct version. 

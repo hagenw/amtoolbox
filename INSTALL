@@ -1,29 +1,25 @@
+Auditory-Modeling Toolbox (AMT)
 
---------- Running the toolbox --------------------
+--------- Running the AMT --------------------
 
-AMToolbox depends on LTFAT.  You must first download LTFAT from
-http://ltfat.sourceforge.net/ and unpack the downloaded file.
+AMT depends on LTFAT.  You must first download LTFAT from
+http://ltfat.sourceforge.net/ and unpack the downloaded file. 
+In the AMT, there is a pre-prepared directory /thirdparty/ltfat
+where the LTFAT can be stored. Alternatively, set the path to your
+LTFAT installation to the search path of Matlab/Octave.
 
-To start LTFAT in Matlab or Octave type "ltfatstart" as the first
-command from the installation directory. This will set up the correct
-paths. Similarly, type "amtstart" to start AMToolbox.
+To start the AMT, type "amtstart".
 
-In Octave you can put these commands in your ~/.octaverc file. In Matlab
-you can put these command in your startup.m file. Your startup file of
-choice should contain some lines like this:
-
-addpath /path/to/ltfat
-addpath /path/to/amtoolbox
-ltfatstart;
-amtstart;
-
-The "ltfatstart" and "amtstart" commands will add all the necessary
+The "amtstart" command will add all the necessary
 subdirectories (so please don't add these manually), and will print
 statements telling you which backend you are currently using.
 
--------- Compiling the toolbox ------- ------------
+See http://amtoolbox.sourceforge.net/notes/ for more details.
 
-If you wish to compile the C and Fortran functions in the toolbox,
+-------- Compiling the AMT  -------------------
+
+Some models require compiled libraries. 
+If you wish to compile the C and Fortran functions in the AMT,
 execute the "amtmex" command. This will execute all the necessary
 compilation scripts if you have the required compilers installed.
 
