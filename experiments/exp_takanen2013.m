@@ -399,12 +399,12 @@ output = g;
 
 function data=safe_load(filename)
   try
-      data=load([amtbasepath,'humandata',filesep,filename]);
+      data=load([amtbasepath,'signals',filesep,filename]);
   catch exception
     disp('=============================================================');
     disp('Please load the necessary mat-files from the companying page:');
     disp('   www.acoustics.hut.fi/publications/papers/AMTool2013-bam/  ');
-    disp('and place them in the "humandata" directory                ');
+    disp('and place them in the "signals" directory                ');
     disp('=============================================================');
             
       error('Error: mat-file %s not found',filename);

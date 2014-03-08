@@ -42,12 +42,12 @@ printMap = 1;
 if preComp ==1
     filename='demo_takanen2013cochleadata.mat';
     try
-        data=load([amtbasepath,'demos',filesep,filename]);
+        data=load([amtbasepath,'signals',filesep,filename]);
     catch exception
         disp(['=============================================================';
               'Please load the necessary mat-files from the companying page:';
               '   www.acoustics.hut.fi/publications/papers/AMTool2013-bam/  ';
-              'and place them in the "demos" directory                      ';
+              'and place them in the "signals" directory                    ';
               '=============================================================']);
         
         error('Error: mat-file %s not found',filename);
@@ -60,12 +60,12 @@ if preComp ==1
 else
     filename='demo_takanen2013binsignals.mat';
     try
-        data=load([amtbasepath,'demos',filesep,filename]);
+        data=load([amtbasepath,'signals',filesep,filename]);
     catch exception
         disp(['=============================================================';
               'Please load the necessary mat-files from the companying page:';
               '   www.acoustics.hut.fi/publications/papers/AMTool2013-bam/  ';
-              'and place them in the "demos" directory                      ';
+              'and place them in the "signals" directory                    ';
               '=============================================================']);
         
         error('Error: mat-file %s not found',filename);
