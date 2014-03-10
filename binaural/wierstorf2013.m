@@ -77,7 +77,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %   revision used to generate the figures in the corresponding paper is
 %   a8914700a4.
 %
-%   See also: estimate_azimuth, dietz2011
+%   See also: wierstorf2013estimateazimuth, dietz2011
 %
 %   References: wierstorf2013 wierstorf2011hrtf dietz2011auditory
 

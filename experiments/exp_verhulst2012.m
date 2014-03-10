@@ -56,12 +56,13 @@ sig(:,8:9)=2; %impulse (the value 2 is to have 2 peak-to-peak value)
 [v,y,e,cf]=verhulst2012(sig,fs,fc,spl,norm_Rms);
 figure;
 for i=1:levels_n0
-plot(t*1e3,y(:,1,i)./max(abs(e(:,i))));
+plot(t*1e3,y(:,1,i)./max(abs(y(:,i))));
 hold all;
 end
 legend((horzcat(int2str(spl'),leg_str)));
-grid on;
-xlabel('time (ms)');
-ylabel('Normalized displacement');
+grid off;
+xlabel('Time (ms)');
+ylabel('Normalized y_{BM}');
 axis 'tight';
 title('Displacement in response to a click');
+xlim([0 25]);
