@@ -7,9 +7,8 @@ function [hrir_data, hrir_angles, fs] = enzner2008(mu, delta_phi,varargin)
 %     delta_phi   : azimuthal resolution (delta_phi) in degree to store
 %                   hrir,e.g., 0.1 or 1 
 %     varargin (not necessary, function will also run without): 
-%                   'fig2_2008': plot figure like [Enzner2008, Fig.2] 
-%                   'fig4_2009': plot figure like [Enzner2009, Fig.4]
-%                   'fig2_2008', 'fig4_2009': plot both 
+%                   'fig2': plot figure like [Enzner2008, Fig.2] 
+%                   'fig4_enzner2009': plot figure like [Enzner2009, Fig.4]
 %  
 %   Output parameters:
 %     hrir_data   : sampled HRIR data at arbitrary azimuth-resolution delta_phi
@@ -85,8 +84,8 @@ function [hrir_data, hrir_angles, fs] = enzner2008(mu, delta_phi,varargin)
  
 % option 1.1 using reference signals, measurement stimulus: white noise 
 h_length = 256;
-rec_filename = fullfile(amtbasepath,'hrtf','continuous-azimuth HRIR','measurement','example_1ch_white_noise_earsignals.wav');
-ref_filename = fullfile(amtbasepath,'hrtf','continuous-azimuth HRIR','signals','reference','example_1ch_white_noise_reference.wav');
+rec_filename = fullfile(amtbasepath,'hrtf','enzner2008','measurement','example_1ch_white_noise_earsignals.wav');
+ref_filename = fullfile(amtbasepath,'hrtf','enzner2008','signals','reference','example_1ch_white_noise_reference.wav');
 adapt = 20000; % depends on the recording (overhead at the end and the beginnig)
 sys_latency = 30;
 
@@ -168,7 +167,7 @@ while k <= length(x)-sys_latency-adapt/2                % note that adapt is als
         end;
     end; 
     
-    if (k == k_phi90+adapt) && (sum(cell2mat(cellfun(@(x) strcmp(x,'fig2_2008'),varargin,'UniformOutput',false))) >= 1)  % plot like [Enzner2008, Fig.2] 
+    if (k == k_phi90+adapt) && (sum(cell2mat(cellfun(@(x) strcmp(x,'fig2'),varargin,'UniformOutput',false))) >= 1)  % plot like [Enzner2008, Fig.2] 
         figure
         subplot(2,1,1)
         plot(20*log10(abs(h0(:,1)./max(max(abs(h0))))))
@@ -199,7 +198,7 @@ hrir_data = hrir_data./(max(max(max(max(abs(hrir_data))))));
 % save hrir_data.mat hrir_data
 
 %%% plot recorded earsignals vs. error signals like [Enzner2009, Fig.4] %%%
-if sum(cell2mat(cellfun(@(x) strcmp(x,'fig4_2009'),varargin,'UniformOutput',false))) >= 1
+if sum(cell2mat(cellfun(@(x) strcmp(x,'fig4_enzner2009'),varargin,'UniformOutput',false))) >= 1
     SNR_l = 10*log10(var(error(adapt+1:(length(y)-adapt),1))/var(y(adapt+1:(length(y)-adapt),1))/h_length);
     SNR_r = 10*log10(var(error(adapt+1:(length(y)-adapt),2))/var(y(adapt+1:(length(y)-adapt),2))/h_length);
     t = linspace(0, length(y)/fs, length(y));

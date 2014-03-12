@@ -35,14 +35,14 @@ function output = exp_takanen2013(varargin)
 %                    in each channel with (e) the straightforward method 
 %                    and (f) the even-layout method.
 %
-%     'fig6art'      Figure 6 from the manuscript. Binaural activity maps 
+%     'fig6_takanen2014' Figure 6 from Takanen et al. (2014). Binaural activity maps 
 %                    for four binaural listening scenarios, namely (a)
 %                    HRTF-processed pink noise, (b) pink noise with ITD, 
 %                    (c) anti-phasic sinusoidal sweep, and (d) band-
 %                    limited noise centered around 500 Hz with an ITD of
 %                    1.5 ms.
 %
-%     'fig7art'      Figure 7 from the manuscript. Binaural activity maps 
+%     'fig7_takanen2014' Figure 7 from Takanen et al. (2014). Binaural activity maps 
 %                    for four binaural listening scenarios, namely (a) 
 %                    $S_\pi N_0$ with different signal-to-noise ratios, 
 %                    (b) binaural interference, (c) precedence effect, and
@@ -66,12 +66,12 @@ function output = exp_takanen2013(varargin)
 %   To display Figure 6 from the manuscript using pre-computed cochlea 
 %   model outputs use:::
 %
-%     exp_takanen2013('fig6art','cochlea');
+%     exp_takanen2013('fig6_takenen2014','cochlea');
 %
 %   To display Figure 6 from the manuscript using pre-computed cochlea 
 %   model outputs use:::
 %
-%     exp_takanen2013('fig7art','cochlea');
+%     exp_takanen2013('fig7_takanen2014','cochlea');
 %
 %   References: takanen2013a takanen2013b
 
@@ -83,7 +83,7 @@ function output = exp_takanen2013(varargin)
 %                      Espoo, Finland
 
 definput.import={'amtredofile'};
-definput.flags.type={'missingflag','fig8','fig9','fig6art','fig7art'};
+definput.flags.type={'missingflag','fig8','fig9','fig6_takanen2014','fig7_takanen2014'};
 
 definput.flags.dataType={'binsig','cochlea'};
 
@@ -212,8 +212,8 @@ if flags.do_fig9
         end
     end
 end
-%% Figure 6 from the article
-if flags.do_fig6art
+%% Figure 6 from takanen2014
+if flags.do_fig6_takanen2014
     % if the user wishes to compute the cochlear model outputs, binaural
     % input signals are used
     if flags.do_binsig
@@ -298,8 +298,8 @@ if flags.do_fig6art
         end
     end
 end
-%% Figure 7 from the article
-if flags.do_fig7art
+%% Figure 7 from takanen2014
+if flags.do_fig7_takanen2014
     % if the user wishes to compute the cochlear model outputs, binaural
     % input signals are used
     if flags.do_binsig
