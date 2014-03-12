@@ -58,9 +58,12 @@ def solve_one_cochlea(model): #definition here, to have all the parameter implic
     f=open("out/F"+str(i+1)+".np",'wb')
     np.array(coch.cf,dtype='=d').tofile(f)
     f.close()
+    return
 
 if __name__ == "__main__":
-    p=mp.Pool(int(channels))
+    p=mp.Pool(int(mp.cpu_count()),maxtasksperchild=1)
     p.map(solve_one_cochlea,cochlear_list)
+    p.close()
+    p.join()
 
     
