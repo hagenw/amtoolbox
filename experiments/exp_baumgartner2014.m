@@ -123,47 +123,47 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %     exp_baumgartner2014('fig2');
 %
-%   To display Fig.3 use ::
+%   To display Fig.3 use :::
 %
 %     exp_baumgartner2014('fig3');
 %
-%   To display Fig.4 use ::
+%   To display Fig.4 use :::
 %
 %     exp_baumgartner2014('fig4');
 %
-%   To display Fig.5 use ::
+%   To display Fig.5 use :::
 %
 %     exp_baumgartner2014('fig5');
 %
-%   To display Fig.6 use ::
+%   To display Fig.6 use :::
 %
 %     exp_baumgartner2014('fig6');
 %
-%   To display Fig.7 use ::
+%   To display Fig.7 use :::
 %
 %     exp_baumgartner2014('fig7');
 %
-%   To display Fig.8 use ::
+%   To display Fig.8 use :::
 %
 %     exp_baumgartner2014('fig8');
 %
-%   To display Fig.9 use ::
+%   To display Fig.9 use :::
 %
 %     exp_baumgartner2014('fig9');
 %
-%   To display Fig.10 use ::
+%   To display Fig.10 use :::
 %
 %     exp_baumgartner2014('fig10');
 %
-%   To display Fig.11 use ::
+%   To display Fig.11 use :::
 %
 %     exp_baumgartner2014('fig11');
 %
-%   To display Fig.12 use ::
+%   To display Fig.12 use :::
 %
 %     exp_baumgartner2014('fig12');
 %
-%   To display Fig.13 use ::
+%   To display Fig.13 use :::
 %
 %     exp_baumgartner2014('fig13');
 %
