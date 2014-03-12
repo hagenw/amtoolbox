@@ -5,8 +5,6 @@
 %  The Breebaart model
 %     BREEBAART2001PREPROC  - EI-cell output
 %
-%  HRTF measurement tools
-%     ENZNER2008            - Azimuth-continuous HRTF measurements
 %
 %  Localization models
 %     LINDEMANN1986         - Calculate a binaural activity map
