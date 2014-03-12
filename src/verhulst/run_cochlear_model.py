@@ -12,6 +12,8 @@ import multiprocessing as mp
 import ctypes as c
 import time
 
+import sys
+print (sys.version)
 Oversampling=1
 sectionsNo=1000
 p0=float(2e-5)
