@@ -35,14 +35,14 @@ function output = exp_takanen2013(varargin)
 %                    in each channel with (e) the straightforward method 
 %                    and (f) the even-layout method.
 %
-%     'fig6_takanen2014' Figure 6 from Takanen et al. (2014). Binaural activity maps 
+%     'fig7_takanen2014' Figure 7 from Takanen et al. (2014). Binaural activity maps 
 %                    for four binaural listening scenarios, namely (a)
 %                    HRTF-processed pink noise, (b) pink noise with ITD, 
 %                    (c) anti-phasic sinusoidal sweep, and (d) band-
 %                    limited noise centered around 500 Hz with an ITD of
 %                    1.5 ms.
 %
-%     'fig7_takanen2014' Figure 7 from Takanen et al. (2014). Binaural activity maps 
+%     'fig8_takanen2014' Figure 8 from Takanen et al. (2014). Binaural activity maps 
 %                    for four binaural listening scenarios, namely (a) 
 %                    $S_\pi N_0$ with different signal-to-noise ratios, 
 %                    (b) binaural interference, (c) precedence effect, and
@@ -63,15 +63,15 @@ function output = exp_takanen2013(varargin)
 %
 %     exp_takanen2013('fig9','cochlea');
 %
-%   To display Figure 6 from the manuscript using pre-computed cochlea 
+%   To display Figure 7 from the manuscript using pre-computed cochlea 
 %   model outputs use:::
 %
-%     exp_takanen2013('fig6_takenen2014','cochlea');
+%     exp_takanen2013('fig7_takenen2014','cochlea');
 %
-%   To display Figure 6 from the manuscript using pre-computed cochlea 
+%   To display Figure 8 from the manuscript using pre-computed cochlea 
 %   model outputs use:::
 %
-%     exp_takanen2013('fig7_takanen2014','cochlea');
+%     exp_takanen2013('fig8_takanen2014','cochlea');
 %
 %   References: takanen2013a takanen2013b
 
@@ -83,9 +83,9 @@ function output = exp_takanen2013(varargin)
 %                      Espoo, Finland
 
 definput.import={'amtredofile'};
-definput.flags.type={'missingflag','fig8','fig9','fig6_takanen2014','fig7_takanen2014'};
+definput.flags.type={'missingflag','fig8','fig9','fig7_takanen2014','fig8_takanen2014'};
 
-definput.flags.dataType={'binsig','cochlea'};
+definput.flags.dataType={'cochlea','binsig'};
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
@@ -109,8 +109,12 @@ if flags.do_fig8
     if flags.do_binsig
         data=safe_load('exp_takanen2013fig8bookbinsignals.mat');
         for ind=1:length(data.tests)
+            data=safe_load('exp_takanen2013fig8bookbinsignals.mat');
+            insig=data.tests(ind).insig;
+            tit=data.tests(ind).case;
+            clear data
             % compute the binaural activity map with the model
-            output = takanen2013(data.tests(ind).insig,fs,compType,printFigs,printMap);
+            output = takanen2013(insig,fs,compType,printFigs,printMap);
             nXBins= length(output.levels)*(size(output.colorMtrx,1)-1);
             dim = size(output.activityMap);
             output.colorGains(output.colorGains>1) =1;
@@ -122,7 +126,8 @@ if flags.do_fig8
                 outputMtrx(temp+2*dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,3);
             end
             g(ind)= subplot(3,2,ind);imagesc(output.levels./90,((dim(1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
-            title(data.tests(ind).case);
+            clear output outputMtrx
+            title(tit);
             set(gca,'YTick',.0:.5:2.5);
             set(gca,'YTickLabel',2.5:-0.5:0);
             set(gca,'Xtick',-1:0.4:1);
@@ -135,12 +140,16 @@ if flags.do_fig8
     if flags.do_cochlea
         data=safe_load('exp_takanen2013fig8bookcochleadata.mat');
         for ind=1:length(data.tests)
+            data=safe_load('exp_takanen2013fig8bookcochleadata.mat');
+            tit=data.tests(ind).case;
+            cochlear=data.tests(ind).cochlear;
+            clear data
             % compute the binaural activity map with the model
-            output = takanen2013(data.tests(ind).cochlear,fs,compType,printFigs,printMap);
+            output = takanen2013(cochlear,fs,compType,printFigs,printMap);
             nXBins= length(output.levels)*(size(output.colorMtrx,1)-1);
             dim = size(output.activityMap);
             output.colorGains(output.colorGains>1) =1;
-            outputMtrx = zeros(dim(1),nXBins,3);
+            outputMtrx = single(zeros(dim(1),nXBins,3));
             for colorInd=1:size(output.colorMtrx,1)
                 temp = find((output.activityMap==(colorInd-1))==1);
                 outputMtrx(temp) = output.colorGains(temp)*output.colorMtrx(colorInd,1);
@@ -148,7 +157,8 @@ if flags.do_fig8
                 outputMtrx(temp+2*dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,3);
             end
             g(ind)= subplot(3,2,ind);imagesc(output.levels./90,((dim(1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
-            title(data.tests(ind).case);
+            clear output outputMtrx
+            title(tit);
             set(gca,'YTick',.0:.5:2.5);
             set(gca,'YTickLabel',2.5:-0.5:0);
             set(gca,'Xtick',-1:0.4:1);
@@ -157,7 +167,7 @@ if flags.do_fig8
         end
     end
 end
-%% Figure 8 from the book chapter
+%% Figure 9 from the book chapter
 if flags.do_fig9
     probDist = zeros(6,19);
     % if the user wishes to compute the cochlear model outputs, binaural
@@ -165,8 +175,12 @@ if flags.do_fig9
     if flags.do_binsig
         data=safe_load('exp_takanen2013fig9bookbinsignals.mat');
         for ind=1:length(data.tests)
+            data=safe_load('exp_takanen2013fig9bookbinsignals.mat');
+            insig=data.tests(ind).insig;
+            tit=data.tests(ind).case;
+            clear data
             % compute the binaural activity map with the model
-            output = takanen2013(data.tests(ind).insig,fs,compType,printFigs,printMap);
+            output = takanen2013(insig,fs,compType,printFigs,printMap);
             for i=1:6
                 probDist(i,:) = sum(output.colorGains(:,i:6:end));
             end
@@ -178,7 +192,8 @@ if flags.do_fig9
                 outputMtrx(colorInd-1,:,3) = temp(colorInd-1,:)*output.colorMtrx(colorInd,3);
             end
             g(ind)= subplot(3,2,ind);imagesc(output.levels./90,6:-1:1,outputMtrx);
-            title(data.tests(ind).case);
+            clear output outputMtrx
+            title(tit);
             set(gca,'YTick',1:6);
             set(gca,'YTickLabel',6:-1:1);
             set(gca,'Xtick',-1:0.4:1);
@@ -190,8 +205,12 @@ if flags.do_fig9
     if flags.do_cochlea
         data=safe_load('exp_takanen2013fig9bookcochleadata.mat');
         for ind=1:length(data.tests)
+            data=safe_load('exp_takanen2013fig9bookcochleadata.mat');
+            cochlear=data.tests(ind).cochlear;
+            tit=data.tests(ind).case;
+            clear data
             % compute the binaural activity map with the model
-            output = takanen2013(data.tests(ind).cochlear,fs,compType,printFigs,printMap);
+            output = takanen2013(cochlear,fs,compType,printFigs,printMap);
             for i=1:6
                 probDist(i,:) = sum(output.colorGains(:,i:6:end));
             end
@@ -203,7 +222,8 @@ if flags.do_fig9
                 outputMtrx(colorInd-1,:,3) = temp(colorInd-1,:)*output.colorMtrx(colorInd,3);
             end
             g(ind)= subplot(3,2,ind);imagesc(output.levels./90,6:-1:1,outputMtrx);
-            title(data.tests(ind).case);
+            clear output outputMtrx
+            title(tit);
             set(gca,'YTick',1:6);
             set(gca,'YTickLabel',6:-1:1);
             set(gca,'Xtick',-1:0.4:1);
@@ -212,8 +232,8 @@ if flags.do_fig9
         end
     end
 end
-%% Figure 6 from takanen2014
-if flags.do_fig6_takanen2014
+%% Figure 7 from takanen2014
+if flags.do_fig7_takanen2014
     % if the user wishes to compute the cochlear model outputs, binaural
     % input signals are used
     if flags.do_binsig
@@ -298,8 +318,8 @@ if flags.do_fig6_takanen2014
         end
     end
 end
-%% Figure 7 from takanen2014
-if flags.do_fig7_takanen2014
+%% Figure 8 from takanen2014
+if flags.do_fig8_takanen2014
     % if the user wishes to compute the cochlear model outputs, binaural
     % input signals are used
     if flags.do_binsig
