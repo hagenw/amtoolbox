@@ -6,10 +6,8 @@ function exp_ziegelwanger2014(varargin)
 %   Ziegelwanger and Majdak (2014).
 %
 %   The following flags can be specified:
-% 
-%     'reload'  Reload previously calculated results. This is the default.
 %
-%     'recalc'  Recalculate results.
+%     'redo'  Recalculate results.
 %
 %     'fig3'    Reproduce Fig. 3:
 %               
@@ -178,7 +176,7 @@ definput.flags.type = {'missingflag',...
 'fig3','fig5','fig6','fig7','fig8','fig9',...
 'fig10','fig12','tab1','tab2','tab3','tab5',...
 'tab6'};
-definput.flags.results = {'reload','recalc'};
+definput.flags.redo = {'missingflag','redo'};
 
 % Parse input options
 [flags,~]  = ltfatarghelper({},definput,varargin);
@@ -269,7 +267,11 @@ end
 if flags.do_fig5
 
 %load data
-    data=data_ziegelwanger2014('SPHERE_ROT');
+    if flags.do_redo
+        data=data_ziegelwanger2014('SPHERE_ROT','redo');
+    else
+        data=data_ziegelwanger2014('SPHERE_ROT');
+    end
     for ii=1:length(data.results)
         p_onaxis{1}(:,:,ii)=data.results(ii).MAX{1}.p_onaxis;
         p_onaxis{2}(:,:,ii)=data.results(ii).CTD{1}.p_onaxis;
@@ -386,7 +388,11 @@ if flags.do_fig6
 %load data
     hrtf={'ARI','CIPIC','LISTEN'};
     for kk=1:length(hrtf)
-        data=data_ziegelwanger2014(hrtf{kk});
+        if flags.do_redo
+            data=data_ziegelwanger2014(hrtf{kk},'redo');
+        else
+            data=data_ziegelwanger2014(hrtf{kk});
+        end
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
@@ -586,7 +592,11 @@ if flags.do_fig7
 %load data
     hrtf={'ARI','CIPIC','LISTEN'};
     for kk=1:length(hrtf)
-        data=data_ziegelwanger2014(hrtf{kk});
+        if flags.do_redo
+            data=data_ziegelwanger2014(hrtf{kk},'redo');
+        else
+            data=data_ziegelwanger2014(hrtf{kk});
+        end
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
@@ -600,7 +610,11 @@ if flags.do_fig7
         p_offaxis{kk,2}=temp3;
         clear data temp1 temp2 temp3
     end
-    data=data_ziegelwanger2014('SPHERE_ROT');
+    if flags.do_redo
+        data=data_ziegelwanger2014('SPHERE_ROT','redo');
+    else
+        data=data_ziegelwanger2014('SPHERE_ROT');
+    end
     for ii=1:length(data.results)
         temp(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
     end
@@ -618,7 +632,11 @@ if flags.do_fig7
     [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
     p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
     clear data temp Obj
-    data=data_ziegelwanger2014('SPHERE_DIS');
+    if flags.do_redo
+        data=data_ziegelwanger2014('SPHERE_DIS','redo');
+    else
+        data=data_ziegelwanger2014('SPHERE_DIS');
+    end
     for ii=1:length(data.results)
         temp1(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
         temp2(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
@@ -817,7 +835,11 @@ end
 if flags.do_fig10
 
 %load data
-    data=data_ziegelwanger2014('SPHERE_DIS');
+    if flags.do_redo
+        data=data_ziegelwanger2014('SPHERE_DIS','redo');
+    else
+        data=data_ziegelwanger2014('SPHERE_DIS');
+    end
     for ii=1:length(data.results)
         p_onaxis(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
     end
@@ -886,7 +908,11 @@ end
 if flags.do_fig12
 
 %load data
-    data=data_ziegelwanger2014('SPHERE_DIS');
+    if flags.do_redo
+        data=data_ziegelwanger2014('SPHERE_DIS','redo');
+    else
+        data=data_ziegelwanger2014('SPHERE_DIS');
+    end
     for ii=1:length(data.results)
         p_offaxis(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
     end
@@ -1041,7 +1067,11 @@ end
 if flags.do_tab1
     
 %load data
-    data=data_ziegelwanger2014('SPHERE_ROT');
+    if flags.do_redo
+        data=data_ziegelwanger2014('SPHERE_ROT','redo');
+    else
+        data=data_ziegelwanger2014('SPHERE_ROT');
+    end
     for ii=1:length(data.results)
         p_onaxis{1}(:,:,ii)=data.results(ii).MAX{1}.p_onaxis;
         p_onaxis{2}(:,:,ii)=data.results(ii).CTD{1}.p_onaxis;
@@ -1207,7 +1237,11 @@ if flags.do_tab3
     out=zeros(4,8);
     hrtf={'ARI','CIPIC','LISTEN'};
     for kk=1:length(hrtf)
-        data=data_ziegelwanger2014(hrtf{kk});
+        if flags.do_redo
+            data=data_ziegelwanger2014(hrtf{kk},'redo');
+        else
+            data=data_ziegelwanger2014(hrtf{kk});
+        end
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
@@ -1331,7 +1365,11 @@ if flags.do_tab5
 
     hrtf={'ARI','CIPIC','LISTEN'};
     for kk=1:length(hrtf)
-        data=data_ziegelwanger2014(hrtf{kk});
+        if flags.do_redo
+            data=data_ziegelwanger2014(hrtf{kk},'redo');
+        else
+            data=data_ziegelwanger2014(hrtf{kk});
+        end
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
@@ -1492,7 +1530,11 @@ if flags.do_tab6
 
     hrtf={'SPHERE_ROT','SPHERE_DIS'};
     for kk=1:length(hrtf)
-        data=data_ziegelwanger2014(hrtf{kk});
+        if flags.do_redo
+            data=data_ziegelwanger2014(hrtf{kk},'redo');
+        else
+            data=data_ziegelwanger2014(hrtf{kk});
+        end
         for jj=1:2
             for ii=1:length(data.results)
                 temp1(:,:,ii)=data.results(ii).MCM{jj}.p_offaxis;

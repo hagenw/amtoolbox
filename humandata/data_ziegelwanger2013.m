@@ -89,7 +89,7 @@ else
     hpath = [hpath 'ziegelwanger2014' filesep];
     
     if ~exist([hpath filesep 'info.mat'],'file')
-        urlwrite([SOFAdbURL '/ziegelwanger2014/info.mat'],[hpath filesep 'info.mat']);
+        urlwrite([SOFAdbURL filesep 'ziegelwanger2014' filesep 'info.mat'],[hpath filesep 'info.mat']);
     end
 end
 
@@ -97,7 +97,7 @@ end
 if flags.do_ARI
     
     if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_ARI.mat'],'file')
-        urlwrite([SOFAdbURL '/ziegelwanger2013/exp_ziegelwanger2013_ARI.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_ARI.mat']);
+        urlwrite([SOFAdbURL filesep 'ziegelwanger2013' filesep 'exp_ziegelwanger2013_ARI.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_ARI.mat']);
     end
     if flags.do_recalc
         tmp=load([hpath filesep 'info.mat']);
@@ -137,7 +137,7 @@ end
 if flags.do_CIPIC
     
     if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_CIPIC.mat'],'file')
-        urlwrite([SOFAdbURL '/ziegelwanger2013/exp_ziegelwanger2013_CIPIC.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_CIPIC.mat']);
+        urlwrite([SOFAdbURL filesep 'ziegelwanger2013' filesep 'exp_ziegelwanger2013_CIPIC.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_CIPIC.mat']);
     end
     if flags.do_recalc
         tmp=load([hpath filesep 'info.mat']);
@@ -171,7 +171,7 @@ end
 if flags.do_LISTEN
     
     if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_LISTEN.mat'],'file')
-        urlwrite([SOFAdbURL '/ziegelwanger2013/exp_ziegelwanger2013_LISTEN.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_LISTEN.mat']);
+        urlwrite([SOFAdbURL filesep 'ziegelwanger2013' filesep 'exp_ziegelwanger2013_LISTEN.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_LISTEN.mat']);
     end
     if flags.do_recalc
         tmp=load([hpath filesep 'info.mat']);
@@ -208,7 +208,7 @@ end
 if flags.do_SPHERE_DIS
     
     if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_SPHERE_DIS.mat'],'file')
-        urlwrite([SOFAdbURL '/ziegelwanger2013/exp_ziegelwanger2013_SPHERE_DIS.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_SPHERE_DIS.mat']);
+        urlwrite([SOFAdbURL filesep 'ziegelwanger2013' filesep 'exp_ziegelwanger2013_SPHERE_DIS.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_SPHERE_DIS.mat']);
     end
     if flags.do_recalc
         tmp=load([hpath filesep 'info.mat']);
@@ -236,7 +236,7 @@ end
 if flags.do_SPHERE_ROT
     
     if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_SPHERE_ROT.mat'],'file')
-        urlwrite([SOFAdbURL '/ziegelwanger2013/exp_ziegelwanger2013_SPHERE_ROT.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_SPHERE_ROT.mat']);
+        urlwrite([SOFAdbURL filesep 'ziegelwanger2013' filesep 'exp_ziegelwanger2013_SPHERE_ROT.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_SPHERE_ROT.mat']);
     end
     if flags.do_recalc
         tmp=load([hpath filesep 'info.mat']);
