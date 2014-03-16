@@ -76,7 +76,6 @@ function output = exp_takanen2013(varargin)
 %   References: takanen2013a takanen2013b
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
-%   Adapted by Piotr Majdak
 %
 %   COPYRIGHT (C) 2013 Aalto University
 %                      School of Electrical Engineering
