@@ -27,7 +27,7 @@ function [directionCues cueEnergies] = takanen2013cueconsistency(directionCues, 
 %
 %   See also: takanen2013
 %
-%   References: takanen2013a
+%   References: takanen2014
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %

@@ -90,7 +90,7 @@ function output = data_takanen2013(varargin)
 %
 %     data_takanen2013('lookuptable','plot');
 %
-%   References: takanen2013a takanen2013b verhulst2012
+%   References: takanen2013 takanen2014 verhulst2012
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %

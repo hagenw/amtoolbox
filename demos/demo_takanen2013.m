@@ -20,7 +20,7 @@
 %
 %   See also: takanen2013
 %
-%   References: takanen2013a santala2011
+%   References: takanen2013 takanen2014 santala2011
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %

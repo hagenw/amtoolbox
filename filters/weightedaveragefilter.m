@@ -22,7 +22,7 @@ function outsig = weightedaveragefilter(insig,weight,fs,timeconst)
 %   See also: takanen2013mso, takanen2013lso, takanen2013wbmso,
 %             takanen2013onsetenhancement, takanen2013contracomparison
 %
-%   References: pulkki2009 takanen2013a
+%   References: pulkki2009 takanen2013
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %

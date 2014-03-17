@@ -28,7 +28,7 @@ function [msoAngles,lsoAngles,wbMsoAngles] = takanen2013directionmapping(mso,lso
 %   See also: takanen2013, takanen2013mso, takanen2013lso,
 %             takanen2013wbmso
 %
-%   References: takanen2013a
+%   References: takanen2014
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %
