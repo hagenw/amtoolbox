@@ -109,7 +109,7 @@ if flags.do_ARI
         tmp=load([hpath 'info.mat']);
         data=tmp.info.ARI;
         for ii=1:length(data.subjects)
-            disp(['Recalculate data for sujbect ' num2str(ii) filesep num2str(length(data.subjects)) ' of ARI database']);
+            disp(['Recalculate data for subject ' num2str(ii) '/' num2str(length(data.subjects)) ' (' data.subjects{ii} ') of ARI database']);
             Obj=SOFAload([hpath 'ARI_' data.subjects{ii} '.sofa']);
              
             if exist([hpath 'ARI_' data.subjects{ii} '.sofa.MCM.mat'],'file')

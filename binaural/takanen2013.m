@@ -82,6 +82,12 @@ function output = takanen2013(insig,fs,computationType,printFigs,printMap)
 %      the ventral stream output of the periphery models on a
 %      topographically organized binaural activity map
 %
+%   Requirements and installation: 
+%   1) Functioning model verhulst2012 (see the corresponding requirements)
+%
+%   2) Much RAM (depending on the signal length)
+%
+%
 %   See also: takanen2013periphery, takanen2013mso, takanen2013lso,
 %             takanen2013wbmso, takanen2013directionmapping,
 %             takanen2013cueconsistency, takanen2013onsetenhancement,

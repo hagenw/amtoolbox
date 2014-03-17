@@ -1,11 +1,31 @@
 function output=exp_verhulst2012(varargin)
 %EXP_VERHULST2012 Compute figurs from the Verhulst paper
 %
-%    this script compute and plot figures 2.a and 2.c of: Verhulst, Sarah,
-%   Torsten Dau, and Christopher A. Shera.  "Nonlinear time-domain cochlear
+%   Usage: output = exp_verhulst2012(flag)
+%
+%   This script reproduces figures 2a and 2c from Verhulst et al.  "Nonlinear time-domain cochlear
 %   model for transient stimulation and human otoacoustic emission."  The
 %   Journal of the Acoustical Society of America 132.6 (2012): 3842-3848.
 %
+%   Requirements and installation: 
+%   1) Python >2.6 is required with numpy and scipi packages. On Linux, use sudo apt-get install python-scipy python-numpy
+% 
+%   2) Compiled files with a C-compiler, e.g. gcc. In amtbase/src/verhulst start make (Linux) or make.bat (Windows)
+%
+%   3) On linux, when problems with GFORTRAN lib appear, try sudo ln -sf /usr/lib64/libgfortran.so.3.0.0 /mymatlabroot/sys/os/glnxa64/libgfortran.so.3 (mymatlabroot is usually /usr/local/MATLAB/version
+%               
+%   Examples:
+%   ---------
+%
+%   To display Figure 2a from the Verhulst et al. (2012) use:::
+%
+%     exp_verhulst2012('fig2a');
+%
+%   To display Figure 2c from the Verhulst et al. (2012) use:::
+%
+%     exp_verhulst2012('fig2c');
+%
+%   References: verhulst2012
 
 %   AUTHOR: Alessandro Altoe, Piotr Majdak
 

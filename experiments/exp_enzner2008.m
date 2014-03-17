@@ -2,6 +2,8 @@ function exp_enzner2008(varargin)
 %EXP_ENZNER2008  Creates figures like [Enzner2008, Fig. 2], [Enzner2009, Fig. 4]
 %   Usage: exp_enzner2008(flag)
 %
+%   Required data: hrtf/enzner2008
+% 
 %   The following flags can be specified:
 %
 %     'fig2'   Plot Fig. 2 from Enzner et al. (2008)

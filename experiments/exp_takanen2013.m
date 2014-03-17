@@ -3,7 +3,7 @@ function output = exp_takanen2013(varargin)
 %   Usage: output = exp_takanen2013(flag)
 %
 %   `exp_takanen2013(flag)` reproduces the figure given by *flag* either from
-%   the Takanen et al. (2013) book chapter or the Takanen et al. (2013)
+%   the Takanen et al. (2013) book chapter or the Takanen et al. (2014)
 %   manuscript. The format of its output depends on the chosen figure.
 %   Optionally, pre-computed cochlear model outputs for the different
 %   scenarios can be applied to significantly reduce the required
@@ -50,6 +50,13 @@ function output = exp_takanen2013(varargin)
 %
 %   If no flag is given, the function will print the list of valid flags.
 %
+%   Requirements and installation: 
+%   1) Functioning model verhulst2012 (see the corresponding requirements)
+%
+%   2) Data from www.acoustics.hut.fi/publications/papers/AMTool2013-bam/ in amtbase/signals
+%
+%   3) at least 3 GB of RAM
+%
 %   Examples:
 %   ---------
 %
@@ -73,7 +80,7 @@ function output = exp_takanen2013(varargin)
 %
 %     exp_takanen2013('fig8_takanen2014','cochlea');
 %
-%   References: takanen2013a takanen2013b
+%   References: takanen2013 takanen2014
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %

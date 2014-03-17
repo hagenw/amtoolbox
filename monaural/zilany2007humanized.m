@@ -32,6 +32,9 @@ function [ANdata,vFreq] = zilany2007humanized(stim_level,stim,fsstim,fsmod,varar
 %                     frequency. The fibers will be equidistantly spaced
 %                     on the basilar membrane. Default value is 500.
 %  
+%   Requirements and installation:
+%   1) Compiled  mex files (run `amtmex`)
+%   
 %   References: roenne2012modeling zilany2007representation
 
 if nargin<4
