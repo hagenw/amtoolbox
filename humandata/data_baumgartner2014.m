@@ -152,7 +152,7 @@ end
 
 function s = loadBaselineData(s)
 
-latseg = 0; 
+latseg = [-20,0,20]; 
 dlat = 10;
 
 % Experimental baseline data
@@ -161,6 +161,7 @@ methods = data_majdak2010('HMD_M');
 spatstrat = data_majdak2013('BB');
 ctcA = data_majdak2013ctc('A');
 ctcB = data_majdak2013ctc('B');
+ctcL = data_majdak2013ctc('Learn');
 
 for ll = 1:length(s)
   
@@ -171,6 +172,7 @@ for ll = 1:length(s)
   s(ll).mm1 = [s(ll).mm1 ; spatstrat(ismember({spatstrat.id},s(ll).id)).mtx];
   s(ll).mm1 = [s(ll).mm1 ; ctcA(ismember({ctcA.id},s(ll).id)).mtx];
   s(ll).mm1 = [s(ll).mm1 ; ctcB(ismember({ctcB.id},s(ll).id)).mtx];
+  s(ll).mm1 = [s(ll).mm1 ; ctcL(ismember({ctcL.id},s(ll).id)).mtx];
   
   s(ll).pe_exp = localizationerror(s(ll).mm1,'rmsPmedianlocal');
   s(ll).qe_exp = localizationerror(s(ll).mm1,'querrMiddlebrooks');   
@@ -178,8 +180,11 @@ for ll = 1:length(s)
   for ii = 1:length(latseg)
     
     latresp = s(ll).mm1(:,7);
-    idlat = latresp <= latseg+dlat & latresp > latseg-dlat;
+    idlat = latresp <= latseg(ii)+dlat & latresp > latseg(ii)-dlat;
     mm2 = s(ll).mm1(idlat,:);
+    
+    s(ll).pe_exp_lat(ii) = localizationerror(mm2,'rmsPmedianlocal');
+    s(ll).qe_exp_lat(ii) = localizationerror(mm2,'querrMiddlebrooks');
     
     s(ll).target{ii} = mm2(:,6); % polar angle of target
     s(ll).response{ii} = mm2(:,8); % polar angle of response

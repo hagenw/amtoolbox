@@ -17,7 +17,7 @@ function scalib = baumgartner2014calibration(s,kv)
 
 % AUTHOR : Robert Baumgartner
 
-kv.latseg = 0;
+kv.latseg = [-20,0,20];
 
 scalib = s;
 for ss = 1:length(s)
@@ -54,7 +54,7 @@ for ll = 1:length(s)
     [s(ll).p{ii},respangs] = baumgartner2014(...
         s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
         'S',S,'lat',kv.latseg(ii),'polsamp',polang,...
-        'mrsmsp',kv.mrsmsp,'gamma',kv.gamma,'do',kv.do,'print');
+        'mrsmsp',kv.mrsmsp,'gamma',kv.gamma,'do',kv.do);
 
     [ qe(ii),pe(ii) ] = pmv2ppp( ...
         s(ll).p{ii} , polang , respangs , s(ll).target{ii});

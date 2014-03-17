@@ -17,7 +17,7 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %     'noplot'  Don't plot, only return data.
 %
-%     'auto'     Re-calculate the file if it does not exist. Return 1 if the
+%     'autorefresh'  Re-calculate the file if it does not exist. Return 1 if the
 %                file exist, otherwise 0. This is the default
 %
 %     'refresh'  Always recalculate the file.
@@ -178,12 +178,14 @@ function varargout = exp_baumgartner2014(varargin)
 %% ------ Check input options --------------------------------------------
 
 definput.import={'amtredofile'};
+definput.keyvals.FontSize = 12;
+definput.keyvals.MarkerSize = 6;
 definput.flags.type = {'missingflag','fig2','fig3','fig4','fig5','fig6',...
                        'fig7','fig8','fig9','fig10','fig11','fig12','fig13'};
 definput.flags.plot = {'plot','noplot'};
 
 
-[flags]  = ltfatarghelper({},definput,varargin);
+[flags,kv]  = ltfatarghelper({'FontSize','MarkerSize'},definput,varargin);
 
 
 if flags.do_missingflag
@@ -194,11 +196,8 @@ end;
 
 save_format='-v6';
 
-
-%% General Plot Settings --------------------------------------------------
-
-FontSize = 12;
-MarkerSize = 6;
+%% General Plot Settings
+TickLength = [0.02,0.04];
 
 %% ------ FIG 2 -----------------------------------------------------------
 if flags.do_fig2
@@ -236,19 +235,19 @@ if flags.do_fig2
     plot(lat,binw_left)
     hold on
     plot(lat,binw_right,'r--')
-    plot(Morimoto_ang,Morimoto_left,'vk','MarkerSize',MarkerSize)
-    plot(Macpherson_ang,Macpherson_left,'ok','MarkerSize',MarkerSize)
+    plot(Morimoto_ang,Morimoto_left,'vk','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w');
+    plot(Macpherson_ang,Macpherson_left,'ok','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w')
 
-    plot(Morimoto_ang,Morimoto_left,'vb','MarkerSize',MarkerSize)
-    plot(Morimoto_ang,Morimoto_right,'vr','MarkerSize',MarkerSize)
-    plot(Macpherson_ang,Macpherson_left,'ob','MarkerSize',MarkerSize)
-    plot(Macpherson_ang,Macpherson_right,'or','MarkerSize',MarkerSize)
+    plot(Morimoto_ang,Morimoto_left,'vb','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w')
+    plot(Morimoto_ang,Morimoto_right,'vr','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w')
+    plot(Macpherson_ang,Macpherson_left,'ob','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w')
+    plot(Macpherson_ang,Macpherson_right,'or','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w')
 
     l = legend('\itL','\itR','[1]','[2]');
-    set(l,'Location','East','FontSize',FontSize-1)
-    set(gca,'XLim',[lat(1) lat(end)],'YLim',[-0.05 1.05],'XTick',-60:30:60,'FontSize',FontSize)
-    xlabel('\phi_k (deg)','FontSize',FontSize)
-    ylabel('w_{\zeta}(\phi_k)','FontSize',FontSize)
+    set(l,'Location','East','FontSize',kv.FontSize-1)
+    set(gca,'XLim',[lat(1) lat(end)],'YLim',[-0.05 1.05],'XTick',-60:30:60,'FontSize',kv.FontSize)
+    xlabel('\phi_k (deg)','FontSize',kv.FontSize)
+    ylabel('w_{\zeta}(\phi_k)','FontSize',kv.FontSize)
   end
   
   % Output
@@ -378,6 +377,7 @@ if flags.do_fig3
     save(fn,'perr','perr_exp','qerr','qerr_exp','g','mrs','Ntargets',save_format);
     
     rmdir(tempfn,'s')
+    delete(fullfile(amtbasepath,'modelstages','baumgartner2014calibration.mat'))
     
   else
     load(fn);
@@ -460,16 +460,18 @@ if flags.do_fig3
     hold on
     semilogx(gamma_int,dqerr_int,'k--')
     semilogx(gamma_int,dtot_int,'k-')
-    semilogx(gamma(idopt),0.95,'vk','MarkerFaceColor','k','MarkerSize',MarkerSize+1)
+    semilogx(gamma(idopt),0.95,'vk','MarkerFaceColor','k','MarkerSize',kv.MarkerSize+1)
 
-    leg = legend('PE','QE','PE+QE','\{\epsilon,\Gamma\}_{opt}');
-    set(leg,'Location','northeast','FontSize',FontSize-1)
+    leg = legend('PE','QE','PE&QE','\{\epsilon,\Gamma\}_{opt}');
+    set(leg,'Location','northeast','FontSize',kv.FontSize-1)
 
-    ylabel('e(\Gamma) / e(\Gamma_{opt})','FontSize',FontSize)
-    xlabel('\Gamma','FontSize',FontSize)
+    ylabel('e(\Gamma) / e(\Gamma_{opt})','FontSize',kv.FontSize)
+    xlabel('\Gamma (dB^{-1})','FontSize',kv.FontSize)
 
     set(gca,'XLim',[gamma(1)-0.1 gamma(end)+20],'YLim',[0.91 1.7],'XMinorTick','on',...
-      'FontSize',FontSize-1,'XTickLabel',[1 10 100])
+      'FontSize',kv.FontSize-1)
+    set(gca,'XTick',[1:10,20:10:100],'XTickLabel',{1,2,3,'',5,'','','','',10,20,30,'',50,'','','','',100})
+    set(gca,'TickLength',TickLength)
 
     %% Plot residues for optimal gamma and various mrs
 
@@ -486,13 +488,14 @@ if flags.do_fig3
     hold on
     plot(mrs_int,dqerr_int,'k--')
     plot(mrs_int,dtot_int,'k-')
-    plot(mrs(idopt_mrs),0.95,'vk','MarkerFaceColor','k','MarkerSize',MarkerSize+1)
+    plot(mrs(idopt_mrs),0.95,'vk','MarkerFaceColor','k','MarkerSize',kv.MarkerSize+1)
 
-    ylabel('e(\epsilon) / e(\epsilon_{opt})','FontSize',FontSize)
-    xlabel('\epsilon (\circ)','FontSize',FontSize)
+    ylabel('e(\epsilon) / e(\epsilon_{opt})','FontSize',kv.FontSize)
+    xlabel('\epsilon (deg)','FontSize',kv.FontSize)
 
     set(gca,'XLim',[mrssort(1) 40],'YLim',[0.91 1.7],'XMinorTick','on',...
-      'FontSize',FontSize-1)
+      'FontSize',kv.FontSize-1)
+    set(gca,'TickLength',TickLength)
     
   end
 end
@@ -500,48 +503,18 @@ end
 %% ------ FIG 4 -----------------------------------------------------------
 if flags.do_fig4
   
-  latseg = 0; % centers of lateral segments
-  dlat =  10;  % lateral range (+-) of each segment
+  latseg = [-20,0,20]; ii = 2; % centers of lateral segments
+%   dlat =  10;         % lateral range (+-) of each segment
 
   s = data_baumgartner2014('baseline');
   
   idselect = ismember({s.id},{'NH15','NH22','NH72'});
   s = s(idselect);
 
-  qe_exp = zeros(length(s),length(latseg));
-  pe_exp = zeros(length(s),length(latseg));
-  
-  for ll = 1:length(s)
-
-    s(ll).target = [];
-    s(ll).response = [];
-    s(ll).Nt = [];
-    for ii = 1:length(latseg)
-      
-      latresp = s(ll).mm1(:,7);
-      idlat = latresp <= latseg(ii)+dlat & latresp >= latseg(ii)-dlat;
-      s(ll).mm2 = s(ll).mm1(idlat,:);
-      
-      % set lateral angle to 0deg such that localizationerror works outside +-30deg
-      s(ll).mm2(:,7) = 0; 
-
-      pe_exp(ll,ii) = real(localizationerror(s(ll).mm2,'rmsPmedianlocal'));
-      qe_exp(ll,ii) = real(localizationerror(s(ll).mm2,'querrMiddlebrooks'));
-
-      s(ll).target{ii} = real(s(ll).mm2(:,6)); % polar angle of target
-      s(ll).response{ii} = real(s(ll).mm2(:,8)); % polar angle of response
-      s(ll).Nt{ii} = length(s(ll).target{ii});
-
-    end
-  end
-
-
   %% LocaMo
   qe = zeros(length(s),length(latseg));
   pe = zeros(length(s),length(latseg));
   for ll = 1:length(s)
-
-    for ii = 1:length(latseg)
 
       s(ll).sphrtfs{ii} = 0;     % init
       s(ll).p{ii} = 0;        % init
@@ -551,34 +524,31 @@ if flags.do_fig4
           s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
           'S',s(ll).S,'lat',latseg(ii),'polsamp',polang); 
 
-      if s(ll).Nt{ii} > 0
-        [ qe(ll,ii),pe(ll,ii) ] = pmv2ppp( ...
-            s(ll).p{ii} , polang , respangs , s(ll).target{ii});
-      else
-        qe(ll,ii) = NaN; 
-        pe(ll,ii) = NaN;
-      end
+      [ qe(ll,ii),pe(ll,ii) ] = pmv2ppp( ...
+          s(ll).p{ii} , polang , respangs , s(ll).target{ii});
 
       if flags.do_plot
         if ll ==1; figure; end
         subplot(1,3,ll)
-        idend = min(150,length(s(ll).target{ii}));
+        Nmax = min(150,s(ll).Ntargets{ii});
+        idplot = round(1:s(ll).Ntargets{ii}/Nmax:s(ll).Ntargets{ii});
         plotbaumgartner2013(s(ll).p{ii},polang,respangs,...
-                  s(ll).target{ii}(1:idend),s(ll).response{ii}(1:idend),...
-                  'MarkerSize',MarkerSize,'cmax',0.05,'nocolorbar');
-        title({['A: PE = ' num2str(pe_exp(ll,ii),2) 'deg, QE = ' num2str(qe_exp(ll,ii),2) '%'];['P: PE = ' num2str(pe(ll,ii),2) 'deg, QE = ' num2str(qe(ll,ii),2) '%']},...
-          'FontSize',FontSize-1)
-        xlabel('Target Angle (deg)','FontSize',FontSize)
-        ylabel('Response Angle (deg)','FontSize',FontSize)
-        set(gca,'FontSize',FontSize-1)
+                  s(ll).target{ii}(idplot),s(ll).response{ii}(idplot),...
+                  'MarkerSize',kv.MarkerSize,'cmax',0.05,'nocolorbar');
+        title({['A: PE = ' num2str(s(ll).pe_exp_lat(ii),2) '\circ, QE = ' num2str(s(ll).qe_exp_lat(ii),2) '%'];['P: PE = ' num2str(pe(ll,ii),2) '\circ, QE = ' num2str(qe(ll,ii),2) '%']},...
+          'FontSize',kv.FontSize-1)
+        text(90,240,s(ll).id,'FontSize',kv.FontSize,...
+          'Color','w','HorizontalAlignment','center')
+        xlabel('Target Angle (deg)','FontSize',kv.FontSize)
+        ylabel('Response Angle (deg)','FontSize',kv.FontSize)
+        set(gca,'FontSize',kv.FontSize-1)
         set(gca,'XTickLabel',{[];[];0;[];60;[];120;[];180;[];[]})
         set(gca,'YTickLabel',{-60;[];0;[];60;[];120;[];180;[];240})
       end
-    end
 
   end
   
-  s = rmfield(s,{'Obj','mm1','mm2','sphrtfs'}); % reduce file size 
+  s = rmfield(s,{'Obj','mm1','sphrtfs'}); % reduce file size 
   
   varargout{1} = s;
   
@@ -655,97 +625,100 @@ if flags.do_fig5
     
   end
   
-  model{1} = load(fn);
+  load(fn);
   varargout{1} = load(fn);
   
   sign = {'ko';'kd';'kd';'k<';'kp';'k>'};
-
-  latseg = model{1}.latseg; 
-  idlat = latseg == 0;
-  pe_exp = model{1}.pe_exp(:,idlat);
-  qe_exp = model{1}.qe_exp(:,idlat);
-  [tmp,idsort] = sort(pe_exp);
-
-  Ns = length(model{1}.s);
+  flags.do_pm30deglat = true; % consider lateral range of +-30 deg
+  
+  Ns = length(s);
+  relfreq = zeros(Ns,length(latseg));
+  for jj = 1:Ns
+    Ntlat = [s(jj).Nt{:}];
+    Ntall(jj) = sum(Ntlat);
+    relfreq(jj,:) = Ntlat/Ntall(jj);
+  end
+  
+  if flags.do_pm30deglat
+    idlat = find(latseg <= 30 & latseg >= -30);
+  else % consider only median plane (+-10 deg)
+    idlat = latseg == 0;
+  end
+  relfreqPerSubject = relfreq(:,idlat)./repmat(sum(relfreq(:,idlat),2),1,3);
+  pe = sum(relfreqPerSubject .* pe(:,idlat) , 2);
+  qe = sum(relfreqPerSubject .* qe(:,idlat) , 2);
+  
+  % Actual performances sorted acc. to deteriorating performance
+  pe_exp = [s.pe_exp]';
+  qe_exp = [s.qe_exp]';
+  [tmp,idsort] = sort(pe_exp+qe_exp);
+  
+  % IDs for xlabel
   for ll = 1:Ns
-      NHs(ll,:) = model{1}.s(ll).id;
+      NHs(ll,:) = s(ll).id;
   end
 
   % Mean RMS Differences
-  dpe = zeros(1,length(model));
-  dqe = dpe;
-  for ii = 1:length(model)
-    idnum = not(isnan(model{ii}.pe_exp(idsort,idlat)) | isnan(model{ii}.pe(idsort,idlat)));
-    idsort = idsort(idnum);
-    Ns = length(model{ii}.s);
-    relfreq = zeros(Ns,1);
-    Ntall = zeros(Ns,1);
-    for jj = 1:Ns
-      Ntlat = [model{ii}.s(jj).Nt{idlat}];
-      Ntall(jj) = sum(Ntlat);
-      relfreq(jj,1) = Ntlat/Ntall(jj);
-    end
-    relfreq = relfreq.*repmat(Ntall,1,1)/sum(Ntall);
-    dpe(ii) = sqrt( relfreq(idsort)' * (model{ii}.pe_exp(idsort,idlat) - model{ii}.pe(idsort,idlat)).^2 );
-    dqe(ii) = sqrt( relfreq(idsort)' * (model{ii}.qe_exp(idsort,idlat) - model{ii}.qe(idsort,idlat)).^2 );
-  end
+  idnum = not(isnan(pe_exp(idsort)) | isnan(pe(idsort)));
+  idsort = idsort(idnum);
+  relfreqAcrossSubjects = sum(relfreq(:,idlat),2);
+  relfreqAcrossSubjects = relfreqAcrossSubjects/sum(relfreqAcrossSubjects);
+  dpe = sqrt( relfreqAcrossSubjects(idsort)' * (pe_exp(idsort) - pe(idsort)).^2 );
+  dqe = sqrt( relfreqAcrossSubjects(idsort)' * (qe_exp(idsort) - qe(idsort)).^2 );
 
   % Correlation Coefficients
-  for ii = 1:length(model)
-    idnum = not(isnan(model{ii}.pe_exp(:,idlat)) | isnan(model{ii}.pe(:,idlat)));
-    r = corrcoef(model{ii}.pe_exp(idnum,idlat),model{ii}.pe(idnum,idlat));
-    r_pe(ii) = r(2);
-    idnum = not(isnan(model{ii}.qe_exp(:,idlat)) | isnan(model{ii}.qe(:,idlat)));
-    [r,p] = corrcoef(model{ii}.qe_exp(idnum,idlat),model{ii}.qe(idnum,idlat));
-    r_qe(ii) = r(2);
-  end
+  idnum = not(isnan(pe_exp(:)) | isnan(pe));
+  r = corrcoef(pe_exp(idnum),pe(idnum));
+  r_pe = r(2);
+  idnum = not(isnan(qe_exp(:)) | isnan(qe));
+  [r,p] = corrcoef(qe_exp(idnum),qe(idnum));
+  r_qe = r(2);
 
   if flags.do_plot
+    
     fig=figure;
     
     %% Polar Error
 
     subplot(1,2,1)
 
-    ylim = [23.1 43];
-
+    ylim = [23.1 40.9];
+    ii = 1;
+    
     h = bar(pe_exp(idsort));
     hold on
-    for ii = 1:length(model)
-      plot(model{ii}.pe(idsort,idlat),sign{ii},'MarkerSize',MarkerSize,'MarkerFaceColor','k')
-    end
+    plot(pe(idsort),sign{ii},'MarkerSize',kv.MarkerSize,'MarkerFaceColor','k')
     set(gca,'XLim',[0 Ns+1],'XTick',1:Ns,'XTickLabel',NHs(idsort,3:4),...
-        'YLim',ylim,'YMinorTick','on','FontSize',FontSize-2)
-      plot([0,Ns+1],[ylim(1),ylim(1)]+0.03,'k')
+        'YLim',ylim,'YMinorTick','on','FontSize',kv.FontSize-2)
+    plot([0,Ns+1],[ylim(1),ylim(1)]+0.0015*diff(ylim),'k') % bottom line
     set(h,'FaceColor','white')
-    xlabel('Listener (NH)','FontSize',FontSize)
-    ylabel('Local Polar RMS Error (deg)','FontSize',FontSize)
+    xlabel('Listener (NH)','FontSize',kv.FontSize)
+    ylabel('Local Polar RMS Error (deg)','FontSize',kv.FontSize)
 
       l = legend('Actual','Predicted');
-      set(l,'FontSize',FontSize-2,'Location','northwest')
+      set(l,'FontSize',kv.FontSize-2,'Location','northwest')
       title(['e_{PE} = ' num2str(dpe,'%0.1f') '\circ ; r_{PE} = ' num2str(r_pe,'%0.2f')],...
-      'FontSize',FontSize)
+      'FontSize',kv.FontSize)
 
     %% Quadrant Error
 
     subplot(1,2,2)
 
-    ylim = [0 24.5];
+    ylim = [0.1 19.9];
 
     h = bar(qe_exp(idsort));
     hold on
-    for ii = 1:length(model)
-      plot(model{ii}.qe(idsort,idlat),sign{ii},'MarkerSize',MarkerSize,'MarkerFaceColor','k')
-    end
+    plot(qe(idsort),sign{ii},'MarkerSize',kv.MarkerSize,'MarkerFaceColor','k')
 
     set(gca,'XLim',[0 Ns+1],'XTick',1:Ns,'XTickLabel',NHs(idsort,3:4),...
-        'YLim',ylim,'YMinorTick','on','FontSize',FontSize-2)
+        'YLim',ylim,'YMinorTick','on','FontSize',kv.FontSize-2)
+    plot([0,Ns+1],[ylim(1),ylim(1)]+0.0015*diff(ylim),'k') % bottom line
     set(h,'FaceColor','white')
-    xlabel('Listener (NH)','FontSize',FontSize)
-    ylabel('Quadrant Error (%)','FontSize',FontSize)
+    xlabel('Listener (NH)','FontSize',kv.FontSize)
+    ylabel('Quadrant Error (%)','FontSize',kv.FontSize)
 
     title(['e_{QE} = ' num2str(dqe,'%0.1f') '% ; r_{QE} = ' num2str(r_qe,'%0.2f')],...
-      'FontSize',FontSize)
+      'FontSize',kv.FontSize)
 
     set(fig,'PaperPosition',[1,1,9,3.5])
   end
@@ -773,8 +746,6 @@ if flags.do_fig6
   idmrs0 = paradata.g == 6 & paradata.mrs == 0;
   mrs0.pe = paradata.perr(:,:,idmrs0);
   mrs0.qe = paradata.qerr(:,:,idmrs0);
-
-  dx = 2;
 
   %% # of targets
   Ns = length(s);
@@ -841,6 +812,8 @@ if flags.do_fig6
 
 
   if flags.do_plot
+     
+    dx = 3;
     
     %% PE
 
@@ -849,23 +822,23 @@ if flags.do_fig6
     errorbar(latseg-dx,quart_pe(2,:,1),...
       quart_pe(2,:,1)-quart_pe(1,:,1),...
       quart_pe(3,:,1)-quart_pe(2,:,1),...
-      'ok-','MarkerSize',MarkerSize,'MarkerFaceColor','k');
+      'ok-','MarkerSize',kv.MarkerSize,'MarkerFaceColor','k');
     hold on
-    errorbar(latseg,quart_pe(2,:,3),...
+    errorbar(latseg+dx,quart_pe(2,:,3),...
       quart_pe(2,:,3)-quart_pe(1,:,3),...
       quart_pe(3,:,3)-quart_pe(2,:,3),...
-      'dk--','MarkerSize',MarkerSize-1,'MarkerFaceColor','k');
-    errorbar(latseg+dx,quart_pe(2,:,2),...
+      'dk--','MarkerSize',kv.MarkerSize-1,'MarkerFaceColor','k');
+    errorbar(latseg,quart_pe(2,:,2),...
       quart_pe(2,:,2)-quart_pe(1,:,2),...
       quart_pe(3,:,2)-quart_pe(2,:,2),...
-      'ok-','MarkerSize',MarkerSize,'MarkerFaceColor','w');
+      'ok-','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w');
 
     title(['e_{PE} = ' num2str(dpe,'%0.1f') '\circ ; r_{PE} = ' num2str(r_pe(2),'%0.2f')],...
-      'FontSize',FontSize)
-    set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[22.1,45.9],...
-      'YMinorTick','on','FontSize',FontSize)
-    ylabel('Local Polar RMS Error (deg)','FontSize',FontSize)
-    xlabel('Magnitude of Lateral Angle (deg)','FontSize',FontSize)
+      'FontSize',kv.FontSize)
+    set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[21.1,45.9],...
+      'YMinorTick','on','FontSize',kv.FontSize)
+    ylabel('Local Polar RMS Error (deg)','FontSize',kv.FontSize)
+    xlabel('Magnitude of Lateral Angle (deg)','FontSize',kv.FontSize)
 
 
     %% QE
@@ -874,25 +847,25 @@ if flags.do_fig6
     errorbar(latseg-dx,quart_qe(2,:,1),...
       quart_qe(2,:,1)-quart_qe(1,:,1),...
       quart_qe(3,:,1)-quart_qe(2,:,1),...
-      'ok-','MarkerSize',MarkerSize,'MarkerFaceColor','k');
+      'ok-','MarkerSize',kv.MarkerSize,'MarkerFaceColor','k');
     hold on
-    errorbar(latseg,quart_qe(2,:,3),...
+    errorbar(latseg+dx,quart_qe(2,:,3),...
       quart_qe(2,:,3)-quart_qe(1,:,3),...
       quart_qe(3,:,3)-quart_qe(2,:,3),...
-      'dk--','MarkerSize',MarkerSize-1,'MarkerFaceColor','k');
-    errorbar(latseg+dx,quart_qe(2,:,2),...
+      'dk--','MarkerSize',kv.MarkerSize-1,'MarkerFaceColor','k');
+    errorbar(latseg,quart_qe(2,:,2),...
       quart_qe(2,:,2)-quart_qe(1,:,2),...
       quart_qe(3,:,2)-quart_qe(2,:,2),...
-      'ok-','MarkerSize',MarkerSize,'MarkerFaceColor','w');
+      'ok-','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w');
     title(['e_{QE} = ' num2str(dqe,'%0.1f') '% ; r_{QE} = ' num2str(r_qe(2),'%0.2f')],...
-      'FontSize',FontSize)
-    set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[2.1,27.5],...
-      'XTick',latseg,'YMinorTick','on','FontSize',FontSize)
-    ylabel('Quadrant Error (%)','FontSize',FontSize)
-    xlabel('Magnitude of Lateral Angle (deg)','FontSize',FontSize)
+      'FontSize',kv.FontSize)
+    set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[2.1,26.9],...
+      'XTick',latseg,'YMinorTick','on','FontSize',kv.FontSize)
+    ylabel('Quadrant Error (%)','FontSize',kv.FontSize)
+    xlabel('Magnitude of Lateral Angle (deg)','FontSize',kv.FontSize)
 
     l = legend('P (with SMM)','P (w/o SMM)','A');
-    set(l,'FontSize',FontSize-1,'Location','northwest')
+    set(l,'FontSize',kv.FontSize-1,'Location','northwest')
 
     set(fig,'PaperPosition',[1,1,10,3.5])
     
@@ -911,7 +884,8 @@ if flags.do_fig7
 
   %% Computations
   s = data_baumgartner2014('pool');  
-  s = s(14); % for PMV plot of NH62
+  s = s(ismember({s.id},'NH39'));
+  disp(['Listener: ' s.id])
   chance = [];
   for C = 1:length(Conditions)
 
@@ -1016,16 +990,18 @@ if flags.do_fig7
             targets = [targets;s(ll).target{jj}];
           end
           plotbaumgartner2013(s(ll).p{ii},s(ll).polang{ii},rang,...
-                targets,responses,'MarkerSize',MarkerSize,'cmax',0.05,'nocolorbar')
+                targets,responses,'MarkerSize',kv.MarkerSize,'cmax',0.05,'nocolorbar')
+          text(90,240,Cond,...
+            'FontSize',kv.FontSize,'Color','w','HorizontalAlignment','center')
           Nt = length(targets);
           tmp.m = [zeros(Nt,5) targets(:) zeros(Nt,1) responses(:)];
           tmp.qe = localizationerror(tmp.m,'querrMiddlebrooks');
           tmp.pe = localizationerror(tmp.m,'rmsPmedianlocal');
-          title({['A: PE = ' num2str(tmp.pe,2) 'deg, QE = ' num2str(tmp.qe,2) '%'];...
-            ['P: PE = ' num2str(pe_t(ii),2) 'deg, QE = ' num2str(qe_t(ii),2) '%']},'FontSize',FontSize-1)
-          xlabel('Target Angle (deg)','FontSize',FontSize)
-          ylabel('Response Angle (deg)','FontSize',FontSize)
-          set(gca,'FontSize',FontSize-1)
+          title({['A: PE = ' num2str(tmp.pe,2) '\circ, QE = ' num2str(tmp.qe,2) '%'];...
+            ['P: PE = ' num2str(pe_t(ii),2) '\circ, QE = ' num2str(qe_t(ii),2) '%']},'FontSize',kv.FontSize-1)
+          xlabel('Target Angle (deg)','FontSize',kv.FontSize)
+          ylabel('Response Angle (deg)','FontSize',kv.FontSize)
+          set(gca,'FontSize',kv.FontSize-1)
           set(gca,'XTickLabel',{[];[];0;[];60;[];120;[];180;[];[]})
           set(gca,'YTickLabel',{-60;[];0;[];60;[];120;[];180;[];240})
 
@@ -1224,64 +1200,64 @@ if flags.do_fig8
     errorbar((1:3)+dx,quart_pe_part(2,:),...
         quart_pe_part(2,:) - quart_pe_part(1,:),...
         quart_pe_part(3,:) - quart_pe_part(2,:),...
-        'ko-','MarkerSize',MarkerSize,...
+        'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','k');
     hold on
     errorbar((1:3)-dx,quart_pe_pool(2,:),...
         quart_pe_pool(2,:) - quart_pe_pool(1,:),...
         quart_pe_pool(3,:) - quart_pe_pool(2,:),...
-        'ks-','MarkerSize',MarkerSize,...
+        'ks-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','k');
     errorbar((1:3),quart_pe_exp(2,:),...
         quart_pe_exp(2,:) - quart_pe_exp(1,:),...
         quart_pe_exp(3,:) - quart_pe_exp(2,:),...
-        'ko-','MarkerSize',MarkerSize,...
+        'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','w');
 
     plot([0,4],[pe0,pe0],'k:')
 
     title(['e_{PE} = ' num2str(dpe,'%0.1f') '\circ ; r_{PE} = ' num2str(cc.pe.r,'%0.2f')],...
-      'FontSize',FontSize)
-    ylabel('Local Polar RMS Error (deg)','FontSize',FontSize)
+      'FontSize',kv.FontSize)
+    ylabel('Local Polar RMS Error (deg)','FontSize',kv.FontSize)
     set(gca,...
         'XLim',[0.5 3.5],...
         'XTick',1:3,...
         'YLim',[27 52.9],...
         'XTickLabel',{'BB';'LP';'W'},...
-        'YMinorTick','on','FontSize',FontSize)
+        'YMinorTick','on','FontSize',kv.FontSize)
 
     subplot(122)
     errorbar((1:3)+dx,quart_qe_part(2,:),...
         quart_qe_part(2,:) - quart_qe_part(1,:),...
         quart_qe_part(3,:) - quart_qe_part(2,:),...
-        'ko-','MarkerSize',MarkerSize,...
+        'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','k');
     hold on
     errorbar((1:3)-dx,quart_qe_pool(2,:),...
         quart_qe_pool(2,:) - quart_qe_pool(1,:),...
         quart_qe_pool(3,:) - quart_qe_pool(2,:),...
-        'ks-','MarkerSize',MarkerSize,...
+        'ks-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','k');
     errorbar((1:3),quart_qe_exp(2,:),...
         quart_qe_exp(2,:) - quart_qe_exp(1,:),...
         quart_qe_exp(3,:) - quart_qe_exp(2,:),...
-        'ko-','MarkerSize',MarkerSize,...
+        'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','w');
     plot([0,4],[qe0 qe0],'k:')
 
     title(['e_{QE} = ' num2str(dqe,'%0.1f') '% ; r_{QE} = ' num2str(cc.qe.r,'%0.2f')],...
-      'FontSize',FontSize)
-    ylabel('Quadrant Error (%)','FontSize',FontSize)
+      'FontSize',kv.FontSize)
+    ylabel('Quadrant Error (%)','FontSize',kv.FontSize)
     set(gca,...
         'XLim',[0.5 3.5],...
         'XTick',1:3,...
         'YLim',[0.1 49],...
         'XTickLabel',{'BB';'LP';'W'},...
         'YAxisLocation','left',...
-        'YMinorTick','on','FontSize',FontSize)
+        'YMinorTick','on','FontSize',kv.FontSize)
 
     l = legend('Part.','Pool','Actual');
-    set(l,'Location','northwest','FontSize',FontSize-1)
+    set(l,'Location','northwest','FontSize',kv.FontSize-1)
 
     set(gcf,'PaperPosition',[1,1,10,3.5])
     
@@ -1305,7 +1281,8 @@ if flags.do_fig9
 
   %% Computations
   s = data_baumgartner2014('pool');
-  s = s(1); disp(['Listener: ' s.id]) % NH42: 8
+  s = s(ismember({s.id},'NH12')); 
+  disp(['Listener: ' s.id])
   chance = [];
   for C = 1:length(Conditions)
 
@@ -1424,12 +1401,14 @@ if flags.do_fig9
           subplot(1,3,C)
           plotbaumgartner2013(p,s(ll).polang{ii},rang,...
                 s(ll).target{ii},s(ll).response{ii},...
-                    'MarkerSize',MarkerSize,'cmax',0.05,'nocolorbar');
-          title({['A: PE = ' num2str(s(ll).pe_exp(C,1),2) 'deg, QE = ' num2str(s(ll).qe_exp(C,1),2) '%'];...
-            ['P: PE = ' num2str(s(ll).pe_part(C,1),2) 'deg, QE = ' num2str(s(ll).qe_part(C,1),2) '%']},'FontSize',FontSize-1)
-          xlabel('Target Angle (deg)','FontSize',FontSize)
-          ylabel('Response Angle (deg)','FontSize',FontSize)
-          set(gca,'FontSize',FontSize-1)
+                    'MarkerSize',kv.MarkerSize,'cmax',0.05,'nocolorbar');
+          title({['A: PE = ' num2str(s(ll).pe_exp(C,1),2) '\circ, QE = ' num2str(s(ll).qe_exp(C,1),2) '%'];...
+            ['P: PE = ' num2str(s(ll).pe_part(C,1),2) '\circ, QE = ' num2str(s(ll).qe_part(C,1),2) '%']},'FontSize',kv.FontSize-1)
+          text(90,240,Cond,...
+            'FontSize',kv.FontSize,'Color','w','HorizontalAlignment','center')
+          xlabel('Target Angle (deg)','FontSize',kv.FontSize)
+          ylabel('Response Angle (deg)','FontSize',kv.FontSize)
+          set(gca,'FontSize',kv.FontSize-1)
           set(gca,'XTickLabel',{[];[];0;[];60;[];120;[];180;[];[]})
           set(gca,'YTickLabel',{-60;[];0;[];60;[];120;[];180;[];240})
 
@@ -1642,32 +1621,32 @@ if flags.do_fig10
     errorbar(fliplr(N)+dx,quart_pe_part(2,:),...
         quart_pe_part(2,:) - quart_pe_part(1,:),...
         quart_pe_part(3,:) - quart_pe_part(2,:),...
-        'ko-','MarkerSize',MarkerSize,...
+        'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','k');
     hold on
     errorbar(fliplr(N)-dx,quart_pe_pool(2,:),...
         quart_pe_pool(2,:) - quart_pe_pool(1,:),...
         quart_pe_pool(3,:) - quart_pe_pool(2,:),...
-        'ks-','MarkerSize',MarkerSize,...
+        'ks-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','k');
     errorbar(fliplr(N),quart_pe_exp(2,:),...
         quart_pe_exp(2,:) - quart_pe_exp(1,:),...
         quart_pe_exp(3,:) - quart_pe_exp(2,:),...
-        'ko-','MarkerSize',MarkerSize,...
+        'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','w');
     plot([0,2*max(N)],[pe0,pe0],'k:')
-    xlabel('Num. of Channels','FontSize',FontSize)
-    ylabel('Local Polar RMS Error (deg)','FontSize',FontSize)
+    xlabel('Num. of Channels','FontSize',kv.FontSize)
+    ylabel('Local Polar RMS Error (deg)','FontSize',kv.FontSize)
 
     title(['e_{PE} = ' num2str(dpe,'%0.1f') '\circ ; r_{PE} = ' num2str(cc.pe.r,'%0.2f')],...
-      'FontSize',FontSize)
+      'FontSize',kv.FontSize)
     set(gca,'XLim',[1 32],'XTick',[3 6 9 12 18 24 30],...
         'XTickLabel',{3;6;9;12;18;24;'CL'},...
         'YLim',[29.1 54.5],...
-        'YMinorTick','on','FontSize',FontSize)
+        'YMinorTick','on','FontSize',kv.FontSize)
 
     l = legend('Part.','Pool','Actual');
-    set(l,'Location','southwest','FontSize',FontSize-2)
+    set(l,'Location','southwest','FontSize',kv.FontSize-2)
 
     %% QE
     subplot(122)
@@ -1676,28 +1655,28 @@ if flags.do_fig10
     errorbar(fliplr(N)+dx,quart_qe_part(2,:),...
         quart_qe_part(2,:) - quart_qe_part(1,:),...
         quart_qe_part(3,:) - quart_qe_part(2,:),...
-        'ko-','MarkerSize',MarkerSize,...
+        'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','k');
     errorbar(fliplr(N)-dx,quart_qe_pool(2,:),...
         quart_qe_pool(2,:) - quart_qe_pool(1,:),...
         quart_qe_pool(3,:) - quart_qe_pool(2,:),...
-        'ks-','MarkerSize',MarkerSize,...
+        'ks-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','k');
     errorbar(fliplr(N),quart_qe_exp(2,:),...
         quart_qe_exp(2,:) - quart_qe_exp(1,:),...
         quart_qe_exp(3,:) - quart_qe_exp(2,:),...
-        'ko-','MarkerSize',MarkerSize,...
+        'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','w');
 
     title(['e_{QE} = ' num2str(dqe,'%0.1f') '% ; r_{QE} = ' num2str(cc.qe.r,'%0.2f')],...
-      'FontSize',FontSize)
-    xlabel('Num. of Channels','FontSize',FontSize)
-    ylabel('Quadrant Error (%)','FontSize',FontSize)
+      'FontSize',kv.FontSize)
+    xlabel('Num. of Channels','FontSize',kv.FontSize)
+    ylabel('Quadrant Error (%)','FontSize',kv.FontSize)
     set(gca,'XLim',[1 32],'XTick',[3 6 9 12 18 24 30],...
         'XTickLabel',{3;6;9;12;18;24;'CL'},...
         'YLim',[5.1 43],...
         'YMinorTick','on',...
-        'YAxisLocation','left','FontSize',FontSize)
+        'YAxisLocation','left','FontSize',kv.FontSize)
 
     set(gcf,'PaperPosition',[1,1,10,3.5])
 
@@ -1800,48 +1779,48 @@ if flags.do_fig11
     
     fig = figure;
     subplot(131)
-    middlebroxplot(1-dx,qe_own.quantiles,MarkerSize)
-    plot(1-dx,qe_own.mean,Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',MFC)
-    middlebroxplot(1+dx,data.qe_own.quantiles,MarkerSize)
-    plot(1+dx,data.qe_own.mean,data.Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',data.MFC)
-    middlebroxplot(2-dx,qe_other.quantiles,MarkerSize)
-    plot(2-dx,qe_other.mean,Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',MFC)
-    middlebroxplot(2+dx,data.qe_other.quantiles,MarkerSize)
-    plot(2+dx,data.qe_other.mean,data.Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',data.MFC)
-    ylabel('Quadrant Errors (%)','FontSize',FontSize)
+    middlebroxplot(1-dx,qe_own.quantiles,kv.MarkerSize)
+    plot(1-dx,qe_own.mean,Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',MFC)
+    middlebroxplot(1+dx,data.qe_own.quantiles,kv.MarkerSize)
+    plot(1+dx,data.qe_own.mean,data.Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',data.MFC)
+    middlebroxplot(2-dx,qe_other.quantiles,kv.MarkerSize)
+    plot(2-dx,qe_other.mean,Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',MFC)
+    middlebroxplot(2+dx,data.qe_other.quantiles,kv.MarkerSize)
+    plot(2+dx,data.qe_other.mean,data.Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',data.MFC)
+    ylabel('Quadrant Errors (%)','FontSize',kv.FontSize)
     set(gca,'YLim',[-2 43],'XLim',[0.5 2.5],...
-      'XTick',1:2,'XTickLabel',{'Own' 'Other'},'FontSize',FontSize)
+      'XTick',1:2,'XTickLabel',{'Own' 'Other'},'FontSize',kv.FontSize)
 
     subplot(132)
-    plot(1-dx,pe_own.mean,Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',MFC)
+    plot(1-dx,pe_own.mean,Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',MFC)
     hold on
-    plot(1+dx,data.pe_own.mean,data.Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',data.MFC)
+    plot(1+dx,data.pe_own.mean,data.Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',data.MFC)
 
-    middlebroxplot(1-dx,pe_own.quantiles,MarkerSize)
-    plot(1-dx,pe_own.mean,Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',MFC)
-    middlebroxplot(1+dx,data.pe_own.quantiles,MarkerSize)
-    plot(1+dx,data.pe_own.mean,data.Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',data.MFC)
-    middlebroxplot(2-dx,pe_other.quantiles,MarkerSize)
-    plot(2-dx,pe_other.mean,Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',MFC)
-    middlebroxplot(2+dx,data.pe_other.quantiles,MarkerSize)
-    plot(2+dx,data.pe_other.mean,data.Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',data.MFC)
-    ylabel('Local Polar RMS Error (deg)','FontSize',FontSize)
+    middlebroxplot(1-dx,pe_own.quantiles,kv.MarkerSize)
+    plot(1-dx,pe_own.mean,Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',MFC)
+    middlebroxplot(1+dx,data.pe_own.quantiles,kv.MarkerSize)
+    plot(1+dx,data.pe_own.mean,data.Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',data.MFC)
+    middlebroxplot(2-dx,pe_other.quantiles,kv.MarkerSize)
+    plot(2-dx,pe_other.mean,Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',MFC)
+    middlebroxplot(2+dx,data.pe_other.quantiles,kv.MarkerSize)
+    plot(2+dx,data.pe_other.mean,data.Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',data.MFC)
+    ylabel('Local Polar RMS Error (deg)','FontSize',kv.FontSize)
     set(gca,'YLim',[-2 62],'XLim',[0.5 2.5],...
-      'XTick',1:2,'XTickLabel',{'Own' 'Other'},'FontSize',FontSize)
+      'XTick',1:2,'XTickLabel',{'Own' 'Other'},'FontSize',kv.FontSize)
 
     subplot(133)
-    middlebroxplot(1-dx,pb_own.quantiles,MarkerSize)
-    plot(1-dx,pb_own.mean,Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',MFC)
-    middlebroxplot(1+dx,data.pb_own.quantiles,MarkerSize)
-    plot(1+dx,data.pb_own.mean,data.Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',data.MFC)
-    middlebroxplot(2-dx,pb_other.quantiles,MarkerSize)
-    plot(2-dx,pb_other.mean,Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',MFC)
-    middlebroxplot(2+dx,data.pb_other.quantiles,MarkerSize)
-    plot(2+dx,data.pb_other.mean,data.Marker,'MarkerSize',MarkerSize,'MarkerFaceColor',data.MFC)
+    middlebroxplot(1-dx,pb_own.quantiles,kv.MarkerSize)
+    plot(1-dx,pb_own.mean,Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',MFC)
+    middlebroxplot(1+dx,data.pb_own.quantiles,kv.MarkerSize)
+    plot(1+dx,data.pb_own.mean,data.Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',data.MFC)
+    middlebroxplot(2-dx,pb_other.quantiles,kv.MarkerSize)
+    plot(2-dx,pb_other.mean,Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',MFC)
+    middlebroxplot(2+dx,data.pb_other.quantiles,kv.MarkerSize)
+    plot(2+dx,data.pb_other.mean,data.Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',data.MFC)
 
-    ylabel('Magnitude of Elevation Bias (deg)','FontSize',FontSize)
+    ylabel('Magnitude of Elevation Bias (deg)','FontSize',kv.FontSize)
     set(gca,'YLim',[-2 55],'XLim',[0.5 2.5],...
-      'XTick',1:2,'XTickLabel',{'Own' 'Other'},'FontSize',FontSize)
+      'XTick',1:2,'XTickLabel',{'Own' 'Other'},'FontSize',kv.FontSize)
   end
 end
 
@@ -2019,6 +1998,15 @@ if flags.do_fig12
       noDCN.pe_exp2 = mean(noDCN.pe_exp2,3);
   end
   idphase = 1;
+  
+  
+  %% Increase
+  pe_exp1 = pe_exp1 - repmat(pe_flat(:),1,size(pe_exp1,2));
+  pe_exp2 = pe_exp2 - repmat(pe_flat(:),1,size(pe_exp2,2));
+  if dcn_flag
+      noDCN.pe_exp1 = noDCN.pe_exp1 - repmat(noDCN.pe_flat(:),1,size(noDCN.pe_exp1,2));
+      noDCN.pe_exp2 = noDCN.pe_exp2 - repmat(noDCN.pe_flat(:),1,size(noDCN.pe_exp2,2));
+  end
 
 
   %% Statistics
@@ -2041,48 +2029,46 @@ if flags.do_fig12
   if flags.do_plot
     
     dx = 1.05;
+    FontSize = kv.FontSize;
+    MarkerSize = kv.MarkerSize;
+    
     % Exp1
     fig = figure;
-    subplot(5,1,1:3)
-    errorbar(data.density*dx,quart_pe_exp1(2,:,idphase),...
+    
+    subplot(2,5,1:5)
+    errorbar(data.density/dx,quart_pe_exp1(2,:,idphase),...
         quart_pe_exp1(2,:,idphase) - quart_pe_exp1(1,:,idphase),...
         quart_pe_exp1(3,:,idphase) - quart_pe_exp1(2,:,idphase),...
         'ks-','MarkerSize',MarkerSize,...
         'MarkerFaceColor','k');
     hold on
     if dcn_flag
-        errorbar(data.density,noDCN.quart_pe_exp1(2,:,idphase),...
+        errorbar(data.density*dx,noDCN.quart_pe_exp1(2,:,idphase),...
         noDCN.quart_pe_exp1(2,:,idphase) - noDCN.quart_pe_exp1(1,:,idphase),...
         noDCN.quart_pe_exp1(3,:,idphase) - noDCN.quart_pe_exp1(2,:,idphase),...
         'kd--','MarkerSize',MarkerSize-1,...
         'MarkerFaceColor','k');
     end
-    errorbar(data.density/dx,quart_pe_data_exp1(2,:,idphase),...
+    errorbar(data.density,quart_pe_data_exp1(2,:,idphase),...
         quart_pe_data_exp1(2,:,idphase) - quart_pe_data_exp1(1,:,idphase),...
         quart_pe_data_exp1(3,:,idphase) - quart_pe_data_exp1(2,:,idphase),...
         'ko-','MarkerSize',MarkerSize,...
         'MarkerFaceColor','w');
     set(gca,'XScale','log','YMinorTick','on')
-    set(gca,'XLim',[0.25/1.2 8*1.2],'XTick',data.density,'YLim',[-1 75],'FontSize',FontSize)
+    set(gca,'XLim',[0.25/1.2 8*1.2],'XTick',data.density,'YLim',[-15 59],'FontSize',FontSize)
     xlabel('Ripple Density (ripples/octave)','FontSize',FontSize)
-    ylabel({'Polar Error Rate (%)'},'FontSize',FontSize)
+    ylabel({'Increase in';'Polar Error Rate (%)'},'FontSize',FontSize)
 
     if dcn_flag
-        leg = legend('P (with DCN)','P (w/o DCN)','A');
+        leg = legend('Predicted with edge extraction','Predicted without edge extraction','Actual');
     else
         leg = legend('Predicted','Actual');
     end
-    set(leg,'FontSize',FontSize-2,'Location','northeast')
+    set(leg,'FontSize',FontSize-2,'Location','southwest')
 
     %% Exp2
-    data.depth = [0 data.depth];
-    quart_pe_exp2 = [quart_pe_flat(:) , quart_pe_exp2];
-    if dcn_flag
-      noDCN.quart_pe_exp2 = [noDCN.quart_pe_flat(:) , noDCN.quart_pe_exp2];
-    end
-    quart_pe_data_exp2 = [quart_pe_data_flat(:) , quart_pe_data_exp2];
-    
-    subplot(5,1,4:5)
+
+    subplot(2,5,6:9)
     errorbar(data.depth-1,quart_pe_exp2(2,:,idphase),...
         quart_pe_exp2(2,:,idphase) - quart_pe_exp2(1,:,idphase),...
         quart_pe_exp2(3,:,idphase) - quart_pe_exp2(2,:,idphase),...
@@ -2090,20 +2076,64 @@ if flags.do_fig12
         'MarkerFaceColor','k');
     hold on
     if dcn_flag
-        errorbar(data.depth,noDCN.quart_pe_exp2(2,:,idphase),...
+        errorbar(data.depth+1,noDCN.quart_pe_exp2(2,:,idphase),...
         noDCN.quart_pe_exp2(2,:,idphase) - noDCN.quart_pe_exp2(1,:,idphase),...
         noDCN.quart_pe_exp2(3,:,idphase) - noDCN.quart_pe_exp2(2,:,idphase),...
         'kd--','MarkerSize',MarkerSize-1,...
         'MarkerFaceColor','k');
     end
-    errorbar(data.depth+1,quart_pe_data_exp2(2,:,idphase),...
+    errorbar(data.depth,quart_pe_data_exp2(2,:,idphase),...
         quart_pe_data_exp2(2,:,idphase) - quart_pe_data_exp2(1,:,idphase),...
         quart_pe_data_exp2(3,:,idphase) - quart_pe_data_exp2(2,:,idphase),...
         'ko-','MarkerSize',MarkerSize,...
         'MarkerFaceColor','w');
-    set(gca,'XLim',[data.depth(1)-5 data.depth(end)+5],'XTick',data.depth,'YLim',[-4 69],'YMinorTick','on','FontSize',FontSize)
+    set(gca,'XLim',[data.depth(1)-5 data.depth(end)+5],'XTick',data.depth,...
+      'YLim',[-15 59],'YMinorTick','on','FontSize',FontSize)
     xlabel('Ripple Depth (dB)','FontSize',FontSize)
+    ylabel({'Increase in';'Polar Error Rate (%)'},'FontSize',FontSize)
+    ytick = get(gca,'YTick');
+    ticklength = get(gca,'TickLength');
+
+    %% Baseline
+    subplot(2,5,10)
+    errorbar(-0.5,quart_pe_flat(2),...
+        quart_pe_flat(2) - quart_pe_flat(1),...
+        quart_pe_flat(3) - quart_pe_flat(2),...
+        'ks-','MarkerSize',MarkerSize,...
+        'MarkerFaceColor','k');
+    hold on
+    if dcn_flag
+        errorbar(0.5,noDCN.quart_pe_flat(2),...
+        noDCN.quart_pe_flat(2) - noDCN.quart_pe_flat(1),...
+        noDCN.quart_pe_flat(3) - noDCN.quart_pe_flat(2),...
+        'kd-','MarkerSize',MarkerSize-1,...
+        'MarkerFaceColor','k');
+    end
+    errorbar(0,quart_pe_data_flat(2),...
+        quart_pe_data_flat(2) - quart_pe_data_flat(1),...
+        quart_pe_data_flat(3) - quart_pe_data_flat(2),...
+        'ko-','MarkerSize',MarkerSize,...
+        'MarkerFaceColor','w');
+    set(gca,'XLim',[-3 3],'XTick',0,'XTickLabel',{'Baseline'},...
+      'YLim',[-15 59],'YTick',ytick,'TickLength',3*ticklength,...
+      'FontSize',FontSize,'YAxisLocation','right')
+    xlabel(' ','FontSize',FontSize)
     ylabel({'Polar Error Rate (%)'},'FontSize',FontSize)
+
+    %% Overall correlation between actual and predicted median values
+    if dcn_flag
+      m_pe_pred = [quart_pe_exp1(2,:,idphase) quart_pe_exp2(2,:,idphase)];
+      m_pe_pred_noDCN = [noDCN.quart_pe_exp1(2,:,idphase) noDCN.quart_pe_exp2(2,:,idphase)];
+      m_pe_actual = [quart_pe_data_exp1(2,:,idphase) quart_pe_data_exp2(2,:,idphase)];
+      r = corrcoef(m_pe_pred,m_pe_actual);
+      rDCN = r(2);
+      r = corrcoef(m_pe_pred_noDCN,m_pe_actual);
+      rnoDCN = r(2);
+
+      disp('Correlation between actual and predicted median values (15 conditions):')
+      disp(['w/  DCN: r = ' num2str(rDCN,'%0.2f')])
+      disp(['w/o DCN: r = ' num2str(rnoDCN,'%0.2f')])
+    end
     
   end
 end
@@ -2115,7 +2145,8 @@ if flags.do_fig13
   
   if amtredofile(fn,flags.redomode)
     
-    if not(exist('HarvardWords','dir'))
+    fnHarvard = fullfile(amtbasepath,'signals','HarvardWords');
+    if not(exist(fnHarvard,'dir'))
       disp('The Harvard word list is missing.') 
       disp('Please, contact Virginia Best (ginbest@bu.edu) or Craig Jin (craig.jin@sydney.edu.au) for providing their speech recordings.')
       disp(['Then, move the folder labeled HarvardWords to: ' fullfile(amtbasepath,'signals') '.'])
@@ -2124,12 +2155,9 @@ if flags.do_fig13
     
     autorefreshnotification(fn,flags)
     
-    tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_highfreqatten'); % temporary folder
-    mkdir(tempfn)
-    
     %% Settings
     latseg = 0;%[-20,0,20];   % centers of lateral segments
-    NsampModel = 260; % # of modeled speech samples (takes 30min/sample)
+    NsampModel = 100; % # of modeled speech samples (takes 30min/sample); max: 260
     startSamp = 1;
 
     saveflag = true;
@@ -2139,12 +2167,9 @@ if flags.do_fig13
 
     %% Loda Data
 
-    % Listeners
-    s = data_baumgartner2014('pool');
-
     % Speech Samples from Harvard Word list
     fs_orig = 80e3; % Hz
-    fs = s(1).fs;   % Hz
+    fs = 48e3;   % Hz
     p_resamp = fs/fs_orig;
     kk = 1;
     if NsampModel <= 51
@@ -2157,7 +2182,7 @@ if flags.do_fig13
     lsamp = 120000*p_resamp;
     speechsample = cell(Nsamp,1);
     for ii = 1:Nlists
-      tmp.path = fullfile(mfilename,'HarvardWords',['list' num2str(ii,'%1.0u')]);
+      tmp.path = fullfile(fnHarvard,['list' num2str(ii,'%1.0u')]);
       tmp.dir = dir(fullfile(tmp.path,'*.mat'));
       for jj = 1:length(tmp.dir)
         if jj > Nsamp; break; end
@@ -2189,13 +2214,23 @@ if flags.do_fig13
     lp{4} = fir60db;
 
     %% Model Data
+    for do = 0:1
 
+      if do == 1
+        s = data_baumgartner2014('pool');
+        tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_highfreqatten'); % temporary folder
+      else % recalib
+        s = data_baumgartner2014('pool','recalib','do',0);
+        tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_highfreqatten_do0'); % temporary folder
+      end
+      mkdir(tempfn)
+      
     ape_BBnoise = zeros(1,length(s),length(latseg));
     qe_BBnoise = ape_BBnoise;
     for ss = 1:length(s)
       for ll = 1:length(latseg)
         [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
-        [p,rang] = baumgartner2014(spdtfs,spdtfs,...
+        [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',do,...
               'S',s(ss).S,'polsamp',polang,'lat',latseg(ll),'notprint');
         ape_BBnoise(1,ss,ll) = apebest2005(p,polang,rang);
         qe_BBnoise(1,ss,ll) = pmv2ppp(p,polang,rang);
@@ -2218,7 +2253,7 @@ if flags.do_fig13
             if plotspec; figure; audspecgram(stim(:),fs,'dynrange',150); end
 
             [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
-            [p,rang] = baumgartner2014(spdtfs,spdtfs,...
+            [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',do,...
               'S',s(ss).S,'polsamp',polang,...
               'lat',latseg(ll),'stim',stim,'notprint');
             ape_all(ii,ss,ll) = apebest2005(p,polang,rang);
@@ -2257,19 +2292,28 @@ if flags.do_fig13
       qe_all(:,:,ii) = tmp.qe_all;
     end
     
-    save(fn,'ape_all','qe_all','ape_BBnoise','qe_BBnoise',save_format);
+    if do == 0
+      save([fn(1:end-4) '_do0.mat'],'ape_all','qe_all','ape_BBnoise','qe_BBnoise',save_format);
+    else
+      save(fn,'ape_all','qe_all','ape_BBnoise','qe_BBnoise',save_format);
+    end
 %     rmdir(tempfn,'s');
+    end
     
   else
     load(fn);
+    noDCN = load([fn(1:end-4) '_do0.mat']);
   end
   varargout{1} = load(fn);
+  varargout{2} = load([fn(1:end-4) '_do0.mat']);
   
   data = data_best2005;
-
+  
   % Pool Samples
   ape_pooled = mean(ape_all,3);
   qe_pooled = mean(qe_all,3);
+  noDCN.ape_pooled = mean(noDCN.ape_all,3);
+  noDCN.qe_pooled = mean(noDCN.qe_all,3);
 
   % Confidence Intervals or standard errors
   df_speech = size(ape_all,2)-1;%*size(ape_all,3)-1;
@@ -2279,40 +2323,67 @@ if flags.do_fig13
   tquant_noise = 1;%icdf('t',.975,df_noise);
   seape_noise = std(ape_BBnoise,0,2)*tquant_noise/(df_noise+1);
   seape = [seape_noise;seape_speech];
+  % DCN
+  df_speech = size(noDCN.ape_all,2)-1;%*size(ape_all,3)-1;
+  tquant_speech = 1;%icdf('t',.975,df_speech);
+  seape_speech = std(noDCN.ape_pooled,0,2)*tquant_speech/(df_speech+1);
+  df_noise = size(noDCN.ape_BBnoise,2)-1;
+  tquant_noise = 1;%icdf('t',.975,df_noise);
+  seape_noise = std(noDCN.ape_BBnoise,0,2)*tquant_noise/(df_noise+1);
+  noDCN.seape = [seape_noise;seape_speech];
 
   % Means
   ape = mean([ape_BBnoise ; ape_pooled],2);
   qe = mean([qe_BBnoise ; qe_pooled],2);
+  noDCN.ape = mean([noDCN.ape_BBnoise ; noDCN.ape_pooled],2);
+  noDCN.qe = mean([noDCN.qe_BBnoise ; noDCN.qe_pooled],2);
 
 
   if flags.do_plot
     
     dx = 0;
+    MarkerSize = kv.MarkerSize;
+    FontSize = kv.FontSize;
+    
     xticks = 0:size(ape_all,1);
     fig = figure;
     subplot(211)
     h(1) = errorbar(xticks-dx,ape,seape,'ko');
     set(h(1),'MarkerFaceColor','k','MarkerSize',MarkerSize,'LineStyle','-')
     hold on
-    h(2) = errorbar(xticks+dx,data.ape,data.seape,'ko');
+    h(3) = errorbar(xticks+dx,noDCN.ape,noDCN.seape,'kd');
+    set(h(3),'MarkerFaceColor','k','MarkerSize',MarkerSize-1,'LineStyle','--')
+    h(2) = errorbar(xticks,data.ape,data.seape,'ko');
     set(h(2),'MarkerFaceColor','w','MarkerSize',MarkerSize,'LineStyle','-')
-    ylabel('| \theta - \vartheta | (deg)','FontSize',FontSize)
+%     ylabel('| \theta - \vartheta | (°)','FontSize',FontSize)
+    ylabel('Polar Error (deg)','FontSize',FontSize)
     set(gca,'XTick',xticks,'XTickLabel',[],'FontSize',FontSize)
-    set(gca,'XLim',[-0.5 4.5],'YLim',[14 79],'YMinorTick','on')
+    set(gca,'XLim',[-0.5 4.5],'YLim',[12 95],'YMinorTick','on')
 
     pos = get(gca,'Position');
-    pos(2) = pos(2)-0.1;
+    pos(2) = pos(2)-0.11;
     set(gca,'Position',pos)
+
+    leg = legend('Predicted with edge extraction','Predicted without edge extraction','Actual');
+    set(leg,'FontSize',FontSize-2,'Location','northoutside')
+    pos = get(leg,'Position');
+    pos(2) = pos(2)+0.14;
+    set(leg,'Position',pos)
 
     subplot(212)
     h(1) = plot(xticks-dx,qe,'ko');
     set(h(1),'MarkerFaceColor','k','MarkerSize',MarkerSize,'LineStyle','-')
     hold on
-    h(2) = plot(xticks([1 2 5])+dx,data.qe([1 2 5]),'ko');
+    h(3) = plot(xticks+dx,noDCN.qe,'kd');
+    set(h(3),'MarkerFaceColor','k','MarkerSize',MarkerSize-1,'LineStyle','--')
+    h(2) = plot(xticks([1 2 5]),data.qe([1 2 5]),'ko');
     set(h(2),'MarkerFaceColor','w','MarkerSize',MarkerSize,'LineStyle','-')
-    ylabel('QE (%)','FontSize',FontSize)
+    % h(4) = plot(xticks(5),data.qe(5),'ko');
+    % set(h(4),'MarkerFaceColor','w','MarkerSize',MarkerSize)
+%     ylabel('QE (%)','FontSize',FontSize)
+    ylabel('Quadrant Err. (%)','FontSize',FontSize)
     set(gca,'XTick',xticks,'XTickLabel',data.meta,'FontSize',FontSize,...
-      'XLim',[-0.5 4.5],'YLim',[-5 45],'YMinorTick','on')
+      'XLim',[-0.5 4.5],'YLim',[-3 53],'YMinorTick','on')
 
   end
 end

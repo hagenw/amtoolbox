@@ -22,8 +22,9 @@ function data = data_majdak2013ctc(varargin)
 %
 %   The *condition* flag may be one of:
 %
-%     'A'   First HRTF measurement. This is the default.
-%     'B'   Second HRTF measurement.
+%     'Learn' Last 300 trials of acoustical training with visual feedback.
+%     'A'     First HRTF measurement. This is the default.
+%     'B'     Second HRTF measurement.
 %
 %
 %   References: majdak2013ctc
@@ -33,7 +34,7 @@ function data = data_majdak2013ctc(varargin)
 %% Check input options
 
 % Define input flags
-definput.flags.condition = {'A','B'};
+definput.flags.condition = {'A','B','Learn'};
 
 % Parse input options
 [flags,kv]  = ltfatarghelper({},definput,varargin);
