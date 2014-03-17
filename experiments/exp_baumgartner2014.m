@@ -1,4 +1,4 @@
-function varargout = exp_baumgartner2014(varargin)
+﻿function varargout = exp_baumgartner2014(varargin)
 %EXP_BAUMGARTNER2014 Figures from Baumgartner et al. (2014)
 %   Usage: data = exp_baumgartner2014(flag)
 %
@@ -1908,7 +1908,7 @@ if flags.do_fig12
 
         [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
 
-        % target elevation range of +-60°
+        % target elevation range of +-60 deg
         idt = find( polang<=60 | polang>=120 );
         targets = spdtfs(:,idt,:);
         tang = polang(idt);
@@ -2355,7 +2355,7 @@ if flags.do_fig13
     set(h(3),'MarkerFaceColor','k','MarkerSize',MarkerSize-1,'LineStyle','--')
     h(2) = errorbar(xticks,data.ape,data.seape,'ko');
     set(h(2),'MarkerFaceColor','w','MarkerSize',MarkerSize,'LineStyle','-')
-%     ylabel('| \theta - \vartheta | (�)','FontSize',FontSize)
+%     ylabel('| \theta - \vartheta | (deg)','FontSize',FontSize)
     ylabel('Polar Error (deg)','FontSize',FontSize)
     set(gca,'XTick',xticks,'XTickLabel',[],'FontSize',FontSize)
     set(gca,'XLim',[-0.5 4.5],'YLim',[12 95],'YMinorTick','on')
@@ -2759,8 +2759,8 @@ apet = zeros(nt,1);
 for ii = 1:nt % for all target positions
   
     d = tang(ii)-rang;                 % wraped angular distance between tang & rang
-    iduw = (d < -180) | (180 < d);     % 180°-unwrap indices
-    d(iduw) = mod(d(iduw) + 180,360) - 180; % 180deg unwrap
+    iduw = (d < -180) | (180 < d);     % 180-deg unwrap indices
+    d(iduw) = mod(d(iduw) + 180,360) - 180; % 180-deg unwrap
     d = abs(d);                        % absolut distance
     apet(ii) = sum( p(:,ii) .* d');     % absolut polar angle error for target ii
     
