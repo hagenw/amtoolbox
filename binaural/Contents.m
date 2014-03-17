@@ -5,6 +5,9 @@
 %  The Breebaart model
 %     BREEBAART2001PREPROC  - EI-cell output
 %
+%  HRTF measurement model
+%     ENZNER2008            - Measurement of HRTFs 
+%
 %  Localization models
 %     LINDEMANN1986         - Calculate a binaural activity map
 %     PLOTLINDEMANN1986     - Plot the binaural activity map

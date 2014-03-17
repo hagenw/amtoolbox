@@ -16,8 +16,9 @@ database_url = { ...
 
 %% ===== Downloading the databases =======================================
 % get the path to hrtf/
-basepath = which('download_hrtf');
-basepath = [basepath(1:31) 'data/'];
+hpath = which('hrtfinit');  % find local path of hrtf repository
+hpath = hpath(1:end-10);
+basepath = [hpath filesep 'wierstorf2013'];
 % create directory if it is not existing
 if ~exist(basepath,'dir')
     mkdir(basepath);

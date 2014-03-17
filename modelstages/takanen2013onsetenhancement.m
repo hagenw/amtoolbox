@@ -96,6 +96,7 @@ envelope = filter(b,1,scaledEnergy);
 envelope = [envelope((length(b)/2):end,:);zeros(length(b)/2-1,dims(2))];
 %derive the instantaneous derivative by
 grad = envelope-[zeros(1,dims(2));envelope(1:end-1,:)];
+clear envelope
 %employ half-wave rectification so that the analysis is sensitive only to
 %the onsets, not to the offsets
 grad = grad.*(grad>0);
@@ -112,6 +113,8 @@ tauOfShortFrame = conv((thetaIn.*(grad.*(ones(dims(1),1)*g)))*ones(dims(2),1),wi
 tauOfShortFrame = tauOfShortFrame*ones(1,dims(2));
 %compute also the average energy across frequencies
 energOfShortFrame = conv(grad*ones(dims(2),1),win2,'same')*ones(1,dims(2));
+clear grad
+
 %and scale the gradient energy using the coefficient
 energOfShortFrame = energOfShortFrame.*(ones(dims(1),1)*coeff);
 
@@ -124,7 +127,7 @@ for i=1:dims(2)
         )./(conv(scaledEnergy(:,i),win1,'same')+1e-30);
    energOfLongFrame(:,i) =  conv(scaledEnergy(:,i),win1,'same');
 end
-
+clear thetaIn scaledEnergy
 %% ------ Combination of the informations obtained ------------------------
 %the where cues are combined by computing a weighted average in which the
 %energies are used as the weight. Additionally, the information obtained by
@@ -133,6 +136,7 @@ end
 envelopeWeight =5;
 thetaOut = (tauOfShortFrame.*energOfShortFrame*envelopeWeight+tauOfLongFrame.*energOfLongFrame)...
     ./(energOfLongFrame+energOfShortFrame*envelopeWeight+1e-30);
+clear energOfLongFrame tauOfLongFrame tauOfShortFrame % reduce memory requirements
 
 %the rms value of the energy obtained with the mechanism employing shorter
 %time frame is computed

@@ -4,7 +4,7 @@
 #include <math.h>
 #include <mex.h>
 #include <time.h>
-#include "../src/zilany_complex.c"
+#include "../src/zilany5/complex.c"
 
 
 /* This is Version 1 of the code for the "humanized" auditory
