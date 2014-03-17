@@ -171,7 +171,7 @@ if outlierDetection>0
         x=pos(:,1:2)*pi/180;
         y=toaEst(:,ch)/Obj.Data.SamplingRate;
         if isoctave
-            [~,tmp]=leasqr(x,y,p0_onaxis(ch,:),@ziegelwanger2014onaxis);
+            fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
         else
             tmp=lsqcurvefit(@ziegelwanger2014onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
         end
@@ -190,10 +190,7 @@ if model>0
         x=pos(idx,1:2)*pi/180;
         y=toaEst(idx,ch)/Obj.Data.SamplingRate;
         if isoctave
-            [toa(:,ch),p_onaxis(ch,:)]=leasqr(x,y,p0_onaxis(ch,:),@ziegelwanger2014onaxis,1e-6);
-            toa(:,ch)=toa(:,ch)*Obj.Data.SamplingRate;
-            performance.on_axis{ch}.residualS=toaEst(idx,ch)-toa(idx,ch);
-            performance.on_axis{ch}.resnormS=sum((performance.on_axis{ch}.residualS).^2);
+            fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
         else
             [p_onaxis(ch,:),performance.on_axis{ch}.resnormS,performance.on_axis{ch}.residualS,performance.on_axis{ch}.exitflag,performance.on_axis{ch}.output]=...
                 lsqcurvefit(@ziegelwanger2014onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
@@ -213,10 +210,7 @@ if model>0
             p0_offaxis(ch,:)=[mean(p_onaxis(:,1)) 0.001 -diff(p_onaxis(:,1))/2 0.001 mean(p_onaxis(:,4)) p_onaxis(ch,2) p_onaxis(ch,3)];
             p0offset_offaxis=[abs(diff(p_onaxis(:,1))/4) 0.1 0.1 0.1 0.001 pi/4 pi/4];
             if isoctave
-                [toa(:,ch),p_offaxis(ch,:)]=leasqr(x,y,p0_offaxis(ch,:),@ziegelwanger2014offaxis,1e-6);
-                toa(:,ch)=toa(:,ch)*Obj.Data.SamplingRate;
-                performance.off_axis{ch}.residualS=toaEst(idx,ch)-toa(idx,ch);
-                performance.off_axis{ch}.resnormS=sum((performance.off_axis{ch}.residualS).^2);
+                fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
             else
                 [p_offaxis(ch,:),performance.off_axis{ch}.resnormS,performance.off_axis{ch}.residualS,performance.off_axis{ch}.exitflag,performance.off_axis{ch}.output]=...
                     lsqcurvefit(@ziegelwanger2014offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',model));
