@@ -66,7 +66,7 @@ function output = exp_takanen2013(varargin)
 %   To display Figure 7 from the article Takanen et al. (2014) using pre-computed cochlea 
 %   model outputs use:::
 %
-%     exp_takanen2013('fig7_takenen2014','cochlea');
+%     exp_takanen2013('fig7_takanen2014','cochlea');
 %
 %   To display Figure 8 the article Takanen et al. (2014) using pre-computed cochlea 
 %   model outputs use:::
