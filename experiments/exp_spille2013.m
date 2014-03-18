@@ -9,7 +9,7 @@ function example_output = exp_spille2013
 %   Examples:
 %   ---------
 %
-%   To display Fig. 6 use :::
+%   To display Fig. 6 use:::
 %
 %     exp_spille2013;
 %
