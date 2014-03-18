@@ -54,6 +54,7 @@ end
 definput.keyvals.fs = 44100;
 definput.flags.binaural_model = {'dietz','lindemann'};
 definput.flags.spectral_weighting = {'no_spectral_weighting','rms_weighting','raatgever_weighting'};
+definput.flags.outlier = {'remove_outlier','include_outlier'};
 
 [flags,kv]  = ltfatarghelper({},definput,varargin);
 
@@ -78,8 +79,10 @@ if flags.do_dietz
         idx = ~isnan(angle);
         if size(angle(idx),1)==0
             azimuth(n) = NaN;
+            azimuth_std(n) = NaN;
         else
             azimuth(n) = median(angle(idx));
+            azimuth_std(n) = std(angle(idx));
         end
     end
     % Calculate ITD and ILD values
@@ -124,9 +127,12 @@ if flags.do_raatgever_weighting
     w = 10.^( -(b1*f+b2*(f).^2+b3*(f).^3)/10 );
 end
 
-% Remove outliers
-[azimuth,cfreqs,w] = remove_outlier(azimuth,itd,cfreqs,w);
-%[azimuth_env,~,~] = remove_outlier(azimuth_itd(:,13:23),itd,cfreqs,w);
+if flags.do_remove_outlier
+    % Remove outliers
+    [azimuth,azimuth_std,itd,cfreqs,w] = remove_outlier(azimuth,azimuth_std,itd,cfreqs,w);
+    %[azimuth_env,~,~] = remove_outlier(azimuth_itd(:,13:23),itd,cfreqs,w);
+end
+
 % Calculate mean about frequency channels
 if length(azimuth)==0
     phi = NaN;
@@ -134,26 +140,31 @@ if length(azimuth)==0
 else
     phi = median(azimuth);
     %phi = sum(azimuth.*w)/sum(w);
-    phi_std = std(azimuth);
+    %phi_std = std(azimuth);
+    phi_std = median(azimuth_std);
 end
 
 end % of main function
 
 %% ===== Subfunctions ====================================================
-function [azimuth,cfreqs,w] = remove_outlier(azimuth,itd,cfreqs,w)
+function [azimuth,azimuth_std,itd,cfreqs,w] = remove_outlier(azimuth,azimuth_std,itd,cfreqs,w)
     %cfreqs = cfreqs(1:12);
     % remove unvalid ITDs
     %azimuth = azimuth(abs(itd(1:12))<0.001);
     %cfreqs = cfreqs(abs(itd(1:12))<0.001);
     %w = w(abs(itd(1:12))<0.001);
     % remove NaN
-    azimuth = azimuth(~isnan(azimuth));
-    cfreqs = cfreqs(~isnan(azimuth));
     w = w(~isnan(azimuth));
+    itd = itd(~isnan(azimuth));
+    cfreqs = cfreqs(~isnan(azimuth));
+    azimuth = azimuth(~isnan(azimuth));
+    azimuth_std = azimuth_std(~isnan(azimuth_std));
     % remove outliers more than 30deg away from median
     if length(azimuth)>0
+        itd = itd(abs(azimuth-median(azimuth))<30);
         cfreqs = cfreqs(abs(azimuth-median(azimuth))<30);
         w = w(abs(azimuth-median(azimuth))<30);
+        azimuth_std = azimuth_std(abs(azimuth-median(azimuth))<30);
         azimuth = azimuth(abs(azimuth-median(azimuth))<30);
     end
 end
