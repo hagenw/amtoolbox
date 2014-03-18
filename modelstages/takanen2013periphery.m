@@ -48,7 +48,7 @@ function periphOutput = takanen2013periphery(insig,fs,outputPlot)
 %
 %   See also: takanen2013, verhulst2012
 
-%   References: takanen2013a pulkki2009 verhulst2012
+%   References: takanen2014 pulkki2009 verhulst2012
 %
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %

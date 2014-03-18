@@ -4,10 +4,12 @@ function example_output = exp_spille2013
 %   `exp_spille2013` reproduce Fig. no. 6 from the Spille et
 %   al. 2013 AABBA chapter.
 %
+%   Requires exp_spille2013_s123456.wav in amtbasepath/signals/
+%
 %   Examples:
 %   ---------
 %
-%   To display Fig. 6 use :::
+%   To display Fig. 6 use:::
 %
 %     exp_spille2013;
 %
@@ -17,7 +19,14 @@ function example_output = exp_spille2013
 % AUTHOR: Mathias Dietz
 
 % choose input signal (e.g. spille2013_s123456)
-signal=wavread('spille2013_s123456');
+fn = 'exp_spille2013_s123456.wav';
+targetfn = fullfile(amtbasepath,'signals',fn);
+if not(exist(targetfn,'file'))
+  disp(['Downloading ' fn ' from http://amtoolbox.sourceforge.net/data/signals/']);  
+  sourcefn = ['http://amtoolbox.sourceforge.net/data/signals/' fn];
+  urlwrite(sourcefn,targetfn);
+end
+signal=wavread(targetfn);
 fs=44100;
 s_pos =[-75 -40 -10 10 40 75];
 

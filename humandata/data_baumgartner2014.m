@@ -49,6 +49,11 @@ function data = data_baumgartner2014(varargin)
 %
 %     .response   experimental response angles
 %
+%   Requirements: 
+%   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
+% 
+%   2) Data in hrtf/baumgartner2014
+%
 %   Examples:
 %   ---------
 %

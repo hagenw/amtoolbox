@@ -39,7 +39,7 @@ function [activityMap colorGains colorMtrx levels] = takanen2013formbinauralacti
 %
 %   See also: takanen2013, takanen2013contracomparison
 %
-%   References: takanen2013a
+%   References: takanen2014
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %

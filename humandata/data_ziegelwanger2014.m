@@ -64,6 +64,13 @@ function data = data_ziegelwanger2014(varargin)
 %
 %     `data`             SOFA object
 % 
+%   Requirements: 
+%   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
+% 
+%   2) Optimization Toolbox for Matlab
+%
+%   3) Data in hrtf/ziegelwanger2014
+%
 %   Examples:
 %   ---------
 % 
@@ -109,7 +116,7 @@ if flags.do_ARI
         tmp=load([hpath 'info.mat']);
         data=tmp.info.ARI;
         for ii=1:length(data.subjects)
-            disp(['Recalculate data for sujbect ' num2str(ii) filesep num2str(length(data.subjects)) ' of ARI database']);
+            disp(['Recalculate data for subject ' num2str(ii) '/' num2str(length(data.subjects)) ' (' data.subjects{ii} ') of ARI database']);
             Obj=SOFAload([hpath 'ARI_' data.subjects{ii} '.sofa']);
              
             if exist([hpath 'ARI_' data.subjects{ii} '.sofa.MCM.mat'],'file')

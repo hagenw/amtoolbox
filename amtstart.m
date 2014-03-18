@@ -1,32 +1,30 @@
 function amtstart()
-%AMTSTART   Start the Auditory Modelling Toolbox
+%AMTSTART   Start the Auditory Modeling Toolbox
 %   Usage:  amtstart;
 %
-%   `amtstart` starts the Auditory Modelling toolbox. This command must be
+%   `amtstart` starts the Auditory Modeling Toolbox. This command must be
 %   run before using any of the function in the toolbox.
 %
-%   The auditory modelling toolbox depends on the Linear Time Frequency
-%   Analysis Toolbox (LTFAT) to properly function. Therefore, you must issue
-%   the `ltfatstart` command before you start AMT.
+%   The AMT depends on the Linear Time Frequency Analysis Toolbox (LTFAT). 
+%   You must first download LTFAT from
+%   http://ltfat.sourceforge.net/ and unpack the downloaded file. 
+%   In the AMT, there is a pre-prepared directory /thirdparty/ltfat
+%   where the LTFAT can be stored. Alternatively, set the path to your
+%   LTFAT installation to the search path of Matlab/Octave.
 %
-%   To configure default options for functions, you can use the
-%   `ltfatsetdefaults` function in your startup script. A typical startup
-%   file could look like::
-%
-%     addpath('/path/to/my/work/ltfat');
-%     addpath('/path/to/my/work/amtoolbox');
-%     ltfatstart;
-%     amtstart;
-%     ltfatsetdefaults('audspecgram','classic');
-%
-%   The last command wil configure |audspecgram| to display a classic
-%   auditory spectrogram by default.
+%   In order to run all the models from AMT, you will need:
+%   
+%   1) run `amtmex` and compile successfully
+%   2) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. `amtbase/thirdparty/SOFA`)
+%   3) Python >2.6 is required with numpy and scipi packages. On Linux, use `sudo apt-get install python-scipy python-numpy`
+%   4) run `make` (Linux) or `make.bat` (Windows) in `amtbase/src/verhulst`
+%   5) Optimization Toolbox for Matlab
+%   6) Data in `amtbase/signals/` and `amtbase/hrtf/` depending on the model
 %
 %   See also:  amthelp
 %
-%   References: ltfatnote015
   
-%   AUTHOR : Peter L. Søndergaard.  
+%   AUTHOR : Peter L. Søndergaard, Piotr Majdak 
 
 %% LTFAT package
 
@@ -193,7 +191,7 @@ end;
 %end;
 
 if printbanner
-  disp(['AMT version ',amt_version,'. Copyright 2009 - 2014 Peter L. Søndergaard. For help, please type "amthelp".'])
+  disp(['AMT version ',amt_version,'. (C) Peter L. Søndergaard and Piotr Majdak. For help, please type "amthelp".'])
 end;
 
 

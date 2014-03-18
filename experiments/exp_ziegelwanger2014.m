@@ -107,6 +107,13 @@ function exp_ziegelwanger2014(varargin)
 %               which r and vec(e) varied from M=0. Non-centered:
 %               Conditions in which M varied. Other defails as in Tab. 5.
 %
+%   Requirements: 
+%   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
+% 
+%   2) Optimization Toolbox for Matlab
+%
+%   3) Data in hrtf/ziegelwanger2014
+%
 %   Examples:
 %   ---------
 %

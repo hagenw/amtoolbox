@@ -92,11 +92,11 @@ if isempty(flags.errorflag)
   precL=sqrt(sum((m(:,7)-m(:,5)-accL).^2)/size(m,1));  
   varargout{2}=precL;
   w=0.5*cos(deg2rad(m(:,7))*2)+0.5;  
-  varargout{3}=npi2pi(circmean(m(:,8)-m(:,6),w));
+  varargout{3}=mynpi2pi(circmean(m(:,8)-m(:,6),w));
   [x,mag]=circmean(m(:,8)-m(:,6));
   precP=rad2deg(acos(mag)*2)/2;        
   varargout{4}=precP;
-  idx=find((abs(npi2pi(m(:,8)-m(:,6))).*w)<=thr);  
+  idx=find((abs(mynpi2pi(m(:,8)-m(:,6))).*w)<=thr);  
   querr=100-size(idx,1)/size(m,1)*100;
   varargout{5}=querr;
 else
@@ -142,18 +142,18 @@ else
     case 'rmsL'
       idx=find(abs(m(:,7))<=60);
       m=m(idx,:);        
-      rmsL=sqrt(sum((npi2pi(m(:,7)-m(:,5))).^2)/size(m,1));
+      rmsL=sqrt(sum((mynpi2pi(m(:,7)-m(:,5))).^2)/size(m,1));
       varargout{1}=rmsL;
       meta.ylabel='Lateral RMS error (deg)';
     case 'accP'
-      varargout{1}=npi2pi(circmean(m(:,8)-m(:,6)));
+      varargout{1}=mynpi2pi(circmean(m(:,8)-m(:,6)));
       meta.ylabel='Polar bias (deg)';
     case 'accPnoquerr'
       w=0.5*cos(deg2rad(m(:,7))*2)+0.5;
       idx=find(w>0.5);
       m=m(idx,:); w=w(idx,:);
-      idx=find((abs(npi2pi(m(:,8)-m(:,6))).*w)<=45);                  
-      varargout{1}=npi2pi(circmean(m(idx,8)-m(idx,6)));     
+      idx=find((abs(mynpi2pi(m(:,8)-m(:,6))).*w)<=45);                  
+      varargout{1}=mynpi2pi(circmean(m(idx,8)-m(idx,6)));     
       par.par1=length(idx);
       meta.ylabel='Local polar bias (deg)';
       meta.par1='Number of considered responses';
@@ -173,7 +173,7 @@ else
       idx=find(abs(m(:,7))<latmax); % targets outside not considered
       m=m(idx,:);
       w=0.5*cos((m(:,7))*2*pi/180)+0.5;
-      idx=find((abs(npi2pi(m(:,8)-m(:,6))).*w)<=thr);                  
+      idx=find((abs(mynpi2pi(m(:,8)-m(:,6))).*w)<=thr);                  
       m=m(idx,:);
       w=0.5*cos((m(:,7))*pi/180*2)+0.5;
       precP=circstd(m(:,8)-m(:,6),w);
@@ -186,7 +186,7 @@ else
       idx=find(abs(m(:,7))<latmax); % targets outside not considered
       m=m(idx,:);
       w=0.5*cos(pi*(m(:,7))/180*2)+0.5; % weigthing of the errors
-      corrects=size(find((abs(npi2pi(m(:,8)-m(:,6))).*w)<=thr),1);
+      corrects=size(find((abs(mynpi2pi(m(:,8)-m(:,6))).*w)<=thr),1);
       totals=size(m,1);
       chancerate=2*thr/range./w;
       wrongrate=100-mean(chancerate)*100;
@@ -202,7 +202,7 @@ else
     case 'querrMiddlebrooks' % as in Middlebrooks (199); comparable to COC from Best et al. (2005)
       idx=find(abs(m(:,7))<=30);
       m=m(idx,:);
-      idx=find((abs(npi2pi(m(:,8)-m(:,6))))<=90);  
+      idx=find((abs(mynpi2pi(m(:,8)-m(:,6))))<=90);  
       querr=100-size(idx,1)/size(m,1)*100;
       varargout{1}=querr;
       meta.ylabel='Quadrant errors (%)';
@@ -213,7 +213,7 @@ else
     case 'querrMiddlebrooksRAU' % as in Middlebrooks (1999) but calculated in rau
       idx=find(abs(m(:,7))<=30);
       m=m(idx,:);
-      idx=find((abs(npi2pi(m(:,8)-m(:,6))))<=90);  
+      idx=find((abs(mynpi2pi(m(:,8)-m(:,6))))<=90);  
       querr=100-size(idx,1)/size(m,1)*100;
       varargout{1}=rau(querr,size(m,1));
       meta.ylabel='RAU quadrant errors';
@@ -222,10 +222,10 @@ else
       par.par2=size(m,1);
       meta.par2='Number of responses within the lateral range';
     case 'accE'
-      varargout{1}=npi2pi(circmean(m(:,4)-m(:,2)));
+      varargout{1}=mynpi2pi(circmean(m(:,4)-m(:,2)));
       meta.ylabel='Elevation bias (deg)';
     case 'absaccE'
-      varargout{1}=abs(npi2pi(circmean(m(:,4)-m(:,2))));
+      varargout{1}=abs(mynpi2pi(circmean(m(:,4)-m(:,2))));
       meta.ylabel='Absolute elevation bias (deg)';
     case 'precE'
       precE=circstd(m(:,4)-m(:,2));      
@@ -243,7 +243,7 @@ else
     case 'precPmedianlocal'
       idx=find(abs(m(:,7))<=30);
       m=m(idx,:);
-      idx=find(abs(npi2pi(m(:,8)-m(:,6)))<90);
+      idx=find(abs(mynpi2pi(m(:,8)-m(:,6)))<90);
       if isempty(idx), error('Quadrant errors of 100%, local bias is NaN'); end
       precPM=circstd(m(idx,8)-m(idx,6));        
       varargout{1}=precPM;
@@ -257,14 +257,14 @@ else
     case 'rmsPmedianlocal'
       idx=find(abs(m(:,7))<=30);
       m=m(idx,:);
-      idx=find(abs(npi2pi(m(:,8)-m(:,6)))<90);        
-      rmsPlocal=sqrt(sum((npi2pi(m(idx,8)-m(idx,6))).^2)/size(idx,1));
+      idx=find(abs(mynpi2pi(m(:,8)-m(:,6)))<90);        
+      rmsPlocal=sqrt(sum((mynpi2pi(m(idx,8)-m(idx,6))).^2)/size(idx,1));
       varargout{1}=rmsPlocal;
       meta.ylabel='Local central RMS error (deg)';
     case 'rmsPmedian'
       idx=find(abs(m(:,7))<=30);
       m=m(idx,:);
-      rmsP=sqrt(sum((npi2pi(m(:,8)-m(:,6))).^2)/size(m,1));
+      rmsP=sqrt(sum((mynpi2pi(m(:,8)-m(:,6))).^2)/size(m,1));
       varargout{1}=rmsP;
       meta.ylabel='Central RMS error (deg)';
     case 'SCC'
@@ -368,4 +368,7 @@ else
   end
 end
 
-end
+function out_deg=mynpi2pi(ang_deg)
+ang=ang_deg/180*pi;
+out_rad=sign(ang).*((abs(ang)/pi)-2*ceil(((abs(ang)/pi)-1)/2))*pi;
+out_deg=out_rad*180/pi;

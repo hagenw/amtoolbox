@@ -2,6 +2,8 @@ function [hrir_data, hrir_angles, fs] = enzner2008(mu, delta_phi,varargin)
 %ENZNER2008  Calculate HRIR set
 %   Usage: [hrir_data,hrir_angles,fs] = enzner2008(mu,delta_phi,...)
 %
+%   Required data: hrtf/enzner2008
+% 
 %   Input parameters:
 %     mu          : NLMS stepzize, e.g., 0.75 or 1
 %     delta_phi   : azimuthal resolution (delta_phi) in degree to store

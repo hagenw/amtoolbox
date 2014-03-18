@@ -116,6 +116,13 @@ function varargout = exp_baumgartner2014(varargin)
 %               angle errors (top) and QEs (bottom) averaged across listeners 
 %               are shown.  
 %
+%   Requirements: 
+%   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
+% 
+%   2) Data in hrtf/baumgartner2014
+%
+%   3) Statistics Toolbox for Matlab (for some of the figures)
+%
 %   Examples:
 %   ---------
 %
@@ -920,8 +927,15 @@ if flags.do_fig7
             if C == 1       % Learn 
                 s(ll).spdtfs_c{ii} = s(ll).spdtfs{ii};
             elseif C == 2   % Dummy
-                load exp_baumgartner2014_spatstrat_lpfilter
-                s(ll).spdtfs_c{ii} = filter(blp,alp,s(ll).spdtfs{ii});
+                fn_filters = 'exp_baumgartner2014_spatstrat_lpfilter.mat';
+                if not(exist(fn_filters,'file'))
+                  disp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
+                  targetfn = fullfile(amtbasepath,'humandata',fn_filters);
+                  sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
+                  urlwrite(sourcefn,targetfn);
+                end
+                temp=load(fn_filters);
+                s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
             elseif C == 3   % Warped
                 s(ll).spdtfs_c{ii} = warp_hrtf(s(ll).spdtfs{ii},s(ll).fs);
             end
@@ -1076,8 +1090,8 @@ if flags.do_fig8
                   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
                   urlwrite(sourcefn,targetfn);
                 end
-                load(fn_filters)
-                s(ll).spdtfs_c{ii} = filter(blp,alp,s(ll).spdtfs{ii});
+                temp=load(fn_filters);
+                s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
               elseif C == 3   % Warped
                   s(ll).spdtfs_c{ii} = warp_hrtf(s(ll).spdtfs{ii},s(ll).fs);
               end
@@ -1908,7 +1922,7 @@ if flags.do_fig12
 
         [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
 
-        % target elevation range of +-60°
+        % target elevation range of +-60 deg
         idt = find( polang<=60 | polang>=120 );
         targets = spdtfs(:,idt,:);
         tang = polang(idt);
@@ -2355,7 +2369,7 @@ if flags.do_fig13
     set(h(3),'MarkerFaceColor','k','MarkerSize',MarkerSize-1,'LineStyle','--')
     h(2) = errorbar(xticks,data.ape,data.seape,'ko');
     set(h(2),'MarkerFaceColor','w','MarkerSize',MarkerSize,'LineStyle','-')
-%     ylabel('| \theta - \vartheta | (�)','FontSize',FontSize)
+%     ylabel('| \theta - \vartheta | (deg)','FontSize',FontSize)
     ylabel('Polar Error (deg)','FontSize',FontSize)
     set(gca,'XTick',xticks,'XTickLabel',[],'FontSize',FontSize)
     set(gca,'XLim',[-0.5 4.5],'YLim',[12 95],'YMinorTick','on')
@@ -2438,7 +2452,7 @@ for canal = 1:size(hM,3)
         hges = ifft([yges(1:end)],length(yges));
         hges=fftshift(ifft(yges));
         hwin=hges(fs/2-256:fs/2+768);
-        hwinfade = fade(hwin,512,24,96,192);
+        hwinfade = FW_fade(hwin,512,24,96,192);
         hM_warped(1:end,el,canal)=hwinfade;
             
     end
@@ -2759,8 +2773,8 @@ apet = zeros(nt,1);
 for ii = 1:nt % for all target positions
   
     d = tang(ii)-rang;                 % wraped angular distance between tang & rang
-    iduw = (d < -180) | (180 < d);     % 180°-unwrap indices
-    d(iduw) = mod(d(iduw) + 180,360) - 180; % 180deg unwrap
+    iduw = (d < -180) | (180 < d);     % 180-deg unwrap indices
+    d(iduw) = mod(d(iduw) + 180,360) - 180; % 180-deg unwrap
     d = abs(d);                        % absolut distance
     apet(ii) = sum( p(:,ii) .* d');     % absolut polar angle error for target ii
     
