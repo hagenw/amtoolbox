@@ -1,4 +1,4 @@
-function example_output = exp_spille2013
+function example_output = exp_spille2013(varargin)
 %EXP_SPILLE2013 Experiments from Spille et al 2013. Model: Dietz et al 2011
 %
 %   `exp_spille2013` reproduce Fig. no. 6 from the Spille et
@@ -9,7 +9,7 @@ function example_output = exp_spille2013
 %   Examples:
 %   ---------
 %
-%   To display Fig. 6 use:::
+%   To display Figure 6 use:::
 %
 %     exp_spille2013;
 %

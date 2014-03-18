@@ -1,3 +1,4 @@
+function demo_takanen2013(varargin)
 %DEMO_TAKANEN2013 Demo of the binaural model by Takanen, Santala and Pulkki
 %
 %   This script generates a figure showing the result of the binaural

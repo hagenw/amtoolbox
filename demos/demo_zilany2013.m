@@ -1,6 +1,11 @@
+function demo_zilany2013(vargin)
 %DEMO_ZILANY2013  Demo of the Zilany 2013 model
 %
-%   XXX Description is missing
+%   Demo of Zilany et al. (2013) model::
+%
+%    demo_zilany2013
+%
+%   
 
 %Parameter Settings
 
