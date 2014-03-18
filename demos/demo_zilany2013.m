@@ -1,9 +1,10 @@
-function demo_zilany2013(vargin)
 %DEMO_ZILANY2013  Demo of the Zilany 2013 model
 %
-%   Demo of Zilany et al. (2013) model::
+%   This demos generates a simple figure that shows the behaviour of the Zilany et al. (2013) model
+% 
+%   .. figure::
 %
-%    demo_zilany2013
+%      Figure from Zilany et al. (2013) model
 %
 %   
 

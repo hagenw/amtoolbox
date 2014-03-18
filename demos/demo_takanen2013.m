@@ -1,4 +1,3 @@
-function demo_takanen2013(varargin)
 %DEMO_TAKANEN2013 Demo of the binaural model by Takanen, Santala and Pulkki
 %
 %   This script generates a figure showing the result of the binaural
@@ -54,7 +53,7 @@ if preComp ==1
         error('Error: mat-file %s not found',filename);
     end
     output= takanen2013(data.tests.cochlea,data.tests.fs,compType,printFigs,printMap);
-	figure;
+	figure(1);
     title(data.tests.scenario);
     set(gca,'Ytick',data.tests.ytickPos);set(gca,'YtickLabel',data.tests.ytickLab(end:-1:1));
     ylabel(data.tests.ylab);
@@ -73,7 +72,7 @@ else
         error('Error: mat-file %s not found',filename);
     end
     output= takanen2013(data.tests.insig,data.tests.fs,compType,printFigs,printMap);
-	figure;
+	figure(1);
     title(data.tests.scenario);
     set(gca,'Ytick',data.tests.ytickPos);set(gca,'YtickLabel',data.tests.ytickLab(end:-1:1));
     ylabel(data.tests.ylab);
