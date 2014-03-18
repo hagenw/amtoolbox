@@ -9,9 +9,9 @@ function example_output = exp_spille2013(varargin)
 %   Examples:
 %   ---------
 %
-%   To display Figure 6 use:::
+%   To display Figure 6 use :::
 %
-%     exp_spille2013;
+%     exp_spille2013('fig6');
 %
 %   See also: exp_dietz2011
 
