@@ -7,6 +7,9 @@
 %     ZIEGELWANGER2014      - Direction-continuous model of time-of-arrival (TOA) in HRTFs
 %     ZIEGELWANGER2014OFFAXIS - synthesis of TOAs for the off-axis model
 %     ZIEGELWANGER2014ONAXIS  - synthesis of TOAs for the on-axis model
+%     ZIEGELWANGER2013      - Direction-continuous model of time-of-arrival (TOA) in HRTFs (depracated)
+%     ZIEGELWANGER2013OFFAXIS - synthesis of TOAs for the off-axis model  (depracated)
+%     ZIEGELWANGER2013ONAXIS  - synthesis of TOAs for the on-axis model (depracated)
 %
 %  Preprocessing stages
 %     BREEBAART2001PREPROC  - EI-cell output
