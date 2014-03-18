@@ -2452,7 +2452,7 @@ for canal = 1:size(hM,3)
         hges = ifft([yges(1:end)],length(yges));
         hges=fftshift(ifft(yges));
         hwin=hges(fs/2-256:fs/2+768);
-        hwinfade = fade(hwin,512,24,96,192);
+        hwinfade = FW_fade(hwin,512,24,96,192);
         hM_warped(1:end,el,canal)=hwinfade;
             
     end
