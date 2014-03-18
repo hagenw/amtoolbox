@@ -2157,7 +2157,7 @@ if flags.do_fig13
     
     %% Settings
     latseg = 0;%[-20,0,20];   % centers of lateral segments
-    NsampModel = 100; % # of modeled speech samples (takes 30min/sample); max: 260
+    NsampModel = 50; % # of modeled speech samples (takes 30min/sample); max: 260
     startSamp = 1;
 
     saveflag = true;
@@ -2217,7 +2217,7 @@ if flags.do_fig13
     for do = 0:1
 
       if do == 1
-        s = data_baumgartner2014('pool');
+        s = data_baumgartner2014('pool','recalib');
         tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_highfreqatten'); % temporary folder
       else % recalib
         s = data_baumgartner2014('pool','recalib','do',0);
@@ -2299,7 +2299,7 @@ if flags.do_fig13
     end
 %     rmdir(tempfn,'s');
     end
-    
+    noDCN = load([fn(1:end-4) '_do0.mat']);
   else
     load(fn);
     noDCN = load([fn(1:end-4) '_do0.mat']);
