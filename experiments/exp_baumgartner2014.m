@@ -121,6 +121,8 @@ function varargout = exp_baumgartner2014(varargin)
 % 
 %   2) Data in hrtf/baumgartner2014
 %
+%   3) Statistics Toolbox for Matlab (for some of the figures)
+%
 %   Examples:
 %   ---------
 %
@@ -925,8 +927,15 @@ if flags.do_fig7
             if C == 1       % Learn 
                 s(ll).spdtfs_c{ii} = s(ll).spdtfs{ii};
             elseif C == 2   % Dummy
-                load exp_baumgartner2014_spatstrat_lpfilter
-                s(ll).spdtfs_c{ii} = filter(blp,alp,s(ll).spdtfs{ii});
+                fn_filters = 'exp_baumgartner2014_spatstrat_lpfilter.mat';
+                if not(exist(fn_filters,'file'))
+                  disp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
+                  targetfn = fullfile(amtbasepath,'humandata',fn_filters);
+                  sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
+                  urlwrite(sourcefn,targetfn);
+                end
+                temp=load(fn_filters);
+                s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
             elseif C == 3   % Warped
                 s(ll).spdtfs_c{ii} = warp_hrtf(s(ll).spdtfs{ii},s(ll).fs);
             end
@@ -1081,8 +1090,8 @@ if flags.do_fig8
                   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
                   urlwrite(sourcefn,targetfn);
                 end
-                load(fn_filters)
-                s(ll).spdtfs_c{ii} = filter(blp,alp,s(ll).spdtfs{ii});
+                temp=load(fn_filters);
+                s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
               elseif C == 3   % Warped
                   s(ll).spdtfs_c{ii} = warp_hrtf(s(ll).spdtfs{ii},s(ll).fs);
               end

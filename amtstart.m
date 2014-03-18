@@ -191,7 +191,7 @@ end;
 %end;
 
 if printbanner
-  disp(['AMT version ',amt_version,'. Copyright 2009 - 2014 Peter L. Søndergaard. For help, please type "amthelp".'])
+  disp(['AMT version ',amt_version,'. (C) Peter L. Søndergaard and Piotr Majdak. For help, please type "amthelp".'])
 end;
 
 
