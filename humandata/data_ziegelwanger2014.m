@@ -64,6 +64,13 @@ function data = data_ziegelwanger2014(varargin)
 %
 %     `data`             SOFA object
 % 
+%   Requirements: 
+%   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
+% 
+%   2) Optimization Toolbox for Matlab
+%
+%   3) Data in hrtf/ziegelwanger2014
+%
 %   Examples:
 %   ---------
 % 

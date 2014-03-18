@@ -112,7 +112,7 @@ function exp_ziegelwanger2014(varargin)
 % 
 %   2) Optimization Toolbox for Matlab
 %
-%   3) Data in hrtf/ziegelwanger2013
+%   3) Data in hrtf/ziegelwanger2014
 %
 %   Examples:
 %   ---------
