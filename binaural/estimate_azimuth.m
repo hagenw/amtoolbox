@@ -52,7 +52,7 @@ if ~isstruct(lookup)
 end
 
 definput.keyvals.fs = 44100;
-definput.flags.binaural_model = {'dietz','lindemann'};
+definput.flags.binaural_model = {'dietz2011','lindemann1986'};
 definput.flags.spectral_weighting = {'no_spectral_weighting','rms_weighting','raatgever_weighting'};
 definput.flags.outlier = {'remove_outlier','include_outlier'};
 
@@ -62,7 +62,7 @@ definput.flags.outlier = {'remove_outlier','include_outlier'};
 %% ===== Computation ====================================================
 %
 % === Calculate azimuth values for every frequency channel ===
-if flags.do_dietz
+if flags.do_dietz2011
     ic_threshold=0.98;
     % Run the Dietz model on signal
     [fine,cfreqs,ild] = dietz2011(insig,kv.fs,'nolowpass','fhigh',1400);
@@ -86,7 +86,7 @@ if flags.do_dietz
     itd = median(itd,1);
     % weights for rms-weighting
     rms_weights = fine.rms;
-elseif flags.do_lindemann
+elseif flags.do_lindemann1986
     % run Lindemann model on signal
     c_s = 0.3; % stationary inhibition
     w_f = 0; % monaural sensitivity
@@ -145,11 +145,12 @@ end % of main function
 
 %% ===== Subfunctions ====================================================
 function [azimuth,azimuth_std,itd,cfreqs,w] = remove_outlier(azimuth,azimuth_std,itd,cfreqs,w)
-    %cfreqs = cfreqs(1:12);
     % remove unvalid ITDs
-    %azimuth = azimuth(abs(itd(1:12))<0.001);
-    %cfreqs = cfreqs(abs(itd(1:12))<0.001);
-    %w = w(abs(itd(1:12))<0.001);
+    %azimuth = azimuth(abs(itd)<0.001);
+    %azimuth_std = azimuth_std(abs(itd)<0.001);
+    %cfreqs = cfreqs(abs(itd)<0.001);
+    %w = w(abs(itd)<0.001);
+    %itd = itd(abs(itd)<0.001);
     % remove NaN
     w = w(~isnan(azimuth));
     itd = itd(~isnan(azimuth));

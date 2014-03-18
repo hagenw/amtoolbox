@@ -109,10 +109,9 @@ save_format='-v6';
 if ~which('SFS_start')
     error(['%s: you need to install the Sound-Field-Synthesis Toolbox.\n', ...
         'You can download it at https://github.com/sfstoolbox/sfs.\n', ...
-        'You need version 0.2.4 of the Toolbox (commit afe5c14359).'], ...
+        'You need version 1.0.0 of the Toolbox (commit afe5c14359).'], ...
         upper(mfilename));
 end
-conf = SFS_config;
 
 
 %% ------ F I G U R E  1 -------------------------------------------------
@@ -128,7 +127,7 @@ if flags.do_fig1
     % position of the virtual point source
     xs = [0 0];
     src = 'ps';
-    % distance between the loudspeaker ion the stereo setup
+    % intra-loudspeaker distance on the stereo setup
     L = 2;
   
     if amtredofile(s,flags.redomode)
@@ -152,7 +151,9 @@ if flags.do_fig1
             zeros(size(aud_event)));
         quiver(xaxis,yaxis,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0,1);
+        conf.plot.realloudspeakers = true;
+        conf.plot.lssize = 0.16;
+        draw_loudspeakers(x0,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
     end;
@@ -165,38 +166,70 @@ elseif flags.do_fig3
     % listening area
     X = [-2 2];
     Y = [-2 2];
+    Z = 0;
     % circular array with 56 loudspeakers
-    L = 3;
-    conf.array = 'circle';
-    conf.dx0 = L*pi/56;
-    conf.xref = [0 0];
+    conf.secondary_sources.geometry = 'circle';
+    conf.secondary_sources.size = 3;
+    conf.secondary_sources.number = 56;
+    conf.secondary_sources.center = [0 0 0];
+    conf.secondary_sources.x0 = [];
+    conf.xref = [0 0 0];
     % plane wave travelling upwards
-    xs = [0 1];
+    xs = [0 1 0];
     src = 'pw';
     % other neccessary settings
-    conf.usebandpass = 0;
+    conf.c = 343;
+    conf.fs = 44100;
+    conf.showprogress = false;
+    conf.debug = 0;
+    conf.tmpdir = '/tmp/sfs';
+    conf.resolution = 300;
+    conf.phase = 0;
+    conf.N = 1024;
+    conf.usenormalisation = true;
+    conf.usebandpass = false;
     conf.bandpassflow = 0;
     conf.bandpassfhigh = 20000;
-    conf.plot.usedb = 0;
-    conf.plot.colormap = '';
+    conf.dimension = '2.5D';
+    conf.driving_functions = 'default';
+    conf.usetapwin = true;
+    conf.tapwinlen = 0.3;
+    conf.wfs.usehpre = false;
+    conf.usefracdelay = false;
+    conf.plot.useplot = false;
+    conf.plot.usegnuplot = false;
+    conf.plot.usedb = false;
+    conf.plot.colormap = 'gray';
+    conf.plot.loudspeakers = true;
+    conf.plot.realloudspeakers = true;
+    conf.plot.lssize = 0.16; % m
+    conf.plot.cmd = '';
+    conf.plot.mode = 'monitor';
+    conf.plot.size = [540 404];
+    conf.plot.size_unit = 'px';
+    conf.plot.caxis = '';
+    conf.plot.usefile = false;
+    conf.plot.file = '';
+
   
     if amtredofile(s,flags.redomode)
         % get secondary sources and tapering window for plotting
-        x0 = secondary_source_positions(L,conf);
-        win = [zeros(1,29) ones(1,27)];
+        x0 = secondary_source_positions(conf);
+        % disable inactive loudspeakers for plot
+        x0(:,7) = [zeros(1,29) ones(1,27)];
         % (a)
         f = 1000;
-        [xaxis,yaxis,P_a] = wave_field_mono_wfs_25d(X,Y,xs,src,f,L,conf);
+        [P_a,xaxis,yaxis,zaxis] = sound_field_mono_wfs(X,Y,Z,xs,src,f,conf);
         % (b)
         f = 2000;
-        [~,~,P_b] = wave_field_mono_wfs_25d(X,Y,xs,src,f,L,conf);
+        P_b = sound_field_mono_wfs(X,Y,Z,xs,src,f,conf);
         % (c)
         f = 5000;
-        [~,~,P_c] = wave_field_mono_wfs_25d(X,Y,xs,src,f,L,conf);
+        P_c = sound_field_mono_wfs(X,Y,Z,xs,src,f,conf);
         % (d)
         t = 212;
-        [~,~,p_d] = wave_field_imp_wfs_25d(X,Y,xs,src,t,L,conf);
-        save(save_format,s,'P_a','P_b','P_c','p_d','xaxis','yaxis','x0','win');
+        p_d = sound_field_imp_wfs(X,Y,Z,xs,src,t,conf);
+        save(save_format,s,'P_a','P_b','P_c','p_d','xaxis','yaxis','zaxis','x0');
     else
         load(s);
     end;
@@ -207,27 +240,27 @@ elseif flags.do_fig3
     output.p_d = p_d;
     output.xaxis = xaxis;
     output.yaxis = yaxis;
+    output.zaxis = zaxis;
     output.x0 = x0;
-    output.win = win;
 
     if flags.do_plot
         % ------ Plotting ------
         % (a)
-        plot_wavefield(xaxis,yaxis,P_a,x0,win,conf);
+        plot_sound_field(-P_a,xaxis,yaxis,zaxis,x0,conf);
         axis([X(1) X(2) Y(1) Y(2)]);
         colorbar;
         xlabel('x/m');
         ylabel('y/m');
         title('(a) f_{pw} = 1kHz');
         % (b)
-        plot_wavefield(xaxis,yaxis,P_b,x0,win,conf);
+        plot_sound_field(-P_b,xaxis,yaxis,zaxis,x0,conf);
         axis([X(1) X(2) Y(1) Y(2)]);
         colorbar;
         xlabel('x/m');
         ylabel('y/m');
         title('(b) f_{pw} = 2kHz');
         % (c)
-        plot_wavefield(xaxis,yaxis,P_c,x0,win,conf);
+        plot_sound_field(-P_c,xaxis,yaxis,zaxis,x0,conf);
         axis([X(1) X(2) Y(1) Y(2)]);
         colorbar;
         xlabel('x/m');
@@ -235,7 +268,7 @@ elseif flags.do_fig3
         title('(c) f_{pw} = 5kHz');
         % (d)
         conf.plot.usedb = 1;
-        plot_wavefield(xaxis,yaxis,p_d,x0,win,conf);
+        plot_sound_field(p_d,xaxis,yaxis,zaxis,x0,conf);
         axis([X(1) X(2) Y(1) Y(2)]);
         colorbar;
         xlabel('x/m');

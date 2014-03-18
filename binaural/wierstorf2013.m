@@ -113,7 +113,7 @@ showprogress = kv.showprogress;
 if ~which('SFS_start')
     error(['%s: you need to install the Sound-Field-Synthesis Toolbox.\n', ...
         'You can download it at https://github.com/sfstoolbox/sfs.\n', ...
-        'You need version 0.2.4 of the Toolbox (commit afe5c14359).'], ...
+        'You need version 1.0.0 of the Toolbox (commit ...).'], ...
         upper(mfilename));
 end
 
@@ -233,7 +233,7 @@ for ii=1:length(x)
             % sum of both loudspeakers
             ir = (ir1+ir2)/2;
         else % WFS
-            ir = ir_wfs(X,phi,xs,src,hrtf,conf);
+            ir = ir_wfs(X,phi,[xs 0],src,hrtf,conf);
         end
         % generate a 0.1s noise signal
         sig_noise = noise(fs/10,1,'white');
@@ -246,9 +246,10 @@ for ii=1:length(x)
         % then mapped to azimuth values with a lookup table
         %
         % estimate the perceived direction of arrival
-        perceived_direction(ii,jj) = estimate_azimuth(sig,lookup,'dietz2011',0);
+        perceived_direction(ii,jj) = ...
+            estimate_azimuth(sig,lookup,'dietz2011','no_spectral_weighting','remove_outlier');
         % calculate the desired direction
-        desired_direction(ii,jj) = source_direction(X,phi,xs,src);
+        desired_direction(ii,jj) = source_direction(X,phi,[xs 0],src);
         % calculate the localization error as the difference of both
     end
 end
