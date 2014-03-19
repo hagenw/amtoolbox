@@ -92,6 +92,8 @@ function varargout = baumgartner2014( target,template,varargin )
 %     'noregular'    Disable regularization of angular sampling.
 %
 %   Requirements: 
+%   -------------
+%
 %   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
 % 
 %   2) Data in hrtf/baumgartner2014

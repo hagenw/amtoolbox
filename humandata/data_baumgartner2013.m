@@ -48,6 +48,8 @@ function data = data_baumgartner2013(varargin)
 %     .Obj        DTF data in SOFA Format
 %
 %   Requirements: 
+%   -------------
+%
 %   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
 % 
 %   2) Data in hrtf/baumgartner2013

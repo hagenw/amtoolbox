@@ -117,6 +117,8 @@ function varargout = exp_baumgartner2014(varargin)
 %               are shown.  
 %
 %   Requirements: 
+%   -------------
+%
 %   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
 % 
 %   2) Data in hrtf/baumgartner2014

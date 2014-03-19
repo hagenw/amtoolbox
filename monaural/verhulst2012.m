@@ -45,6 +45,8 @@ function [V,Y,E,CF]=verhulst2012(sign,fs,fc,spl,normalizeRMS,subject,irregularit
 %      rate
 %
 %   Requirements and installation: 
+%   ------------------------------
+%
 %   1) Python >2.6 is required with numpy and scipi packages. On Linux, use sudo apt-get install python-scipy python-numpy
 % 
 %   2) Compiled files with a C-compiler, e.g. gcc. In amtbase/src/verhulst start make (Linux) or make.bat (Windows)

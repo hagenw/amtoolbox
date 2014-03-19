@@ -108,6 +108,8 @@ function exp_ziegelwanger2014(varargin)
 %               Conditions in which M varied. Other defails as in Tab. 5.
 %
 %   Requirements: 
+%   -------------
+%
 %   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
 % 
 %   2) Optimization Toolbox for Matlab
