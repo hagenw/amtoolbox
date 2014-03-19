@@ -24,6 +24,9 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %                      Hz. This method is given in Breebaart (2001). Page
 %                      94 in Breebart's thesis.
 %
+%     'ihc_filter_order',n
+%                      Filter order for the Breebaart filter, default: 5.
+%
 %     'ihc_dau'        Use a 2nd order Butterworth filter with a cut-off
 %                      frequency of 1000 Hz. This method has been used in all
 %                      models deriving from the original 1996 model by 
@@ -50,6 +53,7 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %
 %     'dim',d          Work along dimension d.
 %
+%
 %   References: bernstein1999normalized breebaart2001a gabor1946 lindemann1986a dau1996qmeI
   
 
@@ -70,6 +74,7 @@ end;
 
 definput.import = {'ihcenvelope'};
 definput.keyvals.dim=[];
+definput.keyvals.ihc_filter_order=5;
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
@@ -100,7 +105,7 @@ if flags.do_ihc_breebaart
   % correspond to a cut off-frequency of 770 Hz after the five iterations
   cutofffreq=2000;
   [b, a] = butter(1, cutofffreq*2/fs);
-  for ii=1:5
+  for ii=1:keyvals.ihc_filter_order
     inoutsig = filter(b,a, inoutsig);
   end;
 end;
