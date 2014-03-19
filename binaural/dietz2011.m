@@ -140,6 +140,8 @@ function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %     'nolowpass'    Don't calculate the lowpass based interaural parameters.
 %                    The *_lp values are not returned.
 %
+%     'debug'        Display what is happening.
+%
 %   See also: dietz2011interauralfunctions, dietz2011filterbank,
 %     ihcenvelope, auditoryfilterbank
 %
@@ -188,6 +190,9 @@ definput.keyvals.alpha = 0;                   % Internal noise strength
 % mini: set all values < alpha to alpha
 definput.flags.int_noise_case = {'int_randn','int_mini'};
 
+% debugging messages
+definput.flags.debugging = {'no_debug','debug'};
+
 [flags,kv]  = ltfatarghelper({},definput,varargin);
 
 
@@ -196,6 +201,7 @@ definput.flags.int_noise_case = {'int_randn','int_mini'};
 
 %% ---- middle ear band pass filtering ------
 % Compare Puria et al. (1997)
+debug('band pass filtering of input according to middle ear transfer charact.',flags);
 [b,a] = butter(kv.middle_ear_order,kv.middle_ear_thr(2)/(fs/2),'low');
 inoutsig = filter(b,a,insig);
 [b,a] = butter(kv.middle_ear_order,kv.middle_ear_thr(1)/(fs/2),'high');
@@ -203,25 +209,30 @@ inoutsig = filter(b,a,inoutsig);
 
 %% ---- inner ear ------
 % gammatone filterbank
+debug('splitting signal into frequency channels',flags);
 [inoutsig,fc] = auditoryfilterbank(inoutsig,fs,'argimport',flags,kv);
 % cochlea compression
 inoutsig = inoutsig.^kv.compression_power;
 % rectification and lowpass filtering of filtered signals
+debug('haircell processing of frequency bands',flags);
 inoutsig = ihcenvelope(inoutsig,fs,'argimport',flags,kv);
 
 %% ---- internal noise ------
 % additive white noise
 if flags.do_int_randn
+  debug('adding internal random noise',flags);
   inoutsig = inoutsig + kv.alpha*randn(size(inoutsig));
 end
 % replace values<kv.alpha with kv.alpha
 if flags.do_int_mini
+  debug('adding internal noise via minimum',flags);
   inoutsig = max(inoutsig,kv.alpha);
 end
 
 %% ---- modulation filterbank ------
 % filter signals with three different filters to get fine structure, envelope
 % and ILD low pass
+debug('apply second filterbank',flags)
 [inoutsig_fine,fc_fine,inoutsig_env,fc_env,inoutsig_ild] = ...
   dietz2011filterbank(inoutsig,fs,fc,'argimport',flags,kv);
 
@@ -229,13 +240,22 @@ end
 % calculate interaural parameters for fine structure and envelope and calculate
 % ILD
 % -- fine structure
+debug('calculating interaural functions from haircell fine structure',flags);
 fine = dietz2011interauralfunctions(inoutsig_fine,fs,fc_fine,'argimport',flags,kv);
 % --envelope
+debug('calculating interaural functions from haircell modulation',flags);
 env = dietz2011interauralfunctions(inoutsig_env,fs, ...
   kv.mod_center_frequency_hz+0*fc_env,'argimport',flags,kv);
 % -- ILD
 % interaural level difference, eq. 5 in Dietz (2011)
 % max(sig,1e-4) avoids division by zero
+debug('determining ILD',flags);
 ild = 20/kv.compression_power*log10(max(inoutsig_ild(:,:,2),1e-4)./max(inoutsig_ild(:,:,1),1e-4));
+
+end
+
+function debug(text_str,flags)
+  if flags.do_debug disp(text_str); end
+end
 
 % vim: set sw=2 ts=2 expandtab textwidth=80:
