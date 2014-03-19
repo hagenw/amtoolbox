@@ -58,7 +58,7 @@ function [outsig_fine,fc_fine,outsig_env,fc_env,outsig_ild] = dietz2011filterban
 %
 %   References: dietz2011auditory
 
-% AUTHOR: Mathias Dietz, Martin Klein-Hennig (implementation for AMT)
+% AUTHOR: Mathias Dietz, Martin Klein-Hennig (for AMT), Hagen Wierstorf (for AMT)
 
 %   Copyright (C) 2002-2012   AG Medizinische Physik,
 %                             Universitaet Oldenburg, Germany

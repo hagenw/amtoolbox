@@ -145,7 +145,7 @@ function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %
 %   References: dietz2011auditory
 
-% AUTHOR: Mathias Dietz, Martin Klein-Hennig (implementation for AMT)
+% AUTHOR: Mathias Dietz, Martin Klein-Hennig (for AMT), Hagen Wierstorf (for AMT)
 
 %   Copyright (C) 2002-2012   AG Medizinische Physik,
 %                             Universitaet Oldenburg, Germany

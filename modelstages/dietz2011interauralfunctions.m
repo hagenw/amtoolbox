@@ -58,6 +58,8 @@ function [outp] = dietz2011interauralfunctions(insig,fs,fc,varargin)
 %
 %   References: dietz2011auditory
 
+% AUTHOR: Mathias Dietz, Martin Klein-Hennig (for AMT), Hagen Wierstorf (for AMT)
+
 if nargin<3
   error('%s: Too few input parameters.',upper(mfilename));
 end;

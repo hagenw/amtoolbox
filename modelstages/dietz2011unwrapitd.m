@@ -22,7 +22,7 @@ function itd = dietz2011unwrapitd(itd,ild,f_inst,tr)
 %
 %   References: dietz2011auditory wierstorf2013
 
-% AUTHOR: Mathias Dietz, Hagen Wierstorf
+% AUTHOR: Mathias Dietz, Hagen Wierstorf (for AMT)
 
 %% ===== Checking of input parameters ===================================
 nargmin = 3;
