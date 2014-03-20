@@ -1,37 +1,60 @@
-function [phi,phi_std,itd,ild,cfreqs] = estimate_azimuth(insig,lookup,varargin)
-%ESTIMATE_AZIMUTH Estimate the perceived azimuth using a binaural model
-%   Usage: [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)
-%          [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model,do_spectral_weighting)
-%          [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup,model)
-%          [phi,itd,ild,cfreqs] = estimate_azimuth(sig,lookup)
+function [phi,phi_std,itd,ild,cfreqs] = wierstorf2013estimateazimuth(insig,lookup,varargin)
+%WIERSTORF2013ESTIMATEAZIMUTH Estimate the perceived azimuth using a binaural model
+%   Usage: [phi,phi_std,itd,ild,cfreqs] = wierstorf2013estimateazimuth(sig,lookup,'fs',44100,'dietz2011')
+%          [phi,phi_std,itd,ild,cfreqs] = wierstorf2013estimateazimuth(sig,lookup)
 %
 %   Input parameters:
 %       sig                   : binaural singal
 %       lookup                : lookup table to map ITDs to angles (struct)
-%       model                 : model to use:
-%                                   'dietz2011' (default)
-%                                   'lindemann1986'
-%       do_spectral_weighting : apply spectral weighting of ITD values after
-%                               Raatgever (1980) (default: false)
-%       fs                    : sampling rate (default: 44100) (Hz)
 %
 %   Output parameters:
-%       phi     : estimated azimuth (rad)
+%       phi     : estimated azimuth / deg
+%       phi_std : standard deviation of the estimated azimuth / deg
 %       itd     : calculated ITD (s)
 %       ild     : calculated ILD (dB)
 %       cfreqs  : center frequencies of used auditory filters (Hz)
 %
-%   `estimate_azimuth(sig,lookup,model,do_spectral_weighting,fs)` uses a
-%   binaural model to estimate the perceived direction for a given binaural
-%   signal.  Therefore, it needs the struct lookup, which maps ITD values to
-%   the corresponding angles. This can be created with the
-%   |itd2anglelookuptable| function.  If do_spectral_weighting is set to true,
-%   a spectral weighting of the single ITD values after Raatgever is applied. He
-%   has done some measurements to see what is the spectral domincance region for
-%   lateralization by the ITD and found a region around 600 Hz. Stern et al.
-%   have fitted his data with a formula used in this function.
+%   `wierstorf2013estimateazimuth(sig,lookup)` uses a binaural model to
+%   estimate the perceived direction for a given binaural signal.  Therefore,
+%   it needs the struct lookup, which maps ITD values to the corresponding
+%   angles. This can be created with the |itd2anglelookuptable| function.
+%   The azimuth values are first calculated for every frequency channel and
+%   after that their median is calculated. In this process the different
+%   frequency channels could be weighted and outlier could be removed, see the
+%   options below. The default setting does not apply any weighting of the
+%   frequency channels and removes outlier that deviate more than 30 degree from
+%   the median.
 %
-%   See also: itd2anglelookuptable
+%   `wierstorf2013estimateazimuth` accepts the following optional parameters:
+%
+%     'fs',fs                  Sampling rate
+%
+%     'dietz2011'              Use the dietz2011 binaural model to estimate the
+%                              azimuth value. This is the default.
+%
+%     'lindemann1986'          Use the lindemann1986 binaural model to estimate
+%                              the azimuth value.
+%
+%     'no_spectral_weighting'  Apply equal weighting of all frequency channels.
+%                              This is the default behavior.
+%
+%     'rms_weighting'          Weight the frequency channels according their rms
+%                              value of the signal.
+%
+%     'raatgever_weighting'    Weight the frequency channels after the empirical
+%                              curve from Raatgever that has a maximum around
+%                              600 Hz. Note, that this works well only for
+%                              special stimuli.
+%
+%     'remove_outlier'         Remove frequency channels from azimuth
+%                              calculation that deviate more than 30 degree from
+%                              the median azimuth.
+%
+%     'include_outlier'        Use all azimuth values to calculate the median.
+%                              Note, this can lead to NaN if one of the
+%                              frequency channels has a NaN as direction.
+%
+%   See also: wierstorf2013, dietz2011, lindemann1986, itd2anglelookuptable
 %
 %   References: raatgever1980 stern1988 dietz2011auditory lindemann1986a wierstorf2013
 
@@ -91,25 +114,29 @@ elseif flags.do_lindemann1986
     c_s = 0.3; % stationary inhibition
     w_f = 0; % monaural sensitivity
     M_f = 6; % decrease of monaural sensitivity
-    T_int = inf; % integration time
+    T_int = 6; % integration time
     N_1 = 1764; % sample at which first cross-correlation is calculated
     [cc_tmp,~,ild,cfreqs] = lindemann1986(insig,kv.fs,c_s,w_f,M_f,T_int,N_1);
     cc_tmp = squeeze(cc_tmp);
     % Calculate tau (delay line time) axes
-    tau = linspace(-1,1,size(cc_tmp,1));
+    tau = linspace(-1,1,size(cc_tmp,2));
     % find max in cc
-    itd = zeros(1,size(cc_tmp,2));
-    for jj = 1:size(cc_tmp,2)
-        [~,idx] = max(cc_tmp(:,jj));
-        itd(jj) = tau(idx)/1000;
+    itd = zeros(size(cc_tmp,1),size(cc_tmp,3));
+    for ii=1:size(cc_tmp,1)
+        for jj=1:size(cc_tmp,3)
+            [~,idx] = max(cc_tmp(ii,:,jj));
+            itd(ii,jj) = tau(idx)/1000;
+        end
     end
     azimuth = itd2angle(itd,lookup);
+    azimuth_std = std(azimuth);
+    azimuth = median(azimuth);
     % TODO: rms weights
 end
 
 % === Weights for cross-frequency integration ===
 if flags.do_no_spectral_weighting
-    w = ones(1,12);
+    w = ones(size(azimuth));
 end
 if flags.do_rms_weighting
     w = rms_weights;
@@ -126,7 +153,6 @@ end
 if flags.do_remove_outlier
     % Remove outliers
     [azimuth,azimuth_std,itd,cfreqs,w] = remove_outlier(azimuth,azimuth_std,itd,cfreqs,w);
-    %[azimuth_env,~,~] = remove_outlier(azimuth_itd(:,13:23),itd,cfreqs,w);
 end
 
 % Calculate mean about frequency channels
@@ -134,11 +160,13 @@ if length(azimuth)==0
     phi = NaN;
     phi_std = NaN;
 else
-    % TODO: add weighted median
-    phi = median(azimuth);
-    %phi = sum(azimuth.*w)/sum(w);
-    %phi_std = std(azimuth);
-    phi_std = median(azimuth_std);
+    if flags.do_no_spectral_weighting
+        phi = median(azimuth);
+        phi_std = median(azimuth_std);
+    else
+        phi = sum(azimuth.*w)/sum(w);
+        phi_std = sum(azimuth_std.*w)/sum(w);
+    end
 end
 
 end % of main function
