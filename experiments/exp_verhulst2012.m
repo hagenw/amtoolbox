@@ -8,6 +8,8 @@ function output=exp_verhulst2012(varargin)
 %   Journal of the Acoustical Society of America 132.6 (2012): 3842-3848.
 %
 %   Requirements and installation: 
+%   ------------------------------
+%
 %   1) Python >2.6 is required with numpy and scipi packages. On Linux, use sudo apt-get install python-scipy python-numpy
 % 
 %   2) Compiled files with a C-compiler, e.g. gcc. In amtbase/src/verhulst start make (Linux) or make.bat (Windows)

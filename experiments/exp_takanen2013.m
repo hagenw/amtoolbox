@@ -51,6 +51,8 @@ function output = exp_takanen2013(varargin)
 %   If no flag is given, the function will print the list of valid flags.
 %
 %   Requirements and installation: 
+%   ------------------------------
+%
 %   1) Functioning model verhulst2012 (see the corresponding requirements)
 %
 %   2) Data from www.acoustics.hut.fi/publications/papers/AMTool2013-bam/ in amtbase/signals

@@ -1,11 +1,11 @@
-% AMT - Binaural models
+% AMT - Speech perception models
 %
 %  The AMT team, 2012 - 2014.
 %
 %  Monaural speech intelligibility models
-%    JOERGENSEN2011COMBINEINFORMATION - XXX
-%    JOERGENSEN2011SNRENV             - XXX
-%    TAAL2011              - Short-time Speech Objective Index
+%    TAAL2011              - Short-time objective intelligibility
+%    JOERGENSEN2011COMBINEINFORMATION - Combine SNRenvs
+%    JOERGENSEN2011SNRENV  - SNRenv of processed signal
 %
 %  Binaural speech advantage models  
 %    JELFS2011             - Binaural speech advantage

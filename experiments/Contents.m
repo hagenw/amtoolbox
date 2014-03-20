@@ -12,6 +12,7 @@
 %       EXP_ROENNE2012       - Auditory nerve latency
 %       EXP_SPILLE2013       - Figures from Spille et al. (2013)
 %       EXP_TAKANEN2013      - Figures from Takanen et al. (2013)
+%       EXP_VERHULST2012     - Figures from Verhulst et al. (2012)
 %       EXP_BAUMGARTNER2013  - Figures from Baumgartner et al. (2013)
 %       EXP_BAUMGARTNER2014  - Figures from Baumgartner et al. (2014)
 %       EXP_ZIEGELWANGER2013 - Figures from Ziegelwanger et al. (2013)

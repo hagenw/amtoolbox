@@ -53,6 +53,7 @@ if preComp ==1
         error('Error: mat-file %s not found',filename);
     end
     output= takanen2013(data.tests.cochlea,data.tests.fs,compType,printFigs,printMap);
+	figure(1);
     title(data.tests.scenario);
     set(gca,'Ytick',data.tests.ytickPos);set(gca,'YtickLabel',data.tests.ytickLab(end:-1:1));
     ylabel(data.tests.ylab);
@@ -71,6 +72,7 @@ else
         error('Error: mat-file %s not found',filename);
     end
     output= takanen2013(data.tests.insig,data.tests.fs,compType,printFigs,printMap);
+	figure(1);
     title(data.tests.scenario);
     set(gca,'Ytick',data.tests.ytickPos);set(gca,'YtickLabel',data.tests.ytickLab(end:-1:1));
     ylabel(data.tests.ylab);

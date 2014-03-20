@@ -1,6 +1,12 @@
 %DEMO_ZILANY2013  Demo of the Zilany 2013 model
 %
-%   XXX Description is missing
+%   This demos generates a simple figure that shows the behaviour of the Zilany et al. (2013) model
+% 
+%   .. figure::
+%
+%      Figure from Zilany et al. (2013) model
+%
+%   
 
 %Parameter Settings
 

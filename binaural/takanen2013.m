@@ -83,17 +83,16 @@ function output = takanen2013(insig,fs,computationType,printFigs,printMap)
 %      topographically organized binaural activity map
 %
 %   Requirements and installation: 
+%   ------------------------------
+%
 %   1) Functioning model verhulst2012 (see the corresponding requirements)
 %
 %   2) Much RAM (depending on the signal length)
 %
 %
 %   See also: takanen2013periphery, takanen2013mso, takanen2013lso,
-%             takanen2013wbmso, takanen2013directionmapping,
-%             takanen2013cueconsistency, takanen2013onsetenhancement,
-%             takanen2013formbinauralactivitymap
+%             takanen2013wbmso
 %
-%   XXX The demo needs cleanup: demo_takanen2013
 %
 %   References: takanen2013 takanen2014 pulkki2009 bekesy1930 verhulst2012 
 

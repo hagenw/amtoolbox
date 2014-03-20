@@ -72,6 +72,8 @@ function varargout=exp_ziegelwanger2013(varargin)
 %
 %
 %   Requirements: 
+%   -------------
+%
 %   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
 % 
 %   2) Optimization Toolbox for Matlab
