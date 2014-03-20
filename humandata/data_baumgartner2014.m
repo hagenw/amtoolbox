@@ -78,9 +78,7 @@ definput.flags.type = {'pool','baseline'};
 definput.flags.recalib = {'norecalib','recalib'};
 definput.flags.HRTFformat = {'sofa','ari'};
 
-definput.keyvals.mrsmsp=20;     % motoric response scatter in elevation (degrees)
-definput.keyvals.gamma=6;       % degree of selectivity
-definput.keyvals.do=1;          % spectral gradient
+definput.import={'baumgartner2014'};
 
 % Parse input options
 [flags,kv]  = ltfatarghelper({'mrsmsp','gamma'},definput,varargin);

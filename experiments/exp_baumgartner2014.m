@@ -176,7 +176,7 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %   See also: baumgartner2013, data_baumgartner2013
 %
-%   References morimoto2001 macpherson2007
+%   References: baumgartner2014
 
   
 % AUTHOR: Robert Baumgartner
@@ -270,6 +270,7 @@ if flags.do_fig3
   if amtredofile(fn,flags.redomode)
     
     autorefreshnotification(fn,flags)
+    disp('Note that this procedure lasts at least 2 hours!')
     
     tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_parametrization'); % temporary folder
     mkdir(tempfn)
@@ -1576,8 +1577,9 @@ if flags.do_fig10
       end
       disp(['Condition ' Cond ' completed.'])
     end
-
-    chance(:,8) = 240*rand(size(chance,1),1)-30;
+    
+    Crange = max(chance(:,8))-min(chance(:,8));
+    chance(:,8) = Crange*rand(size(chance,1),1)-min(chance(:,8));
     pe_chance = localizationerror(chance,'rmsPmedianlocal');
     qe_chance = localizationerror(chance,'querrMiddlebrooks');
 
