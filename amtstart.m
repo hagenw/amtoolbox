@@ -89,7 +89,7 @@ end
 basepath=which('amtstart');
 basepath=basepath(1:end-11);
 if ~exist('SFS_start','file')
-  sfspath=fullfile(basepath,'thirdparty','SFS');
+  sfspath=fullfile(basepath,'thirdparty','sfs');
   if exist(sfspath,'dir')
     addpath(sfspath);
   end
@@ -99,7 +99,7 @@ end
 disp('*** Starting SFS ***');
 if exist('SFS_start','file')
   SFS_start;
-  s=SFS_version; s_r='0.2.4'; % set the required version
+  s=SFS_version; s_r='1.0.0'; % set the required version
   disp(['SFS, version ' s]);
   v=sscanf(s,'%d.%d.%d'); v(4)=0;
   v_r=sscanf(s_r,'%d.%d.%d');
@@ -111,7 +111,7 @@ else
   disp(['SFS package could not be found. Continue without SFS support.']);
   disp(['For SFS support please download the package ' ...
         'from https://github.com/sfstoolbox/sfs ' ...
-        'and copy to amtoolbox/thirdparty/SFS.']); 
+        'and copy to amtoolbox/thirdparty/sfs.']); 
 end
 
 %% Start AMT
