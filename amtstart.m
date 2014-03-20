@@ -100,7 +100,7 @@ disp('*** Starting SFS ***');
 if exist('SFS_start','file')
   SFS_start;
   s=SFS_version; s_r='1.0.0'; % set the required version
-  disp(['SFS, version ' s]);
+  disp(['Sound Field Synthesis Toolbox, version ' s]);
   v=sscanf(s,'%d.%d.%d'); v(4)=0;
   v_r=sscanf(s_r,'%d.%d.%d');
   if ~(v(1)>v_r(1) || (v(1)>=v_r(1) && v(2)>v_r(2)) || (v(1)>=v_r(1) && v(2)>=v_r(2) && v(3)>=v_r(3)) ),
