@@ -31,7 +31,7 @@ function output = takanen2013mso(ipsilateral, contralateral, fs, fc, printfigs)
 %
 %   See also: takanen2013, takanen2013periphery, weightedaveragefilter
 %
-%   References: takanen2013a pulkki2009
+%   References: takanen2014 pulkki2009
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %

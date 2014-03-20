@@ -20,12 +20,11 @@ function op1=amthelp(varargin)
 % Verify that LTFAT has been installed
 if ~exist('ltfatarghelper','file')  
     disp('');
-    disp('--- AMTOOLBOX - The Auditory Modelling toolbox. ---');
+    disp('--- AMTOOLBOX - The Auditory Modeling toolbox. ---');
     disp('')
     error(['The toolbox require the LTFAT toolbox to properly function. ' ...
          'Please download and install it from http://ltfat.sourceforge.net,' ...
-         'and then call the LTFATSTART command BEFORE you call ' ...
-          'AMTSTART.'])
+         'and then call the LTFATSTART command BEFORE you use the AMT.'])
 end;
 
 bp=amtbasepath;
@@ -38,7 +37,7 @@ definput.flags.mode={'general','version','modules','authors'};
 
 if flags.do_general
   disp(' ');
-  disp('--- AMT - The Auditory Modelling Toolbox. ---');
+  disp('--- AMT - The Auditory Modeling Toolbox. ---');
   disp(' ')
 
   disp(['Version ',kv.versiondata]);

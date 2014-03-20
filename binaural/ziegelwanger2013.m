@@ -52,6 +52,16 @@ function [Obj,results]=ziegelwanger2013(Obj,method,model,p0_onaxis)
 %
 %   4) Minimal-Phase Cross-Correlation (Max) (default)
 %
+%   Requirements: 
+%   -------------
+%
+%   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
+% 
+%   2) Optimization Toolbox for Matlab
+%
+%   3) Data in hrtf/ziegelwanger2013
+%
+%
 %   Examples:
 %   ---------
 % 
@@ -65,7 +75,7 @@ function [Obj,results]=ziegelwanger2013(Obj,method,model,p0_onaxis)
 %   See also: ziegelwanger2013onaxis, ziegelwanger2013offaxis,
 %   data_ziegelwanger2013, exp_ziegelwanger2013
 %
-%   References: ziegelwanger2013 majdak2013
+%   References: ziegelwanger2013 majdak2013toa
 
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria

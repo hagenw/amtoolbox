@@ -1,5 +1,5 @@
-addpath ~/nw/ltfat
-addpath ~/nw/amtoolbox
+addpath ~/ltfat
+addpath ~/amtoolbox
 
-ltfatstart;
 amtstart;
+warning off;

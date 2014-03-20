@@ -4,6 +4,7 @@
 #include <math.h>
 #include <mex.h>
 #include <time.h>
+#include "../src/zilany5/complex.c"
 
 
 /* This is Version 1 of the code for the "humanized" auditory
@@ -64,140 +65,7 @@
 #endif
 
 /* ------------------  Stuff from the complex.c file --------------- */
-
-/* Structure of the complex */
-struct __COMPLEX{ double x,y; };
-
-/* structure COMPLEX same as __COMPLEX */
-typedef struct __COMPLEX COMPLEX;
-
-/* for below, X, Y are complex structures, and one is returned */
-
-/* real part of the complex multiplication */
-#define CMULTR(X,Y) ((X).x*(Y).x-(X).y*(Y).y)
-
-/* image part of the complex multiplication */
-#define CMULTI(X,Y) ((X).y*(Y).x+(X).x*(Y).y)
-
-/* used in the Division : real part of the division */
-#define CDRN(X,Y) ((X).x*(Y).x+(Y).y*(X).y)
-
-/* used in the Division : image part of the division */
-#define CDIN(X,Y) ((X).y*(Y).x-(X).x*(Y).y)
-
-/* used in the Division : denumerator of the division */
-#define CNORM(X) ((X).x*(X).x+(X).y*(X).y)
-
-/* real part of the complex */
-#define CREAL(X) (double((X).x))
-
-/* conjunction value */
-#define CONJG(z,X) {(z).x=(X).x;(z).y= -(X).y;}
-
-/* conjunction value */
-#define CONJ(X) {(X).y= -(X).y;}
-
-/* muliply : z could not be same variable as X or Y, same rule for
- * other Macro */
-#define CMULT(z,X,Y) {(z).x=CMULTR((X),(Y));(z).y=CMULTI((X),(Y));}
-
-/* division */
-#define CDIV(z,X,Y){double d=CNORM(Y); (z).x=CDRN(X,Y)/d; (z).y=CDIN(X,Y)/d;}
-
-/* addition */
-#define CADD(z,X,Y) {(z).x=(X).x+(Y).x;(z).y=(X).y+(Y).y;}
-
-/* subtraction */
-#define CSUB(z,X,Y) {(z).x=(X).x-(Y).x;(z).y=(X).y-(Y).y;}
-
-/* assign */
-#define CLET(to,from) {(to).x=(from).x;(to).y=(from).y;}
-
-/* abstract value(magnitude) */
-#define CABS(X) sqrt((X).y*(X).y+(X).x*(X).x)
-
-/* real to complex */
-#define CMPLX(X,real,imag) {(X).x=(real);(X).y=(imag);}
-
-/* multiply with real */
-#define CTREAL(z,X,real) {(z).x=(X).x*(real);(z).y=(X).y*(real);}
-
-
-/* divide */
-COMPLEX compdiv(COMPLEX ne,COMPLEX de)
-{
-  double d;
-  COMPLEX z;
-  d=de.x*de.x+de.y*de.y;
-  z.x=(ne.x*de.x+ne.y*de.y)/d;
-  z.y=(ne.y*de.x-ne.x*de.y)/d;
-  return(z);
-}
-/* this returns a complex number equal to exp(i*theta) */
-COMPLEX compexp(double theta)
-{
-  COMPLEX dummy;
-  dummy.x = cos(theta);
-  dummy.y = sin(theta);
-  return dummy;
-}
-/* Multiply a complex number by a scalar */
-COMPLEX compmult(double scalar, COMPLEX compnum)
-{
- COMPLEX answer;
- answer.x = scalar * compnum.x;
- answer.y = scalar * compnum.y;
- return answer;
-}
-/* Find the product of 2 complex numbers */
-COMPLEX compprod(COMPLEX compnum1, COMPLEX compnum2)
-{
- COMPLEX answer;
- answer.x = (compnum1.x * compnum2.x) - (compnum1.y * compnum2.y);
- answer.y = (compnum1.x * compnum2.y) + (compnum1.y * compnum2.x);
- return answer;
-}
-/* add 2 complex numbers */
-COMPLEX comp2sum(COMPLEX summand1, COMPLEX summand2)
-{
- COMPLEX answer;
- answer.x = summand1.x + summand2.x;
- answer.y = summand1.y + summand2.y;
- return answer;
-}
-/* add three complex numbers */
-COMPLEX comp3sum(COMPLEX summand1, COMPLEX summand2, COMPLEX summand3)
-{
- COMPLEX answer;
- answer.x = summand1.x + summand2.x + summand3.x;
- answer.y = summand1.y + summand2.y + summand3.y;
- return answer;
-}
-
-/* subtraction: complexA - complexB */
-COMPLEX compsubtract(COMPLEX complexA, COMPLEX complexB)
-{
- COMPLEX answer;
- answer.x = complexA.x - complexB.x;
- answer.y = complexA.y - complexB.y;
- return answer;
-}
-/* Get the real part of the complex */
-double REAL(COMPLEX compnum)
-{ return(compnum.x); }
-
-/* Get the imaginary part of the complex */
-double IMAG(COMPLEX compnum)
-{ return(compnum.y); }
-
-/* Get the conjugate of the complex signal */
-COMPLEX compconj(COMPLEX complexA)
-{
-  COMPLEX answer;
-  answer.x = complexA.x;
-  answer.y = -complexA.y;
-  return (answer);
-}
+/* This is now included directly */
 
 
 

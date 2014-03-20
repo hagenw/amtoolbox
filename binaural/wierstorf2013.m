@@ -191,7 +191,7 @@ conf.resolution = resolution;
 % 700 ms white noise burst
 sig_noise = whitenoiseburst(fs);
 for ii=1:length(x)
-    progressbar(ii,length(x))
+    if showprogress progressbar(ii,length(x)), end
     for jj=1:length(y)
         X = [x(ii) y(jj) 0];
         desired_direction(ii,jj) = source_direction(X,phi,xs,src);
@@ -209,6 +209,8 @@ for ii=1:length(x)
         % convolve impulse response with noise burst
         sig = auralize_ir(ir,sig_noise,1,conf);
         % estimate the perceived direction
+        % this is done by calculating ITDs with the dietz2011 binaural model,
+        % which are then mapped to azimuth values with a lookup table
         perceived_direction(ii,jj) = wierstorf2013estimateazimuth(sig,lookup, ...
             'dietz2011','no_spectral_weighting','remove_outlier');
         localization_error(ii,jj) = desired_direction(ii,jj)-perceived_direction(ii,jj);

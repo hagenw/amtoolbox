@@ -1,6 +1,6 @@
 % AMT - Functions for reading HRTFs
 %
-%  The AMT team, 2012 - 2013.
+%  The AMT team, 2012 - 2014.
 %
 %  HRIR
 %     READ_HRTF        - Read HRTF from selected databases.

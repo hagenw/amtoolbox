@@ -72,7 +72,7 @@ function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %     'basef',basef  Ensure that the frequency basef is a center frequency
 %                    in the filterbank. The default value  is 1000.
 %
-%     'filters_per_ERB', filters_per_erb
+%     'filters_per_ERB',filters_per_erb
 %                    Filters per erb. The default value is 1.
 %
 %     'middle_ear_thr',r
@@ -87,8 +87,8 @@ function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %                    Applied compression of the signal on the cochlea with
 %                    ^compression_power. The default value is 0.4.
 %
-%     'alpha',alpha  Internal noise strength. Convention FIXME 65dB =
-%                    0.0354. The default value is 0.
+%     'alpha',alpha  Internal noise strength. Convention 65dB = 0.0354.
+%                    The default value is 0.
 %
 %     'int_randn'    Internal noise by adding random noise with rms = alpha.
 %                    This is the default.
@@ -179,8 +179,6 @@ definput.importdefaults = { ...
     'basef',1000, ...   % auditory filter should be centered at basef / Hz
     'ihc_breebaart' ... % use haircell parameters as in Breebarts model
 };
-% TODO: check if can change the used haircell model via input parameter or does
-% this interact with the internal noise switch?
 % Preprocessing parameters
 definput.keyvals.middle_ear_thr = [500 2000]; % Bandpass freqencies for middle ear transfer
 definput.keyvals.middle_ear_order = 2;        % Only even numbers possible

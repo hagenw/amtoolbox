@@ -15,7 +15,7 @@ function y=ziegelwanger2013offaxis(p,x)
 %   See also: ziegelwanger2013, ziegelwanger2013onaxis,
 %   data_ziegelwanger2013, exp_ziegelwanger2013
 %
-%   References: ziegelwanger2013 majdak2013
+%   References: ziegelwanger2013 majdak2013toa
 
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria

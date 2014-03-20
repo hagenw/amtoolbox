@@ -70,6 +70,16 @@ function varargout=exp_ziegelwanger2013(varargin)
 %               Model parameters (sphere radius) resulting from fitting the
 %               on-axis model to HRTFs of an off-axis placed rigid sphere.
 %
+%
+%   Requirements: 
+%   -------------
+%
+%   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
+% 
+%   2) Optimization Toolbox for Matlab
+%
+%   3) Data in hrtf/ziegelwanger2013
+%
 %   Examples:
 %   ---------
 %
@@ -92,7 +102,7 @@ function varargout=exp_ziegelwanger2013(varargin)
 %   See also: ziegelwanger2013, ziegelwanger2013onaxis,
 %   ziegelwanger2013offaxis, data_ziegelwanger2013
 %
-%   References: ziegelwanger2013 majdak2013
+%   References: ziegelwanger2013 majdak2013toa
 
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria

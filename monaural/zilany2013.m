@@ -68,7 +68,7 @@ function [ANresp,fc,varargout] = zilany2013(spl,stim,fsstim,varargin)
 %
 %   References: zilany2009 zilany2013
 
-% AUTHOR: Robert Baumgartner
+% AUTHOR: code provided by Muhammad Zilany, AMT compatibility adapted by Robert Baumgartner
 
 if nargin<3
   error('%s: Too few input parameters.',upper(mfilename));

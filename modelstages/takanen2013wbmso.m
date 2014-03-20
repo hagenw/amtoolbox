@@ -51,7 +51,7 @@ function [output energy] = takanen2013wbmso(ipsilateral, contralateral, fs, widt
 %
 %   See also: takanen2013, takanen2013periphery, weightedaveragefilter
 %
-%   References: takanen2013a pulkki2009
+%   References: takanen2014 pulkki2009
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %

@@ -39,7 +39,7 @@ function [activityMap colorGains colorMtrx levels] = takanen2013formbinauralacti
 %
 %   See also: takanen2013, takanen2013contracomparison
 %
-%   References: takanen2013a
+%   References: takanen2014
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %
@@ -101,13 +101,13 @@ for bandInd =1:(length(ranges)-1)
    activityMap(:,bandInd:length(ranges)-1:nXBins) = mapTemp*bandInd;
    colorGains(:,bandInd:length(ranges)-1:nXBins) = gainTemp;
 end
-
+clear thetaL thetaR eL eR gainTemp mapTemp
 
 %An image of the activation is plotted
 colorGains(colorGains>1) =1;
 %a 3-D matrix is created to store the rgb-values of the figure for
 %each time and activation instant
-outputMtrx = zeros(dims(1),nXBins,3);
+outputMtrx = single(zeros(dims(1),nXBins,3));
 for colorInd=1:size(colorMtrx,1)
     temp = find((activityMap==(colorInd-1))==1);
     outputMtrx(temp) = colorGains(temp)*colorMtrx(colorInd,1);

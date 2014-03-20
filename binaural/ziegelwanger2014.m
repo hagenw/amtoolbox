@@ -1,11 +1,8 @@
 function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0_onaxis)
 %ZIEGELWANGER2014 Time of arrival estimates
-%   usage: [Obj,results]=ziegelwanger2014(data,estimation,outlierDetection,model,p0_onaxis) 
+%   Usage: [Obj,results]=ziegelwanger2014(data,estimation,outlierDetection,model,p0_onaxis) 
 %
-%   Estimates the Time-of-Arrival for each measurement in Obj (SOFA) and
-%   corrects the results with a geometrical model of the head.
-%
-%   Input:
+%   Input parameters:
 %       Obj: SOFA object
 % 
 %       estimation (optional): select one of the estimation methods
@@ -34,7 +31,7 @@ function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0
 %                 direction-independent delay in seconds]
 %           dim 2: each record channel
 % 
-%   Output:
+%   Output parameters:
 %       Obj: SOFA Object
 % 
 %       results.toa: data matrix with time of arrival (TOA) for each impulse response (IR):
@@ -56,6 +53,18 @@ function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0
 %                 elevation of ear in radiants]
 %           dim 2: each record channel
 %
+%   Estimates the Time-of-Arrival for each measurement in Obj (SOFA) and
+%   corrects the results with a geometrical model of the head.
+%
+%   Requirements: 
+%   -------------
+%
+%   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
+% 
+%   2) Optimization Toolbox for Matlab
+%
+%   3) Data in hrtf/ziegelwanger2014
+%
 %   Examples:
 %   ---------
 % 
@@ -67,7 +76,7 @@ function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0
 %       [Obj,results]=ziegelwanger2014(Obj,4,1);
 %
 %   See also: ziegelwanger2014onaxis, ziegelwanger2014offaxis,
-%   data_ziegelwanger2014, exp_ziegelwanger2014
+%             data_ziegelwanger2014, exp_ziegelwanger2014
 %
 %   References: ziegelwanger2014
 
@@ -171,7 +180,7 @@ if outlierDetection>0
         x=pos(:,1:2)*pi/180;
         y=toaEst(:,ch)/Obj.Data.SamplingRate;
         if isoctave
-            [~,tmp]=leasqr(x,y,p0_onaxis(ch,:),@ziegelwanger2014onaxis);
+            fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
         else
             tmp=lsqcurvefit(@ziegelwanger2014onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
         end
@@ -190,10 +199,7 @@ if model>0
         x=pos(idx,1:2)*pi/180;
         y=toaEst(idx,ch)/Obj.Data.SamplingRate;
         if isoctave
-            [toa(:,ch),p_onaxis(ch,:)]=leasqr(x,y,p0_onaxis(ch,:),@ziegelwanger2014onaxis,1e-6);
-            toa(:,ch)=toa(:,ch)*Obj.Data.SamplingRate;
-            performance.on_axis{ch}.residualS=toaEst(idx,ch)-toa(idx,ch);
-            performance.on_axis{ch}.resnormS=sum((performance.on_axis{ch}.residualS).^2);
+            fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
         else
             [p_onaxis(ch,:),performance.on_axis{ch}.resnormS,performance.on_axis{ch}.residualS,performance.on_axis{ch}.exitflag,performance.on_axis{ch}.output]=...
                 lsqcurvefit(@ziegelwanger2014onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
@@ -213,10 +219,7 @@ if model>0
             p0_offaxis(ch,:)=[mean(p_onaxis(:,1)) 0.001 -diff(p_onaxis(:,1))/2 0.001 mean(p_onaxis(:,4)) p_onaxis(ch,2) p_onaxis(ch,3)];
             p0offset_offaxis=[abs(diff(p_onaxis(:,1))/4) 0.1 0.1 0.1 0.001 pi/4 pi/4];
             if isoctave
-                [toa(:,ch),p_offaxis(ch,:)]=leasqr(x,y,p0_offaxis(ch,:),@ziegelwanger2014offaxis,1e-6);
-                toa(:,ch)=toa(:,ch)*Obj.Data.SamplingRate;
-                performance.off_axis{ch}.residualS=toaEst(idx,ch)-toa(idx,ch);
-                performance.off_axis{ch}.resnormS=sum((performance.off_axis{ch}.residualS).^2);
+                fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
             else
                 [p_offaxis(ch,:),performance.off_axis{ch}.resnormS,performance.off_axis{ch}.residualS,performance.off_axis{ch}.exitflag,performance.off_axis{ch}.output]=...
                     lsqcurvefit(@ziegelwanger2014offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',model));

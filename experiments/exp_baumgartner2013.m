@@ -122,6 +122,13 @@ function varargout=exp_baumgartner2013(varargin)
 %               Right: LS and LSH at the azimuth of 130 deg. 
 %               All other conventions as in Fig. 22.
 %
+%   Requirements: 
+%   -------------
+%
+%   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
+% 
+%   2) Data in hrtf/baumgartner2013
+%
 %   See also: baumgartner2013, data_baumgartner2013
 %
 %   Examples:
@@ -269,7 +276,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
     end
   end
   
-  fprintf('\n Please wait a little! \n');
+  %fprintf('\n Please wait a little! \n');
   qe = zeros(ns,ns,length(latdivision)); % init QEs
   pe = qe;                               % init PEs
   for ll = 1:ns    % listener
@@ -526,7 +533,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
 
     D = LSPhp(1,2):dpol:LSPhp(nLSP,2);     % Desired polar angle    
 
-    fprintf('\n Please wait a little! \n');
+    %fprintf('\n Please wait a little! \n');
     for ll = 1:ns
       
       s(ll).pos(:,1)=bsxfun(@times,s(ll).Obj.SourcePosition(:,1),ones(s(ll).Obj.API.M,1));
@@ -537,7 +544,8 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
       % DTF indices of LSPs
       idLSP = zeros(nLSP,1);
       for ii = 1:nLSP
-        [tmp,idLSP(ii)] = min( dist(poscart,LSPcart(ii,:)') );
+        e = poscart-repmat(LSPcart(ii,:),size(poscart,1),1);
+        [tmp,idLSP(ii)] = min( sqrt(sum(e.^2,2)) ); % minimum euclidean distance
       end
       clear poscart
 

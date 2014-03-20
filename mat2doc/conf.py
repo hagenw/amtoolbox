@@ -5,7 +5,4 @@ versionfile="amtoolbox_version"
 
 # Optional global settings
 author=u'Peter L. S\xf8ndergaard'
-year="2013"
-
-# Settings used by scripts just for this project
-username='soender'
+year="2014"

@@ -3,22 +3,23 @@ function mixer = gfb_mixer_new(analyzer, delay, iterations)
 %   Usage: mixer = gfb_mixer_new(analyzer, delay, iterations)
 %
 %   Input parameters:
-%     analyzer : A gfb_analyzer structure as created by gfb_analyzer_new. The
-%                mixer created by this function can act as part of a synthesizer
+%     analyzer : A gfb_analyzer structure as created by
+%                gfb_analyzer_new. The mixer created by this function can
+%                act as part of a synthesizer
 %                that resynthesizes the output of this analyzer
-%     delay    : A gfb_Delay structure as created by gfb_delay_new, Together with
-%                the mixer created by this function, this delay can form a
-%                synthesizer that resynthesizes the output of the analyzer
-%     iterations : The gain factors are approximated numerically in iterations.
-%                If this parameter is omitted, then the number of iterations will
-%                be  GFB_GAINCALC_ITERATIONS (see gfb_set_constants.m, usually
-%                =100)
+%     delay :    A gfb_Delay structure as created by gfb_delay_new, together
+%                with the mixer created by this function, this delay can
+%                form a synthesizer that resynthesizes the output of the
+%                analyzer
+%     iterations : The gain factors are approximated numerically in
+%                  iterations.  If this parameter is omitted, then the
+%                  number of iterations will be GFB_GAINCALC_ITERATIONS
+%                  (see gfb_set_constants.m, usually =100)
 %
 %   `gfb_mixer_new` creates a `gfb_mixer` object with gain factors suitable
 %   to calculate a weighted sum of the bands present in the output of the
 %   given delay.  The gain factors are computed using a numerical optimization
-%   method described in [Herzke & Hohmann 2007].
-
+%   method described in Herzke & Hohmann (2007).
 
 % author   : tp
 % date     : Jan 2002, Nov 2003, Mar & Nov 2006, Jan Feb 2007

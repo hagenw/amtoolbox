@@ -18,7 +18,7 @@ function output = exp_langendijk2002(varargin)
 %   You can choose between two of his listeners P3 and P6. The required
 %   data (DTF data and response patterns) will be provided by precalculated
 %   mat-files due to high computing time (optionally data can be 
-%   recalculated by using |data_langendijk2002|_. 
+%   recalculated by using |data_langendijk2002|. 
 %
 %   The following subfigures show the probability density functions (PDFs)
 %   and actual response angles as functions of the target angle for the 

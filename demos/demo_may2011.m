@@ -1,12 +1,12 @@
-% Load example
+%DEMO_MAY2011 Demo of the May et al. (2011)
+%  
+%   This script does not work unless speakers1234 is provided
+%
+%
+%   See also: may2011
 
-% load speakers24
-% load speakers123
-load speakers1234
-% load speakers12345
-
-% Sampling frequency
-fs = 16000;
+% Load a test signal.
+[signal,fs]=competingtalkers('five_speakers');
 
 % Perform localization
 out = may2011(signal,fs);

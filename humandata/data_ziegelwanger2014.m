@@ -40,11 +40,9 @@ function data = data_ziegelwanger2014(varargin)
 %  
 %     'NH89'        HRTF set of listener NH89 of the ARI database: The
 %                   output has the following fields: `data.hM`,
-%                   `data.meta` and `data.stimPar`.
+%                   `data.meta` and `data.stimPar`.  
 %  
-%     'reload'      Reload previously calculated results    
-%  
-%     'recalc'      Recalculate the results  
+%     'redo'        Recalculate the results  
 %
 %   The fields are given by:
 %
@@ -66,6 +64,15 @@ function data = data_ziegelwanger2014(varargin)
 %
 %     `data`             SOFA object
 % 
+%   Requirements: 
+%   -------------
+%
+%   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
+% 
+%   2) Optimization Toolbox for Matlab
+%
+%   3) Data in hrtf/ziegelwanger2014
+%
 %   Examples:
 %   ---------
 % 
@@ -84,8 +91,8 @@ function data = data_ziegelwanger2014(varargin)
 %% ------ Check input options --------------------------------------------
 
 % Define input flags
-definput.flags.type = {'missingflag','ARI','CIPIC','LISTEN','SPHERE_DIS','SPHERE_ROT','NH89','Sphere','SAT','STP','redo'};
-definput.flags.results = {'reload','recalc'};
+definput.flags.type = {'missingflag','ARI','CIPIC','LISTEN','SPHERE_DIS','SPHERE_ROT','NH89','Sphere','SAT','STP'};
+definput.flags.redo = {'missingflag','redo'};
 
 % Parse input options
 [flags,~]  = ltfatarghelper({},definput,varargin);
@@ -107,14 +114,11 @@ end
 %% ARI database
 if flags.do_ARI
     
-    if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_ARI.mat'],'file')
-        urlwrite([SOFAdbURL filesep 'ziegelwanger2014' filesep 'exp_ziegelwanger2014_ARI.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_ARI.mat']);
-    end
-    if flags.do_recalc
+    if flags.do_redo || ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_ARI.mat'],'file')
         tmp=load([hpath 'info.mat']);
         data=tmp.info.ARI;
         for ii=1:length(data.subjects)
-            disp(['Recalculate data for sujbect ' num2str(ii) filesep num2str(length(data.subjects)) ' of ARI database']);
+            disp(['Recalculate data for subject ' num2str(ii) '/' num2str(length(data.subjects)) ' (' data.subjects{ii} ') of ARI database']);
             Obj=SOFAload([hpath 'ARI_' data.subjects{ii} '.sofa']);
              
             if exist([hpath 'ARI_' data.subjects{ii} '.sofa.MCM.mat'],'file')
@@ -141,10 +145,7 @@ end
 %% CIPIC database
 if flags.do_CIPIC
     
-    if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_CIPIC.mat'],'file')
-        urlwrite([SOFAdbURL filesep 'ziegelwanger2014' filesep 'exp_ziegelwanger2014_CIPIC.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_CIPIC.mat']);
-    end
-    if flags.do_recalc
+    if flags.do_redo || ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_CIPIC.mat'],'file')
         tmp=load([hpath 'info.mat']);
         data=tmp.info.CIPIC;
         for ii=1:length(data.subjects)
@@ -175,10 +176,7 @@ end
 %% LISTEN database
 if flags.do_LISTEN
     
-    if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_LISTEN.mat'],'file')
-        urlwrite([SOFAdbURL filesep 'ziegelwanger2014' filesep 'exp_ziegelwanger2014_LISTEN.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_LISTEN.mat']);
-    end
-    if flags.do_recalc
+    if flags.do_redo || ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_LISTEN.mat'],'file')
         tmp=load([hpath 'info.mat']);
         data=tmp.info.LISTEN;
         for ii=1:length(data.subjects)
@@ -211,12 +209,9 @@ end
 %% SPHERE (Displacement) database
 if flags.do_SPHERE_DIS
     
-    if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_DIS.mat'],'file')
-        urlwrite([SOFAdbURL filesep 'ziegelwanger2014' filesep 'exp_ziegelwanger2014_SPHERE_DIS.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_DIS.mat']);
-    end
-    if flags.do_recalc
+    if flags.do_redo || ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_DIS.mat'],'file')
         tmp=load([hpath 'info.mat']);
-        data=tmp.info.Sphere_Displacement;
+        data=tmp.info.Displacement;
         results.p_onaxis=zeros(4,2,length(data.subjects));
         results.p_offaxis=zeros(7,2,length(data.subjects));
         for ii=1:length(data.subjects)
@@ -247,12 +242,9 @@ end
 %% SPHERE (Rotation) database
 if flags.do_SPHERE_ROT
     
-    if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_ROT.mat'],'file')
-        urlwrite([SOFAdbURL filesep 'ziegelwanger2014' filesep 'exp_ziegelwanger2014_SPHERE_ROT.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_ROT.mat']);
-    end
-    if flags.do_recalc
+    if flags.do_redo || ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_ROT.mat'],'file')
         tmp=load([hpath 'info.mat']);
-        data=tmp.info.Sphere_Rotation;
+        data=tmp.info.Rotation;
         results.p=zeros(4,2,length(data.phi));
         for ii=1:length(data.subjects)
             disp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of SPHERE_ROT database']);

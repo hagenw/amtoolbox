@@ -31,7 +31,7 @@ function [activMap gainMtrx]= takanen2013contracomparison(thetaL,thetaR,levels,e
 %   See also: takanen2013, takanen2013formbinauralactivitymap, 
 %             weightedaveragefilter
 %
-%   References: takanen2013a mcalpine2000
+%   References: takanen2014 mcalpine2000
 
 %   AUTHOR: Marko Takanen, Olli Santala, Ville Pulkki
 %

@@ -6,19 +6,17 @@ function exp_ziegelwanger2014(varargin)
 %   Ziegelwanger and Majdak (2014).
 %
 %   The following flags can be specified:
-% 
-%     'reload'	Reload previously calculated results. This is the default.
 %
-%     'recalc'	Recalculate results.
+%     'redo'  Recalculate results.
 %
-%     'fig2'    Reproduce Fig. 2:
+%     'fig3'    Reproduce Fig. 3:
 %               
 %               TOAs resulting from TOA estimators in the horizontal plane 
 %               applied on calculated HRTFs of the objects Sphere, SAT,
 %               STP, as well on measured HRTFs of an exemplary listener
 %               (NH89, ARI).
 %
-%     'fig4'    Reproduce Fig. 4:
+%     'fig5'    Reproduce Fig. 5:
 %
 %               Estimated on-axis model parameters from HRTFs calculated
 %               for the centered object Sphere. Condition: combination of
@@ -26,23 +24,13 @@ function exp_ziegelwanger2014(varargin)
 %               cross: Parameters estimated for the left and right ears,
 %               respectively. Gray lines: Actual parameters.
 %
-%     'fig5'    Reproduce Fig. 5:
+%     'fig6'    Reproduce Fig. 6:
 %
 %               Estimated on-axis model parameters from left-ear (top row)
 %               and right-ear (bottom row) HRTFs of human listeners. Lines:
 %               normal distribution fitted to the data. phi_e: Positive and
 %               negative values corresponding to the left and right ears,
 %               respectively.
-%
-%     'fig6'    Reproduce Fig. 6:
-%
-%               Relative TOAs (top row) and on-axis model fit residuals
-%               (bottom row) from HRTFs of STP (left column) and of an
-%               exemplary listener (NH89, ARI; right column). Black points:
-%               data classified as outliers by the ESD test with an upper
-%               bound of outlier rate of 1% (see ziegelwanger2014). The
-%               reference for the relative TOAs is the smallest TOA in each
-%               HRTF set. Horizontal lines: $\pm1$ sampling interval.
 %
 %     'fig7'    Reproduce Fig. 7:
 %
@@ -52,23 +40,33 @@ function exp_ziegelwanger2014(varargin)
 %
 %     'fig8'    Reproduce Fig. 8:
 %
+%               Relative TOAs (top row) and on-axis model fit residuals
+%               (bottom row) from HRTFs of STP (left column) and of an
+%               exemplary listener (NH89, ARI; right column). Black points:
+%               data classified as outliers by the ESD test with an upper
+%               bound of outlier rate of 1% (see ziegelwanger2014). The
+%               reference for the relative TOAs is the smallest TOA in each
+%               HRTF set. Horizontal lines: $\pm1$ sampling interval.
+%
+%     'fig9'    Reproduce Fig. 9:
+%
 %               Relative TOAs of an exemplary listener (NH89, ARI) in the
 %               interaural horizontal plane for the left (black) and right
 %               (gray) ears as results from the MCM estimator (symbols) and
 %               the on-axis model (lines). The reference for the relative
 %               TOAs is the smallest TOA in HRTF sets of both ears.
 %
-%     'fig9'    Reproduce Fig. 9:
+%     'fig10'    Reproduce Fig. 10:
 %
 %               Estimated on-axis model parameters from HRTFs calculated
 %               for the non-centered object Sphere. Other details as in
-%               Fig. 4.
+%               Fig. 5.
 %
-%     'fig11'   Reproduce Fig. 11:
+%     'fig12'   Reproduce Fig. 12:
 %
 %               Estimated on-axis model parameters from HRTFs calculated
 %               for the non-centered object Sphere. Other details as in
-%               Fig. 4. phi_e: Positive and negative values correspond to
+%               Fig. 5. phi_e: Positive and negative values correspond to
 %               the left and right ears, respectively.
 %
 %     'tab1'    Reproduce Tab. 1:
@@ -109,16 +107,21 @@ function exp_ziegelwanger2014(varargin)
 %               which r and vec(e) varied from M=0. Non-centered:
 %               Conditions in which M varied. Other defails as in Tab. 5.
 %
+%   Requirements: 
+%   -------------
+%
+%   1) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
+% 
+%   2) Optimization Toolbox for Matlab
+%
+%   3) Data in hrtf/ziegelwanger2014
+%
 %   Examples:
 %   ---------
 %
-%   To display Fig. 2, use :::
+%   To display Fig. 3, use :::
 %
-%     exp_ziegelwanger2014('fig2');
-%
-%   To display Fig. 4, use :::
-%
-%     exp_ziegelwanger2014('fig4');
+%     exp_ziegelwanger2014('fig3');
 %
 %   To display Fig. 5, use :::
 %
@@ -140,9 +143,13 @@ function exp_ziegelwanger2014(varargin)
 %
 %     exp_ziegelwanger2014('fig9');
 %
-%   To display Fig. 11, use :::
+%   To display Fig. 10, use :::
 %
-%     exp_ziegelwanger2014('fig11');
+%     exp_ziegelwanger2014('fig10');
+%
+%   To display Fig. 12, use :::
+%
+%     exp_ziegelwanger2014('fig12');
 %
 %   To display Tab. 1, use :::
 %
@@ -175,10 +182,10 @@ function exp_ziegelwanger2014(varargin)
 %% ------ Check input options --------------------------------------------
 
 definput.flags.type = {'missingflag',...
-'fig2','fig4','fig5','fig6','fig7','fig8',...
-'fig9','fig11','tab1','tab2','tab3','tab5',...
+'fig3','fig5','fig6','fig7','fig8','fig9',...
+'fig10','fig12','tab1','tab2','tab3','tab5',...
 'tab6'};
-definput.flags.results = {'reload','recalc'};
+definput.flags.redo = {'missingflag','redo'};
 
 % Parse input options
 [flags,~]  = ltfatarghelper({},definput,varargin);
@@ -189,8 +196,8 @@ if flags.do_missingflag
     error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
 
-%% Figure 2
-if flags.do_fig2
+%% Figure 3
+if flags.do_fig3
 
 %load data
     Obj{1}=data_ziegelwanger2014('Sphere');
@@ -265,11 +272,15 @@ if flags.do_fig2
     
 end
 
-%% Figure 4
-if flags.do_fig4
+%% Figure 5
+if flags.do_fig5
 
 %load data
-    data=data_ziegelwanger2014('SPHERE_ROT');
+    if flags.do_redo
+        data=data_ziegelwanger2014('SPHERE_ROT','redo');
+    else
+        data=data_ziegelwanger2014('SPHERE_ROT');
+    end
     for ii=1:length(data.results)
         p_onaxis{1}(:,:,ii)=data.results(ii).MAX{1}.p_onaxis;
         p_onaxis{2}(:,:,ii)=data.results(ii).CTD{1}.p_onaxis;
@@ -380,13 +391,17 @@ if flags.do_fig4
     
 end
 
-%% Figure 5
-if flags.do_fig5
+%% Figure 6
+if flags.do_fig6
 
 %load data
     hrtf={'ARI','CIPIC','LISTEN'};
     for kk=1:length(hrtf)
-        data=data_ziegelwanger2014(hrtf{kk});
+        if flags.do_redo
+            data=data_ziegelwanger2014(hrtf{kk},'redo');
+        else
+            data=data_ziegelwanger2014(hrtf{kk});
+        end
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
@@ -580,8 +595,135 @@ if flags.do_fig5
     set(gcf,'color',[1 1 1])
 end
 
-%% Figure 6
-if flags.do_fig6
+%% Figure 7
+if flags.do_fig7
+    
+%load data
+    hrtf={'ARI','CIPIC','LISTEN'};
+    for kk=1:length(hrtf)
+        if flags.do_redo
+            data=data_ziegelwanger2014(hrtf{kk},'redo');
+        else
+            data=data_ziegelwanger2014(hrtf{kk});
+        end
+        if kk==3
+            data.results=data.results([1:27 29:end]);
+        end
+        for ii=1:length(data.results)
+            temp1(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
+            temp2(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
+            temp3(:,:,ii)=data.results(ii).MCM{2}.p_offaxis;
+        end
+        p_onaxis{kk}=temp1;
+        p_offaxis{kk,1}=temp2;
+        p_offaxis{kk,2}=temp3;
+        clear data temp1 temp2 temp3
+    end
+    if flags.do_redo
+        data=data_ziegelwanger2014('SPHERE_ROT','redo');
+    else
+        data=data_ziegelwanger2014('SPHERE_ROT');
+    end
+    for ii=1:length(data.results)
+        temp(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
+    end
+    p_onaxis{4}=temp;
+    clear data temp
+    Obj=data_ziegelwanger2014('Sphere');
+    [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
+    p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
+    clear data temp Obj
+    Obj=data_ziegelwanger2014('SAT');
+    [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
+    p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
+    clear data temp Obj
+    Obj=data_ziegelwanger2014('STP');
+    [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
+    p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
+    clear data temp Obj
+    if flags.do_redo
+        data=data_ziegelwanger2014('SPHERE_DIS','redo');
+    else
+        data=data_ziegelwanger2014('SPHERE_DIS');
+    end
+    for ii=1:length(data.results)
+        temp1(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
+        temp2(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
+    end
+    p_onaxis{5}=temp1;
+    p_offaxis{5}=temp2;
+    clear data temp1 temp2
+
+%plot figure
+    figure('PaperUnits','centimeters','PaperType','A4','Paperposition',[0, 0, 21, 29.7],'Units','centimeters','Position',[0 0 21 29.7],'Resize','off')
+    fs=14;%fontsize
+
+    temp=1;
+    for kk=1:3
+        varl(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
+            squeeze(p_onaxis{kk}(1,1,:)*1000);
+        varr(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
+            squeeze(p_onaxis{kk}(1,2,:)*1000);
+        temp=size(varl,1)+1;
+    end
+
+    h(1)=subplot(621);
+    binranges = -105:5:105;
+    bincounts=histc(varl(:,1)-varr(:,1),binranges);
+    bar(binranges,bincounts/sum(bincounts)*100,'Facecolor',[0.6 0.6 0.6]);
+    hold on
+    [mu,sigma]=normfit(varl(:,1)-varr(:,1));
+    y=normpdf(binranges,mu,sigma);
+    plot(binranges,y*100*5,'k','linewidth',1.1)
+    ylabel('Rel. Freq.','Fontname','Arial','Fontsize',fs)
+    xlabel('IRD (mm)','Fontname','Arial','Fontsize',fs)
+    xlim([-80,85])
+    ylim([-1,16])
+    set(gca,'xtick',[-60 -30 0 30 60])
+    clear varl varr y
+
+    clear varl varr temp
+    temp=1;
+    for kk=1:3
+        varl(temp:temp+size(p_offaxis{kk,2},3)-1,:)= ...
+            squeeze(p_offaxis{kk,2}(1,1,:)*1000);
+        varr(temp:temp+size(p_offaxis{kk,2},3)-1,:)= ...
+            squeeze(p_offaxis{kk,2}(1,2,:)*1000);
+        temp=size(varl,1)+1;
+    end
+
+    h(2)=subplot(623);
+    binranges = -105:1:105;
+    bincounts=histc(varl(:,1)-varr(:,1),binranges);
+    bar(binranges,bincounts/sum(bincounts)*100,'Facecolor',[0 0 0]);
+    hold on
+    [mu,sigma]=normfit(varl(:,1)-varr(:,1));
+    y=normpdf(binranges,mu,sigma);
+    % plot(binranges,y*100*0.5,'k','linewidth',1.1)
+    xlabel('IRD (mm)')
+    ylabel('Rel. Freq.','Fontname','Arial','Fontsize',fs)
+    xlabel('IRD (mm)','Fontname','Arial','Fontsize',fs)
+    xlim([-80,85])
+    ylim([-3,48])
+    set(gca,'xtick',[-60 -30 0 30 60])
+    set(gca,'ytick',[0 20 40])
+    clear varl varr y
+
+    tmp=get(gca,'Position');
+    set(gca,'Position',tmp+[0 0.03 0 0]);
+
+    for ii=1:length(h)
+        set(h(ii),'Linewidth',1.1)
+        set(h(ii),'TickLength',[0.015 0.015])
+        tmp=findobj(h(ii),'Type','patch');
+        set(tmp,'EdgeColor','k');
+    end
+    set(gcf,'color',[1 1 1])
+    
+end
+
+%% Figure 8
+if flags.do_fig8
     
     siglevel=0.05;
     outlierrate=0.01; % upper bound for the outlier rate
@@ -666,93 +808,8 @@ if flags.do_fig6
     
 end
 
-%% Figure 7
-if flags.do_fig7
-    
-%load data
-    hrtf={'ARI','CIPIC','LISTEN'};
-    for kk=1:length(hrtf)
-        data=data_ziegelwanger2014(hrtf{kk});
-        if kk==3
-            data.results=data.results([1:27 29:end]);
-        end
-        for ii=1:length(data.results)
-            temp1(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
-            temp2(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
-            temp3(:,:,ii)=data.results(ii).MCM{2}.p_offaxis;
-        end
-        p_onaxis{kk}=temp1;
-    %     p_offaxis{kk,1}=temp2;
-    %     p_offaxis{kk,2}=temp3;
-        clear data temp1 temp2 temp3
-    end
-    data=data_ziegelwanger2014('SPHERE_ROT');
-    for ii=1:length(data.results)
-        temp(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
-    end
-    p_onaxis{4}=temp;
-    clear data temp
-    Obj=data_ziegelwanger2014('Sphere');
-    [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
-    p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
-    clear data temp Obj
-    Obj=data_ziegelwanger2014('SAT');
-    [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
-    p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
-    clear data temp Obj
-    Obj=data_ziegelwanger2014('STP');
-    [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
-    p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
-    clear data temp Obj
-    data=data_ziegelwanger2014('SPHERE_DIS');
-    for ii=1:length(data.results)
-        temp1(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
-        temp2(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
-    end
-    p_onaxis{5}=temp1;
-    p_offaxis{5}=temp2;
-    clear data temp1 temp2
-
-%plot figure
-    figure('PaperUnits','centimeters','PaperType','A4','Paperposition',[0, 0, 21, 29.7],'Units','centimeters','Position',[0 0 21 29.7],'Resize','off')
-    fs=14;%fontsize
-
-    temp=1;
-    for kk=1:3
-        varl(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
-            squeeze(p_onaxis{kk}(1,1,:)*1000);
-        varr(temp:temp+size(p_onaxis{kk},3)-1,:)= ...
-            squeeze(p_onaxis{kk}(1,2,:)*1000);
-        temp=size(varl,1)+1;
-    end
-
-    h(1)=subplot(621);
-    binranges = -105:5:105;
-    bincounts=histc(varl(:,1)-varr(:,1),binranges);
-    bar(binranges,bincounts/sum(bincounts)*100,'Facecolor',[0.6 0.6 0.6]);
-    hold on
-    [mu,sigma]=normfit(varl(:,1)-varr(:,1));
-    y=normpdf(binranges,mu,sigma);
-    plot(binranges,y*100*5,'k','linewidth',1.1)
-    ylabel('Rel. Freq.','Fontname','Arial','Fontsize',fs)
-    xlabel('IRD (mm)','Fontname','Arial','Fontsize',fs)
-    xlim([-80,85])
-    ylim([-1,16])
-    set(gca,'xtick',[-60 -30 0 30 60])
-    clear varl varr y
-
-    for ii=1:length(h)
-        set(h(ii),'Linewidth',1.1)
-        set(h(ii),'TickLength',[0.015 0.015])
-        tmp=findobj(h(ii),'Type','patch');
-        set(tmp,'EdgeColor','k');
-    end
-    set(gcf,'color',[1 1 1])
-    
-end
-
-%% Figure 8
-if flags.do_fig8
+%% Figure 9
+if flags.do_fig9
     
 %load data
     Obj=data_ziegelwanger2014('NH89');
@@ -783,11 +840,15 @@ if flags.do_fig8
     
 end
 
-%% Figure 9
-if flags.do_fig9
+%% Figure 10
+if flags.do_fig10
 
 %load data
-    data=data_ziegelwanger2014('SPHERE_DIS');
+    if flags.do_redo
+        data=data_ziegelwanger2014('SPHERE_DIS','redo');
+    else
+        data=data_ziegelwanger2014('SPHERE_DIS');
+    end
     for ii=1:length(data.results)
         p_onaxis(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
     end
@@ -852,11 +913,15 @@ if flags.do_fig9
     
 end
 
-%% Figure 11
-if flags.do_fig11
+%% Figure 12
+if flags.do_fig12
 
 %load data
-    data=data_ziegelwanger2014('SPHERE_DIS');
+    if flags.do_redo
+        data=data_ziegelwanger2014('SPHERE_DIS','redo');
+    else
+        data=data_ziegelwanger2014('SPHERE_DIS');
+    end
     for ii=1:length(data.results)
         p_offaxis(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
     end
@@ -1011,7 +1076,11 @@ end
 if flags.do_tab1
     
 %load data
-    data=data_ziegelwanger2014('SPHERE_ROT');
+    if flags.do_redo
+        data=data_ziegelwanger2014('SPHERE_ROT','redo');
+    else
+        data=data_ziegelwanger2014('SPHERE_ROT');
+    end
     for ii=1:length(data.results)
         p_onaxis{1}(:,:,ii)=data.results(ii).MAX{1}.p_onaxis;
         p_onaxis{2}(:,:,ii)=data.results(ii).CTD{1}.p_onaxis;
@@ -1177,7 +1246,11 @@ if flags.do_tab3
     out=zeros(4,8);
     hrtf={'ARI','CIPIC','LISTEN'};
     for kk=1:length(hrtf)
-        data=data_ziegelwanger2014(hrtf{kk});
+        if flags.do_redo
+            data=data_ziegelwanger2014(hrtf{kk},'redo');
+        else
+            data=data_ziegelwanger2014(hrtf{kk});
+        end
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
@@ -1301,7 +1374,11 @@ if flags.do_tab5
 
     hrtf={'ARI','CIPIC','LISTEN'};
     for kk=1:length(hrtf)
-        data=data_ziegelwanger2014(hrtf{kk});
+        if flags.do_redo
+            data=data_ziegelwanger2014(hrtf{kk},'redo');
+        else
+            data=data_ziegelwanger2014(hrtf{kk});
+        end
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
@@ -1462,7 +1539,11 @@ if flags.do_tab6
 
     hrtf={'SPHERE_ROT','SPHERE_DIS'};
     for kk=1:length(hrtf)
-        data=data_ziegelwanger2014(hrtf{kk});
+        if flags.do_redo
+            data=data_ziegelwanger2014(hrtf{kk},'redo');
+        else
+            data=data_ziegelwanger2014(hrtf{kk});
+        end
         for jj=1:2
             for ii=1:length(data.results)
                 temp1(:,:,ii)=data.results(ii).MCM{jj}.p_offaxis;
