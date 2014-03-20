@@ -87,6 +87,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 nargmin = 7;
 nargmax = 17;
 error(nargchk(nargmin,nargmax,nargin));
+if length(xs)==2 xs = [xs 0]; end
 
 definput.flags.method = {'stereo','wfs'};
 definput.keyvals.array = 'linear';
@@ -193,7 +194,7 @@ for ii=1:length(x)
     progressbar(ii,length(x))
     for jj=1:length(y)
         X = [x(ii) y(jj) 0];
-        desired_direction(ii,jj) = source_direction(X,phi,[xs 0],src);
+        desired_direction(ii,jj) = source_direction(X,phi,xs,src);
         if flags.do_stereo
             % first loudspeaker
             ir1 = ir_point_source(X,phi,x0(1,1:3),hrtf,conf);
@@ -203,7 +204,7 @@ for ii=1:length(x)
             ir = (ir1+ir2)/2;
         else % WFS
             conf.xref = X;
-            ir = ir_wfs(X,pi/2,[xs 0],src,hrtf,conf);
+            ir = ir_wfs(X,pi/2,xs,src,hrtf,conf);
         end
         % convolve impulse response with noise burst
         sig = auralize_ir(ir,sig_noise,1,conf);
