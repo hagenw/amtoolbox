@@ -74,7 +74,7 @@ if flags.do_dietz2011
     ild = zeros(nangles,23);
     for ii = 1:nangles
         % generate noise coming from the given direction
-        ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance],conf);
+        ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance],'spherical',conf);
         sig = auralize_ir(ir,sig_noise,1,conf);
         % calculate binaural parameters
         [fine, cfreqs, ild_tmp, env] = dietz2011(sig,fs);
@@ -131,4 +131,3 @@ lookup.S = S;
 lookup.p_ild = p_ild;
 lookup.MU_ild = MU_ild;
 lookup.S_ild = S_ild;
-
