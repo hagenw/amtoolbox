@@ -26,7 +26,7 @@ end
 for ii=1:size(database_url,1)
     if strcmpi(database_url{ii,1},database)
         % check if file is already downloaded
-        filename = [basepath database_url{ii,1} '.mat'];
+        filename = [basepath '/' database_url{ii,1} '.mat'];
         if ~exist(filename,'file')
             succes = urlwrite(database_url{ii,2},filename);
         else
