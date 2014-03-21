@@ -1,1 +1,0 @@
-HRTFs and data required for wierstorf2013 will be saved here. 
