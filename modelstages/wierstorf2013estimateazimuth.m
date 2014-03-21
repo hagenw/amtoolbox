@@ -173,6 +173,7 @@ end % of main function
 
 %% ===== Subfunctions ====================================================
 function [azimuth,azimuth_std,itd,cfreqs,w] = remove_outlier(azimuth,azimuth_std,itd,cfreqs,w)
+    % NOTE: the following was enabled for the original paper
     % remove unvalid ITDs
     %azimuth = azimuth(abs(itd)<0.001);
     %azimuth_std = azimuth_std(abs(itd)<0.001);
