@@ -150,7 +150,7 @@ if isempty(hrtf)
     % load HRTFs, see:
     % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
     [~,path] = download_hrtf('wierstorf2011_3m');
-    hrtf = read_irs([path 'wierstorf2011_3m.mat'],conf);
+    hrtf = read_irs([path '/wierstorf2011_3m.mat'],conf);
 end
 % Get sampling rate from the HRTFs
 fs = hrtf.fs;
@@ -194,26 +194,32 @@ for ii=1:length(x)
     if showprogress progressbar(ii,length(x)), end
     for jj=1:length(y)
         X = [x(ii) y(jj) 0];
-        desired_direction(ii,jj) = source_direction(X,phi,xs,src);
-        if flags.do_stereo
-            % first loudspeaker
-            ir1 = ir_point_source(X,phi,x0(1,1:3),hrtf,conf);
-            % second loudspeaker
-            ir2 = ir_point_source(X,phi,x0(2,1:3),hrtf,conf);
-            % sum of both loudspeakers
-            ir = (ir1+ir2)/2;
-        else % WFS
-            conf.xref = X;
-            ir = ir_wfs(X,pi/2,xs,src,hrtf,conf);
+        if strcmpi('circle',array) && norm(X)>L/2
+            desired_direction(ii,jj) = NaN;
+            perceived_direction(ii,jj) = NaN;
+            localization_error(ii,jj) = NaN;
+        else
+            desired_direction(ii,jj) = source_direction(X,phi,xs,src);
+            if flags.do_stereo
+                % first loudspeaker
+                ir1 = ir_point_source(X,phi,x0(1,1:3),hrtf,conf);
+                % second loudspeaker
+                ir2 = ir_point_source(X,phi,x0(2,1:3),hrtf,conf);
+                % sum of both loudspeakers
+                ir = (ir1+ir2)/2;
+            else % WFS
+                conf.xref = X;
+                ir = ir_wfs(X,pi/2,xs,src,hrtf,conf);
+            end
+            % convolve impulse response with noise burst
+            sig = auralize_ir(ir,sig_noise,1,conf);
+            % estimate the perceived direction
+            % this is done by calculating ITDs with the dietz2011 binaural model,
+            % which are then mapped to azimuth values with a lookup table
+            perceived_direction(ii,jj) = wierstorf2013estimateazimuth(sig,lookup, ...
+                'dietz2011','no_spectral_weighting','remove_outlier');
+            localization_error(ii,jj) = perceived_direction(ii,jj)-desired_direction(ii,jj);
         end
-        % convolve impulse response with noise burst
-        sig = auralize_ir(ir,sig_noise,1,conf);
-        % estimate the perceived direction
-        % this is done by calculating ITDs with the dietz2011 binaural model,
-        % which are then mapped to azimuth values with a lookup table
-        perceived_direction(ii,jj) = wierstorf2013estimateazimuth(sig,lookup, ...
-            'dietz2011','no_spectral_weighting','remove_outlier');
-        localization_error(ii,jj) = desired_direction(ii,jj)-perceived_direction(ii,jj);
     end
 end
 
