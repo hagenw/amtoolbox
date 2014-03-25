@@ -161,7 +161,7 @@ function outsig = lowpass(sig, a)
 end
 
 
-% NOTE: I have removed the temporal smoothing from this function. The lowpass
+% Hagen: I have removed the temporal smoothing from this function. The lowpass
 % has to be applied afterwards. The positive effect is a little bit smoother ITD
 % value. The negative effect is a longer time after the onset at the beginning
 % to reach the actual value.
