@@ -148,6 +148,10 @@ function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %   References: dietz2011auditory
 
 % AUTHOR: Mathias Dietz, Martin Klein-Hennig (for AMT), Hagen Wierstorf (for AMT)
+% 
+% This model got a major update, and the figures of exp_dietz2011() look now
+% slightly different than before. If you want to restore the original version of
+% the model please checkout version 29a048b with git or install AMToolbox 0.9.5
 
 %   Copyright (C) 2002-2012   AG Medizinische Physik,
 %                             Universitaet Oldenburg, Germany
