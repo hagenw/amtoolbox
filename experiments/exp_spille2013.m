@@ -39,7 +39,7 @@ panellabel = 'acbd';
 
 % convert interaural information into azimuth
 itd_unwrapped = ...
-    dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst,2.5);
+    dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst_lp,2.5);
 lookup = load('dietz2011itd2anglelookup.mat');
 angl=itd2angle(itd_unwrapped,lookup);
 
