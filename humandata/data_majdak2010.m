@@ -20,10 +20,13 @@ function data = data_majdak2010(varargin)
 % 
 %   The *condition* flag may be one of:
 %
-%     'HMD_M'   Head-mounted display and manual pointing. This is the default.
-%     'HMD_H'   Head-mounted display and head pointing.
-%     'Dark_M'  Dark room and manual pointing.
-%     'Dark_H'  Dark room and head pointing.
+%     'HMD_M'   Head-mounted display and manual pointing. Testing of naive
+%               subjects.
+%     'HMD_H'   Head-mounted display, head pointing, naive subjects.
+%     'Dark_M'  Dark room, manual pointing, naive subjects.
+%     'Dark_H'  Dark room, head pointing, naive subjects.
+%     'Learn_M' Acoustic learning condition with manual pointing. This is the default.
+%     'Learn_H' Acoustic learning condition with head pointing.
 %
 %   References: majdak2010methods
 
@@ -32,7 +35,7 @@ function data = data_majdak2010(varargin)
 %% Check input options
 
 % Define input flags
-definput.flags.condition = {'HMD_M','HMD_H','Dark_M','Dark_H'};
+definput.flags.condition = {'Learn_M','Learn_H','HMD_M','HMD_H','Dark_M','Dark_H'};
 
 % Parse input options
 [flags,kv]  = ltfatarghelper({},definput,varargin);
@@ -51,7 +54,9 @@ C = find(ismember(condition,flags.condition));
 
 for ll = 1:length(subject)
   
-  data(ll).mtx = subject(ll).expData{C}(:,1:8);
+  if not(isempty(subject(ll).expData{C}))
+    data(ll).mtx = subject(ll).expData{C}(:,1:8);
+  end
   data(ll).id = subject(ll).id;
 
 end

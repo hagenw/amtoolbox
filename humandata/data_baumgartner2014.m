@@ -96,7 +96,8 @@ definput.import={'baumgartner2014'};
 if flags.do_pool || flags.do_baseline
   
   listeners = {'NH12';'NH15';'NH21';'NH22';'NH33';'NH39';'NH41';'NH42';'NH43';...
-               'NH46';'NH53';'NH55';'NH58';'NH62';'NH64';'NH68';'NH71';'NH72'};
+               'NH46';'NH53';'NH55';'NH58';'NH62';'NH64';'NH68';'NH71';'NH72';...
+               'NH14';'NH16';'NH17';'NH18';'NH57'};
   data=cell2struct(listeners,'id',2);
              
     for ii = 1:length(data)
@@ -162,10 +163,9 @@ dlat = 10;
 
 % Experimental baseline data
 numchan = data_goupell2010('BB');
-methods = data_majdak2010('HMD_M');
+methods = data_majdak2010('Learn_M');
 spatstrat = data_majdak2013('BB');
-ctcA = data_majdak2013ctc('A');
-ctcB = data_majdak2013ctc('B');
+% ctc = data_majdak2013ctc('A');
 ctcL = data_majdak2013ctc('Learn');
 
 for ll = 1:length(s)
@@ -175,8 +175,8 @@ for ll = 1:length(s)
   s(ll).mm1 = [s(ll).mm1 ; numchan(ismember({numchan.id},s(ll).id)).mtx];
   s(ll).mm1 = [s(ll).mm1 ; methods(ismember({methods.id},s(ll).id)).mtx];
   s(ll).mm1 = [s(ll).mm1 ; spatstrat(ismember({spatstrat.id},s(ll).id)).mtx];
-  s(ll).mm1 = [s(ll).mm1 ; ctcA(ismember({ctcA.id},s(ll).id)).mtx];
-  s(ll).mm1 = [s(ll).mm1 ; ctcB(ismember({ctcB.id},s(ll).id)).mtx];
+%   s(ll).mm1 = [s(ll).mm1 ; ctcA(ismember({ctcA.id},s(ll).id)).mtx];
+%   s(ll).mm1 = [s(ll).mm1 ; ctcB(ismember({ctcB.id},s(ll).id)).mtx];
   s(ll).mm1 = [s(ll).mm1 ; ctcL(ismember({ctcL.id},s(ll).id)).mtx];
   
   s(ll).pe_exp = localizationerror(s(ll).mm1,'rmsPmedianlocal');

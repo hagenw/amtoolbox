@@ -25,6 +25,7 @@ for ss = 1:length(s)
   scalib(ss).S = fminsearch(@(S) evaldist(s(ss),S,kv),s(ss).S,...
     optimset('MaxIter',50,'TolX',0.001)...
     );
+%   [~,scalib(ss).qe_pred,scalib(ss).pe_pred] = evaldist(s(ss),S,kv);
   fprintf('%2.0u of %2.0u calibrated.\n',ss,length(s))
 
 end
@@ -33,7 +34,7 @@ end
 end
 
 
-function distmetric = evaldist(s,S,kv)
+function [distmetric,qeM,peM] = evaldist(s,S,kv)
 
 if S <= 0
   distmetric = Inf;

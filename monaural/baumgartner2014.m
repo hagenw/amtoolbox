@@ -57,9 +57,8 @@ function varargout = baumgartner2014( target,template,varargin )
 %                    equivalent rectangular bandwidths (ERBs). 
 %                    Default value is 1 ERB.
 %
-%     'conGain',cg   Set the contralateral gain *cg* of the sigmoid function 
-%                    applied for binaural weighting of monaural similarity 
-%                    indices. Default value is 13 degrees.
+%     'bwcoef',bwc   Set the binaural weighting coefficient *bwc*.
+%                    Default value is 13 degrees.
 %
 %     'polsamp',ps   Define the the polar angular sampling of the current
 %                    SP. As default the sampling of ARI's HRTF format at
@@ -112,7 +111,7 @@ definput.import={'baumgartner2014'};
 
 [flags,kv]=ltfatarghelper(...
   {'fs','S','lat','stim','fsstim','space','do','flow','fhigh',...
-  'lvltar','lvltem','SL','conGain','polsamp','mrsmsp','gamma'},definput,varargin);
+  'lvltar','lvltem','SL','bwcoef','polsamp','mrsmsp','gamma'},definput,varargin);
 
 % Print Settings
 if flags.do_print 
@@ -254,7 +253,7 @@ end
 
 %% Binaural weighting -> binaural SIs
 if size(si,3) == 2
-    binw = 1./(1+exp(-kv.lat/kv.conGain)); % weight of left ear signal with 0 <= binw <= 1
+    binw = 1./(1+exp(-kv.lat/kv.bwcoef)); % weight of left ear signal with 0 <= binw <= 1
     si = binw * si(:,:,1) + (1-binw) * si(:,:,2);
 end
 

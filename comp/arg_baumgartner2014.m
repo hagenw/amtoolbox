@@ -25,9 +25,9 @@ definput.keyvals.fhigh=18000;   % Hz
 definput.keyvals.lvltar = 50; 	% dBSPL
 definput.keyvals.lvltem = 60;  	% dBSPL
 definput.keyvals.SL = [];       % db/ERB; spectral density of target sound re absolut detection threshold
-definput.keyvals.conGain=13;    % steepness in degrees of binaural weighting function
+definput.keyvals.bwcoef=13;     % steepness in degrees of binaural weighting function
 definput.keyvals.polsamp=[-30:5:70 80 100 110:5:210];  % polar sampling (for regular)
-definput.keyvals.mrsmsp=19;     % degrees
+definput.keyvals.mrsmsp=17;     % degrees
 definput.keyvals.gamma=6;       % slope of psychometric function
   
 end

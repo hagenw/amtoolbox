@@ -27,94 +27,139 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %     'fig2'    Reproduce Fig.2:
 %               Binaural weighting function best fitting results from 
-%               Morimoto (2001) labeled as [1] and Macpherson and Sabin (2007) 
-%               labeled as [2] in a squared error sense.
+%               morimoto2001 labeled as $[1]$ and macpherson2007 labeled as 
+%               $[2]$ in a least squared error sense.
 %
 %     'fig3'    Reproduce Fig.3:
-%               Partial and joint prediction residues, $e_\mathrm{PE}$ and/or 
-%               $e_\mathrm{QE}$, as functions of the degree of selectivity, 
-%               $\Gamma$, and the motoric response scatter, $\varepsilon$. 
-%               Residuum functions are normalized to the minimum residuum 
-%               obtained for the optimal parameter value. See text for details.
+%               Prediction examples. Actual responses and response predictions 
+%               for three exemplary listeners when listening to median-plane 
+%               targets in the baseline condition. 
+%               Actual response angles are shown as open circles. 
+%               Probabilistic response predictions are encoded by brightness 
+%               according to the color bar to the right. Actual (A:) and 
+%               predicted (P:) quadrant error rates (QE) and local polar 
+%               RMS errors (PE) are listed above each panel.
 %               
 %     'fig4'    Reproduce Fig.4:
-%               Actual and predicted response patterns of listeners NH15, 
-%               NH22, and NH72 (from left to right) when listening to  targets 
-%               in the baseline condition and in the midsagittal plane. 
-%               Actual response angles are shown as open circles. Probabilistic 
-%               response predictions are encoded by brightness according to 
-%               the color bar to the right. Actual (A) and predicted (P) 
-%               performances (PEs and QEs) of the listener are listed above 
-%               each panel.
+%               Model parametrization. Partial and joint prediction residues 
+%               as functions of the degree of selectivity and the motoric 
+%               response scatter. Residuum functions are normalized to the 
+%               minimum residuum obtained for the optimal parameter value.
 %
 %     'fig5'    Reproduce Fig.5:
-%               Listener-specific baseline performance in the midsagittal plane. 
-%               Local performance is shown in terms of PE (left), global 
-%               performance in terms of QE (right). Correlation coefficients, 
-%               $r$, and prediction residues, $e$, with respect to actual and 
-%               predicted performances are shown above each panel.
+%               Effect of band limitation and spectral warping. Actual 
+%               responses and response predictions for listener NH12 when 
+%               listening to broadband (BB), low-pass filtered (LP), or 
+%               spectrally warped (W) DTFs of the median plane. Data were 
+%               pooled within $\pm15^\circ$ of lateral angle.
+%               All other conventions are as in Fig.3.
 %
 %     'fig6'    Reproduce Fig.6:
-%               Baseline performance as a function of the magnitudes of the 
-%               lateral response angle. Symbols and whiskers show median values 
+%               Effect of band limitation and spectral warping. 
+%               Listeners were tested with broadband (BB), low-pass 
+%               filtered (LP), and spectrally warped (W) DTFs. 
+%               Actual: experimental results from majdak2013. 
+%               Part.: Model predictions for the actual eight participants 
+%               based on the actually tested target positions. Pool: Model 
+%               predictions for our listener pool based on all possible 
+%               target positions. Symbols and whiskers show median values 
 %               and inter-quartile ranges, respectively. Symbols were 
-%               horizontally shifted to avoid overlaps. Correlation coefficients, 
-%               $r$, and prediction residues, $e$, specify the correspondence 
-%               between actual (A) and predicted (P) listener-specific performances. 
-%               Predictions of the model without the sensory-motoric mapping (SMM) 
-%               stage are shown with dashed lines.
+%               horizontally shifted to avoid overlaps. Dotted horizontal 
+%               lines represent chance rate. Correlation coefficients, $r$, 
+%               and prediction residues, $e$, specify the correspondence 
+%               between actual and predicted listener-specific performances.
 %
 %     'fig7'    Reproduce Fig.7:
-%               Actual and predicted response patterns of listener NH62 when 
-%               listening to broadband (left), low-pass filtered (center), 
-%               or spectrally warped (right) DTFs of the midsagittal plane. 
-%               Data were pooled within $\pm15^\circ$ of lateral angle.
-%               All other conventions are as in Fig.4.
+%               Effect of spectral resolution in terms of varying the number 
+%               of spectral channels of a channel vocoder. Actual responses 
+%               and response predictions for exemplary listener NH12. 
+%               Results for 24, 9, and 3 channels are shown. All other 
+%               conventions are as in Fig.3.
 %
 %     'fig8'    Reproduce Fig.8:
-%               Effect of band limitation and spectral warping. 
-%               Listeners were tested with broadband (BB), low-pass filtered (LP), 
-%               and spectrally warped (W) DTFs. Actual: experimental results 
-%               from Majdak et al. (2013). Part.: Model predictions for the 
-%               actual eight participants based on the actually tested target 
-%               positions. Pool: Model predictions for our pool of 18 listeners 
-%               based on all possible target positions. Dotted horizontal lines 
-%               represent chance rate. All other conventions are as in Fig.6.
+%               Effect of spectral resolution in terms of varying the number 
+%               of spectral channels of a channel vocoder. Actual experimental 
+%               results are from goupell2010numchan. Stimulation with broadband 
+%               click trains (CL) represents an unlimited number of channels. 
+%               All other conventions are as in Fig.6.
 %
 %     'fig9'    Reproduce Fig.9:
-%               Actual and predicted response patterns of exemplary listener 
-%               NH12 listening to channel-limited HRTFs. Results for an unlimited 
-%               number of channels (broadband click trains), 24, and 9 channels 
-%               are shown from left to right. All other conventions are as in Fig.7.
+%               Effect of non-individualized HRTFs in terms of untrained 
+%               localization with others' instead of own ears. Statistics 
+%               summaries with open symbols represent actual experimental 
+%               results replotted from Fig.\,13 of middlebrooks1999nonindividualized, 
+%               statistics with filled symbols represent predicted results.
+%               Horizontal lines represent 25th, 50th, and 75th percentiles, 
+%               the whiskers represent 5th and 95th percentiles, and crosses 
+%               represent minima and maxima. Circles and squares denote mean values.
 %
 %     'fig10'   Reproduce Fig.10:
-%               Effect of spectral resolution in terms of varying the number 
-%               of spectral channels used by a channel vocoder. Actual experimental 
-%               results are from Goupell et al. (2010). Stimulation with broadband 
-%               click trains (CL) represents an unlimited number of channels. 
-%               All other conventions are as in Fig.8.  
+%               Effect of spectral ripples. Actual experimental results (circles) 
+%               are from macpherson2003ripples. Predicted results (filled circles) 
+%               were modeled for our listener pool (squares). Either the ripple 
+%               depth of 40\,dB (top) or the ripple density of one ripple/octave 
+%               (bottom) was kept constant. Ordinates show the listener-specific 
+%               difference in error rate between a test and the baseline condition. 
+%               Baseline performances are shown in the bottom right panel.
+%               Symbols and whiskers show median values and inter-quartile ranges, 
+%               respectively. Symbols were horizontally shifted to avoid overlaps. 
+%               Diamonds with dashed lines show predictions (P) of the model 
+%               without positive spectral gradient extraction (PSGE).
 %
 %     'fig11'   Reproduce Fig.11:
-%               Effect of non-individualized HRTFs, i.e., localizing with others' 
-%               instead of own ears. Statistics summary replotted from Fig.13 
-%               of Middlebrooks (1999b). Horizontal lines represent 25th, 50th, 
-%               and 75th percentiles, the whiskers represent 5th and 95th percentiles, 
-%               and crosses represent minima and maxima. Circles and squares 
-%               represent mean values.
+%               Effect of high-frequency attenuation in speech localization. 
+%               Actual experimental results are from best2005highfrequency. 
+%               Absolute polar angle errors (top) and QE (bottom) were averaged 
+%               across listeners. Circles and squares show actual and predicted 
+%               results, respectively. Diamonds with dashed lines show predictions 
+%               of the model without positive spectral gradient extraction.
 %
 %     'fig12'   Reproduce Fig.12:
-%               Effect of spectral ripples. Actual experimental results are 
-%               from Macpherson et al. (2003). Either the ripple depth of 40dB (top) 
-%               or the ripple density of one ripple/octave (bottom) was kept constant.
-%               Predictions (P) of the model without the DCN stage are shown 
-%               with dashed lines. All other conventions are as in Fig.8.  
+%               Listener-specific likelihood statistics used to evaluate 
+%               target-specific predictions for baseline condition. Bars 
+%               show actual likelihoods, dots show mean expected likelihoods, 
+%               and whiskers show tolerance intervals with 99\% confidence 
+%               level of expected likelihoods.
 %
 %     'fig13'   Reproduce Fig.13:
-%               Effect of high-frequency attenuation in speech. Actual experimental 
-%               results are from Best et al. (2005). Open and filled symbols 
-%               show actual and predicted results, respectively. Absolute polar 
-%               angle errors (top) and QEs (bottom) averaged across listeners 
-%               are shown.  
+%               Exemplary baseline predictions. Same as Fig.3 but for listeners 
+%               where actual likelihoods were outside the tolerance intervals.    
+%
+%     'fig14'   Reproduce Fig.14:
+%               Baseline performance as a function of the magnitude of the 
+%               lateral response angle. Symbols and whiskers show median 
+%               values and inter-quartile ranges, respectively. Open symbols 
+%               represent actual and closed symbols predicted results. Symbols 
+%               were horizontally shifted to avoid overlaps. Triangles with 
+%               dashed lines show predictions (P) of the model without the 
+%               sensomotoric mapping (SMM) stage.  
+%
+%     'tab1'    Reproduce Tab.1:
+%               Listener-specific sensitivity calibrated on the basis of N 
+%               baseline targets in proximity of the median plane (+-30deg). 
+%               Listeners are labeled as NH$l$. Actual and predicted quadrant 
+%               errors (QE) and local polar RMS errors (PE) are shown pairwise 
+%               (Actual $|$ Predicted).
+%
+%     'tab2'    Reproduce Tab.2:
+%               The effects of model configurations on the prediction residues. 
+%               PSGE: model with or without positive spectral gradient extraction. 
+%               MBA: model with or without manual bandwidth adjustment to the 
+%               stimulus bandwidth. Prediction residues between actual and 
+%               predicted PE and QE are listed for acute performance with 
+%               the broadband (BB), low-passed (LP) and warping (W) conditions 
+%               of the experiments from majdak2013spatstrat.
+%
+%     'tab3'    Reproduce Tab.3:
+%               Performance predictions for binaural, ipsilateral, and 
+%               contralateral listening conditions. The binaural weighting 
+%               coefficient was varied in order to represent the three 
+%               conditions: binaural: $\Phi = 13^\circ$; 
+%               ipsilateral: $\Phi \rightarrow +0^\circ$; 
+%               contralateral: $\Phi \rightarrow -0^\circ$. 
+%               Prediction residues and correlation coefficients between 
+%               actual and predicted results are shown together with predicted 
+%               average performances. 
 %
 %   Requirements: 
 %   -------------
@@ -176,9 +221,11 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %     exp_baumgartner2014('fig13');
 %
-%   See also: baumgartner2013, data_baumgartner2013
+%   See also: baumgartner2014, data_baumgartner2014
 %
-%   References: baumgartner2014
+%   References: baumgartner2014 majdak2013spatstrat morimoto2001
+%   macpherson2007 goupell2010numchan middlebrooks1999nonindividualized 
+%   macpherson2003ripples
 
   
 % AUTHOR: Robert Baumgartner
@@ -190,7 +237,8 @@ definput.import={'amtredofile'};
 definput.keyvals.FontSize = 12;
 definput.keyvals.MarkerSize = 6;
 definput.flags.type = {'missingflag','fig2','fig3','fig4','fig5','fig6',...
-                       'fig7','fig8','fig9','fig10','fig11','fig12','fig13'};
+                       'fig7','fig8','fig9','fig10','fig11','fig12','fig13',...
+                       'fig14','tab1','tab2','tab3'};
 definput.flags.plot = {'plot','noplot'};
 
 
@@ -264,8 +312,66 @@ if flags.do_fig2
   
 end
 
-%% ------ FIG 3 -----------------------------------------------------------
-if flags.do_fig3
+%% ------ FIG 3&13 --------------------------------------------------------
+if flags.do_fig3 || flags.do_fig13
+  
+  latseg = [-20,0,20]; ii = 2; % centers of lateral segments
+%   dlat =  10;         % lateral range (+-) of each segment
+
+  s = data_baumgartner2014('baseline');
+  
+  if flags.do_fig3
+    idselect = ismember({s.id},{'NH15','NH22','NH62'});
+  else
+    idselect = ismember({s.id},{'NH12','NH39','NH18'});
+  end
+  s = s(idselect);
+
+  %% LocaMo
+  qe = zeros(length(s),length(latseg));
+  pe = zeros(length(s),length(latseg));
+  for ll = 1:length(s)
+
+      s(ll).sphrtfs{ii} = 0;     % init
+      s(ll).p{ii} = 0;        % init
+
+      [s(ll).sphrtfs{ii},polang] = extractsp( latseg(ii),s(ll).Obj );
+      [s(ll).p{ii},respangs] = baumgartner2014(...
+          s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
+          'S',s(ll).S,'lat',latseg(ii),'polsamp',polang); 
+
+      [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014pmv2ppp( ...
+          s(ll).p{ii} , polang , respangs , s(ll).target{ii});
+
+      if flags.do_plot
+        if ll ==1; figure; end
+        subplot(1,3,ll)
+        Nmax = min(150,s(ll).Ntargets{ii});
+        idplot = round(1:s(ll).Ntargets{ii}/Nmax:s(ll).Ntargets{ii});
+        plotbaumgartner2013(s(ll).p{ii},polang,respangs,...
+                  s(ll).target{ii}(idplot),s(ll).response{ii}(idplot),...
+                  'MarkerSize',kv.MarkerSize,'cmax',0.05,'nocolorbar');
+        title({['A: PE = ' num2str(s(ll).pe_exp_lat(ii),2) '\circ, QE = ' num2str(s(ll).qe_exp_lat(ii),2) '%'];['P: PE = ' num2str(pe(ll,ii),2) '\circ, QE = ' num2str(qe(ll,ii),2) '%']},...
+          'FontSize',kv.FontSize-1)
+        text(90,240,s(ll).id,'FontSize',kv.FontSize,...
+          'Color','w','HorizontalAlignment','center')
+        xlabel('Target Angle (deg)','FontSize',kv.FontSize)
+        ylabel('Response Angle (deg)','FontSize',kv.FontSize)
+        set(gca,'FontSize',kv.FontSize-1)
+        set(gca,'XTickLabel',{[];[];0;[];60;[];120;[];180;[];[]})
+        set(gca,'YTickLabel',{-60;[];0;[];60;[];120;[];180;[];240})
+      end
+
+  end
+  
+  s = rmfield(s,{'Obj','mm1','sphrtfs'}); % reduce file size 
+  
+  varargout{1} = s;
+  
+end
+
+%% ------ FIG 4 -----------------------------------------------------------
+if flags.do_fig4
   
   fn = [mfilename('fullpath'),'_parametrization.mat'];
   
@@ -277,9 +383,9 @@ if flags.do_fig3
     tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_parametrization'); % temporary folder
     mkdir(tempfn)
     
-    gamma = [1,3,3,3,4,4,4,5,5,5,6,6,6,6,6,6,6,6,6,6,7,7,7,8,8,8,9,9,9,...
+    gamma = [1,3,3,3,4,4,4,5,5,5,6,6,6,6,6,6,6,6,6,6,6,6,7,7,7,8,8,8,9,9,9,...
       10,10,10,12,12,12,16,16,16,30,30,30,100,100,100];
-    mrs = [0,17,18,19,19,20,21,19,20,21, 0,10,100,17,19,20,21,23,30, 5,...
+    mrs = [0,17,18,19,19,20,21,19,20,21, 0,10,100,16,17,18,19,20,21,23,30, 5,...
       19,20,21,19,20,21,19,20,21,19,20,21,19,20,21,19,20,21,19,20,21,19,20,21];
 
     for g = 1:length(gamma)
@@ -332,7 +438,7 @@ if flags.do_fig3
               'gamma',gamma(g),'mrsmsp',mrs(g)); 
 
           if s(ll).Nt{ii} > 0
-            [ qe(ll,ii),pe(ll,ii) ] = pmv2ppp( ...
+            [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014pmv2ppp( ...
                 s(ll).p{ii} , polang , respangs , s(ll).target{ii});
           else
             qe(ll,ii) = NaN; 
@@ -349,7 +455,7 @@ if flags.do_fig3
 
     %% Combine results to single mat file
     fname = dir(fullfile(tempfn,'result_baseline_g*.mat'));
-    perr = zeros(18,7,length(fn));
+    perr = zeros(length(s),7,length(fn));
     qerr = perr;
     for ii = 1:length(fname)
       tmp = load(fullfile(tempfn,fname(ii).name));
@@ -379,8 +485,8 @@ if flags.do_fig3
     % Number of targets for each listeners (1st dim) and lateral segment (2nd
     % dim)
 
-    Ntargets = zeros(18,7);
-    for jj = 1:18
+    Ntargets = zeros(length(s),7);
+    for jj = 1:length(s)
       Ntargets(jj,:) = [tmp.s(jj).Nt{:}];
     end
     
@@ -394,7 +500,7 @@ if flags.do_fig3
   end
   varargout{1} = load(fn);
   
-  [qerr0,perr0] = pmv2ppp(ones(49,44)); % chance performances
+  [qerr0,perr0] = baumgartner2014pmv2ppp(ones(72,44)); % chance performances
 
   % extract all different gammas
   gamma = g(1);
@@ -438,6 +544,7 @@ if flags.do_fig3
   etotal_g = etotal_g / etotal_g(idopt);
   eperr_g = eperr_g / eperr_g(idopt);
   eqerr_g = eqerr_g / eqerr_g(idopt);
+  disp(['Optimal Gamma: ' num2str(gamma(idopt),'%u') ' dB^-1'])
 
 
   % Select residues for optimal gamma and various mrs
@@ -450,7 +557,7 @@ if flags.do_fig3
   etotal_gopt = resid.total(idmrs) / resid.total(idnorm);
   eperr_gopt = resid.perr(idmrs) / resid.perr(idnorm);
   eqerr_gopt = resid.qerr(idmrs) / resid.qerr(idnorm);
-  
+  disp(['Optimal MRS: ' num2str(mrssort(idopt_mrs),'%u') ' deg'])
   
   if flags.do_plot
     
@@ -498,74 +605,20 @@ if flags.do_fig3
     hold on
     plot(mrs_int,dqerr_int,'k--')
     plot(mrs_int,dtot_int,'k-')
-    plot(mrs(idopt_mrs),0.95,'vk','MarkerFaceColor','k','MarkerSize',kv.MarkerSize+1)
+    plot(mrssort(idopt_mrs),0.95,'vk','MarkerFaceColor','k','MarkerSize',kv.MarkerSize+1)
 
     ylabel('e(\epsilon) / e(\epsilon_{opt})','FontSize',kv.FontSize)
     xlabel('\epsilon (deg)','FontSize',kv.FontSize)
 
-    set(gca,'XLim',[mrssort(1) 40],'YLim',[0.91 1.7],'XMinorTick','on',...
+    set(gca,'XLim',[mrssort(1) 32],'YLim',[0.91 1.7],'XMinorTick','on',...
       'FontSize',kv.FontSize-1)
     set(gca,'TickLength',TickLength)
     
   end
 end
 
-%% ------ FIG 4 -----------------------------------------------------------
-if flags.do_fig4
-  
-  latseg = [-20,0,20]; ii = 2; % centers of lateral segments
-%   dlat =  10;         % lateral range (+-) of each segment
-
-  s = data_baumgartner2014('baseline');
-  
-  idselect = ismember({s.id},{'NH15','NH22','NH72'});
-  s = s(idselect);
-
-  %% LocaMo
-  qe = zeros(length(s),length(latseg));
-  pe = zeros(length(s),length(latseg));
-  for ll = 1:length(s)
-
-      s(ll).sphrtfs{ii} = 0;     % init
-      s(ll).p{ii} = 0;        % init
-
-      [s(ll).sphrtfs{ii},polang] = extractsp( latseg(ii),s(ll).Obj );
-      [s(ll).p{ii},respangs] = baumgartner2014(...
-          s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
-          'S',s(ll).S,'lat',latseg(ii),'polsamp',polang); 
-
-      [ qe(ll,ii),pe(ll,ii) ] = pmv2ppp( ...
-          s(ll).p{ii} , polang , respangs , s(ll).target{ii});
-
-      if flags.do_plot
-        if ll ==1; figure; end
-        subplot(1,3,ll)
-        Nmax = min(150,s(ll).Ntargets{ii});
-        idplot = round(1:s(ll).Ntargets{ii}/Nmax:s(ll).Ntargets{ii});
-        plotbaumgartner2013(s(ll).p{ii},polang,respangs,...
-                  s(ll).target{ii}(idplot),s(ll).response{ii}(idplot),...
-                  'MarkerSize',kv.MarkerSize,'cmax',0.05,'nocolorbar');
-        title({['A: PE = ' num2str(s(ll).pe_exp_lat(ii),2) '\circ, QE = ' num2str(s(ll).qe_exp_lat(ii),2) '%'];['P: PE = ' num2str(pe(ll,ii),2) '\circ, QE = ' num2str(qe(ll,ii),2) '%']},...
-          'FontSize',kv.FontSize-1)
-        text(90,240,s(ll).id,'FontSize',kv.FontSize,...
-          'Color','w','HorizontalAlignment','center')
-        xlabel('Target Angle (deg)','FontSize',kv.FontSize)
-        ylabel('Response Angle (deg)','FontSize',kv.FontSize)
-        set(gca,'FontSize',kv.FontSize-1)
-        set(gca,'XTickLabel',{[];[];0;[];60;[];120;[];180;[];[]})
-        set(gca,'YTickLabel',{-60;[];0;[];60;[];120;[];180;[];240})
-      end
-
-  end
-  
-  s = rmfield(s,{'Obj','mm1','sphrtfs'}); % reduce file size 
-  
-  varargout{1} = s;
-  
-end
-
-%% ------ FIG 5 -----------------------------------------------------------
-if flags.do_fig5
+%% ------ FIG 12 & TAB 1 -------------------------------------------------
+if flags.do_fig12 || flags.do_tab1
   
   fn = [mfilename('fullpath'),'_baseline.mat'];
   
@@ -613,22 +666,26 @@ if flags.do_fig5
         s(ll).sphrtfs{ii} = 0;     % init
         s(ll).p{ii} = 0;        % init
 
-        [s(ll).sphrtfs{ii},polang] = extractsp( latseg(ii),s(ll).Obj );
-        [s(ll).p{ii},respangs] = baumgartner2014(...
+        [s(ll).sphrtfs{ii},polang{ii}] = extractsp( latseg(ii),s(ll).Obj );
+        [s(ll).p{ii},respangs{ii}] = baumgartner2014(...
             s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
-            'S',s(ll).S,'lat',latseg(ii),'polsamp',polang); 
+            'S',s(ll).S,'lat',latseg(ii),'polsamp',polang{ii}); 
 
         if s(ll).Nt{ii} > 0
-          [ qe(ll,ii),pe(ll,ii) ] = pmv2ppp( ...
-              s(ll).p{ii} , polang , respangs , s(ll).target{ii});
+          [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014pmv2ppp( ...
+              s(ll).p{ii} , polang{ii} , respangs{ii} , s(ll).target{ii});
         else
           qe(ll,ii) = NaN; 
           pe(ll,ii) = NaN;
         end
 
       end
-
+      
+      [s(ll).la,s(ll).le,s(ll).ci,s(ll).lr] = baumgartner2014likelistat(s(ll).p,polang,respangs,s(ll).target,s(ll).response);
+      
+      
     end
+%     sum( ci(:,1)-la' <=0 & ci(:,2)-la' >=0 )
 
     s = rmfield(s,{'Obj','mm1','mm2','sphrtfs'}); % reduce file size 
     save(fn,'s', 'qe', 'pe', 'qe_exp', 'pe_exp', 'latseg',save_format);
@@ -638,8 +695,9 @@ if flags.do_fig5
   load(fn);
   varargout{1} = load(fn);
   
-  sign = {'ko';'kd';'kd';'k<';'kp';'k>'};
+  
   flags.do_pm30deglat = true; % consider lateral range of +-30 deg
+
   
   Ns = length(s);
   relfreq = zeros(Ns,length(latseg));
@@ -648,7 +706,7 @@ if flags.do_fig5
     Ntall(jj) = sum(Ntlat);
     relfreq(jj,:) = Ntlat/Ntall(jj);
   end
-  
+
   if flags.do_pm30deglat
     idlat = find(latseg <= 30 & latseg >= -30);
   else % consider only median plane (+-10 deg)
@@ -657,86 +715,71 @@ if flags.do_fig5
   relfreqPerSubject = relfreq(:,idlat)./repmat(sum(relfreq(:,idlat),2),1,3);
   pe = sum(relfreqPerSubject .* pe(:,idlat) , 2);
   qe = sum(relfreqPerSubject .* qe(:,idlat) , 2);
+
   
-  % Actual performances sorted acc. to deteriorating performance
-  pe_exp = [s.pe_exp]';
-  qe_exp = [s.qe_exp]';
-  [tmp,idsort] = sort(pe_exp+qe_exp);
-  
-  % IDs for xlabel
-  for ll = 1:Ns
-      NHs(ll,:) = s(ll).id;
+  if flags.do_fig12
+
+    % IDs for xlabel
+    for ll = 1:Ns
+        NHs(ll,:) = s(ll).id;
+    end
+
+    if flags.do_plot
+
+      [tmp,idsort] = sort([s.la]);
+      la = [s.la];
+      le = [s.le];
+      ci = [s.ci]';
+      lr = [s.lr]';
+      
+      fig=figure;
+
+      plotbaumgartner2014likelistat(la(idsort),le(idsort),ci(idsort,:),lr(idsort,:))
+      ylabel({'Likelihood'},'FontSize',kv.FontSize)
+      xlabel('Listener (NH)','FontSize',kv.FontSize)
+      set(gca,'XLim',[0 Ns+1],'XTickLabel',NHs(idsort,3:4),...
+          'YMinorTick','on','FontSize',kv.FontSize)
+      
+      % Bottom Line
+      hold on
+      ylim = [min(lr(:,1)) max(lr(:,4))];
+      plot([0,Ns+1],[ylim(1),ylim(1)]+0.0015*diff(ylim),'k')
+     
+      set(fig,'PaperPosition',[1,1,9,3.5])
+
+    end
+    
   end
+  
+  if flags.do_tab1
 
-  % Mean RMS Differences
-  idnum = not(isnan(pe_exp(idsort)) | isnan(pe(idsort)));
-  idsort = idsort(idnum);
-  relfreqAcrossSubjects = sum(relfreq(:,idlat),2);
-  relfreqAcrossSubjects = relfreqAcrossSubjects/sum(relfreqAcrossSubjects);
-  dpe = sqrt( relfreqAcrossSubjects(idsort)' * (pe_exp(idsort) - pe(idsort)).^2 );
-  dqe = sqrt( relfreqAcrossSubjects(idsort)' * (qe_exp(idsort) - qe(idsort)).^2 );
+    Labels = {'ID','N','S','actual QE','predicted QE','actual PE','predicted PE','Likelihood fit'};    
 
-  % Correlation Coefficients
-  idnum = not(isnan(pe_exp(:)) | isnan(pe));
-  r = corrcoef(pe_exp(idnum),pe(idnum));
-  r_pe = r(2);
-  idnum = not(isnan(qe_exp(:)) | isnan(qe));
-  [r,p] = corrcoef(qe_exp(idnum),qe(idnum));
-  r_qe = r(2);
-
-  if flags.do_plot
+    mtx = zeros(length(Labels),length(s));
+    for ll = 1:length(s)
+      mtx(1,ll) = str2num(s(ll).id(3:end));
+      mtx(2,ll) = sum([s(ll).Ntargets{:}]);
+      mtx(3,ll) = s(ll).S;
+      mtx(4,ll) = s(ll).qe_exp;
+      mtx(5,ll) = qe(ll);
+      mtx(6,ll) = s(ll).pe_exp;
+      mtx(7,ll) = pe(ll);
+%       mtx(8,ll) = s(ll).pvalue;
+    end
     
-    fig=figure;
+%     [tmp,idsort] = sort([s.qe_exp]);
+    [tmp,idsort] = sort(mtx(1,:)); % sort acc. to ID
+    mtx = mtx(:,idsort);
     
-    %% Polar Error
-
-    subplot(1,2,1)
-
-    ylim = [23.1 40.9];
-    ii = 1;
+    varargout{1} = mtx;
+    varargout{2} = Labels;
     
-    h = bar(pe_exp(idsort));
-    hold on
-    plot(pe(idsort),sign{ii},'MarkerSize',kv.MarkerSize,'MarkerFaceColor','k')
-    set(gca,'XLim',[0 Ns+1],'XTick',1:Ns,'XTickLabel',NHs(idsort,3:4),...
-        'YLim',ylim,'YMinorTick','on','FontSize',kv.FontSize-2)
-    plot([0,Ns+1],[ylim(1),ylim(1)]+0.0015*diff(ylim),'k') % bottom line
-    set(h,'FaceColor','white')
-    xlabel('Listener (NH)','FontSize',kv.FontSize)
-    ylabel('Local Polar RMS Error (deg)','FontSize',kv.FontSize)
-
-      l = legend('Actual','Predicted');
-      set(l,'FontSize',kv.FontSize-2,'Location','northwest')
-      title(['e_{PE} = ' num2str(dpe,'%0.1f') '\circ ; r_{PE} = ' num2str(r_pe,'%0.2f')],...
-      'FontSize',kv.FontSize)
-
-    %% Quadrant Error
-
-    subplot(1,2,2)
-
-    ylim = [0.1 19.9];
-
-    h = bar(qe_exp(idsort));
-    hold on
-    plot(qe(idsort),sign{ii},'MarkerSize',kv.MarkerSize,'MarkerFaceColor','k')
-
-    set(gca,'XLim',[0 Ns+1],'XTick',1:Ns,'XTickLabel',NHs(idsort,3:4),...
-        'YLim',ylim,'YMinorTick','on','FontSize',kv.FontSize-2)
-    plot([0,Ns+1],[ylim(1),ylim(1)]+0.0015*diff(ylim),'k') % bottom line
-    set(h,'FaceColor','white')
-    xlabel('Listener (NH)','FontSize',kv.FontSize)
-    ylabel('Quadrant Error (%)','FontSize',kv.FontSize)
-
-    title(['e_{QE} = ' num2str(dqe,'%0.1f') '% ; r_{QE} = ' num2str(r_qe,'%0.2f')],...
-      'FontSize',kv.FontSize)
-
-    set(fig,'PaperPosition',[1,1,9,3.5])
   end
 
 end
 
-%% ------ FIG 6 -----------------------------------------------------------
-if flags.do_fig6
+%% ------ FIG 14 ----------------------------------------------------------
+if flags.do_fig14
   
   fn = [mfilename('fullpath'),'_baseline.mat'];
   
@@ -837,16 +880,19 @@ if flags.do_fig6
     errorbar(latseg+dx,quart_pe(2,:,3),...
       quart_pe(2,:,3)-quart_pe(1,:,3),...
       quart_pe(3,:,3)-quart_pe(2,:,3),...
-      'dk--','MarkerSize',kv.MarkerSize-1,'MarkerFaceColor','k');
+      'vk--','MarkerSize',kv.MarkerSize,'MarkerFaceColor','k');
     errorbar(latseg,quart_pe(2,:,2),...
       quart_pe(2,:,2)-quart_pe(1,:,2),...
       quart_pe(3,:,2)-quart_pe(2,:,2),...
       'ok-','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w');
-
-    title(['e_{PE} = ' num2str(dpe,'%0.1f') '\circ ; r_{PE} = ' num2str(r_pe(2),'%0.2f')],...
-      'FontSize',kv.FontSize)
+    
+    titstr = {['w/ SMM:  e_{PE} = ' num2str(dpe,'%0.1f') '\circ , r_{PE} = ' num2str(r_pe(2),'%0.2f')];...
+      ['w/o SMM: e_{PE} = ' num2str(mrs0.dpe,'%0.1f') '\circ , r_{PE} = ' num2str(mrs0.r_pe(2),'%0.2f')]};
+    disp(titstr)
+    title(titstr,'FontSize',kv.FontSize)
     set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[21.1,45.9],...
-      'YMinorTick','on','FontSize',kv.FontSize)
+      'YMinorTick','on','FontSize',kv.FontSize,...
+        'TickLength',2*get(gca,'TickLength'))
     ylabel('Local Polar RMS Error (deg)','FontSize',kv.FontSize)
     xlabel('Magnitude of Lateral Angle (deg)','FontSize',kv.FontSize)
 
@@ -862,19 +908,22 @@ if flags.do_fig6
     errorbar(latseg+dx,quart_qe(2,:,3),...
       quart_qe(2,:,3)-quart_qe(1,:,3),...
       quart_qe(3,:,3)-quart_qe(2,:,3),...
-      'dk--','MarkerSize',kv.MarkerSize-1,'MarkerFaceColor','k');
+      'vk--','MarkerSize',kv.MarkerSize,'MarkerFaceColor','k');
     errorbar(latseg,quart_qe(2,:,2),...
       quart_qe(2,:,2)-quart_qe(1,:,2),...
       quart_qe(3,:,2)-quart_qe(2,:,2),...
       'ok-','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w');
-    title(['e_{QE} = ' num2str(dqe,'%0.1f') '% ; r_{QE} = ' num2str(r_qe(2),'%0.2f')],...
-      'FontSize',kv.FontSize)
+    titstr = {['w/ SMM:  e_{QE} = ' num2str(dqe,'%0.1f') '% , r_{QE} = ' num2str(r_qe(2),'%0.2f')];...
+      ['w/o SMM: e_{QE} = ' num2str(mrs0.dqe,'%0.1f') '% , r_{QE} = ' num2str(mrs0.r_qe(2),'%0.2f')]};
+    disp(titstr)
+    title(titstr,'FontSize',kv.FontSize)
     set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[2.1,26.9],...
-      'XTick',latseg,'YMinorTick','on','FontSize',kv.FontSize)
+      'XTick',latseg,'YMinorTick','on','FontSize',kv.FontSize,...
+        'TickLength',2*get(gca,'TickLength'))
     ylabel('Quadrant Error (%)','FontSize',kv.FontSize)
     xlabel('Magnitude of Lateral Angle (deg)','FontSize',kv.FontSize)
 
-    l = legend('P (with SMM)','P (w/o SMM)','A');
+    l = legend('P (with SMM)','P (w/o SMM)','Actual');
     set(l,'FontSize',kv.FontSize-1,'Location','northwest')
 
     set(fig,'PaperPosition',[1,1,10,3.5])
@@ -882,8 +931,8 @@ if flags.do_fig6
   end
 end
 
-%% ------ FIG 7 -----------------------------------------------------------
-if flags.do_fig7
+%% ------ FIG 5 -----------------------------------------------------------
+if flags.do_fig5
   
   latdivision = 0;  % lateral angle
   dlat = 15;
@@ -894,7 +943,7 @@ if flags.do_fig7
 
   %% Computations
   s = data_baumgartner2014('pool');  
-  s = s(ismember({s.id},'NH39'));
+  s = s(ismember({s.id},'NH12'));
   disp(['Listener: ' s.id])
   chance = [];
   for C = 1:length(Conditions)
@@ -960,11 +1009,12 @@ if flags.do_fig7
               s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},s(ll).fs,...
               'S',s(ll).S,'lat',latdivision(ii),...
               'polsamp',s(ll).polang{ii});
+        respangs{ii} = rang;
 
-        [ qe(ii),pe(ii) ] = pmv2ppp(s(ll).p{ii} , s(ll).polang{ii} , rang);
+        [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp(s(ll).p{ii} , s(ll).polang{ii} , rang);
 
         if sum(ismember({data.id},s(ll).id)) % if participant then actual targets
-          [ qe_t(ii),pe_t(ii) ] = pmv2ppp( ...
+          [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
               s(ll).p{ii} , s(ll).polang{ii} , rang , s(ll).target{ii} );
 
         end
@@ -1023,7 +1073,9 @@ if flags.do_fig7
           set(gca,'YTickLabel',{-60;[];0;[];60;[];120;[];180;[];240})
 
         end
-
+        
+%         [la(C,ll),le(C,ll),ci(C,ll,:)] = baumgartner2014likelistat(s(ll).p,s(ll).polang,respangs,s(ll).target,s(ll).response);
+        
       end
 
     end
@@ -1035,8 +1087,8 @@ if flags.do_fig7
 end
 
 
-%% ------ FIG 8 -----------------------------------------------------------
-if flags.do_fig8
+%% ------ FIG 6 -----------------------------------------------------------
+if flags.do_fig6
   
   fn = [mfilename('fullpath'),'_spatstrat.mat'];
   
@@ -1052,7 +1104,7 @@ if flags.do_fig8
 
     %% Computations
     s = data_baumgartner2014('pool');
-    chance = [];
+%     chance = [];
     for C = 1:length(Conditions)
 
       Cond = Conditions{C};
@@ -1068,7 +1120,7 @@ if flags.do_fig8
             latresp = s(ll).mm1(:,7);
             idlat = latresp <= latdivision(ii)+dlat & latresp > latdivision(ii)-dlat;
             mm2 = s(ll).mm1(idlat,:);
-            chance = [chance;mm2];
+%             chance = [chance;mm2];
             s(ll).target{ii} = mm2(:,6); % polar angle of target
             s(ll).response{ii} = mm2(:,8); % polar angle of response
           end
@@ -1116,11 +1168,12 @@ if flags.do_fig8
                 s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},s(ll).fs,...
                 'S',s(ll).S,'lat',latdivision(ii),...
                 'polsamp',s(ll).polang{ii});
+          respangs{ii} = rang;
 
-          [ qe(ii),pe(ii) ] = pmv2ppp(s(ll).p{ii} , s(ll).polang{ii} , rang);
+          [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp(s(ll).p{ii} , s(ll).polang{ii} , rang);
 
           if sum(ismember({data.id},s(ll).id)) % if actual participant actual targets
-            [ qe_t(ii),pe_t(ii) ] = pmv2ppp( ...
+            [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
                 s(ll).p{ii} , s(ll).polang{ii} , rang , s(ll).target{ii} );
 
           end
@@ -1153,6 +1206,7 @@ if flags.do_fig8
             s(ll).pe_part(C,1) = mean(pe_t);
           end
 
+          [la(C,ll),le(C,ll),ci(C,ll,:)] = baumgartner2014likelistat(s(ll).p,s(ll).polang,respangs,s(ll).target,s(ll).response);
         end
 
       end
@@ -1160,11 +1214,11 @@ if flags.do_fig8
     s = rmfield(s,{'Obj','spdtfs_c','spdtfs'});% reduce file size
 
     %% Compute Chance Performance
-    chance = repmat(chance,10,1);
-    id_chance = randi(size(chance,1),size(chance,1),1);
-    chance(:,8) = chance(id_chance,6);
-    pe_chance = localizationerror(chance,'rmsPmedianlocal');
-    qe_chance = localizationerror(chance,'querrMiddlebrooks');
+%     chance = repmat(chance,10,1);
+%     id_chance = randi(size(chance,1),size(chance,1),1);
+%     chance(:,8) = chance(id_chance,6);
+%     pe_chance = localizationerror(chance,'rmsPmedianlocal');
+%     qe_chance = localizationerror(chance,'querrMiddlebrooks');
 
     [r,p] =  corrcoef([s.qe_exp],[s.qe_part]);
     cc.qe.r = r(2);
@@ -1204,12 +1258,13 @@ if flags.do_fig8
   dqe = sqrt(relfreq(:)' * sd_qe(:));
 
   % Chance performance
-  qe0 = qe_chance;
-  pe0 = pe_chance;
+%   qe0 = qe_chance;
+%   pe0 = pe_chance;
+  [qe0,pe0] = baumgartner2014pmv2ppp('chance');
 
   if flags.do_plot
     
-    dx = 0.1;
+    dx = 0.15;
     
     figure 
 
@@ -1233,15 +1288,16 @@ if flags.do_fig8
 
     plot([0,4],[pe0,pe0],'k:')
 
-    title(['e_{PE} = ' num2str(dpe,'%0.1f') '\circ ; r_{PE} = ' num2str(cc.pe.r,'%0.2f')],...
+    title(['e_{PE} = ' num2str(dpe,'%0.1f') '\circ , r_{PE} = ' num2str(cc.pe.r,'%0.2f')],...
       'FontSize',kv.FontSize)
     ylabel('Local Polar RMS Error (deg)','FontSize',kv.FontSize)
     set(gca,...
         'XLim',[0.5 3.5],...
         'XTick',1:3,...
-        'YLim',[27 52.9],...
+        'YLim',[27 54.9],...
         'XTickLabel',{'BB';'LP';'W'},...
-        'YMinorTick','on','FontSize',kv.FontSize)
+        'YMinorTick','on','FontSize',kv.FontSize,...
+        'TickLength',2*get(gca,'TickLength'))
 
     subplot(122)
     errorbar((1:3)+dx,quart_qe_part(2,:),...
@@ -1260,41 +1316,44 @@ if flags.do_fig8
         quart_qe_exp(3,:) - quart_qe_exp(2,:),...
         'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','w');
+
+    l = legend('Part.','Pool','Actual');
+    set(l,'Location','northwest','FontSize',kv.FontSize-1)
+    
     plot([0,4],[qe0 qe0],'k:')
 
-    title(['e_{QE} = ' num2str(dqe,'%0.1f') '% ; r_{QE} = ' num2str(cc.qe.r,'%0.2f')],...
+    title(['e_{QE} = ' num2str(dqe,'%0.1f') '% , r_{QE} = ' num2str(cc.qe.r,'%0.2f')],...
       'FontSize',kv.FontSize)
     ylabel('Quadrant Error (%)','FontSize',kv.FontSize)
     set(gca,...
         'XLim',[0.5 3.5],...
         'XTick',1:3,...
-        'YLim',[0.1 49],...
+        'YLim',[0.1 54],...
         'XTickLabel',{'BB';'LP';'W'},...
         'YAxisLocation','left',...
-        'YMinorTick','on','FontSize',kv.FontSize)
-
-    l = legend('Part.','Pool','Actual');
-    set(l,'Location','northwest','FontSize',kv.FontSize-1)
+        'YMinorTick','on','FontSize',kv.FontSize,...
+        'TickLength',2*get(gca,'TickLength'))
 
     set(gcf,'PaperPosition',[1,1,10,3.5])
     
   end
 end
 
-%% ------ FIG 9 -----------------------------------------------------------
-if flags.do_fig9
+%% ------ FIG 7 -----------------------------------------------------------
+if flags.do_fig7
   
   % Model Settings
   latdivision = 0;            % lateral angle
   dlat = 10;
 
   % Experimental Settings
-  Conditions = {'CL','N24','N9'};
+  Conditions = {'N24','N9','N3'};
 
   % Vocoder Settings 
   flow = 300;     % lowest corner frequency
   fhigh = 16000;  % highest corner frequency
-  N = [inf,24,9];
+%   N = [inf,24,9];
+  N = [24,9,3];
 
   %% Computations
   s = data_baumgartner2014('pool');
@@ -1340,7 +1399,7 @@ if flags.do_fig9
     for ll = 1:length(s)
       for ii = 1:length(latdivision)
 
-        if C==1
+        if N(C)==Inf
             s(ll).spdtfs_c{ii} = s(ll).spdtfs{ii};
 
         else
@@ -1379,10 +1438,10 @@ if flags.do_fig9
               'S',s(ll).S,'lat',latdivision(ii),...
               'polsamp',s(ll).polang{ii});
 
-        [ qe(ii),pe(ii) ] = pmv2ppp(p , s(ll).polang{ii} , rang);
+        [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp(p , s(ll).polang{ii} , rang);
 
         if sum(ismember({data.id},s(ll).id)) % if participant then actual targets
-          [ qe_t(ii),pe_t(ii) ] = pmv2ppp( ...
+          [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
               p , s(ll).polang{ii} , rang , s(ll).target{ii} );
         end
 
@@ -1440,8 +1499,8 @@ if flags.do_fig9
   
 end
 
-%% ------ FIG 10 ----------------------------------------------------------
-if flags.do_fig10
+%% ------ FIG 8 ----------------------------------------------------------
+if flags.do_fig8
   
   fn = [mfilename('fullpath'),'_numchan.mat'];
   
@@ -1464,7 +1523,7 @@ if flags.do_fig10
 
     %% Computations
     s = data_baumgartner2014('pool');
-    chance = [];
+%     chance = [];
     for C = 1:length(Conditions)
 
       Cond = Conditions{C};
@@ -1480,7 +1539,7 @@ if flags.do_fig10
             latresp = s(ll).mm1(:,7);
             idlat = latresp <= latdivision(ii)+dlat & latresp > latdivision(ii)-dlat;
             mm2 = s(ll).mm1(idlat,:); 
-            chance = [chance;mm2];
+%             chance = [chance;mm2];
             s(ll).target{ii} = mm2(:,6); % polar angle of target
             s(ll).response{ii} = mm2(:,8); % polar angle of response
           end
@@ -1540,11 +1599,14 @@ if flags.do_fig10
                 s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},s(ll).fs,...
                 'S',s(ll).S,'lat',latdivision(ii),...
                 'polsamp',s(ll).polang{ii});
+              
+          s(ll).p{ii} = p;    
+          respangs{ii} = rang;
 
-          [ qe(ii),pe(ii) ] = pmv2ppp(p , s(ll).polang{ii} , rang);
+          [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp(p , s(ll).polang{ii} , rang);
 
           if sum(ismember({data.id},s(ll).id)) % if actual participant actual targets
-            [ qe_t(ii),pe_t(ii) ] = pmv2ppp( ...
+            [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
                 p , s(ll).polang{ii} , rang , s(ll).target{ii} );
           end
 
@@ -1574,16 +1636,18 @@ if flags.do_fig10
             s(ll).pe_part(C,1) = mean(pe_t);
           end
 
+          [la(C,ll),le(C,ll),ci(C,ll,:)] = baumgartner2014likelistat(s(ll).p,s(ll).polang,respangs,s(ll).target,s(ll).response);
+          
         end
 
       end
       disp(['Condition ' Cond ' completed.'])
     end
     
-    Crange = max(chance(:,8))-min(chance(:,8));
-    chance(:,8) = Crange*rand(size(chance,1),1)-min(chance(:,8));
-    pe_chance = localizationerror(chance,'rmsPmedianlocal');
-    qe_chance = localizationerror(chance,'querrMiddlebrooks');
+%     Crange = max(chance(:,8))-min(chance(:,8));
+%     chance(:,8) = Crange*rand(size(chance,1),1)-min(chance(:,8));
+%     pe_chance = localizationerror(chance,'rmsPmedianlocal');
+%     qe_chance = localizationerror(chance,'querrMiddlebrooks');
 
     [r,p] =  corrcoef([s.qe_exp],[s.qe_part]);
     cc.qe.r = r(2);
@@ -1625,8 +1689,9 @@ if flags.do_fig10
   dqe = sqrt(relfreq(:)' * sd_qe(:));
 
   % Chance performance
-  qe0 = qe_chance;
-  pe0 = pe_chance;
+%   qe0 = qe_chance;
+%   pe0 = pe_chance;
+  [qe0,pe0] = baumgartner2014pmv2ppp('chance');
 
   
   if flags.do_plot
@@ -1656,25 +1721,22 @@ if flags.do_fig10
     xlabel('Num. of Channels','FontSize',kv.FontSize)
     ylabel('Local Polar RMS Error (deg)','FontSize',kv.FontSize)
 
-    title(['e_{PE} = ' num2str(dpe,'%0.1f') '\circ ; r_{PE} = ' num2str(cc.pe.r,'%0.2f')],...
+    title(['e_{PE} = ' num2str(dpe,'%0.1f') '\circ , r_{PE} = ' num2str(cc.pe.r,'%0.2f')],...
       'FontSize',kv.FontSize)
     set(gca,'XLim',[1 32],'XTick',[3 6 9 12 18 24 30],...
         'XTickLabel',{3;6;9;12;18;24;'CL'},...
-        'YLim',[29.1 54.5],...
-        'YMinorTick','on','FontSize',kv.FontSize)
-
-    l = legend('Part.','Pool','Actual');
-    set(l,'Location','southwest','FontSize',kv.FontSize-2)
+        'YLim',[27 54.9],...
+        'YMinorTick','on','FontSize',kv.FontSize,...
+        'TickLength',2*get(gca,'TickLength'))
 
     %% QE
     subplot(122)
-    plot([0,2*max(N)],[qe0,qe0],'k:')
-    hold on
     errorbar(fliplr(N)+dx,quart_qe_part(2,:),...
         quart_qe_part(2,:) - quart_qe_part(1,:),...
         quart_qe_part(3,:) - quart_qe_part(2,:),...
         'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','k');
+    hold on
     errorbar(fliplr(N)-dx,quart_qe_pool(2,:),...
         quart_qe_pool(2,:) - quart_qe_pool(1,:),...
         quart_qe_pool(3,:) - quart_qe_pool(2,:),...
@@ -1686,23 +1748,30 @@ if flags.do_fig10
         'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','w');
 
-    title(['e_{QE} = ' num2str(dqe,'%0.1f') '% ; r_{QE} = ' num2str(cc.qe.r,'%0.2f')],...
+    l = legend('Part.','Pool','Actual');
+    set(l,'Location','northeast','FontSize',kv.FontSize-1)
+      
+    plot([0,2*max(N)],[qe0,qe0],'k:')
+      
+    title(['e_{QE} = ' num2str(dqe,'%0.1f') '% , r_{QE} = ' num2str(cc.qe.r,'%0.2f')],...
       'FontSize',kv.FontSize)
     xlabel('Num. of Channels','FontSize',kv.FontSize)
     ylabel('Quadrant Error (%)','FontSize',kv.FontSize)
     set(gca,'XLim',[1 32],'XTick',[3 6 9 12 18 24 30],...
         'XTickLabel',{3;6;9;12;18;24;'CL'},...
-        'YLim',[5.1 43],...
+        'YLim',[0.1 54],...
         'YMinorTick','on',...
-        'YAxisLocation','left','FontSize',kv.FontSize)
+        'YAxisLocation','left','FontSize',kv.FontSize,...
+        'TickLength',2*get(gca,'TickLength'))
+      
 
     set(gcf,'PaperPosition',[1,1,10,3.5])
 
   end
 end
 
-%% ------ FIG 11 ----------------------------------------------------------
-if flags.do_fig11
+%% ------ FIG 9 ----------------------------------------------------------
+if flags.do_fig9
   
   fn = [mfilename('fullpath'),'_nonindividual.mat'];
   
@@ -1745,7 +1814,7 @@ if flags.do_fig11
                   'S',s(ll).S,'lat',s(ll).latang{ii},...
                   'polsamp',s(ll).polangs{ii},'flow',flow);
 
-              [ qe(ll,jj,ii),pe(ll,jj,ii),pb(ll,jj,ii) ] = pmv2ppp( ...
+              [ qe(ll,jj,ii),pe(ll,jj,ii),pb(ll,jj,ii) ] = baumgartner2014pmv2ppp( ...
                   s(ll).p{jj,ii} , s(jj).polangs{ii} , s(ll).respangs{ii});
 
             end
@@ -1807,7 +1876,8 @@ if flags.do_fig11
     plot(2+dx,data.qe_other.mean,data.Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',data.MFC)
     ylabel('Quadrant Errors (%)','FontSize',kv.FontSize)
     set(gca,'YLim',[-2 43],'XLim',[0.5 2.5],...
-      'XTick',1:2,'XTickLabel',{'Own' 'Other'},'FontSize',kv.FontSize)
+      'XTick',1:2,'XTickLabel',{'Own' 'Other'},'FontSize',kv.FontSize,...
+        'TickLength',2*get(gca,'TickLength'))
 
     subplot(132)
     plot(1-dx,pe_own.mean,Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',MFC)
@@ -1824,7 +1894,8 @@ if flags.do_fig11
     plot(2+dx,data.pe_other.mean,data.Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',data.MFC)
     ylabel('Local Polar RMS Error (deg)','FontSize',kv.FontSize)
     set(gca,'YLim',[-2 62],'XLim',[0.5 2.5],...
-      'XTick',1:2,'XTickLabel',{'Own' 'Other'},'FontSize',kv.FontSize)
+      'XTick',1:2,'XTickLabel',{'Own' 'Other'},'FontSize',kv.FontSize,...
+        'TickLength',2*get(gca,'TickLength'))
 
     subplot(133)
     middlebroxplot(1-dx,pb_own.quantiles,kv.MarkerSize)
@@ -1838,12 +1909,13 @@ if flags.do_fig11
 
     ylabel('Magnitude of Elevation Bias (deg)','FontSize',kv.FontSize)
     set(gca,'YLim',[-2 55],'XLim',[0.5 2.5],...
-      'XTick',1:2,'XTickLabel',{'Own' 'Other'},'FontSize',kv.FontSize)
+      'XTick',1:2,'XTickLabel',{'Own' 'Other'},'FontSize',kv.FontSize,...
+        'TickLength',2*get(gca,'TickLength'))
   end
 end
 
-%% ------ FIG 12 ----------------------------------------------------------
-if flags.do_fig12
+%% ------ FIG 10 ----------------------------------------------------------
+if flags.do_fig10
   
   fn = [mfilename('fullpath'),'_ripples.mat'];
   
@@ -1938,7 +2010,7 @@ if flags.do_fig12
         [f,r] = localizationerror(mflat,'sirpMacpherson2000');
         pe_flat(ll,ss) = localizationerror(mflat,f,r,'perMacpherson2003');
 
-        if plotpmv; plotbaumgartner2013(pflat,tang,rang,mflat(:,6),mflat(:,8));title(num2str(pe_flat(ll,ss),2));pause(0.5); end 
+        if plotpmv; figure; plotbaumgartner2013(pflat,tang,rang,mflat(:,6),mflat(:,8));title(num2str(pe_flat(ll,ss),2));pause(0.5); end 
 
         if do_exp1  % Exp. I
         for ii = 1:2*length(density)
@@ -1949,7 +2021,7 @@ if flags.do_fig12
           m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
           pe_exp1(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
-          if plotpmv; plotbaumgartner2013(p,tang,rang,m(:,6),m(:,8));title([num2str(density(mod(ii-1,10)+1)) 'ripples/oct; PE:' num2str(pe_exp1(ll,ss,ii),2) '%']);pause(0.5); end
+          if plotpmv; figure; plotbaumgartner2013(p,tang,rang,m(:,6),m(:,8));title([num2str(density(mod(ii-1,10)+1)) 'ripples/oct; PE:' num2str(pe_exp1(ll,ss,ii),2) '%']);pause(0.5); end
 
         end
         end
@@ -2053,7 +2125,7 @@ if flags.do_fig12
     % Exp1
     fig = figure;
     
-    subplot(2,5,1:5)
+    subplot(2,8,1:8)
     errorbar(data.density/dx,quart_pe_exp1(2,:,idphase),...
         quart_pe_exp1(2,:,idphase) - quart_pe_exp1(1,:,idphase),...
         quart_pe_exp1(3,:,idphase) - quart_pe_exp1(2,:,idphase),...
@@ -2073,20 +2145,23 @@ if flags.do_fig12
         'ko-','MarkerSize',MarkerSize,...
         'MarkerFaceColor','w');
     set(gca,'XScale','log','YMinorTick','on')
-    set(gca,'XLim',[0.25/1.2 8*1.2],'XTick',data.density,'YLim',[-15 59],'FontSize',FontSize)
+    set(gca,'XLim',[0.25/1.2 8*1.2],'XTick',data.density,'YLim',[-16 59],'FontSize',FontSize)
     xlabel('Ripple Density (ripples/octave)','FontSize',FontSize)
     ylabel({'Increase in';'Polar Error Rate (%)'},'FontSize',FontSize)
 
     if dcn_flag
-        leg = legend('Predicted with edge extraction','Predicted without edge extraction','Actual');
+        leg = legend('P (with PSGE)','P (w/o PSGE)','Actual');
     else
         leg = legend('Predicted','Actual');
     end
-    set(leg,'FontSize',FontSize-2,'Location','southwest')
+    set(leg,'FontSize',FontSize-1,'Location','southwest')
+    legpos = get(leg,'Position');
+    legpos(1) = legpos(1)+0.05;
+    set(leg,'Position',legpos)
 
     %% Exp2
 
-    subplot(2,5,6:9)
+    subplot(2,8,9:13)
     errorbar(data.depth-1,quart_pe_exp2(2,:,idphase),...
         quart_pe_exp2(2,:,idphase) - quart_pe_exp2(1,:,idphase),...
         quart_pe_exp2(3,:,idphase) - quart_pe_exp2(2,:,idphase),...
@@ -2106,14 +2181,14 @@ if flags.do_fig12
         'ko-','MarkerSize',MarkerSize,...
         'MarkerFaceColor','w');
     set(gca,'XLim',[data.depth(1)-5 data.depth(end)+5],'XTick',data.depth,...
-      'YLim',[-15 59],'YMinorTick','on','FontSize',FontSize)
+      'YLim',[-16 59],'YMinorTick','on','FontSize',FontSize)
     xlabel('Ripple Depth (dB)','FontSize',FontSize)
     ylabel({'Increase in';'Polar Error Rate (%)'},'FontSize',FontSize)
     ytick = get(gca,'YTick');
     ticklength = get(gca,'TickLength');
 
     %% Baseline
-    subplot(2,5,10)
+    subplot(2,8,14:15)
     errorbar(-0.5,quart_pe_flat(2),...
         quart_pe_flat(2) - quart_pe_flat(1),...
         quart_pe_flat(3) - quart_pe_flat(2),...
@@ -2147,6 +2222,11 @@ if flags.do_fig12
       rDCN = r(2);
       r = corrcoef(m_pe_pred_noDCN,m_pe_actual);
       rnoDCN = r(2);
+      
+%       r = corrcoef(m_pe_pred,m_pe_pred_noDCN);
+%       rInter = r(2);
+%       [t,p] = corrdifftest(rDCN,rnoDCN,rInter,14,'hotelling')
+%       z = corrdifftest(rDCN,rnoDCN,rInter,14,'steiger')
 
       disp('Correlation between actual and predicted median values (15 conditions):')
       disp(['w/  DCN: r = ' num2str(rDCN,'%0.2f')])
@@ -2156,8 +2236,8 @@ if flags.do_fig12
   end
 end
 
-%% ------ FIG 13 ----------------------------------------------------------
-if flags.do_fig13
+%% ------ FIG 11 ----------------------------------------------------------
+if flags.do_fig11
   
   fn = [mfilename('fullpath'),'_highfreqatten.mat'];
   
@@ -2172,11 +2252,12 @@ if flags.do_fig13
     end
     
     autorefreshnotification(fn,flags)
+    disp('Note that this computation will take several hours!')
     
     %% Settings
     latseg = 0;%[-20,0,20];   % centers of lateral segments
-    NsampModel = 50; % # of modeled speech samples (takes 30min/sample); max: 260
-    startSamp = 1;
+    NsampModel = 200; % # of modeled speech samples (takes 30min/sample); max: 260
+    startSamp = 51;
 
     saveflag = true;
     plotpmv = false;
@@ -2206,7 +2287,8 @@ if flags.do_fig13
         if jj > Nsamp; break; end
         load(fullfile(tmp.path,tmp.dir(jj).name))
         signal = resample(word,p_resamp*10,10);
-        env = filter(normpdf(0:0.001:10,0,1),1,signal.^2);
+        gcurve = exp(-0.5 * (0:0.001:10).^2) ./ (sqrt(2*pi));
+        env = filter(gcurve,1,signal.^2);
         idon = max(find(env > 5e7,1,'first')-1e3,1);
         idoff = min(find(env > 5e7,1,'last')+1e3,lsamp);
         lwin = idoff-idon+1;
@@ -2250,8 +2332,8 @@ if flags.do_fig13
         [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
         [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',do,...
               'S',s(ss).S,'polsamp',polang,'lat',latseg(ll),'notprint');
-        ape_BBnoise(1,ss,ll) = apebest2005(p,polang,rang);
-        qe_BBnoise(1,ss,ll) = pmv2ppp(p,polang,rang);
+        ape_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
+        qe_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang);
 
         if plotpmv; figure; plotbaumgartner2013(p,polang,rang); title(num2str(ape_BBnoise(1,ss,ll),2)); end
 
@@ -2274,8 +2356,8 @@ if flags.do_fig13
             [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',do,...
               'S',s(ss).S,'polsamp',polang,...
               'lat',latseg(ll),'stim',stim,'notprint');
-            ape_all(ii,ss,ll) = apebest2005(p,polang,rang);
-            qe_all(ii,ss,ll) = pmv2ppp(p,polang,rang);
+            ape_all(ii,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
+            qe_all(ii,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang);
 
             if plotpmv; figure; plotbaumgartner2013(p,polang,rang); title(num2str(ape_all(ii,ss,ll),2)); end
 
@@ -2364,15 +2446,18 @@ if flags.do_fig13
     FontSize = kv.FontSize;
     
     xticks = 0:size(ape_all,1);
+    ape0 = baumgartner2014pmv2ppp('absPE','chance');
+    
     fig = figure;
     subplot(211)
-    h(1) = errorbar(xticks-dx,ape,seape,'ko');
+    h(1) = errorbar(xticks-dx,ape,seape,'ks');
     set(h(1),'MarkerFaceColor','k','MarkerSize',MarkerSize,'LineStyle','-')
     hold on
     h(3) = errorbar(xticks+dx,noDCN.ape,noDCN.seape,'kd');
     set(h(3),'MarkerFaceColor','k','MarkerSize',MarkerSize-1,'LineStyle','--')
     h(2) = errorbar(xticks,data.ape,data.seape,'ko');
     set(h(2),'MarkerFaceColor','w','MarkerSize',MarkerSize,'LineStyle','-')
+    plot([-0.5 4.5],[ape0 ape0],'k:') % chance performance
 %     ylabel('| \theta - \vartheta | (deg)','FontSize',FontSize)
     ylabel('Polar Error (deg)','FontSize',FontSize)
     set(gca,'XTick',xticks,'XTickLabel',[],'FontSize',FontSize)
@@ -2382,28 +2467,396 @@ if flags.do_fig13
     pos(2) = pos(2)-0.11;
     set(gca,'Position',pos)
 
-    leg = legend('Predicted with edge extraction','Predicted without edge extraction','Actual');
-    set(leg,'FontSize',FontSize-2,'Location','northoutside')
-    pos = get(leg,'Position');
-    pos(2) = pos(2)+0.14;
-    set(leg,'Position',pos)
+%     leg = legend('Predicted with edge extraction','Predicted without edge extraction','Actual');
+%     set(leg,'FontSize',FontSize-2,'Location','northoutside')
+%     pos = get(leg,'Position');
+%     pos(2) = pos(2)+0.14;
+%     set(leg,'Position',pos)
 
+    qe0 = baumgartner2014pmv2ppp('QE','chance');
+    
     subplot(212)
-    h(1) = plot(xticks-dx,qe,'ko');
+    h(1) = plot(xticks-dx,qe,'ks');
     set(h(1),'MarkerFaceColor','k','MarkerSize',MarkerSize,'LineStyle','-')
     hold on
     h(3) = plot(xticks+dx,noDCN.qe,'kd');
     set(h(3),'MarkerFaceColor','k','MarkerSize',MarkerSize-1,'LineStyle','--')
     h(2) = plot(xticks([1 2 5]),data.qe([1 2 5]),'ko');
     set(h(2),'MarkerFaceColor','w','MarkerSize',MarkerSize,'LineStyle','-')
-    % h(4) = plot(xticks(5),data.qe(5),'ko');
-    % set(h(4),'MarkerFaceColor','w','MarkerSize',MarkerSize)
-%     ylabel('QE (%)','FontSize',FontSize)
+    plot([-0.5 4.5],[qe0 qe0],'k:') % chance performance
     ylabel('Quadrant Err. (%)','FontSize',FontSize)
     set(gca,'XTick',xticks,'XTickLabel',data.meta,'FontSize',FontSize,...
-      'XLim',[-0.5 4.5],'YLim',[-3 53],'YMinorTick','on')
+      'XLim',[-0.5 4.5],'YLim',[-3 54],'YMinorTick','on')
 
   end
+end
+
+
+%% ------ TAB 2 ---------------------------------------------------------- 
+if flags.do_tab2
+  
+  
+  fn = [mfilename('fullpath'),'_spatstrat_do0.mat'];
+  
+  if amtredofile(fn,flags.redomode)
+    autorefreshnotification(fn,flags)
+    
+    latdivision = [-20,0,20];            % lateral angle
+    dlat = 10;
+
+    % Experimental Settings
+    Conditions = {'BB','LP','W'};
+
+    %% Computations
+    for do = 0:1
+
+      if do == 1
+        s = data_baumgartner2014('pool','recalib');
+      else % recalib
+        s = data_baumgartner2014('pool','recalib','do',0);
+      end
+    
+      for C = 1:length(Conditions)
+
+        Cond = Conditions{C};
+
+        %% Data
+
+        % Experimental data
+        data = data_majdak2013(Cond);
+        
+        % Consider only actual participants
+        idpart = [];
+        for ii = 1:length(data)
+          idpart = [idpart,find(ismember({s.id},data(ii).id))];
+        end
+        s = s(idpart);
+        
+        for ll = 1:length(s)
+          s(ll).mm1=data(ismember({data.id},s(ll).id)).mtx; 
+          for ii = 1:length(latdivision)
+            latresp = s(ll).mm1(:,7);
+            idlat = latresp <= latdivision(ii)+dlat & latresp > latdivision(ii)-dlat;
+            mm2 = s(ll).mm1(idlat,:);
+            s(ll).target{ii} = mm2(:,6); % polar angle of target
+            s(ll).response{ii} = mm2(:,8); % polar angle of response
+          end
+        end
+
+
+        for ll = 1:length(s)
+          for ii = 1:length(latdivision)
+            s(ll).spdtfs{ii} = 0;     % init
+            s(ll).polang{ii} = 0;   % init
+            [s(ll).spdtfs{ii},s(ll).polang{ii}] = extractsp(...
+              latdivision(ii),s(ll).Obj);
+
+            if C == 1       % Learn 
+                s(ll).spdtfs_c{ii} = s(ll).spdtfs{ii};
+            elseif C == 2   % Dummy
+              fn_filters = 'exp_baumgartner2014_spatstrat_lpfilter.mat';
+              if not(exist(fn_filters,'file'))
+                disp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
+                targetfn = fullfile(amtbasepath,'humandata',fn_filters);
+                sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
+                urlwrite(sourcefn,targetfn);
+              end
+              temp=load(fn_filters);
+              s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
+            elseif C == 3   % Warped
+                s(ll).spdtfs_c{ii} = warp_hrtf(s(ll).spdtfs{ii},s(ll).fs);
+            end
+
+          end
+        end
+
+
+      %% Run Model
+
+        for ll = 1:length(s)
+            
+          fh = [8500,18000]; % Hz
+          for ff=1:length(fh)
+            qe = zeros(1,length(latdivision));
+            pe = zeros(1,length(latdivision));
+            qe_t = zeros(1,length(latdivision));
+            pe_t = zeros(1,length(latdivision));
+            for ii = 1:length(latdivision)
+
+              if C == 1
+                fhigh = 18000;
+              else
+                fhigh = fh(ff);
+              end
+              
+              [s(ll).p{ii},rang] = baumgartner2014(...
+                    s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},s(ll).fs,...
+                    'S',s(ll).S,'lat',latdivision(ii),...
+                    'polsamp',s(ll).polang{ii},'do',do,'fhigh',fhigh);
+              respangs{ii} = rang;
+
+              [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
+                  s(ll).p{ii} , s(ll).polang{ii} , rang , s(ll).target{ii} );
+
+            end
+
+            % Model results of participants
+            if length(latdivision) == 3
+              qe_part(ll,C,2*do+ff) = (qe_t(1)*length(s(ll).target{1}) + ...
+                  qe_t(2)*length(s(ll).target{2}) + ...
+                  qe_t(3)*length(s(ll).target{3}))/...
+                  (length(s(ll).target{1})+length(s(ll).target{2})+length(s(ll).target{3}));
+              pe_part(ll,C,2*do+ff) = (pe_t(1)*length(s(ll).target{1}) + ...
+                  pe_t(2)*length(s(ll).target{2}) + ...
+                  pe_t(3)*length(s(ll).target{3}))/...
+                  (length(s(ll).target{1})+length(s(ll).target{2})+length(s(ll).target{3}));
+            else 
+              s(ll).qe_part(C,2*do+ff) = mean(qe_t);
+              s(ll).pe_part(C,2*do+ff) = mean(pe_t);
+            end
+          end
+
+          % Actual experimental results
+          qe_exp(ll,C) = localizationerror(s(ll).mm1,'querrMiddlebrooks');
+          pe_exp(ll,C,1) = localizationerror(s(ll).mm1,'rmsPmedianlocal');
+%           s(ll).Nt(C,1) = size(s(ll).mm1,1);
+            
+        end
+      end
+    end
+%     delete(which('baumgartner2014calibration.mat'))
+    s = rmfield(s,{'Obj','spdtfs_c','spdtfs'});% reduce file size
+    save(fn,'qe_exp','pe_exp','qe_part','pe_part',save_format);
+  end
+  
+  result = load(fn);
+  varargout{1} = load(fn);
+  
+  meta = {'DCN no,  BWA yes';...
+          'DCN no,  BWA no ';...
+          'DCN yes, BWA yes';...
+          'DCN yes, BWA no ';...
+          };
+  
+  [qe0,pe0] = baumgartner2014pmv2ppp('chance');
+
+  qe_exp = permute(result.qe_exp,[2,1]);
+  pe_exp = permute(result.pe_exp,[2,1]);
+  qe_all = permute(result.qe_part,[2,1,3]);
+  pe_all = permute(result.pe_part,[2,1,3]);
+%   for im = 1:length(model)
+%     qe_all = [result.s.qe_part];
+%     pe_all(:,:,im) = [result.s.pe_part];
+%   end
+
+  % Statistics
+  for cond = 1:3
+
+    if cond == 1
+      disp('BB:')
+    elseif cond == 2
+      disp('LP:')
+    else
+      disp('W:')
+    end
+
+    Ns = size(pe_exp,2);
+
+    group{1} = repmat(meta{1},Ns,1);
+    for im = 2:length(meta)
+      group{1} = [group{1} ; repmat(meta{im},Ns,1)];
+    end
+    group{2} = repmat(1:Ns,1,length(meta));
+
+      data = sqrt(((qe_all(cond,:,:) - repmat(qe_exp(cond,:),[1,1,length(meta)]))/qe0).^2) + ...
+             sqrt(((pe_all(cond,:,:) - repmat(pe_exp(cond,:),[1,1,length(meta)]))/pe0).^2);
+
+      [p,t,stat] = friedman(squeeze(data),1);
+%       [p,t,stat] = anovan(data(:),group,'display','off');
+
+      fprintf('  Chi-sq = %5.2f, p = %3.3f \n',t{2,5},p(1))
+      
+      if p(1) < 0.05
+        figure
+        [c,m,h,nms] = multcompare(stat,'display','on');
+        set(gca,'YTickLabel',flipud(meta))
+      end
+
+  end
+
+
+  e_qe = zeros(length(meta),3);  % model, BB/LP/W
+  e_pe = e_qe;
+  r_pe = e_qe;
+  r_qe = e_qe;
+  for m = 1:length(meta)
+    for c = 1:3
+
+      e_qe(m,c) = rms(qe_all(c,:,m) - qe_exp(c,:));
+      e_pe(m,c) = rms(pe_all(c,:,m) - pe_exp(c,:));
+      tmp.r = corrcoef(qe_all(c,:,m) , qe_exp(c,:));
+      r_qe(m,c) = tmp.r(2);
+      tmp.r = corrcoef(pe_all(c,:,m) , pe_exp(c,:));
+      r_pe(m,c) = tmp.r(2);
+
+    end
+  end
+
+  %% Write Table
+  mtx = [e_pe e_qe];
+  mtx(:,1:2:end) = e_pe;
+  mtx(:,2:2:end) = e_qe;
+  mtx = round(mtx*10)/10;
+  columnLabels = {'Spect. Proc.',...
+    '$e_\mathrm{PE}$','$e_\mathrm{QE}$',...
+    '$e_\mathrm{PE}$','$e_\mathrm{QE}$',...
+    '$e_\mathrm{PE}$','$e_\mathrm{QE}$'};
+  rowLabels = meta;
+  
+  varargout{1} = mtx;
+  varargout{2} = rowLabels; 
+  varargout{3} = columnLabels; 
+  
+end
+ 
+
+%% ------ TAB 3 ----------------------------------------------------------    
+if flags.do_tab3
+  
+  
+  fn = [mfilename('fullpath'),'_binWeighting.mat'];
+  
+  if amtredofile(fn,flags.redomode)
+    autorefreshnotification(fn,flags)
+    
+    bwcoef = [13 eps -eps Inf];
+    latseg = -60:20:60; % centers of lateral segments
+    dlat =  10;  % lateral range (+-) of each segment
+
+    s = data_baumgartner2014('baseline');
+
+    qe_exp = zeros(length(s),length(latseg));
+    pe_exp = zeros(length(s),length(latseg));
+    for ll = 1:length(s)
+
+      s(ll).target = [];
+      s(ll).response = [];
+      s(ll).Nt = [];
+      for ii = 1:length(latseg)
+        
+        latresp = s(ll).mm1(:,7);
+        idlat = latresp <= latseg(ii)+dlat & latresp > latseg(ii)-dlat;
+        s(ll).mm2 = s(ll).mm1(idlat,:);
+
+        s(ll).mm2(:,7) = 0; % set lateral angle to 0deg such that localizationerror works outside +-30deg
+
+        pe_exp(ll,ii) = real(localizationerror(s(ll).mm2,'rmsPmedianlocal'));
+        qe_exp(ll,ii) = real(localizationerror(s(ll).mm2,'querrMiddlebrooks'));
+
+        s(ll).target{ii} = real(s(ll).mm2(:,6)); % polar angle of target
+        s(ll).response{ii} = real(s(ll).mm2(:,8)); % polar angle of response
+        s(ll).Nt{ii} = length(s(ll).target{ii});
+
+      end
+    end
+
+
+    %% LocaMo
+    
+    qe = zeros(length(s),length(latseg),length(bwcoef));
+    pe = zeros(length(s),length(latseg),length(bwcoef));
+    for b = 1:length(bwcoef)
+      for ll = 1:length(s)
+
+        for ii = 1:length(latseg)
+
+          s(ll).sphrtfs{ii} = 0;     % init
+          s(ll).p{ii} = 0;        % init
+
+          [s(ll).sphrtfs{ii},polang{ii}] = extractsp( latseg(ii),s(ll).Obj );
+          [s(ll).p{ii},respangs{ii}] = baumgartner2014(...
+              s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
+              'S',s(ll).S,'lat',latseg(ii),'polsamp',polang{ii},...
+              'bwcoef',bwcoef(b)); 
+
+          if s(ll).Nt{ii} > 0
+            [ qe(ll,ii,b),pe(ll,ii,b) ] = baumgartner2014pmv2ppp( ...
+                s(ll).p{ii} , polang{ii} , respangs{ii} , s(ll).target{ii});
+          else
+            qe(ll,ii,b) = NaN; 
+            pe(ll,ii,b) = NaN;
+          end
+
+        end
+
+      end
+    
+    fprintf('%1.0f of %1.0f completed\n',b,length(bwcoef));
+    end
+    
+    s = rmfield(s,{'Obj','mm1','mm2','sphrtfs'}); % reduce file size 
+    save(fn,'s', 'qe', 'pe', 'qe_exp', 'pe_exp', 'latseg','bwcoef',save_format);
+    
+  end
+  
+  load(fn);
+  varargout{1} = load(fn);
+  
+  %% # of targets
+  Ns = length(s);
+  Nlat = length(latseg);
+  Ntlat = zeros(Ns,Nlat);
+  relfreq = zeros(Ns,Nlat);
+  Ntall = zeros(Ns,1);
+  for jj = 1:Ns
+    Ntlat(jj,:) = [s(jj).Nt{:}];
+    Ntall(jj) = sum(Ntlat(jj,:));
+    relfreq(jj,:) = Ntlat(jj,:)/Ntall(jj);
+  end
+  relfreq = relfreq.*repmat(Ntall,1,Nlat)/sum(Ntall);
+
+  %% Pooling to lateralization
+  idlat0 = round(Nlat/2);
+  idleft = idlat0-1:-1:1;
+  idright = idlat0+1:Nlat;
+  latseg = latseg(idlat0:end);
+  relfreqLR = Ntlat(:,idleft) ./ (Ntlat(:,idleft) + Ntlat(:,idright) + eps);
+
+  relfreq = [relfreq(:,idlat0) , relfreq(:,1:idlat0-1) + relfreq(:,Nlat:-1:idlat0+1)];
+  pe_exp = [pe_exp(:,idlat0) , relfreqLR.*pe_exp(:,idleft) + (1-relfreqLR).*pe_exp(:,idright)];
+  qe_exp = [qe_exp(:,idlat0) , relfreqLR.*qe_exp(:,idleft) + (1-relfreqLR).*qe_exp(:,idright)];
+
+  %% Evaluation Metrics  
+  for b=1:length(bwcoef)
+    
+    % pooling lat.
+    pe_b = [pe(:,idlat0,b) , relfreqLR.*pe(:,idleft,b) + (1-relfreqLR).*pe(:,idright,b)];
+    qe_b = [qe(:,idlat0,b) , relfreqLR.*qe(:,idleft,b) + (1-relfreqLR).*qe(:,idright,b)];
+    
+    idnum = not(isnan(pe_exp) | isnan(pe_b));
+    dpe(b) = sqrt( relfreq(idnum)' * (pe_exp(idnum) - pe_b(idnum)).^2 );
+    dqe(b) = sqrt( relfreq(idnum)' * (qe_exp(idnum) - qe_b(idnum)).^2 );
+    Mpe(b) = relfreq(idnum)' * pe_b(idnum);
+    Mqe(b) = relfreq(idnum)' * qe_b(idnum);
+    r = corrcoef(pe_exp(idnum),pe_b(idnum));
+    r_pe(b) = r(2);
+    r = corrcoef(qe_exp(idnum),qe_b(idnum));
+    r_qe(b) = r(2);
+    
+  end
+
+  %% Table
+
+  % Write Table
+  mtx = [round([dpe' dqe']*10)/10 , round([r_pe' r_qe']*100)/100 , round([Mpe' Mqe']*10)/10];
+  columnLabels = {'','$e_\mathrm{PE}$','$e_\mathrm{QE}$','$r_\mathrm{PE}$',...
+    '$r_\mathrm{QE}$','$\overline{\mathrm{PE}}$','$\overline{\mathrm{QE}}$'};
+  rowLabels = {'$\Phi = 13^\circ$','$\Phi \rightarrow +0^\circ$','$\Phi \rightarrow -0^\circ$','$\Phi \rightarrow \infty^\circ$'};
+
+  varargout{1} = mtx;
+  varargout{2} = rowLabels;
+  varargout{3} = columnLabels;
+  
 end
   
 end
@@ -2751,39 +3204,5 @@ line([x,x],quantiles(2:3),'Color','k') % connector lower whisker
 line([x,x],quantiles(5:6),'Color','k') % connector upper whisker
 line([x,x]-lilen,quantiles([3,5]),'Color','k') % left box edge
 line([x,x]+lilen,quantiles([3,5]),'Color','k') % left box edge
-
-end
-
-function ape = apebest2005(p,tang,rang)
-%APEBEST2005 PMV to PPP conversion
-%   Usage:  [ ape ] = apebest2005( p,tang,rang );
-%
-%   Input parameters:
-%     p          : prediction matrix (response PMVs)
-%     tang       : possible polar target angles. As default, ARI's MSP 
-%                  polar angles in the median SP is used.
-%     rang       : polar angles of possible response angles.
-%                  As default regular 5deg-sampling is used (-30:5:210).    
-%
-%   Output parameter:
-%     ape        : absolute polar angle error in degrees
-%
-
-% AUTHOR : Robert Baumgartner
-
-nt = length(tang);
-
-apet = zeros(nt,1);
-for ii = 1:nt % for all target positions
-  
-    d = tang(ii)-rang;                 % wraped angular distance between tang & rang
-    iduw = (d < -180) | (180 < d);     % 180-deg unwrap indices
-    d(iduw) = mod(d(iduw) + 180,360) - 180; % 180-deg unwrap
-    d = abs(d);                        % absolut distance
-    apet(ii) = sum( p(:,ii) .* d');     % absolut polar angle error for target ii
-    
-end
-
-ape = mean(apet);
 
 end
