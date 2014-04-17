@@ -35,11 +35,11 @@ cn = [10 1]; % channel numbers for separate plots (1st entry also for time plot)
 panellabel = 'acbd';
 
 % run IPD model on signal
-[hairc_fine, hairc_mod, fc, hairc_ild]=dietz2011(signal,fs);
+[hairc_fine,fc,hairc_ild]=dietz2011(signal,fs,'fhigh',1400);
 
 % convert interaural information into azimuth
 itd_unwrapped = ...
-    dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+    dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst_lp,2.5);
 lookup = load('dietz2011itd2anglelookup.mat');
 angl=itd2angle(itd_unwrapped,lookup);
 

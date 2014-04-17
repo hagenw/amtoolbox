@@ -7,6 +7,7 @@ function [varargout] = localizationerror(m,varargin)
 %
 %   `localizationerror(m,errorflag)` returns psychoacoustic performance 
 %   parameters for experimental response patterns .
+%   FIXME: what is the format of m???
 %   `[res, meta, par] = localizationerror(m,errorflag)` calculates error 
 %   metric *res* given by the string *errorflag*. *meta* contains additional 
 %   metadata, *par* contains additional calculation results.

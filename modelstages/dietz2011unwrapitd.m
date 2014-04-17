@@ -16,13 +16,13 @@ function itd = dietz2011unwrapitd(itd,ild,f_inst,tr)
 %   `dietz2011unwrapitd(itd,ild,f_inst,tr)` unwraps the given itd using the sign of the
 %   corresponding ild value. Unwrapping means, that the ild value is used to
 %   decide to which direction the itd belongs, which can be unclear for
-%   large values, because of the $\pi$ limit (see Dietz et al. 2011).
+%   large values, because of the $\pi$ limit (see Dietz et al. 2011, Fig. 2).
 %
 %   See also: dietz2011, wierstorf2013
 %
 %   References: dietz2011auditory wierstorf2013
 
-% AUTHOR: Mathias Dietz, Hagen Wierstorf
+% AUTHOR: Mathias Dietz, Hagen Wierstorf (for AMT)
 
 %% ===== Checking of input parameters ===================================
 nargmin = 3;

@@ -13,10 +13,11 @@ function phi = itd2angle(itd,lookup)
 %   `itd2angle(itd,lookup)` converts the given ITD values to azimuth angles phi.
 %   Therefore a lookup table containing the polynomial fitting parameters is
 %   used. This lookup table is created from a set of HRTFs with known azimuth
-%   angles and stores the corresponding ITD values. Note that itd2angle works
-%   with the dietz2011 and with lindemann1986.
+%   angles and stores the corresponding ITD values. itd2angle works with
+%   |dietz2011| and |lindemann1986|. Corresponding lookup tables can be created
+%   by |itd2anglelookuptable|.
 
-% AUTHOR: Mathias Dietz, Hagen Wierstorf
+% AUTHOR: Mathias Dietz, Hagen Wierstorf (for AMT)
 
 
 %% ===== Checking of input parameters ====================================
@@ -34,4 +35,3 @@ for n = 1:size(itd,2)
 end
 % neglect angles > 95°. WARNING => maybe systematic underestimation for azi ~ 90°
 phi(abs(phi)>95) = NaN;
-
