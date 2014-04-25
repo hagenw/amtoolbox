@@ -303,7 +303,11 @@ varargout{1} = p;
 if nargout >= 2
     varargout{2} = respangs;
     if nargout >= 3
+      try
         varargout{3} = tang;
+      catch
+        disp('SOFA Object of target DTFs is required to output target angles.')
+      end
     end
 end
   
