@@ -56,7 +56,7 @@ function exp_gammatone(varargin)
 %                   spaced in time, while those of the APGF are stretched out
 %                   in early cycles.
 %               
-%     'fig1ho'      Reproduce parts of Fig.l from Hohmann, 2002:
+%     'fig1ho'      Reproduce Fig.l from Hohmann, 2002:
 %                   Impulse response of the example Gammatone filter
 %                   (center frequency fc = 1000 Hz; 3-db bandwidth fb = 100 Hz;
 %                   sampling frequency fs = 10kHz). The solid and dashed lines
@@ -65,6 +65,9 @@ function exp_gammatone(varargin)
 %                   (dashdotted line) clearly represents the envelope.
 %
 %     'fig2ho'      Reproduce Fig.2 from Hohmann, 2002:
+%                   Still in Progress
+%       
+%     'fig3ho'      Reproduce Fig.3 from Hohmann, 2002:
 %                   Still in Progress
 %
 %   Examples:
@@ -149,7 +152,7 @@ function exp_gammatone(varargin)
         end
         clear dy;
         title '24 channel array of gamma impulse responses (classic)'
-        xlabel 'Sample points of 25ms (fs=8000Hz)'
+        xlabel 'Sample points for 25ms (fs=8000Hz)'
         ylabel '24 erb-spaced channels from 100Hz - 4000Hz'
         set(gca, 'XLim',[0 200],'YLim',[0 4.8])
         hold off
@@ -163,7 +166,7 @@ function exp_gammatone(varargin)
            dy = dy+0.2;
         end
         title '24 channel array of gamma impulse responses envelopes (classic)'
-        xlabel 'Sample points of 25ms (fs=8000Hz)'
+        xlabel 'Sample points for 25ms (fs=8000Hz)'
         ylabel '24 erb-spaced channels from 100Hz - 4000Hz'
         set(gca, 'XLim',[0 200],'YLim',[0 5])
         hold off
@@ -199,7 +202,7 @@ function exp_gammatone(varargin)
         end
         clear dy;
         title 'Gammatone impulse response filterbank without phase-compensation'
-        xlabel 'Sample points of ~14.3ms (fs=10000Hz)'
+        xlabel 'Sample points for ~14.3ms (fs=10000Hz)'
         ylabel '37 equal spaced channels by 132,43Hz from ~ 100Hz - 5000Hz'
         set(gca, 'XLim',[1022 1094],'YLim',[0 3.7])
         hold off
@@ -234,7 +237,7 @@ function exp_gammatone(varargin)
         end
         clear dy;
         title 'Gammatone filterbank with envelope and fine-structure phase-compensation'
-        xlabel 'Sample points of ~14.3ms (fs=10000Hz)'
+        xlabel 'Sample points for ~14.3ms (fs=10000Hz)'
         ylabel '37 equal spaced channels by 132,43 Hz // ~ 100 Hz - 5000 Hz'
         set(gca, 'XLim',[1022 1094],'YLim',[0 3.7])
         hold off
@@ -266,7 +269,7 @@ function exp_gammatone(varargin)
         subplot(2,1,1)
         plot(insig)
         title 'Pulsetrain'
-        xlabel 'Sample points of 12ms (fs=10000Hz)'
+        xlabel 'Sample points for 12ms (fs=10000Hz)'
         ylabel 'Amplitude'
         set(gca, 'XLim',[0 120],'YLim',[0 1])
         dy = 0;
@@ -278,7 +281,7 @@ function exp_gammatone(varargin)
         end
         clear dy;
         title 'Gammatone impulse response filterbank without phase-compensation'
-        xlabel 'Sample points of 12ms (fs=10000Hz)'
+        xlabel 'Sample points for 12ms (fs=10000Hz)'
         ylabel '37 equal spaced channels from ~ 100Hz - 5000Hz'
         set(gca, 'XLim',[0 120],'YLim',[0 3.7])
         hold off
@@ -337,8 +340,7 @@ function exp_gammatone(varargin)
 % gammatone (allpass,casualphase) 'complex'
 
     if flags.do_fig2ly
-        warning(['FIXME: The complex-valued allpass filters are not scaled ' ...
-                 'correctly too.']);
+
         flow =100;
         fhigh=4000;
         fs=8000;
@@ -362,7 +364,8 @@ function exp_gammatone(varargin)
         ylabel 'Amplitude'
         set(gca, 'XLim',[1020 1084],'YLim',[-0.25 0.25])
         hold on
-
+        
+        %[b,a] = gammatone(erb,fs,n,betamul);
         [b,a] = gammatone(erb,fs,n,betamul,'complex');
         outsig = 2*real(ufilterbankz(b,a,insig));
         outsig=permute(outsig,[3 2 1]);
@@ -383,6 +386,7 @@ function exp_gammatone(varargin)
         set(gca, 'XLim',[1020 1084],'YLim',[-0.25 0.25])
         hold on
 
+        %[b,a] = gammatone(erb,fs,n,betamul);
         [b,a] = gammatone(erb,fs,n,betamul,'complex');
         outsig = 2*real(ufilterbankz(b,a,insig));
         outsig=permute(outsig,[3 2 1]);
@@ -394,8 +398,6 @@ function exp_gammatone(varargin)
 % gammatone (allpass,casualphase) 'complex'
 
     if flags.do_fig1ho
-%         warning(['FIXME: The complex-valued allpass filters produce ' ...
-%                  'no imaginary part.']);
         fs=10000;
         fc=1000;
         N=4096;
@@ -404,12 +406,12 @@ function exp_gammatone(varargin)
         insig(1)=1;
 
         [b,a] = gammatone(fc,fs,'complex');
-        outsig = 2*real(ufilterbankz(b,a,insig));
+        outsig = (ufilterbankz(b,a,insig));
         outsig=permute(outsig,[3 2 1]);
-        outsig = hilbert(outsig,fs);
+        outsigenv = hilbert(outsig,fs);
 
         figure  
-        plot(abs(outsig),'b-.')
+        plot(abs(outsigenv),'b-.')
         set(gca, 'XLim',[0 200],'YLim',[-0.04 0.04])
         hold on
         plot(real(outsig),'r-')
@@ -418,26 +420,52 @@ function exp_gammatone(varargin)
     end
 %% Figure 2
 %
-    if flags.do_fig2ho
-         warning(['FIXME: Still in progress..' ...
-                 '.']);
-        fs=10000;
-        fc=1000;
-        N=4096;
-        insig=(1:N);
-        insig(:)=0;
-        insig(1)=1;
+   % if flags.do_fig2ho
+        fc = 1000;
+        fs = 10000;
+        fn = 5000;
+        Tn = 1/fn;
+        N = 4096;
+        df = fs/N; %Frequenzauflösung
+        xfn = (0:df:fn-df)*Tn;
+        insig = (1:N);
+        insig(:) = 0;
+        insig(1) = 1;
 
         [b,a] = gammatone(fc,fs,'complex');
-        outsig = 2*real(ufilterbankz(b,a,insig));
-        outsig=permute(outsig,[3 2 1]);
-        outfft= fft(outsig);
+        outsig = (ufilterbankz(b,a,insig));
+        outsig = permute(outsig,[3 2 1]);
+        % Upper two panels
+        outfftr = fft(2*real(outsig));
+        [phi] = phasez(b,a,2048);
+        phi = phi+2*pi;
+        phi = phi.';
+        % Lower two panels
+        % The real-to-imaginary transfer function was calculated by
+        % dividing the FFT-spectra of imaginary and real part of the
+        % impulse response.
+        outffti = fft(2*imag(outsig));
+        outsigrtoi = outffti./outfftr;
+        theta = angle(outsigrtoi);
+        phirtoi = theta+ pi/2;
+               
         figure
-        stem( outfft(N:end), 'b.-')
-        %axis([-Fn Fn 0 max_y])
-        title('Amplitudengang')
-        ylabel('Amplitude')
-        xlabel(['Auflösung: ',num2str(N),' Hz Frequenz in Hz'])
+        subplot(4,1,1)
+        plot(xfn, 20*log10(abs(outfftr(1:N/2))))
+        set(gca,'Xlim',[0 1], 'YLim',[-70 0])
+        ylabel('Magnitude/db')
+        subplot(4,1,2)
+        plot(xfn,phi)
+        ylabel('Phase/rad')
+        set(gca,'Xlim',[0 1],'Ylim',[-5 5])
+        subplot(4,1,3)
+        plot(xfn,(20*log10(abs(outsigrtoi(1:N/2)))))
+        set(gca,'Xlim',[0 1],'Ylim',[-10 10])
+        ylabel('Magnitude/db')
+        subplot(4,1,4)
+        plot(xfn, phirtoi(1:N/2))
+        set(gca,'Xlim',[0 1],'Ylim',[-2 2])
+        xlabel('Frequency / pi')
+        ylabel('Phase/rad')
         grid
-    end
-end
+    %end
