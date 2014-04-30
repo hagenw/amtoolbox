@@ -59,16 +59,25 @@ function exp_gammatone(varargin)
 %     'fig1ho'      Reproduce Fig.l from Hohmann, 2002:
 %                   Impulse response of the example Gammatone filter
 %                   (center frequency fc = 1000 Hz; 3-db bandwidth fb = 100 Hz;
-%                   sampling frequency fs = 10kHz). The solid and dashed lines
+%                   sampling frequency fs = 10kHz). Solid and dashed lines
 %                   show the real and imaginary part of the filter output,
 %                   respectively. The absolute value of the filter output
 %                   (dashdotted line) clearly represents the envelope.
 %
 %     'fig2ho'      Reproduce Fig.2 from Hohmann, 2002:
-%                   Still in Progress
+%                   Frequency response of the example Gammatone filter
+%                   (upper two panels) and of the real-to-imaginary
+%                   response(lower two panels). Pi/2 was added to the phase
+%                   of the latter (see text). The frequency axis goes up to
+%                   half the sampling rate (z=pi).
 %       
 %     'fig3ho'      Reproduce Fig.3 from Hohmann, 2002:
-%                   Still in Progress
+%                   Magnitude frequency response of the Gammatone
+%                   filterbank. In this example, the filter channel density
+%                   is 1 on the ERB scale and the filter bandwidth is 1
+%                   ERBaud. The sampling frequency was 16276Hz and the
+%                   lower and upper boundary for the center frequencies
+%                   were 70Hz and 6.7kHz, respectively.
 %
 %   Examples:
 %   ---------
@@ -105,6 +114,10 @@ function exp_gammatone(varargin)
 %
 %     exp_gammatone('fig2ho');
 %
+%  To display Fig. 3 Hohmann, 2002 use :::
+%
+%     exp_gammatone('fig3ho');
+%
 %
 % AUTHOR: Christian Klemenschitz, 2014
 
@@ -114,7 +127,7 @@ function exp_gammatone(varargin)
     definput.keyvals.MarkerSize = 6;
     definput.flags.type = {'missingflag',...
     'fig5pat' ,'fig10apat', 'fig10cpat', 'fig11pat', 'fig1ly', 'fig2ly',...
-    'fig1ho', 'fig2ho'};
+    'fig1ho', 'fig2ho', 'fig3ho'};
 
     % Parse input options
     [flags,~]  = ltfatarghelper({'FontSize','MarkerSize'},definput,varargin);
@@ -292,7 +305,7 @@ function exp_gammatone(varargin)
 % gammatone (allpass,casualphase,real')
 % gammatone 'classic' (casualphase, real)
 
-    if flags.do_fig1ly
+    %if flags.do_fig1ly
         warning(['FIXME: The real-valued allpass filters produce good results, ' ... 
                  'though there is a fixme for real-valued filters, ' ...
                  'complex-valued filters do not.']);
@@ -334,7 +347,7 @@ function exp_gammatone(varargin)
         h=abs(h)*nor;
         semilogx(w/(erb(13)/fs*2*pi),20*log10(abs(h)),'b--');
         hold off
-    end
+   % end
 %% Figure 2
 % gammatone 'classic' (casualphase, real)
 % gammatone (allpass,casualphase) 'complex'
@@ -419,8 +432,9 @@ function exp_gammatone(varargin)
         hold off
     end
 %% Figure 2
-%
-   % if flags.do_fig2ho
+% gammatone (allpass,casualphase) 'complex'
+
+    if flags.do_fig2ho
         fc = 1000;
         fs = 10000;
         fn = 5000;
@@ -468,4 +482,33 @@ function exp_gammatone(varargin)
         xlabel('Frequency / pi')
         ylabel('Phase/rad')
         grid
-    %end
+    end
+    
+%% figure 3
+% gammatone (allpass,casualphase) 'complex'
+
+     if flags.do_fig3ho
+        flow=70;
+        fhigh=6700;
+        fs=16276;
+        fn=fs/2;
+        N=2048;
+        erb = erbspacebw(flow,fhigh);
+
+        [b,a] = gammatone(erb,fs,'complex');
+        h=zeros(length(erb),N/4);
+        w=zeros(length(erb),N/4);
+        for i=1:30
+           [h(i,:),w(i,:)] = freqz(b(i,:),a(i,:));
+        end
+        h(:)=abs(h(:));
+        
+        figure
+        hold on
+        for i = 1:size(erb,2)
+            plot(w(i,:)/(2*pi)*fs,20*log10(h(i,:)))
+        end
+        xlabel('Frequency / Hz')
+        set(gca,'Xlim',[0 fn],'Ylim',[-40 0])
+        hold off
+     end
