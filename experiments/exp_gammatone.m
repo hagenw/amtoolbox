@@ -79,6 +79,15 @@ function exp_gammatone(varargin)
 %                   lower and upper boundary for the center frequencies
 %                   were 70Hz and 6.7kHz, respectively.
 %
+%     'fig4ho'      Treatment of an impulse response with envelope maximum
+%                   to the left of the desired group delay (at sample 65).
+%                   The original complex impulse response (real part and
+%                   envelope plotted in the upper panel) is multiplied with
+%                   a complex factor and delayed so that the envelope maximum 
+%                   and the maximum of the real part coincide with the desired
+%                   group delay (lower panel).
+%
+%
 %   Examples:
 %   ---------
 %
@@ -118,6 +127,10 @@ function exp_gammatone(varargin)
 %
 %     exp_gammatone('fig3ho');
 %
+%  To display Fig. 4 Hohmann, 2002 use :::
+%
+%     exp_gammatone('fig4ho');
+%
 %
 % AUTHOR: Christian Klemenschitz, 2014
 
@@ -127,7 +140,7 @@ function exp_gammatone(varargin)
     definput.keyvals.MarkerSize = 6;
     definput.flags.type = {'missingflag',...
     'fig5pat' ,'fig10apat', 'fig10cpat', 'fig11pat', 'fig1ly', 'fig2ly',...
-    'fig1ho', 'fig2ho', 'fig3ho'};
+    'fig1ho', 'fig2ho', 'fig3ho', 'fig4ho'};
 
     % Parse input options
     [flags,~]  = ltfatarghelper({'FontSize','MarkerSize'},definput,varargin);
@@ -186,7 +199,8 @@ function exp_gammatone(varargin)
 
 
     end
-%% Figure 10a
+%% Pattersons Paper 
+% Figure 10a
 % gammatone 'classic' (casualphase, real)
 
     if flags.do_fig10apat
@@ -220,7 +234,8 @@ function exp_gammatone(varargin)
         set(gca, 'XLim',[1022 1094],'YLim',[0 3.7])
         hold off
     end
-%% Figure 10c
+%% Pattersons Paper
+% Figure 10c
 % gammatone 'classic','peakphase','complex'
 
     if flags.do_fig10cpat
@@ -255,7 +270,8 @@ function exp_gammatone(varargin)
         set(gca, 'XLim',[1022 1094],'YLim',[0 3.7])
         hold off
     end  
-%% Figure 11 
+%% Pattersons Paper 
+% Figure 11 
 % gammatone 'classic' (casualphase, real) pulsetrain
   
     if flags.do_fig11pat
@@ -348,7 +364,8 @@ function exp_gammatone(varargin)
         semilogx(w/(erb(13)/fs*2*pi),20*log10(abs(h)),'b--');
         hold off
    % end
-%% Figure 2
+%% Lyons Paper 
+% Figure 2
 % gammatone 'classic' (casualphase, real)
 % gammatone (allpass,casualphase) 'complex'
 
@@ -431,7 +448,8 @@ function exp_gammatone(varargin)
         plot(imag(outsig),'g--')
         hold off
     end
-%% Figure 2
+%% Hohmanns paper
+% Figure 2
 % gammatone (allpass,casualphase) 'complex'
 
     if flags.do_fig2ho
@@ -440,7 +458,7 @@ function exp_gammatone(varargin)
         fn = 5000;
         Tn = 1/fn;
         N = 4096;
-        df = fs/N; %Frequenzauflösung
+        df = fs/N;
         xfn = (0:df:fn-df)*Tn;
         insig = (1:N);
         insig(:) = 0;
@@ -484,7 +502,8 @@ function exp_gammatone(varargin)
         grid
     end
     
-%% figure 3
+%% Hohmanns paper
+% Figure 3
 % gammatone (allpass,casualphase) 'complex'
 
      if flags.do_fig3ho
@@ -498,17 +517,79 @@ function exp_gammatone(varargin)
         [b,a] = gammatone(erb,fs,'complex');
         h=zeros(length(erb),N/4);
         w=zeros(length(erb),N/4);
-        for i=1:30
+        for i=1:length(erb)
            [h(i,:),w(i,:)] = freqz(b(i,:),a(i,:));
         end
         h(:)=abs(h(:));
         
         figure
         hold on
-        for i = 1:size(erb,2)
+        for i = 1:length(erb)
             plot(w(i,:)/(2*pi)*fs,20*log10(h(i,:)))
         end
         xlabel('Frequency / Hz')
+        ylabel('Level / dB')
         set(gca,'Xlim',[0 fn],'Ylim',[-40 0])
         hold off
      end
+%% Hohmanns paper
+% Figure 4
+% gammatone (allpass,casualphase) 'complex'
+% Result is delayed and peakphased
+
+    if flags.do_fig4ho
+        flow=70;
+        fhigh=6700;
+        fs=16276;
+        insig = (1:fs);
+        insig(:) = 0;
+        insig(1) = 1;
+        erb=erbspacebw(flow,fhigh);
+        channel = 22;
+        desiredpeak = 65;
+
+        [b,a] = gammatone(erb,fs,'complex');
+        outsig = (ufilterbankz(b,a,insig));
+        outsig=permute(outsig,[3 2 1]);
+
+        outenv = hilbert(real(outsig(channel,:)),fs);
+        envmax = find(abs(outenv(1,:))==max(abs(outenv(1,:))));
+        sigmax = 2*real(outsig(channel,:))==max(2*real(outsig(channel,:)));
+          
+        thetasig = angle((outsig(channel,sigmax)));
+        thetaenv = angle(outenv(envmax));
+        phi = thetaenv - thetasig;
+        outsignew = 2*real(outsig(channel,:))*exp(1i*phi); 
+        
+        outsignewenv = hilbert(real(outsignew),fs);
+        envmaxnew = find(abs(outsignewenv(1,:))==max(abs(outsignewenv(1,:))));
+        sigmaxnew = find(2*real(outsignew(1,:))==max(2*real(outsignew(1,:))));
+        
+        delay = zeros(1,desiredpeak-envmax);
+        outsigdelay= [delay outsignew(1:length(outsignew)-delay)];
+        outsigdelay = outsigdelay(1:length(outsignew)-delay);
+        outsigdelayenv = hilbert(real(outsigdelay),fs);
+        
+        figure
+        subplot(2,1,1)
+        plot(real(outsig(channel,:)),'b-')
+        hold on
+        set(gca, 'XLim',[0 200],'YLim',[-0.04 0.04])
+        xlabel('Sample')
+        ylabel('Amplitude')
+        plot(abs(outenv),'r-')
+        hold off
+        subplot(2,1,2)
+        plot (real(outsigdelay),'b-')
+        hold on
+        set(gca, 'XLim',[0 200],'YLim',[-0.04 0.04])
+        xlabel('Sample')
+        ylabel('Amplitude')
+        plot(abs(outsigdelayenv),'r-')
+        hold off
+        
+        warning(['FIXME: The maximum of the real part of the impulse response ' ... 
+                 'misses the maximum of the envelope for ' num2str(envmaxnew - sigmaxnew) ...
+                 ' samplepoint(s).']);
+     end
+end
