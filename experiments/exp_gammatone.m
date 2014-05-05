@@ -535,7 +535,8 @@ function exp_gammatone(varargin)
 %% Hohmanns paper
 % Figure 4
 % gammatone (allpass,casualphase) 'complex'
-% Result is delayed and peakphased
+% Result is delayed and peakphased.
+% Case 2a: envelope maximum before desired peak;
 
     if flags.do_fig4ho
         flow=70;
@@ -545,7 +546,10 @@ function exp_gammatone(varargin)
         insig(:) = 0;
         insig(1) = 1;
         erb=erbspacebw(flow,fhigh);
-        channel = 22;
+       
+        % The envelope maximum envmax is earlier in time than the desired
+        % peak at channels 13 to 30.
+        channel = 13;
         desiredpeak = 65;
 
         [b,a] = gammatone(erb,fs,'complex');
@@ -554,20 +558,29 @@ function exp_gammatone(varargin)
 
         outenv = hilbert(real(outsig(channel,:)),fs);
         envmax = find(abs(outenv(1,:))==max(abs(outenv(1,:))));
-        sigmax = 2*real(outsig(channel,:))==max(2*real(outsig(channel,:)));
-          
-        thetasig = angle((outsig(channel,sigmax)));
-        thetaenv = angle(outenv(envmax));
-        phi = thetaenv - thetasig;
-        outsignew = 2*real(outsig(channel,:))*exp(1i*phi); 
+        sigmax = find(real(outsig(channel,:))==max(real(outsig(channel,:))));
+
+        % Equation 18 Phi_k
+        phi = (erb(channel)*(-2*pi)*(envmax-sigmax)/fs);
+       
+        % Equation 19
+        outsignew = real(outsig(channel,:))*cos(phi)-imag(outsig(channel,:))*sin(phi);
         
-        outsignewenv = hilbert(real(outsignew),fs);
-        envmaxnew = find(abs(outsignewenv(1,:))==max(abs(outsignewenv(1,:))));
-        sigmaxnew = find(2*real(outsignew(1,:))==max(2*real(outsignew(1,:))));
-        
+%         outenvnew = hilbert(real(outsignew(1,:)),fs);
+%         envmaxnew = find(abs(outenvnew(1,:))==max(abs(outenvnew(1,:))));
+%         sigmaxnew = find(real(outsignew(1,:))==max(real(outsignew(1,:))));
+%         
+%         warning(['FIXME: The maximum of the real part of the impulse response ' ... 
+%                  'misses the maximum of the envelope in channel '  num2str(channel)...
+%                  ' by ' num2str(envmaxnew - sigmaxnew) ' sample(s).']);
+                
+        % Equation 20
         delay = zeros(1,desiredpeak-envmax);
+        
+        % Equation 21
         outsigdelay= [delay outsignew(1:length(outsignew)-delay)];
         outsigdelay = outsigdelay(1:length(outsignew)-delay);
+        
         outsigdelayenv = hilbert(real(outsigdelay),fs);
         
         figure
@@ -587,9 +600,5 @@ function exp_gammatone(varargin)
         ylabel('Amplitude')
         plot(abs(outsigdelayenv),'r-')
         hold off
-        
-        warning(['FIXME: The maximum of the real part of the impulse response ' ... 
-                 'misses the maximum of the envelope for ' num2str(envmaxnew - sigmaxnew) ...
-                 ' samplepoint(s).']);
      end
 end
