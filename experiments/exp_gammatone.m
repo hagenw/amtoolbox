@@ -24,7 +24,11 @@ function exp_gammatone(varargin)
 %                   produced by by a gammatone filterbank without phase 
 %                   compensation. The triangular objects are the upper
 %                   three formants of the vowel. The duration of each
-%                   period is 8 ms....!!!!
+%                   period is ~8 ms. The ordinate is filter centre
+%                   frequency of 189 equally spaced channels from 100 to
+%                   4000 Hz. Note the strong rightward skew induced  by the
+%                   phase lags of the low-frequency filters in the lower
+%                   half of the figure.
 %                       
 %
 %     'fig5patterson1987'
@@ -195,12 +199,14 @@ function exp_gammatone(varargin)
 % Figure 3 
 % gammatone 'classic' (casualphase, real)
 
-    if flags.do_fig3patterson1987
+   if flags.do_fig3patterson1987
         % Input parameters
-        %load('a_from_past_us.mat'); % Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
+        %load('a_from_past_us.mat');% Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
         load('a_from_past_uk.mat'); % Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
         ts = 1/fs;                  % Time between sampling points in s;
         insig = insig(:,1).';       % Extract one channel from signal;
+        insig = insig(610:963);     % Extract ~8 ms;
+        insig = [insig insig insig insig insig insig insig insig]; % 8 cycles;
         nchannels = 189;            % Number of channels in filterbank
         N=length(insig);            % Length of signal;
         treal = (1:N)*ts*1000;      % Time axis in ms
@@ -230,9 +236,9 @@ function exp_gammatone(varargin)
         title '189 channel array of gammatone impulse responses of vowel a from past'
         xlabel 'Time (ms)'
         ylabel '189 equal spaced channels by 20.6 Hz from ~ 120.6Hz - 4000Hz'
-        set(gca, 'Xlim', [19 80], 'YLim',[0 189])
+        set(gca, 'Xlim', [20 56], 'YLim',[0 189])
         hold off
-    end;
+   end;
     
 %% Pattersons Paper - Classic Gammatone Filter
 % Figure 5 
@@ -304,7 +310,7 @@ function exp_gammatone(varargin)
         fc = zeros(1,nchannels);    % Vector with 37 equally spaced center frequencies;
         bw = ((fhigh-flow)/nchannels); % Distance between frequency channels;
         fc(1) = bw;
-        for i = 2:nchannels
+        for ii = 2:nchannels
             fc(ii) = fc(ii-1) + bw;
         end;
         insig = zeros(1,N);         % Impulse as input signal 
@@ -336,7 +342,7 @@ function exp_gammatone(varargin)
 % Figure 10c
 % gammatone 'classic','peakphase','complex'
 
-    if flags.do_fig10cpat
+    if flags.do_fig10cpatterson1987
         % Input parameters
         fs = 10000;                 % Sampling frequency;
         ts = 1/fs;                  % Time between sampling points in s
@@ -449,7 +455,7 @@ function exp_gammatone(varargin)
            dy = dy+1;
         end;
         title 'Gammatone impulse response filterbank but without envelope phase-compensation'
-        ylabel '37 equal spaced channels'
+        ylabel '37 equally spaced channels'
         set(gca, 'XLim',[14.5 39],'YLim',[0 37])
         hta3 = subplot(3,1,3);
         posAxes3 = get(hta3, 'Position');
@@ -458,7 +464,7 @@ function exp_gammatone(varargin)
         set(hta3, 'Position',posAxes3);
  %       title 'test'
         xlabel 'Time (ms)'
-        ylabel '37 equal spaced channels'
+        ylabel '37 equally spaced channels'
         set(gca, 'XLim',[12 36],'YLim',[0 37])
         hold off
     end
@@ -472,19 +478,26 @@ function exp_gammatone(varargin)
         warning(['FIXME: The real-valued allpass filters produce good results, ' ... 
                  'though there is a fixme for real-valued filters, ' ...
                  'complex-valued filters do not.']);
-
-        flow = 100;
-        fhigh = 4000;
-        fs = 25000;
-        erb = erbspacebw(flow,fhigh);
-
-        n = 6;
-        betamul = 3;
+        
+        % Input parameters
+        fs = 8000;                      % Sampling frequency;
+        flow = 100;                     % ERB lowest center frequency in Hz;
+        fhigh = 4000;                   % ERB highest center frequency in Hz;
+        erb = erbspacebw(flow,fhigh);   % 24 ERB spaced channels;
+        n = 6;                          % Filter order;
+        betamul = 3;                    % Betamul
+        
+        % Derives filter coefficients for erb spaced channels.
         [b,a] = gammatone(erb,fs,n,betamul);
+        % Returns frequency response vector 'h' and the corresponding
+        % angular frequency vector 'w' for channel 13.
         [h,w] = freqz(b(13,:), a(13,:));
+        % Scale first value to zero.
         h = h(:)/h(1);
+        % For scaling of following transfer function (peak on peak).
         nor = real(max(h));
-
+        
+        % Plot
         figure
         semilogx(w/(erb(13)/fs*2*pi), 20*log10(abs(h)),'r-');
         title 'Transfer functions of classic and allpass gammatone filters for b=omeg_r/3 and b=omeg_r/2'
@@ -492,22 +505,42 @@ function exp_gammatone(varargin)
         ylabel 'Magnitude gain (db)'
         set(gca,'XLim',[0.03 3],'YLim',[-40, 40]) 
         hold on
-
+        
+        % Derives filter coefficients for erb spaced channels.
         [b,a] = gammatone(erb,fs,n,betamul,'classic');
+        % Returns frequency response vector 'h' and the corresponding
+        % angular frequency vector 'w' for channel 13.
         [h,w] = freqz(b(13,:), a(13,:));
+        % Scale tranfer function to previous transfer fuction.
         h=abs(h) * nor;
+        
+        % Plot 
         semilogx(w/(erb(13)/fs*2*pi), 20*log10(abs(h)),'b--');
-
+        
+        % Change betamul;
         betamul = 2;
+        % Derives filter coefficients for erb spaced channels.
         [b,a] = gammatone(erb,fs,n,betamul);
+        % Returns frequency response vector 'h' and the corresponding
+        % angular frequency vector 'w' for channel 13.
         [h,w] = freqz(b(13,:), a(13,:));
+        % Scale first value to zero;
         h = h(:)/h(1);
+        % For scaling of following transfer function (peak on peak).
         nor = real(max(h));
+        
+        % Plot
         semilogx(w/(erb(13)/fs*2*pi), 20*log10(abs(h)),'r-');
 
+        % Derives filter coefficients for erb spaced channels.
         [b,a] = gammatone(erb,fs,n,betamul,'classic');
+        % Returns frequency response vector 'h' and the corresponding
+        % angular frequency vector 'w' for channel 13.
         [h,w] = freqz(b(13,:), a(13,:));
+        % Scale tranfer function to previous transfer fuction.
         h=abs(h) * nor;
+        
+        % Plot
         semilogx(w/(erb(13)/fs*2*pi), 20*log10(abs(h)),'b--');
         hold off
     end;
@@ -517,76 +550,97 @@ function exp_gammatone(varargin)
 % gammatone (allpass,casualphase) 'complex'
 
     if flags.do_fig2lyon1997
-
-        flow =100;
-        fhigh = 4000;
-        fs = 25000;
-        erb = erbspacebw(flow,fhigh);
-        N = 2048;
-        insig = (1:N);
-        insig(:) = 0;
-        insig(1024) = 1;
-
-        n = 6;
-        betamul = 3;
-        [b,a] = gammatone(erb,fs,n,betamul,'classic');
+        % Input parameters
+        fs = 8000;              % Sampling frequency;
+        fc = 1000;              % Center frequency at 1000 Hz
+        N = 2048;               % Signal length;
+        insig = zeros(1,N);     % Input signal;
+        insig(1024) = 1;        % Impulse at sample 1024;
+        n = 6;                  % Filter order 6;
+        betamul = 3;            % Betamul;
+        
+        % Derives filter coefficients for erb spaced channels.
+        [b,a] = gammatone(fc,fs,n,betamul,'classic');
+        % Filters impulse signal with filter coefficients from above.
         outsig = 2*real(ufilterbankz(b,a,insig));
         outsig = permute(outsig,[3 2 1]);
    
+        % Plot
         figure
         subplot(2,1,1)
-        plot(outsig(13,:),'b--')
+        plot(outsig(1,:),'b--')
         title 'Impulse responses of classic and allpass gammatone filters for b=omeg_r/3'
         xlabel 'Sample points'
         ylabel 'Amplitude'
         set(gca, 'XLim',[1020 1084],'YLim',[-0.25 0.25])
         hold on
         
+        % Derives filter coefficients for erb spaced channels.
         %[b,a] = gammatone(erb,fs,n,betamul);
-        [b,a] = gammatone(erb,fs,n,betamul,'complex');
+        [b,a] = gammatone(fc,fs,n,betamul,'complex');
+        % Filters impulse signal with filter coefficients from above.
         outsig = 2*real(ufilterbankz(b,a,insig));
         outsig = permute(outsig,[3 2 1]);
-        plot(outsig(13,:),'r-')
+        
+        % Plot
+        plot(outsig(1,:),'r-')
         hold off
 
+        % Change filter order 
         n = 6;
+        % Change betamul
         betamul = 2;
-        [b,a] = gammatone(erb,fs,n,betamul,'classic');
+        
+        % Derives filter coefficients for erb spaced channels.
+        [b,a] = gammatone(fc,fs,n,betamul,'classic');
+        % Filters impulse signal with filter coefficients from above.
         outsig = 2*real(ufilterbankz(b,a,insig));
         outsig = permute(outsig,[3 2 1]);
-
+        
+        
+        % Plot
         subplot(2,1,2)
-        plot(outsig(13,:),'b--')
+        plot(outsig(1,:),'b--')
         title 'Impulse responses of classic and allpass gammatone filters for b=omeg_r/2'
         xlabel 'Sample points'
         ylabel 'Amplitude'
         set(gca, 'XLim',[1020 1084],'YLim',[-0.25 0.25])
         hold on
 
+        % Derives filter coefficients for erb spaced channels.
         %[b,a] = gammatone(erb,fs,n,betamul);
-        [b,a] = gammatone(erb,fs,n,betamul,'complex');
+        [b,a] = gammatone(fc,fs,n,betamul,'complex');
+        % Filters impulse signal with filter coefficients from above.
         outsig = 2*real(ufilterbankz(b,a,insig));
         outsig = permute(outsig,[3 2 1]);
-        plot(outsig(13,:),'r-')
-        hold off
+        
+        % Plot
+        plot(outsig(1,:),'r-')
+        hold off   
     end;
+    
 %% Hohmanns paper
 % Figure 1
 % gammatone (allpass,casualphase) 'complex'
 
     if flags.do_fig1hohmann2002
-        fs = 25000;
-        fc = 1000;
-        N = 4096;
-        insig = (1:N);
-        insig(:) = 0;
-        insig(1) = 1;
+        % Input parameters
+        fs = 8000;              % Sampling frequency;
+        fc = 1000;              % Center frequency at 1000 Hz;
+        N = 4096;               % Signal length;
+        insig = zeros(1,N);     % Input signal with
+        insig(1) = 1;           % impulse at 1;
 
+        % Derives filter coefficients for erb spaced channels.
         [b,a] = gammatone(fc,fs,'complex');
+        % Filters impulse signal with filter coefficients from above.
         outsig = (ufilterbankz(b,a,insig));
         outsig = permute(outsig,[3 2 1]);
-        outsigenv = hilbert(outsig,fs);
+        
+        % Envelope of impulse response of gammatone filter at 1000 Hz
+        outsigenv = hilbert(real(outsig),fs);
 
+        % Plot
         figure  
         plot(abs(outsigenv),'b-.')
         set(gca, 'XLim',[0 200],'YLim',[-0.04 0.04])
@@ -601,36 +655,44 @@ function exp_gammatone(varargin)
 % gammatone (allpass,casualphase) 'complex'
 
     if flags.do_fig2hohmann2002
-        fc = 1000;
-        fs = 25000;
-        fn = 5000;
-        Tn = 1/fn;
-        N = 4096;
-        df = fs/N;
-        xfn = (0:df:fn-df)*Tn;
-        insig = (1:N);
-        insig(:) = 0;
-        insig(1) = 1;
+        % Input parameters
+        fs = 10000;             % Sampling frequency;
+        fc = 1000;              % Center frequency at 1000 Hz;
+        fn = 5000;              % Nyquist frequency    
+        Tn = 1/fn;              % Time between samples for Nyquist frequency
+        N = 4096;               % Signal length;
+        df = fs/N;              % Distance frequency of fft 
+        xfn = (0:df:fn-df)*Tn;  % Frequency vector for fft
+        insig = zeros(1,N);     % Input signal with
+        insig(1) = 1;           % impulse at one;
 
+        % Derives filter coefficients for erb spaced channels.
         [b,a] = gammatone(fc,fs,'complex');
+        % Filters impulse signal with filter coefficients from above.
         outsig = (ufilterbankz(b,a,insig));
         outsig = permute(outsig,[3 2 1]);
         
         % Upper two panels
+        % FFT of real part of output signal
         outfftr = fft(2*real(outsig));
+        % Returns unwrapped phase response vectors evaluated at n equally-spaced points
+        % around the unit circle from 0 to 2? radians/sample. 
         [phi] = phasez(b,a,2048);
         phi = phi+2*pi;
         phi = phi.';
         
         % Lower two panels
-        % The real-to-imaginary transfer function was calculated by
+        % The real-to-imaginary transfer function is calculated by
         % dividing the FFT-spectra of imaginary and real part of the
         % impulse response.
         outffti = fft(2*imag(outsig));
         outsigrtoi = outffti./outfftr;
+        % Extract phase angle of signal.
         theta = angle(outsigrtoi);
+        % Add Pi/2 to phase.
         phirtoi = theta+ pi/2;
-               
+        
+        % Plot
         figure
         subplot(4,1,1)
         plot(xfn, 20*log10(abs(outfftr(1:N/2))))
@@ -657,22 +719,26 @@ function exp_gammatone(varargin)
 % gammatone (allpass,casualphase) 'complex'
 
      if flags.do_fig3hohmann2002
-        flow = 70;
-        fhigh = 6700;
-        fs = 16276;
-        fn = fs/2;
-        N = 2048;
-        erb = erbspacebw(flow,fhigh);
+        fs = 16276;                     % Sampling frequency;
+        flow = 70;                      % ERB lowest center frequency in Hz;
+        fhigh = 6700;                   % ERB highest center frequency in Hz;
+        erb = erbspacebw(flow,fhigh);   % 24 ERB spaced channels;
+        fn = fs/2;                      % Nyquist frequency
+        N = 2048;                       % Signal length
 
+        % Derives filter coefficients for erb spaced channels.
         [b,a] = gammatone(erb,fs,'complex');
+        
+        % Frequency response per channel
         h = zeros(length(erb),N/4);
         w = zeros(length(erb),N/4);
-        
         for ii=1:length(erb)
            [h(ii,:),w(ii,:)] = freqz(b(ii,:),a(ii,:));
         end;
+        % Normalize peak to zero
         h(:) = abs(h(:));
         
+        % Plot
         figure
         hold on
         for ii = 1:length(erb)
@@ -691,30 +757,35 @@ function exp_gammatone(varargin)
 % Case 2a: envelope maximum before desired peak;
 
     if flags.do_fig4hohmann2002
-        flow = 70;
-        fhigh = 6700;
-        fs = 16276;
-        insig = (1:fs);
-        insig(:) = 0;
-        insig(1) = 1;
-        erb = erbspacebw(flow,fhigh);
+        fs = 16276;                     % Sampling frequency;
+        flow = 70;                      % ERB lowest center frequency in Hz;
+        fhigh = 6700;                   % ERB highest center frequency in Hz;
+        erb = erbspacebw(flow,fhigh);   % 24 ERB spaced channels;
+        insig = zeros(1,fs);            % Input signal with
+        insig(1) = 1;                   % impulse at one
        
         % The envelope maximum envmax is earlier in time than the desired
         % peak at channels 13 to 30.
         channel = 20;
         desiredpeak = 65;
 
+        % Derives filter coefficients for erb spaced channels.
         [b,a] = gammatone(erb,fs,'complex');
+        % Filters impulse signal with filter coefficients from above. 
         outsig = (ufilterbankz(b,a,insig));
         outsig = permute(outsig,[3 2 1]);
 
+        % Envelope maximum
         outenv = hilbert(real(outsig(channel,:)),fs);
         envmax = find(abs(outenv(1,:)) == max(abs(outenv(1,:))));
+        % Signal maximum
         sigmax = find(real(outsig(channel,:)) == max(real(outsig(channel,:))));
 
+        % Phase delay between envelope maximum and signal maximum
         % Equation 18 Phi_k
         phi = erb(channel)*(-2*pi)*(envmax - sigmax)/fs;
-       
+        
+        % Derives signal with envelope maximum at signal maximum 
         % Equation 19
         outsignew = real(outsig(channel,:)) * cos(phi) - imag(outsig(channel,:)) * sin(phi);
           
@@ -726,16 +797,20 @@ function exp_gammatone(varargin)
 %         warning(['FIXME: The maximum of the real part of the impulse response ' ... 
 %                  'misses the maximum of the envelope in channel '  num2str(channel)...
 %                  ' by ' num2str(envmaxnew - sigmaxnew) ' sample(s).']);
-                
+        
+        % Derives time delay        
         % Equation 20
         delay = outsignew(end-desiredpeak+envmax+1:end);
         
+        % Delay signal
         % Equation 21
         outsigdelay= [delay outsignew(1:length(outsignew) - delay)];
         outsigdelay = outsigdelay(1:length(outsignew) - delay);
         
+        % Envelope of delayed signal
         outsigdelayenv = hilbert(real(outsigdelay),fs);
         
+        % Plot
         figure
         subplot(2,1,1)
         plot(real(outsig(channel,:)),'b-')
