@@ -1,25 +1,14 @@
 function exp_gammatone(varargin)
 %   Usage: exp_gammatone(flags)
 %
-%   `exp_gammatone(flags)` reproduces some figures from the papers
-%
-%  "An efficient auditory filterbank based on the gammatone function"
-%  by Roy Patterson and Ian Nimmo-Smith and John Holdsworth and Peter Rice,
-%  Annex B of the svos final report,1987.
-%
-%  "All-Pole models of auditory filtering" by R.F.Lyon,
-%  published in "Diversity in Auditory Mechanics", Lewis et al.(eds),
-%  World Scientific Publishing, Singapore, 1997, pp. 205-211.
-%
-%  "Frequency analysis and synthesis using a gammatone filterbank"
-%  by V. Hohmann, Acta Acustica united with Acustica Vol.88, 2002
-%
+%   `exp_gammatone(flags)` reproduces some figures from  
+%   Patterson et al. (1987), Lyon (1997), and Hohmann (2002)
 %
 %   The following flags can be specified;
 %
 %     'fig1patterson1987'
 %
-%                   Reproduce Fig.1 from Patterson,1987 efficient:
+%                   Reproduce Fig.1 from Patterson et al. (1987):
 %                   The amplitude characteristics of three roex(p) filters
 %                   centered at 427 Hz, 1000 Hz and 2089 Hz. The lower and
 %                   upper filters are centered 6 ERBs below and above the
@@ -208,7 +197,7 @@ function exp_gammatone(varargin)
 %   Examples:
 %   ---------
 %
-%   To display Fig. 1 Patterson, 1987 efficient use :::
+%   To display Fig. 1 from Patterson et al. (1987) use :::
 %
 %     exp_gammatone('fig1patterson1987');
 %
