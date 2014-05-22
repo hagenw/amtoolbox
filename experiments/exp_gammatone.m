@@ -21,7 +21,7 @@ function exp_gammatone(varargin)
 %
 %     'fig2_patterson1987'
 %
-%                   Reproduce Fig.2 from Patterson,1987 efficient:
+%                   Reproduce Fig.2 from Patterson et al. (1987):
 %                   An array of 24 impulse responses for roex(p) filters
 %                   whose centre frequencies ranges from 100 to 4000 Hz.
 %                   The linear-phase assumption leads to symmetric impulse
@@ -31,7 +31,7 @@ function exp_gammatone(varargin)
 %
 %     'fig3_patterson1987'
 %
-%                   Reproduce Fig.3 similiar to Patterson,1987 efficient:
+%                   Reproduce Fig.3 similiar to Patterson et al. (1987):
 %                   A cochleagram of four cycles of the [ae] in "past"
 %                   produced by by a gammatone filterbank without phase 
 %                   compensation. The triangular objects are the upper
@@ -45,7 +45,7 @@ function exp_gammatone(varargin)
 %
 %     'fig5_patterson1987'
 %
-%                   Reproduce Fig.5 from Patterson,1987 efficient:
+%                   Reproduce Fig.5 from Patterson et al. (1987):
 %                   An array of gamma impulse responses for a 24-channel
 %                   auditory filterbank.(lower portion), and the equvalent
 %                   array of gamma envelopes (upper portion). The range of
@@ -55,7 +55,7 @@ function exp_gammatone(varargin)
 %
 %     'fig6_patterson1987'
 %
-%                   Reproduce Fig.6 from Patterson,1987 efficient:
+%                   Reproduce Fig.6 from Patterson et al. (1987):
 %                   A comparison of the gammatone(4,b) and roex(p) filters
 %                   at three centre frequencies, 0.43, 1.00 and 2.09 kHz.
 %                   In this case, the gammatone filter has been matched to
@@ -68,7 +68,7 @@ function exp_gammatone(varargin)
 %
 %     'fig7_patterson1987'
 %
-%                   Reproduce Fig.7 from Patterson,1987 efficient:
+%                   Reproduce Fig.7 from Patterson et al. (1987):
 %                   The comparison of the gammatone(4,b) and roex(p)
 %                   filters at three centre frequencies (0.43, 1.00 and
 %                   2.09 kHz). In this case, the bandwidth of the gammatone
@@ -81,7 +81,7 @@ function exp_gammatone(varargin)
 %
 %     'fig8_patterson1987'
 %
-%                   Reproduce Fig.8 from Patterson,1987 efficient:
+%                   Reproduce Fig.8 from Patterson et al. (1987):
 %                   A comparison of the gammatone(2,b) and the roex(p,w,t)
 %                   filters at three centre frequencies (0.43, 1.00 and
 %                   2.09 kHz). The parameters for the roex filter are
@@ -94,7 +94,7 @@ function exp_gammatone(varargin)
 %
 %     'fig9_patterson1987'
 %
-%                   Reproduce Fig.9 from Patterson,1987 efficient:
+%                   Reproduce Fig.9 from Patterson et al. (1987):
 %                   A comparison of the gammatone(2,b) and the roex(p,w,t)
 %                   filters at three centre frequencies (0.43, 1.00 and
 %                   2.09 kHz). In this case the roex parameters, w and t,
@@ -107,7 +107,7 @@ function exp_gammatone(varargin)
 %                   
 %     'fig10a_patterson1987'
 %                   
-%                   Reproduce Fig.10a from Patterson, 1987 eficcient:
+%                   Reproduce Fig.10a from Patterson et al. (1987):
 %                   The impulse responses for a gammatone auditory filterbank
 %                   without phase compensation. The filterbank contains 37 
 %                   channels ranging from 100 to 5,000 Hz. The range of abcissa
@@ -116,7 +116,7 @@ function exp_gammatone(varargin)
 %
 %     'fig10c_patterson1987'
 %                   
-%                   Reproduce Fig.10c from Patterson, 1987 efficient:
+%                   Reproduce Fig.10c from Patterson et al. (1987):
 %                   The impulse responses for a gammatone auditory filterbank
 %                   with envelope and fine structure phase-compensation; that is,
 %                   the envelope peaks have been aligned and then a fine structure
@@ -127,14 +127,14 @@ function exp_gammatone(varargin)
 %
 %     'fig11_patterson1987'
 %
-%                   Reproduce similiar to Fig.11 from Patterson, 1987 efficient:
+%                   Reproduce similiar to Fig.11 from Patterson et al. (1987):
 %                   The impulse responses of a gammatone filterbank from a
 %                   pulsetrain.
 %
 %
 %     'fig1_lyon1997'
 %
-%                   Reproduce parts of Fig.1 from Lyon, 1997 (no DAPGF):
+%                   Reproduce parts of Fig.1 from Lyon (1997) (no DAPGF):
 %                   Comparison of GTF and APGF transfer function for two different
 %                   values of the real part of the pole position. Notice that
 %                   the ordering of gain near the peak for the classic gammatone
@@ -145,7 +145,7 @@ function exp_gammatone(varargin)
 %
 %     'fig2_lyon1997'
 %
-%                   Reproduce parts of Fig.2 from Lyon, 1997 (no DAPGF):
+%                   Reproduce parts of Fig.2 from Lyon (1997) (no DAPGF):
 %                   Impulse responses of the APGF and sine-phased GTF from 
 %                   Figure 1. Note that the GTF's zero crossings are equally
 %                   spaced in time, while those of the APGF are stretched out
@@ -154,7 +154,7 @@ function exp_gammatone(varargin)
 %
 %     'fig1_hohmann2002'
 %
-%                   Reproduce Fig.l from Hohmann, 2002:
+%                   Reproduce Fig.l from Hohmann (2002):
 %                   Impulse response of the example Gammatone filter
 %                   (center frequency fc = 1000 Hz; 3-db bandwidth fb = 100 Hz;
 %                   sampling frequency fs = 10kHz). Solid and dashed lines
@@ -165,7 +165,7 @@ function exp_gammatone(varargin)
 %
 %     'fig2_hohmann2002'
 %
-%                   Reproduce Fig.2 from Hohmann, 2002:
+%                   Reproduce Fig.2 from Hohmann (2002):
 %                   Frequency response of the example Gammatone filter
 %                   (upper two panels) and of the real-to-imaginary
 %                   response(lower two panels). Pi/2 was added to the phase
@@ -175,7 +175,7 @@ function exp_gammatone(varargin)
 %
 %     'fig3_hohmann2002'
 %
-%                   Reproduce Fig.3 from Hohmann, 2002:
+%                   Reproduce Fig.3 from Hohmann (2002):
 %                   Magnitude frequency response of the Gammatone
 %                   filterbank. In this example, the filter channel density
 %                   is 1 on the ERB scale and the filter bandwidth is 1
@@ -202,72 +202,71 @@ function exp_gammatone(varargin)
 %
 %     exp_gammatone('fig1_patterson1987');
 %
-%   To display Fig. 2 Patterson, 1987 efficient use :::
+%   To display Fig. 2 Patterson et al. (1987) use :::
 %
 %     exp_gammatone('fig2_patterson1987');
 %
-%   To display Fig. 3 Patterson, 1987 efficient use :::
+%   To display Fig. 3 Patterson et al. (1987) use :::
 %
 %     exp_gammatone('fig3_patterson1987');
 %
-%   To display Fig. 5 Patterson, 1987 efficient use :::
+%   To display Fig. 5 Patterson et al. (1987) use :::
 % 
 %     exp_gammatone('fig5_patterson1987');
 %
-%   To display Fig. 6 Patterson, 1987 efficient use :::
+%   To display Fig. 6 Patterson et al. (1987) use :::
 % 
 %     exp_gammatone('fig6_patterson1987');
 %
-%   To display Fig. 7 Patterson, 1987 efficient use :::
+%   To display Fig. 7 Patterson et al. (1987) use :::
 % 
 %     exp_gammatone('fig7_patterson1987');
 %
-%   To display Fig. 8 Patterson, 1987 efficient use :::
+%   To display Fig. 8 Patterson et al. (1987) use :::
 % 
 %     exp_gammatone('fig8_patterson1987');
 %
-%   To display Fig. 9 Patterson, 1987 efficient use :::
+%   To display Fig. 9 Patterson et al. (1987) use :::
 % 
 %     exp_gammatone('fig9_patterson1987');
 %
-%   To display Fig. 10a Patterson, 1987 efficient at use :::
+%   To display Fig. 10a Patterson et al. (1987) at use :::
 %
 %     exp_gammatone('fig10a_patterson1987');
 %
-%   To display Fig. 10c Patterson, 1987 efficient at use :::
+%   To display Fig. 10c Patterson et al. (1987) at use :::
 %
 %     exp_gammatone('fig10c_patterson1987');
 %
-%   To display Fig. 11 Patterson, 1987 efficient use :::
+%   To display Fig. 11 Patterson et al. (1987) use :::
 %
 %     exp_gammatone('fig11_patterson1987');
 %
-%   To display Fig. 1 Lyon, 1997 use :::
+%   To display Fig. 1 Lyon (1997) use :::
 %
 %     exp_gammatone('fig1_lyon1997');
 %
-%   To display Fig. 2 Lyon, 1997 use :::
+%   To display Fig. 2 Lyon (1997) use :::
 %
 %     exp_gammatone('fig2_lyon1997');
 %
-%   To display Fig. 1 Hohmann, 2002 use :::
+%   To display Fig. 1 Hohmann (2002) use :::
 %
 %     exp_gammatone('fig1_hohmann2002');
 %
-%   To display Fig. 2 Hohmann, 2002 use :::
+%   To display Fig. 2 Hohmann (2002) use :::
 %
 %     exp_gammatone('fig2_hohmann2002');
 %
-%   To display Fig. 3 Hohmann, 2002 use :::
+%   To display Fig. 3 Hohmann (2002) use :::
 %
 %     exp_gammatone('fig3_hohmann2002');
 %
-%   To display Fig. 4 Hohmann, 2002 use :::
+%   To display Fig. 4 Hohmann (2002) use :::
 %
 %     exp_gammatone('fig4_hohmann2002');
 %
-%   References: patterson1987efficient, lyon1997, hohmann2002, moore1983
-%
+%   References: patterson1987efficient lyon1997 hohmann2002 moore1983
 
 % AUTHOR: Christian Klemenschitz, 2014
 
