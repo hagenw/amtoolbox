@@ -2,6 +2,8 @@
 %
 %   This example program demonstrates how to create and use an analysis
 %   gammatone filterbank
+%
+% FIX ME: Not sure if this really implements Herzke & Hohmann (2007) or Hohmann (2002)
 
 % author   : tp
 % date     : Jan, Mar 2002, Nov 2006
