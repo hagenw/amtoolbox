@@ -210,23 +210,23 @@ function exp_gammatone(varargin)
 %
 %     exp_gammatone('fig3_patterson1987');
 %
-%    To display Fig. 5 Patterson, 1987 efficient use :::
+%   To display Fig. 5 Patterson, 1987 efficient use :::
 % 
 %     exp_gammatone('fig5_patterson1987');
 %
-%    To display Fig. 6 Patterson, 1987 efficient use :::
+%   To display Fig. 6 Patterson, 1987 efficient use :::
 % 
 %     exp_gammatone('fig6_patterson1987');
 %
-%    To display Fig. 7 Patterson, 1987 efficient use :::
+%   To display Fig. 7 Patterson, 1987 efficient use :::
 % 
 %     exp_gammatone('fig7_patterson1987');
 %
-%    To display Fig. 8 Patterson, 1987 efficient use :::
+%   To display Fig. 8 Patterson, 1987 efficient use :::
 % 
 %     exp_gammatone('fig8_patterson1987');
 %
-%    To display Fig. 9 Patterson, 1987 efficient use :::
+%   To display Fig. 9 Patterson, 1987 efficient use :::
 % 
 %     exp_gammatone('fig9_patterson1987');
 %
