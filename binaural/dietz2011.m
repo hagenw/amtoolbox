@@ -32,7 +32,7 @@ function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %     itd_C_lp  : based on lowpass-filtered itf, interaural time difference
 %     f_inst_lp : lowpass instantaneous frequencies
 %
-%   The *_lp values are not returned if the 'nolowpass' flag is set.
+%   The _lp values are not returned if the 'nolowpass' flag is set.
 %
 %   The steps of the binaural model to calculate the result are the
 %   following (see also Dietz et al., 2011):
@@ -136,17 +136,18 @@ function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %                    display and analysis. Default value is 70.
 %
 %     'lowpass'      Calculate the interaural parameters of the lowpassed
-%                    signal/ITF (*_lp return values). This is the default.
+%                    signal/ITF (_lp return values). This is the default.
 %
 %     'nolowpass'    Don't calculate the lowpass based interaural parameters.
-%                    The *_lp values are not returned.
+%                    The _lp values are not returned.
 %
 %     'debug'        Display what is happening.
 %
-%   See also: dietz2011interauralfunctions, dietz2011filterbank,
-%     ihcenvelope, auditoryfilterbank
 %
 %   References: dietz2011auditory
+
+%   See also: dietz2011interauralfunctions, dietz2011filterbank,
+%     ihcenvelope, auditoryfilterbank
 
 % AUTHOR: Mathias Dietz, Martin Klein-Hennig (for AMT), Hagen Wierstorf (for AMT)
 % 

@@ -15,7 +15,7 @@ function [outp] = dietz2011interauralfunctions(insig,fs,fc,varargin)
 %   interaural coherence (IC) for the given input signals. The ITD is calculated
 %   by dividing the IPD by the instantaneous frequency of the signal. In
 %   addition lowpassed filtered version of the interaural parameters are
-%   calculated (ending with *_lp) to simulate a finite time resolution of the
+%   calculated (ending with _lp) to simulate a finite time resolution of the
 %   binaural system.
 %
 %   The output structure *outp* contains the following fields:
@@ -32,7 +32,8 @@ function [outp] = dietz2011interauralfunctions(insig,fs,fc,varargin)
 %     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
 %     itd_lp    : based on lowpass-filtered itf, interaural time difference
 %     itd_C_lp  : based on lowpass-filtered itf, interaural time difference
-%   The *_lp values are not returned if the 'nolowpass' flag is set.
+%
+%   The _lp values are not returned if the 'nolowpass' flag is set.
 %
 %   `dietz2011interauralfunctions` accepts the following optional parameters:
 %
@@ -49,10 +50,10 @@ function [outp] = dietz2011interauralfunctions(insig,fs,fc,varargin)
 %                    display and analysis. Default value is 70.
 %
 %     'lowpass'      Calculate the interaural parameters of the lowpassed
-%                    signal/ITF (*_lp return values). This is the default.
+%                    signal/ITF (_lp return values). This is the default.
 %
 %     'nolowpass'    Don't calculate the lowpass based interaural parameters.
-%                    The *_lp values are not returned.
+%                    The _lp values are not returned.
 %
 %   See also: dietz2011, dietz2011filterbank
 %
