@@ -143,10 +143,11 @@ function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %
 %     'debug'        Display what is happening.
 %
-%   See also: dietz2011interauralfunctions, dietz2011filterbank,
-%     ihcenvelope, auditoryfilterbank
 %
 %   References: dietz2011auditory
+
+%   See also: dietz2011interauralfunctions, dietz2011filterbank,
+%     ihcenvelope, auditoryfilterbank
 
 % AUTHOR: Mathias Dietz, Martin Klein-Hennig (for AMT), Hagen Wierstorf (for AMT)
 % 
