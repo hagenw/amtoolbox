@@ -19,6 +19,9 @@
 %     EICELL             - Excitation-inhibition cell model by Breebaart.
 %     CULLING2005BMLD    - BMLD calculation from Culling et al. (2005).
 %     DIETZ2011UNWRAPITD - IPD to ITD transformation for the Dietz model
+%     DIETZ2011INTERAURALFUNCTIONS - IPD to ITD transformation for the Dietz model
+%     WIERSTORF2013ESTIMATEAZIMUTH - Azimuth position estimation based on dietz2011 or lindemann1986
+
 %
 %  The Takanen 2013 model   - Takanen 2013 binaural auditory model
 %     TAKANEN2013CONTRACOMPARISON - Enhance contrast between hemispheres

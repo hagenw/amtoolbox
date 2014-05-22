@@ -21,11 +21,9 @@
 %     TAKANEN2013           - Takanen 2013 binaural auditory model
 %
 %  Additional functions
-%     WIERSTORF2013ESTIMATEAZIMUTH - Azimuth position estimation based on dietz2011 or lindemann1986
 %     PLOTZIEGELWANGER2014  - Plot the output of the Ziegelwanger2014 model
 %     PLOTLINDEMANN1986     - Plot the binaural activity map
 %     LINDEMANN1986CENTROID - Centroid of the cross-correlation activation
-%     DIETZ2011INTERAURALFUNCTIONS - Interaural stages of Dietz 2011
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
