@@ -13,17 +13,17 @@
 %     CQDFT            - FFT-based filter bank with constant relative bandwidth
 %
 %  Hohmann (2002) filterbank
-%     GFB_ANALYZER_NEW            - XXX 
-%     GFB_ANALYZER_PROCESS        - XXX 
-%     GFB_DELAY_NEW               - XXX 
-%     GFB_DELAY_PROCESS           - XXX 
-%     GFB_FILTER_NEW              - XXX 
-%     GFB_FILTER_PROCESS          - XXX 
-%     GFB_MIXER_NEW               - XXX 
-%     GFB_SYNTHESIZER_NEW         - XXX
+%     GFB_ANALYZER_NEW            - Gammatone filterbank implementation, see demo_hohmann2012
+%     GFB_ANALYZER_PROCESS        - All gfb_ functions are part of the hohmann2012 model
+%     GFB_DELAY_NEW               - .
+%     GFB_DELAY_PROCESS           - .
+%     GFB_FILTER_NEW              - .
+%     GFB_FILTER_PROCESS          - .
+%     GFB_MIXER_NEW               - .
+%     GFB_SYNTHESIZER_NEW         - .
 %
 %  Averaging
-%     WEIGHTEDAVERAGEFILTER       - XXX
+%     WEIGHTEDAVERAGEFILTER       - Part of the takanen2013 model
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
