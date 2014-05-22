@@ -110,7 +110,7 @@ if ~isnumeric(n) || ~isscalar(n) || n<=0 || fix(n)~=n
 end;
 
 if isempty(betamul)
-  % This formula comes from patterson1988efficient, but it is easier to
+  % This formula comes from patterson1987efficient, but it is easier to
   % find in the Hohmann paper.
   betamul = (factorial(n-1))^2/(pi*factorial(2*n-2)*2^(-(2*n-2)));
 

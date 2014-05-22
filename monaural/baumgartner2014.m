@@ -66,7 +66,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %                    ps = [-30:5:70,80,100,110:5:210] degrees.
 %
 %     'mrsmsp',mrs   Set the motoric response scatter mrs within the median 
-%                    sagittal plane. Default value is 17° in accordance
+%                    sagittal plane. Default value is 17 degrees in accordance
 %                    with scatter of unimodal response distribution
 %                    proposed in Langendijk and Bronkhorst (2002).
 %
@@ -100,7 +100,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %
 %   See also: plotbaumgartner2013, data_baumgartner2014
 %
-%   References: baumgartner2014 langendijk2002contribution patterson1988efficient
+%   References: baumgartner2014 langendijk2002contribution patterson1987efficient
 
     
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
