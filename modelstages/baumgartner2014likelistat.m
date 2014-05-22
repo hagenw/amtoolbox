@@ -29,7 +29,7 @@ definput.flags.normlikeli = {'normalize','original'};
 definput.flags.plot = {'noplot','plot'};
 definput.flags.jackknife = {'','jackknife'};
 
-definput.keyvals.runs = 100;  
+definput.keyvals.runs = 100;   
 
 [flags,kv]=ltfatarghelper({'runs'},definput,varargin);
 
