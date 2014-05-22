@@ -12,7 +12,7 @@ function data = data_goode1994(varargin)
 %     'plot'      Plot the data.
 %
 %     'fig1_104'  (default) Returns the stapes footplate diplacement at an SPL of 104 dB 
-%									as shown in Fig. 1. (Currently the only option).
+%                 as shown in Fig. 1. (Currently the only option).
 %
 %   Examples:
 %   ---------
