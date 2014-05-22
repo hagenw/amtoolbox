@@ -18,7 +18,7 @@ function [ la,le,ci,lr,pvalue ] = baumgartner2014likelistat( p,tang,rang,target,
 %     le:          expected likelihood
 %     ci:          99% confidence interval for expected likelihood
 %     lr:          reference likelihoods
-%                  1st dim: unimodal (1 gaussian dist.: std=17°, mu=0)
+%                  1st dim: unimodal (1 gaussian dist.: std=17 deg, mu=0)
 %                  2nd dim: bimodal  (2 gaussians: mu1=0, mu2=180)
 %                  3rd dim: trimodal (mu1=0, mu2=90, mu3=180)
 %                  4th dim: unitary
