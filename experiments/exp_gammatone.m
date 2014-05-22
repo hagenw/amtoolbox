@@ -1,4 +1,5 @@
 function exp_gammatone(varargin)
+%EXP_GAMMATONE  Creates various figures related to the Gammatone filters
 %   Usage: exp_gammatone(flags)
 %
 %   `exp_gammatone(flags)` reproduces some figures from  
