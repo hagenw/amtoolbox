@@ -57,7 +57,7 @@ function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %      gammatone filter for the envelope of the signal centered at 135 Hz.
 %      And a 2nd order lowpass filter with a cutoff frequency of 30 Hz to
 %      extract the ILD of the signal.
-%
+%x
 %   6) Calculation of binaural parameters such as IPD, ITD, IC for fine
 %      structure and envelope filter signals and ILD for the ILD filter.
 %
