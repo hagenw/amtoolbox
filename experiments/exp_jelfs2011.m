@@ -77,8 +77,8 @@ if flags.do_fig4
     scatter(predictions2(1:4),mon_data(1:4),'ob');
     scatter(predictions1(5:8),bin_data(5:8),'^r');
     scatter(predictions2(5:8),mon_data(5:8),'^b');
-    scatter(predictions1(9:12),bin_data(9:12),'^r');
-    scatter(predictions2(9:12),mon_data(9:12),'^b');
+    scatter(predictions1(9:12),bin_data(9:12),'hr');
+    scatter(predictions2(9:12),mon_data(9:12),'hb');
     
     line([-14,5],[-14,6],'LineStyle','--');
     

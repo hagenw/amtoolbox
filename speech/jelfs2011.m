@@ -53,14 +53,25 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
   
   % If target or interferer are cell arrays, call read_hrtf to load the data.
   if iscell(target)
-    [target,fs] = read_hrtf(0,target{:});
+%     [target,fs] = read_hrtf(0,target{:});
+    X=SOFAload(fullfile(amtbasepath,'hrtf',mfilename,[target{2} '.sofa']));
+    idx=find(X.SourcePosition(:,1)==target{1} & X.SourcePosition(:,2)==0);
+    target=squeeze(X.Data.IR(idx,:,:))';
     target=postpad(target,size(target,1)+kv.pad);
+    fs=X.Data.SamplingRate;
   end;
   
   if iscell(interferer)
     azims=numel(interferer{1});
-    [interferer,fs2] = read_hrtf(0,interferer{:});
+%     [interferer,fs2] = read_hrtf(0,interferer{:});
+    X=SOFAload(fullfile(amtbasepath,'hrtf',mfilename,[interferer{2} '.sofa']));
+    for ii=1:azims
+      idx(ii)=find(X.SourcePosition(:,1)==interferer{1}(ii) & X.SourcePosition(:,2)==0);
+    end
+    interferer=shiftdim(X.Data.IR(idx,:,:),2);
     interferer=postpad(interferer,size(interferer,1)+kv.pad);
+    fs2=X.Data.SamplingRate;
+    
     if fs2~=fs
       error('%s: Mis-match between target and interferer sampling rate.',upper(mfilename));
     end;
