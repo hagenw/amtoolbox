@@ -7,7 +7,7 @@ function exp_gammatone(varargin)
 %
 %   The following flags can be specified;
 %
-%     'fig1patterson1987'
+%     'fig1_patterson1987'
 %
 %                   Reproduce Fig.1 from Patterson et al. (1987):
 %                   The amplitude characteristics of three roex(p) filters
@@ -19,7 +19,7 @@ function exp_gammatone(varargin)
 %                   frequency scale. The range of the ordinate is 40dB.
 %
 %
-%     'fig2patterson1987'
+%     'fig2_patterson1987'
 %
 %                   Reproduce Fig.2 from Patterson,1987 efficient:
 %                   An array of 24 impulse responses for roex(p) filters
@@ -29,7 +29,7 @@ function exp_gammatone(varargin)
 %                   mid-points.
 %
 %
-%     'fig3patterson1987'
+%     'fig3_patterson1987'
 %
 %                   Reproduce Fig.3 similiar to Patterson,1987 efficient:
 %                   A cochleagram of four cycles of the [ae] in "past"
@@ -43,7 +43,7 @@ function exp_gammatone(varargin)
 %                   half of the figure.
 %                       
 %
-%     'fig5patterson1987'
+%     'fig5_patterson1987'
 %
 %                   Reproduce Fig.5 from Patterson,1987 efficient:
 %                   An array of gamma impulse responses for a 24-channel
@@ -53,7 +53,7 @@ function exp_gammatone(varargin)
 %                   from 100 - 4,000 Hz.
 %
 %
-%     'fig6patterson1987'
+%     'fig6_patterson1987'
 %
 %                   Reproduce Fig.6 from Patterson,1987 efficient:
 %                   A comparison of the gammatone(4,b) and roex(p) filters
@@ -66,7 +66,7 @@ function exp_gammatone(varargin)
 %                   each case.
 %
 %
-%     'fig7patterson1987'
+%     'fig7_patterson1987'
 %
 %                   Reproduce Fig.7 from Patterson,1987 efficient:
 %                   The comparison of the gammatone(4,b) and roex(p)
@@ -79,7 +79,7 @@ function exp_gammatone(varargin)
 %                   frequency of the filter in each case.
 %
 %
-%     'fig8patterson1987'
+%     'fig8_patterson1987'
 %
 %                   Reproduce Fig.8 from Patterson,1987 efficient:
 %                   A comparison of the gammatone(2,b) and the roex(p,w,t)
@@ -92,7 +92,7 @@ function exp_gammatone(varargin)
 %                   in each case.
 %
 %
-%     'fig9patterson1987'
+%     'fig9_patterson1987'
 %
 %                   Reproduce Fig.9 from Patterson,1987 efficient:
 %                   A comparison of the gammatone(2,b) and the roex(p,w,t)
@@ -105,7 +105,7 @@ function exp_gammatone(varargin)
 %                   above the centre frequency of the filter in each case.
 %
 %                   
-%     'fig10apatterson1987'
+%     'fig10a_patterson1987'
 %                   
 %                   Reproduce Fig.10a from Patterson, 1987 eficcient:
 %                   The impulse responses for a gammatone auditory filterbank
@@ -114,7 +114,7 @@ function exp_gammatone(varargin)
 %                   is 25 ms.
 %
 %
-%     'fig10cpatterson1987'
+%     'fig10c_patterson1987'
 %                   
 %                   Reproduce Fig.10c from Patterson, 1987 efficient:
 %                   The impulse responses for a gammatone auditory filterbank
@@ -125,14 +125,14 @@ function exp_gammatone(varargin)
 %                   The range of abcissa is 25 ms.
 %
 %
-%     'fig11patterson1987'
+%     'fig11_patterson1987'
 %
 %                   Reproduce similiar to Fig.11 from Patterson, 1987 efficient:
 %                   The impulse responses of a gammatone filterbank from a
 %                   pulsetrain.
 %
 %
-%     'fig1lyon1997'
+%     'fig1_lyon1997'
 %
 %                   Reproduce parts of Fig.1 from Lyon, 1997 (no DAPGF):
 %                   Comparison of GTF and APGF transfer function for two different
@@ -143,7 +143,7 @@ function exp_gammatone(varargin)
 %                   symetric GTF approximation.
 %
 %
-%     'fig2lyon1997'
+%     'fig2_lyon1997'
 %
 %                   Reproduce parts of Fig.2 from Lyon, 1997 (no DAPGF):
 %                   Impulse responses of the APGF and sine-phased GTF from 
@@ -152,7 +152,7 @@ function exp_gammatone(varargin)
 %                   in early cycles.
 %
 %
-%     'fig1hohmann2002'
+%     'fig1_hohmann2002'
 %
 %                   Reproduce Fig.l from Hohmann, 2002:
 %                   Impulse response of the example Gammatone filter
@@ -163,7 +163,7 @@ function exp_gammatone(varargin)
 %                   (dashdotted line) clearly represents the envelope.
 %
 %
-%     'fig2hohmann2002'
+%     'fig2_hohmann2002'
 %
 %                   Reproduce Fig.2 from Hohmann, 2002:
 %                   Frequency response of the example Gammatone filter
@@ -173,7 +173,7 @@ function exp_gammatone(varargin)
 %                   half the sampling rate (z=pi).
 %       
 %
-%     'fig3hohmann2002'
+%     'fig3_hohmann2002'
 %
 %                   Reproduce Fig.3 from Hohmann, 2002:
 %                   Magnitude frequency response of the Gammatone
@@ -184,7 +184,7 @@ function exp_gammatone(varargin)
 %                   were 70Hz and 6.7kHz, respectively.
 %
 %
-%     'fig4hohmann2002'
+%     'fig4_hohmann2002'
 %
 %                   Treatment of an impulse response with envelope maximum
 %                   to the left of the desired group delay (at sample 65).
@@ -200,71 +200,71 @@ function exp_gammatone(varargin)
 %
 %   To display Fig. 1 from Patterson et al. (1987) use :::
 %
-%     exp_gammatone('fig1patterson1987');
+%     exp_gammatone('fig1_patterson1987');
 %
 %   To display Fig. 2 Patterson, 1987 efficient use :::
 %
-%     exp_gammatone('fig2patterson1987');
+%     exp_gammatone('fig2_patterson1987');
 %
 %   To display Fig. 3 Patterson, 1987 efficient use :::
 %
-%     exp_gammatone('fig3patterson1987');
+%     exp_gammatone('fig3_patterson1987');
 %
 %    To display Fig. 5 Patterson, 1987 efficient use :::
 % 
-%     exp_gammatone('fig5patterson1987');
+%     exp_gammatone('fig5_patterson1987');
 %
 %    To display Fig. 6 Patterson, 1987 efficient use :::
 % 
-%     exp_gammatone('fig6patterson1987');
+%     exp_gammatone('fig6_patterson1987');
 %
 %    To display Fig. 7 Patterson, 1987 efficient use :::
 % 
-%     exp_gammatone('fig7patterson1987');
+%     exp_gammatone('fig7_patterson1987');
 %
 %    To display Fig. 8 Patterson, 1987 efficient use :::
 % 
-%     exp_gammatone('fig8patterson1987');
+%     exp_gammatone('fig8_patterson1987');
 %
 %    To display Fig. 9 Patterson, 1987 efficient use :::
 % 
-%     exp_gammatone('fig9patterson1987');
+%     exp_gammatone('fig9_patterson1987');
 %
 %   To display Fig. 10a Patterson, 1987 efficient at use :::
 %
-%     exp_gammatone('fig10apatterson1987');
+%     exp_gammatone('fig10a_patterson1987');
 %
 %   To display Fig. 10c Patterson, 1987 efficient at use :::
 %
-%     exp_gammatone('fig10cpatterson1987');
+%     exp_gammatone('fig10c_patterson1987');
 %
 %   To display Fig. 11 Patterson, 1987 efficient use :::
 %
-%     exp_gammatone('fig11patterson1987');
+%     exp_gammatone('fig11_patterson1987');
 %
 %   To display Fig. 1 Lyon, 1997 use :::
 %
-%     exp_gammatone('fig1lyon1997');
+%     exp_gammatone('fig1_lyon1997');
 %
 %   To display Fig. 2 Lyon, 1997 use :::
 %
-%     exp_gammatone('fig2lyon1997');
+%     exp_gammatone('fig2_lyon1997');
 %
 %   To display Fig. 1 Hohmann, 2002 use :::
 %
-%     exp_gammatone('fig1hohmann2002');
+%     exp_gammatone('fig1_hohmann2002');
 %
 %   To display Fig. 2 Hohmann, 2002 use :::
 %
-%     exp_gammatone('fig2hohmann2002');
+%     exp_gammatone('fig2_hohmann2002');
 %
 %   To display Fig. 3 Hohmann, 2002 use :::
 %
-%     exp_gammatone('fig3hohmann2002');
+%     exp_gammatone('fig3_hohmann2002');
 %
 %   To display Fig. 4 Hohmann, 2002 use :::
 %
-%     exp_gammatone('fig4hohmann2002');
+%     exp_gammatone('fig4_hohmann2002');
 %
 %   References: patterson1987efficient, lyon1997, hohmann2002, moore1983
 %
@@ -275,12 +275,12 @@ function exp_gammatone(varargin)
     definput.import={'amtredofile'};
     definput.keyvals.FontSize = 12;
     definput.keyvals.MarkerSize = 6;
-    definput.flags.type = {'missingflag', 'fig1patterson1987', 'fig1patterson1987', ...
-    'fig3patterson1987', 'fig5patterson1987', 'fig6patterson1987', ...
-    'fig7patterson1987', 'fig8patterson1987'...
-    'fig9patterson1987', 'fig10apatterson1987', 'fig10cpatterson1987', ...
-    'fig11patterson1987', 'fig1lyon1997', 'fig2lyon1997',...
-    'fig1hohmann2002', 'fig2hohmann2002', 'fig3hohmann2002', 'fig4hohmann2002'};
+    definput.flags.type = {'missingflag', 'fig1_patterson1987', 'fig2_patterson1987', ...
+    'fig3_patterson1987', 'fig5_patterson1987', 'fig6_patterson1987', ...
+    'fig7_patterson1987', 'fig8_patterson1987'...
+    'fig9_patterson1987', 'fig10a_patterson1987', 'fig10c_patterson1987', ...
+    'fig11_patterson1987', 'fig1_lyon1997', 'fig2_lyon1997',...
+    'fig1_hohmann2002', 'fig2_hohmann2002', 'fig3_hohmann2002', 'fig4_hohmann2002'};
 
     % Parse input options
     [flags,~]  = ltfatarghelper({'FontSize','MarkerSize'},definput,varargin);
@@ -294,7 +294,7 @@ function exp_gammatone(varargin)
 %% Pattersons Paper - Roex(p) Filter
 % Figure 1; 
 
-   if flags.do_fig1patterson1987
+   if flags.do_fig1_patterson1987
        
       % Global parameters:
       fs = 25000;           % Sampling frequency in Hz; 
@@ -392,7 +392,7 @@ function exp_gammatone(varargin)
 %% Pattersons Paper - Roex(p) Filter
 % Figure 2 
 
-  if flags.do_fig2patterson1987
+  if flags.do_fig2_patterson1987
       
       % Parameters:  
       fs = 20000;                       % Sampling frequency in Hz;
@@ -442,7 +442,7 @@ function exp_gammatone(varargin)
 % Figure 3 
 % gammatone 'classic' (casualphase, real)
 
-   if flags.do_fig3patterson1987
+   if flags.do_fig3_patterson1987
         % Input parameters
         %load('a_from_past_us.mat');% Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
         load('a_from_past_uk.mat'); % Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
@@ -483,7 +483,7 @@ function exp_gammatone(varargin)
 % Figure 5 
 % gammatone 'classic' (casualphase, real)
 
-    if flags.do_fig5patterson1987
+    if flags.do_fig5_patterson1987
         % Input parameters
         fs = 25000;                     % Sampling frequency in Hz;
         ts = 1/fs;                      % Time between sampling points in s
@@ -537,7 +537,7 @@ function exp_gammatone(varargin)
 %% Pattersons Paper - Roex(pwt) Filter
 % Figure 6 
 
-   if flags.do_fig6patterson1987
+   if flags.do_fig6_patterson1987
        
       % Global parameters:
       fs = 25000;               % Sampling frequency in Hz;
@@ -702,7 +702,7 @@ function exp_gammatone(varargin)
 %% Pattersons Paper - Roex(pwt) Filter
 % Figure 7 
 
-   if flags.do_fig7patterson1987
+   if flags.do_fig7_patterson1987
        
       % Global parameters:
       fs = 25000;               % Sampling frequency in Hz;
@@ -866,7 +866,7 @@ function exp_gammatone(varargin)
 %% Pattersons Paper - Roex(pwt)
 % Figure 8
 
-    if flags.do_fig8patterson1987
+    if flags.do_fig8_patterson1987
         
         % Global parameters:
         fs = 25000;               % Sampling frequency in Hz;
@@ -1030,7 +1030,7 @@ function exp_gammatone(varargin)
 %% Pattersons Paper - Roex(pwt)
 % Figure 9
 
-    if flags.do_fig9patterson1987
+    if flags.do_fig9_patterson1987
         
         % Global parameters:
         fs = 25000;               % Sampling frequency in Hz;
@@ -1195,7 +1195,7 @@ function exp_gammatone(varargin)
 % Figure 10a
 % gammatone 'classic' (casualphase, real)
 
-    if flags.do_fig10apatterson1987
+    if flags.do_fig10a_patterson1987
         % Input parameters
         fs = 25000;                 % Sampling frequency in Hz;
         ts = 1/fs;                  % Time between sampling points in s;
@@ -1234,7 +1234,7 @@ function exp_gammatone(varargin)
 % Figure 10c
 % gammatone 'classic','peakphase','complex'
 
-    if flags.do_fig10cpatterson1987
+    if flags.do_fig10c_patterson1987
         % Input parameters
         fs = 25000;                 % Sampling frequency;
         ts = 1/fs;                  % Time between sampling points in s
@@ -1294,7 +1294,7 @@ function exp_gammatone(varargin)
 % gammatone 'classic' (casualphase, real) pulsetrain
 % Warning: Not sure if b=3 or b=1/3 // b=2 or b=1/2  
   
-    if flags.do_fig11patterson1987
+    if flags.do_fig11_patterson1987
         
     % Input parameters
         fs = 10000;                 % Sampling frequency in Hz;
@@ -1358,7 +1358,7 @@ function exp_gammatone(varargin)
 % gammatone (allpass,casualphase,real')
 % gammatone 'classic' (casualphase, real)
 % Warning: Not sure if b should be: b=3 or b=1/3 // b=2 or b=1/2;  
-    if flags.do_fig1lyon1997
+    if flags.do_fig1_lyon1997
                 
         % Input parameters
         fs = 24000;                     % Sampling frequency in Hz;
@@ -1436,7 +1436,7 @@ function exp_gammatone(varargin)
 % gammatone (allpass,casualphase) 'complex'
 % Warning: Not sure if b should be: b=3 or b=1/3 // b=2 or b=1/2;  
 
-    if flags.do_fig2lyon1997
+    if flags.do_fig2_lyon1997
         % Input parameters
         fs = 24000;             % Sampling frequency in Hz;
         flow = 100;             % ERB lowest center frequency in Hz;
@@ -1516,7 +1516,7 @@ function exp_gammatone(varargin)
 % Figure 1
 % gammatone (allpass,casualphase) 'complex'
 
-    if flags.do_fig1hohmann2002
+    if flags.do_fig1_hohmann2002
         % Input parameters
         fs = 10000;             % Sampling frequency in Hz;
         fc = 1000;              % Center frequency at 1000 Hz;
@@ -1551,7 +1551,7 @@ function exp_gammatone(varargin)
 % Figure 2
 % gammatone (allpass,casualphase) 'complex'
 
-    if flags.do_fig2hohmann2002
+    if flags.do_fig2_hohmann2002
         % Input parameters
         fs = 10000;             % Sampling frequency in Hz;
         fc = 1000;              % Center frequency at 1000 Hz;
@@ -1615,7 +1615,7 @@ function exp_gammatone(varargin)
 % Figure 3
 % gammatone (allpass,casualphase) 'complex'
 
-     if flags.do_fig3hohmann2002
+     if flags.do_fig3_hohmann2002
         fs = 16276;                     % Sampling frequency in Hz;
         flow = 70;                      % ERB lowest center frequency in Hz;
         fhigh = 6700;                   % ERB highest center frequency in Hz;
@@ -1653,7 +1653,7 @@ function exp_gammatone(varargin)
 % Result is delayed and peakphased.
 % Case 2a: envelope maximum before desired peak;
 
-    if flags.do_fig4hohmann2002
+    if flags.do_fig4_hohmann2002
         fs = 16276;                     % Sampling frequency in Hz;
         flow = 70;                      % ERB lowest center frequency in Hz;
         fhigh = 6700;                   % ERB highest center frequency in Hz;
