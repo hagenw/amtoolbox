@@ -268,6 +268,7 @@ function exp_gammatone(varargin)
 %
 %   References: patterson1987efficient, lyon1997, hohmann2002, moore1983
 %
+
 % AUTHOR: Christian Klemenschitz, 2014
 
 %% ------ Check input options --------------------------------------------
