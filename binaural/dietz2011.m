@@ -31,6 +31,7 @@ function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %     itd_lp    : based on lowpass-filtered itf, interaural time difference
 %     itd_C_lp  : based on lowpass-filtered itf, interaural time difference
 %     f_inst_lp : lowpass instantaneous frequencies
+%
 %   The *_lp values are not returned if the 'nolowpass' flag is set.
 %
 %   The steps of the binaural model to calculate the result are the
