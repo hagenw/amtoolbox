@@ -2,8 +2,8 @@ function data = data_goode1994(varargin)
 %DATA_GOODE1994 Returns data points from the Goode et al. (1994) paper
 %   Usage: data = data_goode1994_data(flag)
 %
-%   `data_goode1994(flag)` returns data points from the paper by Goode et
-%   al. (1994). Currently, only Fig. 1 with condition 104 dB is supported.
+%   `data_goode1994(flag)` returns various data from Goode et al. (1994). 
+%   (See the particular flags for more details on the nature of the data).
 %
 %   The flag may be one of:
 %
@@ -11,14 +11,13 @@ function data = data_goode1994(varargin)
 %
 %     'plot'         Plot the data.
 %
-%     'fig1_104'     Return data from Fig. 1. for 104 dB SPL, stapes
-%                    footplate diplacement at 104 dB SPL. This is
-%                    the default (and currently only option).
+%     'fig1_104'     (default) Returns the stapes footplate diplacement at an SPL of 104 dB 
+%										 as shown in Fig. 1. (Currently the only option).
 %
 %   Examples:
 %   ---------
 % 
-%   To plot the figure use :::
+%   To plot the Fig. 1 from Goode et al. (1994) use :::
 %
 %     data_goode1994('fig1_104','plot');
 %
