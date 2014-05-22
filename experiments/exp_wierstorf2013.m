@@ -80,9 +80,21 @@ function output = exp_wierstorf2013(varargin)
 %   Examples:
 %   ---------
 %
-%   To display Figure 1 use :::
+%   To display Figure 3 use :::
 %
-%     exp_wierstorf('fig1');
+%     exp_wierstorf2013('fig3');
+%
+%   To display Figure 6 use :::
+%
+%     exp_wierstorf2013('fig6');
+%
+%   To display Figure 7 use :::
+%
+%     exp_wierstorf2013('fig7');
+%
+%   To display Figure 8 use :::
+%
+%     exp_wierstorf2013('fig8');
 %
 %   References: wierstorf2013
 
