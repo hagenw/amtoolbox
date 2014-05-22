@@ -32,6 +32,7 @@ function [outp] = dietz2011interauralfunctions(insig,fs,fc,varargin)
 %     ipd_lp    : based on lowpass-filtered itf, phase difference in rad
 %     itd_lp    : based on lowpass-filtered itf, interaural time difference
 %     itd_C_lp  : based on lowpass-filtered itf, interaural time difference
+%
 %   The _lp values are not returned if the 'nolowpass' flag is set.
 %
 %   `dietz2011interauralfunctions` accepts the following optional parameters:
