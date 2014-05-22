@@ -28,7 +28,7 @@ function filter = gfb_filter_new(arg1,arg2,arg3,arg4,arg5)
 %   of the gammatone filter. Filter coefficient are computed as in equations
 %   (11),(12)[Hohmann 2002] (section 2.3).
 %
-%   References: hohmann2002frequency
+%   References: hohmann2002
 
 %   AUTHOR: tp
 

@@ -72,7 +72,7 @@ function [b,a,delay,z,p,k]=gammatone(fc,fs,varargin)
 %
 %     outsig = 2*real(ufilterbankz(b,a,insig));
 %  
-%   References: aertsen1980strI patterson1988efficient lyon1997all
+%   References: aertsen1980strI patterson1987efficient lyon1997
   
 %   AUTHOR : Stephan Ewert, Peter L. Søndergaard
 
