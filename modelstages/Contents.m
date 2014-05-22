@@ -19,7 +19,8 @@
 %     EICELL             - Excitation-inhibition cell model by Breebaart.
 %     CULLING2005BMLD    - BMLD calculation from Culling et al. (2005).
 %     DIETZ2011UNWRAPITD - IPD to ITD transformation for the Dietz model
-%     DIETZ2011INTERAURALFUNCTIONS - IPD to ITD transformation for the Dietz model
+%     DIETZ2011FILTERBANK - filterbank of Dietz 2011 binaural model
+%     DIETZ2011INTERAURALFUNCTIONS - Calculate interaural parameters for Dietz 2011 model
 %     WIERSTORF2013ESTIMATEAZIMUTH - Azimuth position estimation based on dietz2011 or lindemann1986
 
 %
