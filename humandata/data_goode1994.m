@@ -7,12 +7,12 @@ function data = data_goode1994(varargin)
 %
 %   The flag may be one of:
 %
-%     'noplot'       Don't plot, only return data. This is the default.
+%     'noplot'    Don't plot, only return data. This is the default.
 %
-%     'plot'         Plot the data.
+%     'plot'      Plot the data.
 %
-%     'fig1_104'     (default) Returns the stapes footplate diplacement at an SPL of 104 dB 
-%										 as shown in Fig. 1. (Currently the only option).
+%     'fig1_104'  (default) Returns the stapes footplate diplacement at an SPL of 104 dB 
+%									as shown in Fig. 1. (Currently the only option).
 %
 %   Examples:
 %   ---------
