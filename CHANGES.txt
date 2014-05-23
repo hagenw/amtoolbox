@@ -1,0 +1,17 @@
+*************************************************************
+Release history of the AMT
+*************************************************************
+
+*** Version 0.9.6
+
+* New: 
+  - Gammatone validation provided, including exp_gammatone, demo_gammatone, exp_hohmann2002, and demo_hohmann2002
+	- Wierstorf et al. (2013) provided, including wierstorf2013, exp_wierstorf2013, and integration with the SFS toolbox
+
+* Fixes:
+  - data_goode1994: more details provided
+  - jelfs2011 works now with SOFA HRTFs stored in hrtf/jelfs2011/, e.g., kemar.sofa
+  - hohmann2007 naming resolved. hohmann2007 renamed to herzke2007, the primary model is called hohmann2002 now
+  - localizationerror: missing error types added
+  - exp_spille2013: uses lowpass f_inst
+	- dietz2011 improved to better reflect the corresponding publications
