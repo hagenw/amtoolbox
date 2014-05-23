@@ -439,7 +439,7 @@ function exp_gammatone(varargin)
   
 %% Pattersons Paper - Classic Gammatone Filter
 % Figure 3 
-% gammatone 'classic' (casualphase, real)
+% gammatone 'classic' (causalphase, real)
 
    if flags.do_fig3_patterson1987
         % Input parameters
@@ -480,7 +480,7 @@ function exp_gammatone(varargin)
     
 %% Pattersons Paper - Classic Gammatone Filter
 % Figure 5 
-% gammatone 'classic' (casualphase, real)
+% gammatone 'classic' (causalphase, real)
 
     if flags.do_fig5_patterson1987
         % Input parameters
@@ -1043,8 +1043,8 @@ function exp_gammatone(varargin)
         
         % Equation from paper Moore, 1983 found in text after Equation 6.
         p = 4*fc/erb;             % Filter shape;
-        w = 0.005;               % Realtive weight for second exponatial;
-        t = 0.24*p;                % Filter shape tail;                      
+        w = 0.005;                % Realtive weight for second exponatial;
+        t = 0.24*p;               % Filter shape tail;                      
         
         % Equation A8 from Patterson 1982 (slopes are mirrored).
         weight_l = (1-w).*(1+p.*g).*exp(-p.*g)+w*(1+t.*g).*exp(-t.*g);  % for lower slope;
@@ -1096,8 +1096,8 @@ function exp_gammatone(varargin)
         
         % Equation from paper Moore, 1983 found in text after Equation 6.
         p = 4*fc/erb;             % Filter shape;
-        w = 0.005;               % Realtive weight for second exponatial;
-        t = 0.24*p;                % Filter shape tail;                      
+        w = 0.005;                % Realtive weight for second exponatial;
+        t = 0.24*p;               % Filter shape tail;                      
         
         % Equation A8 from Patterson 1982 (slopes are mirrored).
         weight_l = (1-w).*(1+p.*g).*exp(-p.*g)+w*(1+t.*g).*exp(-t.*g);  % for lower slope;
@@ -1147,8 +1147,8 @@ function exp_gammatone(varargin)
         
         % Equation from paper Moore, 1983 found in text after Equation 6.
         p = 4*fc/erb;             % Filter shape;
-        w = 0.005;               % Realtive weight for second exponatial;
-        t = 0.24*p;                % Filter shape tail;                      
+        w = 0.005;                % Realtive weight for second exponatial;
+        t = 0.24*p;               % Filter shape tail;                      
         
         % Equation A8 from Patterson 1982 (slopes are mirrored).
         weight_l = (1-w).*(1+p.*g).*exp(-p.*g)+w*(1+t.*g).*exp(-t.*g);  % for lower slope;
@@ -1192,7 +1192,7 @@ function exp_gammatone(varargin)
     
 %% Pattersons Paper 
 % Figure 10a
-% gammatone 'classic' (casualphase, real)
+% gammatone 'classic' (causalphase, real)
 
     if flags.do_fig10a_patterson1987
         % Input parameters
@@ -1290,7 +1290,7 @@ function exp_gammatone(varargin)
     
 %% Pattersons Paper 
 % Figure 11 
-% gammatone 'classic' (casualphase, real) pulsetrain
+% gammatone 'classic' (causalphase, real) pulsetrain
 % Warning: Not sure if b=3 or b=1/3 // b=2 or b=1/2  
   
     if flags.do_fig11_patterson1987
@@ -1352,10 +1352,10 @@ function exp_gammatone(varargin)
         hold off
     end
     
-%% Lyons Paper - Allpass Gammatone Filter
+%% Lyons Paper - Allpole Gammatone Filter
 % Figure 1
-% gammatone (allpass,casualphase,real')
-% gammatone 'classic' (casualphase, real)
+% gammatone (allpole,causalphase,real')
+% gammatone 'classic' (causalphase, real)
 % Warning: Not sure if b should be: b=3 or b=1/3 // b=2 or b=1/2;  
     if flags.do_fig1_lyon1997
                 
@@ -1381,7 +1381,7 @@ function exp_gammatone(varargin)
         % Plot
         figure
         semilogx(w/(fc(channel)/fs*2*pi), 10*log10(abs(h)),'r-');
-        title 'Transfer functions of classic and allpass gammatone filters for b = \omega_r/3 and b = \omega_r/2'
+        title 'Transfer functions of classic and allpole gammatone filters for b = \omega_r/3 and b = \omega_r/2'
         xlabel '\omega/\omega_r'
         ylabel 'Magnitude gain (db)'
         set(gca,'XLim',[0.03 3],'YLim',[-40, 35]) 
@@ -1431,8 +1431,8 @@ function exp_gammatone(varargin)
 
 %% Lyons Paper 
 % Figure 2
-% gammatone 'classic' (casualphase, real)
-% gammatone (allpass,casualphase) 'complex'
+% gammatone 'classic' (causalphase, real)
+% gammatone (allpole,causalphase) 'complex'
 % Warning: Not sure if b should be: b=3 or b=1/3 // b=2 or b=1/2;  
 
     if flags.do_fig2_lyon1997
@@ -1513,7 +1513,7 @@ function exp_gammatone(varargin)
     
 %% Hohmanns paper
 % Figure 1
-% gammatone (allpass,casualphase) 'complex'
+% gammatone (allpole,causalphase) 'complex'
 
     if flags.do_fig1_hohmann2002
         % Input parameters
@@ -1548,7 +1548,7 @@ function exp_gammatone(varargin)
     
 %% Hohmanns paper
 % Figure 2
-% gammatone (allpass,casualphase) 'complex'
+% gammatone (allpole,causalphase) 'complex'
 
     if flags.do_fig2_hohmann2002
         % Input parameters
@@ -1612,13 +1612,13 @@ function exp_gammatone(varargin)
     
 %% Hohmanns paper
 % Figure 3
-% gammatone (allpass,casualphase) 'complex'
+% gammatone (allpole,causalphase) 'complex'
 
      if flags.do_fig3_hohmann2002
         fs = 16276;                     % Sampling frequency in Hz;
         flow = 70;                      % ERB lowest center frequency in Hz;
         fhigh = 6700;                   % ERB highest center frequency in Hz;
-        fc = erbspacebw(flow,fhigh);   % 24 ERB spaced channels;
+        fc = erbspacebw(flow,fhigh);    % 24 ERB spaced channels;
         fn = fs/2;                      % Nyquist frequency in Hz
         N = 2048;                       % Signal length
 
@@ -1648,7 +1648,7 @@ function exp_gammatone(varargin)
      
 %% Hohmanns paper
 % Figure 4
-% gammatone (allpass,casualphase) 'complex'
+% gammatone (allpole,causalphase) 'complex'
 % Result is delayed and peakphased.
 % Case 2a: envelope maximum before desired peak;
 
@@ -1656,7 +1656,7 @@ function exp_gammatone(varargin)
         fs = 16276;                     % Sampling frequency in Hz;
         flow = 70;                      % ERB lowest center frequency in Hz;
         fhigh = 6700;                   % ERB highest center frequency in Hz;
-        fc = erbspacebw(flow,fhigh);   % 24 ERB spaced channels;
+        fc = erbspacebw(flow,fhigh);    % 24 ERB spaced channels;
         insig = zeros(1,fs);            % Input signal with
         insig(1) = 1;                   % impulse at one
        
