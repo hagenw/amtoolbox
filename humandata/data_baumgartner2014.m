@@ -108,7 +108,11 @@ if flags.do_pool || flags.do_baseline
         ['ARI_' data(ii).id '_hrtf_M_dtf 256.sofa']);
       
       if exist(filename,'file') ~= 2
-        fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/baumgartner2013.zip , \n unzip it, and move the folder into your HRTF repository \n ' SOFAdbPath ' .\n' ' Then, press any key to quit pausing. \n'])
+        disp('Sorry! Before you can run this script, you have to download the HRTF Database from')
+        disp('http://www.kfs.oeaw.ac.at/hrtf/database/amt/baumgartner2013.zip')
+        disp('unzip it, and move the folder into your HRTF repository')
+        disp(SOFAdbPath)
+        disp('Then, press any key to quit pausing.')
         pause
       end
       
@@ -122,7 +126,7 @@ if flags.do_pool || flags.do_baseline
   if not(exist('baumgartner2014calibration.mat','file')) || flags.do_recalib
     
     data = loadBaselineData(data);
-    fprintf('Calibration procedure started. Please wait!\n')
+    disp('Calibration procedure started. Please wait!')
     data = baumgartner2014calibration(data,kv);
     
     data_all = data;

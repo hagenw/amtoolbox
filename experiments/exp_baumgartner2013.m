@@ -295,7 +295,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
 
           end
       end
-      fprintf(' Subject %2u of %2u \n',ll,ns);
+      disp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' compelted'])
   end
 
   qe = mean(qe,3);
@@ -591,7 +591,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
 
       end
 
-      fprintf(' Subject %2u of %2u \n',ll,ns);
+      disp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'])
 
     end
 
@@ -703,7 +703,7 @@ if flags.do_fig19 || flags.do_fig20
     end
     pol2{ii} = (polang(id1)+polang(id2)) /2;
     
-    fprintf([' Span: ' num2str(dPol(ii)) ' deg. \n']);
+    disp([' Span: ' num2str(dPol(ii)) ' deg.']);
     for ll = 1:length(s)
 
         s(ll).spdtfs = extractsp(lat,s(ll).Obj);

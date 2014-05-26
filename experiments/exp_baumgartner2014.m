@@ -280,7 +280,7 @@ if flags.do_fig2
   end
   [~,idmin] = min(resid);
   contralateralGain = bwslope(idmin);
-  fprintf('Phi: %2.0f deg\n',contralateralGain)
+  disp(['Phi: ' num2str(contralateralGain,'%2.0f') ' deg'])
   
   % Calculate specific weights to plot
   lat = -90:5:90;
@@ -1223,12 +1223,12 @@ if flags.do_fig6
     [r,p] =  corrcoef([s.qe_exp],[s.qe_part]);
     cc.qe.r = r(2);
     cc.qe.p = p(2);
-    fprintf('QE: r = %0.2f, p = %0.3f\n',r(2),p(2));
+    disp(['QE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
 
     [r,p] =  corrcoef([s.pe_exp],[s.pe_part]);
     cc.pe.r = r(2);
     cc.pe.p = p(2);
-    fprintf('PE: r = %0.2f, p = %0.3f\n',r(2),p(2));
+    disp(['PE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
 
     save(fn,'cc', 's', 'pe_chance', 'qe_chance',save_format);
   else
@@ -1652,12 +1652,13 @@ if flags.do_fig8
     [r,p] =  corrcoef([s.qe_exp],[s.qe_part]);
     cc.qe.r = r(2);
     cc.qe.p = p(2);
-    fprintf('QE: r = %0.2f, p = %0.3f\n',r(2),p(2));
+    
+    disp(['QE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
 
     [r,p] =  corrcoef([s.pe_exp],[s.pe_part]);
     cc.pe.r = r(2);
     cc.pe.p = p(2);
-    fprintf('PE: r = %0.2f, p = %0.3f\n',r(2),p(2));
+    disp(['PE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
     
     s = rmfield(s,{'spdtfs','spdtfs_c','Obj','mm1'});
     
@@ -1799,7 +1800,7 @@ if flags.do_fig9
       end
     end
 
-    fprintf('\n Please wait a little! \n');
+    disp('Please wait a little!');
     qe = zeros(ns,ns,length(latdivision)); % init QEs
     pe = qe;           % init PEs
     pb = qe;           % init Polar Biases
@@ -1819,7 +1820,7 @@ if flags.do_fig9
 
             end
         end
-        fprintf(' Subject %2u of %2u \n',ll,ns);
+        disp([' Subject ' num2str(ll,'%2u') ' of ' num2str(ns,'%2u')]);
     end
 
     lat_weight = cos(pi*latdivision/180);     %lateral weight compensating compression of polar dimension
@@ -2041,11 +2042,10 @@ if flags.do_fig10
         end
 
       end
-
-      fprintf('\n %2.0f of %2.0f subjects completed',ss,length(s))
+      disp([num2str(ss,'%2u') ' of ' num2str(length(s),'%2u') ' subjects completed']);
 
     end
-    fprintf('\n')
+    disp(' ')
 
     if length(latseg) > 1
       pe_exp1 = squeeze(mean(pe_exp1));
@@ -2377,7 +2377,8 @@ if flags.do_fig11
         savename = fullfile(tempfn,['result_best2005speech_samp' num2str(kk)]);
         save(savename,'ape_all','qe_all','ape_BBnoise','qe_BBnoise')
       end
-      fprintf('%1.0u of %2.0u samples completed\n',kk,NsampModel)
+      
+      disp([num2str(kk,'%1.0u') ' of ' num2str(NsampModel,'%2.0u') ' samples completed'])
     end
     
     results = dir(fullfile(tempfn,'result_best2005speech_samp*.mat'));
@@ -2674,7 +2675,7 @@ if flags.do_tab2
       [p,t,stat] = friedman(squeeze(data),1);
 %       [p,t,stat] = anovan(data(:),group,'display','off');
 
-      fprintf('  Chi-sq = %5.2f, p = %3.3f \n',t{2,5},p(1))
+      disp(['  Chi-sq = ' num2str(t{2,5},'%5.2f') ', p = ' num2str(p(1),'%3.3f')])
       
       if p(1) < 0.05
         figure
@@ -2791,7 +2792,7 @@ if flags.do_tab3
 
       end
     
-    fprintf('%1.0f of %1.0f completed\n',b,length(bwcoef));
+    disp([num2str(b,'%1.0f') ' of ' num2str(length(bwcoef),'%1.0f') ' completed'])
     end
     
     s = rmfield(s,{'Obj','mm1','mm2','sphrtfs'}); % reduce file size 

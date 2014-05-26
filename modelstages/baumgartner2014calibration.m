@@ -26,7 +26,7 @@ for ss = 1:length(s)
     optimset('MaxIter',50,'TolX',0.001)...
     );
 %   [~,scalib(ss).qe_pred,scalib(ss).pe_pred] = evaldist(s(ss),S,kv);
-  fprintf('%2.0u of %2.0u calibrated.\n',ss,length(s))
+  disp([num2str(ss,'%2.0u') ' of ' num2str(length(s),'%2.0u') ' calibrated.'])
 
 end
 
