@@ -159,7 +159,7 @@ if isempty(lookup)
     % load lookup table to map ITD values of the model to azimuth angles.
     % the lookup table was created using the same HRTF database
     path = which('amtstart');
-    lookup = load([path(1:end-10) 'modelstages/wierstorf2013itd2anglelookup.mat']);
+    lookup = load([path(1:end-10) 'hrtf/wierstorf2013/wierstorf2013itd2anglelookup.mat']);
 end
 
 

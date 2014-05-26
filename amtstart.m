@@ -95,6 +95,12 @@ if ~exist('SFS_start','file')
   end
 end
 
+% Delete rms.m from the SFS package because of naming conflict
+sfspath=fileparts(which('SFS_start.m'));
+if exist(fullfile(sfspath,'SFS_general','rms.m'),'file'),
+	delete(fullfile(sfspath,'SFS_general','rms.m'));
+end
+
 % Start 
 disp('*** Starting SFS ***');
 if exist('SFS_start','file')
@@ -107,6 +113,7 @@ if exist('SFS_start','file')
       error(['You need SFS >= ' s_r ' to work with AMT. ' ...
         'Please update your package from https://github.com/sfstoolbox/sfs ']);
   end  
+	
 else
   disp(['SFS package could not be found. Continue without SFS support.']);
   disp(['For SFS support please download the package ' ...
