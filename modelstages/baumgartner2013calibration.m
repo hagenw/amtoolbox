@@ -1,16 +1,18 @@
-function scalib = baumgartner2014calibration(s,kv)
-%baumgartner2014calibration  Calibration of listener-specific sensitivity 
+function scalib = baumgartner2013calibration(s,kv)
+%baumgartner2013calibration  Calibration of listener-specific sensitivity 
 % thresholds to experimental performance
-%   Usage: scalib = baumgartner2014calibration(s)
-%          scalib = baumgartner2014calibration(s,latseg,dlat)
+%   Usage: scalib = baumgartner2013calibration(s)
 %
 %   Input parameter:
-%     s       : strucure containing subject's data
+%     s       : strucure containing subject's data. It must include the 
+%               fields *pe_exp* and *qe_exp* representing local polar RMS 
+%               error and the quadrant error rate in baseline condition,
+%               respectively.
 %
 %   Output parameter:
 %     scalib  : strucure containing subject's data with calibrated u
 %
-%   `baumgartner2014calibration` returns listener data with
+%   `baumgartner2013calibration` returns listener data with
 %   listener-specific sensitivity thresholds calibrated by joint
 %   optimization of PE and QE to minimize mismatch between experimental
 %   and predicted results.
@@ -22,10 +24,9 @@ kv.latseg = [-20,0,20];
 scalib = s;
 for ss = 1:length(s)
   
-  scalib(ss).S = fminsearch(@(S) evaldist(s(ss),S,kv),s(ss).S,...
+  scalib(ss).u = fminsearch(@(u) evaldist(s(ss),u,kv),s(ss).u,...
     optimset('MaxIter',50,'TolX',0.001)...
     );
-%   [~,scalib(ss).qe_pred,scalib(ss).pe_pred] = evaldist(s(ss),S,kv);
   disp([num2str(ss,'%2.0u') ' of ' num2str(length(s),'%2.0u') ' calibrated.'])
 
 end
@@ -34,7 +35,7 @@ end
 end
 
 
-function [distmetric,qeM,peM] = evaldist(s,S,kv)
+function [distmetric,qeM,peM] = evaldist(s,u,kv)
 
 if S <= 0
   distmetric = Inf;
@@ -52,10 +53,9 @@ for ll = 1:length(s)
     s(ll).p{ii} = 0;        % init
 
     [s(ll).sphrtfs{ii},polang] = extractsp( kv.latseg(ii),s(ll).Obj );
-    [s(ll).p{ii},respangs] = baumgartner2014(...
+    [s(ll).p{ii},respangs] = baumgartner2013(...
         s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
-        'S',S,'lat',kv.latseg(ii),'polsamp',polang,...
-        'mrsmsp',kv.mrsmsp,'gamma',kv.gamma,'do',kv.do);
+        'u',u,'lat',kv.latseg(ii),'polsamp',polang);
 
     [ qe(ii),pe(ii) ] = pmv2ppp( ...
         s(ll).p{ii} , polang , respangs , s(ll).target{ii});

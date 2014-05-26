@@ -1,1 +1,0 @@
-Store the SOFA API from http://sofacoustics.sourceforge.net here
