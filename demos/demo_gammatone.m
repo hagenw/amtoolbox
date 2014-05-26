@@ -3,6 +3,7 @@
 %   `demo_gammatone(flag)` demonstrates arrays of impulse responses for
 %   implementations of gammatone.m. 
 %
+%   See also: exp_gammatone gammatone exp_hohmann2002 
 
 %% Global parameters 
     
