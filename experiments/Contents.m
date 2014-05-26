@@ -4,7 +4,7 @@
 %
 %   Experiments
 %       EXP_GAMMATONE        - Figures from Gammatone-related publications
-%       EXP_HOHMAN2002       - Figures from Hohmann (2002)
+%       EXP_HOHMANN2002       - Figures from Hohmann (2002)
 %       EXP_LINDEMANN1986    - Recreate plots from Lindemann (1986)
 %		    EXP_ENZNER2008		 - Plots showing results from enzner2008
 %       EXP_LOPEZPOVEDA2001  - Iso-itensity curves of the DRNL
