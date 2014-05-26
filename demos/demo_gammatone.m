@@ -1,18 +1,18 @@
 % DEMO_GAMMATONE Demo for gammatone.m 
 %
-%  `demo_gammatone(flag)` demonstrates arrays of impulse responses for the
+%   `demo_gammatone(flag)` demonstrates arrays of impulse responses for the
 %   gammatone filterbank implementations of gammatone.m. and Hohmanns
-%   allpass implementation marked by gfb_*.
+%   allpass implementation marked by gfb_.
 %
 %   Figure 1 shows in the first plot an array of 24 erb-spaced channels of
-%   classic gammatone implementation (Patterson, 1987) derived from gammatone.m
-%   with real-valued filter coefficients and in the second plot this
-%   implementation with option peakphased.
+%   classic gammatone implementation (Patterson et al., 1987) derived from 
+%   gammatone.m with real-valued filter coefficients and in the second plot
+%   this implementation with option peakphased.
 %
 %   Figure 2 shows in the first plot an array of 24 erb-spaced channels of
-%   classic gammatone implementation (Patterson, 1987) derived from gammatone.m
-%   with complex-valued filter coefficients and in the second plot this
-%   implementation with option peakphased.
+%   classic gammatone implementation (Patterson et al., 1987) derived from
+%   gammatone.m with complex-valued filter coefficients and in the second
+%   plot this implementation with option peakphased.
 %
 %   Figure 3 shows in the first plot an array of 24 erb-spaced channels of
 %   allpole gammatone implementation (Hohmann, 2002) derived from gammatone.m
@@ -23,8 +23,8 @@
 %   allpass gammatone implementation (Hohmann, 2002) with complex-valued 
 %   filter coefficients.
 %
-%   See also: exp_gammatone gammatone, exp_hohmann2002 gfb_*, 
-%             demo_hohmann2002 gfb_*
+%   See also: exp_gammatone gammatone exp_hohmann2002 demo_hohmann2002
+%   gfb_analyzer gfb_analyzer_process
 
 % AUTHOR: CK, 2014
 
@@ -57,11 +57,13 @@
     outsig_cl_pph_r = permute(outsig_cl_pph_r,[3 2 1]);
 
 %---- classic complex ----
+    disp('Classic, complex-valued, causal-phased gammtone implementation:')
     % Derive filter coefficients and filter impulse input signal;
     [b,a] = gammatone(fc,fs,'classic','causalphase','complex');
     outsig_cl_cph_c = 2*real(ufilterbankz(b,a,insig));
     outsig_cl_cph_c = permute(outsig_cl_cph_c,[3 2 1]);
 
+    disp('Classic, complex-valued, peak-phased gammtone implementation:')
     % Derive filter coefficients and filter impulse input signal with option peakphase;
     [b,a] = gammatone(fc,fs,'classic','peakphase','complex');
     outsig_cl_pph_c = 2*real(ufilterbankz(b,a,insig));
@@ -132,8 +134,6 @@
     % Figure 4;
     outsig7 = impulse_response;                             % Outputsinal 1;
     type7   = 'hohmann / allpole / peakphased / complex';   % Type of implemantion for headline;
-    outsig8 = impulse_response;                             % Outputsinal 1;
-    type8   = 'hohmann / allpole / peakphased / complex';   % Type of implemantion for headline;
        
     
 %% Plot;
@@ -144,7 +144,7 @@
     hold on
     dy = 1;
     for ii = 1:nchannels
-       plot(treal,30*outsig1(ii,:) + dy)
+       plot(treal,30*real(outsig1(ii,:)) + dy)
        dy = dy + 1;
     end;
     clear dy;
@@ -167,7 +167,7 @@
     hold on
     dy = 1;
     for ii = 1:nchannels
-       plot(treal,30*outsig2(ii,:) + dy)
+       plot(treal,30*real(outsig2(ii,:)) + dy)
        dy = dy + 1;
     end;
     clear dy;
@@ -192,7 +192,7 @@
     hold on
     dy = 1;
     for ii = 1:nchannels
-       plot(treal,30*outsig3(ii,:) + dy)
+       plot(treal,30*real(outsig3(ii,:)) + dy)
        dy = dy + 1;
     end;
     clear dy;
@@ -214,7 +214,7 @@
     hold on
     dy = 1;
     for ii = 1:nchannels
-       plot(treal,30*outsig4(ii,:) + dy)
+       plot(treal,30*real(outsig4(ii,:)) + dy)
        dy = dy + 1;
     end;
     clear dy;
@@ -238,7 +238,7 @@
     hold on
     dy = 1;
     for ii = 1:nchannels
-       plot(treal,30*outsig5(ii,:) + dy)
+       plot(treal,30*real(outsig5(ii,:)) + dy)
        dy = dy + 1;
     end;
     clear dy;
@@ -260,7 +260,7 @@
     hold on
     dy = 1;
     for ii = 1:nchannels
-       plot(treal,30*outsig6(ii,:) + dy)
+       plot(treal,30*real(outsig6(ii,:)) + dy)
        dy = dy + 1;
     end;
     clear dy;
@@ -279,16 +279,15 @@
     hold off
     
     % Figure 4 - hohmann allpass complex;
-    figure ('units','normalized','outerposition',[0 0.05 1 0.475])
-    subplot(1,2,1)
+    figure ('units','normalized','outerposition',[0.475 0.05 0.475 0.475])
     hold on
-%     dy = 1;
-%     for ii = 1:nchannels
-%        plot(treal,30*outsig7(ii,:) + dy)
-%        dy = dy + 1;
-%     end;
-%     clear dy;
-%     title (['Gammatone impulse responses of type: ', num2str(type7)])
+    dy = 1;
+    for ii = 1:nchannels
+       plot(treal,30*real(outsig7(ii,:)) + dy)
+       dy = dy + 1;
+    end;
+    clear dy;
+    title (['Gammatone impulse responses of type: ', num2str(type7)])
     xlabel 'Time (ms)'
     ylabel('# Frequency Channel (ERB): Frequency (Hz)');
     xt = 0:5:25;
@@ -302,25 +301,4 @@
     box on
     hold off
         
-    subplot(1,2,2)
-        hold on
-    dy = 1;
-    for ii = 1:nchannels
-       plot(treal,30*outsig8(ii,:) + dy)
-       dy = dy + 1;
-    end;
-    clear dy;
-    title (['Gammatone impulse responses of type: ', num2str(type8)])
-    xlabel 'Time (ms)'
-    ylabel('# Frequency Channel (ERB): Frequency (Hz)');
-    xt = 0:5:25;
-    yt = [1 4 8 12 16 20 24];
-    axis([0, 25, 0, 26]);
-    set(gca,'XTick',xt, 'YTick', yt)
-    set(gca,'YTickLabel', {['#01:  ' num2str(analyzer.center_frequencies_hz(1),'%6.2f') ' Hz'] , ['#04:  ' num2str(analyzer.center_frequencies_hz(4),'%6.2f') ' Hz'], ...
-        ['#08:  ' num2str(analyzer.center_frequencies_hz(8),'%6.2f') ' Hz'], ['#12:  ' num2str(analyzer.center_frequencies_hz(12),'%6.2f') ' Hz'], ... 
-        ['#16: ' num2str(analyzer.center_frequencies_hz(16),'%6.2f') ' Hz'], ['#20: ' num2str(analyzer.center_frequencies_hz(20),'%6.2f') ' Hz'], ...
-        ['#24: ' num2str(analyzer.center_frequencies_hz(24),'%6.2f') ' Hz']})
-    box on
-    hold off
     

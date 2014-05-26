@@ -4,7 +4,8 @@
 %   gammatone filterbank.
 %   It seems to implement Hohmann (2002).
 %
-%   See also: exp_hohmann2002
+%   See also: exp_gammatone gammatone demo_gammatone exp_hohmann2002 
+%   gfb_analyzer gfb_analyzer_process
 
 % author   : tp
 % date     : Jan, Mar 2002, Nov 2006
