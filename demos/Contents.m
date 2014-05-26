@@ -6,6 +6,7 @@
 %
 %   Demonstration of model stages
 %     DEMO_ABSOLUTETHRESHOLD - Absolute thresholds of hearing
+%     DEMO_GAMMATONE         - Gammatone filterbank
 %     DEMO_ADAPTLOOP         - Adaptation loops
 %     DEMO_DRNL              - Widening of filters in the DRNL
 %
