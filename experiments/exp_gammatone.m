@@ -267,8 +267,11 @@ function exp_gammatone(varargin)
 %     exp_gammatone('fig4_hohmann2002');
 %
 %   References: patterson1987efficient lyon1997 hohmann2002 moore1983
+%
+%   See also: demo_gammatone gammatone, demo_hohmann2002 gfb_*,
+%             exp_hohmann2002 gfb_*               
 
-% AUTHOR: Christian Klemenschitz, 2014
+% AUTHOR: CK, 2014
 
 %% ------ Check input options --------------------------------------------
     definput.import={'amtredofile'};
@@ -314,7 +317,7 @@ function exp_gammatone(varargin)
       rp_x = ([-fliplr(g) 0 g]+1);              % Frequency-axis;
 
       % Plot;
-      figure('units','normalized','outerposition',[0 0 1 1])
+      figure('units','normalized','outerposition',[0 0.05 1 0.95])
       subplot(1,3,2)
       plot(rp_x, 10*log10(rp_y), 'b')
       hold on
@@ -326,6 +329,7 @@ function exp_gammatone(varargin)
       axis([0 2 -40 0])
       set(gca,'XTick',xt)
       set(gca,'YTick',yt)
+      box on
       hold off
 
 
@@ -355,6 +359,7 @@ function exp_gammatone(varargin)
       axis([0 2 -40 0])
       set(gca,'XTick',xt)
       set(gca,'YTick',yt)
+      box on
       hold off
 
 
@@ -385,6 +390,7 @@ function exp_gammatone(varargin)
       axis([0 2 -40 0])
       set(gca,'XTick',xt)
       set(gca,'YTick',yt)
+      box on
       hold off
    end;
        
@@ -423,7 +429,7 @@ function exp_gammatone(varargin)
       end;
 
       % Plot
-      figure
+      figure ('units','normalized','outerposition',[0 0.05 1 0.95])
       dy = 1;
       for ii = 1:nchannels
           plot(treal,25*yshift(ii,9875:10124)+dy);
@@ -432,10 +438,15 @@ function exp_gammatone(varargin)
       end;
       title('Roex(p) filters')
       xlabel('Sample')
-      ylabel([num2str(nchannels),' erb spaced channels.'])
+      ylabel('# Frequency Channel (ERB): Frequency (Hz)');
       yt = [1 4 8 12 16 20 24];
-      axis([0, 250, 0, 25]);
+      axis([0, 250, 0, 26]);
       set(gca,'YTick', yt)
+      set(gca,'YTickLabel', {['#01:  '  num2str(fc(1),'%6.2f') ' Hz'] , ['#04:  ' num2str(fc(4),'%6.2f') ' Hz'], ...
+        ['#08:  ' num2str(fc(8),'%6.2f') ' Hz'], ['#12:  ' num2str(fc(12),'%6.2f') ' Hz'], ... 
+        ['#16: ' num2str(fc(16),'%6.2f') ' Hz'], ['#20: ' num2str(fc(20),'%6.2f') ' Hz'], ...
+        ['#24: ' num2str(fc(24),'%6.2f') ' Hz']})
+      box on
       hold off
   end;
   
@@ -477,6 +488,7 @@ function exp_gammatone(varargin)
         xlabel 'Time (ms)'
         ylabel ([num2str(nchannels),' erb spaced channels by from ', num2str(flow), ' Hz - ', num2str(fhigh),' Hz']) 
         set(gca, 'Xlim', [20 56], 'YLim',[1 189])
+        box on
         hold off
    end;
     
@@ -515,11 +527,16 @@ function exp_gammatone(varargin)
         clear dy;
         title ([ num2str(nchannels),' channel array of gamma impulse responses (classic)'])
         xlabel 'Time (ms)'
-        ylabel ([ num2str(nchannels),' erb-spaced channels from ', num2str(flow), ' Hz - ',num2str(fhigh),' Hz'])
-        xt = 0:5:25;
+        ylabel('# Frequency Channel (ERB): Frequency (Hz)');
+        xt = 0:5:27;
         yt = [1 4 8 12 16 20 24];
-        axis([0, 25, 0, 25]);
+        axis([0, 25, 0, 26]);
         set(gca,'XTick',xt, 'YTick', yt)
+        set(gca,'YTickLabel', {['#01:  '  num2str(fc(1),'%6.2f') ' Hz'] , ['#04:  ' num2str(fc(4),'%6.2f') ' Hz'], ...
+        ['#08:  ' num2str(fc(8),'%6.2f') ' Hz'], ['#12:  ' num2str(fc(12),'%6.2f') ' Hz'], ... 
+        ['#16: ' num2str(fc(16),'%6.2f') ' Hz'], ['#20: ' num2str(fc(20),'%6.2f') ' Hz'], ...
+        ['#24: ' num2str(fc(24),'%6.2f') ' Hz']})
+        box on
         hold off
         
         % Upper figure;
@@ -533,11 +550,16 @@ function exp_gammatone(varargin)
         end;
         title ([num2str(nchannels),' channel array of gamma impulse responses envelopes (classic)'])
         xlabel 'Time (ms)'
-        ylabel ([num2str(nchannels),' erb-spaced channels from ', num2str(flow),' Hz - ' num2str(fhigh),' Hz'])
+        ylabel('# Frequency Channel (ERB): Frequency (Hz)');
         xt = 0:5:25;
         yt = [1 4 8 12 16 20 24];
-        axis([0, 25, 0, 25]);
+        axis([0, 25, 0, 26]);
         set(gca,'XTick',xt, 'YTick', yt)
+        set(gca,'YTickLabel', {['#01:  '  num2str(fc(1),'%6.2f') ' Hz'] , ['#04:  ' num2str(fc(4),'%6.2f') ' Hz'], ...
+        ['#08:  ' num2str(fc(8),'%6.2f') ' Hz'], ['#12:  ' num2str(fc(12),'%6.2f') ' Hz'], ... 
+        ['#16: ' num2str(fc(16),'%6.2f') ' Hz'], ['#20: ' num2str(fc(20),'%6.2f') ' Hz'], ...
+        ['#24: ' num2str(fc(24),'%6.2f') ' Hz']})
+        box on
         hold off
     end;
     
@@ -590,7 +612,7 @@ function exp_gammatone(varargin)
       outsigfft = (outsigfft)/max(outsigfft);
 
       % Plot;
-      figure('units','normalized','outerposition',[0 0 1 1])
+      figure('units','normalized','outerposition',[0 0.05 1 0.95])
       subplot(1,3,2)
       plot(rpwt_x, 10*log10(rpwt_y), 'b')
       hold on
@@ -603,6 +625,7 @@ function exp_gammatone(varargin)
       axis([0 2 -60 0])
       set(gca,'XTick',xt)
       set(gca,'YTick',yt)
+      box on
       hold off
 
       
@@ -653,6 +676,7 @@ function exp_gammatone(varargin)
       axis([0 2 -60 0])
       set(gca,'XTick',xt)
       set(gca,'YTick',yt)
+      box on
       hold off
 
 
@@ -703,6 +727,7 @@ function exp_gammatone(varargin)
       axis([0 2 -60 0])
       set(gca,'XTick',xt)
       set(gca,'YTick',yt)
+      box on
       hold off
    end; 
    
@@ -755,7 +780,7 @@ function exp_gammatone(varargin)
       outsigfft = (outsigfft)/max(outsigfft);
 
       % Plot;
-      figure('units','normalized','outerposition',[0 0 1 1])
+      figure('units','normalized','outerposition',[0 0.05 1 0.95])
       subplot(1,3,2)
       plot(rpwt_x, 10*log10(rpwt_y), 'b')
       hold on
@@ -768,6 +793,7 @@ function exp_gammatone(varargin)
       axis([0 2 -60 0])
       set(gca,'XTick',xt)
       set(gca,'YTick',yt)
+      box on
       hold off
 
       
@@ -818,6 +844,7 @@ function exp_gammatone(varargin)
       axis([0 2 -60 0])
       set(gca,'XTick',xt)
       set(gca,'YTick',yt)
+      box on
       hold off
 
 
@@ -867,6 +894,7 @@ function exp_gammatone(varargin)
       axis([0 2 -60 0])
       set(gca,'XTick',xt)
       set(gca,'YTick',yt)
+      box on
       hold off
    end;
  
@@ -918,7 +946,7 @@ function exp_gammatone(varargin)
         outsigfft = (outsigfft)/max((outsigfft));
                          
         % Plot;
-        figure('units','normalized','outerposition',[0 0 1 1])
+        figure('units','normalized','outerposition',[0 0.05 1 0.95])
         subplot(1,3,1)
         plot(rpwt_x,10*log10(rpwt_y), 'b')
         hold on
@@ -930,6 +958,7 @@ function exp_gammatone(varargin)
         axis([0 2 -50 0])
         set(gca,'XTick',xt)
         set(gca,'YTick',yt)
+        box on
         hold off
         
           
@@ -981,6 +1010,7 @@ function exp_gammatone(varargin)
         axis([0 2 -50 0])
         set(gca,'XTick',xt)
         set(gca,'YTick',yt)
+        box on
         hold off
           
           
@@ -1031,6 +1061,7 @@ function exp_gammatone(varargin)
         axis([0 2 -50 0])
         set(gca,'XTick',xt)
         set(gca,'YTick',yt)
+        box on
         hold off
     end
     
@@ -1082,7 +1113,7 @@ function exp_gammatone(varargin)
         outsigfft = (outsigfft)/max((outsigfft));
                          
         % Plot;
-        figure('units','normalized','outerposition',[0 0 1 1])
+        figure('units','normalized','outerposition',[0 0.05 1 0.95])
         subplot(1,3,1)
         plot(rpwt_x,10*log10(rpwt_y), 'b')
         hold on
@@ -1094,6 +1125,7 @@ function exp_gammatone(varargin)
         axis([0 2 -50 0])
         set(gca,'XTick',xt)
         set(gca,'YTick',yt)
+        box on
         hold off
         
           
@@ -1145,6 +1177,7 @@ function exp_gammatone(varargin)
         axis([0 2 -50 0])
         set(gca,'XTick',xt)
         set(gca,'YTick',yt)
+        box on
         hold off
           
           
@@ -1195,6 +1228,7 @@ function exp_gammatone(varargin)
         axis([0 2 -50 0])
         set(gca,'XTick',xt)
         set(gca,'YTick',yt)
+        box on
         hold off
     end
     
@@ -1232,11 +1266,17 @@ function exp_gammatone(varargin)
         clear dy;
         title 'Gammatone impulse response filterbank without phase-compensation'
         xlabel 'Time (ms)'
-        ylabel ([ num2str(nchannels) ,' equal spaced channels from ',num2str(flow), ' Hz - ' ,num2str(fhigh),' Hz'])
+        ylabel('# Frequency Channel (ERB): Frequency (Hz)');
         xt = 0:5:25;
         yt = [1 4 8 12 16 20 24 28 32 36];
-        axis([0, 25, 0, 38]);
+        axis([0, 25, 0, 40]);
         set(gca,'XTick',xt, 'YTick', yt)
+        set(gca,'YTickLabel', {['#01:  '  num2str(fc(1),'%6.2f') ' Hz'] , ['#04:  ' num2str(fc(4),'%6.2f') ' Hz'], ...
+        ['#08:  ' num2str(fc(8),'%6.2f') ' Hz'], ['#12:  ' num2str(fc(12),'%6.2f') ' Hz'], ... 
+        ['#16: ' num2str(fc(16),'%6.2f') ' Hz'], ['#20: ' num2str(fc(20),'%6.2f') ' Hz'], ...
+        ['#24: ' num2str(fc(24),'%6.2f') ' Hz'], ['#28: ' num2str(fc(28),'%6.2f') ' Hz'], ...
+        ['#32: ' num2str(fc(32),'%6.2f') ' Hz'], ['#36: ' num2str(fc(36),'%6.2f') ' Hz'], })
+        box on
         hold off
     end;
 
@@ -1294,11 +1334,17 @@ function exp_gammatone(varargin)
         clear dy;
         title 'Gammatone filterbank with envelope phase-compensation and delayed channel'
         xlabel 'Time (ms)'
-        ylabel ([ num2str(nchannels) ,' equal spaced channels from ',num2str(flow), ' Hz - ' ,num2str(fhigh),' Hz'])
+        ylabel('# Frequency Channel (ERB): Frequency (Hz)');
         xt = 0:5:25;
         yt = [1 4 8 12 16 20 24 28 32 36];
-        axis([0, 25, 0, 38]);
+        axis([0, 25, 0, 39]);
         set(gca,'XTick',xt, 'YTick', yt)
+        set(gca,'YTickLabel', {['#01:  '  num2str(fc(1),'%6.2f') ' Hz'] , ['#04:  ' num2str(fc(4),'%6.2f') ' Hz'], ...
+        ['#08:  ' num2str(fc(8),'%6.2f') ' Hz'], ['#12:  ' num2str(fc(12),'%6.2f') ' Hz'], ... 
+        ['#16: ' num2str(fc(16),'%6.2f') ' Hz'], ['#20: ' num2str(fc(20),'%6.2f') ' Hz'], ...
+        ['#24: ' num2str(fc(24),'%6.2f') ' Hz'], ['#28: ' num2str(fc(28),'%6.2f') ' Hz'], ...
+        ['#32: ' num2str(fc(32),'%6.2f') ' Hz'], ['#36: ' num2str(fc(36),'%6.2f') ' Hz'], })
+        box on
         hold off
     end;
     
@@ -1330,7 +1376,7 @@ function exp_gammatone(varargin)
         outsig = permute(outsig,[3 2 1]);
               
         % Plot
-        figure('units','normalized','outerposition',[0.5 0.1 0.5 0.9])
+        figure('units','normalized','outerposition',[0 0.05 1 0.95])
         hta1 = subplot(3,1,1);
         posAxes1 = get(hta1, 'Position');
         posAxes1(2) = posAxes1(2) + (1 - posAxes1(2))*5/8;
@@ -1352,11 +1398,17 @@ function exp_gammatone(varargin)
            dy = dy+1;
         end;
         title 'Gammatone impulse response filterbank but without envelope phase-compensation'
-        ylabel ([ num2str(nchannels), ' erb spaced channels'])
-        xt = 0:5:25;
+        ylabel('# Frequency Channel (ERB): Frequency (Hz)');
+        xt = 15:5:40;
         yt = [1 4 8 12 16 20 24 28 32 36];
         axis([14.5, 39, 0, 38]);
         set(gca,'XTick',xt, 'YTick', yt)
+        set(gca,'YTickLabel', {['#01:  '  num2str(fc(1),'%6.2f') ' Hz'] , ['#04:  ' num2str(fc(4),'%6.2f') ' Hz'], ...
+        ['#08:  ' num2str(fc(8),'%6.2f') ' Hz'], ['#12:  ' num2str(fc(12),'%6.2f') ' Hz'], ... 
+        ['#16: ' num2str(fc(16),'%6.2f') ' Hz'], ['#20: ' num2str(fc(20),'%6.2f') ' Hz'], ...
+        ['#24: ' num2str(fc(24),'%6.2f') ' Hz'], ['#28: ' num2str(fc(28),'%6.2f') ' Hz'], ...
+        ['#32: ' num2str(fc(32),'%6.2f') ' Hz'], ['#36: ' num2str(fc(36),'%6.2f') ' Hz'], })
+        box on
         hta3 = subplot(3,1,3);
         posAxes3 = get(hta3, 'Position');
         posAxes3(2) =  posAxes3(2) - (1 - posAxes1(2))*1/8; % *3/8
@@ -1365,10 +1417,16 @@ function exp_gammatone(varargin)
  %       title 'test'
         xlabel 'Time (ms)'
         ylabel ([ num2str(nchannels), ' erb spaced channels'])
-        xt = 0:5:25;
+        xt = 15:5:40;
         yt = [1 4 8 12 16 20 24 28 32 36];
         axis([14.5, 39, 0, 38]);
         set(gca,'XTick',xt, 'YTick', yt)
+        set(gca,'YTickLabel', {['#01:  '  num2str(fc(1),'%6.2f') ' Hz'] , ['#04:  ' num2str(fc(4),'%6.2f') ' Hz'], ...
+        ['#08:  ' num2str(fc(8),'%6.2f') ' Hz'], ['#12:  ' num2str(fc(12),'%6.2f') ' Hz'], ... 
+        ['#16: ' num2str(fc(16),'%6.2f') ' Hz'], ['#20: ' num2str(fc(20),'%6.2f') ' Hz'], ...
+        ['#24: ' num2str(fc(24),'%6.2f') ' Hz'], ['#28: ' num2str(fc(28),'%6.2f') ' Hz'], ...
+        ['#32: ' num2str(fc(32),'%6.2f') ' Hz'], ['#36: ' num2str(fc(36),'%6.2f') ' Hz'], })
+        box on
         hold off
     end
     
@@ -1405,6 +1463,7 @@ function exp_gammatone(varargin)
         xlabel '\omega/\omega_r'
         ylabel 'Magnitude gain (db)'
         set(gca,'XLim',[0.03 3],'YLim',[-40, 35]) 
+        box on
         hold on
         
         % Derives filter coefficients for erb spaced channels.
@@ -1445,6 +1504,7 @@ function exp_gammatone(varargin)
         % Plot
         semilogx(w/(fc(channel)/fs*2*pi), 10*log10(abs(h)),'b--');
         legend('APGF, b=3', 'GTF, b=3', 'APGF, b=2', 'GTF, b=2', 'Location', 'NorthWest')  
+        box on
         hold off
         warning('Not sure if b should be: b=3 or b=1/3 // b=2 or b=1/2');  
     end;
@@ -1483,6 +1543,7 @@ function exp_gammatone(varargin)
         xlabel 't * \omega_r / pi'
         ylabel 'Amplitude'
         set(gca,'XLim',[0 16], 'YLim',[-0.25 0.25])
+        box on
         hold on
         %'XLim',[1020 1084],'
         % Derives filter coefficients for erb spaced channels.
@@ -1515,6 +1576,7 @@ function exp_gammatone(varargin)
         xlabel 't * \omega_r / pi'
         ylabel 'Amplitude'
         set(gca, 'XLim',[0 16],'YLim',[-0.25 0.25])
+        box on
         hold on
 
         % Derives filter coefficients for erb spaced channels.
@@ -1527,6 +1589,7 @@ function exp_gammatone(varargin)
         % Plot
         plot(treal,outsig(channel,:),'r-')
         legend('GTF', 'APGF')
+        box on
         hold off
         warning('Not sure if b should be: b=3 or b=1/3 // b=2 or b=1/2');  
      end;
@@ -1560,6 +1623,7 @@ function exp_gammatone(varargin)
         xlabel('Sample')
         ylabel('Amplitude')
         set(gca, 'XLim',[0 200],'YLim',[-0.04 0.04])
+        box on
         hold on
         plot(real(outsig),'r-')
         plot(imag(outsig),'g--')
@@ -1614,19 +1678,23 @@ function exp_gammatone(varargin)
         plot(xfn, 20*log10(abs(outfftr(1:N/2))))
         set(gca,'Xlim',[0 1], 'YLim',[-70 0])
         ylabel('Magnitude/db')
+        box on
         subplot(4,1,2)
         plot(xfn,phi)
         ylabel('Phase/rad')
         set(gca,'Xlim',[0 1],'Ylim',[-5 5])
+        box on
         subplot(4,1,3)
         plot(xfn, 20*log10(abs(outsigrtoi(1:N/2))))
         set(gca,'Xlim',[0 1],'Ylim',[-10 10])
         ylabel('Magnitude/db')
+        box on
         subplot(4,1,4)
         plot(xfn, phirtoi(1:N/2))
         set(gca,'Xlim',[0 1],'Ylim',[-2 2])
         xlabel('Frequency / \pi')
         ylabel('Phase + \pi / 2 / rad')
+        box on
         grid
     end;
     
@@ -1663,6 +1731,7 @@ function exp_gammatone(varargin)
         xlabel('Frequency / Hz')
         ylabel('Level / dB')
         set(gca,'Xlim',[0 fn],'Ylim',[-40 0])
+        box on
         hold off
      end;
      
@@ -1734,6 +1803,7 @@ function exp_gammatone(varargin)
         set(gca, 'XLim',[0 200],'YLim',[-0.04 0.04])
         xlabel('Sample')
         ylabel('Amplitude')
+        box on
         plot(abs(outenv),'r-')
         hold off
         subplot(2,1,2)
@@ -1743,6 +1813,7 @@ function exp_gammatone(varargin)
         xlabel('Sample')
         ylabel('Amplitude')
         plot(abs(outsigdelayenv),'r-')
+        box on
         hold off
     end;
      

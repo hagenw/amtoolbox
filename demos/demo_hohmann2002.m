@@ -4,7 +4,7 @@
 %   gammatone filterbank.
 %   It seems to implement Hohmann (2002).
 %
-%   See also: exp_hohmann2012
+%   See also: exp_hohmann2002
 
 % author   : tp
 % date     : Jan, Mar 2002, Nov 2006

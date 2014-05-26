@@ -104,10 +104,11 @@ function exp_hohmann2002(varargin)
 %     exp_hohmann2002('fig8');
 %
 %   References: hohmann2002
-
-
 %
-% AUTHOR: Christian Klemenschitz, 2014
+%   See also: demo_hohmann2002 gfb_*, demo_gammatone gammatone,
+%             exp_gammatone gammatone
+
+% AUTHOR: CK, 2014
 
 %% ------ Check input options --------------------------------------------
     definput.import={'amtredofile'};
@@ -156,6 +157,7 @@ function exp_hohmann2002(varargin)
         title('Real part, imaginary part and envelope of impulse response at fc = 1000 Hz ');
         xlabel('Sample/ 1');   
         ylabel('Amplitude/ 1');
+        box on;
 
     end;
 
@@ -199,6 +201,7 @@ function exp_hohmann2002(varargin)
         axis([0, 1, -70, 0]);
         set(gca,'XTick',xt, 'YTick', yt)
         ylabel('Magnitude/dB')
+        box on
         subplot(4,1,2)
         plot(frequency(1:end/2),phi(1:end/2))
         ylabel('Phase/rad')
@@ -206,6 +209,7 @@ function exp_hohmann2002(varargin)
         yt = -5:5:5;
         axis([0, 1, -5, 5]);
         set(gca,'XTick',xt, 'YTick', yt)
+        box on
         subplot(4,1,3)
         plot(frequency(1:end/2), 20*log10(abs(divspectra(1:end/2))))
         xt = 0:0.2:1;
@@ -213,6 +217,7 @@ function exp_hohmann2002(varargin)
         axis([0, 1, -10, 10]);
         set(gca,'XTick',xt, 'YTick', yt)
         ylabel('Magnitude/db')
+        box on
         subplot(4,1,4)
         plot(frequency(1:end/2), theta(1:end/2))
         xt = 0:0.2:1;
@@ -221,6 +226,7 @@ function exp_hohmann2002(varargin)
         set(gca,'XTick',xt, 'YTick', yt)
         xlabel('Frequency / \pi')
         ylabel('Phase + \pi / 2 /rad')
+        box on
         
     end;
 
@@ -254,6 +260,7 @@ function exp_hohmann2002(varargin)
         title('Frequency response of the individual filters in this filterbank.');
         xlabel('Frequency / Hz');
         ylabel('Level / dB');     
+        box on
         
     end;
 
@@ -296,7 +303,9 @@ function exp_hohmann2002(varargin)
         xlabel('Sample')
         ylabel('Amplitude')
         plot(abs(impulse_response),'r-')
+        box on
         hold off
+        
         subplot(2,1,2)
         plot (real(outsig),'b-')
         hold on
@@ -308,6 +317,7 @@ function exp_hohmann2002(varargin)
         xlabel('Sample')
         ylabel('Amplitude')
         plot(abs(outsigdelayenv),'r-')
+        box on
         hold off
         
     end;
@@ -348,7 +358,9 @@ function exp_hohmann2002(varargin)
         xlabel('Sample')
         ylabel('Amplitude')
         plot(abs(impulse_response),'r-')
+        box on
         hold off
+        
         subplot(2,1,2)
         plot (real(outsig),'b-')
         hold on
@@ -357,6 +369,7 @@ function exp_hohmann2002(varargin)
         xlabel('Sample')
         ylabel('Amplitude')
         plot(abs(outsigdelayenv),'r-')
+        box on
         hold off
         
     end;
@@ -399,6 +412,8 @@ function exp_hohmann2002(varargin)
         title('Analysis of resynthesized impulse response')
         xlabel('Sample')
         ylabel('Amplitude')
+        box on
+        
         subplot(2,1,2)
         plot (real(resynthesized_impulse),'b-')
         hold on
@@ -411,6 +426,7 @@ function exp_hohmann2002(varargin)
         title('Analysis of resynthesized impulse response on a larger scale')
         xlabel('Sample')
         ylabel('Amplitude')
+        box on
         
     end;   
 %% Figure 7
@@ -457,6 +473,8 @@ function exp_hohmann2002(varargin)
         title('Group delay of transfer function')
         xlabel('Frequency [Hz]')
         ylabel('Group delay / ms')
+        box on
+        
         subplot(2,1,2)
         plot (frequency, 20*log10(abs(resynthesized_spectra)),'b-')
         hold on
@@ -469,6 +487,7 @@ function exp_hohmann2002(varargin)
         title('Magnitude of transfer function')
         xlabel('Frequency / Hz')
         ylabel('Magnitude / dB')
+        box on
         
    end; 
    
