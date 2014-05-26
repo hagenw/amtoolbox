@@ -424,7 +424,7 @@ function exp_gammatone(varargin)
 
       % Plot
       figure
-      dy = 0;
+      dy = 1;
       for ii = 1:nchannels
           plot(treal,25*yshift(ii,9875:10124)+dy);
           hold on
@@ -433,7 +433,9 @@ function exp_gammatone(varargin)
       title('Roex(p) filters')
       xlabel('Sample')
       ylabel([num2str(nchannels),' erb spaced channels.'])
-      set(gca, 'YLim',[-1 24])
+      yt = [1 4 8 12 16 20 24];
+      axis([0, 250, 0, 25]);
+      set(gca,'YTick', yt)
       hold off
   end;
   
@@ -466,7 +468,7 @@ function exp_gammatone(varargin)
         % Plot;
         figure 
         hold on
-        dy = 0;
+        dy = 1;
         for ii = 1:nchannels
            plot(treal,6*outsig(ii,:)+dy)
            dy = dy+1;
@@ -474,7 +476,7 @@ function exp_gammatone(varargin)
         title ([num2str(nchannels), ' channel array of gammatone impulse responses of vowel a from past'])
         xlabel 'Time (ms)'
         ylabel ([num2str(nchannels),' erb spaced channels by from ', num2str(flow), ' Hz - ', num2str(fhigh),' Hz']) 
-        set(gca, 'Xlim', [20 56], 'YLim',[0 189])
+        set(gca, 'Xlim', [20 56], 'YLim',[1 189])
         hold off
    end;
     
@@ -505,7 +507,7 @@ function exp_gammatone(varargin)
         figure('units','normalized','outerposition',[0.5 0.1 0.5 0.9])
         subplot(2,1,2)
         hold on
-        dy = 0;
+        dy = 1;
         for ii = 1:size(outsig,1)
            plot(treal,14*outsig(ii,:) + dy)
            dy = dy + 1;
@@ -514,13 +516,16 @@ function exp_gammatone(varargin)
         title ([ num2str(nchannels),' channel array of gamma impulse responses (classic)'])
         xlabel 'Time (ms)'
         ylabel ([ num2str(nchannels),' erb-spaced channels from ', num2str(flow), ' Hz - ',num2str(fhigh),' Hz'])
-        set(gca, 'XLim',[0 25],'YLim',[0 24])
+        xt = 0:5:25;
+        yt = [1 4 8 12 16 20 24];
+        axis([0, 25, 0, 25]);
+        set(gca,'XTick',xt, 'YTick', yt)
         hold off
         
         % Upper figure;
         subplot(2,1,1)
         hold on
-        dy = 0;
+        dy = 1;
         for ii = 1:size(outsig,1)
            env = abs(hilbert(outsig(ii,:),N));
            plot(treal,(14*env)+dy)
@@ -529,7 +534,10 @@ function exp_gammatone(varargin)
         title ([num2str(nchannels),' channel array of gamma impulse responses envelopes (classic)'])
         xlabel 'Time (ms)'
         ylabel ([num2str(nchannels),' erb-spaced channels from ', num2str(flow),' Hz - ' num2str(fhigh),' Hz'])
-        set(gca, 'XLim',[0 25],'YLim',[0 24.5])
+        xt = 0:5:25;
+        yt = [1 4 8 12 16 20 24];
+        axis([0, 25, 0, 25]);
+        set(gca,'XTick',xt, 'YTick', yt)
         hold off
     end;
     
@@ -565,7 +573,7 @@ function exp_gammatone(varargin)
       % Gammatone filter at 1000 Hz center frequency;
       % Parameters:
       fc = 1000;                % Center frequency in Hz;
-      ind = find(f/fc > 2,1);   % Index where Frequency axis is 2;
+      ind = find(f/fc > 2,1);   % Index where frequency axis is 2;
       insig = zeros(1,N);       % Input impulse signal;
       insig(1) = 1;             % with peak at 1;
       n = 4;                    % Filter order;
@@ -730,7 +738,7 @@ function exp_gammatone(varargin)
       % Gammatone filter at 1000 Hz center frequency;
       % Parameters:
       fc = 1000;                % Center frequency in Hz;
-      ind = find(f/fc > 2,1);   % Index where Frequency axis is 2;
+      ind = find(f/fc > 2,1);   % Index where frequency axis is 2;
       insig = zeros(1,N);       % Input impulse signal;
       insig(1) = 1;             % with peak at 1;
       n = 4;                    % Filter order;
@@ -782,7 +790,7 @@ function exp_gammatone(varargin)
       % Gammatone filter at 427 Hz center frequency;
       % Parameters:
       fc = 427;                 % Center frequency in Hz;
-      ind = find(f/fc > 2,1);   % Index where Frequency axis is 2;
+      ind = find(f/fc > 2,1);   % Index where frequency axis is 2;
       insig = zeros(1,N);       % Input impulse signal;
       insig(1) = 1;             % with peak at 1;
       n = 4;                    % Filter order;
@@ -832,7 +840,7 @@ function exp_gammatone(varargin)
       % Gammatone filter at 2089 Hz center frequency;
       % Parameters:
       fc = 2089;                % Center frequency in Hz;
-      ind = find(f/fc > 2,1);   % Index where Frequency axis is 2;
+      ind = find(f/fc > 2,1);   % Index where frequency axis is 2;
       insig = zeros(1,N);       % Input impulse signal;
       insig(1) = 1;             % with peak at 1;
       n = 4;                    % Filter order;
@@ -893,7 +901,7 @@ function exp_gammatone(varargin)
         fc = 427;                 % Center frequency at 427 Hz;
         N = 4178;                 % Signallength for gammatone filter;
         f = (0:N-1)*fs/N;         % Frequency axis;
-        ind = find(f/fc > 2,1);   % Index where Frequency axis is 2;
+        ind = find(f/fc > 2,1);   % Index where frequency axis is 2;
         insig = zeros(1,N);       % Input impulse signal;
         insig(1) = 1;             % with peak at 1;
         n = 2;                    % Filter order;
@@ -946,7 +954,7 @@ function exp_gammatone(varargin)
         fc = 1000;                % Center frequency at 427 Hz;
         N = 4178;                 % Signallength for gammatone filter;
         f = (0:N-1)*fs/N;         % Frequency axis;
-        ind = find(f/fc > 2,1);   % Index where Frequency axis is 2;
+        ind = find(f/fc > 2,1);   % Index where frequency axis is 2;
         insig = zeros(1,N);       % Input impulse signal;
         insig(1) = 1;             % with peak at 1;
         n = 2;                    % Filter order;
@@ -997,7 +1005,7 @@ function exp_gammatone(varargin)
         fc = 2089;                % Center frequency at 427 Hz;
         N = 4178;                 % Signallength for gammatone filter;
         f = (0:N-1)*fs/N;         % Frequency axis;
-        ind = find(f/fc > 2,1);   % Index where Frequency axis is 2;
+        ind = find(f/fc > 2,1);   % Index where frequency axis is 2;
         insig = zeros(1,N);       % Input impulse signal;
         insig(1) = 1;             % with peak at 1;
         n = 2;                    % Filter order;
@@ -1057,7 +1065,7 @@ function exp_gammatone(varargin)
         fc = 427;                 % Center frequency at 427 Hz;
         N = 4178;                 % Signallength for gammatone filter;
         f = (0:N-1)*fs/N;         % Frequency axis;
-        ind = find(f/fc > 2,1);   % Index where Frequency axis is 2;
+        ind = find(f/fc > 2,1);   % Index where frequency axis is 2;
         insig = zeros(1,N);       % Input impulse signal;
         insig(1) = 1;             % with peak at 1;
         n = 2;                    % Filter order;
@@ -1110,7 +1118,7 @@ function exp_gammatone(varargin)
         fc = 1000;                % Center frequency at 427 Hz;
         N = 4178;                 % Signallength for gammatone filter;
         f = (0:N-1)*fs/N;         % Frequency axis;
-        ind = find(f/fc > 2,1);   % Index where Frequency axis is 2;
+        ind = find(f/fc > 2,1);   % Index where frequency axis is 2;
         insig = zeros(1,N);       % Input impulse signal;
         insig(1) = 1;             % with peak at 1;
         n = 2;                    % Filter order;
@@ -1161,7 +1169,7 @@ function exp_gammatone(varargin)
         fc = 2089;                % Center frequency at 427 Hz;
         N = 4178;                 % Signallength for gammatone filter;
         f = (0:N-1)*fs/N;         % Frequency axis;
-        ind = find(f/fc > 2,1);   % Index where Frequency axis is 2;
+        ind = find(f/fc > 2,1);   % Index where frequency axis is 2;
         insig = zeros(1,N);       % Input impulse signal;
         insig(1) = 1;             % with peak at 1;
         n = 2;                    % Filter order;
@@ -1216,7 +1224,7 @@ function exp_gammatone(varargin)
         % Plot
         figure
         hold on
-        dy = 0;
+        dy = 1;
         for ii = 1:nchannels
            plot(treal,14*outsig(ii,:) + dy)
            dy = dy+1;
@@ -1225,7 +1233,10 @@ function exp_gammatone(varargin)
         title 'Gammatone impulse response filterbank without phase-compensation'
         xlabel 'Time (ms)'
         ylabel ([ num2str(nchannels) ,' equal spaced channels from ',num2str(flow), ' Hz - ' ,num2str(fhigh),' Hz'])
-        set(gca, 'XLim',[0 25],'YLim',[0 37])
+        xt = 0:5:25;
+        yt = [1 4 8 12 16 20 24 28 32 36];
+        axis([0, 25, 0, 38]);
+        set(gca,'XTick',xt, 'YTick', yt)
         hold off
     end;
 
@@ -1275,7 +1286,7 @@ function exp_gammatone(varargin)
         %Plot
         figure
         hold on
-        dy = 0;
+        dy = 1;
         for ii = 1:nchannels
            plot(treal,14*real(outsigdelay(ii,:))+dy)
            dy = dy+1;
@@ -1284,7 +1295,10 @@ function exp_gammatone(varargin)
         title 'Gammatone filterbank with envelope phase-compensation and delayed channel'
         xlabel 'Time (ms)'
         ylabel ([ num2str(nchannels) ,' equal spaced channels from ',num2str(flow), ' Hz - ' ,num2str(fhigh),' Hz'])
-        set(gca, 'XLim', [0 25], 'YLim',[0 37])
+        xt = 0:5:25;
+        yt = [1 4 8 12 16 20 24 28 32 36];
+        axis([0, 25, 0, 38]);
+        set(gca,'XTick',xt, 'YTick', yt)
         hold off
     end;
     
@@ -1326,7 +1340,7 @@ function exp_gammatone(varargin)
         title 'Pulsetrain'
         ylabel 'Amplitude'
         set(gca, 'XLim',[14.5 39],'YLim',[0 1])
-        dy = 0;
+        dy = 1;
         hta2 = subplot(3,1,2);
         posAxes2 = get(hta2, 'Position');
         posAxes2(2) = posAxes1(2)- posAxes2(2);
@@ -1339,7 +1353,10 @@ function exp_gammatone(varargin)
         end;
         title 'Gammatone impulse response filterbank but without envelope phase-compensation'
         ylabel ([ num2str(nchannels), ' erb spaced channels'])
-        set(gca, 'XLim',[14.5 39],'YLim',[0 37])
+        xt = 0:5:25;
+        yt = [1 4 8 12 16 20 24 28 32 36];
+        axis([14.5, 39, 0, 38]);
+        set(gca,'XTick',xt, 'YTick', yt)
         hta3 = subplot(3,1,3);
         posAxes3 = get(hta3, 'Position');
         posAxes3(2) =  posAxes3(2) - (1 - posAxes1(2))*1/8; % *3/8
@@ -1348,7 +1365,10 @@ function exp_gammatone(varargin)
  %       title 'test'
         xlabel 'Time (ms)'
         ylabel ([ num2str(nchannels), ' erb spaced channels'])
-        set(gca, 'XLim',[12 36],'YLim',[0 37])
+        xt = 0:5:25;
+        yt = [1 4 8 12 16 20 24 28 32 36];
+        axis([14.5, 39, 0, 38]);
+        set(gca,'XTick',xt, 'YTick', yt)
         hold off
     end
     
@@ -1444,9 +1464,9 @@ function exp_gammatone(varargin)
         N = 512;                % Signal length;
         insig = zeros(1,N);     % Input signal;
         insig(1) = 1;           % Impulse at sample 1024;
-        channel = 20;           % Channel
+        channel = 12;           % Channel
         n = 6;                  % Filter order 6;
-        betamul = 3;            % Betamul;
+        betamul = 1/3;            % Betamul;
         treal = (0:N-1)*((2*pi*fc(channel))/fs/pi);
         
         % Derives filter coefficients for erb spaced channels.
@@ -1480,7 +1500,7 @@ function exp_gammatone(varargin)
         % Change filter order 
         n = 6;
         % Change betamul
-        betamul = 2;
+        betamul = 1/2;
         
         % Derives filter coefficients for erb spaced channels.
         [b,a] = gammatone(fc,fs,n,betamul,'classic');

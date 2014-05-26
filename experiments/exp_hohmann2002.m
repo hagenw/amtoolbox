@@ -183,9 +183,9 @@ function exp_hohmann2002(varargin)
         phi = angle(frequency_response);
         % Unwrap phase;
         phi = unwrap(phi);
-        % Division of imaginary frequency reponse by real frequency response 
+        % Division of imaginary frequency reponse by real frequency response; 
         divspectra = fft(imag(impulse_response)')./frequency_response;
-        % Phase response from division above.
+        % Phase response from division above;
         theta = angle(divspectra)+pi/2;
 
         % Plot;
@@ -438,7 +438,7 @@ function exp_hohmann2002(varargin)
         frequency = [0:8191] * fs / 8192;
         % Transfer function;
         resynthesized_spectra = fft(resynthesized_impulse);
-        % Group delay
+        % Group delay;
         [spectra_grpdelay, w] = grpdelay(resynthesized_impulse,1,8192);
         
         
