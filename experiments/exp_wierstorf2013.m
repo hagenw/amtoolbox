@@ -80,6 +80,10 @@ function output = exp_wierstorf2013(varargin)
 %   Examples:
 %   ---------
 %
+%   To display Figure 1 use :::
+%
+%     exp_wierstorf2013('fig1');
+%
 %   To display Figure 3 use :::
 %
 %     exp_wierstorf2013('fig3');
@@ -95,6 +99,30 @@ function output = exp_wierstorf2013(varargin)
 %   To display Figure 8 use :::
 %
 %     exp_wierstorf2013('fig8');
+%
+%   To display Figure 9 use :::
+%
+%     exp_wierstorf2013('fig9');
+%
+%   To display Figure 10 use :::
+%
+%     exp_wierstorf2013('fig10');
+%
+%   To display Figure 11a use :::
+%
+%     exp_wierstorf2013('fig11a');
+%
+%   To display Figure 11b use :::
+%
+%     exp_wierstorf2013('fig11b');
+%
+%   To display Figure 12a use :::
+%
+%     exp_wierstorf2013('fig12a');
+%
+%   To display Figure 12b use :::
+%
+%     exp_wierstorf2013('fig12b');
 %
 %   References: wierstorf2013
 
@@ -366,7 +394,7 @@ elseif flags.do_fig8
         % load HRTFs, see:
         % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
         [~,path] = download_hrtf('wierstorf2011_3m');
-        load([path 'wierstorf2011_3m.mat']);
+        load(fullfile(path, 'wierstorf2011_3m.mat'));
         % generate noise signal
         sig_noise = noise(44100/5,1,'white');
         % get only the -90 to 90 degree part of the hrtf set
@@ -416,12 +444,11 @@ if flags.do_fig9
         conf.ir.useinterpolation = true;
         conf.fs = 44100;
         % load lookup table
-        path = which('amtstart');
-        lookup = load([path(1:end-10) 'modelstages/wierstorf2013itd2anglelookup.mat']);
+        lookup = load(fullfile(amtbasepath,'hrtf','wierstorf2013','wierstorf2013itd2anglelookup.mat'));
         % load HRTFs, see:
         % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
         [~,path] = download_hrtf('wierstorf2011_3m');
-        load([path 'wierstorf2011_3m.mat']);
+        load(fullfile(path, 'wierstorf2011_3m.mat'));
         % generate noise signal
         sig_noise = noise(44100/5,1,'white');
         % get only the -90 to 90 degree part of the hrtf set
