@@ -4,7 +4,7 @@
 %   implementations of gammatone.m. 
 %
 
-%% Global parameters
+%% Global parameters 
     
     flow = 100;
     fhigh = 4000;
