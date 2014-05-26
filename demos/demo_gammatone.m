@@ -91,6 +91,7 @@
     title (['Gammatone impulse responses of type: ', num2str(type1)])
     xlabel 'Time (ms)'
     ylabel ([ num2str(nchannels),' channels / ', num2str(flow), ' - ',num2str(fhigh),' Hz'])
+    ylabel('# Frequency Channel (ERB): Frequency (Hz)');
     xt = 0:5:25;
     yt = [1 4 8 12 16 20 24];
     axis([0, 25, 0, 25]);
