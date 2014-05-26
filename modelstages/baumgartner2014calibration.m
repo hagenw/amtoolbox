@@ -2,10 +2,13 @@ function scalib = baumgartner2014calibration(s,kv)
 %baumgartner2014calibration  Calibration of listener-specific sensitivity 
 % thresholds to experimental performance
 %   Usage: scalib = baumgartner2014calibration(s)
-%          scalib = baumgartner2014calibration(s,latseg,dlat)
 %
 %   Input parameter:
-%     s       : strucure containing subject's data
+%     s       : strucure containing subject's data. It must include the 
+%               fields *Obj*, *pe_exp*, and *qe_exp*, representing the
+%               listener's HRTF as SOFA object, the baseline local
+%               polar RMS error, and the baseline quadrant error rate,
+%               respectively.
 %
 %   Output parameter:
 %     scalib  : strucure containing subject's data with calibrated u
