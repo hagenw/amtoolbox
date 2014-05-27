@@ -59,14 +59,6 @@ function exp_hohmann2002(varargin)
 %               analysis-synthesis system using the filterbank design from
 %               section 3.1.
 %             
-%     'fig8'    Reproduce Fig.8: !!!not ready yet!!!
-%               Objective Difference Grade(ODG) according to ITU-R [15] as a
-%               function of the total delay of the analysis-synthesis system
-%               for five different signals (castanets, Jazz trio, chimes, 
-%               harpsichord and speech). For delay values of 4 ms and above,
-%               the quality degradation is smaller than 1 point on the
-%               ITU scale, indicating that the distortion is barely audible. 
-%
 %
 %   Examples:
 %   ---------
@@ -99,9 +91,6 @@ function exp_hohmann2002(varargin)
 %
 %     exp_hohmann2002('fig7');
 %
-%   To display Fig. 8, use :::
-%
-%     exp_hohmann2002('fig8');
 %
 %   References: hohmann2002
 %
@@ -302,6 +291,7 @@ function exp_hohmann2002(varargin)
         title(['Impulse response with center frequency at ', num2str(basef), ' Hz'])
         xlabel('Sample')
         ylabel('Amplitude')
+        line([65 65], [-0.05 0.05])
         plot(abs(impulse_response),'r-')
         box on
         hold off
@@ -316,6 +306,7 @@ function exp_hohmann2002(varargin)
         title(['Delayed impulse response with peak at desired delay at sample ', num2str(delay_samples) ])
         xlabel('Sample')
         ylabel('Amplitude')
+        line([65 65], [-0.05 0.05])
         plot(abs(outsigdelayenv),'r-')
         box on
         hold off
@@ -357,6 +348,7 @@ function exp_hohmann2002(varargin)
         title(['Impulse response with center frequency at ', num2str(basef), ' Hz'])
         xlabel('Sample')
         ylabel('Amplitude')
+        line([65 65], [-0.07 0.07])
         plot(abs(impulse_response),'r-')
         box on
         hold off
@@ -368,6 +360,7 @@ function exp_hohmann2002(varargin)
         title(['Delayed impulse response with a peak at desired delay at sample ', num2str(delay_samples) ])
         xlabel('Sample')
         ylabel('Amplitude')
+        line([65 65], [-0.07 0.07])
         plot(abs(outsigdelayenv),'r-')
         box on
         hold off
