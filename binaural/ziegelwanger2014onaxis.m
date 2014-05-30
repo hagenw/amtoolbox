@@ -3,10 +3,10 @@ function y=ziegelwanger2014onaxis(p,x)
 %   Usage: y=ziegelwanger2014onaxis(p,x)
 %
 %   Input parameters:
-%       p : on-axis model parameters [SI-units]
-%       x : HRTF direction (azimuth,elevation) [rad]
+%       p: on-axis model parameters [SI-units]
+%       x: HRTF direction (azimuth,elevation) [rad]
 %   Output parameters:
-%       y : time-of-arrival [s]
+%       y: time-of-arrival [s]
 %
 %   `toa=ziegelwanger2014onaxis(p,x)` calculates time-of-arrivals (TOAs) for
 %   given model parameters (p) and directions (x) with an on-axis
@@ -19,13 +19,6 @@ function y=ziegelwanger2014onaxis(p,x)
 
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria
-
-if isoctave
-    tmp=p;
-    p=x;
-    x=tmp;
-    clear tmp
-end
     
 r=p(1); %............. sphere radius [m]
 phi_ear=p(2); %....... position of the ear (azimuth angle) [rad]

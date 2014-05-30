@@ -2,10 +2,10 @@ function y=ziegelwanger2013offaxis(p,x)
 %ZIEGELWANGER2013OFFAXIS XXX
 %   Usage: y=ziegelwanger2013offaxis(p,x) 
 %
-%   Input:
+%   Input parameters:
 %       p: off-axis time-of-arrival model parameters [SI-units]
 %       x: HRTF direction (azimuth,elevation) [rad]
-%   Output:
+%   Output parameters:
 %       y: time-of-arrival [s]
 %
 %   `toa=ziegelwanger2013offaxis(p,x)` calculates time-of-arrivals for given

@@ -4,39 +4,18 @@ function [Obj,results]=ziegelwanger2013(Obj,method,model,p0_onaxis)
 %
 %   Input parameters:
 %       Obj: SOFA object
-%       method :   (Optional) Select one of the estimation methods
-%       model  :   (Optional) Correct estimated toa, using geometrical
+%       method: (Optional) Select one of the estimation methods
+%       model: (Optional) Correct estimated toa, using geometrical
 %                  TOA-Model. If $model=0$ use TOA estimated, 
 %                  if $model=1$ use TOA modeled (default).
 %       p0_onaxis: (optional) Starting values for `lsqcurvefit`
-%           dim 1: [sphere-radius in m,
-%                  azimut of ear in radiants,
-%                  elevation of ear in radiants, 
-%                  direction-independent delay in seconds]
-%           dim 2: each record channel
 % 
 %   Output parameters:
 %       Obj: SOFA Object
 % 
 %       results.toa: data matrix with time of arrival (TOA) for each impulse response (IR):
-%           dim 1: each toa in samples
-%           dim 2: each record channel
 %       results.p_onaxis: estimated on-axis model-parameters
-%           dim 1: [sphere-radius in m,
-%                  azimut of ear in radiants,
-%                  elevation of ear in radiants,
-%                  direction-independent delay in seconds]
-%           dim 2: each record channel
 %       results.p_offaxis: estimated off-axis model-parameters
-%           dim 1: [sphere-radius in m,
-%                  xM in m,
-%                  yM in m,
-%                  zM in m,
-%                  direction-independent delay in seconds,
-%                  channel (starting at 1),
-%                  azimut of ear in radiants,
-%                  elevation of ear in radiants]
-%           dim 2: each record channel
 %
 %   Estimates the Time-of-Arrival for each measurement in Obj (SOFA) and
 %   corrects the results with a geometrical model of the head.

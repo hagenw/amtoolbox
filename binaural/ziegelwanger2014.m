@@ -5,53 +5,20 @@ function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0
 %   Input parameters:
 %       Obj: SOFA object
 % 
-%       estimation (optional): select one of the estimation methods
-%           1: Threshold-Detection
-%           2: Centroid of squared IR
-%           3: Mean Groupdelay
-%           4: Minimal-Phase Cross-Correlation (Max) (default)
-%           [TOAest]: pre-estimated TOAs
+%       estimation: (optional) select one of the estimation methods (1: Threshold-Detection, 2: Centroid of squared IR, 3: Mean Groupdelay, 4: Minimal-Phase Cross-Correlation (Max) (default), [TOAest]: pre-estimated TOAs)
 %
-%       outlierDetection (optional): detect outliers in estimated TOAs
-%           0: off
-%           1: on (default values: [0.05;0.01])
-%           [alpha r]: rejects outliers using the extreme Studentized
-%             deviance test with the significance level of ALPHA and upper
-%             bound of outlier rate R. 
+%       outlierDetection: (optional) detect outliers in estimated TOAs (0: off, 1: on (default values: [0.05;0.01]), [alpha r]: rejects outliers using the extreme Studentized deviance test with the significance level of ALPHA and upper bound of outlier rate R. )
 %
-%       model (optional): correct estimated toa, using geometrical TOA-Model
-%           0: TOA estimated
-%           1: off-axis TOA modeled (default)
-%           2: on-axis TOA modeled
+%       model: (optional) correct estimated toa, using geometrical TOA-Model (0: TOA estimated, 1: off-axis TOA modeled (default), 2: on-axis TOA modeled)
 %
-%       p0_onaxis (optional): startvalues for lsqcurvefit
-%           dim 1: [sphere-radius in m,
-%                 azimut of ear in radiants,
-%                 elevation of ear in radiants, 
-%                 direction-independent delay in seconds]
-%           dim 2: each record channel
+%       p0_onaxis: (optional) startvalues for lsqcurvefit
 % 
 %   Output parameters:
 %       Obj: SOFA Object
 % 
 %       results.toa: data matrix with time of arrival (TOA) for each impulse response (IR):
-%           dim 1: each toa in samples
-%           dim 2: each record channel
 %       results.p_onaxis: estimated on-axis model-parameters
-%           dim 1: [sphere-radius in m,
-%                 azimut of ear in radiants,
-%                 elevation of ear in radiants,
-%                 direction-independent delay in seconds]
-%           dim 2: each record channel
 %       results.p_offaxis: estimated off-axis model-parameters
-%           dim 1: [sphere-radius in m,
-%                 xM in m,
-%                 yM in m,
-%                 zM in m,
-%                 direction-independent delay in seconds,
-%                 azimut of ear in radiants,
-%                 elevation of ear in radiants]
-%           dim 2: each record channel
 %
 %   Estimates the Time-of-Arrival for each measurement in Obj (SOFA) and
 %   corrects the results with a geometrical model of the head.

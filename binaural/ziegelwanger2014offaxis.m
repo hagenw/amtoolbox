@@ -2,10 +2,10 @@ function y=ziegelwanger2014offaxis(p,x)
 %ZIEGELWANGER2014OFFAXIS   Off-axis time-of-arrival model
 %   Usage: y=ziegelwanger2014offaxis(p,x) 
 %
-%   Input:
+%   Input parameters:
 %       p: off-axis time-of-arrival model parameters [SI-units]
 %       x: HRTF direction (azimuth,elevation) [rad]
-%   Output:
+%   Output para eters:
 %       y: time-of-arrival [s]
 %
 %   `toa=ziegelwanger2014offaxis(p,x)` calculates time-of-arrivals for given
@@ -19,13 +19,6 @@ function y=ziegelwanger2014offaxis(p,x)
 
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria
-
-if isoctave
-    tmp=p;
-    p=x;
-    x=tmp;
-    clear tmp
-end
 
 r=p(1); %............. sphere radius [m]
 xM=p(2); %............ x-coordinate of the sphere center [m]
