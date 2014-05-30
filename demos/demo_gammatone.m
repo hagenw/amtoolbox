@@ -3,6 +3,10 @@
 %   `demo_gammatone(flag)` demonstrates arrays of impulse responses for the
 %   gammatone filterbank implementations of gammatone.m. and Hohmanns
 %   allpass implementation marked by gfb_.
+%   
+%   .. figure::
+%
+%      Classic gammatone implementation with real-valued filter coefficients
 %
 %   Figure 1 shows in the first plot an array of 24 erb-spaced channels of
 %   classic gammatone implementation (Patterson et al., 1987) derived from 
@@ -11,12 +15,16 @@
 %
 %   .. figure::
 %
+%      Classic gammatone implementation with complex-valued filter coefficients
+%
 %   Figure 2 shows in the first plot an array of 24 erb-spaced channels of
 %   classic gammatone implementation (Patterson et al., 1987) derived from
 %   gammatone.m with complex-valued filter coefficients and in the second
 %   plot this implementation with option peakphased.
 %
 %   .. figure::
+%
+%      Allpole gammatone implementation with real-valued filter coefficients
 %
 %   Figure 3 shows in the first plot an array of 24 erb-spaced channels of
 %   allpole gammatone implementation (Hohmann, 2002) derived from gammatone.m
@@ -25,11 +33,12 @@
 %
 %   .. figure::
 %
+%      Allpole gammatone implementation with complex-valued filter coefficients
+%
 %   Figure 4 shows in the second plot an array of 24 erb-spaced channels of
 %   allpass gammatone implementation (Hohmann, 2002) with complex-valued 
 %   filter coefficients.
 %
-%   .. figure::
 %
 %   See also: exp_gammatone gammatone exp_hohmann2002 demo_hohmann2002
 %   gfb_analyzer gfb_analyzer_process
