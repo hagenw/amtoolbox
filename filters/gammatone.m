@@ -62,6 +62,9 @@ function [b,a,delay,z,p,k]=gammatone(fc,fs,varargin)
 %     'peakphase'    This makes the phase of each filter be zero when the
 %                    envelope of the impulse response of the filter peaks.
 %
+%     '6dBperoctave' This scales the amplitude of each filter to have an
+%                    impulse response of +/-6dB per octave.
+%
 %   To create the filter coefficients of a 1-erb spaced filter bank using
 %   gammatone filters use the following construction::
 %
@@ -74,7 +77,8 @@ function [b,a,delay,z,p,k]=gammatone(fc,fs,varargin)
 %  
 %   References: aertsen1980strI patterson1987efficient lyon1997
   
-%   AUTHOR : Stephan Ewert, Peter L. Søndergaard
+%   AUTHOR : Stephan Ewert, Peter L. Søndergaard, modified by Christian
+%   Klemenschitz
 
 % ------ Checking of input parameters ---------
   
@@ -101,6 +105,7 @@ definput.keyvals.n=4;
 definput.keyvals.betamul=[];
 definput.flags.real={'real','complex'};
 definput.flags.phase={'causalphase','peakphase'};
+definput.flags.scale={'originalscale','6dBperoctave'};
 definput.flags.filtertype={'allpole','classic'};
 
 [flags,keyvals,n,betamul]  = ltfatarghelper({'n','betamul'},definput,varargin);
@@ -159,9 +164,14 @@ if flags.do_allpole
       % Repeat the pole n times, and expand the polynomial
       a2=poly([atilde*ones(1,n),conj(atilde)*ones(1,n)]);
 
-      % Scale to get 0 dB attenuation, FIXME: Does not work, works only
-      % for fc=fs/4
-      b2=a0^n;
+
+      if flags.do_6dBperoctave
+        b2=b2*(a0^n *(fs/fc(ii)/n ) );
+      else
+        % Scale to get 0 dB attenuation, FIXME: Does not work, works only
+        % for fc=fs/4
+        b2=a0^n;
+      end
       
       if flags.do_peakphase
         b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
@@ -172,7 +182,7 @@ if flags.do_allpole
       a(ii,:)=a2;
       
     end;
-
+       
   end;      
   
   if flags.do_complex
@@ -197,7 +207,14 @@ if flags.do_allpole
       a2=poly(atilde*ones(1,n));
       
       btmp=1-exp(-2*pi*ourbeta(ii)/fs);
-      b2=btmp.^n;
+      
+      % Amplitude scaling
+      if flags.do_6dBperoctave
+         b2=btmp.^n *( fs/fc(ii)/n );
+      else
+         b2=btmp.^n;
+      end
+        
       
       if flags.do_peakphase
         b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
@@ -248,8 +265,13 @@ else
       % Repeat the zero n times, and expand the polynomial
       b2 = poly(btilde*ones(1,n));
       
-      % Scale to get 0 dB attenuation
-      b2=b2*(a0^n);
+      % Amplitude scaling
+      if flags.do_6dBperoctave
+        b2 = b2*(a0^n *(fs/fc(ii)/n ) );
+      else
+        % Scale to get 0 dB attenuation
+        b2=b2*(a0^n);
+      end
       
       if flags.do_peakphase
         b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
@@ -305,9 +327,14 @@ else
       % Repeat the zero n times, and expand the polynomial
       b2 = poly(btilde*ones(1,n));
 
-      % Scale to get 0 dB attenuation
-      b2=b2*(a0^n);
-
+      % Amplitude scaling
+      if flags.do_6dBperoctave
+        b2=b2*(a0^n *(fs/fc(ii)/n ) );
+      else
+        % Scale to get 0 dB attenuation  
+        b2=b2*(a0^n);
+      end
+      
       if flags.do_peakphase
         b2=b2*exp(2*pi*1i*fc(ii)*delay(ii));
       end;
@@ -316,8 +343,8 @@ else
       b(ii,:)=b2;
       a(ii,:)=a2;
   
-    end;  
-  
+    end;
+    
   end;
 
 end;
