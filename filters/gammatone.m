@@ -170,7 +170,7 @@ if flags.do_allpole
 
 
       if flags.do_6dBperoctave
-        b2=b2*(a0^n *(fs/fc(ii)/n ) );
+        b2=a0^n *(fs/fc(ii)/n);
       else
         % Scale to get 0 dB attenuation, FIXME: Does not work, works only
         % for fc=fs/4
@@ -214,7 +214,7 @@ if flags.do_allpole
       
       % Amplitude scaling 
       if flags.do_6dBperoctave
-         b2=btmp.^n *( fs/fc(ii)/n );
+         b2=btmp.^n *(fs/fc(ii)/n);
       else
          b2=btmp.^n;
       end
@@ -271,7 +271,7 @@ else
       
       % Amplitude scaling
       if flags.do_6dBperoctave
-        b2 = b2*(a0^n *(fs/fc(ii)/n ) );
+        b2 = b2*(a0^n) *(fs/fc(ii)/n);
       else
         % Scale to get 0 dB attenuation
         b2=b2*(a0^n);
@@ -333,7 +333,7 @@ else
 
       % Amplitude scaling
       if flags.do_6dBperoctave
-        b2=b2*0.5*((a0)^n *(fs/fc(ii)/n ) );
+        b2=b2*(a0^n) *(fs/fc(ii)/n);
       else
         % Scale to get 0 dB attenuation  
         b2=b2*(a0^n);
