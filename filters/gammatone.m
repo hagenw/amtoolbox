@@ -62,8 +62,12 @@ function [b,a,delay,z,p,k]=gammatone(fc,fs,varargin)
 %     'peakphase'    This makes the phase of each filter be zero when the
 %                    envelope of the impulse response of the filter peaks.
 %
+%     '0dBforall'    This scales the amplitude of each filter to have an
+%                    impulse response of 0dB. This is default. 
+%
 %     '6dBperoctave' This scales the amplitude of each filter to have an
-%                    impulse response of +/-6dB per octave.
+%                    impulse response of +/-6dB per octave. 
+%  
 %
 %   To create the filter coefficients of a 1-erb spaced filter bank using
 %   gammatone filters use the following construction::
@@ -105,7 +109,7 @@ definput.keyvals.n=4;
 definput.keyvals.betamul=[];
 definput.flags.real={'real','complex'};
 definput.flags.phase={'causalphase','peakphase'};
-definput.flags.scale={'originalscale','6dBperoctave'};
+definput.flags.scale={'0dBforall','6dBperoctave'};
 definput.flags.filtertype={'allpole','classic'};
 
 [flags,keyvals,n,betamul]  = ltfatarghelper({'n','betamul'},definput,varargin);
@@ -208,7 +212,7 @@ if flags.do_allpole
       
       btmp=1-exp(-2*pi*ourbeta(ii)/fs);
       
-      % Amplitude scaling
+      % Amplitude scaling 
       if flags.do_6dBperoctave
          b2=btmp.^n *( fs/fc(ii)/n );
       else
@@ -329,7 +333,7 @@ else
 
       % Amplitude scaling
       if flags.do_6dBperoctave
-        b2=b2*(a0^n *(fs/fc(ii)/n ) );
+        b2=b2*0.5*((a0)^n *(fs/fc(ii)/n ) );
       else
         % Scale to get 0 dB attenuation  
         b2=b2*(a0^n);
