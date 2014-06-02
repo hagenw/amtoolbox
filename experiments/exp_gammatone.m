@@ -43,6 +43,16 @@ function exp_gammatone(varargin)
 %                   half of the figure.
 %                       
 %
+%     'fig4_patterson1987'
+%
+%                   Reproduce Fig.4 similiar to Patterson et al. (1987):
+%                   A cochleagram of four cycles of the [ae] in "past"
+%                   produced by a gammatone filterbank with phase compensation.
+%                   The coordinates are the same as for Figure 3. Note that
+%                   the strong rightward skew produced by the phase lags of
+%                   the lower frequency filters has been removed now.
+%
+%
 %     'fig5_patterson1987'
 %
 %                   Reproduce Fig.5 from Patterson et al. (1987):
@@ -111,6 +121,17 @@ function exp_gammatone(varargin)
 %                   The impulse responses for a gammatone auditory filterbank
 %                   without phase compensation. The filterbank contains 37 
 %                   channels ranging from 100 to 5,000 Hz. The range of abcissa
+%                   is 25 ms.
+%
+%
+%     'fig10b_patterson1987'
+%                   
+%                   Reproduce Fig.10b from Patterson et al. (1987):
+%                   The impulse responses for a gammatone auditory
+%                   filterbank with envelope phase-compensation; that is,
+%                   the peaks of the impulse-response envelopes have been
+%                   aligned vertically. The filterbank contains 37 channels
+%                   ranging from 100 to 5,000 Hz. The range of the abscissa
 %                   is 25 ms.
 %
 %
@@ -210,6 +231,10 @@ function exp_gammatone(varargin)
 %
 %     exp_gammatone('fig3_patterson1987');
 %
+%   To display Fig. 4 Patterson et al. (1987) use :::
+%
+%     exp_gammatone('fig4_patterson1987');
+%
 %   To display Fig. 5 Patterson et al. (1987) use :::
 % 
 %     exp_gammatone('fig5_patterson1987');
@@ -231,6 +256,10 @@ function exp_gammatone(varargin)
 %     exp_gammatone('fig9_patterson1987');
 %
 %   To display Fig. 10a Patterson et al. (1987) at use :::
+%
+%     exp_gammatone('fig10a_patterson1987');
+%
+%   To display Fig. 10b Patterson et al. (1987) at use :::
 %
 %     exp_gammatone('fig10a_patterson1987');
 %
@@ -278,9 +307,9 @@ function exp_gammatone(varargin)
     definput.keyvals.FontSize = 12;
     definput.keyvals.MarkerSize = 6;
     definput.flags.type = {'missingflag', 'fig1_patterson1987', 'fig2_patterson1987', ...
-    'fig3_patterson1987', 'fig5_patterson1987', 'fig6_patterson1987', ...
-    'fig7_patterson1987', 'fig8_patterson1987'...
-    'fig9_patterson1987', 'fig10a_patterson1987', 'fig10c_patterson1987', ...
+    'fig3_patterson1987', 'fig4_patterson1987', 'fig5_patterson1987', 'fig6_patterson1987', ...
+    'fig7_patterson1987', 'fig8_patterson1987', 'fig9_patterson1987', ...
+    'fig10a_patterson1987', 'fig10b_patterson1987', 'fig10c_patterson1987', ...
     'fig11_patterson1987', 'fig1_lyon1997', 'fig2_lyon1997',...
     'fig1_hohmann2002', 'fig2_hohmann2002', 'fig3_hohmann2002', 'fig4_hohmann2002'};
 
@@ -461,7 +490,7 @@ function exp_gammatone(varargin)
         ts = 1/fs;                  % Time between sampling points in s;
         insig = data(:,1).';        % Extract one channel from signal;
         insig = insig(610:963);     % Extract ~8 ms;
-        insig = insig-mean(insig);
+        insig = insig-mean(insig);  % Removes DC;
         insig = [insig insig insig insig insig insig insig insig]; % 8 cycles;
         nchannels = 189;            % Number of channels in filterbank;
         N=length(insig);            % Length of signal;
@@ -473,15 +502,15 @@ function exp_gammatone(varargin)
         % Derives filter coefficients for erb spaced channels.
         [b,a] = gammatone(fc,fs,'classic');
         % Filters impulse signal with filter coefficients from above.
-        outsig = 2*real(ufilterbankz(b,a,insig));
+        outsig = real(ufilterbankz(b,a,insig));
         outsig = permute(outsig,[3 2 1]);
         
         % Plot;
-        figure 
+        figure ('units','normalized','outerposition',[0 0.05 1 0.95])
         hold on
         dy = 1;
         for ii = 1:nchannels
-           plot(treal,6*outsig(ii,:)+dy)
+           plot(treal,24*outsig(ii,:)+dy)
            dy = dy+1;
         end;
         title ([num2str(nchannels), ' channel array of gammatone impulse responses of vowel a from past'])
@@ -498,7 +527,73 @@ function exp_gammatone(varargin)
         box on
         hold off
    end;
-    
+%% Pattersons Paper - Classic Gammatone Filter
+% Figure 4 
+% gammatone 'classic' (causalphase, real)
+
+   if flags.do_fig4_patterson1987
+        % Input parameters
+        %load('a_from_past_us.mat');% Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
+        load('a_from_past_uk.mat'); % Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
+        ts = 1/fs;                  % Time between sampling points in s;
+        insig = data(:,1).';        % Extract one channel from signal;
+        insig = insig(610:963);     % Extract ~8 ms;
+        insig = insig-mean(insig);  % Removes DC;
+        insig = [insig insig insig insig insig insig insig insig]; % 8 cycles;
+        nchannels = 189;            % Number of channels in filterbank;
+        N=length(insig);            % Length of signal;
+        treal = (1:N)*ts*1000;      % Time axis in ms;
+        flow = 150;                 % Lowest center frequency in Hz;
+        fhigh = 4000;               % Highest center frequency in Hz;
+        fc = erbspace(flow,fhigh,nchannels);   % 189 erb-spaced channels; 
+        
+        % Derives filter coefficients for erb spaced channels.
+        [b,a] = gammatone(fc,fs,'classic','peakphase_new');
+        % Filters impulse signal with filter coefficients from above.
+        outsig = real(ufilterbankz(b,a,insig));
+        outsig = permute(outsig,[3 2 1]);
+        
+        % Impulse response of filter;
+        impulse = [1 zeros(1,352)];
+        outimp = real(ufilterbankz(b,a,impulse));
+        outimp = permute(outimp,[3 2 1]);
+        
+        % Find impulse response envelopes maximums;
+        envmax = zeros(1,nchannels);
+        for ii = 1:nchannels
+            envmax(ii) = find( abs(outimp(ii,:)) == max(abs(outimp(ii,:))));
+        end;
+        
+        % Delay output so the impulse response envelopes peak above each other;
+        for ii = 1:nchannels
+            % Time to delay
+            delay =  zeros(1,(max(envmax(:))+1) - envmax(ii));
+            % Add delay
+            outsig(ii,:) = [delay outsig(ii,1:N - length(delay))]; 
+        end;
+        
+        % Plot;
+        figure ('units','normalized','outerposition',[0 0.05 1 0.95])
+        hold on
+        dy = 1;
+        for ii = 1:nchannels
+           plot(treal,24*outsig(ii,:)+dy)
+           dy = dy+1;
+        end;
+        title ([num2str(nchannels), ' channel array of gammatone impulse responses of vowel a from past'])
+        xlabel 'Time (ms)'
+        ylabel('# Frequency Channel (ERB): Frequency (Hz)');
+        set(gca, 'Xlim', [20 56], 'Ylim', [1 189])
+        yt = [1 20 40 60 80 100 120 140 160 180 189];
+        set(gca, 'YTick', yt )
+        set(gca,'YTickLabel', {['#001:   '  num2str(round(fc(1))) ' Hz'] ,['#020:   '  num2str(round(fc(20))) ' Hz'] , ...
+        ['#040:   '  num2str(round(fc(40))) ' Hz'] , ['#060:   ' num2str(round(fc(60))) ' Hz'], ...
+        ['#080:   ' num2str(round(fc(80))) ' Hz'], ['#100: ' num2str(round(fc(100))) ' Hz'], ... 
+        ['#120: ' num2str(round(fc(120))) ' Hz'], ['#140: ' num2str(round(fc(140))) ' Hz'], ...
+        ['#160: ' num2str(round(fc(160))) ' Hz'], ['#180: ' num2str(round(fc(180))) ' Hz'],['#189: ' num2str(round(fc(189))) ' Hz']})
+        box on
+        hold off
+   end;   
 %% Pattersons Paper - Classic Gammatone Filter
 % Figure 5 
 % gammatone 'classic' (causalphase, real)
@@ -1070,7 +1165,7 @@ function exp_gammatone(varargin)
         set(gca,'YTick',yt)
         box on
         hold off
-    end
+    end;
     
 %% Pattersons Paper - Roex(pwt)
 % Figure 9
@@ -1237,7 +1332,7 @@ function exp_gammatone(varargin)
         set(gca,'YTick',yt)
         box on
         hold off
-    end
+    end;
     
 %% Pattersons Paper 
 % Figure 10a
@@ -1288,6 +1383,70 @@ function exp_gammatone(varargin)
     end;
 
 %% Pattersons Paper
+% Figure 10b
+% gammatone 'classic','peakphase','complex'
+
+    if flags.do_fig10b_patterson1987
+        % Input parameters
+        fs = 25000;                 % Sampling frequency;
+        ts = 1/fs;                  % Time between sampling points in s
+        N=4096;                     % Length of signal
+        treal = (1:N)*ts*1000;      % Time axis in ms
+        nchannels = 37;             % Number of channels in filterbank;
+        flow = 100;                 % ERB lowest center frequency in Hz;
+        fhigh = 5000;               % ERB highest center frequency
+        fc = erbspace(flow,fhigh,nchannels);   % 37 erb-spaced channels 
+        insig = zeros(1,N);         % Impulse as input signal 
+        insig(1) = 1;
+
+        % Derives filter coefficients for 37 erb-spaced channels
+        [b,a] = gammatone(fc,fs,'classic');
+        % Filters impulse signal with filter coefficients from above
+        outsig = 2*real(ufilterbankz(b,a,insig));
+        outsig = permute(outsig,[3 2 1]);
+        
+        % Find peak at envelope maximum
+        envmax = zeros(1,nchannels);
+        for ii = 1:nchannels
+            % Envelope maximum per channel
+            envmax(ii) = find(abs(outsig(ii,:)) == max(abs(outsig(ii,:))));
+        end;
+        
+        % Adding Delay
+        desiredpeak  = max(envmax)+1;
+        for ii = 1:nchannels
+            % Time to delay
+            delay =  zeros(1,desiredpeak - envmax(ii));
+            % Add delay
+            outsig(ii,:) = [delay outsig(ii,1:size(outsig,2) - length(delay))];
+        end;
+        
+        %Plot
+        figure
+        hold on
+        dy = 1;
+        for ii = 1:nchannels
+           plot(treal,14*real(outsig(ii,:))+dy)
+           dy = dy+1;
+        end;
+        clear dy;
+        title 'Gammatone filterbank with envelope phase-compensation'
+        xlabel 'Time (ms)'
+        ylabel('# Frequency Channel (ERB): Frequency (Hz)');
+        xt = 0:5:25;
+        yt = [1 4 8 12 16 20 24 28 32 37];
+        axis([0, 25, 0, 39]);
+        set(gca,'XTick',xt, 'YTick', yt)
+        set(gca,'YTickLabel', {['#01:   '  num2str(round(fc(1))) ' Hz'] , ['#04:   ' num2str(round(fc(4))) ' Hz'], ...
+        ['#08:   ' num2str(round(fc(8))) ' Hz'], ['#12:   ' num2str(round(fc(12))) ' Hz'], ... 
+        ['#16:   ' num2str(round(fc(16))) ' Hz'], ['#20: ' num2str(round(fc(20))) ' Hz'], ...
+        ['#24: ' num2str(round(fc(24))) ' Hz'], ['#28: ' num2str(round(fc(28))) ' Hz'], ...
+        ['#32: ' num2str(round(fc(32))) ' Hz'], ['#37: ' num2str(round(fc(37))) ' Hz'], })
+        box on
+        hold off
+    end;
+    
+%% Pattersons Paper
 % Figure 10c
 % gammatone 'classic','peakphase','complex'
 
@@ -1305,29 +1464,25 @@ function exp_gammatone(varargin)
         insig(1) = 1;
 
         % Derives filter coefficients for 37 erb-spaced channels
-        [b,a] = gammatone(fc,fs,'classic', 'peakphase');
+        [b,a] = gammatone(fc,fs,'classic', 'peakphase_new');
         % Filters impulse signal with filter coefficients from above
         outsig = 2*real(ufilterbankz(b,a,insig));
         outsig = permute(outsig,[3 2 1]);
         
         % Find peak at envelope maximum
-        outenv = zeros(nchannels,N);      
         envmax = zeros(1,nchannels);
         for ii = 1:nchannels
-            % Envelope of filtered impulse signal per channel
-            outenv(ii,:) = hilbert(real(outsig(ii,:)),N);
             % Envelope maximum per channel
-            envmax(ii) = find(abs(outenv(ii,:)) == max(abs(outenv(ii,:))));
+            envmax(ii) = find(abs(outsig(ii,:)) == max(abs(outsig(ii,:))));
         end;
         
         % Adding Delay
         desiredpeak  = max(envmax)+1;
-        outsigdelay = zeros(nchannels,N);
         for ii = 1:nchannels
             % Time to delay
             delay =  zeros(1,desiredpeak - envmax(ii));
             % Add delay
-            outsigdelay(ii,:) = [delay outsig(ii,1:size(outsig,2) - length(delay))];
+            outsig(ii,:) = [delay outsig(ii,1:size(outsig,2) - length(delay))];
         end;
         
         %Plot
@@ -1335,7 +1490,7 @@ function exp_gammatone(varargin)
         hold on
         dy = 1;
         for ii = 1:nchannels
-           plot(treal,14*real(outsigdelay(ii,:))+dy)
+           plot(treal,14*real(outsig(ii,:))+dy)
            dy = dy+1;
         end;
         clear dy;
