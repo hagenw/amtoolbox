@@ -1980,9 +1980,9 @@ if flags.do_fig10
 
 
     %% Modeling
-    for do = 0:1
+    for ii = 0:1
 
-      if do == 1
+      if ii == 1
         s = data_baumgartner2014('pool');
       else % recalib
         s = data_baumgartner2014('pool','recalib','do',0);
@@ -2006,7 +2006,7 @@ if flags.do_fig10
 
         [pflat,rang] = baumgartner2014(targets,spdtfs,...
             'S',s(ss).S,'polsamp',polang,...
-            'lat',latseg(ll),'stim',[1;0],'do',do); % Impulse
+            'lat',latseg(ll),'stim',[1;0],'do',ii); % Impulse
         mflat = baumgartner2014virtualexp(pflat,tang,rang,'runs',runs);
         [f,r] = localizationerror(mflat,'sirpMacpherson2000');
         pe_flat(ll,ss) = localizationerror(mflat,f,r,'perMacpherson2003');
@@ -2018,7 +2018,7 @@ if flags.do_fig10
 
           [p,rang] = baumgartner2014(targets,spdtfs,...
             'S',s(ss).S,'polsamp',polang,...
-            'lat',latseg(ll),'stim',sexp1(:,ii),'do',do);
+            'lat',latseg(ll),'stim',sexp1(:,ii),'do',ii);
           m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
           pe_exp1(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
@@ -2032,7 +2032,7 @@ if flags.do_fig10
 
           [p,rang] = baumgartner2014(targets,spdtfs,...
             'S',s(ss).S,'polsamp',polang,...
-            'lat',latseg(ll),'stim',sexp2(:,ii),'do',do);
+            'lat',latseg(ll),'stim',sexp2(:,ii),'do',ii);
           m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
           pe_exp2(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
@@ -2058,7 +2058,7 @@ if flags.do_fig10
     end
 
     %% Save
-      if do==0
+      if ii==0
         noDCN.pe_exp1 = pe_exp1;
         noDCN.pe_exp2 = pe_exp2;
         noDCN.pe_flat = pe_flat;
@@ -2314,9 +2314,9 @@ if flags.do_fig11
     lp{4} = fir60db;
 
     %% Model Data
-    for do = 0:1
+    for ii = 0:1
 
-      if do == 1
+      if ii == 1
         s = data_baumgartner2014('pool','recalib');
         tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_highfreqatten'); % temporary folder
       else % recalib
@@ -2330,7 +2330,7 @@ if flags.do_fig11
     for ss = 1:length(s)
       for ll = 1:length(latseg)
         [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
-        [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',do,...
+        [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',ii,...
               'S',s(ss).S,'polsamp',polang,'lat',latseg(ll),'notprint');
         ape_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
         qe_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang);
@@ -2353,7 +2353,7 @@ if flags.do_fig11
             if plotspec; figure; audspecgram(stim(:),fs,'dynrange',150); end
 
             [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
-            [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',do,...
+            [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',ii,...
               'S',s(ss).S,'polsamp',polang,...
               'lat',latseg(ll),'stim',stim,'notprint');
             ape_all(ii,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
@@ -2393,7 +2393,7 @@ if flags.do_fig11
       qe_all(:,:,ii) = tmp.qe_all;
     end
     
-    if do == 0
+    if ii == 0
       save([fn(1:end-4) '_do0.mat'],'ape_all','qe_all','ape_BBnoise','qe_BBnoise',save_format);
     else
       save(fn,'ape_all','qe_all','ape_BBnoise','qe_BBnoise',save_format);
@@ -2509,9 +2509,9 @@ if flags.do_tab2
     Conditions = {'BB','LP','W'};
 
     %% Computations
-    for do = 0:1
+    for ii = 0:1
 
-      if do == 1
+      if ii == 1
         s = data_baumgartner2014('pool','recalib');
       else % recalib
         s = data_baumgartner2014('pool','recalib','do',0);
@@ -2593,7 +2593,7 @@ if flags.do_tab2
               [s(ll).p{ii},rang] = baumgartner2014(...
                     s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},s(ll).fs,...
                     'S',s(ll).S,'lat',latdivision(ii),...
-                    'polsamp',s(ll).polang{ii},'do',do,'fhigh',fhigh);
+                    'polsamp',s(ll).polang{ii},'do',ii,'fhigh',fhigh);
               respangs{ii} = rang;
 
               [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
@@ -2603,17 +2603,17 @@ if flags.do_tab2
 
             % Model results of participants
             if length(latdivision) == 3
-              qe_part(ll,C,2*do+ff) = (qe_t(1)*length(s(ll).target{1}) + ...
+              qe_part(ll,C,2*ii+ff) = (qe_t(1)*length(s(ll).target{1}) + ...
                   qe_t(2)*length(s(ll).target{2}) + ...
                   qe_t(3)*length(s(ll).target{3}))/...
                   (length(s(ll).target{1})+length(s(ll).target{2})+length(s(ll).target{3}));
-              pe_part(ll,C,2*do+ff) = (pe_t(1)*length(s(ll).target{1}) + ...
+              pe_part(ll,C,2*ii+ff) = (pe_t(1)*length(s(ll).target{1}) + ...
                   pe_t(2)*length(s(ll).target{2}) + ...
                   pe_t(3)*length(s(ll).target{3}))/...
                   (length(s(ll).target{1})+length(s(ll).target{2})+length(s(ll).target{3}));
             else 
-              s(ll).qe_part(C,2*do+ff) = mean(qe_t);
-              s(ll).pe_part(C,2*do+ff) = mean(pe_t);
+              s(ll).qe_part(C,2*ii+ff) = mean(qe_t);
+              s(ll).pe_part(C,2*ii+ff) = mean(pe_t);
             end
           end
 
