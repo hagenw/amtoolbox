@@ -104,12 +104,12 @@ if flags.do_pool || flags.do_baseline
       
       data(ii).S = 0.5; % default sensitivity
       
-      filename = fullfile(SOFAdbPath,'baumgartner2013',...
+      filename = fullfile(SOFAdbPath,'baumgartner2014',...
         ['ARI_' data(ii).id '_hrtf_M_dtf 256.sofa']);
       
       if exist(filename,'file') ~= 2
         disp('Sorry! Before you can run this script, you have to download the HRTF Database from')
-        disp('http://www.kfs.oeaw.ac.at/hrtf/database/amt/baumgartner2013.zip')
+        disp('http://www.kfs.oeaw.ac.at/hrtf/database/amt/baumgartner2014.zip')
         disp('unzip it, and move the folder into your HRTF repository')
         disp(SOFAdbPath)
         disp('Then, press any key to quit pausing.')
