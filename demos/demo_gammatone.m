@@ -48,12 +48,7 @@
 %
 %   .. figure::
 %
-<<<<<<< HEAD
 %      Classic gammatone implementation with real-valued filter coefficients derived from gammatone.m with otpion '6dBperoctave'.
-=======
-%      Classic gammatone implementation with real-valued filter coefficients
-%      derived from gammatone.m with otpion '6dBperoctave'.
->>>>>>> affe3613355ea81f48e6e373b6339197f89b3a80
 %
 %   Figure 5 shows in the first plot an array of 24 erb-spaced channels of
 %   classic gammatone implementation (Patterson et al., 1987) with real-valued
@@ -64,12 +59,7 @@
 %
 %   .. figure::
 %
-<<<<<<< HEAD
 %      Allpole gammatone implementation with real-valued filter coefficients derived from gammatone.m with otpion '6dBperoctave'.
-=======
-%      Allpole gammatone implementation with real-valued filter coefficients
-%      derived from gammatone.m with otpion '6dBperoctave'.
->>>>>>> affe3613355ea81f48e6e373b6339197f89b3a80
 %
 %   Figure 6 shows in the first plot an array of 24 erb-spaced channels of
 %   allpole gammatone implementation (Hohmann, 2002) with complex-valued
@@ -80,13 +70,7 @@
 %
 %   .. figure::
 %
-<<<<<<< HEAD
 %      Classic with real-valued and allpole with complex-valued filter coefficients of gammatone implementation with otpion '6dBperoctave', peakphased and delayed.
-=======
-%      Classic with real-valued and allpole with complex-valued filter
-%      coefficients of gammatone implementation with otpion '6dBperoctave',
-%      peakphased and delayed.
->>>>>>> affe3613355ea81f48e6e373b6339197f89b3a80
 %
 %   Figure 7 shows in the first plot an array of 24 erb-spaced channels of
 %   classic gammatone implementation (Patterson et al., 1987) with real-valued
