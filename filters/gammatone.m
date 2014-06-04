@@ -86,7 +86,7 @@ function [b,a,delay,z,p,k]=gammatone(fc,fs,varargin)
 %  
 %   References: aertsen1980strI patterson1987efficient lyon1997
   
-%   AUTHOR : Stephan Ewert, Peter L. SÃ¸ndergaard, modified by Christian
+%   AUTHOR : Stephan Ewert, Peter L. Soendergaard, modified by Christian
 %   Klemenschitz
 
 % ------ Checking of input parameters ---------
@@ -189,7 +189,7 @@ if flags.do_allpole
         outsig = 2*real(ufilterbankz(b2,a2,insig));  
         envmax = find( abs(outsig) == max(abs(outsig)) );
         sigmax = find( outsig == max(outsig) );
-        % Equation 18 from Hohmanns paper, but 45° phasedelayed.
+        % Equation 18 from Hohmanns paper, but 45 deg phasedelayed.
         phi_delay = fc(ii)*(-2*pi-pi/4)*(envmax - sigmax)/fs;
         % Equation 19 from Hohmanns paper
         b2 = b2 * exp(1i *phi_delay);
@@ -244,7 +244,7 @@ if flags.do_allpole
         outsig = 2*real(ufilterbankz(b2,a2,insig));  
         envmax = find( abs(outsig) == max(abs(outsig)) );
         sigmax = find( outsig == max(outsig) );
-        % Equation 18 from Hohmanns paper, but 45° phasedelayed.
+        % Equation 18 from Hohmanns paper, but 45 deg phasedelayed.
         phi_delay = fc(ii)*(-2*pi-pi/4)*(envmax - sigmax)/fs;
         % Equation 19 from Hohmanns paper
         b2 = b2 * exp(1i *phi_delay);
