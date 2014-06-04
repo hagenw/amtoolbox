@@ -94,7 +94,7 @@ function exp_hohmann2002(varargin)
 %
 %   References: hohmann2002
 %
-%   See also: demo_hohmann2002 gfb_analyzer gfb_analyzer_process
+%   See also: demo_hohmann2002 gfb_analyzer_new gfb_analyzer_process
 %   demo_gammatone exp_gammatone gammatone 
 
 % AUTHOR: CK, 2014
