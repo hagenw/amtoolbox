@@ -2,7 +2,7 @@
 %
 %   `demo_gammatone(flag)` demonstrates arrays of impulse responses for the
 %   gammatone filterbank implementations of gammatone.m (classic and allpass
-%   implementations) and Hohmanns allpass implementation marked by gfb_.
+%   implementations) and Hohmanns allpass implementation marked by gfb.
 %   
 %   .. figure::
 %
@@ -37,11 +37,11 @@
 %
 %   .. figure::
 %
-%      Allpole gammatone implementation with complex-valued filter coefficients derived from gfb_.
+%      Allpole gammatone implementation with complex-valued filter coefficients derived from gfb.
 %
 %   Figure 4 shows an array of 24 erb-spaced channels of allpass gammatone
 %   implementation (Hohmann, 2002) with complex-valued filter coefficients
-%   derived from gfb_ and in the second plot this implementation peakphased,
+%   derived from gfb and in the second plot this implementation peakphased,
 %   which makes the phase of each filter be zero when the envelope of the
 %   impulse response of the filter peaks and delayed so the peaks of each
 %   filter are arranged above each other.
