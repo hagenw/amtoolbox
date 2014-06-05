@@ -76,6 +76,7 @@ if exist('SOFAstart','file')
   SOFAdbPath(fullfile(basepath,'hrtf'));
   SOFAdbURL('http://www.sofacoustics.org/data/amt');
   SOFAstart;
+	warning('off','SOFA:upgrade');	% disable warning when loading older SOFA files
 else
   disp(['SOFA package could not be found. Continue without SOFA support.']);
   disp(['For SOFA support please download the package ' ...
