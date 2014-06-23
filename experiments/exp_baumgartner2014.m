@@ -221,6 +221,10 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %     exp_baumgartner2014('fig13');
 %
+%   To display Fig.14 use :::
+%
+%     exp_baumgartner2014('fig14');
+%
 %   See also: baumgartner2014, data_baumgartner2014
 %
 %   References: baumgartner2014 majdak2013spatstrat morimoto2001
@@ -348,7 +352,7 @@ if flags.do_fig3 || flags.do_fig13
         subplot(1,3,ll)
         Nmax = min(150,s(ll).Ntargets{ii});
         idplot = round(1:s(ll).Ntargets{ii}/Nmax:s(ll).Ntargets{ii});
-        plotbaumgartner2013(s(ll).p{ii},polang,respangs,...
+        plotbaumgartner2014(s(ll).p{ii},polang,respangs,...
                   s(ll).target{ii}(idplot),s(ll).response{ii}(idplot),...
                   'MarkerSize',kv.MarkerSize,'cmax',0.05,'nocolorbar');
         title({['A: PE = ' num2str(s(ll).pe_exp_lat(ii),2) '\circ, QE = ' num2str(s(ll).qe_exp_lat(ii),2) '%'];['P: PE = ' num2str(pe(ll,ii),2) '\circ, QE = ' num2str(qe(ll,ii),2) '%']},...
@@ -1056,7 +1060,7 @@ if flags.do_fig5
             responses = [responses;s(ll).response{jj}];
             targets = [targets;s(ll).target{jj}];
           end
-          plotbaumgartner2013(s(ll).p{ii},s(ll).polang{ii},rang,...
+          plotbaumgartner2014(s(ll).p{ii},s(ll).polang{ii},rang,...
                 targets,responses,'MarkerSize',kv.MarkerSize,'cmax',0.05,'nocolorbar')
           text(90,240,Cond,...
             'FontSize',kv.FontSize,'Color','w','HorizontalAlignment','center')
@@ -1475,7 +1479,7 @@ if flags.do_fig7
 
           if C==1; fp = figure; end
           subplot(1,3,C)
-          plotbaumgartner2013(p,s(ll).polang{ii},rang,...
+          plotbaumgartner2014(p,s(ll).polang{ii},rang,...
                 s(ll).target{ii},s(ll).response{ii},...
                     'MarkerSize',kv.MarkerSize,'cmax',0.05,'nocolorbar');
           title({['A: PE = ' num2str(s(ll).pe_exp(C,1),2) '\circ, QE = ' num2str(s(ll).qe_exp(C,1),2) '%'];...
@@ -2011,7 +2015,7 @@ if flags.do_fig10
         [f,r] = localizationerror(mflat,'sirpMacpherson2000');
         pe_flat(ll,ss) = localizationerror(mflat,f,r,'perMacpherson2003');
 
-        if plotpmv; figure; plotbaumgartner2013(pflat,tang,rang,mflat(:,6),mflat(:,8));title(num2str(pe_flat(ll,ss),2));pause(0.5); end 
+        if plotpmv; figure; plotbaumgartner2014(pflat,tang,rang,mflat(:,6),mflat(:,8));title(num2str(pe_flat(ll,ss),2));pause(0.5); end 
 
         if do_exp1  % Exp. I
         for ii = 1:2*length(density)
@@ -2022,7 +2026,7 @@ if flags.do_fig10
           m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
           pe_exp1(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
-          if plotpmv; figure; plotbaumgartner2013(p,tang,rang,m(:,6),m(:,8));title([num2str(density(mod(ii-1,10)+1)) 'ripples/oct; PE:' num2str(pe_exp1(ll,ss,ii),2) '%']);pause(0.5); end
+          if plotpmv; figure; plotbaumgartner2014(p,tang,rang,m(:,6),m(:,8));title([num2str(density(mod(ii-1,10)+1)) 'ripples/oct; PE:' num2str(pe_exp1(ll,ss,ii),2) '%']);pause(0.5); end
 
         end
         end
@@ -2036,7 +2040,7 @@ if flags.do_fig10
           m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
           pe_exp2(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
-          if plotpmv; plotbaumgartner2013(p,tang,rang,m(:,6),m(:,8));title([num2str(depth(mod(ii-1,4)+1)) 'dB; PE:' num2str(pe_exp2(ll,ss,ii),2) '%']);pause(0.5); end
+          if plotpmv; plotbaumgartner2014(p,tang,rang,m(:,6),m(:,8));title([num2str(depth(mod(ii-1,4)+1)) 'dB; PE:' num2str(pe_exp2(ll,ss,ii),2) '%']);pause(0.5); end
 
         end
         end
@@ -2335,7 +2339,7 @@ if flags.do_fig11
         ape_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
         qe_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang);
 
-        if plotpmv; figure; plotbaumgartner2013(p,polang,rang); title(num2str(ape_BBnoise(1,ss,ll),2)); end
+        if plotpmv; figure; plotbaumgartner2014(p,polang,rang); title(num2str(ape_BBnoise(1,ss,ll),2)); end
 
       end
     end
@@ -2359,7 +2363,7 @@ if flags.do_fig11
             ape_all(ii,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
             qe_all(ii,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang);
 
-            if plotpmv; figure; plotbaumgartner2013(p,polang,rang); title(num2str(ape_all(ii,ss,ll),2)); end
+            if plotpmv; figure; plotbaumgartner2014(p,polang,rang); title(num2str(ape_all(ii,ss,ll),2)); end
 
           end
         end
