@@ -73,7 +73,7 @@ function [varargout] = localizationerror(m,varargin)
 %                        regression procedure (SIRP) in order to exclude outliers and 
 %                        reversals and isolate the main concentration of responses
 %                        in the computation of the linear fits. Outlier distance
-%                        criterion: 40deg. Output parameters: [f,r] corresponding to regression
+%                        criterion: 40deg. Parameters [f,r] correspond to regression
 %                        results for frontal and rear hemisphere, respectively - see
 %                        help of `regress` for a detailed description of the
 %                        structure fields.
@@ -84,7 +84,7 @@ function [varargout] = localizationerror(m,varargin)
 %                        are defined by showing a deviation of >45deg with respect  
 %                        to the linear flat stimulus prediction. Note that for this
 %                        analysis the results from `sirpMacpherson2000` are
-%                        required and handled as localizationerror(m,f,r,"perMacpherson2003")
+%                        required and handled as localizationerror(m,f,r,'perMacpherson2003')
 %
 %   If no errorflag is provided, the function returns: accL, precL, precP, and querr
  
