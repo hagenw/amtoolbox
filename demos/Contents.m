@@ -12,7 +12,8 @@
 %
 %   Demonstration of full models
 %     DEMO_LINDEMANN1986     - Lindemann binaural model.
-%     DEMO_BAUMGARTNER2013   - Sagittal-plane sound localization (Baumgartner et al., 2013)
+%     DEMO_BAUMGARTNER2013   - Simple version of a sagittal-plane sound localization (Baumgartner et al., 2013)
+%     DEMO_BAUMGARTNER2014   - Comprehensive version of the sagittal-plane sound localization (Baumgartner et al., 2014)
 %     DEMO_HOHMANN2002       - Gammatone filterbank, (Hohmann, 2002)
 %     DEMO_HERZKE2007        - Herzke and Hohmann (2007) filterbank (currently a draft only)
 %     DEMO_TAKANEN2013       - Binaural activity map (Takanen et al., 2013)

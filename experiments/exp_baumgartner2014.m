@@ -225,13 +225,13 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %     exp_baumgartner2014('fig14');
 %
-%   See also: baumgartner2014, data_baumgartner2014
+%   See also: baumgartner2014 data_baumgartner2014
 %
 %   References: baumgartner2014 majdak2013spatstrat morimoto2001
 %   macpherson2007 goupell2010numchan middlebrooks1999nonindividualized 
 %   macpherson2003ripples
 
-  
+
 % AUTHOR: Robert Baumgartner
 
 
