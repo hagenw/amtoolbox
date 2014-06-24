@@ -62,10 +62,12 @@ function [b,a,delay,z,p,k]=gammatone(fc,fs,varargin)
 %     'peakphase'    This makes the phase of each filter be zero when the
 %                    envelope of the impulse response of the filter peaks.
 %
-%     'peakphase_new'   This makes the phase of each filter be zero when the
-%                    envelope of the impulse response of the filter peaks.
-%                    (Delay output signals so the envelopes of the impulse
-%                    responses peak above each other to see its effectiveness.)
+%     'exppeakphase' Experimental version of peakphase. In addition to
+%                    peakphase, the output signal is delayed such that the
+%                    maxima of the corresponding Gammatone impulse
+%                    responses are aligned. This option has been created to
+%                    produce some of the figures from Patterson et al.
+%                    (1987).
 %
 %     '0dBforall'    This scales the amplitude of each filter to have an
 %                    impulse response of 0dB. This is default. 
@@ -113,7 +115,7 @@ end;
 definput.keyvals.n=4;
 definput.keyvals.betamul=[];
 definput.flags.real={'real','complex'};
-definput.flags.phase={'causalphase','peakphase','peakphase_new'};
+definput.flags.phase={'causalphase','peakphase','exppeakphase'};
 definput.flags.scale={'0dBforall','6dBperoctave'};
 definput.flags.filtertype={'allpole','classic'};
 
@@ -184,7 +186,7 @@ if flags.do_allpole
       
       
       % Signal peaks at envelope maximum
-      if flags.do_peakphase_new
+      if flags.do_exppeakphase
         insig = [1 , zeros(1,8191)];  
         outsig = 2*real(ufilterbankz(b2,a2,insig));  
         envmax = find( abs(outsig) == max(abs(outsig)) );
@@ -239,7 +241,7 @@ if flags.do_allpole
         
       
       % Signal peaks at envelope maximum
-      if flags.do_peakphase_new
+      if flags.do_exppeakphase
         insig = [1 , zeros(1,8191)];  
         outsig = 2*real(ufilterbankz(b2,a2,insig));  
         envmax = find( abs(outsig) == max(abs(outsig)) );
@@ -309,7 +311,7 @@ else
       end
       
       % Signal peaks at envelope maximum
-      if flags.do_peakphase_new
+      if flags.do_exppeakphase
         insig = [1 , zeros(1,8191)];  
         outsig = 2*real(ufilterbankz(b2,a2,insig));  
         envmax = find( abs(outsig) == max(abs(outsig)) );
@@ -384,7 +386,7 @@ else
       
 
       % Signal peaks at envelope maximum
-      if flags.do_peakphase_new
+      if flags.do_exppeakphase
         insig = [1 , zeros(1,8191)];  
         outsig = 2*real(ufilterbankz(b2,a2,insig));  
         envmax = find( abs(outsig) == max(abs(outsig)) );

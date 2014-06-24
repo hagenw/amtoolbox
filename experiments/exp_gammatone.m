@@ -547,7 +547,7 @@ function exp_gammatone(varargin)
         fc = erbspace(flow,fhigh,nchannels);   % 189 erb-spaced channels; 
         
         % Derives filter coefficients for erb spaced channels.
-        [b,a] = gammatone(fc,fs,'classic','peakphase_new');
+        [b,a] = gammatone(fc,fs,'classic','exppeakphase');
         % Filters impulse signal with filter coefficients from above.
         outsig = real(ufilterbankz(b,a,insig));
         outsig = permute(outsig,[3 2 1]);
@@ -1463,7 +1463,7 @@ function exp_gammatone(varargin)
         insig(1) = 1;
 
         % Derives filter coefficients for 37 erb-spaced channels
-        [b,a] = gammatone(fc,fs,'classic', 'peakphase_new');
+        [b,a] = gammatone(fc,fs,'classic', 'exppeakphase');
         % Filters impulse signal with filter coefficients from above
         outsig = 2*real(ufilterbankz(b,a,insig));
         outsig = permute(outsig,[3 2 1]);
