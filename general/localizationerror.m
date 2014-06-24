@@ -13,6 +13,79 @@ function [varargout] = localizationerror(m,varargin)
 %
 %   The errorflag may be one of:
 %
+%     accL               accuracy (average) in the lateral dimension
+%
+%     precL              precision (std. dev.) in the lateral dimension
+%
+%     accP               accuracy (average) in the polar dimension
+%
+%     precP              precision (circular std. dev.) in the polar dimension 
+%
+%     querr              percentage of weighted polar errors > 45deg: 
+%                        [querr number_of_corrects total_number] = CalcAccPrec...
+%
+%     accE               accuracy in the elevation
+%
+%     absaccE            absolute accuracy in the elevation
+%
+%     absaccL            absolute lateral accuracy 
+%
+%     accabsL            mean absolute lateral error
+%
+%     accPnoquerr        accP with quadrant errors removed
+%
+%     precE              precision in the elevation
+%
+%     querr90            precentage of weighted polar errors > 90deg
+%
+%     precPmedian        unweighted polar precision error considering targets around
+%                        the median plane only (+/-30deg lateral) 
+%
+%     precPmedianlocal   basing on precPmedian, quadrant errors (polar error >90 deg)
+%                        are excluded. Similar to RMS local polar error (Middlebrooks, 1999)
+%
+%     precPnoquerr       precP with quadrant errors removed
+%
+%     rmsL               lateral RMS error according to Middlebrooks (1999)
+%
+%     rmsPmedianlocal    unweighted polar RMS considering targets around
+%                        the median plane only (+/-30deg lateral) and excluding quadrant
+%                        errors (polar error > 90deg). Identical to RMS local polar
+%                        error in Middlebrooks (1999).
+%
+%     rmsPmedian         unweighted polar RMS considering targets around the median plane 
+%                        only (+/-30deg lateral). Includes quadrant errors.
+%
+%     querrMiddlebrooks  quadrant errors as in Middlebrooks (1999). Use
+%                        central positions within +/-30deg, querr is when polar
+%                        error is >90deg
+%                        [querr number_of_corrects total_number] = CalcAccPrec...
+%
+%     corrcoefL          lateral correlation coeffficient. Output parameter: [cc, p]
+%
+%     corrcoefP          polar correlation coeffficient, Only data within lateral
+%                        +/-30deg are considered. Output parameter: [corr_coeff, p_of_significant_corr]
+%
+%     SCC                spherical/spatial correlation coefficient 
+%                        (Carlile et al., 1997; Fisher et al., 1987)
+%
+%     sirpMacpherson2000 performs an ad-hoc selective, iterative
+%                        regression procedure (SIRP) in order to exclude outliers and 
+%                        reversals and isolate the main concentration of responses
+%                        in the computation of the linear fits. Outlier distance
+%                        criterion: 40deg. Output parameters: [f,r] corresponding to regression
+%                        results for frontal and rear hemisphere, respectively - see
+%                        help of `regress` for a detailed description of the
+%                        structure fields.
+%
+%     perMacpherson2003  polar error rate used in Macpherson & Middlebrooks
+%                        (2003). They measured the deviation of responses from the
+%                        linear predictors obtained by an ad-hoc SIRP. Polar errors  
+%                        are defined by showing a deviation of >45deg with respect  
+%                        to the linear flat stimulus prediction. Note that for this
+%                        analysis the results from `sirpMacpherson2000` are
+%                        required and handled as localizationerror(m,f,r,'perMacpherson2003')
+%
 %   If no errorflag is provided, the function returns: accL, precL, precP, and querr
  
 %   References: FIXME
