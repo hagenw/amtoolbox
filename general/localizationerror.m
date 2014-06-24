@@ -1,13 +1,11 @@
 function [varargout] = localizationerror(m,varargin)
 %LOCALIZATIONERROR Compute psychoacoustic performance parameters for sound localization experiments
-%
 %   Usage: [accL, precL, accP, precP, querr] = localizationerror(m)
 %          [res, meta, par] = localizationerror(m,errorflag)
 %
 %   `localizationerror(m,errorflag)` returns psychoacoustic performance 
-%   parameters for experimental response patterns.
-%
-%   FIXME: provide the format of m
+%   parameters for experimental response patterns. 
+%   *m* is a matrix. In each row of *m*, the information about the target and response in the columns must be provided. FIXME: provide the format of m
 %
 %   `[res, meta, par] = localizationerror(m,errorflag)` calculates error 
 %   metric *res* given by the string *errorflag*. *meta* contains additional 
@@ -87,8 +85,7 @@ function [varargout] = localizationerror(m,varargin)
 %                      are defined by showing a deviation of >45deg with respect  
 %                      to the linear flat stimulus prediction. Note that for this
 %                      analysis the results from `sirpMacpherson2000()` are
-%                      required and handled as follows: 
-%                      `res = localizationerror(m,f,r,'perMacpherson2003')`
+%                      required and handled as follows: `res = localizationerror(m,f,r,'perMacpherson2003')`
 %
 
 %   References: FIXME
