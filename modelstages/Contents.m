@@ -22,7 +22,6 @@
 %     DIETZ2011FILTERBANK - filterbank of Dietz 2011 binaural model
 %     DIETZ2011INTERAURALFUNCTIONS - Calculate interaural parameters for Dietz 2011 model
 %     WIERSTORF2013ESTIMATEAZIMUTH - Azimuth position estimation based on dietz2011 or lindemann1986
-
 %
 %  The Takanen 2013 model   - Takanen 2013 binaural auditory model
 %     TAKANEN2013CONTRACOMPARISON - Enhance contrast between hemispheres
