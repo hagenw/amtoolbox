@@ -84,8 +84,8 @@ function [varargout] = localizationerror(m,varargin)
 %                        linear predictors obtained by an ad-hoc SIRP. Polar errors  
 %                        are defined by showing a deviation of >45deg with respect  
 %                        to the linear flat stimulus prediction. Note that for this
-%                        analysis the results from `sirpMacpherson2000()` are
-%                        required and handled as `res = localizationerror(m,f,r,'perMacpherson2003')`
+%                        analysis the results from `sirpMacpherson2000` are
+%                        required and handled as localizationerror(m,f,r,'perMacpherson2003')
 % 
 %   If no errorflag is provided, the function returns: accL, precL, precP, and querr
  
