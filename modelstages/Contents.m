@@ -39,6 +39,7 @@
 %     PMV2PPP             - PMV to PPP conversion
 %     PLOTBAUMGARTNER2013 - plot probabilistic prediction matrixes
 %     PLOTBAUMGARTNER2014 - plot probabilistic prediction matrixes
+%     BAUMGARTNER2014VIRTUALEXP - Performs a virtual sound-localization experiment
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
