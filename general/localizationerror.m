@@ -86,7 +86,7 @@ function [varargout] = localizationerror(m,varargin)
 %                        to the linear flat stimulus prediction. Note that for this
 %                        analysis the results from `sirpMacpherson2000` are
 %                        required and handled as localizationerror(m,f,r,'perMacpherson2003')
-% 
+%
 %   If no errorflag is provided, the function returns: accL, precL, precP, and querr
  
 %   References: FIXME
