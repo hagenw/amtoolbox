@@ -76,7 +76,9 @@ colormap bone
 shading flat
 caxis([0 kv.cmax])
 if flags.do_colorbar
-    colorbar('southoutside')
+    cbar = colorbar('eastoutside');
+    set(get(cbar,'YLabel'),'String','Probability')
+    set(cbar,'YAxisLocation','right')
 end
 xlabel('Target Angle (deg)')
 ylabel('Response Angle (deg)')

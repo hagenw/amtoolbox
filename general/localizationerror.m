@@ -295,7 +295,8 @@ else
           [f.b,f.bint,f.r,f.rint,f.stats]=regress(mf(idf,8),[ones(length(idf),1) mf(idf,6)]);
           y=f.b(2)*mf(:,6)+f.b(1);
           old = idf;
-          idf=find( abs(wrapTo180(mf(:,8)-y)) < delta); 
+          dev = mod( (mf(:,8)-y) +180,360) -180; % deviation wrapped to +-180 deg
+          idf=find( abs(dev) < delta); 
         end	
       end
 
@@ -312,7 +313,8 @@ else
           [r.b,r.bint,r.r,r.rint,r.stats]=regress(mr(idr,8),[ones(length(idr),1) mr(idr,6)]);
           y=r.b(2)*mr(:,6)+r.b(1);
           old = idr;
-          idr=find( abs(wrapTo180(mr(:,8)-y)) < delta);
+          dev = mod( (mr(:,8)-y) +180,360) -180; % deviation wrapped to +-180 deg
+          idr=find( abs(dev) < delta);
         end	
       end
       varargout{1}=f;
@@ -336,9 +338,12 @@ else
       x = -90:270;
       yf=kv.f.b(2)*mf(:,6)+kv.f.b(1); % linear prediction for flat, frontal targets
       yr=kv.r.b(2)*mr(:,6)+kv.r.b(1); % linear prediction for flat, rear targets
-
-      f.pe = sum(abs(wrapTo180(mf(:,8)-yf)) > tol);
-      r.pe = sum(abs(wrapTo180(mr(:,8)-yr)) > tol);
+      
+      devf = mod( (mf(:,8)-yf) +180,360) -180; % deviation wrapped to +-180 deg
+      devr = mod( (mr(:,8)-yr) +180,360) -180;
+      
+      f.pe = sum(abs(devf) > tol);
+      r.pe = sum(abs(devr) > tol);
 
       per = (f.pe + r.pe) / size(m,1) * 100; % polar error rate
       varargout{1} = per;
