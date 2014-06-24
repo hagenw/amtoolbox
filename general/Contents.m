@@ -15,6 +15,9 @@
 %     DBSPL            - SPL of signal measured in dB.
 %     SETDBSPL         - Specify SPL of signal.
 %
+%  Tools
+%     LOCALIZATIONERROR - Calculates various localization errors from localization responses
+%
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
 
