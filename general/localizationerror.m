@@ -1,6 +1,5 @@
 function [varargout] = localizationerror(m,varargin)
-%LOCALIZATIONERROR Compute psychoacoustic performance parameters for sound
-%localization experiments
+%LOCALIZATIONERROR Compute psychoacoustic performance parameters for sound localization experiments
 %
 %   Usage: [accL, precL, accP, precP, querr] = localizationerror(m)
 %          [res, meta, par] = localizationerror(m,errorflag)
