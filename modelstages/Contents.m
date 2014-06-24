@@ -35,8 +35,10 @@
 %     TAKANEN2013PERIPHERY  - Process input through the model of periphery
 %     TAKANEN2013WBMSO      - Wideband medial superior olive model
 %
-%  Utility
-%     PMV2PPP            - PMV to PPP conversion
+%  Utilities
+%     PMV2PPP             - PMV to PPP conversion
+%     PLOTBAUMGARTNER2013 - plot probabilistic prediction matrixes
+%     PLOTBAUMGARTNER2014 - plot probabilistic prediction matrixes
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
