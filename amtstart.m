@@ -8,18 +8,21 @@ function amtstart()
 %   The AMT depends on the Linear Time Frequency Analysis Toolbox (LTFAT). 
 %   You must first download LTFAT from
 %   http://ltfat.sourceforge.net/ and unpack the downloaded file. 
-%   In the AMT, there is a pre-prepared directory /thirdparty/ltfat
+%   In the AMT, there is a pre-prepared directory `thirdparty/ltfat`
 %   where the LTFAT can be stored. Alternatively, set the path to your
 %   LTFAT installation to the search path of Matlab/Octave.
 %
-%   In order to run all the models from AMT, you will need:
+%   In order to run all the AMT functionality, you will need to:
 %   
-%   1) run `amtmex` and compile successfully
-%   2) SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. `amtbase/thirdparty/SOFA`)
-%   3) Python >2.6 is required with numpy and scipi packages. On Linux, use `sudo apt-get install python-scipy python-numpy`
-%   4) run `make` (Linux) or `make.bat` (Windows) in `amtbase/src/verhulst`
-%   5) Optimization Toolbox for Matlab
-%   6) Data in `amtbase/signals/` and `amtbase/hrtf/` depending on the model
+%   1) install SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. `thirdparty/SOFA`)
+%   2) install SFS Toolbox from https://github.com/sfstoolbox/sfs
+%   3) run `amtmex` and compile successfully
+%   4) install Python >2.6 with `numpy` and `scipi` packages. On Linux, use `sudo apt-get install python-scipy python-numpy`
+%   5) run `make` (Linux) or `make.bat` (Windows) in `src/verhulst`
+%   6) have the Optimization Toolbox for Matlab installed
+%   7) have the required data in `signals/`, `humandata`, and `hrtf/`. The required data provided as ZIP files can be downloaded from https://sourceforge.net/projects/amtoolbox/files/
+% 
+%   Some of the AMT functions require a large processing time. Depending on the machine and the model, it might take even days. Thus, some AMT functions provide caching of calculated results. If you don't want to wait and just take a look at the results: download the cached data from https://sourceforge.net/projects/amtoolbox/files/, unzip in the root AMT directory, and run the particular AMT function.
 %
 %   See also:  amthelp
 %
