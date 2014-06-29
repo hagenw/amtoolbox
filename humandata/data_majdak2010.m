@@ -55,7 +55,7 @@ C = find(ismember(condition,flags.condition));
 for ll = 1:length(subject)
   
   if not(isempty(subject(ll).expData{C}))
-    data(ll).mtx = subject(ll).expData{C}(:,1:8);
+    data(ll).mtx = real(subject(ll).expData{C}(:,1:8));
   end
   data(ll).id = subject(ll).id;
 

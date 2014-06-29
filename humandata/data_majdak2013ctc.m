@@ -53,7 +53,7 @@ C = find(ismember(condition,flags.condition));
 
 for ll = 1:length(subject)
   
-  data(ll).mtx = subject(ll).expData{C}(:,1:8);
+  data(ll).mtx = real(subject(ll).expData{C}(:,1:8));
   data(ll).id = subject(ll).id;
 
 end
