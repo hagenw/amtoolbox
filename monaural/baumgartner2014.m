@@ -38,7 +38,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %                    Default value is 1.
 %
 %     'lat',lat      Set the apparent lateral angle of the target sound to
-%                    *lat*. Default value is 0° (median SP).
+%                    *lat*. Default value is 0 degree (median SP).
 %
 %     'stim',stim    Define the stimulus (source signal without directional
 %                    features). As default an impulse is used.
@@ -57,18 +57,21 @@ function varargout = baumgartner2014( target,template,varargin )
 %                    equivalent rectangular bandwidths (ERBs). 
 %                    Default value is 1 ERB.
 %
+%     'do',do        Set the differential order of the spectral gradient 
+%                    extraction to *do*. Default value is 1 and includes  
+%                    restriction to positive gradients inspired by cat DCN
+%                    functionality.
+%
 %     'bwcoef',bwc   Set the binaural weighting coefficient *bwc*.
 %                    Default value is 13 degrees.
 %
 %     'polsamp',ps   Define the the polar angular sampling of the current
-%                    SP. As default the sampling of ARI's HRTF format at
-%                    the median SP is used, i.e.,
+%                    sagittal plane. As default the sampling of ARI's HRTF 
+%                    format at the median SP is used, i.e.,
 %                    ps = [-30:5:70,80,100,110:5:210] degrees.
 %
 %     'mrsmsp',mrs   Set the motoric response scatter mrs within the median 
-%                    sagittal plane. Default value is 17 degrees in accordance
-%                    with scatter of unimodal response distribution
-%                    proposed in Langendijk and Bronkhorst (2002).
+%                    sagittal plane. Default value is 17 degrees.
 %
 %   `baumgartner2014` accepts the following flags:
 %
@@ -80,9 +83,9 @@ function varargout = baumgartner2014( target,template,varargin )
 %                    This was used by Langendijk and Bronkhorst (2002).
 %
 %     'ihc'          Incorporate the transduction model of inner hair 
-%                    cells used by Dau et al. (1996). This is the default.
+%                    cells used by Dau et al. (1996).
 %
-%     'noihc'        Do not incorporate the IHC stage.
+%     'noihc'        Do not incorporate the IHC stage. This is the default.
 %
 %     'regular'      Apply spline interpolation in order to regularize the 
 %                    angular sampling of the polar response angle. 
@@ -98,9 +101,12 @@ function varargout = baumgartner2014( target,template,varargin )
 %   2) Data in hrtf/baumgartner2014
 %
 %
-%   See also: plotbaumgartner2013, data_baumgartner2014
+%   See also: plotbaumgartner2014, data_baumgartner2014,
+%   exp_baumgartner2014, demo_baumgartner2014, baumgartner2014calibration,
+%   baumgartner2014likelistat, baumgartner2014pmv2ppp,
+%   baumgartner2014virtualexp
 %
-%   References: baumgartner2014 langendijk2002contribution patterson1987efficient
+%   References: baumgartner2014 lyon1997
 
     
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria

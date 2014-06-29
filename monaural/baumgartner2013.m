@@ -99,7 +99,7 @@ function varargout = baumgartner2013( target,template,varargin )
 %
 %   Demos: demo_baumgartner2013
 %
-%   References: baumgartner2013assessment baumgartner2012modelling langendijk2002contribution patterson1987efficient dau1996qmeI
+%   References: baumgartner2013assessment majdak2014factors baumgartner2012modelling langendijk2002contribution patterson1987efficient dau1996qmeI
 
     
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria

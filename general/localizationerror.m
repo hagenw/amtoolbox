@@ -67,7 +67,7 @@ function [varargout] = localizationerror(m,varargin)
 %                        +/-30deg are considered. Output parameter: [corr_coeff, p_of_significant_corr]
 %
 %     SCC                spherical/spatial correlation coefficient 
-%                        (Carlile et al., 1997; Fisher et al., 1987)
+%                        (Carlile et al., 1997)
 %
 %     sirpMacpherson2000 performs an ad-hoc selective, iterative
 %                        regression procedure (SIRP) in order to exclude outliers and 
@@ -88,7 +88,7 @@ function [varargout] = localizationerror(m,varargin)
 %
 %   If no errorflag is provided, the function returns: accL, precL, precP, and querr
  
-%   References: FIXME
+%   References: middlebrooks1999nonindividualized macpherson2003ripples carlile1997errors
 
 % AUTHOR : Piotr Majdak, Robert Baumgartner
 
