@@ -173,7 +173,9 @@ if flags.do_print
   if flags.do_QE_PE_EB
     fprintf('Quadrant errors (%%) \t\t %4.1f \n',qe)
     fprintf('Local polar RMS error (deg) \t %4.1f \n',pe)
-    fprintf('Local polar bias (deg) \t\t %4.1f \n',eb)
+    if nargout==3
+      fprintf('Local polar bias (deg) \t\t %4.1f \n',eb)
+    end
   elseif flags.do_PE 
     fprintf('Quadrant errors (%%) \t\t %4.1f \n',qe)
   elseif flags.do_QE 

@@ -1,8 +1,8 @@
 function varargout = baumgartner2014( target,template,varargin )
 %BAUMGARTNER2014 Model for localization in saggital planes
-%   Usage:    [p,respang] = baumgartner2014( target,template )
-%             [p,respang,tang] = baumgartner2014( target,template )
-%             [p,respang,tang] = baumgartner2014( target,template,fs,S,lat,stim,fsstim )
+%   Usage:    [p,rang] = baumgartner2014( target,template )
+%             [p,rang,tang] = baumgartner2014( target,template )
+%             [p,rang,tang] = baumgartner2014( target,template,fs,S,lat,stim,fsstim )
 %
 %   Input parameters:
 %     target  : binaural impulse response(s) referring to the directional 
@@ -16,7 +16,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %               with respect to target positions
 %               1st dim: response angle
 %               2nd dim: target angle
-%     respang : polar response angles (after regularization of angular 
+%     rang    : polar response angles (after regularization of angular 
 %               sampling)
 %     tang    : polar target angles (usefull if sagittal-plane HRTFs are
 %               extracted directly from SOFA object)
@@ -68,24 +68,12 @@ function varargout = baumgartner2014( target,template,varargin )
 %     'polsamp',ps   Define the the polar angular sampling of the current
 %                    sagittal plane. As default the sampling of ARI's HRTF 
 %                    format at the median SP is used, i.e.,
-%                    ps = [-30:5:70,80,100,110:5:210] degrees.
+%                    *ps* = [-30:5:70,80,100,110:5:210] degrees.
 %
-%     'mrsmsp',mrs   Set the motoric response scatter mrs within the median 
+%     'mrsmsp',eps   Set the motoric response scatter *eps* within the median 
 %                    sagittal plane. Default value is 17 degrees.
 %
 %   `baumgartner2014` accepts the following flags:
-%
-%     'gammatone'    Use the Gammatone filterbank for peripheral processing. 
-%                    This is the default.
-%
-%     'cqdft'        Use a filterbank approximation based on DFT with 
-%                    constant relative bandwidth for peripheral processing. 
-%                    This was used by Langendijk and Bronkhorst (2002).
-%
-%     'ihc'          Incorporate the transduction model of inner hair 
-%                    cells used by Dau et al. (1996).
-%
-%     'noihc'        Do not incorporate the IHC stage. This is the default.
 %
 %     'regular'      Apply spline interpolation in order to regularize the 
 %                    angular sampling of the polar response angle. 
@@ -111,24 +99,24 @@ function varargout = baumgartner2014( target,template,varargin )
     
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
-%% Check input options 
+%% Check input
 
 definput.import={'baumgartner2014'};
 
 [flags,kv]=ltfatarghelper(...
   {'fs','S','lat','stim','fsstim','space','do','flow','fhigh',...
-  'lvltar','lvltem','SL','bwcoef','polsamp','mrsmsp','gamma'},definput,varargin);
+  'bwcoef','polsamp','mrsmsp','gamma'},definput,varargin);
 
 % Print Settings
 if flags.do_print 
   if flags.do_mrs
-    fprintf('Settings: DCN = %1.0f; Gamma = %1.0u; Epsilon = %1.0f deg \n',kv.do,kv.gamma,kv.mrsmsp)
+    fprintf('Settings: PSGE = %1.0f; Gamma = %1.0u; Epsilon = %1.0f deg \n',kv.do,kv.gamma,kv.mrsmsp)
   else
-    fprintf('Settings: DCN = %1.0f; Gamma = %1.0u; Epsilon = 0 deg \n',kv.do,kv.gamma)
+    fprintf('Settings: PSGE = %1.0f; Gamma = %1.0u; Epsilon = 0 deg \n',kv.do,kv.gamma)
   end
 end
 
-% HRTF format
+% HRTF format conversion
 if isstruct(target) % Targets given in SOFA format
   kv.fs = target.Data.SamplingRate;
   [target,tang] = extractsp( kv.lat,target );
@@ -139,7 +127,7 @@ if isstruct(template) % Template given in SOFA format
 end
 
 
-%% Error handling
+% Error handling
 if size(template,2) ~= length(kv.polsamp)
   fprintf('\n Error: Second dimension of template and length of polsamp need to be of the same size! \n')
   return
@@ -153,24 +141,14 @@ end
 
 %% Stimulus 
 if isempty(kv.stim) 
-    kv.stim = [1;0];%[1;zeros(size(target,1),1)];    % impulse
+    kv.stim = [1;0];
     kv.fsstim = kv.fs;
 elseif isempty(kv.fsstim) 
     kv.fsstim = kv.fs;
 end
 
-if flags.do_headphone% || flags.do_drnl
-    hpfilt = headphonefilter(kv.fs);
-    kv.stim = convolve(kv.stim,hpfilt(:));
-end
 
-if flags.do_middleear% || flags.do_drnl
-    miearfilt = middleearfilter(kv.fs);
-    kv.stim = convolve(kv.stim,miearfilt(:));
-end
-
-
-%% DTF filtering
+%% DTF filtering, Eq.(1)
 if ~isequal(kv.fs,kv.fsstim)
     disp('Sorry, sampling rate of stimulus and HRIRs must be equal!')
     return
@@ -178,22 +156,11 @@ end
 
 tmp = convolve(target,kv.stim);
 target = reshape(tmp,[size(tmp,1),size(target,2),size(target,3)]);
-
-
-%% Set level
-idnztar = target~=0;    % to ignore pausings
-idnztem = template~=0;  % to ignore pausings
-% aht = setdbspl([1;0],kv.lvltar-kv.SL);  % absolut hearing threshold
-for ch = 1:size(template,3)
-    target(idnztar(:,:,ch)) = setdbspl(target(idnztar(:,:,ch)),kv.lvltar);
-% aht(idnztar(:,:,ch)) = setdbspl(target(idnztar(:,:,ch)),kv.lvltar-kv.SL);
-    template(idnztem(:,:,ch)) = setdbspl(template(idnztem(:,:,ch)),kv.lvltem);
-end
     
-    
-%% Cochlear filter bank -> internal representations
 
-if kv.space == 1
+%% Spectral Analysis, Eq.(2)
+
+if kv.space == 1 % Standard spacing of 1 ERB
   [ireptar,fc] = auditoryfilterbank(target(:,:),kv.fs,...
       'flow',kv.flow,'fhigh',kv.fhigh);
   ireptem = auditoryfilterbank(template(:,:),kv.fs,...
@@ -201,7 +168,7 @@ if kv.space == 1
 else
   fc = audspacebw(kv.flow,kv.fhigh,kv.space,'erb');
   [bgt,agt] = gammatone(fc,kv.fs,'complex');
-  ireptar = 2*real(ufilterbankz(bgt,agt,target(:,:)));  % channel (3rd) dimension resolved!
+  ireptar = 2*real(ufilterbankz(bgt,agt,target(:,:)));  % channel (3rd) dimension resolved
   ireptem = 2*real(ufilterbankz(bgt,agt,template(:,:)));
 end
 Nfc = length(fc);   % # of bands
@@ -211,53 +178,56 @@ ireptar = reshape(ireptar,[size(target,1),Nfc,size(target,2),size(target,3)]);
 ireptem = reshape(ireptem,[size(template,1),Nfc,size(template,2),size(template,3)]);
 
 % Averaging over time (RMS)
-ireptar = 20*log10(squeeze(rms(ireptar)));      % in dB!
+ireptar = 20*log10(squeeze(rms(ireptar)));      % in dB
 ireptem = 20*log10(squeeze(rms(ireptem)));
 
 if size(ireptar,2) ~= size(target,2) % retreive polar dimension if squeezed out
     ireptar = reshape(ireptar,[size(ireptar,1),size(target,2),size(target,3)]);
 end
 
+%% Positive spectral gradient extraction, Eq.(3)
 
-%% Comparison process -> monaural similarity indices (SIs)
-
-si=zeros(size(ireptem,2),size(ireptar,2),size(ireptem,3)); % initialisation
+nrep.tem = zeros(size(ireptem,1)-kv.do,size(ireptem,2),size(ireptem,3)); %init
+nrep.tar = zeros(size(ireptar,1)-kv.do,size(ireptar,2),size(ireptar,3)); %init
 for ch = 1:size(ireptar,3)
-
-  if kv.do == 1 % DCN model
-      nrep.tem = dcn(ireptem(:,:,ch),kv);
-      nrep.tar = dcn(ireptar(:,:,ch),kv);
-  elseif kv.do == 2 
-      nrep.tem = diff(ireptem(:,:,ch),kv.do);
-      nrep.tar = diff(ireptar(:,:,ch),kv.do);
+  if kv.do == 1 % DCN inspired feature extraction
+      nrep.tem(:,:,ch) = max(diff(ireptem(:,:,ch),kv.do),0);
+      nrep.tar(:,:,ch) = max(diff(ireptar(:,:,ch),kv.do),0);
+  elseif kv.do == 2 % proposed by Zakarauskas & Cynader (1993)
+      nrep.tem(:,:,ch) = diff(ireptem(:,:,ch),kv.do);
+      nrep.tar(:,:,ch) = diff(ireptar(:,:,ch),kv.do);
   else
-      nrep.tem = ireptem(:,:,ch);
-      nrep.tar = ireptar(:,:,ch);
+      nrep.tem(:,:,ch) = ireptem(:,:,ch);
+      nrep.tar(:,:,ch) = ireptar(:,:,ch);
   end
+end
 
+%% Comparison process, Eq.(4)
+
+sigma=zeros(size(ireptem,2),size(ireptar,2),size(ireptem,3)); % init
+for ch = 1:size(ireptar,3)
   for it = 1:size(ireptar,2)
-
-    % Distance Metric
-    isd = repmat(nrep.tar(:,it),[1,size(nrep.tem,2),1]) - nrep.tem; 
+    isd = repmat(nrep.tar(:,it,ch),[1,size(nrep.tem(:,:,ch),2),1]) - nrep.tem(:,:,ch); 
     if kv.do == 0
-      sigma = sqrt(squeeze(var(isd)));
+      sigma(:,it,ch) = sqrt(squeeze(var(isd))); % standard dev. across frequencies
     else
-%         pnorm = 1;
-%         sigma = sum( abs(isd).^pnorm .* repmat(fw,1,length(kv.polsamp)) ).^(1/pnorm);
-      sigma = mean(abs(isd));
-    end
-
-    % Similarity Percept
-    if not(exist('flags','var')) || flags.do_normstdmapping
-      si(:,it,ch) = normpdf(sigma,0,kv.S);
-    else % flags.do_sigmoidmapping
-      si(:,it,ch) = 1+eps - (1+exp(-kv.gamma*(sigma-kv.S))).^-1;
+      sigma(:,it,ch) = mean(abs(isd)); % L1-norm across frequencies
     end
   end
 end
 
+%% Similarity estimation, Eq.(5)
 
-%% Binaural weighting -> binaural SIs
+si=zeros(size(sigma)); % init
+for ch = 1:size(ireptar,3)
+  for it = 1:size(ireptar,2)
+    si(:,it,ch) = 1+eps - (1+exp(-kv.gamma*(sigma(:,it,ch)-kv.S))).^-1;
+  end
+end
+
+
+%% Binaural weighting, Eq.(6)
+
 if size(si,3) == 2
     binw = 1./(1+exp(-kv.lat/kv.bwcoef)); % weight of left ear signal with 0 <= binw <= 1
     si = binw * si(:,:,1) + (1-binw) * si(:,:,2);
@@ -266,25 +236,25 @@ end
 
 %% Interpolation (regularize polar angular sampling)
 if flags.do_regular
-    respang0 = ceil(min(kv.polsamp)*0.2)*5;    % ceil to 5°
-    respangs = respang0:5:max(kv.polsamp);
-    siint = zeros(length(respangs),size(si,2));
+    rang0 = ceil(min(kv.polsamp)*0.2)*5;    % ceil to 5 deg
+    rangs = rang0:5:max(kv.polsamp);
+    siint = zeros(length(rangs),size(si,2));
     for tt = 1:size(si,2)
-        siint(:,tt) = interp1(kv.polsamp,si(:,tt),respangs,'spline');
+        siint(:,tt) = interp1(kv.polsamp,si(:,tt),rangs,'spline');
     end
     si = siint;
     si(si<0) = 0; % SIs must be positive (necessary due to spline interp)
 else
-    respangs = kv.polsamp;
+    rangs = kv.polsamp;
 end
 
 
-%% Motoric response scatter
+%% Sensorimotor mapping, Eq.(7)
 if flags.do_mrs && flags.do_regular && kv.mrsmsp > 0
   
-    angbelow = -90:5:min(respangs)-5;
-    angabove = max(respangs)+5:5:265;
-    respangs = [angbelow,respangs,angabove];
+    angbelow = -90:5:min(rangs)-5;
+    angabove = max(rangs)+5:5:265;
+    rangs = [angbelow,rangs,angabove];
     si = [zeros(length(angbelow),size(si,2)) ; si ; zeros(length(angabove),size(si,2))];
     
     mrs = kv.mrsmsp/cos(deg2rad(kv.lat)); % direction dependent scatter (derivation: const. length rel. to the circumferences of circles considered as cross sections of a unit sphere)
@@ -293,21 +263,20 @@ if flags.do_mrs && flags.do_regular && kv.mrsmsp > 0
     kappa = 1/deg2rad(mrs)^2; % concentration parameter (~1/sigma^2 of normpdf)
     mrspdf = exp(kappa*cos(x)) / (2*pi*besseli(0,kappa)); % von Mises PDF 
     for tt = 1:size(si,2)
-      %si(:,tt) = circonv(si(:,tt),mrspdf,360/5);
       si(:,tt) = pconv(si(:,tt),mrspdf(:));
     end
     
 end
 
 
-%% Normalization to PMV
+%% Normalization to PMV, Eq.(8)
 p = si ./ repmat(sum(si),size(si,1),1);
 
 
 %% Output
 varargout{1} = p;
 if nargout >= 2
-    varargout{2} = respangs;
+    varargout{2} = rangs;
     if nargout >= 3
       try
         varargout{3} = tang;
@@ -317,30 +286,4 @@ if nargout >= 2
     end
 end
   
-end
-
-function t4 = dcn(an,kv)
-%DCN Phenomenological model of dorsal cochlear nucleus (DCN)
-%   Usage:      out = dcn(in)
-%
-%   Input parameters:
-%     an      : spectral profile in dB
-%
-%   Output parameters:
-%     t4      : activity of type IV unit
-
-%% Parameter Settings
-c2 = 1; % inhibitory coupling between type II and type IV neurons
-c4 = 1; % coupling between an and type IV neuron
-dilatation = 1; % of tonotopical 1-ERB-spacing between type IV and II neurons
-
-%% Calculations
-Nb = size(an,1); % # auditory bands
-dt4t2 = round(dilatation/kv.space); % tonotopical distance between type IV and II neurons
-t4 = zeros(Nb-dt4t2,size(an,2),size(an,3)); % type IV output
-for b = 1:Nb-dt4t2
-  t4(b,:,:) = c4 * an(b+dt4t2,:,:) - c2 * an(b,:,:);
-end
-
-t4 = max(t4,0); %disp('only rising edges')
 end

@@ -8,36 +8,19 @@ function data = data_baumgartner2014(varargin)
 %
 %   The flag may be one of:
 %
-%     'pool'      DTFs and calibration data of the pool. The output contains 
-%                 the following fields: *id*, *u*, *goupell10*, *walder10*,
-%                 *fs* and *Obj*.
+%     'pool'      DTFs and calibration data of the pool. This is the
+%                 default.
 %
 %     'baseline'  Same as 'pool', but also with experimental data for
 %                 baseline condition.
+%
+%     'recalib'   DTFs and recalibrated sensitivity paramters of all listeners.
 %
 %   The fields in the output contains the following information
 %
 %     .id         listener ID
 %
-%     .u          listener-specific uncertainty
-%
-%     .goupell10  boolean flag indicating whether listener
-%                 participated in Goupell et al. (2010)
-%
-%     .walder10   boolean flag indicating whether listener
-%                 participated in Walder (2010)
-%
-%     .dtfs       matrix containing DTFs.
-%                 Dimensions: time, position, channel
-%                 (more details see doc: HRTF format)
-%
-%     .fs         sampling rate of impulse responses
-%
-%     .pos        source-position matrix referring to
-%                 2nd dimension of hM and formated acc.
-%                 to meta.pos (ARI format).
-%                 6th col: lateral angle
-%                 7th col: polar angle
+%     .S          listener-specific sensitivity parameter
 %
 %     .Obj        DTF data in SOFA Format
 %

@@ -927,7 +927,7 @@ if flags.do_fig14
     ylabel('Quadrant Error (%)','FontSize',kv.FontSize)
     xlabel('Magnitude of Lateral Angle (deg)','FontSize',kv.FontSize)
 
-    l = legend('P (with SMM)','P (w/o SMM)','Actual');
+    l = legend('P with SMM','P w/o SMM','Actual');
     set(l,'FontSize',kv.FontSize-1,'Location','northwest')
 
     set(fig,'PaperPosition',[1,1,10,3.5])
@@ -1984,12 +1984,12 @@ if flags.do_fig10
 
 
     %% Modeling
-    for ii = 0:1
+    for psge = 0:1
 
-      if ii == 1
+      if psge == 1
         s = data_baumgartner2014('pool');
       else % recalib
-        s = data_baumgartner2014('pool','recalib','do',0);
+        s = data_baumgartner2014('pool','recalib','do',psge);
       end
 
     latseg = 0;   % centers of lateral segments
@@ -2010,7 +2010,7 @@ if flags.do_fig10
 
         [pflat,rang] = baumgartner2014(targets,spdtfs,...
             'S',s(ss).S,'polsamp',polang,...
-            'lat',latseg(ll),'stim',[1;0],'do',ii); % Impulse
+            'lat',latseg(ll),'stim',[1;0],'do',psge); % Impulse
         mflat = baumgartner2014virtualexp(pflat,tang,rang,'runs',runs);
         [f,r] = localizationerror(mflat,'sirpMacpherson2000');
         pe_flat(ll,ss) = localizationerror(mflat,f,r,'perMacpherson2003');
@@ -2022,7 +2022,7 @@ if flags.do_fig10
 
           [p,rang] = baumgartner2014(targets,spdtfs,...
             'S',s(ss).S,'polsamp',polang,...
-            'lat',latseg(ll),'stim',sexp1(:,ii),'do',ii);
+            'lat',latseg(ll),'stim',sexp1(:,ii),'do',psge);
           m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
           pe_exp1(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
@@ -2036,7 +2036,7 @@ if flags.do_fig10
 
           [p,rang] = baumgartner2014(targets,spdtfs,...
             'S',s(ss).S,'polsamp',polang,...
-            'lat',latseg(ll),'stim',sexp2(:,ii),'do',ii);
+            'lat',latseg(ll),'stim',sexp2(:,ii),'do',psge);
           m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
           pe_exp2(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
@@ -2062,7 +2062,7 @@ if flags.do_fig10
     end
 
     %% Save
-      if ii==0
+      if psge==0
         noDCN.pe_exp1 = pe_exp1;
         noDCN.pe_exp2 = pe_exp2;
         noDCN.pe_flat = pe_flat;
@@ -2154,7 +2154,7 @@ if flags.do_fig10
     ylabel({'Increase in';'Polar Error Rate (%)'},'FontSize',FontSize)
 
     if dcn_flag
-        leg = legend('P (with PSGE)','P (w/o PSGE)','Actual');
+        leg = legend('P with PSGE','P w/o PSGE','Actual');
     else
         leg = legend('Predicted','Actual');
     end
