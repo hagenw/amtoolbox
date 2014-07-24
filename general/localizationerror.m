@@ -69,6 +69,18 @@ function [varargout] = localizationerror(m,varargin)
 %     SCC                spherical/spatial correlation coefficient 
 %                        (Carlile et al., 1997)
 %
+%     gainLstats         performs linear regression to obtain lateral gain. 
+%                        See help of `regress` for a detailed description of
+%                        the structure fields.
+%
+%     gainL              lateral gain only
+%
+%     pVeridicalL        Proportion of quasi-verdical responses in lateral
+%                        dimension
+%
+%     precLregress       lateral scatter around linear regression line
+%                        (only quasi-veridical responses included).
+%
 %     sirpMacpherson2000 performs an ad-hoc selective, iterative
 %                        regression procedure (SIRP) in order to exclude outliers and 
 %                        reversals and isolate the main concentration of responses
@@ -78,10 +90,27 @@ function [varargout] = localizationerror(m,varargin)
 %                        help of `regress` for a detailed description of the
 %                        structure fields.
 %
+%     gainPfront         frontal polar gain only
+%
+%     gainPrear          rear polar gain only
+%
+%     pVeridicalPfront   Proportion of quasi-verdical polar responses in
+%                        the front
+%
+%     pVeridicalPrear    Proportion of quasi-verdical polar responses in
+%                        the back
+%
+%     precPregressFront  polar scatter around linear regression line for
+%                        the front (only quasi-veridical responses included).
+%
+%     precPregressRear   polar scatter around linear regression line for
+%                        the back (only quasi-veridical responses included).
+%
 %     perMacpherson2003  polar error rate used in Macpherson & Middlebrooks
 %                        (2003). They measured the deviation of responses from the
 %                        linear predictors obtained by an ad-hoc SIRP. Polar errors  
-%                        are defined by showing a deviation of >45deg with respect  
+%                        are defined by showing a deviation of >45deg 
+%                        (i.e., not being quasi-veridical) with respect 
 %                        to the linear flat stimulus prediction. Note that for this
 %                        analysis the results from `sirpMacpherson2000` are
 %                        required and handled as `localizationerror(m,f,r,'perMacpherson2003')`
@@ -97,8 +126,10 @@ function [varargout] = localizationerror(m,varargin)
 definput.flags.errorflag = {'','accL','precL','accP','precP','querr','accE',...
   'absaccE','absaccL','accabsL','accPnoquerr','precE','querr90','accE','precPmedian',...
   'precPmedianlocal','precPnoquerr','rmsL','rmsPmedianlocal','rmsPmedian',...
-  'querrMiddlebrooks','corrcoefL','corrcoefP','SCC','sirpMacpherson2000',...
-  'perMacpherson2003'};
+  'querrMiddlebrooks','corrcoefL','corrcoefP','SCC',...
+  'gainLstats','gainL','pVeridicalL','precLregress'...
+  'sirpMacpherson2000','gainPfront','gainPrear','perMacpherson2003',...
+  'pVeridicalPfront','pVeridicalPrear','precPregressFront','precPregressRear'};
 definput.keyvals.f=[];       % regress structure of frontal hemisphere
 definput.keyvals.r=[];       % regress structure of rear hemisphere
 
@@ -301,16 +332,51 @@ else
       scc = det(sxy) / sqrt(det(sxx) * det(syy));
       varargout{1}=scc;
       meta.ylabel='Spatial correlation coefficient';
+      
+    case 'gainLstats'
+      
+      [l.b,l.bint,l.r,l.rint,l.stats]=regress(m(:,7),[ones(length(m),1) m(:,5)]);
+      varargout{1}=l;
+      meta.ylabel='Lateral gain';
+      
+    case 'gainL'
+      
+      l = localizationerror(m,'gainLstats');
+      varargout{1}=l.b(2);
+      meta.ylabel='Lateral gain';
+      
+    case 'precLregress'
+      
+      l = localizationerror(m,'gainLstats');
+      x = -90:90;
+      y = l.b(2)*m(:,5) + l.b(1); % linear regression
+      dev = m(:,7) - y; % deviation
+      dev = dev(abs(dev)<=45); % include only quasi-veridical responses
+      prec = rms(dev);
+      varargout{1} = prec;
+      meta.ylabel = 'Lateral scatter (deg)';
+     
+    case 'pVeridicalL'
+      tol = 45; % tolerance of lateral angle error for quasi-veridical responses
+      l = localizationerror(m,'gainLstats');
+      x = -90:90;
+      y = l.b(2)*m(:,5) + l.b(1); % linear regression
+      dev = m(:,7) - y; % deviation wrapped to +-180 deg
+      prop = sum(abs(dev)<=tol)/length(dev);
+      varargout{1} = prop*100;
+      meta.ylabel = '% lateral quasi-veridical';
+     
     case 'sirpMacpherson2000'
       delta = 40; % outlier tolerance in degrees
+      Nmin = 5; % minimum number of responses used for regression
 
       % Front
       mf = m( abs(m(:,7))<=30 & m(:,6)<90 ,:); % frontal central data only
       idf = find(mf(:,8)<90);   % indices correct forntal responses (init)
 
-      if length(idf)<2
-        f.b = zeros(1,2);
-        f.stats = zeros(1,4);
+      if length(idf)<Nmin
+        f.b = nan(1,2);
+        f.stats = nan(1,4);
       else
         old=[];
         while not(isequal(idf,old))
@@ -326,9 +392,9 @@ else
       mr = m( abs(m(:,7))<=30 & m(:,6)>=90 ,:); % rear central data only
       idr = find(mr(:,8)>=90);  % indices correct rear responses (init)
 
-      if length(idr)<2
-        r.b = zeros(1,2);
-        r.stats = zeros(1,4);
+      if length(idr)<Nmin
+        r.b = nan(1,2);
+        r.stats = nan(1,4);
       else
         old=[];
         while not(isequal(idr,old))	
@@ -342,6 +408,91 @@ else
       varargout{1}=f;
       varargout{2}=r;
       par='SIRP results';
+      
+    case 'gainPfront'
+      
+      f = localizationerror(m,'sirpMacpherson2000');
+      varargout{1}=f.b(2);
+      meta.ylabel='Frontal polar gain';
+      
+    case 'gainPrear'
+      
+      [~,r] = localizationerror(m,'sirpMacpherson2000');
+      varargout{1}=r.b(2);
+      meta.ylabel='Rear polar gain';
+      
+    case 'pVeridicalPfront'
+      
+      tol = 45; % tolerance of polar angle error for quasi-veridical responses
+      
+      f = localizationerror(m,'sirpMacpherson2000');
+      
+      mf = m( abs(m(:,7))<=30 & m(:,6)< 90 ,:); % frontal central data only
+      
+      x = -90:270;
+      yf=f.b(2)*mf(:,6)+f.b(1); % linear prediction for flat, frontal targets
+      
+      devf = mod( (mf(:,8)-yf) +180,360) -180; % deviation wrapped to +-180 deg
+      
+      pVer = sum(abs(devf) <= tol) / length(devf);
+      
+      varargout{1}=pVer*100;
+      meta.ylabel = '% quasi-veridical (frontal)';
+     
+    case 'pVeridicalPrear'
+      
+      tol = 45; % tolerance of polar angle error for quasi-veridical responses
+      
+      [~,r] = localizationerror(m,'sirpMacpherson2000');
+      
+      mr = m( abs(m(:,7))<=30 & m(:,6)>=90 ,:); % rear central data only
+      
+      x = -90:270;
+      yr = r.b(2)*mr(:,6) + r.b(1); % linear prediction for flat, rear targets
+      
+      devr = mod( (mr(:,8)-yr) +180,360) -180; % deviation wrapped to +-180 deg
+      
+      pVer = sum(abs(devr) <= tol) / length(devr);
+      
+      varargout{1}=pVer*100;
+      meta.ylabel = '% quasi-veridical (rear)';
+     
+    case 'precPregressFront'
+      
+      tol = 45; % tolerance of polar angle error for quasi-veridical responses
+      
+      f = localizationerror(m,'sirpMacpherson2000');
+      
+      mf = m( abs(m(:,7))<=30 & m(:,6)< 90 ,:); % frontal central data only
+      
+      x = -90:270;
+      yf = f.b(2)*mf(:,6) + f.b(1); % linear prediction for flat, frontal targets
+      
+      devf = mod( (mf(:,8)-yf) +180,360) -180; % deviation wrapped to +-180 deg
+      
+      dev = devf(abs(devf)<=tol); % include only quasi-veridical responses
+      prec = rms(dev);
+      varargout{1} = prec;
+      meta.ylabel = 'Frontal polar scatter (deg)';
+     
+    case 'precPregressRear'
+      
+      tol = 45; % tolerance of polar angle error for quasi-veridical responses
+      
+      [~,r] = localizationerror(m,'sirpMacpherson2000');
+      
+      mr = m( abs(m(:,7))<=30 & m(:,6)>=90 ,:); % rear central data only
+      
+      x = -90:270;
+      yr = r.b(2)*mr(:,6) + r.b(1); % linear prediction for flat, rear targets
+      
+      devr = mod( (mr(:,8)-yr) +180,360) -180; % deviation wrapped to +-180 deg
+      
+      dev = devr(abs(devr)<=tol); % include only quasi-veridical responses
+      prec = rms(dev);
+      varargout{1} = prec;
+      meta.ylabel = 'Rear polar scatter (deg)';
+     
     case 'perMacpherson2003'
       
       if isempty(kv.f) || isempty(kv.r)
@@ -384,15 +535,15 @@ else
         plot(mr(:,6),yr-45,'r','LineWidth',2);
         title(['PER: ' num2str(per,2) '%'])
       end
-      
+       
     otherwise
       error(['Unknown ERR: ' err]);
   end
-  if length(varargout) < 3
-    varargout{3}=par; 
-  end
   if length(varargout) < 2
     varargout{2}=meta;
+  end
+  if length(varargout) < 3
+    varargout{3}=par; 
   end
 end
 
