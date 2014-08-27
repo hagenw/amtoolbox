@@ -2,6 +2,7 @@
 *_fig*.mat
 # vim tmp files
 *.swp
+*~
 demos/demo_takanen2013binsignals.mat
 demos/demo_takanen2013cochleadata.mat
 experiments/exp_takanen2013fig6artbinsignals.mat

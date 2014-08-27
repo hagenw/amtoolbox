@@ -1,6 +1,6 @@
 % AMT - Filter functions
 %
-%  The AMT team, 2012.
+%  The AMT team, 2012 - 2014.
 %
 %  General routines
 %     UFILTERBANKZ     - Apply multiple filters
