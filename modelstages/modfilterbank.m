@@ -58,8 +58,9 @@ umf = min(fc.*0.25, 1000);
 for freqchannel=1:nfreqchannels
 
   % Cut away highest modulation frequencies
-  outtmp = filter(b_highest,a_highest,insig(:,freqchannel));
-
+  %outtmp = filter(b_highest,a_highest,insig(:,freqchannel));
+  outtmp = insig(:,freqchannel);
+  
   if umf(freqchannel)==0
     % ----------- only lowpass ---------------------
     outsigblock = filter(b_lowpass,a_lowpass,outtmp);
@@ -98,7 +99,7 @@ for freqchannel=1:nfreqchannels
     if mfc(nmfc) <= 10
       outsigblock(:,nmfc) = 1*real(outsigblock(:,nmfc));
     else
-      outsigblock(:,nmfc) = 1/sqrt(2)*abs(outsigblock(:,nmfc));
+      outsigblock(:,nmfc) = abs(outsigblock(:,nmfc));
     end
   end
   

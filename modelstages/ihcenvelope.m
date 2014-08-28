@@ -113,7 +113,7 @@ end;
 if flags.do_ihc_dau
   inoutsig = max( inoutsig, 0 );
   cutofffreq=1000;
-  [b, a] = butter(2, cutofffreq*2/fs);
+  [b, a] = butter(1, cutofffreq*2/fs);
   inoutsig = filter(b,a, inoutsig);
 end;
 

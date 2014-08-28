@@ -52,7 +52,7 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
 end;
 
 definput.import={'auditoryfilterbank','ihcenvelope','adaptloop'};
-definput.importdefaults={'ihc_dau','adt_dau'};
+definput.importdefaults={'gtf_dau', 'ihc_dau', 'adt_dau'};
 definput.keyvals.subfs=[];
 
 [flags,keyvals]  = ltfatarghelper({'flow','fhigh'},definput,varargin);
