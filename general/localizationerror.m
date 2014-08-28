@@ -3,9 +3,17 @@ function [varargout] = localizationerror(m,varargin)
 %   Usage: [accL, precL, accP, precP, querr] = localizationerror(m)
 %          [res, meta, par] = localizationerror(m,errorflag)
 %
+%   Input parameters:
+%     m       : item list of experiment
+%               Columns: 
+%                1:4 ...   azi_target,ele_target,azi_response,ele_response
+%                5:8 ...   lat_target,pol_target,lat_response,pol_response
+%                9   ...   F/B-C resolved pol_response
+%
 %   `localizationerror(m,errorflag)` returns psychoacoustic performance 
 %   parameters for experimental response patterns. 
-%   *m* is a matrix. In each row of *m*, the information about the target and response in the columns must be provided. FIXME: provide the format of m
+%   *m* is a matrix. In each row of *m*, the information about the target 
+%   and response in the columns must be provided.
 %
 %   `[res, meta, par] = localizationerror(m,errorflag)` calculates error 
 %   metric *res* given by the string *errorflag*. *meta* contains additional 

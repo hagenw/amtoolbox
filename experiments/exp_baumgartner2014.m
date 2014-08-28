@@ -227,7 +227,7 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %   See also: baumgartner2014 data_baumgartner2014
 %
-%   References: baumgartner2014 majdak2013spatstrat morimoto2001
+%   References: baumgartner2014modeling majdak2013spatstrat morimoto2001
 %   macpherson2007 goupell2010numchan middlebrooks1999nonindividualized 
 %   macpherson2003ripples
 
@@ -368,7 +368,7 @@ if flags.do_fig3 || flags.do_fig13
 
   end
   
-  s = rmfield(s,{'Obj','mm1','sphrtfs'}); % reduce file size 
+  s = rmfield(s,{'Obj','itemlist','sphrtfs'}); % reduce file size 
   
   varargout{1} = s;
   
@@ -408,9 +408,9 @@ if flags.do_fig4
         s(ll).Nt = [];
         for ii = 1:length(latseg)
 
-          latresp = s(ll).mm1(:,7);
+          latresp = s(ll).itemlist(:,7);
           idlat = latresp <= latseg(ii)+dlat & latresp > latseg(ii)-dlat;
-          s(ll).mm2 = s(ll).mm1(idlat,:);
+          s(ll).mm2 = s(ll).itemlist(idlat,:);
 
           s(ll).mm2(:,7) = 0; % set lateral angle to 0deg such that localizationerror works also outside +-30deg
 
@@ -452,7 +452,7 @@ if flags.do_fig4
         end
 
       end
-      s = rmfield(s,{'Obj','mm1','mm2','sphrtfs'}); % reduce file size
+      s = rmfield(s,{'Obj','itemlist','mm2','sphrtfs'}); % reduce file size
       savename = ['result_baseline_g' num2str(gamma(g),'%u') '_mrs' num2str(mrs(g),'%u')];
       save(fullfile(tempfn,savename),'s', 'qe', 'pe', 'qe_exp', 'pe_exp', 'latseg')
     end
@@ -643,9 +643,9 @@ if flags.do_fig12 || flags.do_tab1
       s(ll).Nt = [];
       for ii = 1:length(latseg)
         
-        latresp = s(ll).mm1(:,7);
+        latresp = s(ll).itemlist(:,7);
         idlat = latresp <= latseg(ii)+dlat & latresp > latseg(ii)-dlat;
-        s(ll).mm2 = s(ll).mm1(idlat,:);
+        s(ll).mm2 = s(ll).itemlist(idlat,:);
 
         s(ll).mm2(:,7) = 0; % set lateral angle to 0deg such that localizationerror works outside +-30deg
 
@@ -691,7 +691,7 @@ if flags.do_fig12 || flags.do_tab1
     end
 %     sum( ci(:,1)-la' <=0 & ci(:,2)-la' >=0 )
 
-    s = rmfield(s,{'Obj','mm1','mm2','sphrtfs'}); % reduce file size 
+    s = rmfield(s,{'Obj','itemlist','mm2','sphrtfs'}); % reduce file size 
     save(fn,'s', 'qe', 'pe', 'qe_exp', 'pe_exp', 'latseg',save_format);
     
   end
@@ -960,11 +960,11 @@ if flags.do_fig5
     data = data_majdak2013(Cond);
     for ll = 1:length(s)
       if sum(ismember({data.id},s(ll).id)) % participant ?
-        s(ll).mm1=data(ismember({data.id},s(ll).id)).mtx;
+        s(ll).itemlist=data(ismember({data.id},s(ll).id)).mtx;
         for ii = 1:length(latdivision)
-          latresp = s(ll).mm1(:,7);
+          latresp = s(ll).itemlist(:,7);
           idlat = latresp <= latdivision(ii)+dlat & latresp > latdivision(ii)-dlat;
-          mm2 = s(ll).mm1(idlat,:);
+          mm2 = s(ll).itemlist(idlat,:);
           chance = [chance;mm2];
           s(ll).target{ii} = mm2(:,6); % polar angle of target
           s(ll).response{ii} = mm2(:,8); % polar angle of response
@@ -1031,9 +1031,9 @@ if flags.do_fig5
 
       if sum(ismember({data.id},s(ll).id)) % participant ?
         % Actual experimental results
-        s(ll).qe_exp(C,1) = localizationerror(s(ll).mm1,'querrMiddlebrooks');
-        s(ll).pe_exp(C,1) = localizationerror(s(ll).mm1,'rmsPmedianlocal');
-        s(ll).Nt(C,1) = size(s(ll).mm1,1);
+        s(ll).qe_exp(C,1) = localizationerror(s(ll).itemlist,'querrMiddlebrooks');
+        s(ll).pe_exp(C,1) = localizationerror(s(ll).itemlist,'rmsPmedianlocal');
+        s(ll).Nt(C,1) = size(s(ll).itemlist,1);
         % Model results of participants (actual target angles)
         if length(latdivision) == 3
           s(ll).qe_part(C,1) = (qe_t(1)*length(s(ll).target{1}) + ...
@@ -1119,11 +1119,11 @@ if flags.do_fig6
       data = data_majdak2013(Cond);
       for ll = 1:length(s)
         if sum(ismember({data.id},s(ll).id)) % if actual participant
-          s(ll).mm1=data(ismember({data.id},s(ll).id)).mtx; 
+          s(ll).itemlist=data(ismember({data.id},s(ll).id)).mtx; 
           for ii = 1:length(latdivision)
-            latresp = s(ll).mm1(:,7);
+            latresp = s(ll).itemlist(:,7);
             idlat = latresp <= latdivision(ii)+dlat & latresp > latdivision(ii)-dlat;
-            mm2 = s(ll).mm1(idlat,:);
+            mm2 = s(ll).itemlist(idlat,:);
 %             chance = [chance;mm2];
             s(ll).target{ii} = mm2(:,6); % polar angle of target
             s(ll).response{ii} = mm2(:,8); % polar angle of response
@@ -1192,9 +1192,9 @@ if flags.do_fig6
 
         if sum(ismember({data.id},s(ll).id)) % if actual participant 
           % Actual experimental results
-          s(ll).qe_exp(C,1) = localizationerror(s(ll).mm1,'querrMiddlebrooks');
-          s(ll).pe_exp(C,1) = localizationerror(s(ll).mm1,'rmsPmedianlocal');
-          s(ll).Nt(C,1) = size(s(ll).mm1,1);
+          s(ll).qe_exp(C,1) = localizationerror(s(ll).itemlist,'querrMiddlebrooks');
+          s(ll).pe_exp(C,1) = localizationerror(s(ll).itemlist,'rmsPmedianlocal');
+          s(ll).Nt(C,1) = size(s(ll).itemlist,1);
           % Model results of participants (actual target angles)
           if length(latdivision) == 3
             s(ll).qe_part(C,1) = (qe_t(1)*length(s(ll).target{1}) + ...
@@ -1374,11 +1374,11 @@ if flags.do_fig7
     data = data_goupell2010(Cond);
     for ll = 1:length(s)
       if sum(ismember({data.id},s(ll).id)) % if actual participant
-        s(ll).mm1=data(ismember({data.id},s(ll).id)).mtx; 
+        s(ll).itemlist=data(ismember({data.id},s(ll).id)).mtx; 
         for ii = 1:length(latdivision)
-          latresp = s(ll).mm1(:,7);
+          latresp = s(ll).itemlist(:,7);
           idlat = latresp <= latdivision(ii)+dlat & latresp > latdivision(ii)-dlat;
-          mm2 = s(ll).mm1(idlat,:);
+          mm2 = s(ll).itemlist(idlat,:);
           chance = [chance;mm2];
           s(ll).target{ii} = mm2(:,6); % polar angle of target
           s(ll).response{ii} = mm2(:,8); % polar angle of response
@@ -1457,9 +1457,9 @@ if flags.do_fig7
 
       if sum(ismember({data.id},s(ll).id)) % if actual participant
         % Actual experimental results
-        s(ll).qe_exp(C,1) = localizationerror(s(ll).mm1,'querrMiddlebrooks');
-        s(ll).pe_exp(C,1) = localizationerror(s(ll).mm1,'rmsPmedianlocal');
-        s(ll).Nt(C,1) = size(s(ll).mm1,1);
+        s(ll).qe_exp(C,1) = localizationerror(s(ll).itemlist,'querrMiddlebrooks');
+        s(ll).pe_exp(C,1) = localizationerror(s(ll).itemlist,'rmsPmedianlocal');
+        s(ll).Nt(C,1) = size(s(ll).itemlist,1);
         % Model results of participants (actual target angles)
         if length(latdivision) == 3
           s(ll).qe_part(C,1) = (qe_t(1)*length(s(ll).target{1}) + ...
@@ -1538,11 +1538,11 @@ if flags.do_fig8
       data = data_goupell2010(Cond);
       for ll = 1:length(s)
         if sum(ismember({data.id},s(ll).id)) % if actual participant
-          s(ll).mm1=data(ismember({data.id},s(ll).id)).mtx; 
+          s(ll).itemlist=data(ismember({data.id},s(ll).id)).mtx; 
           for ii = 1:length(latdivision)
-            latresp = s(ll).mm1(:,7);
+            latresp = s(ll).itemlist(:,7);
             idlat = latresp <= latdivision(ii)+dlat & latresp > latdivision(ii)-dlat;
-            mm2 = s(ll).mm1(idlat,:); 
+            mm2 = s(ll).itemlist(idlat,:); 
 %             chance = [chance;mm2];
             s(ll).target{ii} = mm2(:,6); % polar angle of target
             s(ll).response{ii} = mm2(:,8); % polar angle of response
@@ -1622,9 +1622,9 @@ if flags.do_fig8
 
         if sum(ismember({data.id},s(ll).id)) % if actual participant 
           % Actual experimental results
-          s(ll).qe_exp(C,1) = localizationerror(s(ll).mm1,'querrMiddlebrooks');
-          s(ll).pe_exp(C,1) = localizationerror(s(ll).mm1,'rmsPmedianlocal');
-          s(ll).Nt(C,1) = size(s(ll).mm1,1);
+          s(ll).qe_exp(C,1) = localizationerror(s(ll).itemlist,'querrMiddlebrooks');
+          s(ll).pe_exp(C,1) = localizationerror(s(ll).itemlist,'rmsPmedianlocal');
+          s(ll).Nt(C,1) = size(s(ll).itemlist,1);
           % Model results of participants (actual target angles)
           if length(latdivision) == 3
             s(ll).qe_part(C,1) = (qe_t(1)*length(s(ll).target{1}) + ...
@@ -1664,7 +1664,7 @@ if flags.do_fig8
     cc.pe.p = p(2);
     disp(['PE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
     
-    s = rmfield(s,{'spdtfs','spdtfs_c','Obj','mm1'});
+    s = rmfield(s,{'spdtfs','spdtfs_c','Obj','itemlist'});
     
     save(fn,'N', 'cc', 's', 'pe_chance', 'qe_chance',save_format);
   else
@@ -2538,11 +2538,11 @@ if flags.do_tab2
         s = s(idpart);
         
         for ll = 1:length(s)
-          s(ll).mm1=data(ismember({data.id},s(ll).id)).mtx; 
+          s(ll).itemlist=data(ismember({data.id},s(ll).id)).mtx; 
           for ii = 1:length(latdivision)
-            latresp = s(ll).mm1(:,7);
+            latresp = s(ll).itemlist(:,7);
             idlat = latresp <= latdivision(ii)+dlat & latresp > latdivision(ii)-dlat;
-            mm2 = s(ll).mm1(idlat,:);
+            mm2 = s(ll).itemlist(idlat,:);
             s(ll).target{ii} = mm2(:,6); % polar angle of target
             s(ll).response{ii} = mm2(:,8); % polar angle of response
           end
@@ -2622,9 +2622,9 @@ if flags.do_tab2
           end
 
           % Actual experimental results
-          qe_exp(ll,C) = localizationerror(s(ll).mm1,'querrMiddlebrooks');
-          pe_exp(ll,C,1) = localizationerror(s(ll).mm1,'rmsPmedianlocal');
-%           s(ll).Nt(C,1) = size(s(ll).mm1,1);
+          qe_exp(ll,C) = localizationerror(s(ll).itemlist,'querrMiddlebrooks');
+          pe_exp(ll,C,1) = localizationerror(s(ll).itemlist,'rmsPmedianlocal');
+%           s(ll).Nt(C,1) = size(s(ll).itemlist,1);
             
         end
       end
@@ -2749,9 +2749,9 @@ if flags.do_tab3
       s(ll).Nt = [];
       for ii = 1:length(latseg)
         
-        latresp = s(ll).mm1(:,7);
+        latresp = s(ll).itemlist(:,7);
         idlat = latresp <= latseg(ii)+dlat & latresp > latseg(ii)-dlat;
-        s(ll).mm2 = s(ll).mm1(idlat,:);
+        s(ll).mm2 = s(ll).itemlist(idlat,:);
 
         s(ll).mm2(:,7) = 0; % set lateral angle to 0deg such that localizationerror works outside +-30deg
 
@@ -2799,7 +2799,7 @@ if flags.do_tab3
     disp([num2str(b,'%1.0f') ' of ' num2str(length(bwcoef),'%1.0f') ' completed'])
     end
     
-    s = rmfield(s,{'Obj','mm1','mm2','sphrtfs'}); % reduce file size 
+    s = rmfield(s,{'Obj','itemlist','mm2','sphrtfs'}); % reduce file size 
     save(fn,'s', 'qe', 'pe', 'qe_exp', 'pe_exp', 'latseg','bwcoef',save_format);
     
   end

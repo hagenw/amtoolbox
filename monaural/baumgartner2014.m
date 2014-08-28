@@ -94,7 +94,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %   baumgartner2014likelistat, baumgartner2014pmv2ppp,
 %   baumgartner2014virtualexp
 %
-%   References: baumgartner2014 lyon1997
+%   References: baumgartner2014modeling lyon1997
 
     
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria

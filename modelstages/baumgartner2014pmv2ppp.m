@@ -44,7 +44,7 @@ function [ varargout ] = baumgartner2014pmv2ppp( varargin )
 %
 %     [qe,pe] = baumgartner2014pmv2ppp('chance');
 %
-%   References: baumgartner2014
+%   References: baumgartner2014modeling
 
 % AUTHOR : Robert Baumgartner
 

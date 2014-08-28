@@ -32,6 +32,11 @@ function data = data_baumgartner2014(varargin)
 %
 %     .response   experimental response angles
 %
+%     .itemlist   experimental item list. Columns denote:
+%                 1:4 ... azi_target,ele_target,azi_response,ele_response
+%                 5:8 ... lat_target,pol_target,lat_response,pol_response
+%                 9   ... F/B-Confusion resolved pol_response
+%
 %   Requirements: 
 %   -------------
 %
@@ -90,15 +95,6 @@ if flags.do_pool || flags.do_baseline
       filename = fullfile(SOFAdbPath,'baumgartner2014',...
         ['ARI_' data(ii).id '_hrtf_M_dtf 256.sofa']);
       
-      if exist(filename,'file') ~= 2
-        disp('Sorry! Before you can run this script, you have to download the HRTF Database from')
-        disp('http://www.kfs.oeaw.ac.at/hrtf/database/amt/baumgartner2014.zip')
-        disp('unzip it, and move the folder into your HRTF repository')
-        disp(SOFAdbPath)
-        disp('Then, press any key to quit pausing.')
-        pause
-      end
-      
       data(ii).Obj = SOFAload(filename);
       data(ii).fs = data(ii).Obj.Data.SamplingRate;
       
@@ -113,7 +109,7 @@ if flags.do_pool || flags.do_baseline
     data = baumgartner2014calibration(data,kv);
     
     data_all = data;
-    data = rmfield(data,{'Obj','mm1','fs','target','response'}); % reduce filesize
+    data = rmfield(data,{'Obj','itemlist','fs','target','response'}); % reduce filesize
     save(fullfile(amtbasepath,'modelstages','baumgartner2014calibration.mat'),'data')
     data = data_all;
     
@@ -157,23 +153,23 @@ ctcL = data_majdak2013ctc('Learn');
 
 for ll = 1:length(s)
   
-  s(ll).mm1 = [];
+  s(ll).itemlist = [];
   
-  s(ll).mm1 = [s(ll).mm1 ; numchan(ismember({numchan.id},s(ll).id)).mtx];
-  s(ll).mm1 = [s(ll).mm1 ; methods(ismember({methods.id},s(ll).id)).mtx];
-  s(ll).mm1 = [s(ll).mm1 ; spatstrat(ismember({spatstrat.id},s(ll).id)).mtx];
-%   s(ll).mm1 = [s(ll).mm1 ; ctcA(ismember({ctcA.id},s(ll).id)).mtx];
-%   s(ll).mm1 = [s(ll).mm1 ; ctcB(ismember({ctcB.id},s(ll).id)).mtx];
-  s(ll).mm1 = [s(ll).mm1 ; ctcL(ismember({ctcL.id},s(ll).id)).mtx];
+  s(ll).itemlist = [s(ll).itemlist ; numchan(ismember({numchan.id},s(ll).id)).mtx];
+  s(ll).itemlist = [s(ll).itemlist ; methods(ismember({methods.id},s(ll).id)).mtx];
+  s(ll).itemlist = [s(ll).itemlist ; spatstrat(ismember({spatstrat.id},s(ll).id)).mtx];
+%   s(ll).itemlist = [s(ll).itemlist ; ctcA(ismember({ctcA.id},s(ll).id)).mtx];
+%   s(ll).itemlist = [s(ll).itemlist ; ctcB(ismember({ctcB.id},s(ll).id)).mtx];
+  s(ll).itemlist = [s(ll).itemlist ; ctcL(ismember({ctcL.id},s(ll).id)).mtx];
   
-  s(ll).pe_exp = localizationerror(s(ll).mm1,'rmsPmedianlocal');
-  s(ll).qe_exp = localizationerror(s(ll).mm1,'querrMiddlebrooks');   
+  s(ll).pe_exp = localizationerror(s(ll).itemlist,'rmsPmedianlocal');
+  s(ll).qe_exp = localizationerror(s(ll).itemlist,'querrMiddlebrooks');   
   
   for ii = 1:length(latseg)
     
-    latresp = s(ll).mm1(:,7);
+    latresp = s(ll).itemlist(:,7);
     idlat = latresp <= latseg(ii)+dlat & latresp > latseg(ii)-dlat;
-    mm2 = s(ll).mm1(idlat,:);
+    mm2 = s(ll).itemlist(idlat,:);
     
     s(ll).pe_exp_lat(ii) = localizationerror(mm2,'rmsPmedianlocal');
     s(ll).qe_exp_lat(ii) = localizationerror(mm2,'querrMiddlebrooks');

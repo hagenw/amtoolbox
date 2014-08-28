@@ -34,7 +34,7 @@ function m = baumgartner2014virtualexp(p,tang,rang,varargin)
 %   See also: localizationerror, baumgartner2014, plotbaumgartner2013
 %
 
-%   References: baumgartner2014
+%   References: baumgartner2014modeling
 
     
 % AUTHOR: Robert Baumgartner

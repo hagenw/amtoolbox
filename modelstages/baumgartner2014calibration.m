@@ -1,4 +1,4 @@
-function scalib = baumgartner2014calibration(s,kv)
+function scalib = baumgartner2014calibration(s,kv,TolX)
 %baumgartner2014calibration  Calibration of listener-specific sensitivity 
 % thresholds to experimental performance
 %   Usage: scalib = baumgartner2014calibration(s)
@@ -17,16 +17,33 @@ function scalib = baumgartner2014calibration(s,kv)
 %   listener-specific sensitivity thresholds calibrated by joint
 %   optimization of PE and QE to minimize mismatch between experimental
 %   and predicted results.
+%
+%   `baumgartner2014calibration` accepts the following optional parameters:
+%
+%     kv        Key-value pairs according to `baumgartner2014`
+%
+%     TolX      Optimization tolerance of listener-specific sensitivity.
+%               Default is 1e-3.
+%
+%   See also: baumgartner2014
 
 % AUTHOR : Robert Baumgartner
 
+if not(exist('kv','var'))
+  definput.import={'baumgartner2014'};
+  [~,kv]=ltfatarghelper({},definput,varargin);
+end
 kv.latseg = [-20,0,20];
 
+if not(exist('TolX','var'))
+  TolX = 0.001;
+end
+ 
 scalib = s;
 for ss = 1:length(s)
   
   scalib(ss).S = fminsearch(@(S) evaldist(s(ss),S,kv),s(ss).S,...
-    optimset('MaxIter',50,'TolX',0.001)...
+    optimset('MaxIter',50,'TolX',TolX)...
     );
 %   [~,scalib(ss).qe_pred,scalib(ss).pe_pred] = evaldist(s(ss),S,kv);
   disp([num2str(ss,'%2.0u') ' of ' num2str(length(s),'%2.0u') ' calibrated.'])
