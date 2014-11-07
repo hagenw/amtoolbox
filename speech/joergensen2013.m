@@ -24,6 +24,25 @@ function output = joergensen2013(x,y,fs_input,IO_param)
 %                  specified and the conversion requires the Matlab Statistics
 %                  ToolBox. This field is only included if *IO_param* is specified.
 %
+%   The Jørgensen 2011 model consists of the following stages:
+%
+%   1)  A gammatone bandpass filterbank to simulate the auditory filters
+%
+%   2)  An envelope extraction stage via the Hilbert Transform
+%
+%   3)  A modulation filterbank
+%  
+%   4)  Computation of the envelope power in segments with multiple durations
+%
+%   5)  A decision mechanism based on a statistically ideal observer
+% 
+%   The main difference between the Jørgensen 2011 and the Jørgensen 2013
+%   model is that the Jørgensen 2013 model estimates the envelope power
+%   using multi-resolution segmentation of the envelope. The segment
+%   duration depends on the modulation filter center-frequency. In addition,
+%   the modulation filter bank includes filters up to modulation frequencies
+%   of 256 Hz in contrast to the 64 Hz considered by the Jørgensen 2011
+%   model.
 %
 %   Examples:
 %   ---------

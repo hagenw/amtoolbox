@@ -70,27 +70,28 @@ if flags.do_fig5
                 
                 %     ------------ applying reverberation
                 if n>1
-                filename = ['ir',num2str(conditions(n)), 's.wav'];
-                [tmp,Fs,bits] = wavread(filename);
-                tmp = resample(tmp(:,1),fs,Fs); % downsampling to 22.05 kHz
-                tmp_test = fconv(tmp',test); %
-                tmp_noise = fconv(tmp',noise);
-                test_env = abs(hilbert(tmp_test));
-                
-                [bb, aa] = butter(4, 20*2/fs);
-                test_env = filter(bb,aa,test_env);
-                cut =  0.05;
-                threshold = floor(max(test_env)*cut);
-                %         finding the index in the env vector corresponding to the
-                %         threshold:
-                idx = find(test_env(floor(length(test_env)/4):end) > threshold, 1,'last' );
-                
-                idx_end = idx + floor(length(tmp_test)/4);
-                test_env(idx_end);
-                idx_start = floor(0.047*fs);
-                
-                test = tmp_test(idx_start:idx_end);
-                noise = tmp_noise(idx_start:idx_end);
+                  
+                  [tmp,Fs] = simulatedimpulseresponse(conditions(n));
+                  
+                  tmp = resample(tmp,fs,Fs); % downsampling to 22.05 kHz
+                  tmp_test = fconv(tmp',test); %
+                  tmp_noise = fconv(tmp',noise);
+                  test_env = abs(hilbert(tmp_test));
+                  
+                  [bb, aa] = butter(4, 20*2/fs);
+                  test_env = filter(bb,aa,test_env);
+                  cut =  0.05;
+                  threshold = floor(max(test_env)*cut);
+                  %         finding the index in the env vector corresponding to the
+                  %         threshold:
+                  idx = find(test_env(floor(length(test_env)/4):end) > threshold, 1,'last' );
+                  
+                  idx_end = idx + floor(length(tmp_test)/4);
+                  test_env(idx_end);
+                  idx_start = floor(0.047*fs);
+                  
+                  test = tmp_test(idx_start:idx_end);
+                  noise = tmp_noise(idx_start:idx_end);
                 end
                 % ---------------------------------
                 

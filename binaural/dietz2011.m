@@ -216,7 +216,7 @@ inoutsig = filter(b,a,inoutsig);
 debug('splitting signal into frequency channels',flags);
 [inoutsig,fc] = auditoryfilterbank(inoutsig,fs,'argimport',flags,kv);
 % cochlea compression
-inoutsig = inoutsig.^kv.compression_power;
+inoutsig = sign(inoutsig).*abs(inoutsig).^kv.compression_power;
 % rectification and lowpass filtering of filtered signals
 debug('haircell processing of frequency bands',flags);
 inoutsig = ihcenvelope(inoutsig,fs,'argimport',flags,kv);

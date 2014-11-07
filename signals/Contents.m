@@ -6,6 +6,9 @@
 %    TRANSPOSEDTONE -  Transposed tone stimuli
 %    NOTCHEDNOISE   -  Notched noise
 %
+%  Impulse responses
+%    SIMULATEDIMPULSERESPONSES - Simulated monaural room impulse responses
+%
 %  Binaural signal generators
 %    BMSIN          -  Binaural modulated sinusoid
 %    ITDSIN         -  Sinusoid with interaural time difference
