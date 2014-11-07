@@ -1,7 +1,7 @@
-function [ANresp,fc,varargout] = zilany2013(spl,stim,fsstim,varargin)
-%ZILANY5 Auditory nerve (AN) model
-%   Usage: [ANresp,fc] = zilany2013(lvl,stim,fsstim);
-%          [ANresp,fc,vihc,psth] = zilany2013(lvl,stim,fsstim);
+function [ANresp,fc,varargout] = zilany2014(spl,stim,fsstim,varargin)
+%ZILANY2014 Auditory nerve (AN) model
+%   Usage: [ANresp,fc] = zilany2014(lvl,stim,fsstim);
+%          [ANresp,fc,vihc,psth] = zilany2014(lvl,stim,fsstim);
 %
 %   Input parameters:
 %     spl         : Sound pressure level (SPL; re 20e-6 Pa) of stimulus in dB
@@ -16,7 +16,7 @@ function [ANresp,fc,varargout] = zilany2013(spl,stim,fsstim,varargin)
 %     vihc       : Output from inner hair cells (IHCs) in Volts
 %     psth       : Spike histogram
 %
-%   `zilany2013(...)` returns modeled responses of multiple AN fibers tuned to 
+%   `zilany2014(...)` returns modeled responses of multiple AN fibers tuned to 
 %   various characteristic frequencies characterstic frequencies evenly spaced 
 %   along ERB scale (see |audspace|_).
 %
@@ -46,13 +46,13 @@ function [ANresp,fc,varargout] = zilany2013(spl,stim,fsstim,varargin)
 %     'cihc',cihc     IHC scaling factor: 1 denotes normal IHC function (default); 
 %                     0 denotes complete IHC dysfunction.
 %
-%   `zilany2013` accepts the following flag:
+%   `zilany2014` accepts the following flag:
 %
 %     'human'         Use model parameters for humans. This is the default.
 %
 %     'cat'           Use model parameters for cats.
 %
-%     'fixedFGn'      Fractional Gaussian noise will be same in every 
+%     'fixedFGn'      Fractional Gaussian noise will be the same in every 
 %                     simulation. This is the default.
 %
 %     'varFGn'        Fractional Gaussian noise will be different in every 
@@ -64,9 +64,9 @@ function [ANresp,fc,varargout] = zilany2013(spl,stim,fsstim,varargin)
 %     'actualPL'      Use actual implementation of the power-law functions.
 % 
 %
-%   Demos: demo_zilany2013
+%   Demos: demo_zilany2014
 %
-%   References: zilany2009 zilany2013
+%   References: zilany2009 zilany2014
 
 % AUTHOR: code provided by Muhammad Zilany, AMT compatibility adapted by Robert Baumgartner
 
@@ -111,7 +111,7 @@ nrep = 1;
 
 % reptime is the time between stimulus repetitions in seconds; -> set 
 % twice the duration of stim
-reptime = 2*length(stim)/kv.fsmod;
+reptime = (2*length(stim)+1)/kv.fsmod;
 
 % species is either "cat" (1) or "human" (2): "1" for cat and "2" for human
 species = flags.do_human+1;
@@ -123,18 +123,19 @@ noiseType = flags.do_varFGn + 0;
 implnt = flags.do_actualPL + 0;
 
 % Call AN model and loop for all fibers tuned to different CFs
-ANresp = zeros(kv.nfibers,reptime*kv.fsmod);
+vihc = zeros(kv.nfibers,round(reptime*kv.fsmod));
+ANresp = vihc;
+psth = vihc;
 for jj = 1:kv.nfibers
   
   % Call IHC model (mex'ed C model)
-  vihc = comp_zilany2013_model_IHC(...
+  vihc(jj,:) = comp_zilany2014_model_IHC(...
     stim,fc(jj),nrep,tdres,reptime,kv.cohc,kv.cihc,species);
-  % Call Synapse model
-  [meanrate,varrate,psth] = comp_zilany2013_model_Synapse(...
-    vihc,fc(jj),nrep,tdres,kv.fiberType,noiseType,implnt);
   
-  % Use the output of the synapse stage of the AN model. 
-  ANresp(jj,:)           = meanrate;             
+  % Call Synapse model
+  [ANresp(jj,:),varrate,psth(jj,:)] = comp_zilany2014_model_Synapse(...
+    vihc(jj,:),fc(jj),nrep,tdres,kv.fiberType,noiseType,implnt);
+          
 end
 
 

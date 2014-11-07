@@ -102,6 +102,8 @@ function [varargout] = localizationerror(m,varargin)
 %
 %     gainPrear          rear polar gain only
 %
+%     gainP              polar gain averaged between front and back
+%
 %     pVeridicalPfront   Proportion of quasi-verdical polar responses in
 %                        the front
 %
@@ -136,7 +138,7 @@ definput.flags.errorflag = {'','accL','precL','accP','precP','querr','accE',...
   'precPmedianlocal','precPnoquerr','rmsL','rmsPmedianlocal','rmsPmedian',...
   'querrMiddlebrooks','corrcoefL','corrcoefP','SCC',...
   'gainLstats','gainL','pVeridicalL','precLregress'...
-  'sirpMacpherson2000','gainPfront','gainPrear','perMacpherson2003',...
+  'sirpMacpherson2000','gainPfront','gainPrear','gainP','perMacpherson2003',...
   'pVeridicalPfront','pVeridicalPrear','precPregressFront','precPregressRear'};
 definput.keyvals.f=[];       % regress structure of frontal hemisphere
 definput.keyvals.r=[];       % regress structure of rear hemisphere
@@ -428,6 +430,12 @@ else
       [~,r] = localizationerror(m,'sirpMacpherson2000');
       varargout{1}=r.b(2);
       meta.ylabel='Rear polar gain';
+      
+    case 'gainP'
+      
+      [f,r] = localizationerror(m,'sirpMacpherson2000');
+      varargout{1}=(f.b(2)+r.b(2))/2;
+      meta.ylabel='Polar gain';
       
     case 'pVeridicalPfront'
       

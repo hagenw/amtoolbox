@@ -1234,7 +1234,7 @@ if flags.do_fig6
     cc.pe.p = p(2);
     disp(['PE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
 
-    save(fn,'cc', 's', 'pe_chance', 'qe_chance',save_format);
+    save(fn,'cc', 's',save_format);
   else
     load(fn);
   end
@@ -1666,7 +1666,7 @@ if flags.do_fig8
     
     s = rmfield(s,{'spdtfs','spdtfs_c','Obj','itemlist'});
     
-    save(fn,'N', 'cc', 's', 'pe_chance', 'qe_chance',save_format);
+    save(fn,'N', 'cc', 's',save_format);
   else
     load(fn);
   end

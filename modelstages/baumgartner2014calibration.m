@@ -8,10 +8,12 @@ function scalib = baumgartner2014calibration(s,kv,TolX)
 %               fields *Obj*, *pe_exp*, and *qe_exp*, representing the
 %               listener's HRTF as SOFA object, the baseline local
 %               polar RMS error, and the baseline quadrant error rate,
-%               respectively.
+%               respectively. Optionally, the structure can include the
+%               field *target*, a cell array representing the polar target
+%               angles for each lateral segment.
 %
 %   Output parameter:
-%     scalib  : strucure containing subject's data with calibrated u
+%     scalib  : strucure containing subject's data with calibrated S
 %
 %   `baumgartner2014calibration` returns listener data with
 %   listener-specific sensitivity thresholds calibrated by joint
@@ -31,9 +33,16 @@ function scalib = baumgartner2014calibration(s,kv,TolX)
 
 if not(exist('kv','var'))
   definput.import={'baumgartner2014'};
-  [~,kv]=ltfatarghelper({},definput,varargin);
+  [~,kv]=ltfatarghelper({},definput,{});
 end
-kv.latseg = [-20,0,20];
+
+if not(isfield(kv,'latseg'))
+  kv.latseg = [-20,0,20];
+end
+
+if not(isfield(s,'target'))
+  disp('Calibration accuracy could be enhanced by providing the target polar-angles.')
+end
 
 if not(exist('TolX','var'))
   TolX = 0.001;
@@ -73,15 +82,26 @@ for ll = 1:length(s)
 
     [s(ll).sphrtfs{ii},polang] = extractsp( kv.latseg(ii),s(ll).Obj );
     [s(ll).p{ii},respangs] = baumgartner2014(...
-        s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
+        s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).Obj.Data.SamplingRate,...
         'S',S,'lat',kv.latseg(ii),'polsamp',polang,...
         'mrsmsp',kv.mrsmsp,'gamma',kv.gamma,'do',kv.do);
 
-    [ qe(ii),pe(ii) ] = pmv2ppp( ...
-        s(ll).p{ii} , polang , respangs , s(ll).target{ii});
-
-    qeM(ll) = qeM(ll) + qe(ii)*s(ll).Ntargets{ii}/sum([s(ll).Ntargets{:}]);
-    peM(ll) = peM(ll) + pe(ii)*s(ll).Ntargets{ii}/sum([s(ll).Ntargets{:}]);
+    if isfield(s,'target')
+      
+      [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp( ...
+          s(ll).p{ii} , polang , respangs , s(ll).target{ii});
+      latweight = length(s(ll).target{ii})/length(cat(1,s(ll).target{:}));
+      qeM(ll) = qeM(ll) + qe(ii)*latweight;
+      peM(ll) = peM(ll) + pe(ii)*latweight;
+      
+    else
+      
+      [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp( ...
+          s(ll).p{ii} , polang , respangs);
+      qeM(ll) = qeM(ll) + qe(ii)*1/length(kv.latseg);
+      peM(ll) = peM(ll) + pe(ii)*1/length(kv.latseg);
+      
+    end
 
   end
 

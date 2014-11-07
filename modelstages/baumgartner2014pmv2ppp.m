@@ -82,7 +82,7 @@ if flags.do_QE_PE_EB || flags.do_PE || flags.do_QE || flags.do_EB
   isnotuprear = false(nt,1);
   for ii = 1:nt % for all target positions
       d = tang(ii)-rang;                 % wraped angular distance between tang & rang
-      iduw = (d < -180) | (180 < d);     % 180°-unwrap indices
+      iduw = (d < -180) | (180 < d);     % 180deg-unwrap indices
       d(iduw) = mod(d(iduw) + 180,360) - 180; % 180 deg unwrap
       d = abs(d);                        % absolut distance
       qet(ii) = sum( p(d>=90,ii) );

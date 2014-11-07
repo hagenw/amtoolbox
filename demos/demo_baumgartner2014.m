@@ -50,7 +50,7 @@ disp('Performance Predictions:')
 disp('------------------------')
 
 % via expectancy values:
-[qe,pe,pb] = baumgartner2014pmv2ppp(p,'print'); 
+[qe,pe] = baumgartner2014pmv2ppp(p,tang,rang,'print'); 
 
 % and/or via responses drawn from virtual experiments
 [f,r] = localizationerror(m,'sirpMacpherson2000');
