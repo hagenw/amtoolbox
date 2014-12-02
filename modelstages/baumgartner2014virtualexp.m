@@ -64,7 +64,11 @@ else
 end
 post=zeros(nt,1); % indices of target positions
 for ii = 1:nt
+  if kv.targetset(ii) > max(tangbound)
+    post(ii) = length(tangbound); % if outside predicted range, set to most extreme possible position
+  else
     post(ii) = find(tangbound>=kv.targetset(ii),1);
+  end
 end
 
 posr=zeros(nt,1);

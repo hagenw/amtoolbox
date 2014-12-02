@@ -77,7 +77,7 @@ shading flat
 caxis([0 kv.cmax])
 if flags.do_colorbar
     cbar = colorbar('eastoutside');
-    set(get(cbar,'YLabel'),'String','Probability')
+    set(get(cbar,'YLabel'),'String','Probability / 5\circ')
     set(cbar,'YAxisLocation','right')
 end
 xlabel('Target Angle (deg)')

@@ -134,7 +134,7 @@ if size(template,2) ~= length(kv.polsamp)
 end
 
 if kv.S <= 0
-  fprintf('\n Error: Listener-specific uncertainty has to be larger than zero! \n')
+  fprintf('\n Error: Listener-specific sensitivity has to be larger than zero! \n')
   return
 end
 

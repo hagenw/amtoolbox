@@ -25,6 +25,9 @@ function [varargout] = localizationerror(m,varargin)
 %
 %     precL              precision (std. dev.) in the lateral dimension
 %
+%     precLcentral       *precL* derived from responses close to horizontal
+%                        meridian (+-30 deg elevation)
+%
 %     accP               accuracy (average) in the polar dimension
 %
 %     precP              precision (circular std. dev.) in the polar dimension 
@@ -133,7 +136,7 @@ function [varargout] = localizationerror(m,varargin)
 
 %% Check input options 
 
-definput.flags.errorflag = {'','accL','precL','accP','precP','querr','accE',...
+definput.flags.errorflag = {'','accL','precL','precLcentral','accP','precP','querr','accE',...
   'absaccE','absaccL','accabsL','accPnoquerr','precE','querr90','accE','precPmedian',...
   'precPmedianlocal','precPnoquerr','rmsL','rmsPmedianlocal','rmsPmedian',...
   'querrMiddlebrooks','corrcoefL','corrcoefP','SCC',...
@@ -203,6 +206,12 @@ else
       precL=sqrt(sum((m(:,7)-m(:,5)-accL).^2)/size(m,1));  
       varargout{1}=precL;
       meta.ylabel='Lateral precision error (deg)';
+    case 'precLcentral'
+      idx=find(abs(m(:,4))<=30); % responses close to horizontal meridian
+      accL=mean(m(idx,7)-m(idx,5));  
+      precL=sqrt(sum((m(idx,7)-m(idx,5)-accL).^2)/length(idx));  
+      varargout{1}=precL;
+      meta.ylabel='Central lateral precision error (deg)';
     case 'rmsL'
       idx=find(abs(m(:,7))<=60);
       m=m(idx,:);        

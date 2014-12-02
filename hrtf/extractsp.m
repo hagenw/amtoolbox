@@ -54,14 +54,15 @@ end
 
 %% Extract SP
 
-dlat = 2;      % initial lateral tolerance (+/-) in deg
+dlat = 1;      % initial lateral tolerance (+/-) in deg
 pol = [0,0];   % initial polar angles
+dx = 0.01;
 
-while (min(pol) > -30 || max(pol) < 210 ... % ensure that important polar range is included
+while (min(pol) > -30+dx || max(pol) < 210-dx ... % ensure that important polar range is included
         || max(diff(pol))>30)...            % and gaps are <= 30deg
         && dlat <= 5                        % but keep tolerance smaller than 5 deg
 
-  idx=find(pos(:,6)>=-(dlat+0.01)/2+lat & pos(:,6)<=(dlat+0.01)/2+lat);
+  idx=find( pos(:,6)>=-(dlat+dx)/2+lat & pos(:,6)<=(dlat+dx)/2+lat );
   latActual = pos(idx,6); % actual lateral angles
   [pol,polidx]=unique(real(pos(idx,7)));   % sorted polar angles
   latActual = latActual(polidx);
