@@ -100,7 +100,7 @@ lvlref = 20*log10(1/20e-6);           % Reference level: 20 micro Pa
 stim(idnz) = setdbspl(stim(idnz),spl,'dboffset',lvlref); % Calibrate level
 stim = stim(:)'; % stim must be a row vector
 
-% characterstic frequencies evenly spaced along ERB scale
+% characteristic frequencies evenly spaced along ERB scale
 fc = audspace(kv.flow,kv.fhigh,kv.nfibers,'erb');
 
 % tdres is the binsize in seconds, i.e., the reciprocal of the sampling rate
@@ -111,7 +111,7 @@ nrep = 1;
 
 % reptime is the time between stimulus repetitions in seconds; -> set 
 % twice the duration of stim
-reptime = (2*length(stim)+1)/kv.fsmod;
+reptime = (2*length(stim))/kv.fsmod;
 
 % species is either "cat" (1) or "human" (2): "1" for cat and "2" for human
 species = flags.do_human+1;

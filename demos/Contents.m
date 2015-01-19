@@ -17,7 +17,7 @@
 %     DEMO_HOHMANN2002       - Gammatone filterbank, (Hohmann, 2002)
 %     DEMO_HERZKE2007        - Herzke and Hohmann (2007) filterbank (currently a draft only)
 %     DEMO_TAKANEN2013       - Binaural activity map (Takanen et al., 2013)
-%     DEMO_ZILANY2013        - Non-linear model of the auditory filtering (Zilany et al., 2013)
+%     DEMO_ZILANY2014        - Non-linear model of the auditory filtering (Zilany et al., 2014)
 %     DEMO_VERHULST2012      - Transmission line model of the cochlea (Verhulst et al., 2012)
 %
 %   For help, bug reports, suggestions etc. send email to 

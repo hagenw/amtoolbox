@@ -1,10 +1,10 @@
-%DEMO_ZILANY2013  Demo of the Zilany 2013 model
+%DEMO_ZILANY2014  Demo of the Zilany et al., (2014) model
 %
-%   This demos generates a simple figure that shows the behaviour of the Zilany et al. (2013) model
+%   This demos generates a simple figure that shows the behaviour of the Zilany et al. (2014) model
 % 
 %   .. figure::
 %
-%      Figure from Zilany et al. (2013) model
+%      Figure from Zilany et al. (2014) model
 %
 %   
 
@@ -37,7 +37,7 @@ stim(1:irpts)= stim(1:irpts).*(0:(irpts-1))/irpts;
 stim((mxpts-irpts):mxpts)=stim((mxpts-irpts):mxpts).*(irpts:-1:0)/irpts;
 
 % AN modeling
-[ANresp,fc,vihc,psth] = zilany2013(...
+[ANresp,fc,vihc,psth] = zilany2014(...
   stimdb,stim,fsstim,...
   'flow',CF','fhigh',CF,'nfibers',1,'fiberType',fiberType);
 
