@@ -29,7 +29,7 @@ function [gamma,epsilon,s] = baumgartner2014parametrization(s)
 %
 %   See also: baumgartner2014, data_baumgartner2014
 %
-%   References: baumgartner2014
+%   References: baumgartner2014modeling
 
 %% Evaluate performance as a function of the lateral angle
 

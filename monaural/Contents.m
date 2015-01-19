@@ -24,6 +24,7 @@
 %     PLOTROENNE2012CHIRP      - Plot output of roenne2012chirp
 %     PLOTROENNE2012TONEBURSTS - Plot output of roenne2012tonebursts
 %     ZILANY2007HUMANIZED       - Humanized auditory nerve model
+%     ZILANY2013                - Zilany et al. (2013) model
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
