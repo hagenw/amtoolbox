@@ -12,7 +12,7 @@ gridAz = AZ_MODULE.rangeAZ;
      
 deltaAz = abs(diff(gridAz(1:2)));
 
-% Select method for integrating localiztaion information across time
+% Select method for integrating localization information across time
 switch(upper(intLL))
     
     case 'AVG'        

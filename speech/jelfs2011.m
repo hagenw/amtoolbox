@@ -66,7 +66,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
 %     [interferer,fs2] = read_hrtf(0,interferer{:});
     X=SOFAload(fullfile(amtbasepath,'hrtf',mfilename,[interferer{2} '.sofa']));
     for ii=1:azims
-      idx(ii)=find(X.SourcePosition(:,1)==interferer{1}(ii) & X.SourcePosition(:,2)==0);
+      idx(ii)=find(X.SourcePosition(:,1)==mod(interferer{1}(ii),360) & X.SourcePosition(:,2)==0);
     end
     interferer=shiftdim(X.Data.IR(idx,:,:),2);
     interferer=postpad(interferer,size(interferer,1)+kv.pad);

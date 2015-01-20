@@ -1,5 +1,5 @@
 function out = may2011(input,fs)
-%may2011   GMM-based localization module.
+%may2011   GMM-based estimation of azimuth direction for concurrent speakers
 %   Usage: out = may2011(input,fs)
 %
 %   Input arguments:
@@ -18,16 +18,12 @@ function out = may2011(input,fs)
 %        .ild      = interaural level difference     [nFilter x nFrames]
 %        .ic      = interaural coherence             [nFilter x nFrames]
 % 
-%REFERENCES
-%   [1] T. May, S. van de Par and A. Kohlrausch, "A Probabilistic Model for
-%       Robust Localization Based on a Binaural Auditory Front-End", IEEE
-%       Transactions on Audio, Speech and Language Processing, Vol 19,
-%       Issue 1, pp. 1-13, 2011.
+%   References: may2011
 
 
 %   Developed with Matlab 7.8.0.347 (R2009a). Please send bug reports to:
 %
-%   Author  :  Tobias May © 2009-2014
+%   Author  :  Tobias May 2009-2014
 %              University of Oldenburg and TU/e Eindhoven   
 %              tobias.may@uni-oldenburg.de   t.may@tue.nl
 %
@@ -70,7 +66,7 @@ switch lower(methodGMM)
 end
 
 % Check if localization module can be re-loaded from persistent memory
-if ~isempty(AMT_may2011PERC) && ~isempty(PERmethod) && isequal(methodGMM,AMT_may2011PERmethod)
+if ~isempty(AMT_may2011PERC) && ~isempty(AMT_may2011PERmethod) && isequal(methodGMM,AMT_may2011PERmethod)
     % Re-load GMMs
     C = AMT_may2011PERC;
 else
@@ -288,3 +284,6 @@ if nargin < 2 || isempty(dim)
 else
     [temp, maxidx] = max(input,[],dim);
 end
+
+function m=nanmean(x,dim)
+m=mean(x(~isnan(x)),dim);

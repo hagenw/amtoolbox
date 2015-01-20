@@ -19,6 +19,7 @@
 %     DEMO_TAKANEN2013       - Binaural activity map (Takanen et al., 2013)
 %     DEMO_ZILANY2014        - Non-linear model of the auditory filtering (Zilany et al., 2014)
 %     DEMO_VERHULST2012      - Transmission line model of the cochlea (Verhulst et al., 2012)
+%     DEMO_MAY2011           - Azimuth estimation of concurrent speakers (May et al., 2011)
 %
 %   For help, bug reports, suggestions etc. send email to 
 %   amtoolbox-help@lists.sourceforge.net

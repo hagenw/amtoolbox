@@ -23,7 +23,7 @@ function cbarlabel(szString,fig)
 
 %   Developed with Matlab 7.8.0.347 (R2009a). Please send bug reports to:
 %   
-%   Author  :  Tobias May, © 2009 
+%   Author  :  Tobias May, 2009 
 %              TUe Eindhoven and Philips Research  
 %              t.may@tue.nl      tobias.may@philips.com
 %

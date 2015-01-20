@@ -5,7 +5,7 @@ function varargout = comp_may2011gammatone(varargin)
 
 %   Developed with Matlab 7.9.0.529 (R2009b). Please send bug reports to:
 %   
-%   Author  :  Tobias May, © 2009 
+%   Author  :  Tobias May, 2009 
 %              TUe Eindhoven and Philips Research  
 %              t.may@tue.nl      tobias.may@philips.com
 %

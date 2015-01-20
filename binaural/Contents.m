@@ -16,9 +16,10 @@
 %
 %  Localization models
 %     LINDEMANN1986         - Calculate a binaural activity map
-%     DIETZ2011             - Dietz 2011 binaural model
-%     WIERSTORF2013         - Localization for a WFS or stereo setup
-%     TAKANEN2013           - Takanen 2013 binaural auditory model
+%     DIETZ2011             - Binaural azimuth estimation 
+%     WIERSTORF2013         - Localization in a WFS or stereo setup
+%     TAKANEN2013           - Binaural count-comparison model
+%     MAY2011               - Azimuth of concurrent speakers
 %
 %  Additional functions
 %     PLOTZIEGELWANGER2014  - Plot the output of the Ziegelwanger2014 model

@@ -1,4 +1,3 @@
-
 function output = joergensen2013(x,y,fs_input,IO_param)
 %joergensen2013  the multi-resolution sEPSM 
 %   Usage: output = joergensen2013(x,y,fs_input,IO_param)

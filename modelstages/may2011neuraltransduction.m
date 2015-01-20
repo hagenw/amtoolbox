@@ -2,7 +2,7 @@ function audNerve = may2011neuraltransduction(bm,fs,haircellMethod)
 
 %   Developed with Matlab 7.5.0.342 (R2007b). Please send bug reports to:
 %   
-%   Author  :  Tobias May, © 2008-2009
+%   Author  :  Tobias May, 2008-2009
 %              TUe Eindhoven and Philips Research  
 %              t.may@tue.nl      tobias.may@philips.com
 %

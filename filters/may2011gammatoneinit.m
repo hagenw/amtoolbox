@@ -29,7 +29,7 @@ function GFB = may2011gammatoneinit(fs,lowFreq,upFreq,nFilter,bUseEar,bAlign,bIn
 % 
 %OUTPUT PARAMETER
 %       GFB : gammatone parameter structure which can be passed as second
-%             input argument to the function "gammatone".
+%             input argument to the function `gammatone`
 %
 %EXAMPLE
 %   nSamples = 500;
@@ -40,11 +40,11 @@ function GFB = may2011gammatoneinit(fs,lowFreq,upFreq,nFilter,bUseEar,bAlign,bIn
 %   % Plot result
 %   waveplot(1:nSamples,GFB.cf,bm);
 %
-%   See also gammatone and isGFB.
+%   See also: gammatone
 
 %   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
 %   
-%   Author  :  Tobias May, Â© 2008 
+%   Author  :  Tobias May, 2008 
 %              TUe Eindhoven and Philips Research  
 %              t.may@tue.nl      tobias.may@philips.com
 %
@@ -133,7 +133,7 @@ function out = isGFB(in)
 
 %   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
 %   
-%   Author  :  Tobias May, © 2008 
+%   Author  :  Tobias May, 2008 
 %              TUe Eindhoven and Philips Research  
 %              t.may@tue.nl      tobias.may@philips.com
 %
@@ -185,7 +185,7 @@ function freqHz = erb2freq(erbf)
 
 %   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
 %   
-%   Author  :  Tobias May, © 2008 
+%   Author  :  Tobias May, 2008 
 %              TUe Eindhoven and Philips Research  
 %              t.may@tue.nl      tobias.may@philips.com
 %
@@ -221,7 +221,7 @@ function erbf = freq2erb(freqHz)
 
 %   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
 %   
-%   Author  :  Tobias May, © 2008 
+%   Author  :  Tobias May, 2008 
 %              TUe Eindhoven and Philips Research  
 %              t.may@tue.nl      tobias.may@philips.com
 %
@@ -259,7 +259,7 @@ function erbWidth = erb(freqHz)
 
 %   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
 %   
-%   Author  :  Tobias May, © 2008 
+%   Author  :  Tobias May, 2008 
 %              TUe Eindhoven and Philips Research  
 %              t.may@tue.nl      tobias.may@philips.com
 %
