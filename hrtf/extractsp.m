@@ -58,7 +58,8 @@ dlat = 1;      % initial lateral tolerance (+/-) in deg
 pol = [0,0];   % initial polar angles
 dx = 0.01;
 
-while (min(pol) > -30+dx || max(pol) < 210-dx ... % ensure that important polar range is included
+while isempty(pol) || ...
+        (min(pol) > -30+dx || max(pol) < 210-dx ... % ensure that important polar range is included
         || max(diff(pol))>30)...            % and gaps are <= 30deg
         && dlat <= 5                        % but keep tolerance smaller than 5 deg
 
