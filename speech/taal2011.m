@@ -35,7 +35,7 @@ function d = taal2011(sigclean, sigproc, fs)
 %     % Get a clean and noisy test signal
 %     [f,fs]=cocktailparty;
 %     Ls=length(f);
-%     f_noisy=f+0.05*pinknoise(Ls,1,'rms');
+%     f_noisy=f+0.05*pinknoise(Ls,1);
 %
 %     % Simple spectral subtraction to remove the noise
 %     a=128; M=256; g=gabtight('hann',a,M);

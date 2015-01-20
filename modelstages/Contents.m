@@ -34,11 +34,14 @@
 %     TAKANEN2013PERIPHERY  - Process input through the model of periphery
 %     TAKANEN2013WBMSO      - Wideband medial superior olive model
 %
-%  Utilities
+%  Sagittal-plane localization models
 %     PMV2PPP             - PMV to PPP conversion
 %     PLOTBAUMGARTNER2013 - plot probabilistic prediction matrixes
 %     PLOTBAUMGARTNER2014 - plot probabilistic prediction matrixes
+%     BAUMGARTNER2014CALIBRATION - Calibration of the model
+%     BAUMGARTNER2014LIKELISTAT - Likelihood statistics in the model
 %     BAUMGARTNER2014VIRTUALEXP - Performs a virtual sound-localization experiment
+%     BAUMGARTNER2014PMV2PPP - Calculate psychophysical predictions from PMVs
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

@@ -7,6 +7,8 @@ function output = exp_wierstorf2013(varargin)
 %   results.  The format of its output depends on the chosen figure.
 %   Note that the original figures in the paper are not plotted with Matlab, but
 %   with gnuplot and may look a little bit different.
+%
+%   The Sound-Field-Synthesis Toolbox is required.
 %   
 %   The following flags can be specified;
 %
