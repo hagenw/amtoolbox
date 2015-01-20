@@ -70,6 +70,7 @@ if flags.do_compile
     ext=mexext;
     % Get the list of files.
     L=dir([bp,filesep,'mex',filesep,'comp_*.c']);
+    L=[L; dir([bp,filesep,'mex',filesep,'comp_*.cpp'])];
   end;
     filenames = arrayfun(@(lEl) lEl.name,L,'UniformOutput',0);
   
