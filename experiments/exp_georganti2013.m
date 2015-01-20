@@ -1,12 +1,14 @@
-function varargout = exp_georganti2013(flag)
-
+function exp_georganti2013(varargin)
 %EXP_GEORGANTI2013 Figures from Georganti et al. (2013)
+%   Usage: exp_georganti2013(flag);
 % 
-%
-%   EXP_GEORGANTI2013(FLAG) reproduces figures that can be found in  
-%   Georganti et al. (2013) [1].
+%   `exp_georganti2013(flags)` reproduces figures from Georganti et al. (2013).
 %   
-%   FLAG maybe either 'fig9' or 'fig10'
+%   The following flags can be specified;
+%
+%     'fig9'    distance estimation for a small room
+%
+%     'fig10'    distance estimation for a large room
 %
 %   The figures present the computed distance-dependent feature
 %   BSMD STD (Binaural Spectral Magnitude Difference Standard Deviation)
@@ -16,7 +18,7 @@ function varargout = exp_georganti2013(flag)
 %   (binaural/stereo recordings).
 %
 %   The BSMD STD feature is related to the standard deviation of the
-%   magnitude spectrum of Room Transfer Function, which is known to depend on 
+%   magnitude spectrum of room impulse response, which is known to depend on 
 %   the source/receiver distance. See [2] for more information.
 %
 %
@@ -102,16 +104,24 @@ function varargout = exp_georganti2013(flag)
 
 
 % SELECT SMALL OR LARGE ROOM BY COMMENTING/UNCOMMENTING
+definput.flags.type = {'missingflag','fig9','fig10'};
 
-if flag =='fig09'
+% Parse input options
+[flags]  = ltfatarghelper({},definput,varargin);
+
+if flags.do_missingflag
+  flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+             sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end;
+
+if flags.do_fig9
     num = 1;      % Small Room -  RT = 0.15 sec
-elseif flag == 'fig10'
+    prefix = 'smallRoom';
+elseif flags.do_fig10
     num = 2;      % Large Room -  RT = 0.9 sec
+    prefix = 'largeRoom';
 end
-
-
-
-
 
 % Sampling frequency
 P.fs = 44100;
@@ -135,17 +145,7 @@ P.freq = (P.fs/P.nFFT)*(0:(P.nFFT/2-1));
 P.fmin = 20;    % lower frequency in Hz - default value
 P.fmax = 2300; % upper frequency in Hz - default value
 
-
-% List the number of available distances for the wavfiles
-% Wav files should be placed in separate folders - one for each distance
-
-
-if num == 1
-    nDist = listDirs(['signals',filesep,'wavFilesGeorganti',filesep,'smallRoom']);  
-elseif num == 2;
-    nDist = listDirs(['signals',filesep,'wavFilesGeorganti',filesep,'largeRoom']);   
-end
-
+nDist=dir(fullfile(amtbasepath,'signals',['exp_georganti2013_' prefix '*.mat']));
 
 fmin_id = min(find((P.freq>P.fmin)));
 fmax_id = min(find((P.freq>P.fmax)));
@@ -155,8 +155,8 @@ idx = 1;
 
 for ww = 1:length(nDist)
     
-    pathWav = listFiles(nDist(ww).name,'*.mat');
-    signalPre = load(pathWav(1).name);
+    pathWav = nDist(ww).name;
+    signalPre = load(pathWav);
     signal = signalPre.signal;
     
     for kk = 1:P.hop:length(signal)-P.hop
@@ -193,13 +193,13 @@ if num == 1
     hold on
     plot(difSTD(2,10:210),'Color',[0.6 0.6 0.6],'LineWidth',2)
     plot(difSTD(3,10:210),'--k','LineWidth',2)
-    xlabel('Time (sec)','FontSize',16,'FontWeight','bold')
-    ylabel('BSMD STD','FontSize',16,'FontWeight','bold')
+    xlabel('Time (sec)','FontSize',12,'FontWeight','bold')
+    ylabel('BSMD STD','FontSize',12,'FontWeight','bold')
     title ('Small Room -  RT = 0.15 sec','FontSize',16,'FontWeight','bold')
     ylim([3 8])
     xlim([0 200])
     legend('0.5m','1m','1.5m','Location','NorthWest')
-    set(gca,'FontSize',14)
+    set(gca,'FontSize',10)
     grid on
     box on
     
@@ -208,10 +208,10 @@ if num == 1
     [a2,b2] = hist(difSTD(2,10:210),[3:0.1:8]);
     [a3,b3] = hist(difSTD(3,10:210),[3:0.1:8]);
     plot(a1/201,b1,'LineWidth',2,'Color','k'); hold on
-    set(gca,'FontSize',14)
+    set(gca,'FontSize',10)
     plot(a2/201,b2,'Color',[0.6 0.6 0.6],'LineWidth',2)
     plot(a3/201,b3,'LineWidth',2,'Color','k','LineStyle','--')
-    xlabel('Frequency of occurence (%)','FontSize',16,'FontWeight','bold')
+    xlabel('Frequency of occurence (%)','FontSize',10,'FontWeight','bold')
     legend('0.5m','1m','1.5m','Location','NorthEast')
     box on
     xlim([0 0.4])
@@ -220,7 +220,7 @@ if num == 1
     set(gca,'YTick',[])
     grid on
     
-    print -depsc2 smallSpeechBSMD_STD  %Creates .eps file with the figure
+%     print -depsc2 smallSpeechBSMD_STD  %Creates .eps file with the figure
     
     
 elseif num == 2 
@@ -231,13 +231,13 @@ elseif num == 2
     hold on
     plot(difSTD(2,10:210),'Color',[0.6 0.6 0.6],'LineWidth',2)
     plot(difSTD(3,10:210),'--k','LineWidth',2)
-    xlabel('Time (sec)','FontSize',16,'FontWeight','bold')
-    ylabel('BSMD STD','FontSize',16,'FontWeight','bold')
+    xlabel('Time (sec)','FontSize',12,'FontWeight','bold')
+    ylabel('BSMD STD','FontSize',12,'FontWeight','bold')
     title ('Large Room -  RT = 0.9 sec','FontSize',16,'FontWeight','bold')
     ylim([2 8.5])
     xlim([0 200])
     legend('1m','2m','3m','Location','NorthWest')
-    set(gca,'FontSize',14)
+    set(gca,'FontSize',10)
     grid on
     box on
     
@@ -246,10 +246,10 @@ elseif num == 2
     [a2,b2] = hist(difSTD(2,10:210),[3:0.1:8]);
     [a3,b3] = hist(difSTD(3,10:210),[3:0.1:8]);
     plot(a1/201,b1,'LineWidth',2,'Color','k'); hold on
-    set(gca,'FontSize',14)
+    set(gca,'FontSize',10)
     plot(a2/201,b2,'Color',[0.6 0.6 0.6],'LineWidth',2)
     plot(a3/201,b3,'LineWidth',2,'Color','k','LineStyle','--')
-    xlabel('Frequency of occurence (%)','FontSize',16,'FontWeight','bold')
+    xlabel('Frequency of occurence (%)','FontSize',10,'FontWeight','bold')
     legend('1m','2m','3m','Location','NorthEast')
     box on
     xlim([0 0.4])
@@ -258,7 +258,6 @@ elseif num == 2
     set(gca,'YTick',[])
     grid on
     
-    print -depsc2 largeSpeechBSMD_STD  %Creates .eps file with the figure
 end
 
 
