@@ -3,7 +3,7 @@
 %  The AMT team, 2011 - 2014.
 %
 %  Peripheral stages
-%     HEADPHONEFILTER    - FIR filter to model headphones
+%     HEADPHONEFILTER    - FIR filter to model headphones 
 %     MIDDLEEARFILTER    - FIR filter to model the middle ear
 %     AUDITORYFILTERBANK - Linear auditory filterbank.
 %     IHCENVELOPE        - Inner hair cell envelope extration.

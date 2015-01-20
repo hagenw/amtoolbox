@@ -9,7 +9,7 @@
 %     BAUMGARTNER2013   - Localization in saggital planes
 %     BAUMGARTNER2014     - Localization in saggital planes
 %     ZILANY2007HUMANIZED  - Humanized auditory nerve model
-%     ZILANY2014           - Auditory cochlear processing
+%     ZILANY2014           - Auditory cochlear processing 
 %
 %  The Langendijk model
 %     LANGENDIJK2002           - Langendijk & Bronkhorst 2002 auditory model 

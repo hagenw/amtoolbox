@@ -1,6 +1,6 @@
 function out = may2011(input,fs)
 %may2011   GMM-based localization module.
-%   Usage: out = GFB2Azimuth(input,fs)
+%   Usage: out = may2011(input,fs)
 %
 %   Input arguments:
 %     input : binaural input signal [nSamples x 2 channels]
@@ -17,10 +17,7 @@ function out = may2011(input,fs)
 %        .itd      = interaural time difference      [nFilter x nFrames]
 %        .ild      = interaural level difference     [nFilter x nFrames]
 %        .ic      = interaural coherence             [nFilter x nFrames]
-%  
-%  **Note**: The NETLAB toolbox is required for the GMM modeling.
 % 
-
 %REFERENCES
 %   [1] T. May, S. van de Par and A. Kohlrausch, "A Probabilistic Model for
 %       Robust Localization Based on a Binaural Auditory Front-End", IEEE
@@ -30,24 +27,28 @@ function out = may2011(input,fs)
 
 %   Developed with Matlab 7.8.0.347 (R2009a). Please send bug reports to:
 %
-%   Author  :  Tobias May, Â© 2009-2013 
+%   Author  :  Tobias May © 2009-2014
 %              University of Oldenburg and TU/e Eindhoven   
 %              tobias.may@uni-oldenburg.de   t.may@tue.nl
 %
 %   History :
-%   v.1.0   2009/04/05
-%   v.1.1   2009/05/19 ensure that loglikelihoods are finite
+%   v.0.1   2009/04/05
+%   v.0.2   2014/02/27 adopted model to run in the AMToolbox
+%   v.0.3   2015/01/20 integrated in the AMT
 %   ***********************************************************************
 
 % Initialize persistent memory
-persistent PERC PERmethod
+persistent AMT_may2011PERC AMT_may2011PERmethod
 
 
 %% ***********************  CHECK INPUT ARGUMENTS  ************************
 % 
 % 
 % Check for proper input arguments
-error(nargchk(2,2,nargin));
+if nargin ~= 2
+    help(mfilename);
+    error('Wrong number of input arguments!');
+end
 
 
 %% *******************  INITIALIZE AZIMUTH CLASSIFIER  ********************
@@ -63,21 +64,21 @@ methodGMM = 'default';
 switch lower(methodGMM)
     case 'default'
         % Room 5 -90:5:90
-        A.gmmModel = 'GMMMultiPosRoom5Roman_20100622-1525';   
+        A.gmmModel = 'data_may2011modeldata';   
     otherwise
         error(['GMM module ''',lower(methodGMM),'''is not available.'])
 end
 
 % Check if localization module can be re-loaded from persistent memory
-if ~isempty(PERC) && ~isempty(PERmethod) && isequal(methodGMM,PERmethod)
+if ~isempty(AMT_may2011PERC) && ~isempty(PERmethod) && isequal(methodGMM,AMT_may2011PERmethod)
     % Re-load GMMs
-    C = PERC;
+    C = AMT_may2011PERC;
 else
     % Load localization module
     load(A.gmmModel);
     
     % Store classifier to persistent memory
-    PERC = C; PERmethod = methodGMM;
+    AMT_may2011PERC = C; AMT_may2011PERmethod = methodGMM;
 end
 
 % Store classifier
@@ -165,8 +166,8 @@ for ii = 1 : GFB.nFilter
     right = may2011neuraltransduction(bm(:,ii,2), fs, A.haircellModel);
     
     % Framing
-    frameL = frameData(left, blockSamples, hopSamples, winType);
-    frameR = frameData(right,blockSamples, hopSamples, winType);
+    frameL = may2011frameData(left, blockSamples, hopSamples, winType);
+    frameR = may2011frameData(right,blockSamples, hopSamples, winType);
     
     % =====================================================================
     % ITD ESTIMATE
@@ -176,21 +177,15 @@ for ii = 1 : GFB.nFilter
     switch lower(A.xcorrMethod)
         case 'power'
             % Time-based
-            xcorr = xcorrNorm(frameL,frameR,A.maxDelay,A.bXcorrDetrend,...
+            xcorr = may2011xcorrNorm(frameL,frameR,A.maxDelay,A.bXcorrDetrend,...
                               A.bXcorrNorm);
-        case 'unbiased'
-            % FFT-based
-            xcorr = calcXCorr(frameL,frameR,A.maxDelay,A.xcorrMethod);
     end
     
     % Maximum search per frame
-    [a,b] = findLocalPeaks(xcorr,2); %#ok
+    bM = transpose(argmax(xcorr,1)); 
     
-    % Warp indices
-    bM = mod(b-1,2*A.maxDelay+1)+1;
-      
     % Refine lag position by applying parabolic interpolation
-    [delta,currIC] = interpolateParabolic(xcorr,bM);
+    [delta,currIC] = may2011interpolateParabolic(xcorr,bM);
     
     % Calculate ITD with fractional part
     feat(:,1) = A.lags(bM)/fs + delta * (1/fs);
@@ -204,8 +199,8 @@ for ii = 1 : GFB.nFilter
     bmEnergyR = sum(abs(frameR).^2)/blockSamples;
     
     % Compute ILD
-    feat(:,2) = calcILD(bmEnergyL,bmEnergyR);
-    
+    feat(:,2) = 10 * (log10(bmEnergyR + eps) -  log10(bmEnergyL + eps));
+        
     % Compensate for square-root compression
     if isequal(A.haircellModel,'roman')
         % Reverse effect of sqrt() in decibel domain
@@ -217,7 +212,7 @@ for ii = 1 : GFB.nFilter
     % =====================================================================
     %     
     % Classify azimuth
-    prob(ii,:,:) = classifyGMM(feat,gmmFinal{ii}(azIdx));
+    prob(ii,:,:) = may2011classifyGMM(feat,gmmFinal{ii}(azIdx));
     
     % Normalize
     prob(ii,:,:) = prob(ii,:,:) ./ repmat(sum(prob(ii,:,:),3),[1 1 nAz]);
@@ -234,9 +229,6 @@ for ii = 1 : GFB.nFilter
     % Store IC
     ic(ii,:) = currIC;
 end
-
-% Ensure that loglikelihood is finite
-loglik(isinf(loglik) | isnan(loglik)) = 0;
 
 
 %% ***********************  LOCALIZATION ESTIMATE  ************************
@@ -259,7 +251,7 @@ azimuth = azGrid(maxIdx);
 % 
 % 
 % Integrate log-likelihoods across channels
-intChanGMM = squeeze(mean(loglik,1));
+intChanGMM = squeeze(nanmean(loglik,1));
 
 % Maximum search
 [tmp,maxIdx] = max(intChanGMM,[],2); %#ok
@@ -268,7 +260,7 @@ intChanGMM = squeeze(mean(loglik,1));
 azFrames = azGrid(maxIdx);
 
 % Apply interpolation to increase azimuth resolution
-delta = interpolateParabolic(exp(intChanGMM).',maxIdx);
+delta = may2011interpolateParabolic(exp(intChanGMM).',maxIdx);
 
 % Find overall azimuth estimate
 azFrames(:) = azFrames(:) + (azStep*delta(:));
@@ -287,3 +279,12 @@ out.loglik     = loglik;
 out.itd        = itd;
 out.ild        = ild;
 out.ic         = ic;
+
+
+function maxidx = argmax(input, dim)
+
+if nargin < 2 || isempty(dim)
+    [temp, maxidx] = max(input);
+else
+    [temp, maxidx] = max(input,[],dim);
+end

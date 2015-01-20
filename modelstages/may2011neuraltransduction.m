@@ -21,7 +21,10 @@ persistent PERfs PERlowpass
 %% ***********************  CHECK INPUT ARGUMENTS  ************************
 
 % Check for proper input arguments
-checkInArg(2,3,nargin,mfilename);
+if nargin < 2 || nargin > 3
+    help(mfilename);
+    error('Wrong number of input arguments!');
+end
 
 % Set default values
 if nargin < 3 || isempty(haircellMethod); haircellMethod = 'none'; end
@@ -47,10 +50,6 @@ switch lower(haircellMethod)
         % ----------------------
         % Half-wave rectification and square-root compression
         audNerve = sqrt(max(bm,0));
-    case 'haircell'
-        % Low-pass filter and half-wave rectification to mimic
-        % auditory nerve fibers
-        audNerve = haircell(bm,fs,1e3);
     case 'envelope'
         % Halfwave-rectification amd full envelope compression 
         %
@@ -105,18 +104,6 @@ switch lower(haircellMethod)
         
         % Trim signal to its original length
         audNerve = audNerve(maxIdx:end,:);
-    case 'meddis1988'
-        % Apply meddis haricell transformation
-        audNerve = haircellMeddis(bm,fs,'1988');
-    case 'meddismedium'
-        % Apply meddis haricell transformation
-        audNerve = haircellMeddis(bm,fs,'medium');
-    case 'meddishigh'
-        % Apply meddis haricell transformation
-        audNerve = haircellMeddis(bm,fs,'high');
-    case 'meddispitch'
-        % Apply meddis haricell transformation
-        audNerve = haircellMeddis(bm,fs,'pitch');
     otherwise
         error(['Neural transduction method ''',haircellMethod,...
                ''' is not supported.'])
