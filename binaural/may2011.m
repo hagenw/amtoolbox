@@ -1,21 +1,31 @@
 function out = may2011(input,fs)
 %may2011   GMM-based estimation of azimuth direction for concurrent speakers
-%   Usage: out = may2011(input,fs)
+%   Usage: out = may2011(input,fs);
 %
-%   Input arguments:
-%     input : binaural input signal [nSamples x 2 channels]
-%        fs : sampling frequency in Hertz
+%   Input parameters:
+%       input : binaural input signal [nSamples x 2 channels]
 %
-%   Output arguments:
+%       fs : sampling frequency in Hertz
+%
+%   Output parameters:
 %     out : localization structure containing the following fields:
+%
 %        .param    = processing parameters
+%
 %        .azFrames = frame-based azimuth estimate    [Frames x 1]
+%
 %        .azimuth  = time-frequency azimuth estimate [nFilter x nFrames]
+%
 %        .rangeAZ  = azimuth grid                    [nAzDir x 1]
+%
 %        .prob     = 3D probability map              [nFilter x nFrames x nAzDir]
+%
 %        .loglik   = 3D log-likelihood map           [nFilter x nFrames x nAzDir]
+%
 %        .itd      = interaural time difference      [nFilter x nFrames]
+%
 %        .ild      = interaural level difference     [nFilter x nFrames]
+%
 %        .ic      = interaural coherence             [nFilter x nFrames]
 % 
 %   References: may2011

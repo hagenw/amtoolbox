@@ -32,7 +32,7 @@
 %  amtoolbox-help@lists.sourceforge.net
 %
 
-% Copyright (C) 2009-2014 Peter L. Söndergaard and Piotr Majdak
+% Copyright (C) 2009-2014 Peter L. Soendergaard and Piotr Majdak
 % This file is part of AMToolbox version 0.9
 %
 % This program is free software: you can redistribute it and/or modify

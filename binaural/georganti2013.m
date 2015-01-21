@@ -1,33 +1,41 @@
 function difSTD=georganti2013(signal,P)
-%GEORGANTI2013 Binaural spectral-magnitude difference standard deviation
-%according to Georgantis et al., (2013).
-%   Usage: [Obj,results]=georganti2013(signal, P) 
+%GEORGANTI2013 Binaural spectral-magnitude difference standard deviation according to Georganti et al., (2013)
+%   Usage: difSTD = georganti2013(signal, P)
 %
 %   Input parameters:
-%     signal: binaural input signal
-%     P.fs: sampling rate in Hz
-%     P.timeFr: Frame size in seconds
-%     P.fmin: lower frequency (Hz) for the BSDM STD calculation
-%     P.fmax: upper frequency (Hz) for the BSDM STD calculation
+%       signal : binaural input signal
+%
+%       P.fs: sampling rate in Hz
+%
+%       P.timeFr: Frame size in seconds
+%
+%       P.fmin: lower frequency (Hz) for the BSDM STD calculation
+%
+%       P.fmax: upper frequency (Hz) for the BSDM STD calculation
 %
 %   Output parameters:
-%     difSTD: Binaural spectral-magnitude difference standard deviation (dB)
+%       difSTD: Binaural spectral-magnitude difference standard deviation (dB)
 %
 %   See also: exp_georganti2013
 %
 %   References: georganti2013 georganti2013application
+%
 
-%   Developed with Matlab 7.1.0.584 (R2010b)      v.0.1
-%   Updated   with Matlab R2011b    (7.13.0.564)  v.1.0
+%
+%   Developed with Matlab 7.1.0.584 (R2010b) v.0.1
+%   Updated with Matlab R2011b (7.13.0.564) v.1.0
 %
 %   Please send bug reports to:
+%     Eleftheria Georganti
+%     Postdoctoral Researcher
+%     Experimental Audiology, ENT
+%     University Hospital of Zurich/University of Zurich
+%     Zurich, Switzerland
+%     eleftheria.georganti@uzh.ch
 %
-%   Author  :  Eleftheria Georganti
-%              Postdoctoral Researcher
-%              Experimental Audiology, ENT
-%              University Hospital of Zurich/University of Zurich
-%              Zurich, Switzerland
-%              eleftheria.georganti@uzh.ch
+%
+
+
 
 if ~exist('P','var'), P=[]; end
   

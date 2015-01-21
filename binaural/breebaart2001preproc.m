@@ -63,10 +63,10 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %     plotfilterbank(ei_map,1,fc,fs,'audtick','lin');
 %
 %   See also: eicell, auditoryfilterbank, ihcenvelope, adaptloop
+%
+%   References: breebaart2001a
 
-%   References: breebaart2001binaural
-
-%   AUTHOR : Peter L. Søndergaard
+%   AUTHOR : Peter L. Soendergaard
   
 % ------ Checking of input parameters ------------
 
