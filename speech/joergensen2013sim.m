@@ -26,7 +26,7 @@ function [SRTs conditions] = joergensen2013sim(NSpeechsamples,varargin)
 %
 %   ---------
 %
-%   Please cite Jørgensen et al. (2013) if you use
+%   Please cite Joergensen et al. (2013) if you use
 %   this model.
 %
 %   See also: joergensen2013, plotjoergensen2013, exp_joergensen2013
@@ -118,7 +118,7 @@ if flags.do_Jetal2013
     % ------------------  Estimating changes in SRTs based on the mean Pcorrect -------------
     %   The first column of Pc_est_mean should always be the reference
     selection = 1:length(conditions);
-    [dSRT SRTs] = dsrts_from_pc_mean(Pc_est_mean,result.SNRs,selection);
+    [dSRT SRTs] = joergensen2011PCtodSRT(Pc_est_mean,result.SNRs,selection);
 end
 
 if flags.do_JandD2011specsub
@@ -217,7 +217,7 @@ if flags.do_JandD2011specsub
     % ------------------  Estimating changes in SRTs based on the mean Pcorrect -------------
     %   The first column of Pc_est_mean should always be the reference
     selection = 1:length(conditions);
-    [dSRT SRTs] = dsrts_from_pc_mean(Pc_est_mean,result.SNRs,selection);
+    [dSRT SRTs] = joergensen2011PCtodSRT(Pc_est_mean,result.SNRs,selection);
 end
 
 if flags.do_JandD2011reverb
@@ -324,7 +324,7 @@ if flags.do_JandD2011reverb
     % ------------------  Estimating changes in SRTs based on the mean Pcorrect -------------
     %   The first column of Pc_est_mean should always be the reference
     selection = 1:length(conditions);
-    [dSRT SRTs] = dsrts_from_pc_mean(Pc_est_mean,result.SNRs,selection);
+    [dSRT SRTs] = joergensen2011PCtodSRT(Pc_est_mean,result.SNRs,selection);
 end
 
 if flags.do_FP1990
@@ -415,7 +415,7 @@ if flags.do_FP1990
     % ------------------  Estimating changes in SRTs based on the mean Pcorrect -------------
     %   The first column of Pc_est_mean should always be the reference
     selection = 1:length(conditions);
-    [dSRT SRTs] = dsrts_from_pc_mean(Pc_est_mean,result.SNRs,selection);
+    [dSRT SRTs] = joergensen2011PCtodSRT(Pc_est_mean,result.SNRs,selection);
     
 end
 
@@ -502,7 +502,7 @@ if flags.do_Kjems2009
     % ------------------  Estimating changes in SRTs based on the mean Pcorrect -------------
     %   The first column of Pc_est_mean should always be the reference
     selection = 1:length(conditions);
-    [dSRT SRTs] = dsrts_from_pc_mean(Pc_est_mean,result.SNRs,selection);
+    [dSRT SRTs] = joergensen2011PCtodSRT(Pc_est_mean,result.SNRs,selection);
     
 end
 

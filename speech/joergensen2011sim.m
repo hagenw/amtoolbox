@@ -125,7 +125,7 @@ if flags.do_fig5
     % ------------------  Estimating changes in SRTs based on the mean Pcorrect -------------
     %   The first column of Pc_est_mean should always be the reference
     selection = 1:5;
-    dSRT = dsrts_from_pc_mean(Pc_est_mean,result.SNRs,selection);
+    dSRT = joergensen2011PCtodSRT(Pc_est_mean,result.SNRs,selection);
 end
 
 if flags.do_fig6
@@ -234,7 +234,7 @@ if flags.do_fig6
     % ------------------  Estimating changes in SRTs based on the mean Pcorrect -------------
     %   The first column of Pc_est_mean should always be the reference
     selection = 1:6;
-    dSRT = dsrts_from_pc_mean(Pc_est_mean,result.SNRs,selection);
+    dSRT = joergensen2011PCtodSRT(Pc_est_mean,result.SNRs,selection);
 end
 
 

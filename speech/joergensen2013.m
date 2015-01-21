@@ -1,29 +1,28 @@
 function output = joergensen2013(x,y,fs_input,IO_param)
 %joergensen2013  the multi-resolution sEPSM 
-%   Usage: output = joergensen2013(x,y,fs_input,IO_param)
+%   Usage: output = joergensen2013(x, y, fs, IO_param)
 %
-%   `output = joergensen2013(x,y,fs_input,IO_param)` returns the output of
-%   the multi-resolution speech-based envelope spectrum model (mr-sEPSM)
-%   described in Jørgensen et al. (2013), where *x* and *y* denote the noisy
-%   speech mixture and the noise alone, respectively, with sample rate
-%   *fs_input* measured in Hz.
+%   `output = joergensen2013(x, y, fs, IO_param)` calculates the 
+%   signal-to-noise envelope-power (SNRenv) ratio using the 
+%   multi-resolution speech-based envelope spectrum model (mr-sEPSM)
+%   described in Joergensen et al. (2013)
+%   Input parameters:
+%     x: noisy speech mixture 
+%     y: noise alone
+%     fs: sample rate in Hz
+%     IO_param: (optional) vector with parameters for the ideal observer 
+%       that converts the SNRenv to probability of correct, assuming a
+%       given speech material. It contains four parameters of the ideal observer 
+%       formatted as *[k q m sigma_s]*.
 %
-%   The input parameter *IO_param* is a vector with
-%   parameters for the Ideal Observer that converts the SNRenv to
-%   probability of correct, assuming a given speech material.  *IO_param*
-%   contains the four parameters of the Ideal Observer formatted as [k q m
-%   sigma_s].
+%   Output parameters:
+%     output.SNRenv: The SNRenv
 %
-%   *output* is a struct with the following fields:
+%     output.P_correct: The probability of correct given the
+%       SNRenv. This field is only included if *IO_param* is specified.
+%       Its calculation requires the Statistics ToolBox. 
 %
-%     .SNRenv    : The SNRenv
-%
-%     .P_correct : (Optional) The probability of correct given the
-%                  SNRenv. The *IO_param* parameters for a given speech material must be
-%                  specified and the conversion requires the Matlab Statistics
-%                  ToolBox. This field is only included if *IO_param* is specified.
-%
-%   The Jørgensen 2011 model consists of the following stages:
+%   The model is based on the model from Joergensen et al. (2011), which consists of the following stages:
 %
 %   1)  A gammatone bandpass filterbank to simulate the auditory filters
 %
@@ -31,57 +30,20 @@ function output = joergensen2013(x,y,fs_input,IO_param)
 %
 %   3)  A modulation filterbank
 %  
-%   4)  Computation of the envelope power in segments with multiple durations
+%   4)  Computation of the long-term envelope power (*output.SNRenv*)
 %
 %   5)  A decision mechanism based on a statistically ideal observer
+%   (*output.P_correct*)
 % 
-%   The main difference between the Jørgensen 2011 and the Jørgensen 2013
-%   model is that the Jørgensen 2013 model estimates the envelope power
+%   The main difference between to the Joergensen et al. (2011) 
+%   model is that the present model estimates the envelope power
 %   using multi-resolution segmentation of the envelope. The segment
 %   duration depends on the modulation filter center-frequency. In addition,
 %   the modulation filter bank includes filters up to modulation frequencies
-%   of 256 Hz in contrast to the 64 Hz considered by the Jørgensen 2011
-%   model.
+%   of 256 Hz in contrast to the 64 Hz considered by the model from
+%   Joergensen et al. (2011).
 %
-%   Examples:
-%   ---------
-%
-%   The following example computes the SNRenv for a single sentence in
-%   noise at an SNR of -3 dB:::
-% 
-%     load Danish_CLUE_10sentence_samples_22kHz
-%     speech  = sentenceArray{1};
-%     sentenceFileLevel = -26.00; % The RMS level of all CLUE sentence files (in dB relative to 1)
-%     SPL = 65; % speech presentation level
-%     SNR = -3;
-%     fs = 22050;
-%     speech = speech*10^((SPL-sentenceFileLevel)/20);
-%     N = length(speech);
-%     noise = wavread('SSN_CLUE_22kHz.wav');
-% 
-%     % pick a random segment from the noise file
-%     Nsegments = floor(length(noise)/N);
-%     startIdx = randi(Nsegments-2 ,1)*N;
-%     noise = noise(startIdx:startIdx+N -1)';
-% 
-%     noise = noise./rms(noise)*10^((SPL-SNR)/20);
-% 
-%     if size(noise) ~= size(speech)
-%       noise = noise';
-%     end
-% 
-%     test = noise + speech;
-% 
-%     tmp = joergensen2013(test,noise,fs);
-%     SNRenvs = tmp.SNRenv;
-%  
-%     % Parameters for the CLUE material, from Jørgensen et al., (2013).
-%     IOparameters = [0.61 0.5 8000 0.6]; 
-%     tmp = joergensen2013(test,noise,fs, IOparameters);
-%     SNRenvs = tmp.SNRenv;
-%     Pcorrect = tmp.P_correct;
-%
-%     References: joergensen2013
+%   References: joergensen2013 joergensen2011predicting
 
 if nargin < 3
     error('Too few input arguments.');

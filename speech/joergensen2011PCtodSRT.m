@@ -1,16 +1,17 @@
-function [dSRTs_out newSRT] = dSRTs_from_PC_mean(PC_input,SNRs,conditions)
-%%
-% dSRTs_from_PC_mean: calculates the SRT and change in SRT from the simlated percent correct 
+function [dSRTs_out, newSRT] = joergensen2011PCtodSRT(PC_input,SNRs,conditions)
+%joergensen2011PCtodSRT: calculates the SRT and change in SRT from the simulated percent correct 
 % 
-% Usage: [dSRTs_out newSRT] = dSRTs_from_PC_mean(PC_input,SNRs,conditions)
+% Usage: [dSRTs_out newSRT] = joergensen2011PCtodSRT(PC_input,SNRs,conditions)
 % PC_input   :  Matrix with the mean percent correct for each processing
 %               condition and SNR. The first column of PC_input should always be the
 %               reference with no processing
 % conditions :  Vector with the processing conditions
 % SNRs       :  Vector with the SNRs used.
 % 
-% Søren Jørgensen august 2010
 %
+
+% Was dSRTs_from_pc_mean by Soeren Joergensen august 2010
+% roughly adapted to AMT by Piotr Majdak
 
  % ----------------  calculating dSRTs on mean psychofuncs.
 for k = conditions

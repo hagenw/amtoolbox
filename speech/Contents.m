@@ -4,12 +4,8 @@
 %
 %  Monaural speech intelligibility models
 %    TAAL2011              - Short-time objective intelligibility
-%    JOERGENSEN2011        - Speech-based envelope power spectrum (sEPSM 2011)
-%    JOERGENSEN2011SIM     - Simulate experiments for sEPSM 2011
-%    PLOTJOERGENSEN2011    - Plot sEPSM 2011
-%    JOERGENSEN2013        - Speech-based envelope power spectrum (sEPSM 2013)
-%    JOERGENSEN2013SIM     - Simulate experiments for sEPSM 2013
-%    PLOTJOERGENSEN2013    - Plot sEPSM 2013
+%    JOERGENSEN2011        - Speech-based envelope power spectrum based on Joergensen et al. (2011)
+%    JOERGENSEN2013        - Speech-based envelope power spectrum based on Joergensen et al. (2013)
 %
 %  Binaural speech advantage models  
 %    JELFS2011             - Binaural speech advantage
