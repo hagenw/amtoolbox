@@ -101,11 +101,11 @@ len_in_s = length(signal) ./ fs;
 t = linspace(0,len_in_s-dt,length(signal))';
 
 % middle ear band pass filtering
-if displ disp('band pass filtering of input according to middle ear transfer charact. -> signal_me'); end
+if displ amtdisp('band pass filtering of input according to middle ear transfer charact. -> signal_me'); end
 signal_me = middle_ear(signal, middle_ear_thr, middle_ear_order, fs);
 
 % analyzing signals (split into frequency channels)
-if displ disp('splitting signal into frequency channels -> signal_filtered'); end
+if displ amtdisp('splitting signal into frequency channels -> signal_filtered'); end
 
 % create filterbank
 analyzer = gfb_analyzer_new(fs, lower_cutoff_frequency_hz, ...
@@ -126,7 +126,7 @@ channels = length(cfreqs);
 tau = coh_param.tau_cycles./cfreqs;
 
 % rectification, comression, and lowpass filtering of filtered signals (haircell processing)
-if displ disp('haircell processing of frequency bands -> hairc'); end
+if displ amtdisp('haircell processing of frequency bands -> hairc'); end
 
 % haircell processing
 hairc = haircell(signal_filtered, haircell_lp_freq,haircell_lp_order,compression_power, fs)';
@@ -138,24 +138,24 @@ hairc_nolp_sh = haircell(signal_sh_filtered, '','',compression_power, fs)';
 % adding internal noise
 switch int_noise_case
     case 'randn'
-        if displ disp('adding internal random noise -> hairc'); end
+        if displ amtdisp('adding internal random noise -> hairc'); end
         hairc = hairc + (randn(length(hairc),channels)*alpha);
         hairc_sh = hairc_sh + (randn(length(hairc_sh),length(cfreqs))*alpha);
         hairc_nolp = hairc_nolp + (randn(length(hairc),channels)*alpha);
         hairc_nolp_sh = hairc_nolp_sh + (randn(length(hairc_sh),length(cfreqs))*alpha);
     case 'mini'
-        if displ disp('adding internal noise via minimum -> hairc'); end
+        if displ amtdisp('adding internal noise via minimum -> hairc'); end
         hairc = max(hairc,alpha);
         hairc_sh = max(hairc_sh,alpha);
         hairc_nolp = max(hairc,alpha);
         hairc_nolp_sh = max(hairc_sh,alpha);
     otherwise
-        disp('Unknown noise case. WARNING: No noise added!')
+        amtdisp('Unknown noise case. WARNING: No noise added!')
 end
 
 % processing the hairc output with a modulation frequency filter
 %cmin = min(find(cfreqs>2*mod_center_frequency_hz)); % lowest freq. band for envelope detection
-if displ disp('enveloping haircell output -> hairc_mod'); end
+if displ amtdisp('enveloping haircell output -> hairc_mod'); end
 mod_filter_bandwidth_hz = mod_center_frequency_hz/mod_filter_finesse;
 [hairc_mod, hairc_sh_mod] =... %gfb_envelope_filter(hairc(:,cmin:end), hairc_sh(:,cmin:end), fs,...
     gfb_envelope_filter(hairc, hairc_sh, fs,...
@@ -163,7 +163,7 @@ mod_filter_bandwidth_hz = mod_center_frequency_hz/mod_filter_finesse;
     filter_attenuation_db, filter_order);
 
 % calculation of interaural functions from haircell modulation
-if displ disp('calculating interaural functions from haircell modulation'); end
+if displ amtdisp('calculating interaural functions from haircell modulation'); end
 [hairc_mod_itf, hairc_mod_ipd, hairc_mod_ipd_smooth,...
     hairc_mod_ild, hairc_mod_itd, hairc_mod_itd_C, hairc_mod_itd_smooth,...
     hairc_mod_itd_C_smooth, hairc_mod_f_inst,...
@@ -173,13 +173,13 @@ if displ disp('calculating interaural functions from haircell modulation'); end
     signal_level_dB_SPL, compression_power, coh_param.tau_cycles, fs);
 
 % processing the hairc output with a fine structure filter
-if displ disp('deriving fine structure of haircell output -> hairc_fine'); end
+if displ amtdisp('deriving fine structure of haircell output -> hairc_fine'); end
 [hairc_fine, hairc_sh_fine] =...
     gfb_envelope_filter(hairc_nolp, hairc_nolp_sh, fs, cfreqs,...
     cfreqs/fine_filter_finesse, filter_attenuation_db, filter_order);
 
 % calculation of interaural functions from haircell fine structure
-if displ disp('calculating interaural functions from haircell fine structure'); end
+if displ amtdisp('calculating interaural functions from haircell fine structure'); end
 [hairc_fine_itf, hairc_fine_ipd, hairc_fine_ipd_smooth,...
     hairc_fine_ild, hairc_fine_itd, hairc_fine_itd_C, hairc_fine_itd_smooth,...
     hairc_fine_itd_C_smooth, hairc_fine_f_inst,...
@@ -188,7 +188,7 @@ if displ disp('calculating interaural functions from haircell fine structure'); 
     signal_level_dB_SPL, compression_power, coh_param.tau_cycles, fs);
 
 % determine ILD of the hairc output
-if displ disp('determining ild of the haircell output -> hairc_ild'); end
+if displ amtdisp('determining ild of the haircell output -> hairc_ild'); end
 [hairc_ild] =...
     ild_filter(hairc,hairc_sh,level_filter_cutoff_hz,...
     level_filter_order,compression_power,fs);
@@ -200,7 +200,7 @@ hairc_fine_ipd_smooth(:,cfreqs>1400)=[];
 hairc_fine_itd_smooth(:,cfreqs>1400)=[];
 
 
-if displ disp('finished');end
+if displ amtdisp('finished');end
 end
 
 

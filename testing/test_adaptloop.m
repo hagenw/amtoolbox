@@ -27,9 +27,9 @@ limitr = [0.5, 10];
 
 minlvl=0;
 
-disp(' ===============  TEST_ADAPTLOOP ================');
+amtdisp(' ===============  TEST_ADAPTLOOP ================');
 
-disp('--- Used subroutines ---');
+amtdisp('--- Used subroutines ---');
 
 which comp_adaptloop
 
@@ -68,7 +68,7 @@ for w=1:2
       res=norm(s1(:)-s2(:))/norm(s1);
       [test_failed,fail]=ltfatdiditfail(res,test_failed);
       s=sprintf('REF_ADAPT %s %s L: %3i W:%2i %0.5g %s',slimit,tauname,L,w,res,fail);
-      disp(s);
+      amtdisp(s);
 
       
       if tauchoose==1
@@ -83,7 +83,7 @@ for w=1:2
         res=norm(s1(:)-s3(:))/norm(s3);
         [test_failed,fail]=ltfatdiditfail(res,test_failed);
         s=sprintf('NLAL_LIM  %s %s L: %3i W:%2i %0.5g %s',slimit,tauname,L,w,res,fail);
-        disp(s);
+        amtdisp(s);
       end;
                                           
       
@@ -101,7 +101,7 @@ for w=1:2
       
       [test_failed,fail]=ltfatdiditfail(res,test_failed);
       s=sprintf('BLOCK     %s %s L: %3i W:%2i %0.5g %s',slimit,tauname,L,w,res,fail);
-      disp(s);
+      amtdisp(s);
       
     end;
   end;

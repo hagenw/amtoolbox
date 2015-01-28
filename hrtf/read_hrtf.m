@@ -79,12 +79,12 @@ function [outsig,fs] = read_hrtf(elev_r,azim_r,database);
 
       
       ipfile = fopen(sprintf('%skemar/elev%d/L%de%sa.dat',s,elev,elev,azim_str));
-      if ipfile == -1; disp('Error: HRTF Data unavailable!'); break; end
+      if ipfile == -1; amtdisp('Error: HRTF Data unavailable!'); break; end
       outsig(:,ii,1) = fread(ipfile, 512, 'int16',0,'b');
       fclose(ipfile);
 
       ipfile = fopen(sprintf('%skemar/elev%d/R%de%sa.dat',s,elev,elev,azim_str));
-      if ipfile == -1; disp('Error: HRTF Data unavailable!'); break; end
+      if ipfile == -1; amtdisp('Error: HRTF Data unavailable!'); break; end
       outsig(:,ii,2) = fread(ipfile, 512, 'int16',0,'b');
       fclose(ipfile);
     end;

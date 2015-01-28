@@ -5,7 +5,7 @@ function test_failed=test_drnl
 %
 %  
 
-disp(' ===============  TEST_DRNL ================');
+amtdisp(' ===============  TEST_DRNL ================');
 
 % The reference implementations are not dbspl-safe, so switch to the
 % dboffset=100 setting.
@@ -54,11 +54,11 @@ outsig_ref_1=ref_drnl_1(insig,fs,'jepsen2008');
 % There is a deviation. This deviation happends because we convolve the
 % filter coefficients, instead of cascading the filters.
 res=outsig-outsig_ref_1;
-disp('DRNL vs. REF_DRNL_1')
+amtdisp('DRNL vs. REF_DRNL_1')
 fprintf('Relative l^2-norm: %f\n',norm(res(:))/norm(outsig(:)));
 fprintf('Peak SNR: %f\n',20*log10(norm(res(:),inf)/norm(outsig(:),inf)));
 
-disp('REF_DRNL_1 vs. REF_DRNL')
+amtdisp('REF_DRNL_1 vs. REF_DRNL')
 res=outsig_ref-outsig_ref_1;
 fprintf('Relative l^2-norm: %f\n',norm(res(:))/norm(outsig_ref(:)));
 fprintf('Peak SNR: %f\n',20*log10(norm(res(:),inf)/norm(outsig_ref(:),inf)));

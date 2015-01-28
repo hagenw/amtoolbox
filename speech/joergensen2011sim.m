@@ -26,7 +26,7 @@ definput.flags.type = {'fig5','fig6'};
 % ------- simulate experiment with reverberation
 if flags.do_fig5
     load Danish_CLUE_10sentence_samples_22kHz
-    disp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
+    amtdisp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
     
     
     for q = 1:NSpeechsamples
@@ -104,7 +104,7 @@ if flags.do_fig5
             end
             
         end
-        disp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
+        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
         
     end
     
@@ -131,7 +131,7 @@ end
 if flags.do_fig6
     % Loads a cell array with 10 sentences from the CLUE material
     load Danish_CLUE_10sentence_samples_22kHz
-    disp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
+    amtdisp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
     
     
     for q = 1:NSpeechsamples
@@ -213,7 +213,7 @@ if flags.do_fig6
             end
             
         end
-        disp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
+        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
         
     end
     
@@ -260,6 +260,6 @@ H=fft(h, Ly2);		    % Fast Fourier transform
 Y=X.*H;        	           
 y=real(ifft(Y, Ly2));       % Inverse fast Fourier transform
 y=y(1:1:Ly);                % Take just the first N elements
-% disp(['rms before scaling: ', num2str(20*log10(rms(y)))]);
+% amtdisp(['rms before scaling: ', num2str(20*log10(rms(y)))]);
 m=m/max(abs(y));
 y=m*y;

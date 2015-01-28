@@ -39,7 +39,7 @@ definput.flags.type = {'JandD2011specsub','JandD2011reverb','FP1990','Kjems2009'
 % ------- simulate experiment with reverberation
 if flags.do_Jetal2013
     load single_150_SentArray22kHz_varLength
-    disp(['start Jetal2013: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
+    amtdisp(['start Jetal2013: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
     sentenceFileLevel = -26;
     noise_names = {'SSN_CLUE_22kHz','SSN_MOD_CLUE','ISTS_eq'};
     speechSPL = 65;
@@ -99,7 +99,7 @@ if flags.do_Jetal2013
             end
             
         end
-        disp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
+        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
         
     end
   
@@ -123,7 +123,7 @@ end
 
 if flags.do_JandD2011specsub
     load single_150_SentArray22kHz_varLength
-    disp(['start JandD2011specsub: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
+    amtdisp(['start JandD2011specsub: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
     sentenceFileLevel = -26;
     noise_name = 'SSN_CLUE_22kHz';
     speechSPL = 65;
@@ -198,7 +198,7 @@ if flags.do_JandD2011specsub
             end
             
         end
-        disp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
+        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
         
     end
     
@@ -222,7 +222,7 @@ end
 
 if flags.do_JandD2011reverb
     load single_150_SentArray22kHz_varLength
-    disp(['start JandD2011reverb: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
+    amtdisp(['start JandD2011reverb: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
     sentenceFileLevel = -26;
     noise_name = 'SSN_CLUE_22kHz';
     speechSPL = 65;
@@ -305,7 +305,7 @@ if flags.do_JandD2011reverb
             end
             
         end
-        disp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
+        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
         
     end
     
@@ -329,7 +329,7 @@ end
 
 if flags.do_FP1990
     load PlompMimpen_130_SentArray22kHz
-    disp(['start FP1990: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
+    amtdisp(['start FP1990: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
     sentenceFileLevel = 10^((-17.93)/20);
     noise_names = {'MaleS00.wav','MaleF00.wav','P&MRunningSpeech_FemaleTR.wav'};
     conditions = {'SSN','SMN','RT'};
@@ -396,7 +396,7 @@ if flags.do_FP1990
             end
             
         end
-        disp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
+        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
         
     end
     
@@ -421,7 +421,7 @@ end
 
 if flags.do_Kjems2009
      load DANTALE2_144single_SentArray44kHz_varLength
-     disp(['start Kjems2009: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
+     amtdisp(['start Kjems2009: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
             sentenceFileLevel = 10^((-19.79)/20);
             noise_names = {'ssn_noise_20k','cafe_noise_20k','car_noise_20k','Bottle_noise_20k'};
             fs = 22050;
@@ -485,7 +485,7 @@ if flags.do_Kjems2009
             end
             
         end
-        disp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
+        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
         
     end
     
@@ -527,7 +527,7 @@ H=fft(h, Ly2);		    % Fast Fourier transform
 Y=X.*H;
 y=real(ifft(Y, Ly2));       % Inverse fast Fourier transform
 y=y(1:1:Ly);                % Take just the first N elements
-% disp(['rms before scaling: ', num2str(20*log10(rms(y)))]);
+% amtdisp(['rms before scaling: ', num2str(20*log10(rms(y)))]);
 m=m/max(abs(y));
 y=m*y;
 

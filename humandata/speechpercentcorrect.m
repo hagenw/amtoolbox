@@ -17,7 +17,7 @@ function [Pc_est SNRenv] = speechpercentcorrect(SNRenv_lin,material)
 
 
 if nargin < 2
-    disp('you have to specify the spech material used: CLUE, DANTALE or DANTALEII')
+    amtdisp('you have to specify the spech material used: CLUE, DANTALE or DANTALEII')
 end
 
 % ---------- Determine the model parameters based on the speech material used

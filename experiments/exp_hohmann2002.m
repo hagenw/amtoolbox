@@ -487,5 +487,5 @@ function exp_hohmann2002(varargin)
 %% Figure 8
 
     if flags.do_fig8
-        disp('Figure not ready yet')
+        amtdisp('Figure not ready yet')
     end

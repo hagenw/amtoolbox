@@ -259,7 +259,7 @@ ild = 20/kv.compression_power*log10(max(inoutsig_ild(:,:,2),1e-4)./max(inoutsig_
 end
 
 function debug(text_str,flags)
-  if flags.do_debug disp(text_str); end
+  if flags.do_debug amtdisp(text_str); end
 end
 
 % vim: set sw=2 ts=2 expandtab textwidth=80:

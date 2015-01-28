@@ -45,7 +45,7 @@ definput.flags.condition = {'BB','CL','N24','N18','N12','N9','N6','N3'};
 
 %% Extract data
 if not(exist([mfilename '.mat'],'file'))
-  disp(['Downloading ' mfilename ' from http://www.kfs.oeaw.ac.at/']);
+  amtdisp(['Downloading ' mfilename ' from http://www.kfs.oeaw.ac.at/']);
   targetfn = fullfile(amtbasepath,'humandata',[mfilename '.mat']);
   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' mfilename '.mat'];
   urlwrite(sourcefn,targetfn);

@@ -19,9 +19,9 @@ function op1=amthelp(varargin)
 
 % Verify that LTFAT has been installed
 if ~exist('ltfatarghelper','file')  
-    disp('');
-    disp('--- AMTOOLBOX - The Auditory Modeling toolbox. ---');
-    disp('')
+    amtdisp('');
+    amtdisp('--- AMTOOLBOX - The Auditory Modeling toolbox. ---');
+    amtdisp('')
     error(['The toolbox require the LTFAT toolbox to properly function. ' ...
          'Please download and install it from http://ltfat.sourceforge.net,' ...
          'and then call the LTFATSTART command BEFORE you use the AMT.'])
@@ -36,34 +36,34 @@ definput.flags.mode={'general','version','modules','authors'};
 [flags,kv]=ltfatarghelper({},definput,varargin);
 
 if flags.do_general
-  disp(' ');
-  disp('--- AMT - The Auditory Modeling Toolbox. ---');
-  disp(' ')
+  amtdisp(' ');
+  amtdisp('--- AMT - The Auditory Modeling Toolbox. ---');
+  amtdisp(' ')
 
-  disp(['Version ',kv.versiondata]);
-  disp(' ');
-  disp('Installed modules:');
-  disp(' ');
-  disp('Name:            Version:  Description');
+  amtdisp(['Version ',kv.versiondata]);
+  amtdisp(' ');
+  amtdisp('Installed modules:');
+  amtdisp(' ');
+  amtdisp('Name:            Version:  Description');
   modinfo=amthelp('modules');
   for ii=1:length(modinfo);
     s=sprintf(' %-15s %7s  %s',modinfo{ii}.name,modinfo{ii}.version, ...
 	      modinfo{ii}.description);
-    disp(s);
+    amtdisp(s);
   end;
 
-  disp(' ')
+  amtdisp(' ')
   if isoctave
-    disp('Type amthelp("modulename") where "modulename" is the name of one');
-    disp('of the modules to see help on that module.');
+    amtdisp('Type amthelp("modulename") where "modulename" is the name of one');
+    amtdisp('of the modules to see help on that module.');
     
   else
-    disp('Type "help modulename" where "modulename" is the name of one')
-    disp('of the modules to see help on that module.') 
+    amtdisp('Type "help modulename" where "modulename" is the name of one')
+    amtdisp('of the modules to see help on that module.') 
 
   end; 
-  disp(' ');
-  disp('For other questions, please don''t hesitate to send an email to amtoolbox-help@lists.sourceforge.net.'); 
+  amtdisp(' ');
+  amtdisp('For other questions, please don''t hesitate to send an email to amtoolbox-help@lists.sourceforge.net.'); 
     
 end;
   

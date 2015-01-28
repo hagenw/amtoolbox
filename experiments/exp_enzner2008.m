@@ -74,9 +74,9 @@ P.h_length = 256;
 
 % check if signals exist
 if(exist(ref_filename,'file') ~= 2 || exist(rec_filename,'file') ~= 2)
-    display('*')
-    display(strcat('Missing file: ',ref_filename))
-    display('Please download the required wav-files from Sourceforge.')
+    amtdisp('*')
+    amtdisp(strcat('Missing file: ',ref_filename))
+    amtdisp('Please download the required wav-files from Sourceforge.')
     error('Missing file');
 end
 

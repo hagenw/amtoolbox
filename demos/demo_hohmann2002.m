@@ -16,18 +16,18 @@ base_frequency_hz = 1000;
 sampling_rate_hz = 16276;
 filters_per_ERB = 1.0;
 
-disp(['Building a filterbank for ', num2str(sampling_rate_hz), ...
+amtdisp(['Building a filterbank for ', num2str(sampling_rate_hz), ...
       'Hz sampling frequency.']);
-disp(['Lower cutoff frequency: ', num2str(flow), 'Hz']);
-disp(['Upper cutoff frequency: ', num2str(fhigh), 'Hz']);
-disp(['Base frequency        : ', num2str(base_frequency_hz), 'Hz']);
-disp(['filters per ERB       : ', num2str(filters_per_ERB)]);
-disp(' ')
+amtdisp(['Lower cutoff frequency: ', num2str(flow), 'Hz']);
+amtdisp(['Upper cutoff frequency: ', num2str(fhigh), 'Hz']);
+amtdisp(['Base frequency        : ', num2str(base_frequency_hz), 'Hz']);
+amtdisp(['filters per ERB       : ', num2str(filters_per_ERB)]);
+amtdisp(' ')
 analyzer = gfb_analyzer_new(sampling_rate_hz, flow, ...
                             base_frequency_hz, fhigh,...
 			    filters_per_ERB);
 bands = length(analyzer.center_frequencies_hz);
-disp(['filterbank contains ', num2str(bands), ' filters:']);
+amtdisp(['filterbank contains ', num2str(bands), ' filters:']);
 
 fprintf(1,'%3s|%12s |%15s |%16s\n\n', ...
         '# ', 'f / Hz ', 'normalization', 'coefficient');
@@ -56,6 +56,6 @@ title('frequency response of the individual filters in this filterbank');
 xlabel('frequency / Hz');
 ylabel('filter response / dB');
 
-disp(' ');
-disp('Figure 1 shows the frequency response of the individual filters.');
+amtdisp(' ');
+amtdisp('Figure 1 shows the frequency response of the individual filters.');
 

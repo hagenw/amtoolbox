@@ -44,7 +44,7 @@ if preComp ==1
     try
         data=load([amtbasepath,'signals',filesep,filename]);
     catch exception
-        disp(['=============================================================';
+        amtdisp(['=============================================================';
               'Please load the necessary mat-files from the companying page:';
               '   www.acoustics.hut.fi/publications/papers/AMTool2013-bam/  ';
               'and place them in the "signals" directory                    ';
@@ -63,7 +63,7 @@ else
     try
         data=load([amtbasepath,'signals',filesep,filename]);
     catch exception
-        disp(['=============================================================';
+        amtdisp(['=============================================================';
               'Please load the necessary mat-files from the companying page:';
               '   www.acoustics.hut.fi/publications/papers/AMTool2013-bam/  ';
               'and place them in the "signals" directory                    ';

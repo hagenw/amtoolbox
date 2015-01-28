@@ -284,7 +284,7 @@ if flags.do_fig2
   end
   [~,idmin] = min(resid);
   contralateralGain = bwslope(idmin);
-  disp(['Phi: ' num2str(contralateralGain,'%2.0f') ' deg'])
+  amtdisp(['Phi: ' num2str(contralateralGain,'%2.0f') ' deg'])
   
   % Calculate specific weights to plot
   lat = -90:5:90;
@@ -382,7 +382,7 @@ if flags.do_fig4
   if amtredofile(fn,flags.redomode)
     
     autorefreshnotification(fn,flags)
-    disp('Note that this procedure lasts at least 2 hours!')
+    amtdisp('Note that this procedure may last several hours!','progress')
     
     tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_parametrization'); % temporary folder
     mkdir(tempfn)
@@ -548,7 +548,7 @@ if flags.do_fig4
   etotal_g = etotal_g / etotal_g(idopt);
   eperr_g = eperr_g / eperr_g(idopt);
   eqerr_g = eqerr_g / eqerr_g(idopt);
-  disp(['Optimal Gamma: ' num2str(gamma(idopt),'%u') ' dB^-1'])
+  amtdisp(['Optimal Gamma: ' num2str(gamma(idopt),'%u') ' dB^-1'])
 
 
   % Select residues for optimal gamma and various mrs
@@ -561,7 +561,7 @@ if flags.do_fig4
   etotal_gopt = resid.total(idmrs) / resid.total(idnorm);
   eperr_gopt = resid.perr(idmrs) / resid.perr(idnorm);
   eqerr_gopt = resid.qerr(idmrs) / resid.qerr(idnorm);
-  disp(['Optimal MRS: ' num2str(mrssort(idopt_mrs),'%u') ' deg'])
+  amtdisp(['Optimal MRS: ' num2str(mrssort(idopt_mrs),'%u') ' deg'])
   
   if flags.do_plot
     
@@ -892,7 +892,7 @@ if flags.do_fig14
     
     titstr = {['w/ SMM:  e_{PE} = ' num2str(dpe,'%0.1f') '\circ , r_{PE} = ' num2str(r_pe(2),'%0.2f')];...
       ['w/o SMM: e_{PE} = ' num2str(mrs0.dpe,'%0.1f') '\circ , r_{PE} = ' num2str(mrs0.r_pe(2),'%0.2f')]};
-    disp(titstr)
+    amtdisp(titstr)
     title(titstr,'FontSize',kv.FontSize)
     set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[21.1,45.9],...
       'YMinorTick','on','FontSize',kv.FontSize,...
@@ -919,7 +919,7 @@ if flags.do_fig14
       'ok-','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w');
     titstr = {['w/ SMM:  e_{QE} = ' num2str(dqe,'%0.1f') '% , r_{QE} = ' num2str(r_qe(2),'%0.2f')];...
       ['w/o SMM: e_{QE} = ' num2str(mrs0.dqe,'%0.1f') '% , r_{QE} = ' num2str(mrs0.r_qe(2),'%0.2f')]};
-    disp(titstr)
+    amtdisp(titstr)
     title(titstr,'FontSize',kv.FontSize)
     set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[2.1,26.9],...
       'XTick',latseg,'YMinorTick','on','FontSize',kv.FontSize,...
@@ -948,7 +948,7 @@ if flags.do_fig5
   %% Computations
   s = data_baumgartner2014('pool');  
   s = s(ismember({s.id},'NH12'));
-  disp(['Listener: ' s.id])
+  amtdisp(['Listener: ' s.id])
   chance = [];
   for C = 1:length(Conditions)
 
@@ -985,7 +985,7 @@ if flags.do_fig5
             elseif C == 2   % Dummy
                 fn_filters = 'exp_baumgartner2014_spatstrat_lpfilter.mat';
                 if not(exist(fn_filters,'file'))
-                  disp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
+                  amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
                   targetfn = fullfile(amtbasepath,'humandata',fn_filters);
                   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
                   urlwrite(sourcefn,targetfn);
@@ -1144,7 +1144,7 @@ if flags.do_fig6
               elseif C == 2   % Dummy
                 fn_filters = 'exp_baumgartner2014_spatstrat_lpfilter.mat';
                 if not(exist(fn_filters,'file'))
-                  disp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
+                  amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
                   targetfn = fullfile(amtbasepath,'humandata',fn_filters);
                   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
                   urlwrite(sourcefn,targetfn);
@@ -1227,12 +1227,12 @@ if flags.do_fig6
     [r,p] =  corrcoef([s.qe_exp],[s.qe_part]);
     cc.qe.r = r(2);
     cc.qe.p = p(2);
-    disp(['QE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
+    amtdisp(['QE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
 
     [r,p] =  corrcoef([s.pe_exp],[s.pe_part]);
     cc.pe.r = r(2);
     cc.pe.p = p(2);
-    disp(['PE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
+    amtdisp(['PE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
 
     save(fn,'cc', 's',save_format);
   else
@@ -1362,7 +1362,7 @@ if flags.do_fig7
   %% Computations
   s = data_baumgartner2014('pool');
   s = s(ismember({s.id},'NH12')); 
-  disp(['Listener: ' s.id])
+  amtdisp(['Listener: ' s.id])
   chance = [];
   for C = 1:length(Conditions)
 
@@ -1645,7 +1645,7 @@ if flags.do_fig8
         end
 
       end
-      disp(['Condition ' Cond ' completed.'])
+      amtdisp(['Condition ' Cond ' completed.'],'progress')
     end
     
 %     Crange = max(chance(:,8))-min(chance(:,8));
@@ -1657,12 +1657,12 @@ if flags.do_fig8
     cc.qe.r = r(2);
     cc.qe.p = p(2);
     
-    disp(['QE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
+    amtdisp(['QE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
 
     [r,p] =  corrcoef([s.pe_exp],[s.pe_part]);
     cc.pe.r = r(2);
     cc.pe.p = p(2);
-    disp(['PE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
+    amtdisp(['PE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
     
     s = rmfield(s,{'spdtfs','spdtfs_c','Obj','itemlist'});
     
@@ -1804,7 +1804,7 @@ if flags.do_fig9
       end
     end
 
-    disp('Please wait a little!');
+    amtdisp('Please wait a moment!','progress');
     qe = zeros(ns,ns,length(latdivision)); % init QEs
     pe = qe;           % init PEs
     pb = qe;           % init Polar Biases
@@ -1824,7 +1824,7 @@ if flags.do_fig9
 
             end
         end
-        disp([' Subject ' num2str(ll,'%2u') ' of ' num2str(ns,'%2u')]);
+        amtdisp([' Subject ' num2str(ll,'%2u') ' of ' num2str(ns,'%2u')],'progress');
     end
 
     lat_weight = cos(pi*latdivision/180);     %lateral weight compensating compression of polar dimension
@@ -2046,10 +2046,10 @@ if flags.do_fig10
         end
 
       end
-      disp([num2str(ss,'%2u') ' of ' num2str(length(s),'%2u') ' subjects completed']);
+      amtdisp([num2str(ss,'%2u') ' of ' num2str(length(s),'%2u') ' subjects completed'],'progress');
 
     end
-    disp(' ')
+    amtdisp(' ','progress')
 
     if length(latseg) > 1
       pe_exp1 = squeeze(mean(pe_exp1));
@@ -2232,9 +2232,9 @@ if flags.do_fig10
 %       [t,p] = corrdifftest(rDCN,rnoDCN,rInter,14,'hotelling')
 %       z = corrdifftest(rDCN,rnoDCN,rInter,14,'steiger')
 
-      disp('Correlation between actual and predicted median values (15 conditions):')
-      disp(['w/  DCN: r = ' num2str(rDCN,'%0.2f')])
-      disp(['w/o DCN: r = ' num2str(rnoDCN,'%0.2f')])
+      amtdisp('Correlation between actual and predicted median values (15 conditions):')
+      amtdisp(['w/  DCN: r = ' num2str(rDCN,'%0.2f')])
+      amtdisp(['w/o DCN: r = ' num2str(rnoDCN,'%0.2f')])
     end
     
   end
@@ -2249,14 +2249,14 @@ if flags.do_fig11
     
     fnHarvard = fullfile(amtbasepath,'signals','HarvardWords');
     if not(exist(fnHarvard,'dir'))
-      disp('The Harvard word list is missing.') 
-      disp('Please, contact Virginia Best (ginbest@bu.edu) or Craig Jin (craig.jin@sydney.edu.au) for providing their speech recordings.')
-      disp(['Then, move the folder labeled HarvardWords to: ' fullfile(amtbasepath,'signals') '.'])
+      amtdisp('The Harvard word list is missing.') 
+      amtdisp('Please, contact Virginia Best (ginbest@bu.edu) or Craig Jin (craig.jin@sydney.edu.au) for providing their speech recordings.')
+      amtdisp(['Then, move the folder labeled HarvardWords to: ' fullfile(amtbasepath,'signals') '.'])
       return
     end
     
     autorefreshnotification(fn,flags)
-    disp('Note that this computation will take several hours!')
+    amtdisp('Note that this computation may take several hours!','progress')
     
     %% Settings
     latseg = 0;%[-20,0,20];   % centers of lateral segments
@@ -2306,7 +2306,7 @@ if flags.do_fig11
     % Brick-wall (aka sinc-filter): fir1(200,1/3) -> -60 dB
     fn_filters = 'exp_baumgartner2014_highfreqatten_filters.mat';
     if not(exist(fn_filters,'file'))
-      disp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
+      amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
       targetfn = fullfile(amtbasepath,'humandata',fn_filters);
       sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
       urlwrite(sourcefn,targetfn);
@@ -2382,7 +2382,7 @@ if flags.do_fig11
         save(savename,'ape_all','qe_all','ape_BBnoise','qe_BBnoise')
       end
       
-      disp([num2str(kk,'%1.0u') ' of ' num2str(NsampModel,'%2.0u') ' samples completed'])
+      amtdisp([num2str(kk,'%1.0u') ' of ' num2str(NsampModel,'%2.0u') ' samples completed'],'progress')
     end
     
     results = dir(fullfile(tempfn,'result_best2005speech_samp*.mat'));
@@ -2561,7 +2561,7 @@ if flags.do_tab2
             elseif C == 2   % Dummy
               fn_filters = 'exp_baumgartner2014_spatstrat_lpfilter.mat';
               if not(exist(fn_filters,'file'))
-                disp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
+                amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
                 targetfn = fullfile(amtbasepath,'humandata',fn_filters);
                 sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
                 urlwrite(sourcefn,targetfn);
@@ -2658,11 +2658,11 @@ if flags.do_tab2
   for cond = 1:3
 
     if cond == 1
-      disp('BB:')
+      amtdisp('BB:')
     elseif cond == 2
-      disp('LP:')
+      amtdisp('LP:')
     else
-      disp('W:')
+      amtdisp('W:')
     end
 
     Ns = size(pe_exp,2);
@@ -2679,7 +2679,7 @@ if flags.do_tab2
       [p,t,stat] = friedman(squeeze(data),1);
 %       [p,t,stat] = anovan(data(:),group,'display','off');
 
-      disp(['  Chi-sq = ' num2str(t{2,5},'%5.2f') ', p = ' num2str(p(1),'%3.3f')])
+      amtdisp(['  Chi-sq = ' num2str(t{2,5},'%5.2f') ', p = ' num2str(p(1),'%3.3f')])
       
       if p(1) < 0.05
         figure
@@ -2796,7 +2796,7 @@ if flags.do_tab3
 
       end
     
-    disp([num2str(b,'%1.0f') ' of ' num2str(length(bwcoef),'%1.0f') ' completed'])
+    amtdisp([num2str(b,'%1.0f') ' of ' num2str(length(bwcoef),'%1.0f') ' completed'],'progress')
     end
     
     s = rmfield(s,{'Obj','itemlist','mm2','sphrtfs'}); % reduce file size 
@@ -2873,11 +2873,11 @@ end
 %  ------------------------------------------------------------------------
 function autorefreshnotification(fn,flags)
 if flags.do_autorefresh
-  disp(['Calculation of ' fn ' started.'])
-  disp('Results can be also downloaded here:') 
-  disp(' http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/exp_baumgartner2014.zip')
-  disp('Unzip the folder and move the single files into:')
-  disp([' ' fullfile(amtbasepath,'experiments')])
+  amtdisp(['Calculation of ' fn ' started.'])
+  amtdisp('Results can be also downloaded here:') 
+  amtdisp(' http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/exp_baumgartner2014.zip')
+  amtdisp('Unzip the folder and move the single files into:')
+  amtdisp([' ' fullfile(amtbasepath,'experiments')])
 end
 end
 
@@ -3088,7 +3088,7 @@ out=sum(outX,1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 out=out*(10^(amp/20))/sqrt(sum(out.^2))*sqrt(sum(in.^2))*sqrt(sum(h.^2))/sqrt(sum(h0.^2));
-% disp(20*log10(sqrt(sum(out.^2))));
+% amtdisp(20*log10(sqrt(sum(out.^2))));
 ii=max(max(abs(out)));
 if ii>=1
   error(['Maximum amplitude value is ' num2str(20*log10(ii)) 'dB. Set the HRTF scaling factor lower to avoid clipping']);

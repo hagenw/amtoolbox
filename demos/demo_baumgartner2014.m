@@ -46,8 +46,8 @@ m = baumgartner2014virtualexp(p,tang,rang,'runs',2);
 
 %% Calcualte performance measures 
 
-disp('Performance Predictions:')
-disp('------------------------')
+amtdisp('Performance Predictions:')
+amtdisp('------------------------')
 
 % via expectancy values:
 [qe,pe] = baumgartner2014pmv2ppp(p,tang,rang,'print'); 
@@ -55,7 +55,7 @@ disp('------------------------')
 % and/or via responses drawn from virtual experiments
 [f,r] = localizationerror(m,'sirpMacpherson2000');
 perMacpherson2003 = localizationerror(m,f,r,'perMacpherson2003');
-disp(['Local polar error rate (%)        ' num2str(perMacpherson2003,'%4.1f')])
+amtdisp(['Local polar error rate (%)        ' num2str(perMacpherson2003,'%4.1f')])
 
 
 %% Plot results

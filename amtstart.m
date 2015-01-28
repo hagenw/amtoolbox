@@ -1,4 +1,4 @@
-function amtstart()
+function amtstart(varargin)
 %AMTSTART   Start the Auditory Modeling Toolbox
 %   Usage:  amtstart;
 %
@@ -24,10 +24,22 @@ function amtstart()
 % 
 %   Some of the AMT functions require a large processing time. Depending on the machine and the model, it might take even days. Thus, some AMT functions provide caching of calculated results. If you don't want to wait and just take a look at the results: download the cached data from https://sourceforge.net/projects/amtoolbox/files/, unzip in the root AMT directory, and run the particular AMT function.
 %
+%   `amtstart('mat2doc')` starts the AMT in the documentation compiling
+%   mode.
+% 
 %   See also:  amthelp
 %
   
-%   AUTHOR : Peter L. Søndergaard, Piotr Majdak 
+%   AUTHOR : Peter L. Soendergaard, Piotr Majdak 
+
+
+%% define default start-up behaviour
+if isempty(varargin),
+%   amtflags('verbose','download');
+  flags=amtflags('verbose');
+else
+  flags=amtflags(varargin);
+end
 
 %% LTFAT package
 
@@ -42,9 +54,17 @@ if ~exist('ltfatstart','file')
 end
 
 % Start LTFAT
-disp('*** Starting LTFAT ***');
+amtdisp('*** Starting LTFAT ***');
 if exist('ltfatstart','file')
   ltfatstart;
+    % set defaults again because ltfatstart is clearing all persistent vars
+  if isempty(varargin),
+  %   amtflags('verbose','download');
+    flags=amtflags('verbose');
+  else
+    flags=amtflags(varargin);
+  end
+  
 else
   error(['LTFAT package could not be found. Unable to continue.' 10 ...
         'Download LTFAT from http://ltfat.sourceforge.net ' 10 ...
@@ -74,15 +94,19 @@ if ~exist('SOFAstart','file')
 end
 
 % Start SOFA
-disp('*** Starting SOFA ***');
+amtdisp('*** Starting SOFA ***');
 if exist('SOFAstart','file')
   SOFAdbPath(fullfile(basepath,'hrtf'));
   SOFAdbURL('http://www.sofacoustics.org/data/amt');
-  SOFAstart;
+  if flags.do_silent
+    SOFAstart('silent');
+  else
+    SOFAstart;
+  end
 	warning('off','SOFA:upgrade');	% disable warning when loading older SOFA files
 else
-  disp(['SOFA package could not be found. Continue without SOFA support.']);
-  disp(['For SOFA support please download the package ' ...
+  amtdisp(['SOFA package could not be found. Continue without SOFA support.']);
+  amtdisp(['For SOFA support please download the package ' ...
         'from http://sofacoustics.sourceforge.net ' ...
         'and copy to amtoolbox/thirdparty/SOFA.']); 
 end
@@ -106,11 +130,11 @@ if exist(fullfile(sfspath,'SFS_general','rms.m'),'file'),
 end
 
 % Start 
-disp('*** Starting SFS ***');
+amtdisp('*** Starting SFS ***');
 if exist('SFS_start','file')
   SFS_start;
   s=SFS_version; s_r='1.0.0'; % set the required version
-  disp(['Sound Field Synthesis Toolbox, version ' s]);
+  amtdisp(['Sound Field Synthesis Toolbox, version ' s]);
   v=sscanf(s,'%d.%d.%d'); v(4)=0;
   v_r=sscanf(s_r,'%d.%d.%d');
   if ~(v(1)>v_r(1) || (v(1)>=v_r(1) && v(2)>v_r(2)) || (v(1)>=v_r(1) && v(2)>=v_r(2) && v(3)>=v_r(3)) ),
@@ -119,14 +143,14 @@ if exist('SFS_start','file')
   end  
 	
 else
-  disp(['SFS package could not be found. Continue without SFS support.']);
-  disp(['For SFS support please download the package ' ...
+  amtdisp(['SFS package could not be found. Continue without SFS support.']);
+  amtdisp(['For SFS support please download the package ' ...
         'from https://github.com/sfstoolbox/sfs ' ...
         'and copy to amtoolbox/thirdparty/sfs.']); 
 end
 
 %% Start AMT
-disp('*** Starting AMT ***');  
+amtdisp('*** Starting AMT ***');  
 % --- general settings ---
 % Print the banner at startup?
 printbanner=1;
@@ -202,7 +226,7 @@ end;
 %end;
 
 if printbanner
-  disp(['AMT version ',amt_version,'. (C) Peter L. Soendergaard and Piotr Majdak. For help, please type "amthelp".'])
+  amtdisp(['AMT version ',amt_version,'. (C) Peter L. Soendergaard and Piotr Majdak. For help, please type "amthelp".'])
 end;
 
 

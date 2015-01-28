@@ -89,8 +89,8 @@ function [hrir_data, hrir_angles, errorsig] = enzner2008(x, y, P)
 circle = 360;                                               % range of measured trajectory in degree
 delta_phi_samples = (length(y)-2*P.adapt)/circle * P.delta_phi; % length of ear signals contains full circle plus some overhead (2 * adapt)
 if delta_phi_samples < 1
-    display(['delta_phi can not be smaller than ', num2str(circle/(length(y)-2*P.adapt)),' deg = 1 Sample']);
-    display(['delta_phi will be set to ', num2str(circle/(length(y)-2*P.adapt)),' deg = 1 Sample']);
+    amtdisp(['delta_phi can not be smaller than ', num2str(circle/(length(y)-2*P.adapt)),' deg = 1 Sample']);
+    amtdisp(['delta_phi will be set to ', num2str(circle/(length(y)-2*P.adapt)),' deg = 1 Sample']);
     delta_phi_samples = 1;
 end;
 save_data_samples = zeros(round((length(y)-2*P.adapt)/delta_phi_samples),1);

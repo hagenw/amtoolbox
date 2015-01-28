@@ -138,6 +138,6 @@ if flags.do_stim
   data_mean=fs;
   
   if flags.do_plot
-    disp('XXX Plot is missing.');
+    amtdisp('XXX Plot is missing.');
   end;
 end;
