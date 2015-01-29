@@ -26,12 +26,10 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
 %   `[benefit, weighted_SNR, weighted_bmld]=jelfs2011(...)` additionaly
 %   returns the benefit from the SII weighted SNR and the SII weighted BMLD.
 %
-%   If *target* or *interferer* are cell-arrays, they contents of these cell
-%   arrays will be passed as arguments to the |read_hrtf|. The first
+%   If *target* or *interferer* are cell-arrays, the HRTF data will be loaded. The first
 %   argument in the cell-array is the azimuth angle, and the second
-%   parameter is the database type. The elevation is set to zer.
-%   function. This makes it possible to directly load HRIR from a
-%   database.
+%   parameter is the database type. The elevation is set to zero.
+%   function. 
 %
 %   Example:
 %   --------
@@ -42,7 +40,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
 %
 %     jelfs2011({0,'kemar'},{[330 90],'kemar'})
 %
-%   See also: plotjelfs2011, culling2005bmld, read_hrtf, exp_jelfs2011
+%   See also: plotjelfs2011, culling2005bmld, exp_jelfs2011
 % 
 %   References:  jelfs2011revision culling2010mapping lavandier2012binaural
   
@@ -51,9 +49,8 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
   definput.keyvals.pad=1024;
   [flags,kv,fs]=ltfatarghelper({'fs'},definput,varargin);
   
-  % If target or interferer are cell arrays, call read_hrtf to load the data.
+  % If target or interferer are cell arrays, load HRTFs.
   if iscell(target)
-%     [target,fs] = read_hrtf(0,target{:});
     X=SOFAload(fullfile(amtbasepath,'hrtf',mfilename,[target{2} '.sofa']));
     idx=find(X.SourcePosition(:,1)==target{1} & X.SourcePosition(:,2)==0);
     target=squeeze(X.Data.IR(idx,:,:))';
@@ -63,7 +60,6 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
   
   if iscell(interferer)
     azims=numel(interferer{1});
-%     [interferer,fs2] = read_hrtf(0,interferer{:});
     X=SOFAload(fullfile(amtbasepath,'hrtf',mfilename,[interferer{2} '.sofa']));
     for ii=1:azims
       idx(ii)=find(X.SourcePosition(:,1)==mod(interferer{1}(ii),360) & X.SourcePosition(:,2)==0);
