@@ -38,18 +38,15 @@ function data = data_langendijk2002(varargin)
 %              
 %     'P3_dtf'   DTF data from Fig.11; listener: P3. If you do not have the
 %                bitmap of the JASA paper you will get the precalculated
-%                gain response data hrtf_M_langendijk2002 P3.ampMdB.
+%                gain response data "hrtf_langendijk2002P3.mat".
 %              
 %     'P6_dtf'   DTF data from Fig.11; listener: P6. If you do not have the
 %                bitmap of the JASA paper you will get the precalculated
-%                gain response data hrtf_M_langendijk2002 P6.ampMdB.
+%                gain responses from "hrtf_langendijk2002P6.mat".
 %
 %     'expdata'  Create the whole dataset required for exp_langendijk2002,
 %                e.g. after adjusting response data.
 %                **BE ADVISED**: The calculation takes a long time.
-%                If only parts of data (e.g. '1-oct(high)') are to be
-%                regenerated, the unnecessary parts can be commented out to
-%                save computation time.
 %
 %   If no flag is given, the function will print the list of valid flags.
 %
@@ -252,84 +249,86 @@ function data = data_langendijk2002(varargin)
   end;
 
   if flags.do_P3_dtf
-    if exist('langendijk2002-dtfP3.bmp','file')==2
-      [med,pol]=bmp2gr('langendijk2002-dtfP3');
+    if exist('data_langendijk2002P3_dtf.bmp','file')==2
+      amtdisp('P3: Bitmap of DTFs found, converting to DTFs...','progress');
+      [med,pol]=bmp2gr('data_langendijk2002P3_dtf');
       data=[pol;med];
     else
-      data=load('hrtf_M_langendijk2002 P3');
+      amtdisp('P3: DTFs required, loading...','progress');
+      data=load(fullfile(amtbasepath, 'hrtf', 'langendijk2002','hrtf_langendijk2002P3.mat'));
     end;
   end
 
   if flags.do_P6_dtf
-    if exist('langendijk2002-dtfP6.bmp','file')==2
-      [med,pol]=bmp2gr('langendijk2002-dtfP6');
+    if exist('data_langendijk2002P6_dtf.bmp','file')==2
+      amtdisp('P6: Bitmap of DTFs found, converting to DTFs...','progress');
+      [med,pol]=bmp2gr('data_langendijk2002P6_dtf');
       data=[pol;med];
     else
-      data=load('hrtf_M_langendijk2002 P6');
+      amtdisp('P6: DTFs required, loading...','progress');
+      data=load(fullfile(amtbasepath, 'hrtf', 'langendijk2002','hrtf_langendijk2002P6.mat'));
     end
   end;
   
   if flags.do_expdata
     listener='P3';
+    amtdisp('Calculation for P3','progress');
     temp=data_langendijk2002([listener '_dtf']);
     fs=temp.stimPar.SamplingRate;           
     pol=temp.posLIN(:,5)';
     temp=temp.ampMdB;
     med=temp(1:end,:);
+    amtdisp('  Condition: b','progress');
     temp=data_langendijk2002([listener '_b']);
     targetb=temp(1,:); responseb=temp(2,:);
-    h = waitbar(0,'Please wait...1/2');
     medir=gr2ir(med,'b',fs);
+    amtdisp('  Condition: 2o','progress');
     temp=data_langendijk2002([listener '_2o']);
     targetc=temp(1,:); response2o=temp(2,:);
-    waitbar(1/5);
     medir2o=gr2ir(med,'2o',fs);
+    amtdisp('  Condition: 1ol','progress');
     temp=data_langendijk2002([listener '_1ol']);
     response1ol=temp(2,:);
-    waitbar(2/5);
     medir1ol=gr2ir(med,'1ol',fs);
+    amtdisp('  Condition: 1om','progress');
     temp=data_langendijk2002([listener '_1om']);
     response1om=temp(2,:);
-    waitbar(3/5);
     medir1om=gr2ir(med,'1om',fs);
+    amtdisp('  Condition: 1oh','progress');
     temp=data_langendijk2002([listener '_1oh']);
     response1oh=temp(2,:);
-    waitbar(4/5);
     medir1oh=gr2ir(med,'1oh',fs);
-    save(['humandata\langendijk2002-' listener '.mat'],'-append','-regexp','^med|^pol|^response|^target');
-    waitbar(5/5);
-    close(h);
+    save(['data_langendijk2002' listener '.mat'],'-regexp','^med|^pol|^response|^target');
     
     clear
+    amtdisp('Calculation for P6','progress');
     listener='P6';
-    temp=data_langendijk2002([listener '-dtf']);
+    temp=data_langendijk2002([listener '_dtf']);
     fs=temp.stimPar.SamplingRate;
     pol=temp.posLIN(:,5)';
     temp=temp.ampMdB;
     med=temp(1:end,:);
-    temp=data_langendijk2002([listener '-b']);
+    amtdisp('  Condition: b','progress');
+    temp=data_langendijk2002([listener '_b']);
     targetb=temp(1,:); responseb=temp(2,:);
-    h = waitbar(0,'Please wait...2/2');
     medir=gr2ir(med,'b',fs);
-    temp=data_langendijk2002([listener '-2o']);
+    amtdisp('  Condition: 2o','progress');
+    temp=data_langendijk2002([listener '_2o']);
     targetc=temp(1,:); response2o=temp(2,:);
-    waitbar(1/5);
     medir2o=gr2ir(med,'2o',fs);
-    temp=data_langendijk2002([listener '-1ol']);
+    amtdisp('  Condition: 1ol','progress');
+    temp=data_langendijk2002([listener '_1ol']);
     response1ol=temp(2,:);
-    waitbar(2/5);
     medir1ol=gr2ir(med,'1ol',fs);
-    temp=data_langendijk2002([listener '-1om']);
+    amtdisp('  Condition: 1om','progress');
+    temp=data_langendijk2002([listener '_1om']);
     response1om=temp(2,:);
-    waitbar(3/5);
     medir1om=gr2ir(med,'1om',fs);
-    temp=data_langendijk2002([listener '-1oh']);
+    amtdisp('  Condition: 1oh','progress');
+    temp=data_langendijk2002([listener '_1oh']);
     response1oh=temp(2,:);
-    waitbar(4/5);
     medir1oh=gr2ir(med,'1oh',fs);
-    save(['humandata\langendijk2002-' listener '.mat'],'-append','-regexp','^med|^pol|^response|^target');
-    waitbar(5/5);
-    close(h);
+    save(['data_langendijk2002' listener '.mat'],'-regexp','^med|^pol|^response|^target');
   end
 
 end
