@@ -8,8 +8,7 @@ function op = plotjelfs2011(target_azim,database)
 %   full circle in the horizontal plane, and the output is visualized on
 %   a polar plot.
 %
-%   The *database*  parameter selects the HRIR database to use. Please
-%   see the help of |read_hrtf|.
+%   *database* selects the HRIR dataset.
 %
 %   Examples:
 %   ---------
@@ -18,7 +17,7 @@ function op = plotjelfs2011(target_azim,database)
 %
 %     plotjelfs2011(0,'kemar');
 %
-%   See also: jelfs2011, culling2005bmld, read_hrtf
+%   See also: jelfs2011, culling2005bmld
   
   step = 5;
   n_op = 360/step+1;
@@ -30,26 +29,4 @@ function op = plotjelfs2011(target_azim,database)
   end
   polar([angles angles angles], op);
   
-end
-
-function op = test_jelfs2011(targ_azim,int_azims,database)
-
-  padding = zeros(1024,2);
-  if strncmp(database,'siemens',7)
-    fs = 48000;
-  else
-    fs = 44100;
-  end
-  
-  int_ir = [];  
-  target_ir = read_hrtf(0,targ_azim,database); 
-  
-  for i=1:length(int_azims)
-    int_ir = [int_ir; read_hrtf(0,int_azims(i),database); padding];
-  end
-  
-  int_ir = int_ir/sqrt(length(int_azims));
-  
-  op = jelfs2011([target_ir; padding],int_ir,fs);
-
 end
