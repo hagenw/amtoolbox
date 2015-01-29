@@ -42,7 +42,8 @@ if flags.do_clean
     oldstate = recycle('off');
   end;
   
-  fprintf('========= Cleaning %s interfaces ==========\n', extname);
+  s=sprintf('========= Cleaning %s interfaces ==========', extname);
+  amtdisp(s);
   if isoctave
     deletefiles([bp,'oct'],'*.oct');
     deletefiles([bp,'oct'],'*.o');
@@ -61,8 +62,8 @@ end;
 
 if flags.do_compile
 
-  fprintf('========= Compiling %s interfaces ==========\n', extname);
-  
+  s=sprintf('========= Compiling %s interfaces ==========', extname);
+  amtdisp(s);
   if isoctave
     ext='oct';
     L=dir([bp,filesep,'oct',filesep,'*.cc']);
@@ -75,7 +76,8 @@ if flags.do_compile
     filenames = arrayfun(@(lEl) lEl.name,L,'UniformOutput',0);
   
   if compile_amt(bp,ext,filenames)>1;                
-    fprintf('ERROR: The %s interfaces was not built.\n', extname);
+    s=sprintf('ERROR: The %s interfaces was not built.', extname);
+    amtdisp(s);
   else
     amtdisp('Done.');
   end;
@@ -90,9 +92,10 @@ if flags.do_compile
     
     mexdiff = cellfun(@(lEl) [lEl,'.c'],mexdiffstrip,'UniformOutput',0);
     if ~isempty(mexdiff)
-        amtdisp('========= Compiling MEX interfaces ==========\n')
+        amtdisp('========= Compiling MEX interfaces ==========')
         if compile_amt(bp,'mex',mexdiff)>1;                
-            fprintf('ERROR: The %s interfaces was not built.\n', extname);
+            s=sprintf('ERROR: The %s interfaces was not built.', extname);
+            amtdisp(s);
         else
             if movefile([bp,filesep,'mex',filesep,'*.mex'],...
                         [bp,filesep,'oct'],'f');
@@ -142,8 +145,8 @@ for ii=1:numel(filenames)
     L = dir(filename);
     if isempty(objdirinfo) || (objdirinfo.datenum<L(1).datenum)
         
-        fprintf('Compiling %s\n',filename);
-        
+        s=sprintf('Compiling %s',filename);
+        amtdisp(s);
         if isoctave
           if ~strcmpi(ext(1:3),'oct')
               mkoctfile('-mex','-I.','-I../src',filename);

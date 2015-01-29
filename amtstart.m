@@ -184,6 +184,14 @@ else
 end
 
 %% Install modules
+% A directory called DIRNAME containing a file 'DIRNAMEinit.m' is
+% considered as a module. 
+% DIRNAMEinit.m must set the variable 'status' with the following value:
+%  0: disabled module, don't add to the search path
+%  >0: add to the search path.
+
+% add root of the AMT to the path
+addpath(basepath);
 
 modules={};
 nplug=0;
@@ -193,28 +201,25 @@ d=dir(basepath);
 
 for ii=1:length(d)
   if d(ii).isdir
-    if ~(d(ii).name(1)=='.')
-
+    if ~(d(ii).name(1)=='.')      
+      % The file is a directory and it does not start with '.' This could be a module      
       name=d(ii).name;
-      
-      % The file is a directory and it does not start with '.' This could
-      % be a module      
       if exist([bp,name,filesep,name,'init.m'],'file')
-	% Set 'status' to zero if the module forgets to define it.
-	status=0;
-	module_version=amt_version;
+          % Set 'status' to zero if the module forgets to define it.
+        status=0;
+        module_version=amt_version;
         addpath([bp,name]);
 
-	eval([name,'init']);
+        eval([name,'init']);
         if status>0
           if status==1
             nplug=nplug+1;
             modules{nplug}.name=name;
             modules{nplug}.version=module_version;
           end;
-	else
-	  rmpath([bp,name]);
-	end;
+        else
+          rmpath([bp,name]);
+        end;
       end;	
 
     end;
