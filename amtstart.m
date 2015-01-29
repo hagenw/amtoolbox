@@ -45,6 +45,36 @@ else
   flags=amtflags(varargin);
 end
 
+
+%% Start AMT
+bp=amtbasepath;
+
+% Load the version number
+[FID, MSG] = fopen ([bp,'amtoolbox_version'],'r');
+if FID == -1
+    error(MSG);
+else
+    amt_version = fgetl (FID);
+    fclose(FID);
+end
+
+% Check if Octave was called using 'silent'
+printbanner=1;
+%if isoctave
+%  args=argv;
+%  for ii=1:numel(args)
+%    s=lower(args{ii});
+%    if strcmp(s,'--silent') || strcmp(s,'-q')
+%      printbanner=0;
+%    end;
+%  end;
+%end;
+
+if printbanner
+  amtdisp(['AMT version ',amt_version,'. (C) Peter L. Soendergaard and Piotr Majdak.'])
+end;
+
+
 %% LTFAT package
 
 % Search for LTAFT package
@@ -153,34 +183,7 @@ else
         'and copy to amtoolbox/thirdparty/sfs.']); 
 end
 
-%% Start AMT
-amtdisp('*** Starting AMT ***');  
-% --- general settings ---
-% Print the banner at startup?
-printbanner=1;
-
-% Get the basepath as the directory this function resides in.
-% The 'which' solution below is more portable than 'mfilename'
-% becase old versions of Matlab does not have "mfilename('fullpath')"
-basepath=which('amtstart');
-basepath=basepath(1:end-11);
-if exist('addpath','var')>0
-  addpath(basepath);
-else
-  path(path,basepath);
-end
-bp=[basepath,filesep];
-
-% Load the version number
-[FID, MSG] = fopen ([bp,'amtoolbox_version'],'r');
-if FID == -1
-    error(MSG);
-else
-    amt_version = fgetl (FID);
-    fclose(FID);
-end
-
-% -----------  install the modules -----------------
+%% Install modules
 
 modules={};
 nplug=0;
@@ -217,23 +220,6 @@ for ii=1:length(d)
     end;
   end;
 end;
-
-% Check if Octave was called using 'silent'
-%if isoctave
-%  args=argv;
-%  for ii=1:numel(args)
-%    s=lower(args{ii});
-%    if strcmp(s,'--silent') || strcmp(s,'-q')
-%      printbanner=0;
-%    end;
-%  end;
-%end;
-
-if printbanner
-  amtdisp(['AMT version ',amt_version,'. (C) Peter L. Soendergaard and Piotr Majdak. For help, please type "amthelp".'])
-end;
-
-
 
 %% ---------- load information into ltfathelp ------------
 
