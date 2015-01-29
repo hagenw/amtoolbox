@@ -1,5 +1,5 @@
 function [flags,kv]=amtflags(varargin)
-%AMTFLAGS   
+%AMTFLAGS Returns the start-up flags of the AMT
   
 %   AUTHOR : Piotr Majdak 
 

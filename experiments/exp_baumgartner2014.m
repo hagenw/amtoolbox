@@ -2873,7 +2873,7 @@ end
 %  ------------------------------------------------------------------------
 function autorefreshnotification(fn,flags)
 if flags.do_autorefresh
-  amtdisp(['Calculation of ' fn ' started.'])
+  amtdisp(['Calculation of ' fn ' started.'],'progress')
   amtdisp('Results can be also downloaded here:') 
   amtdisp(' http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/exp_baumgartner2014.zip')
   amtdisp('Unzip the folder and move the single files into:')

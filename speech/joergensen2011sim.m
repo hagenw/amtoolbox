@@ -26,7 +26,7 @@ definput.flags.type = {'fig5','fig6'};
 % ------- simulate experiment with reverberation
 if flags.do_fig5
     load Danish_CLUE_10sentence_samples_22kHz
-    amtdisp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
+    amtdisp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress')
     
     
     for q = 1:NSpeechsamples
@@ -104,7 +104,7 @@ if flags.do_fig5
             end
             
         end
-        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
+        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress');
         
     end
     
@@ -131,7 +131,7 @@ end
 if flags.do_fig6
     % Loads a cell array with 10 sentences from the CLUE material
     load Danish_CLUE_10sentence_samples_22kHz
-    amtdisp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')])
+    amtdisp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress')
     
     
     for q = 1:NSpeechsamples
@@ -213,7 +213,7 @@ if flags.do_fig6
             end
             
         end
-        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')]);
+        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress');
         
     end
     

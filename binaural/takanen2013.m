@@ -121,7 +121,7 @@ widthInErbs = 9; % the number of adjacent ERB bands the information is gathered 
 contraDelay = floor(0.0002*fs); %the what cues are delayed by 0.2 ms
 
 %% ------ Modeling the first stages of the human auditory pathway ---------
-amtdisp('Model of periphery');
+amtdisp('Model of periphery','progress');
 periph = takanen2013periphery(insig,fs,printFigs);
 
 dims = size(periph.left);
@@ -140,15 +140,15 @@ limit = find(periph.fc>=1500,1,'first');
 cueEnergies.leftMso = [cueEnergies.leftLso(:,1:(limit-1)) zeros(dims(1),dims(2)-limit+1)];
 cueEnergies.rightMso = [cueEnergies.rightLso(:,1:(limit-1)) zeros(dims(1),dims(2)-limit+1)];
 
-amtdisp('Models of MSO');
+amtdisp('Models of MSO','progress');
 leftMso = takanen2013mso(periph.left,periph.right,fs,periph.fc,printFigs);
 rightMso = takanen2013mso(periph.right,periph.left,fs,periph.fc,printFigs);
 
-amtdisp('Models of wideband MSO');
+amtdisp('Models of wideband MSO','progress');
 [leftWbMso cueEnergies.leftWbMso]= takanen2013wbmso(periph.left,periph.right,fs,widthInErbs,periph.fc,printFigs);
 [rightWbMso cueEnergies.rightWbMso] = takanen2013wbmso(periph.right,periph.left,fs,widthInErbs,periph.fc,printFigs);
 
-amtdisp('Models of LSO');
+amtdisp('Models of LSO','progress');
 leftLso = takanen2013lso(periph.right,periph.left,fs,periph.fc);
 rightLso = takanen2013lso(periph.left,periph.right,fs,periph.fc);
 
@@ -162,7 +162,7 @@ else
     
     %1) Mapping the MSO and LSO model outputs into azimuthal angles ranging
     %from -90 to 90
-    amtdisp('Direction mapping');
+    amtdisp('Direction mapping','progress');
     [directionCues.leftMso,directionCues.leftLso,directionCues.leftWbMso] = takanen2013directionmapping(leftMso,leftLso,rightMso,leftWbMso);
     [directionCues.rightMso,directionCues.rightLso,directionCues.rightWbMso] = takanen2013directionmapping(rightMso,rightLso,leftMso,rightWbMso);
     

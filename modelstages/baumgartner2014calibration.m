@@ -54,7 +54,7 @@ for ss = 1:length(s)
     optimset('MaxIter',50,'TolX',TolX)...
     );
 %   [~,scalib(ss).qe_pred,scalib(ss).pe_pred] = evaldist(s(ss),S,kv);
-  amtdisp([num2str(ss,'%2.0u') ' of ' num2str(length(s),'%2.0u') ' calibrated.'])
+  amtdisp([num2str(ss,'%2.0u') ' of ' num2str(length(s),'%2.0u') ' calibrated.'],'progress')
 
 end
 

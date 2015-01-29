@@ -24,10 +24,14 @@ function amtstart(varargin)
 % 
 %   Some of the AMT functions require a large processing time. Depending on the machine and the model, it might take even days. Thus, some AMT functions provide caching of calculated results. If you don't want to wait and just take a look at the results: download the cached data from https://sourceforge.net/projects/amtoolbox/files/, unzip in the root AMT directory, and run the particular AMT function.
 %
-%   `amtstart('mat2doc')` starts the AMT in the documentation compiling
-%   mode.
+%   `amtstart('documentation')` starts the AMT in the documentation compiling
+%   mode. The progress output will be suppressed.
+%
+%   `amtstart('silent')` starts the AMT in the silent mode where all output but figures will be suppressed.
+%
+%   `amtstart('verbose')` starts the AMT in the verbose mode and all output will be dispplayed. This is the default mode. 
 % 
-%   See also:  amthelp
+%   See also:  amtmex amtflags
 %
   
 %   AUTHOR : Peter L. Soendergaard, Piotr Majdak 
