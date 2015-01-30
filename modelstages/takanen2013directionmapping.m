@@ -40,7 +40,8 @@ function [msoAngles,lsoAngles,wbMsoAngles] = takanen2013directionmapping(mso,lso
 
 %% ------ Computation ----------------------------------------------------
 %load the precomputed set of reference values
-load takanen2013_lookuptable.mat -mat
+x=amtload('takanen2013','lookuptable.mat');
+referencevalues=x.referencevalues;
 dims = size(mso);
 
 %initialize the output values

@@ -77,7 +77,8 @@ colorGains = zeros(dims(1),nXBins);
 %% ------ Computation -----------------------------------------------------
 %the what cues (i.e. the spectral information) is derived from the
 %periphery model outputs using the max-outputs for a pink noise at 60 dB
-load takanen2013_periphenergyaverages.mat -mat
+x=amtload('takanen2013','periphenergyaverages.mat');
+averageEnerg=x.averageEnerg;
 eR = eR./(ones(dims(1),1)*averageEnerg);
 eL = eL./(ones(dims(1),1)*averageEnerg);
 max_val = max(eL(:));

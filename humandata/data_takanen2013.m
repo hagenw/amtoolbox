@@ -130,7 +130,7 @@ if flags.do_msolimits
     %divided by scaling values and thereafter limited between 0 and 1. The
     %scaling values were obtained by computing the average level of the
     %*periphOutput.left* for a pink noise signal reproduced at 30 dB SPL
-    x=load('takanen2013','msolimits.mat');
+    x=amtload('takanen2013','msolimits.mat');
     output = x.limits;
     if flags.do_plot
         figure;plot(output);xlabel('Frequency band');ylabel('Limit value');

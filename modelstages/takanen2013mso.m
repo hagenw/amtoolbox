@@ -80,7 +80,8 @@ end
 %% ------ Limiting of the ipsilateral input -------------------------------
 % Limit values are determined for each frequency based on white noise at 30
 % dB SPL
-load takanen2013_msolimits.mat -mat
+x=amtload('takanen2013','msolimits.mat');
+limits=x.limits;
 limited = ipsilateral./(ones(nrows,1)*limits);
 limited(limited>1) =1;
 

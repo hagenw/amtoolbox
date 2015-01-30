@@ -25,7 +25,8 @@ definput.flags.type = {'fig5','fig6'};
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 % ------- simulate experiment with reverberation
 if flags.do_fig5
-    load Danish_CLUE_10sentence_samples_22kHz
+    x=amtload('joergensen2011','Danish_CLUE_10sentence_samples_22kHz.mat');
+    sentenceArray=x.sentenceArray;
     amtdisp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress')
     
     
@@ -48,7 +49,7 @@ if flags.do_fig5
         N = length(t);
         
         % load the noise file
-        noise_glob = wavread('SSN_CLUE_22kHz.wav');
+        noise_glob = amtload('joergensen2011','SSN_CLUE_22kHz.wav');
         
         Nsegments = floor(length(noise_glob)/N);
         % pick a random segment from the noise file
@@ -153,7 +154,7 @@ if flags.do_fig6
         N = length(t);
         
         % load the noise file
-        noise_glob = wavread('SSN_CLUE_22kHz.wav');
+        noise_glob = amtload('joergensen2011','SSN_CLUE_22kHz.wav');
         
         Nsegments = floor(length(noise_glob)/N);
         % pick a random segment from the noise file

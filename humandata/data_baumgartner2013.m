@@ -13,13 +13,13 @@ function data = data_baumgartner2013(varargin)
 %             output contains the following fields: *id*, *u*, *goupell10* and
 %             *walder10*
 %
-%     'ari'   DTFs and calibration data of the pool. The output contains the
-%             following fields: *id*, *u*, *goupell10*, *walder10*, *dtfs*,
-%             *fs* and *pos*
-%
 %     'pool'  DTFs and calibration data of the pool. The output contains the
 %             following fields: *id*, *u*, *goupell10*, *walder10*, *fs*
 %             and *Obj*.
+%
+%     'ari'   OBSOLETE. DTFs and calibration data of the pool. The output contains the
+%             following fields: *id*, *u*, *goupell10*, *walder10*, *dtfs*,
+%             *fs* and *pos*. 
 %
 %   The fields in the output contains the following information
 %
@@ -33,13 +33,13 @@ function data = data_baumgartner2013(varargin)
 %     .walder10   boolean flag indicating whether listener
 %                 participated in Walder (2010)
 %
-%     .dtfs       matrix containing DTFs.
+%     .dtfs       OBSOLETE. matrix containing DTFs.
 %                 Dimensions: time, position, channel
 %                 (more details see doc: HRTF format)
 %
 %     .fs         sampling rate of impulse responses
 %
-%     .pos        source-position matrix referring to
+%     .pos        OBSOLETE. source-position matrix referring to
 %                 2nd dimension of hM and formated acc.
 %                 to meta.pos (ARI format).
 %                 6th col: lateral angle
@@ -122,43 +122,34 @@ if flags.do_pool % load also DTFs of SPs
   data = data([12,1,10,3,14,16,8,9,4,2,7,15,17,5,11,6,13]);
 
   if flags.do_ari
-
-    hpath = which('hrtfinit');  % find local path of hrtf repository
-    hpath = hpath(1:end-10);
-    sl = hpath(end);            % slash sign (OS dependent)
-
-    if exist([hpath 'hrtf_M_baumgartner2013'],'dir') ~= 7
-      fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/baumgartner2013.zip , \n unzip it, and move it into your HRTF repository \n ' hpath ' .\n' ' Then, press any key to quit pausing. \n'])
-      pause
-    end
-
-    hpath = [hpath sl 'hrtf_M_baumgartner2013' sl];
-
-    for ii = 1:length(data)
-
-      load([hpath 'hrtf_M_baumgartner2013 ' data(ii).id])
-      data(ii).fs = stimPar.SamplingRate;
-      data(ii).pos = meta.pos;
-      data(ii).dtfs = double(hM);
-
-    end
+    error('Obsolete format of HRTFs. Data format not supported anymore');
+%     hpath = which('hrtfinit');  % find local path of hrtf repository
+%     hpath = hpath(1:end-10);
+%     sl = hpath(end);            % slash sign (OS dependent)
+% 
+%     if exist([hpath 'hrtf_M_baumgartner2013'],'dir') ~= 7
+%       fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/baumgartner2013.zip , \n unzip it, and move it into your HRTF repository \n ' hpath ' .\n' ' Then, press any key to quit pausing. \n'])
+%       pause
+%     end
+% 
+%     hpath = [hpath sl 'hrtf_M_baumgartner2013' sl];
+% 
+%     for ii = 1:length(data)
+% 
+%       load([hpath 'hrtf_M_baumgartner2013 ' data(ii).id])
+%       data(ii).fs = stimPar.SamplingRate;
+%       data(ii).pos = meta.pos;
+%       data(ii).dtfs = double(hM);
+% 
+%     end
   end
 
   if flags.do_sofa
 
     for ii = 1:length(data)
-
-      filename = fullfile(SOFAdbPath,'baumgartner2013',...
-        ['ARI_' data(ii).id '_hrtf_M_dtf 256.sofa']);
-
-%       if exist(filename,'file') ~= 2
-%         fprintf([' Sorry! Before you can run this script, you have to download the HRTF Database from \n http://www.kfs.oeaw.ac.at/hrtf/database/amt/SOFA_baumgartner2013.zip , \n unzip it, and move the folder into your HRTF repository \n ' SOFAdbPath ' .\n' ' Then, press any key to quit pausing. \n'])
-%         pause
-%       end
-
-      data(ii).Obj = SOFAload(filename);
+      fn=['ARI_' data(ii).id '_hrtf_M_dtf 256.sofa'];
+      data(ii).Obj = SOFAload(fullfile(SOFAdbPath,'baumgartner2013',fn));
       data(ii).fs = data(ii).Obj.Data.SamplingRate;
-
     end
   end
 
