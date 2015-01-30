@@ -18,6 +18,7 @@ definput.keyvals.fhigh=18000;   % Hz
 definput.keyvals.do=1;          % differential order
 definput.keyvals.bwcoef=13;     % binaural weighting coefficient in deg
 definput.keyvals.polsamp=[-30:5:70 80 100 110:5:210];  % polar sampling (for regular flag)
+definput.keyvals.rangsamp=5;    % equi-polar sampling of response angles
 definput.keyvals.mrsmsp=17;     % response scatter (in deg) in the median plane induced by non-auditory processes
 definput.keyvals.gamma=6;       % degree of selectivity in 1/dB
   

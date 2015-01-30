@@ -2513,9 +2513,9 @@ if flags.do_tab2
     Conditions = {'BB','LP','W'};
 
     %% Computations
-    for ii = 0:1
+    for ido = 0:1
 
-      if ii == 1
+      if ido == 1
         s = data_baumgartner2014('pool','recalib');
       else % recalib
         s = data_baumgartner2014('pool','recalib','do',0);
@@ -2597,7 +2597,7 @@ if flags.do_tab2
               [s(ll).p{ii},rang] = baumgartner2014(...
                     s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},s(ll).fs,...
                     'S',s(ll).S,'lat',latdivision(ii),...
-                    'polsamp',s(ll).polang{ii},'do',ii,'fhigh',fhigh);
+                    'polsamp',s(ll).polang{ii},'do',ido,'fhigh',fhigh);
               respangs{ii} = rang;
 
               [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
@@ -2607,17 +2607,17 @@ if flags.do_tab2
 
             % Model results of participants
             if length(latdivision) == 3
-              qe_part(ll,C,2*ii+ff) = (qe_t(1)*length(s(ll).target{1}) + ...
+              qe_part(ll,C,2*ido+ff) = (qe_t(1)*length(s(ll).target{1}) + ...
                   qe_t(2)*length(s(ll).target{2}) + ...
                   qe_t(3)*length(s(ll).target{3}))/...
                   (length(s(ll).target{1})+length(s(ll).target{2})+length(s(ll).target{3}));
-              pe_part(ll,C,2*ii+ff) = (pe_t(1)*length(s(ll).target{1}) + ...
+              pe_part(ll,C,2*ido+ff) = (pe_t(1)*length(s(ll).target{1}) + ...
                   pe_t(2)*length(s(ll).target{2}) + ...
                   pe_t(3)*length(s(ll).target{3}))/...
                   (length(s(ll).target{1})+length(s(ll).target{2})+length(s(ll).target{3}));
             else 
-              s(ll).qe_part(C,2*ii+ff) = mean(qe_t);
-              s(ll).pe_part(C,2*ii+ff) = mean(pe_t);
+              s(ll).qe_part(C,2*ido+ff) = mean(qe_t);
+              s(ll).pe_part(C,2*ido+ff) = mean(pe_t);
             end
           end
 

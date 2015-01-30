@@ -65,10 +65,13 @@ function varargout = baumgartner2014( target,template,varargin )
 %     'bwcoef',bwc   Set the binaural weighting coefficient *bwc*.
 %                    Default value is 13 degrees.
 %
-%     'polsamp',ps   Define the the polar angular sampling of the current
-%                    sagittal plane. As default the sampling of ARI's HRTF 
-%                    format at the median SP is used, i.e.,
+%     'polsamp',ps   Define the polar-angle sampling of the acoustic data
+%                    provided for the current sagittal plane. As default the 
+%                    sampling of ARI's HRTFs in the median SP is used, i.e.,
 %                    *ps* = [-30:5:70,80,100,110:5:210] degrees.
+%
+%     'rangsamp',rs  Define the equi-polar sampling of the response predictions.
+%                    The default is *rs* = 5 degrees.
 %
 %     'mrsmsp',eps   Set the motoric response scatter *eps* within the median 
 %                    sagittal plane. Default value is 17 degrees.
@@ -105,7 +108,7 @@ definput.import={'baumgartner2014'};
 
 [flags,kv]=ltfatarghelper(...
   {'fs','S','lat','stim','fsstim','space','do','flow','fhigh',...
-  'bwcoef','polsamp','mrsmsp','gamma'},definput,varargin);
+  'bwcoef','polsamp','rangsamp','mrsmsp','gamma'},definput,varargin);
 
 % Print Settings
 if flags.do_print 
@@ -236,8 +239,8 @@ end
 
 %% Interpolation (regularize polar angular sampling)
 if flags.do_regular
-    rang0 = ceil(min(kv.polsamp)*0.2)*5;    % ceil to 5 deg
-    rangs = rang0:5:max(kv.polsamp);
+    rang0 = ceil(min(kv.polsamp)*1/kv.rangsamp)*kv.rangsamp;    % ceil to kv.rangsamp deg
+    rangs = rang0:kv.rangsamp:max(kv.polsamp);
     siint = zeros(length(rangs),size(si,2));
     for tt = 1:size(si,2)
         siint(:,tt) = interp1(kv.polsamp,si(:,tt),rangs,'spline');
