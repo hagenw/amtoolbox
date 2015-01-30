@@ -12,9 +12,11 @@
 %    AMTMEX       -  Compile Mex/Oct interfaces
 %
 %  Basic routines
-%    AMTHELP      -  Help
-%    AMTBASEPATH  -  Return the base path of the AMT
+%    AMTBASEPATH  -  The base path of the AMT
+%    AMTFLAGS     -  The start-up flags of the AMT
 %    AMTREDOFILE  -  Utility to work with cached files
+%    AMTDISP      -  `disp` depending on the start-up flags
+%
 %
 %  The AMT team, 2012 - 2014.
 %

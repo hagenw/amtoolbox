@@ -8,6 +8,8 @@
 %     VERHULST2012      - Verhulst et al. (2012) cochlea model
 %     BAUMGARTNER2013   - Localization in saggital planes
 %     BAUMGARTNER2014     - Localization in saggital planes
+%     ZILANY2007HUMANIZED  - Humanized auditory nerve model
+%     ZILANY2014           - Auditory cochlear processing 
 %
 %  The Langendijk model
 %     LANGENDIJK2002           - Langendijk & Bronkhorst 2002 auditory model 
@@ -23,8 +25,6 @@
 %     PLOTROENNE2012            - Plot output of roenne2012
 %     PLOTROENNE2012CHIRP      - Plot output of roenne2012chirp
 %     PLOTROENNE2012TONEBURSTS - Plot output of roenne2012tonebursts
-%     ZILANY2007HUMANIZED       - Humanized auditory nerve model
-%     ZILANY2013                - Zilany et al. (2013) model
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

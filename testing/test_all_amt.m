@@ -13,15 +13,15 @@ for ii=1:length(tests_todo)
   end;
 end;
 
-disp(' ');
+amtdisp(' ');
 if total_tests_failed==0
-  disp('ALL TESTS PASSED');
+  amtdisp('ALL TESTS PASSED');
 else
   s=sprintf('%i TESTS FAILED',total_tests_failed);
-  disp(s);
-  disp('The following test scripts contained failed tests');
+  amtdisp(s);
+  amtdisp('The following test scripts contained failed tests');
   for ii=1:length(list_of_failed_tests)
-    disp(['   ',list_of_failed_tests{ii}]);
+    amtdisp(['   ',list_of_failed_tests{ii}]);
   end;
 end;
 

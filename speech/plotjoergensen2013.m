@@ -1,9 +1,9 @@
 function plotjoergensen2013(simSRTs, varargin)
-%PLOTJOERGENSEN2013  Plot Fig. 2 of Jørgensen, Ewert and Dau (2013)
+%PLOTJOERGENSEN2013  Plot SRTs in the style of Fig. 2 from Joergensen et al., (2013)
 %   Usage: plotjoergensen2013(SRT,flag)
 %
 %   `plotjoergensen2013(SRT)` plots the output of
-%   |joergensen2012| in the style of Fig. 2 of Jørgensen, Ewert and Dau (2013).
+%   |joergensen2012| in the style of Fig. 2 of Joergensen et al., (2013).
 %
 %   The flag may be one of:
 %
@@ -11,7 +11,7 @@ function plotjoergensen2013(simSRTs, varargin)
 % 
 %   ---------
 %
-%   Please cite Jørgensen et al. (2013) if you use this model
+%   Please cite Joergensen et al. (2013) if you use this model
 %
 %   See also: joergensen2013, joergensen2013sim, exp_joergensen2013
 

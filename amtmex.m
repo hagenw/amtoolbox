@@ -70,13 +70,14 @@ if flags.do_compile
     ext=mexext;
     % Get the list of files.
     L=dir([bp,filesep,'mex',filesep,'comp_*.c']);
+    L=[L; dir([bp,filesep,'mex',filesep,'comp_*.cpp'])];
   end;
     filenames = arrayfun(@(lEl) lEl.name,L,'UniformOutput',0);
   
   if compile_amt(bp,ext,filenames)>1;                
     fprintf('ERROR: The %s interfaces was not built.\n', extname);
   else
-    disp('Done.');
+    amtdisp('Done.');
   end;
   
   if isoctave
@@ -89,13 +90,13 @@ if flags.do_compile
     
     mexdiff = cellfun(@(lEl) [lEl,'.c'],mexdiffstrip,'UniformOutput',0);
     if ~isempty(mexdiff)
-        disp('========= Compiling MEX interfaces ==========\n')
+        amtdisp('========= Compiling MEX interfaces ==========\n')
         if compile_amt(bp,'mex',mexdiff)>1;                
             fprintf('ERROR: The %s interfaces was not built.\n', extname);
         else
             if movefile([bp,filesep,'mex',filesep,'*.mex'],...
                         [bp,filesep,'oct'],'f');
-               disp('Done.');
+               amtdisp('Done.');
             else
                error(['ERROR: Compilation sucessful, but MEX files were not '...
                'moved from mex to oct directory. Check your write permissions.\n']); 

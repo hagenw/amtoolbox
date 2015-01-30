@@ -139,13 +139,13 @@
 %     treal = (1:N)/fs*1000;          % Time axis;
 %     
 %     %---- classic complex ----
-%     disp('Classic, complex-valued, causal-phased gammtone implementation:')
+%     amtdisp('Classic, complex-valued, causal-phased gammtone implementation:')
 %     % Derive filter coefficients and filter impulse responses;
 %     [b,a] = gammatone(fc,fs,'classic','causalphase','complex');
 %     outsig1 = 2*real(ufilterbankz(b,a,insig));
 %     outsig1 = permute(outsig1,[3 2 1]);
 % 
-%     disp('Classic, complex-valued, peak-phased gammtone implementation:')
+%     amtdisp('Classic, complex-valued, peak-phased gammtone implementation:')
 %     % Derive filter coefficients and filter impulse responses with option 'peakphase';
 %     [b,a] = gammatone(fc,fs,'classic','peakphase','complex');
 %     outsig2 = 2*real(ufilterbankz(b,a,insig));

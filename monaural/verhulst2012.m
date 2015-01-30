@@ -28,7 +28,8 @@ function [V,Y,E,CF]=verhulst2012(sign,fs,fc,spl,normalizeRMS,subject,irregularit
 %   This function computes the basilar membrane displacement and the
 %   velocity of the movement at different positions employing a faster
 %   implementation of the nonlinear time-domain model of cochlea by
-%   Verhulsts, Dau, Shera 2012.
+%   Verhulsts, Dau, Shera 2012, through the method described in Alto? et
+%   al. 2014
 %
 %   The processing is implemented as follows:
 %
@@ -53,11 +54,11 @@ function [V,Y,E,CF]=verhulst2012(sign,fs,fc,spl,normalizeRMS,subject,irregularit
 %
 %   3) On linux, when problems with GFORTRAN lib appear, try sudo ln -sf /usr/lib64/libgfortran.so.3.0.0 /mymatlabroot/sys/os/glnxa64/libgfortran.so.3 (mymatlabroot is usually /usr/local/MATLAB/version
 %               
-%   See also: verhulst2012
+%   See also: verhulst2012,
 %
-%   References: verhulst2012
+%   References: verhulst2012, altoe2014transmission
 %
-%   AUTHOR: Alessandro Altoe 
+%   AUTHOR: Alessandro Altoe' 
 
 if nargin<5
     [channels,idx]=min(size(sign));

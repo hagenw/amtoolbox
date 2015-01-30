@@ -105,7 +105,7 @@ if flags.do_pool || flags.do_baseline
   if not(exist('baumgartner2014calibration.mat','file')) || flags.do_recalib
     
     data = loadBaselineData(data);
-    disp('Calibration procedure started. Please wait!')
+    amtdisp('Calibration procedure started. Please wait!','progress')
     data = baumgartner2014calibration(data,kv);
     
     data_all = data;

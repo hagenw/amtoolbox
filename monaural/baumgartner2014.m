@@ -153,7 +153,7 @@ end
 
 %% DTF filtering, Eq.(1)
 if ~isequal(kv.fs,kv.fsstim)
-    disp('Sorry, sampling rate of stimulus and HRIRs must be equal!')
+    amtdisp('Sorry, sampling rate of stimulus and HRIRs must be equal!')
     return
 end
 
@@ -284,7 +284,7 @@ if nargout >= 2
       try
         varargout{3} = tang;
       catch
-        disp('SOFA Object of target DTFs is required to output target angles.')
+        amtdisp('SOFA Object of target DTFs is required to output target angles.')
       end
     end
 end

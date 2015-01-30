@@ -19,7 +19,7 @@
 %
 %   See also:  absolutethreshold
 
-disp(['Type "help demo_absolutethreshold" to see a description of how this ', ...
+amtdisp(['Type "help demo_absolutethreshold" to see a description of how this ', ...
       'demo works.']);
 
 

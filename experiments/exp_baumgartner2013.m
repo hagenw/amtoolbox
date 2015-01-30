@@ -295,7 +295,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
 
           end
       end
-      disp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' compelted'])
+      amtdisp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress');
   end
 
   qe = mean(qe,3);
@@ -591,7 +591,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
 
       end
 
-      disp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'])
+      amtdisp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress')
 
     end
 
@@ -703,7 +703,7 @@ if flags.do_fig19 || flags.do_fig20
     end
     pol2{ii} = (polang(id1)+polang(id2)) /2;
     
-    disp([' Span: ' num2str(dPol(ii)) ' deg.']);
+    amtdisp([' Span: ' num2str(dPol(ii)) ' deg.'],'progress');
     for ll = 1:length(s)
 
         s(ll).spdtfs = extractsp(lat,s(ll).Obj);

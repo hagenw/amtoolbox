@@ -6,9 +6,9 @@
 % author   : tp
 % date     : Jan, Mar 2002, Nov 2006
 
-disp('This example creates a 4th order gammatone filter with a center');
-disp('frequency of 1000Hz and a 3dB-bandwidth of 100Hz, suitable for ');
-disp('input signals with a sampling frequency of 10kHz.              ');
+amtdisp('This example creates a 4th order gammatone filter with a center');
+amtdisp('frequency of 1000Hz and a 3dB-bandwidth of 100Hz, suitable for ');
+amtdisp('input signals with a sampling frequency of 10kHz.              ');
 
 
 %%% create the example filter: %%%
@@ -25,12 +25,12 @@ filter = gfb_filter_new(fs, center_frequency_hz, ...
 
 %%% print the filter's parameters to the screen %%%
 
-disp(' ');
-disp(['The filter coefficient of this filter is: ', ...
+amtdisp(' ');
+amtdisp(['The filter coefficient of this filter is: ', ...
       num2str(real(filter.coefficient)),            ...
       ' + ',                                        ...
       num2str(imag(filter.coefficient))]);
-disp(['Its normalization factor is             : ', ...
+amtdisp(['Its normalization factor is             : ', ...
       num2str(filter.normalization_factor)]);
 
 
@@ -64,13 +64,13 @@ title('frequency response of example gammatone filter');
 xlabel('frequency / Hz');
 ylabel('filter response / dB');
 
-disp(' ');
-disp(['Figure 1 shows the first ',num2str(impulse_response_samples)]);
-disp('samples of the impulse response of this gammatone filter.    ');
-disp('Real part, imaginary part, and absolute value of the impulse ');
-disp('response are plotted as lines 1, 2, and 3, respectively.     ');
-disp(' ');
-disp('Figure 2 shows the frequency response function of this filter');
-disp('in dB over frequency in Hz.');
+amtdisp(' ');
+amtdisp(['Figure 1 shows the first ',num2str(impulse_response_samples)]);
+amtdisp('samples of the impulse response of this gammatone filter.    ');
+amtdisp('Real part, imaginary part, and absolute value of the impulse ');
+amtdisp('response are plotted as lines 1, 2, and 3, respectively.     ');
+amtdisp(' ');
+amtdisp('Figure 2 shows the frequency response function of this filter');
+amtdisp('in dB over frequency in Hz.');
 
 %OLDFORMAT

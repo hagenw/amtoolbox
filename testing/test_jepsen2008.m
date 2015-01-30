@@ -13,7 +13,7 @@ for nfc=1:length(fc)
   for nmfc=1:size(outsig{nfc},2)
     res=norm(outsig{nfc}(:,nmfc)-outsig_ref(:,nfc,nmfc))/norm(outsig{nfc}(:,nmfc));
     
-    disp(sprintf('Freq: %f MFreq: %f res: %f',fc(nfc),mfc(nmfc),res));
+    amtdisp(sprintf('Freq: %f MFreq: %f res: %f',fc(nfc),mfc(nmfc),res));
   end;  
 end;
 

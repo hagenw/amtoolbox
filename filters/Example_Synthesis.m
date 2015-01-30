@@ -17,7 +17,7 @@ desired_delay_in_seconds  =     0.004;
 filter_order              =     4;
 bandwidth_factor          =     1.0;
 
-disp(['Building analysis filterbank']);
+amtdisp(['Building analysis filterbank']);
 analyzer = gfb_analyzer_new(sampling_rate_hz, flow, ...
                             base_frequency_hz, fhigh,...
 			    filters_per_ERB, filter_order, bandwidth_factor);
@@ -25,12 +25,12 @@ analyzer = gfb_analyzer_new(sampling_rate_hz, flow, ...
 
 %%% Now create a synthesizer that can resynthesize the analyzer's output %%%
 
-disp(['Building synthesizer for an analysis-synthesis delay of ', ...
+amtdisp(['Building synthesizer for an analysis-synthesis delay of ', ...
       num2str(desired_delay_in_seconds), ' seconds']);
 synthesizer = gfb_synthesizer_new(analyzer, desired_delay_in_seconds);
 
 %%% Extract the synthesizer's parameters %%%
-disp(['The synthesizers parameters:';...
+amtdisp(['The synthesizers parameters:';...
       '----------------------------']);
 delay = synthesizer.delay;
 mixer = synthesizer.mixer;
@@ -72,7 +72,7 @@ title('frequency response of the analysis-synthesis-system');
 xlabel('frequency / Hz');
 ylabel('system response level / dB');
 
-disp('Figure 1 shows the impulse response of the analysis-synthesis system');
-disp('in the time domain; figure 2 shows its frequency response.');
+amtdisp('Figure 1 shows the impulse response of the analysis-synthesis system');
+amtdisp('in the time domain; figure 2 shows its frequency response.');
 
 %OLDFORMAT

@@ -22,7 +22,7 @@ function example_output = exp_spille2013(varargin)
 fn = 'exp_spille2013_s123456.wav';
 targetfn = fullfile(amtbasepath,'signals',fn);
 if not(exist(targetfn,'file'))
-  disp(['Downloading ' fn ' from http://amtoolbox.sourceforge.net/data/signals/']);  
+  amtdisp(['Downloading ' fn ' from http://amtoolbox.sourceforge.net/data/signals/']);  
   sourcefn = ['http://amtoolbox.sourceforge.net/data/signals/' fn];
   urlwrite(sourcefn,targetfn);
 end

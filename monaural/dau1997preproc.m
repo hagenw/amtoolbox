@@ -8,14 +8,13 @@ function [outsig, fc, mfc] = dau1997preproc(insig, fs, varargin);
 %     fs     : sampling rate.
 %  
 %   `dau1997preproc(insig,fs)` computes the internal representation of the
-%   signal *insig* sampled with a frequency of *fs* Hz as described in Dau,
-%   Puschel and Kohlrausch (1997a).
+%   signal *insig* sampled with a frequency of *fs* Hz.
 %  
 %   `[outsig,fc,mfc]=dau1997preproc(...)` additionally returns the center
 %   frequencies of the filter bank and the center frequencies of the
 %   modulation filterbank.
 %  
-%   The Dau 1997 model consists of the following stages:
+%   The model consists of the following stages:
 %   
 %   1) a gammatone filter bank with 1-erb spaced filtes.
 %

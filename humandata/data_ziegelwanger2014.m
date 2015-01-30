@@ -118,7 +118,7 @@ if flags.do_ARI
         tmp=load([hpath 'info.mat']);
         data=tmp.info.ARI;
         for ii=1:length(data.subjects)
-            disp(['Recalculate data for subject ' num2str(ii) '/' num2str(length(data.subjects)) ' (' data.subjects{ii} ') of ARI database']);
+            amtdisp(['Recalculate data for subject ' num2str(ii) '/' num2str(length(data.subjects)) ' (' data.subjects{ii} ') of ARI database'],'progress');
             Obj=SOFAload([hpath 'ARI_' data.subjects{ii} '.sofa']);
              
             if exist([hpath 'ARI_' data.subjects{ii} '.sofa.MCM.mat'],'file')
@@ -149,7 +149,7 @@ if flags.do_CIPIC
         tmp=load([hpath 'info.mat']);
         data=tmp.info.CIPIC;
         for ii=1:length(data.subjects)
-            disp(['Recalculate data for sujbect ' num2str(ii) filesep num2str(length(data.subjects)) ' of CIPIC database']);
+            amtdisp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of CIPIC database'],'progress');
             Obj=SOFAload([hpath 'CIPIC_' data.subjects{ii} '.sofa']);
              
             if exist([hpath 'CIPIC_' data.subjects{ii} '.sofa.MCM.mat'],'file')
@@ -181,7 +181,7 @@ if flags.do_LISTEN
         data=tmp.info.LISTEN;
         for ii=1:length(data.subjects)
             if ~strcmp(data.subjects{ii},'34')
-                disp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of LISTEN database']);
+                amtdisp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of LISTEN database'],'progress');
                 Obj=SOFAload([hpath 'LISTEN_' data.subjects{ii} '.sofa']);
              
                 if exist([hpath 'LISTEN_' data.subjects{ii} '.sofa.MCM.mat'],'file')
@@ -215,7 +215,7 @@ if flags.do_SPHERE_DIS
         results.p_onaxis=zeros(4,2,length(data.subjects));
         results.p_offaxis=zeros(7,2,length(data.subjects));
         for ii=1:length(data.subjects)
-            disp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of SPHERE_DIS database']);
+            amtdisp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of SPHERE_DIS database'],'progress');
             Obj=SOFAload([hpath 'Sphere_Displacement_' data.subjects{ii} '.sofa']);
              
             if exist([hpath 'Sphere_Displacement_' data.subjects{ii} '.sofa.MCM.mat'],'file')
@@ -247,7 +247,7 @@ if flags.do_SPHERE_ROT
         data=tmp.info.Rotation;
         results.p=zeros(4,2,length(data.phi));
         for ii=1:length(data.subjects)
-            disp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of SPHERE_ROT database']);
+            amtdisp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of SPHERE_ROT database'],'progress');
             Obj=SOFAload([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa']);
                 
             if exist([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MAX.mat'],'file')

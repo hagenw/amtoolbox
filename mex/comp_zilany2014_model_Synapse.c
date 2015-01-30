@@ -142,7 +142,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 			
 	/* run the model */
 
-	mexPrintf("ANmodel: Zilany, Bruce, Ibrahim, and Carney : Auditory Nerve Model\n");
+	/*mexPrintf("ANmodel: Zilany, Bruce, Ibrahim, and Carney : Auditory Nerve Model\n");*/
 
 	SingleAN(px,cf,nrep,tdres,totalstim,fibertype,noiseType,implnt,meanrate,varrate,psth);
 

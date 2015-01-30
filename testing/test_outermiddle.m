@@ -3,7 +3,7 @@ function test_failed=test_outermiddle
 %
 %  Test outermiddel by comparison with reference implementation.
 
-disp(' ===============  TEST_OUTERMIDDLE ================');
+amtdisp(' ===============  TEST_OUTERMIDDLE ================');
   
 test_failed=0;
   
@@ -28,5 +28,5 @@ res=norm(ff(:)-fr(:));
 
 [test_failed,fail]=ltfatdiditfail(res,test_failed);
 
-disp(sprintf('OUTER+MIDDLE %0.5g %s',res,fail));
+amtdisp(sprintf('OUTER+MIDDLE %0.5g %s',res,fail));
 

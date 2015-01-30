@@ -521,9 +521,9 @@ else
     case 'perMacpherson2003'
       
       if isempty(kv.f) || isempty(kv.r)
-        disp('Regression coefficients missing! Input is interpreted as baseline data!')
-        disp('For this analysis the results from `sirpMacpherson2000()` for baseline data')
-        disp('are required and must be handled as `localizationerror(m,f,r,...)`.')
+        amtdisp('Regression coefficients missing! Input is interpreted as baseline data!')
+        amtdisp('For this analysis the results from `sirpMacpherson2000()` for baseline data')
+        amtdisp('are required and must be handled as `localizationerror(m,f,r,...)`.')
         [kv.f,kv.r] = localizationerror(m,'sirpMacpherson2000');
       end
       

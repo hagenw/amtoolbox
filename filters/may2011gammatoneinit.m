@@ -29,7 +29,7 @@ function GFB = may2011gammatoneinit(fs,lowFreq,upFreq,nFilter,bUseEar,bAlign,bIn
 % 
 %OUTPUT PARAMETER
 %       GFB : gammatone parameter structure which can be passed as second
-%             input argument to the function "gammatone".
+%             input argument to the function `gammatone`
 %
 %EXAMPLE
 %   nSamples = 500;
@@ -40,11 +40,11 @@ function GFB = may2011gammatoneinit(fs,lowFreq,upFreq,nFilter,bUseEar,bAlign,bIn
 %   % Plot result
 %   waveplot(1:nSamples,GFB.cf,bm);
 %
-%   See also gammatone and isGFB.
+%   See also: gammatone
 
 %   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
 %   
-%   Author  :  Tobias May, © 2008 
+%   Author  :  Tobias May, 2008 
 %              TUe Eindhoven and Philips Research  
 %              t.may@tue.nl      tobias.may@philips.com
 %
@@ -55,7 +55,10 @@ function GFB = may2011gammatoneinit(fs,lowFreq,upFreq,nFilter,bUseEar,bAlign,bIn
 %   ***********************************************************************
 
 % Check for proper input arguments
-checkInArg(1,7,nargin,mfilename);
+if nargin < 1 || nargin > 7
+    help(mfilename);
+    error('Wrong number of input arguments!');
+end
 
 % Set default values ...   
 if nargin < 2 || isempty(lowFreq);  lowFreq = 80;                    end
@@ -96,14 +99,184 @@ pc = -cf*3./bw;
 
 % Store gammatone-related parameter
 GFB = struct('object','4th order gammatone filterbank',             ...
-             'fcnHandle','gammatoneMEX','fs',fs,                    ...
+             'fcnHandle','comp_may2011gammatone','fs',fs,                    ...
              'nFilter',nTotalFilter,                                ...
              'filter2Process',[nTotalFilter filter2Process],        ...
              'lowerFreq',lowFreq,'upperFreq',upFreq,'cf',cf,        ...
              'bw',bw,'delay',delay,'phaseCorrection',pc,            ...
              'bOuterMiddleEar',bUseEar,'bPhaseAlign',bAlign,'bInfo',bInfo);
 
-         
+        
+function out = isGFB(in)
+%isGFB   Check if input is a gammatone filterbank structure. 
+%   This is a small helper function in order to check if gammatone
+%   filterbank is initialized properly. 
+%
+%USAGE
+%   OUT = isGFB(IN)
+%   
+%INPUT ARGUMENTS
+%    IN : input 
+% 
+%OUTPUT ARGUMENTS
+%   OUT : true/false depending on whether IN is a gammatone structure
+% 
+%EXAMPLE
+%   % Create gammatone structure
+%   p = gammatoneInit(44.1e3);
+%   % Check 
+%   isGFB(p)
+%ans = 
+%      1
+% 
+%   See also gammatone.
+
+%   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
+%   
+%   Author  :  Tobias May, 2008 
+%              TUe Eindhoven and Philips Research  
+%              t.may@tue.nl      tobias.may@philips.com
+%
+%   History :  
+%   v.0.1   2008/05/11
+%   ***********************************************************************
+
+
+% Check for proper input arguments
+if nargin ~= 1
+    help(mfilename);
+    error('Wrong number of input arguments!');
+end
+
+% Initialize output
+out = false; 
+
+% Check if IN is a structure
+if isstruct(in)
+    % Required structure fields
+    reqFields = {'fcnHandle' 'fs' 'lowerFreq' 'upperFreq' ...
+                 'filter2Process' 'bOuterMiddleEar' 'bPhaseAlign' 'bInfo'};
+    
+    % Check if all required fields are present
+    if all(isfield(in,reqFields))
+        % Set flag to true
+        out = true;
+    end
+end
+    
+
+
+function freqHz = erb2freq(erbf)
+%erb2freq   Convert ERB rate to frequency in Hz.
+%
+%   Transformation is done according to Moore and Glasberg.
+% 
+%USAGE
+%   FREQHZ = erb2freq(ERBF);
+%
+%INPUT ARGUMENTS
+%     ERBF : ERB-warped frequencies which should be transformned to
+%            frequency in Hz
+%    
+%OUTPUT ARGUMENTS
+%   FREQHZ : frequency vector in Hz
+%
+%   See also erb and freq2erb.
+
+%   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
+%   
+%   Author  :  Tobias May, 2008 
+%              TUe Eindhoven and Philips Research  
+%              t.may@tue.nl      tobias.may@philips.com
+%
+%   History :  
+%   v.1.0   2008/04/02
+%   ***********************************************************************
+
+% Check for proper input arguments
+if nargin ~= 1
+    help(mfilename);
+    error('Wrong number of input arguments!');
+end
+
+% Convert erb to frequency
+freqHz = (10.^(erbf/21.4)-1)/4.37e-3;
+
+
+function erbf = freq2erb(freqHz)
+%freq2erb   Convert frequency in Hz to ERB rate.
+% 
+%   Transformation is done according to Moore and Glasberg.
+%
+%USAGE
+%     ERBF = freq2erb(FREQHZ);
+%
+%INPUT ARGUMENTS
+%   FREQHZ : frequencies in Hz for which the erb width should be computed
+%    
+%OUTPUT ARGUMENTS
+%     ERBF : auditory filter width 
+%
+%   See also erb and erb2freq.
+
+%   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
+%   
+%   Author  :  Tobias May, 2008 
+%              TUe Eindhoven and Philips Research  
+%              t.may@tue.nl      tobias.may@philips.com
+%
+%   History :  
+%   v.1.0   2008/05/08
+%   ***********************************************************************
+
+% Check for proper input arguments
+if nargin ~= 1
+    help(mfilename);
+    error('Wrong number of input arguments!');
+end
+
+% Convert frequency to erb
+erbf = 21.4*log10(freqHz*0.00437 + 1.0);
+
+
+function erbWidth = erb(freqHz)
+%erb   Compute Equivalent Rectangular Bandwidth (ERB).
+% 
+%   The ERB is calculated according to Moore and Glasberg at each given
+%   frequency.  
+%
+%USAGE
+%   ERBWIDTH = ERB(FREQHZ);
+%
+%INPUT ARGUMENTS
+%     FREQHZ : frequencies in hertz for which the erb width should be
+%              computed
+%    
+%OUTPUT ARGUMENTS
+%   ERBWIDTH : auditory filter width 
+%
+%   See also freq2erb and erb2freq.
+
+%   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
+%   
+%   Author  :  Tobias May, 2008 
+%              TUe Eindhoven and Philips Research  
+%              t.may@tue.nl      tobias.may@philips.com
+%
+%   History :  
+%   v.1.0   2008/05/08
+%   ***********************************************************************
+
+% Check for proper input arguments
+if nargin ~= 1
+    help(mfilename);
+    error('Wrong number of input arguments!');
+end
+
+% Compute ERB width
+erbWidth = 24.7*(4.37e-3*freqHz+1);
+
+
 %   ***********************************************************************
 %   This program is free software: you can redistribute it and/or modify
 %   it under the terms of the GNU General Public License as published by

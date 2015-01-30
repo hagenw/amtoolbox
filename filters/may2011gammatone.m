@@ -66,7 +66,7 @@ function [bm,env,GFB] = may2011gammatone(in,fs,fLow,fUp,nFilter,bEar,bAlign,bInf
 
 %   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
 %   
-%   Author  :  Tobias May, © 2008-2009
+%   Author  :  Tobias May, 2008-2009
 %              TUe Eindhoven and Philips Research  
 %              t.may@tue.nl      tobias.may@philips.com
 %
@@ -82,7 +82,10 @@ function [bm,env,GFB] = may2011gammatone(in,fs,fLow,fUp,nFilter,bEar,bAlign,bInf
 %   ***********************************************************************
 
 % Check for proper input arguments
-error(nargchk(1,8,nargin));
+if nargin < 2 || nargin > 8
+    help(mfilename);
+    error('Wrong number of input arguments!');
+end
 
 % If two parameters are supplied, check if the second argument is a
 % gammatone filterbank structure...
@@ -100,13 +103,6 @@ if bInitOK
     GFB = fs;
 else
     % Set default values
-    if nargin < 2 || isempty(fs) 
-        if isAudio(in)
-            fs = in.fs;
-        else
-            error('One input is only valid if "IN" is an audio object.')
-        end
-    end
     if nargin < 3 || isempty(fLow);    fLow    = 80;                    end
     if nargin < 4 || isempty(fUp);     fUp     = min(5e3,fs/2);         end
     if nargin < 5 || isempty(nFilter); nFilter = round(freq2erb(fs/2)); end
@@ -115,7 +111,7 @@ else
     if nargin < 8 || isempty(bInfo);   bInfo   = false;                 end
     
     % Initialize gammatone filterbank structure
-    GFB = gammatoneInit(fs,fLow,fUp,nFilter,bEar,bAlign,bInfo);
+    GFB = may2011gammatoneinit(fs,fLow,fUp,nFilter,bEar,bAlign,bInfo);
 end
 
 % Check for consistent gammatone channel selection
@@ -128,22 +124,8 @@ if length(GFB.filter2Process) > 1 && ...
            'which should be processed.'])
 end
 
-% Check input data
-if isAudio(in)
-    % Check for consistent sampling frequency
-    if ~isequal(in.fs,GFB.fs)
-        error(['Sampling frequency mismatch between the audio ',...
-               'object "IN" and the gammatone initialization.'])
-    end
-    % Extract audio data
-    data = in.data;
-else
-    % Copy data
-    data = in; clear in;
-end
-
 % Determine data size
-[nSamples,nChannels] = size(data);
+[nSamples,nChannels] = size(in);
 
 % TODO % Enable chunk-based processing by keeping track of filter states 
 
@@ -158,8 +140,10 @@ if nargout > 1
     
     % Loop over number of audio channels
     for ii = 1 : nChannels
+        % replace the original MEX filename by the AMT MEX filename      
+        if strcmp(GFB.fcnHandle,'gammatoneMEX'), GFB.fcnHandle='comp_may2011gammatone'; end
         % Call gammatone filterbank routine (MEX-file implementation)
-        [bm(:,:,ii),env(:,:,ii)] = feval(GFB.fcnHandle,data(:,ii),GFB.fs,...
+        [bm(:,:,ii),env(:,:,ii)] = feval(GFB.fcnHandle,in(:,ii),GFB.fs,...
                                          GFB.lowerFreq,GFB.upperFreq,...
                                          GFB.filter2Process,...
                                          GFB.bOuterMiddleEar,...
@@ -175,8 +159,10 @@ else
 
      % Loop over number of audio channels
     for ii = 1 : nChannels
+        % replace the original MEX filename by the AMT MEX filename
+        if strcmp(GFB.fcnHandle,'gammatoneMEX'), GFB.fcnHandle='comp_may2011gammatone'; end
         % Call gammatone filterbank routine (MEX-file implementation)
-        bm(:,:,ii) = feval(GFB.fcnHandle,data(:,ii),GFB.fs,...
+        bm(:,:,ii) = feval(GFB.fcnHandle,in(:,ii),GFB.fs,...
                            GFB.lowerFreq,GFB.upperFreq,... 
                            GFB.filter2Process,GFB.bOuterMiddleEar,...
                            GFB.bPhaseAlign,GFB.bInfo);
@@ -184,3 +170,63 @@ else
 end
 
 % TODO % Adjust outer/middle ear gain here to allow various weightings
+
+
+
+function out = isGFB(in)
+%isGFB   Check if input is a gammatone filterbank structure. 
+%   This is a small helper function in order to check if gammatone
+%   filterbank is initialized properly. 
+%
+%USAGE
+%   OUT = isGFB(IN)
+%   
+%INPUT ARGUMENTS
+%    IN : input 
+% 
+%OUTPUT ARGUMENTS
+%   OUT : true/false depending on whether IN is a gammatone structure
+% 
+%EXAMPLE
+%   % Create gammatone structure
+%   p = gammatoneInit(44.1e3);
+%   % Check 
+%   isGFB(p)
+%ans = 
+%      1
+% 
+%   See also gammatone.
+
+%   Developed with Matlab 7.4.0.287 (R2007a). Please send bug reports to:
+%   
+%   Author  :  Tobias May, 2008 
+%              TUe Eindhoven and Philips Research  
+%              t.may@tue.nl      tobias.may@philips.com
+%
+%   History :  
+%   v.0.1   2008/05/11
+%   ***********************************************************************
+
+
+% Check for proper input arguments
+if nargin ~= 1
+    help(mfilename);
+    error('Wrong number of input arguments!');
+end
+
+% Initialize output
+out = false; 
+
+% Check if IN is a structure
+if isstruct(in)
+    % Required structure fields
+    reqFields = {'fcnHandle' 'fs' 'lowerFreq' 'upperFreq' ...
+                 'filter2Process' 'bOuterMiddleEar' 'bPhaseAlign' 'bInfo'};
+    
+    % Check if all required fields are present
+    if all(isfield(in,reqFields))
+        % Set flag to true
+        out = true;
+    end
+end
+    

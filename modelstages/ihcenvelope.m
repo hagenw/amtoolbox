@@ -27,7 +27,7 @@ function inoutsig = ihcenvelope(inoutsig,fs,varargin)
 %     'ihc_filter_order',n
 %                      Filter order for the Breebaart filter, default: 5.
 %
-%     'ihc_dau'        Use a 2nd order Butterworth filter with a cut-off
+%     'ihc_dau'        Use a 1st-order Butterworth filter with a cut-off
 %                      frequency of 1000 Hz. This method has been used in all
 %                      models deriving from the original 1996 model by 
 %                      Dau et. al. These models are mostly monaural in nature.

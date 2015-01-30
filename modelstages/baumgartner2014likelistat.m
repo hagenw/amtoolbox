@@ -1,7 +1,7 @@
 function [ la,le,ci,lr,pvalue ] = baumgartner2014likelistat( p,tang,rang,target,response,varargin )
-% BAUMGARTNER2014LIKELISTAT Likelihood estimation for evaluating model performance
-%
-%   Usage:  [la,le,ci,lr,pvalue] = baumgartner2014likelistat(p,tang,rang,target,response,varargin)
+%BAUMGARTNER2014LIKELISTAT Likelihood estimation for evaluating model performance
+%   Usage:  
+%     [la,le,ci,lr,pvalue] = baumgartner2014likelistat(p,tang,rang,target,response,varargin)
 %
 %   Input arguments:
 %     p:           pdf matrix
@@ -13,7 +13,7 @@ function [ la,le,ci,lr,pvalue ] = baumgartner2014likelistat( p,tang,rang,target,
 %                  1 corresponds to unitary. This is the default.
 %                  use 'original' according to Langendijk et al. (2002).
 %
-%  Output arguments:
+%   Output arguments:
 %     la:          actual likelihood
 %     le:          expected likelihood
 %     ci:          99% confidence interval for expected likelihood
