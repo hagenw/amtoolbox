@@ -189,7 +189,7 @@ conf.resolution = resolution;
 % 700 ms white noise burst
 sig_noise = whitenoiseburst(fs);
 for ii=1:length(x)
-    if showprogress progressbar(ii,length(x)), end
+    amtdisp([num2str(ii) ' of ' num2str(length(x))],'progress');
     for jj=1:length(y)
         X = [x(ii) y(jj) 0];
         if strcmpi('circle',array) && norm(X)>L/2

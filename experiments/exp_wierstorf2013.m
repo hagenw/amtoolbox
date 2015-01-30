@@ -501,7 +501,7 @@ if flags.do_fig10
 
     if amtredofile(s,flags.redomode)
         for ii=1:length(X)
-            progressbar(ii,length(X));
+            amtdisp([num2str(ii) ' of ' num2str(length(X))],'progress');
             for jj=1:5
                 model_3_Y1(ii,jj) = wierstorf2013(X(ii),Y1,phi,xs,src,L,'wfs', ...
                                                   'resolution',1, ...

@@ -922,13 +922,13 @@ if flags.do_fig14b
     
     if amtredofile(s,flags.redomode)
 
-      fprintf(1,'NOTE: this test function will need a lot of time!\n\n');
+      amtdisp('NOTE: this test function will need a lot of time!','progress');
 
       output = zeros(length(ild_std)+1,nitds);
       centmp = zeros(nilds,nitds);
       for ii = 1:nitds
         % Show progress
-        progressbar(ii,nitds);
+        amtdisp([num2str(ii) ' of ' num2str(nitds)],'progress');
         % First generate the result for std(ILD) == 0
         sig = itdsin(f,itd(ii),fs);
         sig = sig(1:siglen,:);

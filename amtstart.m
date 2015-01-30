@@ -16,13 +16,20 @@ function amtstart(varargin)
 %   
 %   1) install SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. `thirdparty/SOFA`)
 %   2) install SFS Toolbox from https://github.com/sfstoolbox/sfs
-%   3) run `amtmex` and compile successfully
 %   4) install Python >2.6 with `numpy` and `scipi` packages. On Linux, use `sudo apt-get install python-scipy python-numpy`
+%   3) run `amtmex` and compile successfully
 %   5) run `make` (Linux) or `make.bat` (Windows) in `src/verhulst`
 %   6) have the Optimization Toolbox for Matlab installed
-%   7) have the required data in `signals/`, `humandata`, and `hrtf/`. The required data provided as ZIP files can be downloaded from https://sourceforge.net/projects/amtoolbox/files/
 % 
-%   Some of the AMT functions require a large processing time. Depending on the machine and the model, it might take even days. Thus, some AMT functions provide caching of calculated results. If you don't want to wait and just take a look at the results: download the cached data from https://sourceforge.net/projects/amtoolbox/files/, unzip in the root AMT directory, and run the particular AMT function.
+%   Some of the AMT functions require a large processing time. Depending on the machine and the model, it might take even days. Thus, some AMT functions provide caching of calculated results. If you don't want to wait and just take a look at the results: download the cached data from https://sourceforge.net/projects/amtoolbox/files/, unzip to the root AMT directory, and run the particular AMT function.
+%
+%   Most of the models require auxiliary data. The AMT will download these data on-demand. 
+%   Some of the models require HRTFs. The AMT will download alse these HRTFs on-demand.
+%   If you want to run the AMT completely offline, download the auxiliary data and HRTFs ahead. 
+%   The download URL for the auxiliary data is given by `amtauxdataurl`. 
+%   The target directory for the auxiliary data is given by `amtauxdatapath`. 
+%   The download URL for the HRTFs is given by `SOFAdbURL`.
+%   The target directory for the HRTFs is given by `SOFAdbPath`. 
 %
 %   `amtstart('documentation')` starts the AMT in the documentation compiling
 %   mode. The progress output will be suppressed.
@@ -31,7 +38,7 @@ function amtstart(varargin)
 %
 %   `amtstart('verbose')` starts the AMT in the verbose mode and all output will be dispplayed. This is the default mode. 
 % 
-%   See also:  amtmex amtflags
+%   See also:  amtmex amtflags amtauxdataurl amtauxdatapath
 %
   
 %   AUTHOR : Peter L. Soendergaard, Piotr Majdak 
