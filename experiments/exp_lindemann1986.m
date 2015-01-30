@@ -104,6 +104,7 @@ function output = exp_lindemann1986(varargin)
 %               of the centroid as a function of the ITD averaged over
 %               different small ILD with a standard deviation of $0,1,2,3,4,5$.
 %               The output has dimensions: nilds x nitds
+%               THIS FIGURE DOES NOT SEEM TO MATCH THE PAPER!
 %
 %     'fig15'  Reproduce Fig.15 from Lindemann (1986). The cross-correlation
 %              for an ITD of -0.5ms is calculated. This is done for
@@ -181,10 +182,6 @@ function output = exp_lindemann1986(varargin)
 %   To display Figure 14a use :::
 %
 %     exp_lindemann1986('fig14a');
-%
-%   To display Figure 14b use :::
-%
-%     exp_lindemann1986('fig14b');
 %
 %   To display Figure 15 use :::
 %
