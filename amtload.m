@@ -1,5 +1,5 @@
 function varargout=amtload(model,data)
-%AMTLOAD Load auxiliary data of a model.
+%AMTLOAD Load auxiliary data of a model
 %   Usage: amtload(MODEL, DATA);
 %
 %   `amtload` loads the auxiliary data from the file `data`. The data will loaded 
@@ -15,7 +15,7 @@ function varargout=amtload(model,data)
 %     others: output is the absolute filename
 %
 %
-%  See also: amtauxdatapath amtauxdataurl
+%   See also: amtauxdatapath amtauxdataurl
 %
 
   

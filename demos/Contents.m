@@ -23,6 +23,7 @@
 %
 %   Speech models
 %     DEMO_JOERGENSEN2013    - SNRenv for speech intelligibility from Joergensen et al. (2013)
+%     DEMO_JELFS2011 - Binaural speech intelligibility advantage from Jelfs et al. (2011)
 %
 %   For help, bug reports, suggestions etc. send email to 
 %   amtoolbox-help@lists.sourceforge.net

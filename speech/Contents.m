@@ -9,7 +9,6 @@
 %
 %  Binaural speech advantage models  
 %    JELFS2011             - Binaural speech advantage
-%    PLOTJELFS2011         - Polar plot, fixed target moving masker
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

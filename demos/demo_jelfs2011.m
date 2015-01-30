@@ -1,4 +1,4 @@
-%DEMO_JELFS2011  Binaural speech intelligibility advantage.
+%DEMO_JELFS2011  Binaural speech intelligibility advantage
 %
 %   `demo_jelfs2011` will plot the output of the
 %   `jelfs2011` binaural speech intelligibility advantage model for a
