@@ -312,6 +312,7 @@ if flags.do_fig2
   end
   
   % Output
+  clear data
   data.contralateralGain = contralateralGain;
   
 end
@@ -983,14 +984,14 @@ if flags.do_fig5
             if C == 1       % Learn 
                 s(ll).spdtfs_c{ii} = s(ll).spdtfs{ii};
             elseif C == 2   % Dummy
-                fn_filters = 'exp_baumgartner2014_spatstrat_lpfilter.mat';
-                if not(exist(fn_filters,'file'))
-                  amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
-                  targetfn = fullfile(amtbasepath,'humandata',fn_filters);
-                  sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
-                  urlwrite(sourcefn,targetfn);
-                end
-                temp=load(fn_filters);
+%                 fn_filters = 'data_baumgartner2014_spatstrat_lpfilter.mat';
+%                 if not(exist(fn_filters,'file'))
+%                   amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
+%                   targetfn = fullfile(amtbasepath,'humandata',fn_filters);
+%                   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
+%                   urlwrite(sourcefn,targetfn);
+%                 end
+                temp=amtload('baumgartner2014','spatstrat_lpfilter.mat');
                 s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
             elseif C == 3   % Warped
                 s(ll).spdtfs_c{ii} = warp_hrtf(s(ll).spdtfs{ii},s(ll).fs);
@@ -1142,14 +1143,14 @@ if flags.do_fig6
               if C == 1       % Learn 
                   s(ll).spdtfs_c{ii} = s(ll).spdtfs{ii};
               elseif C == 2   % Dummy
-                fn_filters = 'exp_baumgartner2014_spatstrat_lpfilter.mat';
-                if not(exist(fn_filters,'file'))
-                  amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
-                  targetfn = fullfile(amtbasepath,'humandata',fn_filters);
-                  sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
-                  urlwrite(sourcefn,targetfn);
-                end
-                temp=load(fn_filters);
+%                 fn_filters = 'data_baumgartner2014_spatstrat_lpfilter.mat';
+%                 if not(exist(fn_filters,'file'))
+%                   amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
+%                   targetfn = fullfile(amtbasepath,'humandata',fn_filters);
+%                   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
+%                   urlwrite(sourcefn,targetfn);
+%                 end
+                temp=amtload('baumgartner2014','spatstrat_lpfilter.mat');
                 s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
               elseif C == 3   % Warped
                   s(ll).spdtfs_c{ii} = warp_hrtf(s(ll).spdtfs{ii},s(ll).fs);
@@ -2268,7 +2269,7 @@ if flags.do_fig11
     plotspec = false;
 
 
-    %% Loda Data
+    %% Load Data
 
     % Speech Samples from Harvard Word list
     fs_orig = 80e3; % Hz
@@ -2304,18 +2305,18 @@ if flags.do_fig11
 
     % FIR Low-pass filters at 8kHz
     % Brick-wall (aka sinc-filter): fir1(200,1/3) -> -60 dB
-    fn_filters = 'exp_baumgartner2014_highfreqatten_filters.mat';
-    if not(exist(fn_filters,'file'))
-      amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
-      targetfn = fullfile(amtbasepath,'humandata',fn_filters);
-      sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
-      urlwrite(sourcefn,targetfn);
-    end
-    load(fn_filters)
+%     fn_filters = 'exp_baumgartner2014_highfreqatten_filters.mat';
+%     if not(exist(fn_filters,'file'))
+%       amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
+%       targetfn = fullfile(amtbasepath,'humandata',fn_filters);
+%       sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
+%       urlwrite(sourcefn,targetfn);
+%     end
+    x=load('baumgartner2014','highfreqatten_filters.mat');
     lp{1} = [1 zeros(1,100)];
-    lp{2} = fir20db;
-    lp{3} = fir40db;
-    lp{4} = fir60db;
+    lp{2} = x.fir20db;
+    lp{3} = x.fir40db;
+    lp{4} = x.fir60db;
 
     %% Model Data
     for ii = 0:1
@@ -2559,14 +2560,14 @@ if flags.do_tab2
             if C == 1       % Learn 
                 s(ll).spdtfs_c{ii} = s(ll).spdtfs{ii};
             elseif C == 2   % Dummy
-              fn_filters = 'exp_baumgartner2014_spatstrat_lpfilter.mat';
-              if not(exist(fn_filters,'file'))
-                amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
-                targetfn = fullfile(amtbasepath,'humandata',fn_filters);
-                sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
-                urlwrite(sourcefn,targetfn);
-              end
-              temp=load(fn_filters);
+%               fn_filters = 'data_baumgartner2014_spatstrat_lpfilter.mat';
+%               if not(exist(fn_filters,'file'))
+%                 amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
+%                 targetfn = fullfile(amtbasepath,'humandata',fn_filters);
+%                 sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
+%                 urlwrite(sourcefn,targetfn);
+%               end
+              temp=amtload('baumgartner2014','spatstrat_lpfilter.mat');
               s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
             elseif C == 3   % Warped
                 s(ll).spdtfs_c{ii} = warp_hrtf(s(ll).spdtfs{ii},s(ll).fs);

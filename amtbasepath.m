@@ -5,7 +5,7 @@ function bp = amtbasepath;
 %   `amtbasepath` returns the top level directory in which the AMT
 %   files are installed.
 %
-%   See also: amtstart
+%   See also: amtstart amtauxdatapath
   
 f=mfilename('fullpath');
 

@@ -38,19 +38,20 @@ definput.flags.condition = {'BB','LP','W'};
 
 
 %% Extract data
-if not(exist([mfilename '.mat'],'file'))
-  amtdisp(['Downloading ' mfilename ' from http://www.kfs.oeaw.ac.at/']);
-  targetfn = fullfile(amtbasepath,'humandata',[mfilename '.mat']);
-  sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' mfilename '.mat'];
-  urlwrite(sourcefn,targetfn);
-end
-load(mfilename)
+% if not(exist([mfilename '.mat'],'file'))
+%   amtdisp(['Downloading ' mfilename ' from http://www.kfs.oeaw.ac.at/']);
+%   targetfn = fullfile(amtbasepath,'humandata',[mfilename '.mat']);
+%   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' mfilename '.mat'];
+%   urlwrite(sourcefn,targetfn);
+% end
+% load(mfilename)
+x=amtload('majdak2013','data.mat');
 
-C = find(ismember(condition,flags.condition));
+C = find(ismember(x.condition,flags.condition));
 
-for ll = 1:length(subject)
+for ll = 1:length(x.subject)
   
-  data(ll).mtx = subject(ll).expData{C}(:,1:8);
-  data(ll).id = subject(ll).id;
+  data(ll).mtx = x.subject(ll).expData{C}(:,1:8);
+  data(ll).id = x.subject(ll).id;
 
 end

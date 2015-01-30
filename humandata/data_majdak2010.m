@@ -42,21 +42,22 @@ definput.flags.condition = {'Learn_M','Learn_H','HMD_M','HMD_H','Dark_M','Dark_H
 
 
 %% Extract data
-if not(exist([mfilename '.mat'],'file'))
-  amtdisp(['Downloading ' mfilename ' from http://www.kfs.oeaw.ac.at/']);
-  targetfn = fullfile(amtbasepath,'humandata',[mfilename '.mat']);
-  sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' mfilename '.mat'];
-  urlwrite(sourcefn,targetfn);
-end
-load(mfilename)
+% if not(exist([mfilename '.mat'],'file'))
+%   amtdisp(['Downloading ' mfilename ' from http://www.kfs.oeaw.ac.at/']);
+%   targetfn = fullfile(amtbasepath,'humandata',[mfilename '.mat']);
+%   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' mfilename '.mat'];
+%   urlwrite(sourcefn,targetfn);
+% end
+% load(mfilename)
+x=amtload('majdak2010','data.mat');
 
-C = find(ismember(condition,flags.condition));
+C = find(ismember(x.condition,flags.condition));
 
-for ll = 1:length(subject)
+for ll = 1:length(x.subject)
   
-  if not(isempty(subject(ll).expData{C}))
-    data(ll).mtx = real(subject(ll).expData{C}(:,1:8));
+  if not(isempty(x.subject(ll).expData{C}))
+    data(ll).mtx = real(x.subject(ll).expData{C}(:,1:8));
   end
-  data(ll).id = subject(ll).id;
+  data(ll).id = x.subject(ll).id;
 
 end

@@ -62,8 +62,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %
 %     'lookup',lookup  Lookup table to map ITD values to angles. This can be
 %                      created by the `itd2anglelookuptable` function. Default
-%                      value is the lookup table
-%                      wierstorf2013itd2anglelookup.mat that comes with AMT.
+%                      value is the lookup table itd2anglelookup.mat that comes with AMT.
 %
 %
 %   For the simulation of the wave field synthesis or stereophony setup this
@@ -158,7 +157,7 @@ fs = hrtf.fs;
 if isempty(lookup)
     % load lookup table to map ITD values of the model to azimuth angles.
     % the lookup table was created using the same HRTF database
-    lookup = load(fullfile(amtbasepath, 'hrtf','wierstorf2013','wierstorf2013itd2anglelookup.mat'));
+    lookup = amtload('wierstorf2013','itd2anglelookup.mat');
 end
 
 

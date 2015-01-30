@@ -131,8 +131,7 @@ end;
 
 if flags.do_stim
   % delay is the first output parameter, use it to return the stimulus.  
-  delay=load([amtbasepath,'humandata',filesep, ...
-              'roenne2012_elberling2010stim']);
+  delay=amtload('elberling2010','stim.mat');
   
   % fs is stored in data_mean
   data_mean=fs;

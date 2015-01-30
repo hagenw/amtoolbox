@@ -1,6 +1,6 @@
 function amtdisp(in,flag)
 %AMTDISP AMT-specific overload of the function 'disp'
-%   Usage: amtamtdisp(X);
+%   Usage: amtdisp(X);
 %     amtdisp(X,'progress');
 %
 %   `amtdisp(X);` can be used for displaying information in the command

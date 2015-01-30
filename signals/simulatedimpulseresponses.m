@@ -28,11 +28,7 @@ function [ir,fs]=simulatedimpulseresponses(duration)
 
 switch(duration)
  case {0.4,0.7,1.3,2.3}
-  f=mfilename('fullpath');
-  
-  [f,'_',num2str(duration),'.wav']
-  
-  [ir,fs]=wavread([f,'_',num2str(duration),'s.wav']);
+   [ir,fs]=amtload('signals',['simulatedimpulseresponses_',num2str(duration),'s.wav']);
  otherwise
-  error('%s: Unsupported duration.',upper(mfilename));  
+   error('%s: Unsupported duration.',upper(mfilename));  
 end;

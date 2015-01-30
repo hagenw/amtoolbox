@@ -226,8 +226,14 @@ for ii=1:length(d)
   end;
 end;
 
+
 %% ---------- load information into ltfathelp ------------
 
 % As comp is now in the path, we can call ltfatarghelper
 ltfatsetdefaults('amthelp','versiondata',amt_version,...
                  'modulesdata',modules);
+
+               %% Initialize aux data
+amtdisp('*** AMT Ready to go! ***'); 
+amtdisp(['Auxiliary data (local): ' amtauxdatapath]);
+amtdisp(['Auxiliary data (web): ' amtauxdataurl]);

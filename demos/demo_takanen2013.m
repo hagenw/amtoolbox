@@ -40,39 +40,17 @@ printMap = 1;
 %if the user wishes to use pre-computed cochlea model outputs to reduce the
 %required computation time
 if preComp ==1
-    filename='demo_takanen2013cochleadata.mat';
-    try
-        data=load([amtbasepath,'signals',filesep,filename]);
-    catch exception
-        amtdisp(['=============================================================';
-              'Please load the necessary mat-files from the companying page:';
-              '   www.acoustics.hut.fi/publications/papers/AMTool2013-bam/  ';
-              'and place them in the "signals" directory                    ';
-              '=============================================================']);
-        
-        error('Error: mat-file %s not found',filename);
-    end
+    filename='demo_cochleadata.mat';
+    data=amtload('takanen2013',filename);
     output= takanen2013(data.tests.cochlea,data.tests.fs,compType,printFigs,printMap);
-	figure(1);
     title(data.tests.scenario);
     set(gca,'Ytick',data.tests.ytickPos);set(gca,'YtickLabel',data.tests.ytickLab(end:-1:1));
     ylabel(data.tests.ylab);
 %otherwise, binaural input signals are used
 else
-    filename='demo_takanen2013binsignals.mat';
-    try
-        data=load([amtbasepath,'signals',filesep,filename]);
-    catch exception
-        amtdisp(['=============================================================';
-              'Please load the necessary mat-files from the companying page:';
-              '   www.acoustics.hut.fi/publications/papers/AMTool2013-bam/  ';
-              'and place them in the "signals" directory                    ';
-              '=============================================================']);
-        
-        error('Error: mat-file %s not found',filename);
-    end
+    filename='demo_binsignals.mat';
+    data=amtload('takanen2013',filename);
     output= takanen2013(data.tests.insig,data.tests.fs,compType,printFigs,printMap);
-	figure(1);
     title(data.tests.scenario);
     set(gca,'Ytick',data.tests.ytickPos);set(gca,'YtickLabel',data.tests.ytickLab(end:-1:1));
     ylabel(data.tests.ylab);

@@ -19,14 +19,15 @@ function example_output = exp_spille2013(varargin)
 % AUTHOR: Mathias Dietz
 
 % choose input signal (e.g. spille2013_s123456)
-fn = 'exp_spille2013_s123456.wav';
-targetfn = fullfile(amtbasepath,'signals',fn);
-if not(exist(targetfn,'file'))
-  amtdisp(['Downloading ' fn ' from http://amtoolbox.sourceforge.net/data/signals/']);  
-  sourcefn = ['http://amtoolbox.sourceforge.net/data/signals/' fn];
-  urlwrite(sourcefn,targetfn);
-end
-signal=wavread(targetfn);
+% fn = 'exp_spille2013_s123456.wav';
+% targetfn = fullfile(amtbasepath,'signals',fn);
+% if not(exist(targetfn,'file'))
+%   amtdisp(['Downloading ' fn ' from http://amtoolbox.sourceforge.net/data/signals/']);  
+%   sourcefn = ['http://amtoolbox.sourceforge.net/data/signals/' fn];
+%   urlwrite(sourcefn,targetfn);
+% end
+% signal=wavread(targetfn);
+signal=amtload('spille2013','s123456.wav');
 fs=44100;
 s_pos =[-75 -40 -10 10 40 75];
 
@@ -40,7 +41,7 @@ panellabel = 'acbd';
 % convert interaural information into azimuth
 itd_unwrapped = ...
     dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst_lp,2.5);
-lookup = load('dietz2011itd2anglelookup.mat');
+lookup = amtload('dietz2011','itd2anglelookuptable.mat');
 angl=itd2angle(itd_unwrapped,lookup);
 
 h_ic=zeros(91,12);

@@ -79,10 +79,12 @@ P.fmax = 2300; % upper frequency in Hz for the BSDM STD calculation
 
 if flags.do_fig9 % Small Room -  RT = 0.15 sec
       % load signals        
-    nDist=dir(fullfile(amtbasepath,'signals',['exp_georganti2013_smallRoom*.mat']));
+    nDist(1).name='smallRoomSpeech_0_5m.mat';
+    nDist(2).name='smallRoomSpeech_1_0m.mat';
+    nDist(3).name='smallRoomSpeech_1_5m.mat';
       % calculate 
     for ww = 1:length(nDist)   
-        signalPre = load(nDist(ww).name);    
+        signalPre = amtload('georganti2013',nDist(ww).name);    
         BSMDSTD(ww,:) = georganti2013(signalPre.signal,P);
     end
       % plot BSMD-STDs
@@ -123,10 +125,12 @@ end
 
 if flags.do_fig10 % Large Room -  RT = 0.9 sec
       % load signals        
-    nDist=dir(fullfile(amtbasepath,'signals','exp_georganti2013_largeRoom*.mat'));
+    nDist(1).name='largeRoomSpeech_1m.mat';
+    nDist(2).name='largeRoomSpeech_2m.mat';
+    nDist(3).name='largeRoomSpeech_3m.mat';
       % calculate 
     for ww = 1:length(nDist)   
-        signalPre = load(nDist(ww).name);    
+        signalPre = amtload('georganti2013',nDist(ww).name);    
         BSMDSTD(ww,:) = georganti2013(signalPre.signal,P);
     end
       % plot BSMD-STDs

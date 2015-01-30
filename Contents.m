@@ -10,12 +10,17 @@
 %  Start and installation
 %    AMTSTART     -  Start the AMT
 %    AMTMEX       -  Compile Mex/Oct interfaces
-%
-%  Basic routines
-%    AMTBASEPATH  -  The base path of the AMT
 %    AMTFLAGS     -  The start-up flags of the AMT
+%
+%  Paths and URLs
+%    AMTBASEPATH  -  The base path of the AMT
+%    AMTAUXDATAPATH - The path to the auxiliary data directory
+%    AMTAUXDATAURL - The URL to the auxiliary data on the web
+%
+%  General functions
 %    AMTREDOFILE  -  Utility to work with cached files
 %    AMTDISP      -  `disp` depending on the start-up flags
+%    AMTLOAD      -  Load auxiliary data (or download if required)
 %
 %
 %  The AMT team, 2012 - 2014.

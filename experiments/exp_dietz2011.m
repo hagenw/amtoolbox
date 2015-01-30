@@ -57,7 +57,7 @@ if flags.do_missingflag
 end;
 
 % Load polynomial lookup data for converting ITD to azimuth
-lookup = load('dietz2011itd2anglelookup.mat');
+lookup = amtload('dietz2011','itd2anglelookuptable.mat');
 
 if flags.do_fig3
 

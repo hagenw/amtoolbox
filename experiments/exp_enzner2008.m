@@ -41,8 +41,8 @@ if flags.do_missingflag
 end;
 
 
-rec_filename = fullfile(amtbasepath,'signals','exp_enzner2008_example_1ch_white_noise_earsignals.wav');
-ref_filename = fullfile(amtbasepath,'signals','exp_enzner2008_example_1ch_white_noise_reference.wav');
+rec_filename = 'example_1ch_white_noise_earsignals.wav';
+ref_filename = 'example_1ch_white_noise_reference.wav';
 P.adapt = 20000; % depends on the recording (overhead at the end and the beginnig)
 P.sys_latency = 30;
 P.mu=1;
@@ -73,16 +73,16 @@ P.h_length = 256;
 
 
 % check if signals exist
-if(exist(ref_filename,'file') ~= 2 || exist(rec_filename,'file') ~= 2)
-    amtdisp('*')
-    amtdisp(strcat('Missing file: ',ref_filename))
-    amtdisp('Please download the required wav-files from Sourceforge.')
-    error('Missing file');
-end
+% if(exist(ref_filename,'file') ~= 2 || exist(rec_filename,'file') ~= 2)
+%     amtdisp('*')
+%     amtdisp(strcat('Missing file: ',ref_filename))
+%     amtdisp('Please download the required wav-files from Sourceforge.')
+%     error('Missing file');
+% end
 
 %% read signals
-x = wavread(ref_filename);
-[y, fs] = wavread(rec_filename);
+x = amtload('enzner2008',ref_filename);
+[y, fs] = amtload('enzner2008',rec_filename);
 
 %% Fig. 2 from Enzner (2008)
 if flags.do_fig2

@@ -116,9 +116,9 @@ if flags.do_fig8
     % if the user wishes to compute the cochlear model outputs, binaural
     % input signals are used
     if flags.do_binsig
-        data=safe_load('exp_takanen2013fig8bookbinsignals.mat');
+        data=amtload('takanen2013','fig8bookbinsignals.mat');
         for ind=1:length(data.tests)
-            data=safe_load('exp_takanen2013fig8bookbinsignals.mat');
+            data=amtload('takanen2013','fig8bookbinsignals.mat');
             insig=data.tests(ind).insig;
             tit=data.tests(ind).case;
             clear data
@@ -147,9 +147,9 @@ if flags.do_fig8
     end
     %otherwise pre-computed cochlea model outputs are used
     if flags.do_cochlea
-        data=safe_load('exp_takanen2013fig8bookcochleadata.mat');
+        data=amtload('takanen2013','fig8bookcochleadata.mat');
         for ind=1:length(data.tests)
-            data=safe_load('exp_takanen2013fig8bookcochleadata.mat');
+            data=amtload('takanen2013','fig8bookcochleadata.mat');
             tit=data.tests(ind).case;
             insig=data.tests(ind).cochlear;
             clear data
@@ -182,9 +182,9 @@ if flags.do_fig9
     % if the user wishes to compute the cochlear model outputs, binaural
     % input signals are used
     if flags.do_binsig
-        data=safe_load('exp_takanen2013fig9bookbinsignals.mat');
+        data=amtload('takanen2013','fig9bookbinsignals.mat');
         for ind=1:length(data.tests)
-            data=safe_load('exp_takanen2013fig9bookbinsignals.mat');
+            data=amtload('takanen2013','fig9bookbinsignals.mat');
             insig=data.tests(ind).insig;
             tit=data.tests(ind).case;
             clear data
@@ -212,9 +212,9 @@ if flags.do_fig9
     end
     %otherwise pre-computed cochlea model outputs are used
     if flags.do_cochlea
-        data=safe_load('exp_takanen2013fig9bookcochleadata.mat');
+        data=amtload('takanen2013','fig9bookcochleadata.mat');
         for ind=1:length(data.tests)
-            data=safe_load('exp_takanen2013fig9bookcochleadata.mat');
+            data=amtload('takanen2013','fig9bookcochleadata.mat');
             insig=data.tests(ind).cochlear;
             tit=data.tests(ind).case;
             clear data
@@ -244,11 +244,11 @@ end
 %% Figure 7 from takanen2014
 if flags.do_fig7_takanen2014
     % compute the cochlear model outputs, load the binaural input signals
-    if flags.do_binsig, s='exp_takanen2013fig6artbinsignals.mat'; end
+    if flags.do_binsig, s='fig6artbinsignals.mat'; end
     % otherwise pre-computed cochlea model outputs are used
-    if flags.do_cochlea, s='exp_takanen2013fig6artcochleadata.mat'; end
+    if flags.do_cochlea, s='fig6artcochleadata.mat'; end
 
-    data=safe_load(s);
+    data=amtload('takanen2013',s);
     data_tests=length(data.tests);
     siglen=zeros(length(data.tests),1);
     data_tests_Data=zeros(length(data_tests),1);
@@ -274,7 +274,7 @@ if flags.do_fig7_takanen2014
         %some scenarios consist of multiple test cases that are
         %processed separately
         for caseInd=1:data_tests_Data(ind)
-            data=safe_load(s);
+            data=amtload('takanen2013',s);
             if flags.do_cochlea
               insig=data.tests(ind).cochlearData(caseInd).cochlear;
               len=size(insig.velocityLeft,1);
@@ -327,11 +327,11 @@ end
 %% Figure 8 from takanen2014
 if flags.do_fig8_takanen2014
     % compute the cochlear model outputs, load the binaural input signals
-    if flags.do_binsig, s='exp_takanen2013fig7artbinsignals.mat'; end
+    if flags.do_binsig, s='fig7artbinsignals.mat'; end
     % otherwise pre-computed cochlea model outputs are used
-    if flags.do_cochlea, s='exp_takanen2013fig7artcochleadata.mat'; end
+    if flags.do_cochlea, s='fig7artcochleadata.mat'; end
 
-    data=safe_load(s);
+    data=amtload('takanen2013',s);
     data_tests=length(data.tests);
     siglen=zeros(length(data.tests),1);
     data_tests_Data=zeros(length(data_tests),1);
@@ -357,7 +357,7 @@ if flags.do_fig8_takanen2014
         %some scenarios consist of multiple test cases that are
         %processed separately
         for caseInd=1:data_tests_Data(ind)
-            data=safe_load(s);
+            data=amtload('takanen2013',s);
             if flags.do_cochlea
               insig=data.tests(ind).cochlearData(caseInd).cochlear;
               len=size(insig.velocityLeft,1);
@@ -409,16 +409,3 @@ if flags.do_fig8_takanen2014
     end
 end
 output = g;
-
-function data=safe_load(filename)
-  try
-      data=load([amtbasepath,'signals',filesep,filename]);
-  catch exception
-    amtdisp('=============================================================');
-    amtdisp('Please load the necessary mat-files from the companying page:');
-    amtdisp('   www.acoustics.hut.fi/publications/papers/AMTool2013-bam/  ');
-    amtdisp('and place them in the "signals" directory                ');
-    amtdisp('=============================================================');
-            
-      error('Error: mat-file %s not found',filename);
-  end

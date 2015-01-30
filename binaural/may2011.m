@@ -70,7 +70,7 @@ methodGMM = 'default';
 switch lower(methodGMM)
     case 'default'
         % Room 5 -90:5:90
-        A.gmmModel = 'data_may2011modeldata';   
+        A.gmmModel = 'modeldata.mat';   
     otherwise
         error(['GMM module ''',lower(methodGMM),'''is not available.'])
 end
@@ -81,7 +81,7 @@ if ~isempty(AMT_may2011PERC) && ~isempty(AMT_may2011PERmethod) && isequal(method
     C = AMT_may2011PERC;
 else
     % Load localization module
-    load(A.gmmModel);
+    C=amtload('may2011',A.gmmModel);
     
     % Store classifier to persistent memory
     AMT_may2011PERC = C; AMT_may2011PERmethod = methodGMM;

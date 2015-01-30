@@ -7,8 +7,7 @@ function [hartestim,fs]  = data_harte2009()
 %
 %   References: harte2009comparison
 
-hartestim = load([amtbasepath,'humandata',filesep, ...
-		  'roenne2012_harte2009stim']);
+hartestim = amtload('harte2009','stim.mat');
   
 fs = 48e3;
   

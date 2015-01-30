@@ -23,7 +23,7 @@ function [ur,fs]  = data_roenne2012(varargin)
 %
 %   References: roenne2012modeling
   
-s=load([amtbasepath,'humandata',filesep,'ur']);
+s=amtload('roenne2012','ur.mat');
 ur=s.ur;
 
 fs=30000;

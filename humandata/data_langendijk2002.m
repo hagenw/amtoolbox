@@ -36,13 +36,13 @@ function data = data_langendijk2002(varargin)
 %              
 %     'P6_1oh'   Data from Fig.9; listener: P6, condition: '1-oct(high)'.
 %              
-%     'P3_dtf'   DTF data from Fig.11; listener: P3. If you do not have the
-%                bitmap of the JASA paper you will get the precalculated
-%                gain response data "hrtf_langendijk2002P3.mat".
+%     'P3_dtf'   Precalculated DTF data of P3 from Fig.11.
 %              
-%     'P6_dtf'   DTF data from Fig.11; listener: P6. If you do not have the
-%                bitmap of the JASA paper you will get the precalculated
-%                gain responses from "hrtf_langendijk2002P6.mat".
+%     'P6_dtf'   Precalculated DTF data of P6 from Fig.11.
+%
+%     'P3_dtf_bmp' DTFs calculated of P3 from the bitmap of the JASA paper.
+%
+%     'P6_dtf_bmp' DTFs calculated of P6 from the bitmap of the JASA paper.
 %
 %     'expdata'  Create the whole dataset required for exp_langendijk2002,
 %                e.g. after adjusting response data.
@@ -62,7 +62,7 @@ function data = data_langendijk2002(varargin)
       'missingflag',...
       'P3_b','P3_2o','P3_1ol','P3_1om','P3_1oh',...
       'P6_b','P6_2o','P6_1ol','P6_1om','P6_1oh',...
-      'P3_dtf','P6_dtf','expdata'
+      'P3_dtf','P6_dtf','P3_dtf_bmp','P6_dtf_bmp','expdata'
                       };
   % Parse input options
   [flags,keyvals]  = ltfatarghelper({},definput,varargin);
@@ -249,26 +249,22 @@ function data = data_langendijk2002(varargin)
   end;
 
   if flags.do_P3_dtf
-    if exist('data_langendijk2002P3_dtf.bmp','file')==2
-      amtdisp('P3: Bitmap of DTFs found, converting to DTFs...','progress');
-      [med,pol]=bmp2gr('data_langendijk2002P3_dtf');
-      data=[pol;med];
-    else
-      amtdisp('P3: DTFs required, loading...','progress');
-      data=load(fullfile(amtbasepath, 'hrtf', 'langendijk2002','hrtf_langendijk2002P3.mat'));
-    end;
+      data=amtload('langendijk2002','P3_dtf.mat');
   end
 
-  if flags.do_P6_dtf
-    if exist('data_langendijk2002P6_dtf.bmp','file')==2
-      amtdisp('P6: Bitmap of DTFs found, converting to DTFs...','progress');
-      [med,pol]=bmp2gr('data_langendijk2002P6_dtf');
+  if flags.do_P3_dtf_bmp
+      [med,pol]=bmp2gr(amtload('langendijk2002','P3_dtf.bmp'));
       data=[pol;med];
-    else
-      amtdisp('P6: DTFs required, loading...','progress');
-      data=load(fullfile(amtbasepath, 'hrtf', 'langendijk2002','hrtf_langendijk2002P6.mat'));
-    end
-  end;
+  end  
+  
+  if flags.do_P6_dtf
+      data=amtload('langendijk2002','P6_dtf.mat');
+  end
+
+  if flags.do_P6_dtf_bmp
+      [med,pol]=bmp2gr(amtload('langendijk2002','P6_dtf.bmp'));
+      data=[pol;med];
+  end  
   
   if flags.do_expdata
     listener='P3';
