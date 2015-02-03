@@ -44,15 +44,6 @@ function amtstart(varargin)
 %   AUTHOR : Peter L. Soendergaard, Piotr Majdak 
 
 
-%% define default start-up behaviour
-if isempty(varargin),
-%   amtflags('verbose','download');
-  flags=amtflags('verbose');
-else
-  flags=amtflags(varargin);
-end
-
-
 %% Start AMT
 bp=amtbasepath;
 
@@ -120,7 +111,18 @@ v_r=sscanf(s_r,'%d.%d.%d');
 if ~(v(1)>v_r(1) || (v(1)>=v_r(1) && v(2)>v_r(2)) || (v(1)>=v_r(1) && v(2)>=v_r(2) && v(3)>=v_r(3)) ),
     error(['You need LTFAT >= ' s_r ' to work with AMT. ' ...
       'Please update your package from http://ltfat.sourceforge.net ']);
-end  
+end
+
+
+%% define default start-up behaviour
+if isempty(varargin),
+%   amtflags('verbose','download');
+  flags=amtflags('verbose');
+else
+  flags=amtflags(varargin);
+end
+
+
      
 %% SOFA package
 
