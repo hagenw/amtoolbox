@@ -44,7 +44,7 @@ function [ varargout ] = pmv2ppp( p,varargin )
 % AUTHOR : Robert Baumgartner
 
 definput.flags.print = {'noprint','print'};
-definput.keyvals.rang=-90:5:269;
+definput.keyvals.rang=-30:5:210;
 definput.keyvals.tang=[-30:5:70,80,100,110:5:210];
 definput.keyvals.exptang=[];
 [flags,kv]=ltfatarghelper({'tang','rang','exptang'},definput,varargin);

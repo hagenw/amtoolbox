@@ -7,9 +7,16 @@ function varargout = baumgartner2014( target,template,varargin )
 %   Input parameters:
 %     target  : binaural impulse response(s) referring to the directional 
 %               transfer function(s) (DFTs) of the target sound(s).
+%               Option 1: given in SOFA format -> sagittal plane DTFs will 
+%               be extracted internally. 
+%               Option 2: binaural impulse responses of all available
+%               listener-specific DTFs of the sagittal plane formated 
+%               according to the following matrix dimensions: 
+%               time x direction x channel/ear
 %     template: binaural impulse responses of all available
 %               listener-specific DTFs of the sagittal plane referring to
-%               the perceived lateral angle of the target sound
+%               the perceived lateral angle of the target sound.
+%               Options 1 & 2 equivalent to *target*.
 %
 %   Output parameters:
 %     p       : predicted probability mass vectors for response angles 
