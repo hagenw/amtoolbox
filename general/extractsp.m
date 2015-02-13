@@ -74,6 +74,14 @@ while isempty(pol) || ...
 
 end
 
+% assure polar-angle range to be within [-90,270[ (may occur due to
+% numerical inaccuracy)
+if sum(pol >= 270) || sum(pol < -90)
+  pol = mod(pol+90,360)-90;
+  [pol,idsort] = sort(pol);
+  sphrtfs = sphrtfs(:,idsort,:);
+end
+
 varargout{1} = sphrtfs;
 if nargout >= 2
   varargout{2} = pol;
