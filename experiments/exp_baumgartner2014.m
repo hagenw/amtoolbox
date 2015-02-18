@@ -161,6 +161,13 @@ function varargout = exp_baumgartner2014(varargin)
 %               actual and predicted results are shown together with predicted 
 %               average performances. 
 %
+%     'fig5_baumgartner2015aro'    Reproduce Fig.5 of baumgartner2015aro:
+%               Effect of background noise on reliability of contralateral  
+%               cues for various lateral eccentricities. Top row:
+%               Across-listener averages of performance measures for
+%               contralateral ear. Bottom row: Contralateral re ipsilateral
+%               averages of performance measures.
+%
 %   Requirements: 
 %   -------------
 %
@@ -225,11 +232,15 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %     exp_baumgartner2014('fig14');
 %
+%   To display Fig.5 of baumgartner2015contralateral use :::
+%
+%     exp_baumgartner2014('fig5_baumgartner2015aro');
+%
 %   See also: baumgartner2014 data_baumgartner2014
 %
 %   References: baumgartner2014modeling majdak2013spatstrat morimoto2001
 %   macpherson2007 goupell2010numchan middlebrooks1999nonindividualized 
-%   macpherson2003ripples
+%   macpherson2003ripples baumgartner2015aro
 
 
 % AUTHOR: Robert Baumgartner
@@ -242,7 +253,8 @@ definput.keyvals.FontSize = 12;
 definput.keyvals.MarkerSize = 6;
 definput.flags.type = {'missingflag','fig2','fig3','fig4','fig5','fig6',...
                        'fig7','fig8','fig9','fig10','fig11','fig12','fig13',...
-                       'fig14','tab1','tab2','tab3'};
+                       'fig14','tab1','tab2','tab3',...
+                       'fig5_baumgartner2015aro'};
 definput.flags.plot = {'plot','noplot'};
 
 
@@ -2865,6 +2877,128 @@ if flags.do_tab3
   
 end
   
+
+%% ------ FIG 5 of baumgartner2015aro -------------------------------------
+if flags.do_fig5_baumgartner2015aro
+  
+  fn = [mfilename('fullpath'),'_fig5_baumgartner2015aro.mat'];
+  
+  if amtredofile(fn,flags.redomode)
+    autorefreshnotification(fn,flags)
+    
+    snrFront = -20:2:40; % in dB
+
+    latecc = [10,30,50];% lateral eccentricities
+
+    mrs = 17; % no sensorimotor mapping
+
+    s = data_baumgartner2014('pool');
+
+    bwcoef = [13,+eps,-eps]; % configuration of binaural weighting stage (binaural, ipsilateral, contralateral
+
+    lat = [-fliplr(latecc),latecc];
+
+    maskerNoise = noise(0.05*s(1).Obj.Data.SamplingRate,1,'white');
+    targetNoise = noise(0.05*s(1).Obj.Data.SamplingRate-255,1,'white');
+
+    perr = nan(length(snrFront),length(bwcoef),length(lat),length(s));
+    qerr = nan(length(snrFront),length(bwcoef),length(lat),length(s));
+    for isub=1:length(s)
+      idfrontal = find(s(isub).Obj.SourcePosition(:,1)==0 & s(isub).Obj.SourcePosition(:,2)==0);
+      frontalDtfs = shiftdim(s(isub).Obj.Data.IR(idfrontal,:,:),2);
+      frontalTarget = convolve(targetNoise,frontalDtfs);
+      lvl = mean(dbspl(frontalTarget)); % level of frontal target stimulus in dB
+      for ilat = 1:length(lat)
+        [spdtfs,tang] = extractsp(lat(ilat),s(isub).Obj);
+        targets = convolve(targetNoise,spdtfs);
+        targets = reshape(targets,[length(targets),size(targets,2)/2,2]);
+        for isnr = 1:length(snrFront)
+          targetsPlusMasker = targets + ...
+            repmat(setdbspl(maskerNoise,lvl-snrFront(isnr)),[1,size(targets,2),2]);
+          for ibwc = 1:length(bwcoef)
+            [p,rang] = baumgartner2014(targetsPlusMasker,s(isub).Obj,...
+              'S',s(isub).S,'mrsmsp',mrs,...
+              'lat',lat(ilat),'bwcoef',bwcoef(ibwc));
+            [ qerr(isnr,ibwc,ilat,isub) , perr(isnr,ibwc,ilat,isub) ] = ...
+              baumgartner2014pmv2ppp(p,tang,rang);
+          end
+        end
+      end
+      amtdisp([num2str(isub) ' of ' num2str(length(s)) ' completed'])
+    end
+
+    save(fn,'perr','qerr','snrFront','bwcoef','lat',save_format);
+    
+  end
+  
+  r = load(fn);
+  varargout{1} = load(fn);
+  
+  if flags.do_plot
+    
+    % pool left/right
+    perr = (r.perr(:,:,length(r.lat)/2:-1:1,:) + r.perr(:,:,1+length(r.lat)/2:length(r.lat),:))/2;
+    qerr = (r.qerr(:,:,length(r.lat)/2:-1:1,:) + r.qerr(:,:,1+length(r.lat)/2:length(r.lat),:))/2;
+    latecc = r.lat(1+length(r.lat)/2:length(r.lat)); % lateral eccentricity
+
+    perr_ipsipro = squeeze(perr(:,3,:,:) - perr(:,2,:,:)); % contra minus ipsi
+    qerr_ipsipro = squeeze(qerr(:,3,:,:) - qerr(:,2,:,:)); 
+
+    snr_int = r.snrFront(1):r.snrFront(end);
+
+    figure
+    
+    % display 0-error line
+    for ii = 1:2
+      subplot(2,2,2+ii)
+      plot(snr_int,zeros(length(snr_int),1),'k:')
+      hold on
+    end
+    
+    for ii=1:length(latecc)
+  
+      subplot(2,2,1)
+      abspecontra_int = interp1(r.snrFront,mean(perr(:,ii,3,:),4),snr_int,'spline');
+      h(ii) = plot(snr_int,abspecontra_int);  hold on
+      xlabel('SNR (dB)','FontSize',kv.FontSize)
+      ylabel('PE_{contra} (deg)','FontSize',kv.FontSize)
+      axis([-20,40,31,54])
+      set(gca,'FontSize',kv.FontSize)
+
+      subplot(2,2,2)
+      absqecontra_int = interp1(r.snrFront,mean(qerr(:,ii,3,:),4),snr_int,'spline');
+      h(ii) = plot(snr_int,absqecontra_int);  hold on
+      xlabel('SNR (dB)','FontSize',kv.FontSize)
+      ylabel('QE_{contra} (deg)','FontSize',kv.FontSize)
+      axis([-20,40,6,49])
+      set(gca,'FontSize',kv.FontSize)
+
+      subplot(2,2,3)
+      pe_int = interp1(r.snrFront,mean(perr_ipsipro(:,ii,:),3),snr_int,'spline');
+      h(ii) = plot(snr_int,pe_int);
+      xlabel('SNR (dB)','FontSize',kv.FontSize)
+      ylabel('PE_{contra} - PE_{ipsi} (deg)','FontSize',kv.FontSize)
+      axis([-20,40,-4,29])
+      set(gca,'FontSize',kv.FontSize)
+
+      subplot(2,2,4)
+      qe_int = interp1(r.snrFront,mean(qerr_ipsipro(:,ii,:),3),snr_int,'spline');
+      plot(snr_int,qe_int)
+      xlabel('SNR (dB)','FontSize',kv.FontSize)
+      ylabel('QE_{contra} - QE_{ipsi} (deg)','FontSize',kv.FontSize)
+      axis([-20,40,-4,29])
+      set(gca,'FontSize',kv.FontSize)
+    end
+
+    subplot(2,2,3)
+    legendentries = [repmat('\phi = \pm',length(latecc),1) num2str(latecc(:)) repmat('\circ',length(latecc),1)];
+    leg = legend(h,legendentries,'Location','north');
+    set(leg,'FontSize',kv.FontSize)
+    
+  end
+  
+end
+
 end
 
 

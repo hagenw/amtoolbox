@@ -8,7 +8,7 @@ function [ varargout ] = baumgartner2014pmv2ppp( varargin )
 %     tang       : possible polar target angles. As default, ARI's MSP 
 %                  polar angles in the median SP is used.
 %     rang       : polar angles of possible response angles.
-%                  As default regular 5 deg.-sampling is used (-30:5:210).    
+%                  As default regular 5 deg.-sampling is used (-90:5:265).    
 %
 %   Output parameters:
 %     qe         : quadrant error rate
