@@ -1,11 +1,11 @@
-function lookup = itd2anglelookuptable(irs,varargin)
+function lookup = itd2anglelookuptable(sofa,varargin)
 %ITD2ANGLELOOKUPTABLE generates an ITD-azimuth lookup table for the given HRTF set
-%   Usage: lookup = itd2anglelookuptable(irs,fs,model);
-%          lookup = itd2anglelookuptable(irs,fs);
-%          lookup = itd2anglelookuptable(irs);
+%   Usage: lookup = itd2anglelookuptable(sofa,fs,model);
+%          lookup = itd2anglelookuptable(sofa,fs);
+%          lookup = itd2anglelookuptable(sofa);
 %
 %   Input parameters:
-%       irs    : HRTF data set (at the moment only TU Berlin irs format)
+%       sofa   : HRTF data set (in SOFA format)
 %       fs     : sampling rate, (default: 44100) / Hz
 %       model  : binaural model to use:
 %                   'dietz2011' uses the Dietz binaural model (default)
@@ -15,16 +15,13 @@ function lookup = itd2anglelookuptable(irs,varargin)
 %       lookup : struct containing the polinomial fitting data for the
 %                ITD -> azimuth transformation, p,MU,S, see help polyfit
 %
-%   `itd2anglelookuptable(irs)` creates a lookup table from the given IR data
+%   `itd2anglelookuptable(sofa)` creates a lookup table from the given IR data
 %   set. This lookup table can be used by the dietz2011 or lindemann1986 binaural
 %   models to predict the perceived direction of arrival of an auditory event.
 %   The azimuth angle is stored in degree in the lookup table.
 %
-%   For the handling of the HRTF file format this function depends on the
-%   Sound-Field-Synthesis Toolbox, which is available here:
-%   http://github.com/sfstoolbox/sfs. It runs under Matlab and Octave. The
-%   revision used to genrate the figures in the corressponding paper is
-%   a8914700a4.
+%   For the handling of the HRTF SOFA file format see
+%   http://www.sofaconventions.org/
 %
 %   See also: dietz2011, lindemann1986, wierstorf2013
 %
@@ -58,6 +55,7 @@ conf.fs = fs;
 %% ===== Calculation ====================================================
 % generate noise signal
 sig_noise = noise(nsamples,1,noise_type);
+% 
 % get only the -90 to 90 degree part of the irs set
 idx = (( irs.apparent_azimuth>-pi/2 & irs.apparent_azimuth<pi/2 & ...
     irs.apparent_elevation==0 ));
