@@ -1,11 +1,11 @@
-function lookup = itd2anglelookuptable(sofa,varargin)
+function lookup = itd2anglelookuptable(hrtf,varargin)
 %ITD2ANGLELOOKUPTABLE generates an ITD-azimuth lookup table for the given HRTF set
-%   Usage: lookup = itd2anglelookuptable(sofa,fs,model);
-%          lookup = itd2anglelookuptable(sofa,fs);
-%          lookup = itd2anglelookuptable(sofa);
+%   Usage: lookup = itd2anglelookuptable(hrtf,fs,model);
+%          lookup = itd2anglelookuptable(hrtf,fs);
+%          lookup = itd2anglelookuptable(hrtf);
 %
 %   Input parameters:
-%       sofa   : HRTF data set (in SOFA format)
+%       hrtf   : HRTF data set (as SOFA file or struct)
 %       fs     : sampling rate, (default: 44100) / Hz
 %       model  : binaural model to use:
 %                   'dietz2011' uses the Dietz binaural model (default)
@@ -15,7 +15,7 @@ function lookup = itd2anglelookuptable(sofa,varargin)
 %       lookup : struct containing the polinomial fitting data for the
 %                ITD -> azimuth transformation, p,MU,S, see help polyfit
 %
-%   `itd2anglelookuptable(sofa)` creates a lookup table from the given IR data
+%   `itd2anglelookuptable(hrtf)` creates a lookup table from the given HRTF data
 %   set. This lookup table can be used by the dietz2011 or lindemann1986 binaural
 %   models to predict the perceived direction of arrival of an auditory event.
 %   The azimuth angle is stored in degree in the lookup table.
@@ -43,25 +43,27 @@ definput.keyvals.fs = 44100;
 %% ===== Configuration ==================================================
 % Samplingrate
 fs = kv.fs;
-% time of noise used for the calculation (samples)
+% Time of noise used for the calculation (samples)
 nsamples = fs;
-% noise type to use
+% Noise type to use
 noise_type = 'white';
 % SFS Toolbox settings
 conf.ir.useinterpolation = true;
+conf.ir.useoriglength = true;
 conf.fs = fs;
+conf.c = 343;
+conf.usefracdelay = false;
 
 
 %% ===== Calculation ====================================================
-% generate noise signal
+% Generate noise signal
 sig_noise = noise(nsamples,1,noise_type);
-% 
-% get only the -90 to 90 degree part of the irs set
-idx = (( irs.apparent_azimuth>-pi/2 & irs.apparent_azimuth<pi/2 & ...
-    irs.apparent_elevation==0 ));
-irs = slice_irs(irs,idx);
-% iterate over azimuth angles
-nangles = length(irs.apparent_azimuth);
+% Get distance of HRTF set (x0(:,3))
+header = sofa_get_header(hrtf);
+x0 = SOFAcalculateAPV(header); % x0 = [phi theta r]
+% Use azimuth angles in the range from -90deg..90deg
+azimuth = rad(-90:90);
+nangles = length(azimuth);
 % create an empty mod_itd, because the lindemann model didn't use it
 mod_itd = [];
 
@@ -70,16 +72,19 @@ if flags.do_dietz2011
     itd = zeros(nangles,12);
     mod_itd = zeros(nangles,23);
     ild = zeros(nangles,23);
-    for ii = 1:nangles
-        % generate noise coming from the given direction
-        ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance],'spherical',conf);
+    for ii=1:nangles
+        % Generate noise coming from the given direction
+        % NOTE: this assumes that the ListenerView vector of your HRTF data set
+        % is [1 0 0]!
+        ir = get_ir(hrtf,[0 0 0],[0 0],[azimuth(ii) 0 x0(ii,3)], ...
+                    'spherical',conf);
         sig = auralize_ir(ir,sig_noise,1,conf);
-        % calculate binaural parameters
+        % Calculate binaural parameters
         [fine, cfreqs, ild_tmp, env] = dietz2011(sig,fs);
-        % unwrap ITD
+        % Unwrap ITD
         itd_tmp = dietz2011unwrapitd(fine.itd,ild_tmp(:,1:12),fine.f_inst,2.5);
         env_itd_tmp = dietz2011unwrapitd(env.itd,ild_tmp(:,13:23),env.f_inst,2.5);
-        % calculate the mean about time of the binaural parameters and store
+        % Calculate the mean about time of the binaural parameters and store
         % them
         itd(ii,1:12) = median(itd_tmp,1);
         itd(ii,13:23) = median(env_itd_tmp,1);
@@ -91,12 +96,15 @@ elseif flags.do_lindemann1986
     itd = zeros(nangles,36);
     ild = zeros(nangles,36);
     for ii = 1:nangles
-        % generate noise coming from the given direction
-        ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance],conf);
+        % Generate noise coming from the given direction
+        % NOTE: this assumes that the ListenerView vector of your HRTF data set
+        % is [1 0 0]!
+        ir = get_ir(hrtf,[0 0 0],[0 0],[azimuth(ii) 0 x0(ii,3)], ...
+                    'spherical',conf);
         sig = auralize_ir(ir,sig_noise,1,conf);
         % Ten fold upsampling to have a smoother output
         %sig = resample(sig,10*fs,fs);
-        % calculate binaural parameters
+        % Calculate binaural parameters
         c_s = 0.3; % stationary inhibition
         w_f = 0; % monaural sensitivity
         M_f = 6; % decrease of monaural sensitivity
@@ -118,9 +126,9 @@ end
 
 % Fit the lookup data
 for n = 1:size(itd,2)
-    [p(:,n),S{n},MU(:,n)] = polyfit(itd(:,n),irs.apparent_azimuth'./pi*180,12);
+    [p(:,n),S{n},MU(:,n)] = polyfit(itd(:,n),deg(azimuth)',12);
     [p_ild(:,n),S_ild{n},MU_ild(:,n)] = ...
-        polyfit(ild(:,n),irs.apparent_azimuth'./pi*180,12);
+        polyfit(ild(:,n),deg(azimuth)',12);
 end
 % Create lookup struct
 lookup.p = p;
