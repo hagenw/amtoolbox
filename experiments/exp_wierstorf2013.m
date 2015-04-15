@@ -9,7 +9,7 @@ function output = exp_wierstorf2013(varargin)
 %   with gnuplot and may look a little bit different.
 %
 %   The Sound-Field-Synthesis Toolbox is required.
-%   
+%
 %   The following flags can be specified;
 %
 %     'plot'     plot the output of the experiment. This is the default.
@@ -151,7 +151,7 @@ save_format='-v6';
 if ~which('SFS_start')
     error(['%s: you need to install the Sound-Field-Synthesis Toolbox.\n', ...
         'You can download it at https://github.com/sfstoolbox/sfs.\n', ...
-        'You need version 1.0.0 of the Toolbox (commit afe5c14359).'], ...
+        'You need version 1.2.0 of the Toolbox (commit afe5c14359).'], ...
         upper(mfilename));
 end
 
@@ -160,18 +160,17 @@ end
 if flags.do_fig1
 
     s = [mfilename('fullpath'),'_fig1.mat'];
-      
-    % listening area
+    % Listening area
     X = [-2 2];
     Y = [-3.15 -0.15];
-    % orientation of the listener (always to the front)
+    % Orientation of the listener (always to the front)
     phi = pi/2;
-    % position of the virtual point source
+    % Position of the virtual point source
     xs = [0 0];
     src = 'ps';
-    % intra-loudspeaker distance on the stereo setup
+    % Intra-loudspeaker distance on the stereo setup
     L = 2;
-  
+
     if amtredofile(s,flags.redomode)
         [loc_error,aud_event,sound_event,xaxis,yaxis,x0] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'stereo');
@@ -204,7 +203,7 @@ if flags.do_fig1
 elseif flags.do_fig3
 
     s = [mfilename('fullpath'),'_fig3.mat'];
- 
+
     % listening area
     X = [-2 2];
     Y = [-2 2];
@@ -239,7 +238,6 @@ elseif flags.do_fig3
     conf.wfs.usehpre = false;
     conf.usefracdelay = false;
     conf.plot.useplot = false;
-    conf.plot.usegnuplot = false;
     conf.plot.usedb = false;
     conf.plot.colormap = 'gray';
     conf.plot.loudspeakers = true;
@@ -253,7 +251,7 @@ elseif flags.do_fig3
     conf.plot.usefile = false;
     conf.plot.file = '';
 
-  
+
     if amtredofile(s,flags.redomode)
         % get secondary sources and tapering window for plotting
         x0 = secondary_source_positions(conf);
@@ -395,25 +393,24 @@ elseif flags.do_fig8
         conf.fs = 44100;
         % load HRTFs, see:
         % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
-        load(fullfile(amtbasepath,'hrtf','wierstorf2013','QU_KEMAR_anechoic_3m.mat'));
-        % generate noise signal
+        %load(fullfile(amtbasepath,'hrtf','wierstorf2013','QU_KEMAR_anechoic_3m.mat'));
+        hrtf = SOFAload('QU_KEMAR_anechoic_3m.sofa');
+        x0 = SOFAcalculateAPV(hrtf);
+        % Generate noise signal
         sig_noise = noise(44100/5,1,'white');
-        % get only the -90 to 90 degree part of the hrtf set
-        idx = (( irs.apparent_azimuth>-pi/2 & irs.apparent_azimuth<pi/2 & ...
-            irs.apparent_elevation==0 ));
-        irs = slice_irs(irs,idx);
-        for ii=1:length(irs.apparent_azimuth)
-            % generate noise coming from the given direction
-            ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance],'spherical',conf);
+        phi = -90:90;
+        for ii=1:length(phi)
+            % Generate noise coming from the given direction
+            ir = get_ir(hrtf,[0 0 0],[0 0],[rad(phi(ii)) 0 x0(ii,3)], ...
+                        'spherical',conf);
             sig = auralize_ir(ir,sig_noise,1,conf);
-            % calculate binaural parameters
+            % Calculate binaural parameters
             [fine,cfreqs,ild_tmp] = dietz2011(sig,44100,'fhigh',1400);
             % unwrap ITD
             itd_tmp = dietz2011unwrapitd(fine.itd,ild_tmp,fine.f_inst,2.5);
-            % calculate the mean about time of the binaural parameters and store
+            % Calculate the mean about time of the binaural parameters and store
             % them
             itd(ii,:) = median(itd_tmp,1);
-            phi(ii) = deg(irs.apparent_azimuth(ii));
         end
         save(save_format,s,'phi','itd');
     else
@@ -439,28 +436,27 @@ end;
 if flags.do_fig9
 
     s = [mfilename('fullpath'),'_fig9.mat'];
-      
+
     if amtredofile(s,flags.redomode)
         % Sound Field Synthesis Toolbox settings
         conf.ir.useinterpolation = true;
         conf.fs = 44100;
-        % load lookup table
+        % Load lookup table
         lookup = data_wierstorf2013('itd2anglelookuptable');
-        % load HRTFs, see:
-        load(fullfile(amtbasepath,'hrtf','wierstorf2013','QU_KEMAR_anechoic_3m.mat'));
-        % generate noise signal
+        % Load HRTFs, see:
+        hrtf = SOFAload('QU_KEMAR_anechoic_3m.sofa');
+        x0 = SOFAcalculateAPV(hrtf);
+        % Generate noise signal
         sig_noise = noise(44100/5,1,'white');
-        % get only the -90 to 90 degree part of the hrtf set
-        idx = (( irs.apparent_azimuth>-pi/2 & irs.apparent_azimuth<pi/2 & ...
-            irs.apparent_elevation==0 ));
-        irs = slice_irs(irs,idx);
-        for ii=1:length(irs.apparent_azimuth)
+        % Azimuth angles
+        phi = -90:90;
+        for ii=1:length(phi)
             % generate noise coming from the given direction
-            ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance], ...
-                'spherical',conf);
+            ir = get_ir(hrtf,[0 0 0],[0 0],[rad(phi(ii)) 0 x0(ii,3)], ...
+                        'spherical',conf);
             sig = auralize_ir(ir,sig_noise,1,conf);
             phi_auditory_event(ii) = wierstorf2013estimateazimuth(sig,lookup,'dietz2011');
-            phi_sound_event(ii) = deg(irs.apparent_azimuth(ii));
+            phi_sound_event(ii) = phi(ii);
         end
         save(save_format,s,'phi_auditory_event','phi_sound_event');
     else
@@ -542,7 +538,7 @@ if flags.do_fig10
 
     % get the human data
     [data,description] = data_wierstorf2013('fig10','noplot');
-    
+
     output.model_3_Y1 = model_3_Y1;
     output.model_3_Y2 = model_3_Y2;
     output.model_8_Y1 = model_8_Y1;
@@ -554,7 +550,7 @@ if flags.do_fig10
 
     if flags.do_plot
 
-        figure; 
+        figure;
         subplot(3,1,1)
         errorbar(data(:,1)-0.025,data(:,2),data(:,3),'ob'); hold on;
         errorbar(data(:,1)+0.025,data(:,8),data(:,9),'or');
@@ -594,7 +590,7 @@ end
 if flags.do_fig11a
 
     s = [mfilename('fullpath'),'_fig11a.mat'];
-      
+
     % listening area
     X = [-2 2];
     Y = [-3.15 -0.15];
@@ -605,7 +601,7 @@ if flags.do_fig11a
     src = 'ps';
     % array size
     L = 2.85;
-  
+
     if amtredofile(s,flags.redomode)
         amtdisp('\nWarning: this will take a long time!\n\n','progress');
         % 3 speakers
@@ -726,7 +722,7 @@ end
 if flags.do_fig11b
 
     s = [mfilename('fullpath'),'_fig11b.mat'];
-      
+
     % listening area
     X = [-2 2];
     Y = [-3.15 -0.15];
@@ -737,7 +733,7 @@ if flags.do_fig11b
     src = 'pw';
     % array size
     L = 2.85;
-  
+
     if amtredofile(s,flags.redomode)
         amtdisp('\nWarning: this will take a long time!\n\n','progress');
         % 3 speakers
@@ -858,7 +854,7 @@ end
 if flags.do_fig12a
 
     s = [mfilename('fullpath'),'_fig12a.mat'];
-      
+
     % listening area
     X = [-2.1 2.1];
     Y = [-2.1 2.1];
@@ -869,7 +865,7 @@ if flags.do_fig12a
     src = 'ps';
     % array size
     L = 3;
-  
+
     if amtredofile(s,flags.redomode)
         amtdisp('\nWarning: this will take a long time!\n\n','progress');
         % 14 speakers
@@ -990,7 +986,7 @@ end
 if flags.do_fig12b
 
     s = [mfilename('fullpath'),'_fig12b.mat'];
-      
+
     % listening area
     X = [-2.1 2.1];
     Y = [-2.1 2.1];
@@ -1001,7 +997,7 @@ if flags.do_fig12b
     src = 'pw';
     % array size
     L = 3;
-  
+
     if amtredofile(s,flags.redomode)
         amtdisp('\nWarning: this will take a long time!\n\n','progress');
         % 14 speakers
