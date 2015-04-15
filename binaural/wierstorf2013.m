@@ -54,9 +54,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %     'array',array    Array type to use, could be 'linear' or 'circle'.
 %                      Default value is 'linear'.
 %
-%     'hrtf',hrtf      HRTF database. This have to be in the TU-Berlin
-%                      mat-format, see:
-%                      https://dev.qu.tu-berlin.de/projects/measurements/wiki/IRs_file_format
+%     'hrtf',hrtf      HRTF database in SOFA format.
 %                      Default HRTF set is the 3m one from TU-Berlin measured
 %                      with the KEMAR.
 %
@@ -108,7 +106,7 @@ showprogress = kv.showprogress;
 if ~which('SFS_start')
     error(['%s: you need to install the Sound-Field-Synthesis Toolbox.\n', ...
         'You can download it at https://github.com/sfstoolbox/sfs.\n', ...
-        'You need version 1.0.0 of the Toolbox (commit ...).'], ...
+        'You need version 1.2.0 of the Toolbox (commit ...).'], ...
         upper(mfilename));
 end
 
@@ -147,12 +145,13 @@ conf.secondary_sources.x0 = [];
 % function
 if isempty(hrtf)
     % load HRTFs, see:
-    % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
-    [~,path] = download_hrtf('wierstorf2011_3m');
-    hrtf = read_irs([path '/wierstorf2011_3m.mat'],conf);
+    % https://dev.qu.tu-berlin.de/projects/twoears-database/repository/changes/impulse_responses/qu_kemar_anechoic/QU_KEMAR_anechoic_3m.sofa?rev=master
+    % If the file is not avaialable locally it should be automatically
+    % downloaded by SOFAload
+    hrtf = SOFAload('QU_KEMAR_anechoic_3m.sofa');
 end
 % Get sampling rate from the HRTFs
-fs = hrtf.fs;
+fs = hrtf.Data.SamplingRate;
 % Load lookup table from the AMT if no one is given to the function
 if isempty(lookup)
     % load lookup table to map ITD values of the model to azimuth angles.
