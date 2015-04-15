@@ -176,7 +176,7 @@ end
 amtdisp('*** Starting SFS ***');
 if exist('SFS_start','file')
   SFS_start;
-  s=SFS_version; s_r='1.0.0'; % set the required version
+  s=SFS_version; s_r='1.2.0'; % set the required version
   amtdisp(['Sound Field Synthesis Toolbox, version ' s]);
   v=sscanf(s,'%d.%d.%d'); v(4)=0;
   v_r=sscanf(s_r,'%d.%d.%d');
