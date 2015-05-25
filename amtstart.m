@@ -146,7 +146,8 @@ if exist('SOFAstart','file')
   else
     SOFAstart;
   end
-	warning('off','SOFA:upgrade');	% disable warning when loading older SOFA files
+	warning('off','SOFA:upgrade');	% disable warning on upgrading older SOFA files
+	warning('off','SOFA:load'); % disable warnings on loading SOFA files
 else
   amtdisp(['SOFA package could not be found. Continue without SOFA support.']);
   amtdisp(['For SOFA support please download the package ' ...
