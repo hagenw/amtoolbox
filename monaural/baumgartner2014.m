@@ -257,14 +257,14 @@ end
 %% Sensorimotor mapping, Eq.(7)
 if flags.do_mrs && flags.do_regular && kv.mrsmsp > 0
   
-    angbelow = -90:5:min(rangs)-5;
-    angabove = max(rangs)+5:5:265;
+    angbelow = -90:kv.rangsamp:min(rangs)-kv.rangsamp;
+    angabove = max(rangs)+kv.rangsamp:kv.rangsamp:265;
     rangs = [angbelow,rangs,angabove];
     si = [zeros(length(angbelow),size(si,2)) ; si ; zeros(length(angabove),size(si,2))];
     
     mrs = kv.mrsmsp/cos(deg2rad(kv.lat)); % direction dependent scatter (derivation: const. length rel. to the circumferences of circles considered as cross sections of a unit sphere)
     
-    x = 0:2*pi/72:2*pi-2*pi/72;
+    x = 0:2*pi/length(rangs):2*pi-2*pi/length(rangs);
     kappa = 1/deg2rad(mrs)^2; % concentration parameter (~1/sigma^2 of normpdf)
     mrspdf = exp(kappa*cos(x)) / (2*pi*besseli(0,kappa)); % von Mises PDF 
     for tt = 1:size(si,2)
