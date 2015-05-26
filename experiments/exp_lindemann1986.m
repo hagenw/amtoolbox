@@ -204,7 +204,7 @@ function output = exp_lindemann1986(varargin)
 
 %   AUTHOR: Hagen Wierstorf
 
-definput.import={'amtredofile'};
+definput.import={'amtcache'};
 definput.flags.type={'missingflag','fig6','fig7','fig8','fig10','fig11',...
                     'fig12','fig13','fig14a','fig14b','fig15',...
                     'fig16','fig17','fig18'};
@@ -250,7 +250,7 @@ if flags.do_fig6
   ndl = round(fs/1000)+1;   % length of the delay line (see lindemann1986bincorr.m)
   itd = linspace(0,1,nitds);
   
-  output=amtcache('get','fig6',flags.redomode);
+  output=amtcache('get','fig6',flags.cachemode);
   
   if isempty(output)
     output = zeros(length(c_s),nitds,ndl);
@@ -322,7 +322,7 @@ if flags.do_fig7
     nitds = 21; % number of used ITDs
     itd = linspace(0,1,nitds);
     
-    output=amtcache('get','fig7',flags.redomode);
+    output=amtcache('get','fig7',flags.cachemode);
     if isempty(output)
       
       output = zeros(length(c_s),nitds);
@@ -344,7 +344,6 @@ if flags.do_fig7
           output(jj,ii) = lindemann1986centroid(cc);
         end
       end
-
       amtcache('set','fig7',output);
     end;
     
@@ -392,7 +391,7 @@ if flags.do_fig8
   ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
   ild = linspace(0,25,nilds);
   
-  output=amtcache('get','fig8',flags.redomode);
+  output=amtcache('get','fig8',flags.cachemode);
   if isempty(output)
     
     output = zeros(2,nilds,ndl);
@@ -465,7 +464,7 @@ if flags.do_fig10
   ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
   ild = linspace(0,25,nilds);
   
-  output=amtcache('get','fig10',flags.redomode);
+  output=amtcache('get','fig10',flags.cachemode);
   if isempty(output)
 
     output = zeros(length(c_s),nilds,ndl);
@@ -538,7 +537,7 @@ if flags.do_fig11
     nilds = 26; % number of used ILDs
     ild = linspace(0,25,nilds);
           
-    output=amtcache('get','fig11',flags.redomode);
+    output=amtcache('get','fig11',flags.cachemode);
     if isempty(output)
       
       output = zeros(length(c_s),nilds);
@@ -615,7 +614,7 @@ if flags.do_fig12
     ild = linspace(0,10,nilds);
     itd = linspace(-1,0,nitds);
 
-    output=amtcache('get','fig12',flags.redomode);
+    output=amtcache('get','fig12',flags.cachemode);
     if isempty(output)
 
     
@@ -702,7 +701,7 @@ if flags.do_fig13
     itd_t = linspace(-1,1,nitds_t);
     ild_t = [-3,0,3,9,15,25];
 
-    output=amtcache('get','fig13',flags.redomode);
+    output=amtcache('get','fig13',flags.cachemode);
     if isempty(output)
       
       % Calculate the centroids for the ILD only stimuli
@@ -809,7 +808,7 @@ if flags.do_fig14a
     ild = linspace(-3,3,nilds);
     itd = 2000/f;
     
-    output=amtcache('get','fig14a',flags.redomode);
+    output=amtcache('get','fig14a',flags.cachemode);
     if isempty(output)
      
       output = zeros(length(c_s),nilds);
@@ -882,7 +881,7 @@ if flags.do_fig14b
     itd = linspace(0,1,nitds);
     ild_std = [1,2,3,4,5];
     
-    output=amtcache('get','fig14b',flags.redomode);
+    output=amtcache('get','fig14b',flags.cachemode);
     if isempty(output)
 
       amtdisp('NOTE: this test function will need a lot of time!','progress');
@@ -967,7 +966,7 @@ if flags.do_fig15
     ild = linspace(0,25,nilds);
     itd = -0.5;
     
-    output=amtcache('get','fig15',flags.redomode);
+    output=amtcache('get','fig15',flags.cachemode);
     if isempty(output)
         
       output = zeros(length(c_s),nilds,ndl);
@@ -1045,7 +1044,7 @@ if flags.do_fig16
     ild = linspace(0,10,nilds);
     itd = linspace(-1,0,nitds);
 
-    output=amtcache('get','fig16',flags.redomode);
+    output=amtcache('get','fig16',flags.cachemode);
     if isempty(output)
       
       % Calculate the centroids for ILD+ITD stimuli
@@ -1126,7 +1125,7 @@ if flags.do_fig17
     ild_t = linspace(-9,9,nilds_t);
     itd_t = [0,0.09,0.18,0.27];
 
-    output=amtcache('get','fig17',flags.redomode);
+    output=amtcache('get','fig17',flags.cachemode);
     if isempty(output)
       
       % Calculate the centroids for the ITD only stimuli
@@ -1250,7 +1249,7 @@ if flags.do_fig18
     ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
     iac = linspace(0,1,niacs);
     
-    output=amtcache('get','fig18',flags.redomode);
+    output=amtcache('get','fig18',flags.cachemode);
     if isempty(output)
 
       output = zeros(niacs,ndl);

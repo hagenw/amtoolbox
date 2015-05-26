@@ -108,7 +108,7 @@ if flags.do_ARI
     if ~flags.do_recalc && ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_ARI.mat'],'file')
         urlwrite([SOFAdbURL '/ziegelwanger2013/exp_ziegelwanger2013_ARI.mat'],[hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2013_ARI.mat']);
     end
-    if flags.do_recalc
+    if flags.do_recalc % TODO: cache it!
         tmp=load([hpath filesep 'info.mat']);
         data=tmp.info.ARI;
         for ii=1:length(data.subjects)
@@ -119,7 +119,7 @@ if flags.do_ARI
             Obj.MeasurementSourceAudioChannel=Obj.MeasurementSourceAudioChannel(idx,:);
             Obj.MeasurementAudioLatency=Obj.MeasurementAudioLatency(idx,:);
             Obj.API.M=length(idx);
-            
+            amtdisp(['Calculating TOA models from the ARI database, subject: ' data.subjects{ii}]);
             [Obj,tmp]=ziegelwanger2013(Obj,4,1);
             results(ii).meta=tmp;
             results(ii).meta.performance(4)=tmp.performance;

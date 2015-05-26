@@ -12,11 +12,11 @@ function output = exp_takanen2013(varargin)
 %  
 %   The following flags can be specified:
 %
-%     'binsig'       use binaural input signals in the computation. This 
-%                    is the default.
+%     'binsig'       use binaural input signals in the computation (default)
+%                    This options computes the figures from the scratch
 %
-%     'cochlea'      use pre-computed cochlea model outputs in the
-%                    computation to reduce computation time. 
+%     'cochlea'      use pre-computed cochlea model outputs.
+%                    This option reduces the computation time. 
 %
 %     'fig8'     Figure 8 from the book chapter Takanen et al. (2013). Binaural activity 
 %                    maps obtained with the model for an off-sweet-spot 
@@ -94,7 +94,7 @@ function output = exp_takanen2013(varargin)
 definput.import={'amtredofile'};
 definput.flags.type={'missingflag','fig8','fig9','fig7_takanen2014','fig8_takanen2014'};
 
-definput.flags.dataType={'cochlea','binsig'};
+definput.flags.dataType={'binsig','cochlea'};
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
@@ -308,7 +308,7 @@ if flags.do_fig7_takanen2014
         nXBins= length(levels)*(size(colorMtrx,1)-1);
         dim = size(activityMap);
         gains(gains>1) =1;
-        outputMtrx = zeros(dim(1),nXBins,3);
+        outputMtrx = zeros(dim(1),nXBins,3,'single');
         for colorInd=1:size(colorMtrx,1)
             temp = find((activityMap==(colorInd-1))==1);
             outputMtrx(temp) = gains(temp)*colorMtrx(colorInd,1);
