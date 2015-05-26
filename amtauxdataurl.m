@@ -11,11 +11,11 @@ function auxURL=amtauxdataurl(newURL)
 %
 %   See also: amtauxdatapath amtload
 
-persistent CachedURL;
+persistent AuxDataURL;
 
 if exist('newURL','var')
-  CachedURL=newURL;
-elseif isempty(CachedURL)
-  CachedURL=['http://www.sofacoustics.org/data/amt-' amthelp('version') '/auxdata'];
+  AuxDataURL=newURL;
+elseif isempty(AuxDataURL)
+  AuxDataURL=['http://www.sofacoustics.org/data/amt-' amthelp('version') '/auxdata'];
 end
-auxURL=CachedURL;
+auxURL=AuxDataURL;
