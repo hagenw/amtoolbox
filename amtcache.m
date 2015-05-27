@@ -22,10 +22,10 @@ switch cmd
     
     if ~exist(tokenpath,'dir'); mkdir(tokenpath); end
     for ii=3:nargin
-      s(ii-2).name=inputname(ii);
-      s(ii-2).value=varargin{ii-2};
+      cache(ii-2).name=inputname(ii);
+      cache(ii-2).value=varargin{ii-2};
     end
-    save(tokenfn,'s','-v6');
+    save(tokenfn,'cache','-v6');
     varargout{1}=tokenfn;
   case 'get'
     if nargin<3, varargin{1}='normal'; end    
@@ -58,7 +58,7 @@ switch cmd
         if exist(tokenfn,'file'),
           load(tokenfn);
           for ii=1:nargout
-            varargout{ii}=s(ii).value;
+            varargout{ii}=cache(ii).value;
           end
         else
           for ii=1:nargout, varargout{ii}=[]; end
