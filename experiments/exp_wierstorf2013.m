@@ -130,7 +130,7 @@ function output = exp_wierstorf2013(varargin)
 
 %   AUTHOR: Hagen Wierstorf
 
-definput.import={'amtredofile'};
+definput.import={'amtcache'};
 definput.flags.type={'missingflag','fig1','fig3','fig6','fig7','fig8', ...
                     'fig9','fig10','fig11a','fig11b','fig12a','fig12b'};
 
@@ -138,14 +138,11 @@ definput.flags.plot={'plot','noplot'};
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
-
 if flags.do_missingflag
   flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
              sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
   error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
-
-save_format='-v6';
 
 % Checking for the Sound-Field-Synthesis Toolbox
 if ~which('SFS_start')
@@ -158,8 +155,6 @@ end
 
 %% ------ F I G U R E  1 -------------------------------------------------
 if flags.do_fig1
-
-    s = [mfilename('fullpath'),'_fig1.mat'];
       
     % listening area
     X = [-2 2];
@@ -172,30 +167,28 @@ if flags.do_fig1
     % intra-loudspeaker distance on the stereo setup
     L = 2;
   
-    if amtredofile(s,flags.redomode)
-        [loc_error,aud_event,sound_event,xaxis,yaxis,x0] = ...
+	  output = amtcache('get','fig1',flags.cachemode);
+    if isempty(output),
+        [loc_error,aud_event,~,xaxis,yaxis,x0] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'stereo');
-        save(save_format,s,'loc_error','aud_event','xaxis','yaxis','x0');
-    else
-        load(s);
+				output.loc_error = loc_error;
+				output.aud_event = aud_event;
+				output.xaxis = xaxis;
+				output.yaxis = yaxis;
+				output.x0 = x0;
+				amtcache('set','fig1',output);
     end;
-
-    output.loc_error = loc_error;
-    output.aud_event = aud_event;
-    output.xaxis = xaxis;
-    output.yaxis = yaxis;
-    output.x0 = x0;
 
     if flags.do_plot
         % ------ Plotting ------
         figure;
-        [u,v,~] = pol2cart(rad(aud_event+90),ones(size(aud_event)), ...
-            zeros(size(aud_event)));
-        quiver(xaxis,yaxis,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event+90),ones(size(output.aud_event)), ...
+            zeros(size(output.aud_event)));
+        quiver(output.xaxis,output.yaxis,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
         conf.plot.realloudspeakers = true;
         conf.plot.lssize = 0.16;
-        draw_loudspeakers(x0,[1 1 0],conf);
+        draw_loudspeakers(output.x0,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
     end;
@@ -203,8 +196,6 @@ if flags.do_fig1
 %% ------ F I G U R E  3  ------------------------------------------------
 elseif flags.do_fig3
 
-    s = [mfilename('fullpath'),'_fig3.mat'];
- 
     % listening area
     X = [-2 2];
     Y = [-2 2];
@@ -254,7 +245,8 @@ elseif flags.do_fig3
     conf.plot.file = '';
 
   
-    if amtredofile(s,flags.redomode)
+    output = amtcache('get','fig3',flags.cachemode); 
+    if isempty(output)
         % get secondary sources and tapering window for plotting
         x0 = secondary_source_positions(conf);
         % disable inactive loudspeakers for plot
@@ -270,39 +262,38 @@ elseif flags.do_fig3
         P_c = sound_field_mono_wfs(X,Y,Z,xs,src,f,conf);
         % (d)
         t = 212;
-        p_d = sound_field_imp_wfs(X,Y,Z,xs,src,t,conf);
-        save(save_format,s,'P_a','P_b','P_c','p_d','xaxis','yaxis','zaxis','x0');
-    else
-        load(s);
-    end;
+        P_d = sound_field_imp_wfs(X,Y,Z,xs,src,t,conf);
+				
+				output.P_a = P_a;
+				output.P_b = P_b;
+				output.P_c = P_c;
+				output.P_d = P_d;
+				output.xaxis = xaxis;
+				output.yaxis = yaxis;
+				output.zaxis = zaxis;
+				output.x0 = x0;
 
-    output.P_a = P_a;
-    output.P_b = P_b;
-    output.P_c = P_c;
-    output.p_d = p_d;
-    output.xaxis = xaxis;
-    output.yaxis = yaxis;
-    output.zaxis = zaxis;
-    output.x0 = x0;
+        amtcache('set','fig3',output);
+    end;
 
     if flags.do_plot
         % ------ Plotting ------
         % (a)
-        plot_sound_field(-P_a,xaxis,yaxis,zaxis,x0,conf);
+        plot_sound_field(-output.P_a,output.xaxis,output.yaxis,output.zaxis,output.x0,conf);
         axis([X(1) X(2) Y(1) Y(2)]);
         colorbar;
         xlabel('x/m');
         ylabel('y/m');
         title('(a) f_{pw} = 1kHz');
         % (b)
-        plot_sound_field(-P_b,xaxis,yaxis,zaxis,x0,conf);
+        plot_sound_field(-output.P_b,output.xaxis,output.yaxis,output.zaxis,output.x0,conf);
         axis([X(1) X(2) Y(1) Y(2)]);
         colorbar;
         xlabel('x/m');
         ylabel('y/m');
         title('(b) f_{pw} = 2kHz');
         % (c)
-        plot_sound_field(-P_c,xaxis,yaxis,zaxis,x0,conf);
+        plot_sound_field(-output.P_c,output.xaxis,output.yaxis,output.zaxis,output.x0,conf);
         axis([X(1) X(2) Y(1) Y(2)]);
         colorbar;
         xlabel('x/m');
@@ -310,7 +301,7 @@ elseif flags.do_fig3
         title('(c) f_{pw} = 5kHz');
         % (d)
         conf.plot.usedb = 1;
-        plot_sound_field(p_d,xaxis,yaxis,zaxis,x0,conf);
+        plot_sound_field(output.P_d,output.xaxis,output.yaxis,output.zaxis,output.x0,conf);
         axis([X(1) X(2) Y(1) Y(2)]);
         colorbar;
         xlabel('x/m');
@@ -387,15 +378,15 @@ elseif flags.do_fig7
 %% ------ F I G U R E  8 -------------------------------------------------
 elseif flags.do_fig8
 
-    s = [mfilename('fullpath'),'_fig8.mat'];
-
-    if amtredofile(s,flags.redomode)
+    [phi,itd] = amtcache('get','fig8', flags.cachemode);
+    if isempty(phi)
         % Sound Field Synthesis Toolbox settings
         conf.ir.useinterpolation = true;
         conf.fs = 44100;
         % load HRTFs, see:
         % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
-        load(fullfile(amtbasepath,'hrtf','wierstorf2013','QU_KEMAR_anechoic_3m.mat'));
+        irs=amtload('wierstorf2013','QU_KEMAR_anechoic_3m.mat');
+        irs=irs.irs;
         % generate noise signal
         sig_noise = noise(44100/5,1,'white');
         % get only the -90 to 90 degree part of the hrtf set
@@ -415,9 +406,7 @@ elseif flags.do_fig8
             itd(ii,:) = median(itd_tmp,1);
             phi(ii) = deg(irs.apparent_azimuth(ii));
         end
-        save(save_format,s,'phi','itd');
-    else
-        load(s);
+        amtcache('set', 'fig8', phi,itd);
     end;
 
     output.phi = phi;
@@ -438,16 +427,16 @@ end;
 %% ------ F I G U R E  9 -------------------------------------------------
 if flags.do_fig9
 
-    s = [mfilename('fullpath'),'_fig9.mat'];
-      
-    if amtredofile(s,flags.redomode)
+    [phi_auditory_event,phi_sound_event] = amtcache('get', 'fig9', flags.cachemode);      
+    if isempty(phi_auditory_event)
         % Sound Field Synthesis Toolbox settings
         conf.ir.useinterpolation = true;
         conf.fs = 44100;
         % load lookup table
         lookup = data_wierstorf2013('itd2anglelookuptable');
         % load HRTFs, see:
-        load(fullfile(amtbasepath,'hrtf','wierstorf2013','QU_KEMAR_anechoic_3m.mat'));
+        irs=amtload('wierstorf2013','QU_KEMAR_anechoic_3m.mat');
+        irs=irs.irs;
         % generate noise signal
         sig_noise = noise(44100/5,1,'white');
         % get only the -90 to 90 degree part of the hrtf set
@@ -462,9 +451,7 @@ if flags.do_fig9
             phi_auditory_event(ii) = wierstorf2013estimateazimuth(sig,lookup,'dietz2011');
             phi_sound_event(ii) = deg(irs.apparent_azimuth(ii));
         end
-        save(save_format,s,'phi_auditory_event','phi_sound_event');
-    else
-        load(s);
+        amtcache('set', 'fig9', phi_auditory_event,phi_sound_event);
     end;
 
     output.phi_auditory_event = phi_auditory_event;
@@ -484,8 +471,6 @@ end
 %% ------ F I G U R E  10 ------------------------------------------------
 if flags.do_fig10
 
-    s = [mfilename('fullpath'),'_fig10.mat'];
-
     % orientation of the listener (always to the front)
     phi = pi/2;
     % position of the virtual point source
@@ -499,7 +484,8 @@ if flags.do_fig10
     Y1 = -1.5;
     Y2 = -2.0;
 
-    if amtredofile(s,flags.redomode)
+    output = amtcache('get', 'fig10', flags.cachemode);
+    if isempty(output)
         for ii=1:length(X)
             amtdisp([num2str(ii) ' of ' num2str(length(X))],'progress');
             for jj=1:5
@@ -535,20 +521,18 @@ if flags.do_fig10
                                                    'showprogress',0);
             end
         end
-        save(save_format,s,'model_3_Y1','model_3_Y2','model_8_Y1','model_8_Y2','model_15_Y1','model_15_Y2');
-    else
-        load(s);
+				output.model_3_Y1 = model_3_Y1;
+				output.model_3_Y2 = model_3_Y2;
+				output.model_8_Y1 = model_8_Y1;
+				output.model_8_Y2 = model_8_Y2;
+				output.model_15_Y1 = model_15_Y1;
+				output.model_15_Y2 = model_15_Y2;
+        amtcache('set', 'fig10', output);
     end
 
     % get the human data
     [data,description] = data_wierstorf2013('fig10','noplot');
     
-    output.model_3_Y1 = model_3_Y1;
-    output.model_3_Y2 = model_3_Y2;
-    output.model_8_Y1 = model_8_Y1;
-    output.model_8_Y2 = model_8_Y2;
-    output.model_15_Y1 = model_15_Y1;
-    output.model_15_Y2 = model_15_Y2;
     output.data = data;
     output.description = description;
 
@@ -558,8 +542,8 @@ if flags.do_fig10
         subplot(3,1,1)
         errorbar(data(:,1)-0.025,data(:,2),data(:,3),'ob'); hold on;
         errorbar(data(:,1)+0.025,data(:,8),data(:,9),'or');
-        plot(data(:,1),mean(model_3_Y1,2),'-b');
-        plot(data(:,1),mean(model_3_Y2,2),'-r');
+        plot(data(:,1),mean(output.model_3_Y1,2),'-b');
+        plot(data(:,1),mean(output.model_3_Y2,2),'-r');
         axis([-1.85 0.125 -16 7]);
         legend(description{2,1},description{8,1});
         title(description{2,2});
@@ -568,8 +552,8 @@ if flags.do_fig10
         subplot(3,1,2)
         errorbar(data(:,1)-0.025,data(:,4),data(:,5),'ob'); hold on;
         errorbar(data(:,1)+0.025,data(:,10),data(:,11),'or');
-        plot(data(:,1),mean(model_8_Y1,2),'-b');
-        plot(data(:,1),mean(model_8_Y2,2),'-r');
+        plot(data(:,1),mean(output.model_8_Y1,2),'-b');
+        plot(data(:,1),mean(output.model_8_Y2,2),'-r');
         axis([-1.85 0.125 -16 7]);
         legend(description{4,1},description{10,1});
         title(description{4,2});
@@ -578,8 +562,8 @@ if flags.do_fig10
         subplot(3,1,3)
         errorbar(data(:,1)-0.025,data(:,6),data(:,7),'ob'); hold on;
         errorbar(data(:,1)+0.025,data(:,12),data(:,13),'or');
-        plot(data(:,1),mean(model_15_Y1,2),'-b');
-        plot(data(:,1),mean(model_15_Y2,2),'-r');
+        plot(data(:,1),mean(output.model_15_Y1,2),'-b');
+        plot(data(:,1),mean(output.model_15_Y2,2),'-r');
         axis([-1.85 0.125 -16 7]);
         legend(description{6,1},description{12,1});
         title(description{6,2});
@@ -593,8 +577,6 @@ end
 %% ------ F I G U R E  11a -----------------------------------------------
 if flags.do_fig11a
 
-    s = [mfilename('fullpath'),'_fig11a.mat'];
-      
     % listening area
     X = [-2 2];
     Y = [-3.15 -0.15];
@@ -606,7 +588,8 @@ if flags.do_fig11a
     % array size
     L = 2.85;
   
-    if amtredofile(s,flags.redomode)
+    output = amtcache('get', 'fig11a', flags.cachemode);      
+    if isempty(output)
         amtdisp('\nWarning: this will take a long time!\n\n','progress');
         % 3 speakers
         amtdisp('Calculating figure 1/6\n','progress');
@@ -647,27 +630,23 @@ if flags.do_fig11a
                 'resolution',135, ...
                 'nls',15, ...
                 'array','linear');
-        save(save_format,s,'loc_error_3','loc_error_8','loc_error_15', ...
-            'aud_event_3','aud_event_8','aud_event_15', ...
-            'x0_3','x0_8','x0_15', ...
-            'xaxis_31','yaxis_31','xaxis_135','yaxis_135');
-    else
-        load(s);
-    end;
+								
+				output.loc_error_3 = loc_error_3;
+				output.loc_error_8 = loc_error_8;
+				output.loc_error_15 = loc_error_15;
+				output.aud_event_3 = aud_event_3;
+				output.aud_event_8 = aud_event_8;
+				output.aud_event_15 = aud_event_15;
+				output.x0_3 = x0_3;
+				output.x0_8 = x0_8;
+				output.x0_15 = x0_15;
+				output.xaxis_31 = xaxis_31;
+				output.yaxis_31 = yaxis_31;
+				output.xaxis_135 = xaxis_135;
+				output.yaxis_135 = yaxis_135;
 
-    output.loc_error_3 = loc_error_3;
-    output.loc_error_8 = loc_error_8;
-    output.loc_error_15 = loc_error_15;
-    output.aud_event_3 = aud_event_3;
-    output.aud_event_8 = aud_event_8;
-    output.aud_event_15 = aud_event_15;
-    output.x0_3 = x0_3;
-    output.x0_8 = x0_8;
-    output.x0_15 = x0_15;
-    output.xaxis_31 = xaxis_31;
-    output.yaxis_31 = yaxis_31;
-    output.xaxis_135 = xaxis_135;
-    output.yaxis_135 = yaxis_135;
+        amtcache('set', 'fig11a', output);
+    end;
 
     if flags.do_plot
         % ------ Plotting ------
@@ -675,48 +654,48 @@ if flags.do_fig11a
         conf.plot.lssize = 0.16;
         figure;
         subplot(2,3,1);
-        [u,v,~] = pol2cart(rad(aud_event_3+90),ones(size(aud_event_3)), ...
-            zeros(size(aud_event_3)));
-        quiver(xaxis_31,yaxis_31,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event_3+90),ones(size(output.aud_event_3)), ...
+            zeros(size(output.aud_event_3)));
+        quiver(output.xaxis_31,output.yaxis_31,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_3,[1 1 0],conf);
+        draw_loudspeakers(output.x0_3,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,2);
-        [u,v,~] = pol2cart(rad(aud_event_8+90),ones(size(aud_event_8)), ...
-            zeros(size(aud_event_8)));
-        quiver(xaxis_31,yaxis_31,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event_8+90),ones(size(output.aud_event_8)), ...
+            zeros(size(output.aud_event_8)));
+        quiver(output.xaxis_31,output.yaxis_31,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_8,[1 1 0],conf);
+        draw_loudspeakers(output.x0_8,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,3);
-        [u,v,~] = pol2cart(rad(aud_event_15+90),ones(size(aud_event_15)), ...
-            zeros(size(aud_event_15)));
-        quiver(xaxis_31,yaxis_31,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event_15+90),ones(size(output.aud_event_15)), ...
+            zeros(size(output.aud_event_15)));
+        quiver(output.xaxis_31,output.yaxis_31,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_15,[1 1 0],conf);
+        draw_loudspeakers(output.x0_15,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,4)
-        imagesc(xaxis_135,yaxis_135,abs(loc_error_3'));
+        imagesc(output.xaxis_135,output.yaxis_135,abs(output.loc_error_3'));
         turn_imagesc;
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_3,[1 1 0],conf);
+        draw_loudspeakers(output.x0_3,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,5)
-        imagesc(xaxis_135,yaxis_135,abs(loc_error_8'));
+        imagesc(output.xaxis_135,output.yaxis_135,abs(output.loc_error_8'));
         turn_imagesc;
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_8,[1 1 0],conf);
+        draw_loudspeakers(output.x0_8,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,6)
-        imagesc(xaxis_135,yaxis_135,abs(loc_error_15'));
+        imagesc(output.xaxis_135,output.yaxis_135,abs(output.loc_error_15'));
         turn_imagesc;
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_15,[1 1 0],conf);
+        draw_loudspeakers(output.x0_15,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
     end;
@@ -724,8 +703,6 @@ end
 
 %% ------ F I G U R E  11b -----------------------------------------------
 if flags.do_fig11b
-
-    s = [mfilename('fullpath'),'_fig11b.mat'];
       
     % listening area
     X = [-2 2];
@@ -738,7 +715,8 @@ if flags.do_fig11b
     % array size
     L = 2.85;
   
-    if amtredofile(s,flags.redomode)
+    output = amtcache('get', 'fig11b', flags.cachemode);
+    if isempty(output)
         amtdisp('\nWarning: this will take a long time!\n\n','progress');
         % 3 speakers
         amtdisp('Calculating figure 1/6\n','progress');
@@ -779,27 +757,23 @@ if flags.do_fig11b
                 'resolution',135, ...
                 'nls',15, ...
                 'array','linear');
-        save(save_format,s,'loc_error_3','loc_error_8','loc_error_15', ...
-            'aud_event_3','aud_event_8','aud_event_15', ...
-            'x0_3','x0_8','x0_15', ...
-            'xaxis_31','yaxis_31','xaxis_135','yaxis_135');
-    else
-        load(s);
-    end;
 
-    output.loc_error_3 = loc_error_3;
-    output.loc_error_8 = loc_error_8;
-    output.loc_error_15 = loc_error_15;
-    output.aud_event_3 = aud_event_3;
-    output.aud_event_8 = aud_event_8;
-    output.aud_event_15 = aud_event_15;
-    output.x0_3 = x0_3;
-    output.x0_8 = x0_8;
-    output.x0_15 = x0_15;
-    output.xaxis_31 = xaxis_31;
-    output.yaxis_31 = yaxis_31;
-    output.xaxis_135 = xaxis_135;
-    output.yaxis_135 = yaxis_135;
+				output.loc_error_3 = loc_error_3;
+				output.loc_error_8 = loc_error_8;
+				output.loc_error_15 = loc_error_15;
+				output.aud_event_3 = aud_event_3;
+				output.aud_event_8 = aud_event_8;
+				output.aud_event_15 = aud_event_15;
+				output.x0_3 = x0_3;
+				output.x0_8 = x0_8;
+				output.x0_15 = x0_15;
+				output.xaxis_31 = xaxis_31;
+				output.yaxis_31 = yaxis_31;
+				output.xaxis_135 = xaxis_135;
+				output.yaxis_135 = yaxis_135;
+				
+				amtcache('set', 'fig11b', output);
+    end;
 
     if flags.do_plot
         % ------ Plotting ------
@@ -807,48 +781,48 @@ if flags.do_fig11b
         conf.plot.lssize = 0.16;
         figure;
         subplot(2,3,1);
-        [u,v,~] = pol2cart(rad(aud_event_3+90),ones(size(aud_event_3)), ...
-            zeros(size(aud_event_3)));
-        quiver(xaxis_31,yaxis_31,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event_3+90),ones(size(output.aud_event_3)), ...
+            zeros(size(output.aud_event_3)));
+        quiver(output.xaxis_31,output.yaxis_31,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_3,[1 1 0],conf);
+        draw_loudspeakers(output.x0_3,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,2);
-        [u,v,~] = pol2cart(rad(aud_event_8+90),ones(size(aud_event_8)), ...
-            zeros(size(aud_event_8)));
-        quiver(xaxis_31,yaxis_31,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event_8+90),ones(size(output.aud_event_8)), ...
+            zeros(size(output.aud_event_8)));
+        quiver(output.xaxis_31,output.yaxis_31,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_8,[1 1 0],conf);
+        draw_loudspeakers(output.x0_8,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,3);
-        [u,v,~] = pol2cart(rad(aud_event_15+90),ones(size(aud_event_15)), ...
-            zeros(size(aud_event_15)));
-        quiver(xaxis_31,yaxis_31,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event_15+90),ones(size(output.aud_event_15)), ...
+            zeros(size(output.aud_event_15)));
+        quiver(output.xaxis_31,output.yaxis_31,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_15,[1 1 0],conf);
+        draw_loudspeakers(output.x0_15,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,4)
-        imagesc(xaxis_135,yaxis_135,abs(loc_error_3'));
+        imagesc(output.xaxis_135,output.yaxis_135,abs(output.loc_error_3'));
         turn_imagesc;
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_3,[1 1 0],conf);
+        draw_loudspeakers(output.x0_3,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,5)
-        imagesc(xaxis_135,yaxis_135,abs(loc_error_8'));
+        imagesc(output.xaxis_135,output.yaxis_135,abs(output.loc_error_8'));
         turn_imagesc;
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_8,[1 1 0],conf);
+        draw_loudspeakers(output.x0_8,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,6)
-        imagesc(xaxis_135,yaxis_135,abs(loc_error_15'));
+        imagesc(output.xaxis_135,output.yaxis_135,abs(output.loc_error_15'));
         turn_imagesc;
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_15,[1 1 0],conf);
+        draw_loudspeakers(output.x0_15,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
     end;
@@ -857,8 +831,6 @@ end
 %% ------ F I G U R E  12a -----------------------------------------------
 if flags.do_fig12a
 
-    s = [mfilename('fullpath'),'_fig12a.mat'];
-      
     % listening area
     X = [-2.1 2.1];
     Y = [-2.1 2.1];
@@ -870,7 +842,8 @@ if flags.do_fig12a
     % array size
     L = 3;
   
-    if amtredofile(s,flags.redomode)
+    output = amtcache('get', 'fig12a', flags.cachemode);      
+    if isempty(output)
         amtdisp('\nWarning: this will take a long time!\n\n','progress');
         % 14 speakers
         amtdisp('Calculating figure 1/6\n','progress');
@@ -911,27 +884,23 @@ if flags.do_fig12a
                 'resolution',135, ...
                 'nls',56, ...
                 'array','circle');
-        save(save_format,s,'loc_error_14','loc_error_28','loc_error_56', ...
-            'aud_event_14','aud_event_28','aud_event_56', ...
-            'x0_14','x0_28','x0_56', ...
-            'xaxis_21','yaxis_21','xaxis_135','yaxis_135');
-    else
-        load(s);
-    end;
 
-    output.loc_error_14 = loc_error_14;
-    output.loc_error_28 = loc_error_28;
-    output.loc_error_56 = loc_error_56;
-    output.aud_event_14 = aud_event_14;
-    output.aud_event_28 = aud_event_28;
-    output.aud_event_56 = aud_event_56;
-    output.x0_14 = x0_14;
-    output.x0_28 = x0_28;
-    output.x0_56 = x0_56;
-    output.xaxis_21 = xaxis_21;
-    output.yaxis_21 = yaxis_21;
-    output.xaxis_135 = xaxis_135;
-    output.yaxis_135 = yaxis_135;
+				output.loc_error_14 = loc_error_14;
+				output.loc_error_28 = loc_error_28;
+				output.loc_error_56 = loc_error_56;
+				output.aud_event_14 = aud_event_14;
+				output.aud_event_28 = aud_event_28;
+				output.aud_event_56 = aud_event_56;
+				output.x0_14 = x0_14;
+				output.x0_28 = x0_28;
+				output.x0_56 = x0_56;
+				output.xaxis_21 = xaxis_21;
+				output.yaxis_21 = yaxis_21;
+				output.xaxis_135 = xaxis_135;
+				output.yaxis_135 = yaxis_135;
+
+				amtcache('set', 'fig12a', output);
+    end;
 
     if flags.do_plot
         % ------ Plotting ------
@@ -939,48 +908,48 @@ if flags.do_fig12a
         conf.plot.lssize = 0.16;
         figure;
         subplot(2,3,1);
-        [u,v,~] = pol2cart(rad(aud_event_14+90),ones(size(aud_event_14)), ...
-            zeros(size(aud_event_14)));
-        quiver(xaxis_21,yaxis_21,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event_14+90),ones(size(output.aud_event_14)), ...
+            zeros(size(output.aud_event_14)));
+        quiver(output.xaxis_21,output.yaxis_21,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_14,[1 1 0],conf);
+        draw_loudspeakers(output.x0_14,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,2);
-        [u,v,~] = pol2cart(rad(aud_event_28+90),ones(size(aud_event_28)), ...
-            zeros(size(aud_event_28)));
-        quiver(xaxis_21,yaxis_21,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event_28+90),ones(size(output.aud_event_28)), ...
+            zeros(size(output.aud_event_28)));
+        quiver(output.xaxis_21,output.yaxis_21,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_28,[1 1 0],conf);
+        draw_loudspeakers(output.x0_28,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,3);
-        [u,v,~] = pol2cart(rad(aud_event_56+90),ones(size(aud_event_56)), ...
-            zeros(size(aud_event_56)));
-        quiver(xaxis_21,yaxis_21,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event_56+90),ones(size(output.aud_event_56)), ...
+            zeros(size(output.aud_event_56)));
+        quiver(output.xaxis_21,output.yaxis_21,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_56,[1 1 0],conf);
+        draw_loudspeakers(output.x0_56,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,4)
-        imagesc(xaxis_135,yaxis_135,abs(loc_error_14'));
+        imagesc(output.xaxis_135,output.yaxis_135,abs(output.loc_error_14'));
         turn_imagesc;
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_14,[1 1 0],conf);
+        draw_loudspeakers(output.x0_14,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,5)
-        imagesc(xaxis_135,yaxis_135,abs(loc_error_28'));
+        imagesc(output.xaxis_135,output.yaxis_135,abs(output.loc_error_28'));
         turn_imagesc;
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_28,[1 1 0],conf);
+        draw_loudspeakers(output.x0_28,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,6)
-        imagesc(xaxis_135,yaxis_135,abs(loc_error_56'));
+        imagesc(output.xaxis_135,output.yaxis_135,abs(output.loc_error_56'));
         turn_imagesc;
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_56,[1 1 0],conf);
+        draw_loudspeakers(output.x0_56,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
     end;
@@ -989,8 +958,6 @@ end
 %% ------ F I G U R E  12b -----------------------------------------------
 if flags.do_fig12b
 
-    s = [mfilename('fullpath'),'_fig12b.mat'];
-      
     % listening area
     X = [-2.1 2.1];
     Y = [-2.1 2.1];
@@ -1002,7 +969,8 @@ if flags.do_fig12b
     % array size
     L = 3;
   
-    if amtredofile(s,flags.redomode)
+    output = amtcache('get', 'fig12b', flags.cachemode);      
+    if isempty(output)
         amtdisp('\nWarning: this will take a long time!\n\n','progress');
         % 14 speakers
         amtdisp('Calculating figure 1/6\n','progress');
@@ -1043,27 +1011,23 @@ if flags.do_fig12b
                 'resolution',135, ...
                 'nls',56, ...
                 'array','circle');
-        save(save_format,s,'loc_error_14','loc_error_28','loc_error_56', ...
-            'aud_event_14','aud_event_28','aud_event_56', ...
-            'x0_14','x0_28','x0_56', ...
-            'xaxis_21','yaxis_21','xaxis_135','yaxis_135');
-    else
-        load(s);
-    end;
 
-    output.loc_error_14 = loc_error_14;
-    output.loc_error_28 = loc_error_28;
-    output.loc_error_56 = loc_error_56;
-    output.aud_event_14 = aud_event_14;
-    output.aud_event_28 = aud_event_28;
-    output.aud_event_56 = aud_event_56;
-    output.x0_14 = x0_14;
-    output.x0_28 = x0_28;
-    output.x0_56 = x0_56;
-    output.xaxis_21 = xaxis_21;
-    output.yaxis_21 = yaxis_21;
-    output.xaxis_135 = xaxis_135;
-    output.yaxis_135 = yaxis_135;
+				output.loc_error_14 = loc_error_14;
+				output.loc_error_28 = loc_error_28;
+				output.loc_error_56 = loc_error_56;
+				output.aud_event_14 = aud_event_14;
+				output.aud_event_28 = aud_event_28;
+				output.aud_event_56 = aud_event_56;
+				output.x0_14 = x0_14;
+				output.x0_28 = x0_28;
+				output.x0_56 = x0_56;
+				output.xaxis_21 = xaxis_21;
+				output.yaxis_21 = yaxis_21;
+				output.xaxis_135 = xaxis_135;
+				output.yaxis_135 = yaxis_135;
+
+				amtcache('set', 'fig12b', output);
+    end;
 
     if flags.do_plot
         % ------ Plotting ------
@@ -1071,48 +1035,48 @@ if flags.do_fig12b
         conf.plot.lssize = 0.16;
         figure;
         subplot(2,3,1);
-        [u,v,~] = pol2cart(rad(aud_event_14+90),ones(size(aud_event_14)), ...
-            zeros(size(aud_event_14)));
-        quiver(xaxis_21,yaxis_21,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event_14+90),ones(size(output.aud_event_14)), ...
+            zeros(size(output.aud_event_14)));
+        quiver(output.xaxis_21,output.yaxis_21,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_14,[1 1 0],conf);
+        draw_loudspeakers(output.x0_14,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,2);
-        [u,v,~] = pol2cart(rad(aud_event_28+90),ones(size(aud_event_28)), ...
-            zeros(size(aud_event_28)));
-        quiver(xaxis_21,yaxis_21,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event_28+90),ones(size(output.aud_event_28)), ...
+            zeros(size(output.aud_event_28)));
+        quiver(output.xaxis_21,output.yaxis_21,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_28,[1 1 0],conf);
+        draw_loudspeakers(output.x0_28,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,3);
-        [u,v,~] = pol2cart(rad(aud_event_56+90),ones(size(aud_event_56)), ...
-            zeros(size(aud_event_56)));
-        quiver(xaxis_21,yaxis_21,u',v',0.5);
+        [u,v,~] = pol2cart(rad(output.aud_event_56+90),ones(size(output.aud_event_56)), ...
+            zeros(size(output.aud_event_56)));
+        quiver(output.xaxis_21,output.yaxis_21,u',v',0.5);
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_56,[1 1 0],conf);
+        draw_loudspeakers(output.x0_56,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,4)
-        imagesc(xaxis_135,yaxis_135,abs(loc_error_14'));
+        imagesc(output.xaxis_135,output.yaxis_135,abs(output.loc_error_14'));
         turn_imagesc;
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_14,[1 1 0],conf);
+        draw_loudspeakers(output.x0_14,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,5)
-        imagesc(xaxis_135,yaxis_135,abs(loc_error_28'));
+        imagesc(output.xaxis_135,output.yaxis_135,abs(output.loc_error_28'));
         turn_imagesc;
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_28,[1 1 0],conf);
+        draw_loudspeakers(output.x0_28,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
         subplot(2,3,6)
-        imagesc(xaxis_135,yaxis_135,abs(loc_error_56'));
+        imagesc(output.xaxis_135,output.yaxis_135,abs(output.loc_error_56'));
         turn_imagesc;
         axis([-2.13 2.13 -3.3 0.2])
-        draw_loudspeakers(x0_56,[1 1 0],conf);
+        draw_loudspeakers(output.x0_56,[1 1 0],conf);
         xlabel('x/m');
         ylabel('y/m');
     end;

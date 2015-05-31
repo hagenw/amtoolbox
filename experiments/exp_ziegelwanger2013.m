@@ -13,9 +13,9 @@ function varargout=exp_ziegelwanger2013(varargin)
 %
 %     'noplot'  Don't plot, print results in the console.
 % 
-%     'reload'	Reload previously calculated results. This is the default.
+%     'cached'	Reload previously calculated results. This is the default.
 %
-%     'recalc'	Recalculate results.
+%     'redo'	  Recalculate results.
 %
 %     'fig1a'   Reproduce Fig. 1 from ziegelwanger2013:
 %               Model parameters (sphere radius, sphere center) resulting
@@ -112,8 +112,8 @@ function varargout=exp_ziegelwanger2013(varargin)
     definput.flags.type = {'missingflag',...
     'fig1a','fig1b','fig2b','fig3b'};
     definput.flags.plot = {'plot','noplot'};
-    definput.flags.results = {'reload','recalc'};
-
+    definput.import={'amtcache'}; % get the flags of amtcache
+    
     % Parse input options
     [flags,kv]  = ltfatarghelper({},definput,varargin);
 
@@ -126,7 +126,7 @@ function varargout=exp_ziegelwanger2013(varargin)
 %% Figure 1b
 if flags.do_fig1b
     
-    data=data_ziegelwanger2013('NH89');
+    data=data_ziegelwanger2013('NH89',flags.cachemode);
 
     subplot(122)
     %---------------------------Threshold---------------------------
@@ -204,7 +204,7 @@ end
 %% Figure 2b
 if flags.do_fig2b
         
-    data=data_ziegelwanger2013('NH89');
+    data=data_ziegelwanger2013('NH89',flags.cachemode);
     ch=1;
 
     p0_onaxis=[[0.0875; pi/2; 0; 0.0001] [0.0875; -pi/2; 0; 0.0001]];
@@ -305,11 +305,7 @@ if flags.do_fig3b
     clr=[0,0,255; 255,0,0; 255,255,67]/255; %plot colors
     meclr=[0,0,255; 255,0,0; 255,255,67]/255; %marker edge colors
     
-    if flags.do_recalc
-        data=data_ziegelwanger2013('SPHERE_ROT','recalc');
-    else
-        data=data_ziegelwanger2013('SPHERE_ROT');
-    end
+    data=data_ziegelwanger2013('SPHERE_ROT',flags.cachemode);
     
     % radii
     subplot(311)
@@ -365,11 +361,7 @@ if flags.do_fig3b
     clr=[0,0,255; 255,0,0; 255,255,67]/255; %plot colors
     meclr=[0,0,255; 255,0,0; 255,255,67]/255; %marker edge colors
     
-    if flags.do_recalc
-        data=data_ziegelwanger2013('SPHERE_DIS','recalc');
-    else
-        data=data_ziegelwanger2013('SPHERE_DIS');
-    end
+    data=data_ziegelwanger2013('SPHERE_DIS',flags.cachemode);
     
     p1=data.results.p_onaxis(:,:,[1:3 length(data.xM)/3+1:length(data.xM)/3+3 length(data.xM)/3*2+1:length(data.xM)/3*2+3]);
     r1=data.radius([1:3 length(data.xM)/3+1:length(data.xM)/3+3 length(data.xM)/3*2+1:length(data.xM)/3*2+3]);
@@ -403,11 +395,7 @@ if flags.do_fig1a
 
     %-------------------------------Load Data----------------------------------
     for kk=1:length(hrtf)
-        if flags.do_recalc
-            data=data_ziegelwanger2013(hrtf{kk},'recalc');
-        else
-            data=data_ziegelwanger2013(hrtf{kk});
-        end
+        data=data_ziegelwanger2013(hrtf{kk},flags.cachemode);
         if kk==3
             data.results=data.results([1:27 29:end]);
         end

@@ -62,7 +62,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %
 %     'lookup',lookup  Lookup table to map ITD values to angles. This can be
 %                      created by the `itd2anglelookuptable` function. Default
-%                      value is the lookup table itd2anglelookup.mat that comes with AMT.
+%                      value is the lookup table itd2anglelookuptable.mat that comes with AMT.
 %
 %
 %   For the simulation of the wave field synthesis or stereophony setup this
@@ -148,8 +148,10 @@ conf.secondary_sources.x0 = [];
 if isempty(hrtf)
     % load HRTFs, see:
     % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
-    [~,path] = download_hrtf('wierstorf2011_3m');
-    hrtf = read_irs([path '/wierstorf2011_3m.mat'],conf);
+%     [~,path] = download_hrtf('wierstorf2011_3m');
+    irs=amtload('wierstorf2013', 'QU_KEMAR_anechoic_3m.mat');
+    check_irs(irs.irs);
+    hrtf = fix_irs_length(irs.irs,conf);
 end
 % Get sampling rate from the HRTFs
 fs = hrtf.fs;
@@ -157,7 +159,7 @@ fs = hrtf.fs;
 if isempty(lookup)
     % load lookup table to map ITD values of the model to azimuth angles.
     % the lookup table was created using the same HRTF database
-    lookup = amtload('wierstorf2013','itd2anglelookup.mat');
+    lookup = amtload('wierstorf2013','itd2anglelookuptable.mat');
 end
 
 

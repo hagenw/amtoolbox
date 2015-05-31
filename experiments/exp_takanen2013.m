@@ -12,11 +12,11 @@ function output = exp_takanen2013(varargin)
 %  
 %   The following flags can be specified:
 %
-%     'binsig'       use binaural input signals in the computation (default)
-%                    This options computes the figures from the scratch
+%     'binsig'       This option computes the figures from the binaural
+%                    signals.
 %
-%     'cochlea'      use pre-computed cochlea model outputs.
-%                    This option reduces the computation time. 
+%     'cochlea'      This option uses pre-computed cochlea-model outputs
+%                    and thus reduces the computation time. (Default).
 %
 %     'fig8'     Figure 8 from the book chapter Takanen et al. (2013). Binaural activity 
 %                    maps obtained with the model for an off-sweet-spot 
@@ -91,10 +91,10 @@ function output = exp_takanen2013(varargin)
 %                      Department of Signal Processing and Acoustics
 %                      Espoo, Finland
 
-definput.import={'amtredofile'};
+definput.import={'amtcache'};
 definput.flags.type={'missingflag','fig8','fig9','fig7_takanen2014','fig8_takanen2014'};
 
-definput.flags.dataType={'binsig','cochlea'};
+definput.flags.dataType={'cochlea','binsig'};
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
@@ -116,25 +116,30 @@ if flags.do_fig8
     % if the user wishes to compute the cochlear model outputs, binaural
     % input signals are used
     if flags.do_binsig
-        data=amtload('takanen2013','fig8bookbinsignals.mat');
-        for ind=1:length(data.tests)
-            data=amtload('takanen2013','fig8bookbinsignals.mat');
-            insig=data.tests(ind).insig;
-            tit=data.tests(ind).case;
-            clear data
-            % compute the binaural activity map with the model
-            output = takanen2013(insig,fs,compType,printFigs,printMap);
-            nXBins= length(output.levels)*(size(output.colorMtrx,1)-1);
-            dim = size(output.activityMap);
-            output.colorGains(output.colorGains>1) =1;
-            outputMtrx = zeros(dim(1),nXBins,3);
-            for colorInd=1:size(output.colorMtrx,1)
-                temp = find((output.activityMap==(colorInd-1))==1);
-                outputMtrx(temp) = output.colorGains(temp)*output.colorMtrx(colorInd,1);
-                outputMtrx(temp+dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,2);
-                outputMtrx(temp+2*dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,3);
+        data=amtload('takanen2013','fig8binsignals.mat','testsize');
+        for ind=1:data.testsize
+            [output,outputMtrx,tit]=amtcache('get', ['fig8bin_' num2str(ind)], flags.cachemode);
+            if isempty(output)
+                data=amtload('takanen2013','fig8binsignals.mat',['test' num2str(ind)]);
+                tit=data.(['test' num2str(ind)]).case;
+                insig=data.(['test' num2str(ind)]).insig;
+                clear data
+                % compute the binaural activity map with the model
+                output = takanen2013(insig,fs,compType,printFigs,printMap);
+                nXBins= length(output.levels)*(size(output.colorMtrx,1)-1);
+                dim = size(output.activityMap);
+                output.colorGains(output.colorGains>1) =1;
+                outputMtrx = zeros(dim(1),nXBins,3,'single');
+                for colorInd=1:size(output.colorMtrx,1)
+                    temp = uint32(find((output.activityMap==(colorInd-1))==1));
+                    outputMtrx(temp) = output.colorGains(temp)*output.colorMtrx(colorInd,1);
+                    outputMtrx(temp+dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,2);
+                    outputMtrx(temp+2*dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,3);
+                end
+                amtcache('set', ['fig8bin_' num2str(ind)], output, outputMtrx, tit);
             end
-            g(ind)= subplot(3,2,ind);imagesc(output.levels./90,((dim(1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
+            g(ind)= subplot(3,2,ind);
+            imagesc(output.levels./90,((dim(1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
             clear output outputMtrx
             title(tit);
             set(gca,'YTick',.0:.5:2.5);
@@ -147,25 +152,30 @@ if flags.do_fig8
     end
     %otherwise pre-computed cochlea model outputs are used
     if flags.do_cochlea
-        data=amtload('takanen2013','fig8bookcochleadata.mat');
-        for ind=1:length(data.tests)
-            data=amtload('takanen2013','fig8bookcochleadata.mat');
-            tit=data.tests(ind).case;
-            insig=data.tests(ind).cochlear;
-            clear data
-            % compute the binaural activity map with the model
-            output = takanen2013(insig,fs,compType,printFigs,printMap);
-            nXBins= length(output.levels)*(size(output.colorMtrx,1)-1);
-            dim = size(output.activityMap);
-            output.colorGains(output.colorGains>1) =1;
-            outputMtrx = single(zeros(dim(1),nXBins,3));
-            for colorInd=1:size(output.colorMtrx,1)
-                temp = find((output.activityMap==(colorInd-1))==1);
-                outputMtrx(temp) = output.colorGains(temp)*output.colorMtrx(colorInd,1);
-                outputMtrx(temp+dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,2);
-                outputMtrx(temp+2*dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,3);
+        testsize=amtload('takanen2013','fig8cochleadata.mat','testsize');
+        for ind=1:testsize.testsize
+            [output,outputMtrx,tit]=amtcache('get', ['fig8cochlea_' num2str(ind)], flags.cachemode);
+            if isempty(output)
+                data=amtload('takanen2013','fig8cochleadata.mat',['test' num2str(ind)]);
+                tit=data.(['test' num2str(ind)]).case;
+                insig=data.(['test' num2str(ind)]).cochlear;
+                clear data
+                % compute the binaural activity map with the model
+                output = takanen2013(insig,fs,compType,printFigs,printMap);
+                nXBins= length(output.levels)*(size(output.colorMtrx,1)-1);
+                dim = size(output.activityMap);
+                output.colorGains(output.colorGains>1) =1;
+                outputMtrx = zeros(dim(1),nXBins,3,'single');
+                for colorInd=1:size(output.colorMtrx,1)
+                    temp = uint32(find((output.activityMap==(colorInd-1))==1));
+                    outputMtrx(temp) = output.colorGains(temp)*output.colorMtrx(colorInd,1);
+                    outputMtrx(temp+dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,2);
+                    outputMtrx(temp+2*dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,3);
+                end
+                amtcache('set', ['fig8cochlea_' num2str(ind)], output, outputMtrx, tit);
             end
-            g(ind)= subplot(3,2,ind);imagesc(output.levels./90,((dim(1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
+            g(ind)=subplot(3,2,ind);
+            imagesc(output.levels./90,((size(output.activityMap,1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
             clear output outputMtrx
             title(tit);
             set(gca,'YTick',.0:.5:2.5);
@@ -182,25 +192,30 @@ if flags.do_fig9
     % if the user wishes to compute the cochlear model outputs, binaural
     % input signals are used
     if flags.do_binsig
-        data=amtload('takanen2013','fig9bookbinsignals.mat');
-        for ind=1:length(data.tests)
-            data=amtload('takanen2013','fig9bookbinsignals.mat');
-            insig=data.tests(ind).insig;
-            tit=data.tests(ind).case;
-            clear data
-            % compute the binaural activity map with the model
-            output = takanen2013(insig,fs,compType,printFigs,printMap);
-            for i=1:6
-                probDist(i,:) = sum(output.colorGains(:,i:6:end));
+        data=amtload('takanen2013','fig9binsignals.mat', 'testsize');
+        for ind=1:data.testsize
+            [output,outputMtrx,tit]=amtcache('get', ['fig9bin_' num2str(ind)], flags.cachemode);
+            if isempty(output)
+                data=amtload('takanen2013','fig9binsignals.mat',['test' num2str(ind)]);
+                tit=data.(['test' num2str(ind)]).case;
+                insig=data.(['test' num2str(ind)]).insig;
+                clear data
+                % compute the binaural activity map with the model
+                output = takanen2013(insig,fs,compType,printFigs,printMap);
+                for i=1:6
+                    probDist(i,:) = sum(output.colorGains(:,i:6:end));
+                end
+                temp = probDist./(max(probDist,[],2)*ones(1,size(probDist,2)));
+                outputMtrx = zeros(size(temp,1),size(temp,2),3,'single');
+                for colorInd=2:size(output.colorMtrx,1)
+                    outputMtrx(colorInd-1,:,1) = temp(colorInd-1,:)*output.colorMtrx(colorInd,1);
+                    outputMtrx(colorInd-1,:,2) = temp(colorInd-1,:)*output.colorMtrx(colorInd,2);
+                    outputMtrx(colorInd-1,:,3) = temp(colorInd-1,:)*output.colorMtrx(colorInd,3);
+                end
+                amtcache('set', ['fig9bin_' num2str(ind)], output, outputMtrx, tit);
             end
-            temp = probDist./(max(probDist,[],2)*ones(1,size(probDist,2)));
-            outputMtrx = zeros(size(temp,1),size(temp,2),3);
-            for colorInd=2:size(output.colorMtrx,1)
-                outputMtrx(colorInd-1,:,1) = temp(colorInd-1,:)*output.colorMtrx(colorInd,1);
-                outputMtrx(colorInd-1,:,2) = temp(colorInd-1,:)*output.colorMtrx(colorInd,2);
-                outputMtrx(colorInd-1,:,3) = temp(colorInd-1,:)*output.colorMtrx(colorInd,3);
-            end
-            g(ind)= subplot(3,2,ind);imagesc(output.levels./90,6:-1:1,outputMtrx);
+            g(ind)= subplot(3,2,ind);
+            imagesc(output.levels./90,6:-1:1,outputMtrx);
             clear output outputMtrx
             title(tit);
             set(gca,'YTick',1:6);
@@ -212,25 +227,30 @@ if flags.do_fig9
     end
     %otherwise pre-computed cochlea model outputs are used
     if flags.do_cochlea
-        data=amtload('takanen2013','fig9bookcochleadata.mat');
-        for ind=1:length(data.tests)
-            data=amtload('takanen2013','fig9bookcochleadata.mat');
-            insig=data.tests(ind).cochlear;
-            tit=data.tests(ind).case;
-            clear data
-            % compute the binaural activity map with the model
-            output = takanen2013(insig,fs,compType,printFigs,printMap);
-            for i=1:6
-                probDist(i,:) = sum(output.colorGains(:,i:6:end));
+        data=amtload('takanen2013','fig9cochleadata.mat','testsize');
+        for ind=1:data.testsize
+            [output,outputMtrx,tit]=amtcache('get', ['fig9cochlea_' num2str(ind)], flags.cachemode);
+            if isempty(output)
+                data=amtload('takanen2013','fig9cochleadata.mat',['test' num2str(ind)]);
+                tit=data.(['test' num2str(ind)]).case;
+                insig=data.(['test' num2str(ind)]).cochlear;
+                clear data
+                % compute the binaural activity map with the model
+                output = takanen2013(insig,fs,compType,printFigs,printMap);
+                for i=1:6
+                    probDist(i,:) = sum(output.colorGains(:,i:6:end));
+                end
+                temp = probDist./(max(probDist,[],2)*ones(1,size(probDist,2)));
+                outputMtrx = zeros(size(temp,1),size(temp,2),3,'single');
+                for colorInd=2:size(output.colorMtrx,1)
+                    outputMtrx(colorInd-1,:,1) = temp(colorInd-1,:)*output.colorMtrx(colorInd,1);
+                    outputMtrx(colorInd-1,:,2) = temp(colorInd-1,:)*output.colorMtrx(colorInd,2);
+                    outputMtrx(colorInd-1,:,3) = temp(colorInd-1,:)*output.colorMtrx(colorInd,3);
+                end
+                amtcache('set', ['fig9cochlea_' num2str(ind)], output, outputMtrx, tit);
             end
-            temp = probDist./(max(probDist,[],2)*ones(1,size(probDist,2)));
-            outputMtrx = zeros(size(temp,1),size(temp,2),3);
-            for colorInd=2:size(output.colorMtrx,1)
-                outputMtrx(colorInd-1,:,1) = temp(colorInd-1,:)*output.colorMtrx(colorInd,1);
-                outputMtrx(colorInd-1,:,2) = temp(colorInd-1,:)*output.colorMtrx(colorInd,2);
-                outputMtrx(colorInd-1,:,3) = temp(colorInd-1,:)*output.colorMtrx(colorInd,3);
-            end
-            g(ind)= subplot(3,2,ind);imagesc(output.levels./90,6:-1:1,outputMtrx);
+            g(ind)= subplot(3,2,ind);
+            imagesc(output.levels./90,6:-1:1,outputMtrx);
             clear output outputMtrx
             title(tit);
             set(gca,'YTick',1:6);
@@ -244,78 +264,84 @@ end
 %% Figure 7 from takanen2014
 if flags.do_fig7_takanen2014
     % compute the cochlear model outputs, load the binaural input signals
-    if flags.do_binsig, s='fig6artbinsignals.mat'; end
+    if flags.do_binsig, s='fig6_takanen2014binsignals.mat'; end
     % otherwise pre-computed cochlea model outputs are used
-    if flags.do_cochlea, s='fig6artcochleadata.mat'; end
+    if flags.do_cochlea, s='fig6_takanen2014cochleadata.mat'; end
 
     data=amtload('takanen2013',s);
-    data_tests=length(data.tests);
-    siglen=zeros(length(data.tests),1);
-    data_tests_Data=zeros(length(data_tests),1);
+    data_tests=data.testsize;
+    siglen=zeros(data_tests,1);
+    data_tests_Data=zeros(data_tests,1);
     for ind=1:data_tests
       if flags.do_cochlea
-        data_tests_Data(ind)=length(data.tests(ind).cochlearData);
+        data_tests_Data(ind)=length(data.(['test' num2str(ind)]).cochlearData);
         for caseInd=1:data_tests_Data(ind)
-          siglen(ind)=siglen(ind)+length(data.tests(ind).cochlearData(caseInd).cochlear.velocityLeft);
+          siglen(ind)=siglen(ind)+length(data.(['test' num2str(ind)]).cochlearData(caseInd).cochlear.velocityLeft);
         end
       end
       if flags.do_binsig
-        data_tests_Data(ind)=length(data.tests(ind).binSignals);
+        data_tests_Data(ind)=length(data.(['test' num2str(ind)]).binSignals);
         for caseInd=1:data_tests_Data(ind)
-          siglen(ind)=siglen(ind)+length(data.tests(ind).binSignals(caseInd).insig);
+          siglen(ind)=siglen(ind)+length(data.(['test' num2str(ind)]).binSignals(caseInd).insig);
         end
       end          
     end
     clear data % release unused memory
     for ind=1:data_tests
-        activityMap=zeros(siglen(ind),114);
-        gains=zeros(siglen(ind),114);
         idx=1;
         %some scenarios consist of multiple test cases that are
         %processed separately
-        for caseInd=1:data_tests_Data(ind)
-            data=amtload('takanen2013',s);
-            if flags.do_cochlea
-              insig=data.tests(ind).cochlearData(caseInd).cochlear;
-              len=size(insig.velocityLeft,1);
+        [levels,activityMap,outputMtrx,scenario,ytickPos,ytickLab,ylab]=amtcache('get', [s '_' num2str(ind)], flags.cachemode);
+        if isempty(levels)
+            activityMap=zeros(siglen(ind),114);
+            gains=zeros(siglen(ind),114);
+            for caseInd=1:data_tests_Data(ind)
+                data=amtload('takanen2013',s,['test' num2str(ind)]);
+                if flags.do_cochlea
+                  insig=data.(['test' num2str(ind)]).cochlearData(caseInd).cochlear;
+                  len=size(insig.velocityLeft,1);
+                end
+                if flags.do_binsig
+                  insig=data.(['test' num2str(ind)]).binSignals(caseInd).insig;
+                  len=size(insig,1);
+                end            
+                ylab=data.(['test' num2str(ind)]).ylab;
+                scenario=data.(['test' num2str(ind)]).scenario;
+                ytickPos=data.(['test' num2str(ind)]).ytickPos;
+                ytickLab=data.(['test' num2str(ind)]).ytickLab(end:-1:1);
+                clear data % release unused memory
+                % compute the binaural activity map with the model
+                output = takanen2013(insig,fs,compType,printFigs,printMap);
+                %concatenate the separate activity maps into one map
+                activityMap(idx:idx+len-1,:)=output.activityMap;
+                gains(idx:idx+len-1,:)=output.colorGains;
+                idx=idx+len;
+                colorMtrx=output.colorMtrx;
+                levels=output.levels;
+                clear output insig % release unused memory
             end
-            if flags.do_binsig
-              insig=data.tests(ind).binSignals(caseInd).insig;
-              len=size(insig,1);
-            end            
-            ylab=data.tests(ind).ylab;
-            scenario=data.tests(ind).scenario;
-            ytickPos=data.tests(ind).ytickPos;
-            ytickLab=data.tests(ind).ytickLab(end:-1:1);
-            clear data % release unused memory
-            % compute the binaural activity map with the model
-            output = takanen2013(insig,fs,compType,printFigs,printMap);
-            %concatenate the separate activity maps into one map
-            activityMap(idx:idx+len-1,:)=output.activityMap;
-            gains(idx:idx+len-1,:)=output.colorGains;
-            idx=idx+len;
-            colorMtrx=output.colorMtrx;
-            levels=output.levels;
-            clear output % release unused memory
+            %the anti-phasic sweep contains also frequencies below the
+            %frequency range of the model. Hence, the first 0.5 s of the
+            %activity map are removed
+            if(strcmp('Anti-phasic sinusoidal sweep',scenario)==1)
+                activityMap = activityMap(0.5*fs+1:end,:);
+                gains = gains(0.5*fs+1:end,:);
+            end
+            nXBins= length(levels)*(size(colorMtrx,1)-1);
+            dim = size(activityMap);
+            gains(gains>1) =1;
+            outputMtrx = zeros(dim(1),nXBins,3,'single');
+            for colorInd=1:size(colorMtrx,1)
+                temp = uint32(find((activityMap==(colorInd-1))==1));
+                outputMtrx(temp) = gains(temp)*colorMtrx(colorInd,1);
+                outputMtrx(temp+dim(1)*nXBins) = gains(temp)*colorMtrx(colorInd,2);
+                outputMtrx(temp+2*dim(1)*nXBins) = gains(temp)*colorMtrx(colorInd,3);
+            end
+            amtcache('set', [s '_' num2str(ind)], levels, activityMap, outputMtrx, scenario, ytickPos, ytickLab, ylab);
         end
-        %the anti-phasic sweep contains also frequencies below the
-        %frequency range of the model. Hence, the first 0.5 s of the
-        %activity map are removed
-        if(strcmp('Anti-phasic sinusoidal sweep',scenario)==1)
-            activityMap = activityMap(0.5*fs+1:end,:);
-            gains = gains(0.5*fs+1:end,:);
-        end
-        nXBins= length(levels)*(size(colorMtrx,1)-1);
-        dim = size(activityMap);
-        gains(gains>1) =1;
-        outputMtrx = zeros(dim(1),nXBins,3,'single');
-        for colorInd=1:size(colorMtrx,1)
-            temp = find((activityMap==(colorInd-1))==1);
-            outputMtrx(temp) = gains(temp)*colorMtrx(colorInd,1);
-            outputMtrx(temp+dim(1)*nXBins) = gains(temp)*colorMtrx(colorInd,2);
-            outputMtrx(temp+2*dim(1)*nXBins) = gains(temp)*colorMtrx(colorInd,3);
-        end
-        g(ind)= subplot(2,2,ind);imagesc(levels./90,((dim(1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
+        g(ind)= subplot(2,2,ind);
+        imagesc(levels./90,((size(activityMap,1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
+        clear outputMtrx gains activityMap
         title(scenario);
         set(gca,'YTick',ytickPos);
         set(gca,'YTickLabel',ytickLab);
@@ -327,79 +353,85 @@ end
 %% Figure 8 from takanen2014
 if flags.do_fig8_takanen2014
     % compute the cochlear model outputs, load the binaural input signals
-    if flags.do_binsig, s='fig7artbinsignals.mat'; end
+    if flags.do_binsig, s='fig7_takanen2014binsignals.mat'; end
     % otherwise pre-computed cochlea model outputs are used
-    if flags.do_cochlea, s='fig7artcochleadata.mat'; end
+    if flags.do_cochlea, s='fig7_takanen2014cochleadata.mat'; end
 
     data=amtload('takanen2013',s);
-    data_tests=length(data.tests);
-    siglen=zeros(length(data.tests),1);
-    data_tests_Data=zeros(length(data_tests),1);
+    data_tests=data.testsize;
+    siglen=zeros(data_tests,1);
+    data_tests_Data=zeros(data_tests,1);
     for ind=1:data_tests
       if flags.do_cochlea
-        data_tests_Data(ind)=length(data.tests(ind).cochlearData);
+        data_tests_Data(ind)=length(data.(['test' num2str(ind)]).cochlearData);
         for caseInd=1:data_tests_Data(ind)
-          siglen(ind)=siglen(ind)+length(data.tests(ind).cochlearData(caseInd).cochlear.velocityLeft);
+          siglen(ind)=siglen(ind)+length(data.(['test' num2str(ind)]).cochlearData(caseInd).cochlear.velocityLeft);
         end
       end
       if flags.do_binsig
-        data_tests_Data(ind)=length(data.tests(ind).binSignals);
+        data_tests_Data(ind)=length(data.(['test' num2str(ind)]).binSignals);
         for caseInd=1:data_tests_Data(ind)
-          siglen(ind)=siglen(ind)+length(data.tests(ind).binSignals(caseInd).insig);
+          siglen(ind)=siglen(ind)+length(data.(['test' num2str(ind)]).binSignals(caseInd).insig);
         end
       end          
     end
     clear data % release unused memory
     for ind=1:data_tests
-        activityMap=zeros(siglen(ind),114);
-        gains=zeros(siglen(ind),114);
         idx=1;
         %some scenarios consist of multiple test cases that are
         %processed separately
-        for caseInd=1:data_tests_Data(ind)
-            data=amtload('takanen2013',s);
-            if flags.do_cochlea
-              insig=data.tests(ind).cochlearData(caseInd).cochlear;
-              len=size(insig.velocityLeft,1);
+        [levels,activityMap,outputMtrx,scenario,ytickPos,ytickLab,ylab]=amtcache('get', [s '_' num2str(ind)], flags.cachemode);
+        if isempty(levels)
+            activityMap=zeros(siglen(ind),114);
+            gains=zeros(siglen(ind),114);
+            for caseInd=1:data_tests_Data(ind)
+                data=amtload('takanen2013', s, ['test' num2str(ind)]);
+                if flags.do_cochlea
+                  insig=data.(['test' num2str(ind)]).cochlearData(caseInd).cochlear;
+                  len=size(insig.velocityLeft,1);
+                end
+                if flags.do_binsig
+                  insig=data.(['test' num2str(ind)]).binSignals(caseInd).insig;
+                  len=size(insig,1);
+                end            
+                ylab=data.(['test' num2str(ind)]).ylab;
+                scenario=data.(['test' num2str(ind)]).scenario;
+                ytickPos=data.(['test' num2str(ind)]).ytickPos;
+                ytickLab=data.(['test' num2str(ind)]).ytickLab(end:-1:1);
+                clear data % release unused memory
+                % compute the binaural activity map with the model
+                output = takanen2013(insig,fs,compType,printFigs,printMap);
+                %concatenate the separate activity maps into one map
+                activityMap(idx:idx+len-1,:)=output.activityMap;
+                gains(idx:idx+len-1,:)=output.colorGains;
+                idx=idx+len;
+                colorMtrx=output.colorMtrx;
+                levels=output.levels;
+                clear output % release unused memory
             end
-            if flags.do_binsig
-              insig=data.tests(ind).binSignals(caseInd).insig;
-              len=size(insig,1);
-            end            
-            ylab=data.tests(ind).ylab;
-            scenario=data.tests(ind).scenario;
-            ytickPos=data.tests(ind).ytickPos;
-            ytickLab=data.tests(ind).ytickLab(end:-1:1);
-            clear data % release unused memory
-            % compute the binaural activity map with the model
-            output = takanen2013(insig,fs,compType,printFigs,printMap);
-            %concatenate the separate activity maps into one map
-            activityMap(idx:idx+len-1,:)=output.activityMap;
-            gains(idx:idx+len-1,:)=output.colorGains;
-            idx=idx+len;
-            colorMtrx=output.colorMtrx;
-            levels=output.levels;
-            clear output % release unused memory
+            %in order to better visualize the clicks in the precedence
+            %effect scenario, most of the silent parts of the signal
+            %are removed
+            if(strcmp('Precedence effect',scenario)==1)
+                activityMap = activityMap([1500:3700 4500:6700 7500:9700 10500:12700 13500:15700 16500:18700 20200:22400],:);
+                gains = gains([1500:3700 4500:6700 7500:9700 10500:12700 13500:15700 16500:18700 20200:22400],:);
+                gains = 2*gains;
+            end
+            nXBins= length(levels)*(size(colorMtrx,1)-1);
+            dim = size(activityMap);
+            gains(gains>1) =1;
+            outputMtrx = zeros(dim(1),nXBins,3,'single');
+            for colorInd=1:size(colorMtrx,1)
+                temp = uint32(find((activityMap==(colorInd-1))==1));
+                outputMtrx(temp) = gains(temp)*colorMtrx(colorInd,1);
+                outputMtrx(temp+dim(1)*nXBins) = gains(temp)*colorMtrx(colorInd,2);
+                outputMtrx(temp+2*dim(1)*nXBins) = gains(temp)*colorMtrx(colorInd,3);
+            end
+            amtcache('set', [s '_' num2str(ind)], levels,activityMap,outputMtrx,scenario,ytickPos,ytickLab,ylab);
         end
-        %in order to better visualize the clicks in the precedence
-        %effect scenario, most of the silent parts of the signal
-        %are removed
-        if(strcmp('Precedence effect',scenario)==1)
-            activityMap = activityMap([1500:3700 4500:6700 7500:9700 10500:12700 13500:15700 16500:18700 20200:22400],:);
-            gains = gains([1500:3700 4500:6700 7500:9700 10500:12700 13500:15700 16500:18700 20200:22400],:);
-            gains = 2*gains;
-        end
-        nXBins= length(levels)*(size(colorMtrx,1)-1);
-        dim = size(activityMap);
-        gains(gains>1) =1;
-        outputMtrx = zeros(dim(1),nXBins,3);
-        for colorInd=1:size(colorMtrx,1)
-            temp = find((activityMap==(colorInd-1))==1);
-            outputMtrx(temp) = gains(temp)*colorMtrx(colorInd,1);
-            outputMtrx(temp+dim(1)*nXBins) = gains(temp)*colorMtrx(colorInd,2);
-            outputMtrx(temp+2*dim(1)*nXBins) = gains(temp)*colorMtrx(colorInd,3);
-        end
-        g(ind)= subplot(2,2,ind);imagesc(levels./90,((dim(1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
+        g(ind)= subplot(2,2,ind);
+        imagesc(levels./90,((size(activityMap,1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
+        clear outputMtrx gains activityMap
         title(scenario);
         set(gca,'YTick',ytickPos);
         set(gca,'YTickLabel',ytickLab);

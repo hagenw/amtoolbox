@@ -44,6 +44,8 @@ function data = data_ziegelwanger2014(varargin)
 %  
 %     'redo'        Recalculate the results  
 %
+%     'cached'      Use cached results. Default. 
+%
 %   The fields are given by:
 %
 %     `data.results`     Results for all HRTF sets
@@ -92,7 +94,7 @@ function data = data_ziegelwanger2014(varargin)
 
 % Define input flags
 definput.flags.type = {'missingflag','ARI','CIPIC','LISTEN','SPHERE_DIS','SPHERE_ROT','NH89','Sphere','SAT','STP'};
-definput.flags.redo = {'missingflag','redo'};
+definput.import={'amtcache'}; % get the flags of amtcache
 
 % Parse input options
 [flags,~]  = ltfatarghelper({},definput,varargin);
@@ -101,387 +103,207 @@ if flags.do_missingflag
     flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
         sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
     error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
-else
-    hpath = which('hrtfinit');  % find local path of hrtf repository
-    hpath = hpath(1:end-10);
-    hpath = [hpath 'ziegelwanger2014' filesep];
-    
-    if ~exist([hpath 'info.mat'],'file')
-        urlwrite([SOFAdbURL filesep 'ziegelwanger2014/info.mat'],[hpath 'info.mat']);
-    end
 end
 
 %% ARI database
 if flags.do_ARI
     
-    if flags.do_redo || ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_ARI.mat'],'file')
-        tmp=load([hpath 'info.mat']);
-        data=tmp.info.ARI;
+    tmp=amtload('ziegelwanger2014','info.mat');
+    data=tmp.info.ARI;
+    results=amtcache('get','ARI',flags.cachemode);
+    if isempty(results)
         for ii=1:length(data.subjects)
             amtdisp(['Recalculate data for subject ' num2str(ii) '/' num2str(length(data.subjects)) ' (' data.subjects{ii} ') of ARI database'],'progress');
-            Obj=SOFAload([hpath 'ARI_' data.subjects{ii} '.sofa']);
-             
-            if exist([hpath 'ARI_' data.subjects{ii} '.sofa.MCM.mat'],'file')
-                load([hpath 'ARI_' data.subjects{ii} '.sofa.MCM.mat']);
-            else
-                [~,tmp]=ziegelwanger2014(Obj,4,0,0);
-                toaEst=tmp.toa;
-                save([hpath 'ARI_' data.subjects{ii} '.sofa.MCM.mat'],'toaEst');
-            end
+            Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', [ 'ARI_' data.subjects{ii} '.sofa']));
+            [~,tmp]=ziegelwanger2014(Obj,4,0,0);
+            toaEst=tmp.toa;
             [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
             [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
-        save([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_ARI.mat'],'results');
-        data.results=results;
-    else
-        tmp=load([hpath 'info.mat']);
-        data=tmp.info.ARI;
-        load([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_ARI.mat']);
-        data.results=results;
+        amtcache('set','CIPIC',results);
     end
+    data.results=results;
     
 end
 
 %% CIPIC database
 if flags.do_CIPIC
     
-    if flags.do_redo || ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_CIPIC.mat'],'file')
-        tmp=load([hpath 'info.mat']);
-        data=tmp.info.CIPIC;
+    tmp=amtload('ziegelwanger2014','info.mat');
+    data=tmp.info.CIPIC;
+    results=amtcache('get','CIPIC',flags.cachemode);
+    if isempty(results)
         for ii=1:length(data.subjects)
             amtdisp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of CIPIC database'],'progress');
-            Obj=SOFAload([hpath 'CIPIC_' data.subjects{ii} '.sofa']);
-             
-            if exist([hpath 'CIPIC_' data.subjects{ii} '.sofa.MCM.mat'],'file')
-                load([hpath 'CIPIC_' data.subjects{ii} '.sofa.MCM.mat']);
-            else
-                [~,tmp]=ziegelwanger2014(Obj,4,0,0);
-                toaEst=tmp.toa;
-                save([hpath 'CIPIC_' data.subjects{ii} '.sofa.MCM.mat'],'toaEst');
-            end
+            Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', [ 'CIPIC_' data.subjects{ii} '.sofa']));
+            [~,tmp]=ziegelwanger2014(Obj,4,0,0);
+            toaEst=tmp.toa;
             [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
             [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
-        save([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_CIPIC.mat'],'results');
-        data.results=results;
-    else
-        tmp=load([hpath 'info.mat']);
-        data=tmp.info.CIPIC;
-        load([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_CIPIC.mat']);
-        data.results=results;
+        amtcache('set','CIPIC',results);
     end
+    data.results=results;
     
 end
 
 %% LISTEN database
 if flags.do_LISTEN
     
-    if flags.do_redo || ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_LISTEN.mat'],'file')
-        tmp=load([hpath 'info.mat']);
-        data=tmp.info.LISTEN;
+    tmp=amtload('ziegelwanger2014','info.mat');
+    data=tmp.info.LISTEN;
+    results=amtcache('get','LISTEN',flags.cachemode);
+    if isempty(results)
         for ii=1:length(data.subjects)
             if ~strcmp(data.subjects{ii},'34')
                 amtdisp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of LISTEN database'],'progress');
-                Obj=SOFAload([hpath 'LISTEN_' data.subjects{ii} '.sofa']);
-             
-                if exist([hpath 'LISTEN_' data.subjects{ii} '.sofa.MCM.mat'],'file')
-                    load([hpath 'LISTEN_' data.subjects{ii} '.sofa.MCM.mat']);
-                else
-                    [~,tmp]=ziegelwanger2014(Obj,4,0,0);
-                    toaEst=tmp.toa;
-                    save([hpath 'LISTEN_' data.subjects{ii} '.sofa.MCM.mat'],'toaEst');
-                end
+                Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', [ 'LISTEN_' data.subjects{ii} '.sofa']));
+                [~,tmp]=ziegelwanger2014(Obj,4,0,0);
+                toaEst=tmp.toa;
                 [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
                 [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
             end
         end
-        save([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_LISTEN.mat'],'results');
-        data.results=results;
-    else
-        tmp=load([hpath 'info.mat']);
-        data=tmp.info.LISTEN;
-        load([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_LISTEN.mat']);
-        data.results=results;
+        amtcache('set','LISTEN',results);
     end
-    
+    data.results=results;    
 end
 
 %% SPHERE (Displacement) database
 if flags.do_SPHERE_DIS
     
-    if flags.do_redo || ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_DIS.mat'],'file')
-        tmp=load([hpath 'info.mat']);
-        data=tmp.info.Displacement;
+    tmp=amtload('ziegelwanger2014','info.mat');
+    data=tmp.info.Displacement;
+    results=amtcache('get','SPHERE_DIS',flags.cachemode);
+    if isempty(results)
         results.p_onaxis=zeros(4,2,length(data.subjects));
         results.p_offaxis=zeros(7,2,length(data.subjects));
         for ii=1:length(data.subjects)
             amtdisp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of SPHERE_DIS database'],'progress');
-            Obj=SOFAload([hpath 'Sphere_Displacement_' data.subjects{ii} '.sofa']);
-             
-            if exist([hpath 'Sphere_Displacement_' data.subjects{ii} '.sofa.MCM.mat'],'file')
-                load([hpath 'Sphere_Displacement_' data.subjects{ii} '.sofa.MCM.mat']);
-            else
-                [~,tmp]=ziegelwanger2014(Obj,4,0,0);
-                toaEst=tmp.toa;
-                save([hpath 'Sphere_Displacement_' data.subjects{ii} '.sofa.MCM.mat'],'toaEst');
-            end  
+            Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', [ 'Sphere_Displacement_' data.subjects{ii} '.sofa']));
+            [~,tmp]=ziegelwanger2014(Obj,4,0,0);
+            toaEst=tmp.toa;
             [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
             [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
-        save([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_DIS.mat'],'results');
-        data.results=results;
-    else
-        tmp=load([hpath 'info.mat']);
-        data=tmp.info.Displacement;
-        load([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_DIS.mat']);
-        data.results=results;
+        amtcache('set','SPHERE_DIS',results);
     end
-    
+    data.results=results;    
 end
 
 %% SPHERE (Rotation) database
 if flags.do_SPHERE_ROT
     
-    if flags.do_redo || ~exist([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_ROT.mat'],'file')
-        tmp=load([hpath 'info.mat']);
-        data=tmp.info.Rotation;
+    tmp=amtload('ziegelwanger2014','info.mat');
+    data=tmp.info.Rotation;
+    results=amtcache('get','SPHERE_ROT',flags.cachemode);
+    if isempty(results)
         results.p=zeros(4,2,length(data.phi));
         for ii=1:length(data.subjects)
             amtdisp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of SPHERE_ROT database'],'progress');
-            Obj=SOFAload([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa']);
-                
-            if exist([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MAX.mat'],'file')
-                load([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MAX.mat']);
-            else
-                [~,tmp]=ziegelwanger2014(Obj,1,0,0);
-                toaEst=tmp.toa;
-                save([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MAX.mat'],'toaEst');
-            end
+            Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', [ 'Sphere_Rotation_' data.subjects{ii} '.sofa']));
+            [~,tmp]=ziegelwanger2014(Obj,1,0,0);
+            toaEst=tmp.toa;
             [~,results(ii).MAX{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
             
-            if exist([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.CTD.mat'],'file')
-                load([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.CTD.mat']);
-            else
-                [~,tmp]=ziegelwanger2014(Obj,2,0,0);
-                toaEst=tmp.toa;
-                save([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.CTD.mat'],'toaEst');
-            end
+            [~,tmp]=ziegelwanger2014(Obj,2,0,0);
+            toaEst=tmp.toa;
             [~,results(ii).CTD{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
             
-            if exist([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.AGD.mat'],'file')
-                load([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.AGD.mat']);
-            else
-                [~,tmp]=ziegelwanger2014(Obj,3,0,0);
-                toaEst=tmp.toa;
-                save([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.AGD.mat'],'toaEst');
-            end
+            [~,tmp]=ziegelwanger2014(Obj,3,0,0);
+            toaEst=tmp.toa;
             [~,results(ii).AGD{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
              
-            if exist([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MCM.mat'],'file')
-                load([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MCM.mat']);
-            else
-                [~,tmp]=ziegelwanger2014(Obj,4,0,0);
-                toaEst=tmp.toa;
-                save([hpath 'Sphere_Rotation_' data.subjects{ii} '.sofa.MCM.mat'],'toaEst');
-            end
+            [~,tmp]=ziegelwanger2014(Obj,4,0,0);
+            toaEst=tmp.toa;
             [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
             [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
-        save([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_ROT.mat'],'results');
-        data.results=results;
-    else
-        tmp=load([hpath 'info.mat']);
-        data=tmp.info.Rotation;
-        load([hpath '..' filesep '..' filesep 'experiments' filesep 'exp_ziegelwanger2014_SPHERE_ROT.mat']);
-        data.results=results;
+        amtcache('set','SPHERE_ROT',results);
     end
-    
+    data.results=results;    
 end
 
 %% ARI database (NH89)
 if flags.do_NH89
 
-    data=SOFAload([hpath 'ARI_NH89.sofa']);
+    data=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', 'ARI_NH89.sofa'));
     
-    if exist([hpath 'ARI_NH89.sofa.MAX.mat'],'file')
-        tmp=load([hpath 'ARI_NH89.sofa.MAX.mat']);
-        data.Data.toaEst{1}=tmp.toaEst;
-    else
+    toaEst=amtcache('get','NH89',flags.cachemode);
+    if isempty(toaEst)
         [~,tmp]=ziegelwanger2014(data,1,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'ARI_NH89.sofa.MAX.mat'],'toaEst');
-        data.Data.toaEst{1}=toaEst;
-    end
-    
-    if exist([hpath 'ARI_NH89.sofa.CTD.mat'],'file')
-        tmp=load([hpath 'ARI_NH89.sofa.CTD.mat']);
-        data.Data.toaEst{2}=tmp.toaEst;
-    else
+        toaEst{1}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,2,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'ARI_NH89.sofa.CTD.mat'],'toaEst');
-        data.Data.toaEst{2}=toaEst;
-    end
-    
-    if exist([hpath 'ARI_NH89.sofa.AGD.mat'],'file')
-        tmp=load([hpath 'ARI_NH89.sofa.AGD.mat']);
-        data.Data.toaEst{3}=tmp.toaEst;
-    else
+        toaEst{2}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,3,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'ARI_NH89.sofa.AGD.mat'],'toaEst');
-        data.Data.toaEst{3}=toaEst;
-    end
-    
-    if exist([hpath 'ARI_NH89.sofa.MCM.mat'],'file')
-        tmp=load([hpath 'ARI_NH89.sofa.MCM.mat']);
-        data.Data.toaEst{4}=tmp.toaEst;
-    else
+        toaEst{3}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,4,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'ARI_NH89.sofa.MCM.mat'],'toaEst');
-        data.Data.toaEst{4}=toaEst;
+        toaEst{4}=tmp.toa;
+        amtcache('set','NH89',toaEst);
     end
+    data.Data.toaEst=toaEst;
     
 end
 
 %% Sphere
 if flags.do_Sphere
 
-    data=SOFAload([hpath 'Sphere.sofa']);
+    data=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', 'Sphere.sofa'));
     
-    if exist([hpath 'Sphere.sofa.MAX.mat'],'file')
-        tmp=load([hpath 'Sphere.sofa.MAX.mat']);
-        data.Data.toaEst{1}=tmp.toaEst;
-    else
+    toaEst=amtcache('get','Sphere',flags.cachemode);
+    if isempty(toaEst)
         [~,tmp]=ziegelwanger2014(data,1,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'Sphere.sofa.MAX.mat'],'toaEst');
-        data.Data.toaEst{1}=toaEst;
-    end
-    
-    if exist([hpath 'Sphere.sofa.CTD.mat'],'file')
-        tmp=load([hpath 'Sphere.sofa.CTD.mat']);
-        data.Data.toaEst{2}=tmp.toaEst;
-    else
+        toaEst{1}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,2,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'Sphere.sofa.CTD.mat'],'toaEst');
-        data.Data.toaEst{2}=toaEst;
-    end
-    
-    if exist([hpath 'Sphere.sofa.AGD.mat'],'file')
-        tmp=load([hpath 'Sphere.sofa.AGD.mat']);
-        data.Data.toaEst{3}=tmp.toaEst;
-    else
+        toaEst{2}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,3,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'Sphere.sofa.AGD.mat'],'toaEst');
-        data.Data.toaEst{3}=toaEst;
-    end
-    
-    if exist([hpath 'Sphere.sofa.MCM.mat'],'file')
-        tmp=load([hpath 'Sphere.sofa.MCM.mat']);
-        data.Data.toaEst{4}=tmp.toaEst;
-    else
+        toaEst{3}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,4,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'Sphere.sofa.MCM.mat'],'toaEst');
-        data.Data.toaEst{4}=toaEst;
+        toaEst{4}=tmp.toa;
+        amtcache('set','Sphere',toaEst);
     end
+    data.Data.toaEst=toaEst;
     
 end
 
 %% Sphere and Torso
 if flags.do_SAT
 
-    data=SOFAload([hpath 'SAT.sofa']);
+    data=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', 'SAT.sofa'));
     
-    if exist([hpath 'SAT.sofa.MAX.mat'],'file')
-        tmp=load([hpath 'SAT.sofa.MAX.mat']);
-        data.Data.toaEst{1}=tmp.toaEst;
-    else
+    toaEst=amtcache('get','SAT',flags.cachemode);
+    if isempty(toaEst)
         [~,tmp]=ziegelwanger2014(data,1,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'SAT.sofa.MAX.mat'],'toaEst');
-        data.Data.toaEst{1}=toaEst;
-    end
-    
-    if exist([hpath 'SAT.sofa.CTD.mat'],'file')
-        tmp=load([hpath 'SAT.sofa.CTD.mat']);
-        data.Data.toaEst{2}=tmp.toaEst;
-    else
+        toaEst{1}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,2,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'SAT.sofa.CTD.mat'],'toaEst');
-        data.Data.toaEst{2}=toaEst;
-    end
-    
-    if exist([hpath 'SAT.sofa.AGD.mat'],'file')
-        tmp=load([hpath 'SAT.sofa.AGD.mat']);
-        data.Data.toaEst{3}=tmp.toaEst;
-    else
+        toaEst{2}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,3,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'SAT.sofa.AGD.mat'],'toaEst');
-        data.Data.toaEst{3}=toaEst;
-    end
-    
-    if exist([hpath 'SAT.sofa.MCM.mat'],'file')
-        tmp=load([hpath 'SAT.sofa.MCM.mat']);
-        data.Data.toaEst{4}=tmp.toaEst;
-    else
+        toaEst{3}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,4,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'SAT.sofa.MCM.mat'],'toaEst');
-        data.Data.toaEst{4}=toaEst;
+        toaEst{4}=tmp.toa;
+        amtcache('set','SAT',toaEst);
     end
+    data.Data.toaEst=toaEst;
     
 end
 
 %% Sphere, Torso and Pinna
 if flags.do_STP
 
-    data=SOFAload([hpath 'STP.sofa']);
+    data=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', 'STP.sofa'));
     
-    if exist([hpath 'STP.sofa.MAX.mat'],'file')
-        tmp=load([hpath 'STP.sofa.MAX.mat']);
-        data.Data.toaEst{1}=tmp.toaEst;
-    else
+    toaEst=amtcache('get','STP',flags.cachemode);
+    if isempty(toaEst)
         [~,tmp]=ziegelwanger2014(data,1,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'STP.sofa.MAX.mat'],'toaEst');
-        data.Data.toaEst{1}=toaEst;
-    end
-    
-    if exist([hpath 'STP.sofa.CTD.mat'],'file')
-        tmp=load([hpath 'STP.sofa.CTD.mat']);
-        data.Data.toaEst{2}=tmp.toaEst;
-    else
+        toaEst{1}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,2,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'STP.sofa.CTD.mat'],'toaEst');
-        data.Data.toaEst{2}=toaEst;
-    end
-    
-    if exist([hpath 'STP.sofa.AGD.mat'],'file')
-        tmp=load([hpath 'STP.sofa.AGD.mat']);
-        data.Data.toaEst{3}=tmp.toaEst;
-    else
+        toaEst{2}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,3,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'STP.sofa.AGD.mat'],'toaEst');
-        data.Data.toaEst{3}=toaEst;
-    end
-    
-    if exist([hpath 'STP.sofa.MCM.mat'],'file')
-        tmp=load([hpath 'STP.sofa.MCM.mat']);
-        data.Data.toaEst{4}=tmp.toaEst;
-    else
+        toaEst{3}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,4,0,0);
-        toaEst=tmp.toa;
-        save([hpath 'STP.sofa.MCM.mat'],'toaEst');
-        data.Data.toaEst{4}=toaEst;
+        toaEst{4}=tmp.toa;
+        amtcache('set','STP',toaEst);
     end
+    data.Data.toaEst=toaEst;
     
 end

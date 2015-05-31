@@ -20,104 +20,113 @@ function [dSRT] = joergensen2011sim(NSpeechsamples,varargin)
 %
 %   References: joergensen2011predicting
 
-definput.flags.type = {'fig5','fig6'};
+definput.flags.type = {'missingflag','fig5','fig6'};
+definput.import={'amtcache'};
 
-[flags,keyvals]  = ltfatarghelper({},definput,varargin);
-% ------- simulate experiment with reverberation
+[flags,~]  = ltfatarghelper({},definput,varargin);
+
+if flags.do_missingflag
+  flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+             sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end;
+
+%% ------- simulate experiment with reverberation
 if flags.do_fig5
+  
     x=amtload('joergensen2011','Danish_CLUE_10sentence_samples_22kHz.mat');
     sentenceArray=x.sentenceArray;
-    amtdisp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress')
     
+    result=amtcache('get',['fig5 NSpeechsamples=' num2str(NSpeechsamples)],flags.cachemode);
     
-    for q = 1:NSpeechsamples
-        
-        x = sentenceArray{q}';
-        fs = 22050;
-        
-        sentenceFileLevel = -26.00; % The RMS level of all CLUE sentence files (in dB relative to 1)
-        SPL = 65; % speech presentation level
-        x = x*10^((SPL-sentenceFileLevel)/20);
-        
-        % the level of the sentence is set such that the long-term RMS of all
-        % sentences are presented at a level of 65 dB SPL.
-        
-        Ts = 1/fs;
-        T = length(x)/fs;
-        t = 0:Ts:T;
-        t = t(1:end-1);
-        N = length(t);
-        
-        % load the noise file
-        noise_glob = amtload('joergensen2011','SSN_CLUE_22kHz.wav');
-        
-        Nsegments = floor(length(noise_glob)/N);
-        % pick a random segment from the noise file
-        startIdx = randi(Nsegments-2 ,1)*N;
-        noise_glob = noise_glob(startIdx:startIdx+N -1)';
-        
-        SNRs = [ -9 -6 -3 0 3 6 9 ];
-        conditions = [0 0.4 0.7 1.3 2.3];
-        
-        for n = 1:length(conditions)
-            
-            for k = 1:length(SNRs)
-                
-                noise = noise_glob/rms(noise_glob)*10^((SPL-SNRs(k))/20);
-                if size(noise) ~= size(x)
-                    noise = noise';
-                end
-                test = noise + x;
-                
-                %     ------------ applying reverberation
-                if n>1
-                  
-                  [tmp,Fs] = simulatedimpulseresponse(conditions(n));
-                  
-                  tmp = resample(tmp,fs,Fs); % downsampling to 22.05 kHz
-                  tmp_test = fconv(tmp',test); %
-                  tmp_noise = fconv(tmp',noise);
-                  test_env = abs(hilbert(tmp_test));
-                  
-                  [bb, aa] = butter(4, 20*2/fs);
-                  test_env = filter(bb,aa,test_env);
-                  cut =  0.05;
-                  threshold = floor(max(test_env)*cut);
-                  %         finding the index in the env vector corresponding to the
-                  %         threshold:
-                  idx = find(test_env(floor(length(test_env)/4):end) > threshold, 1,'last' );
-                  
-                  idx_end = idx + floor(length(tmp_test)/4);
-                  test_env(idx_end);
-                  idx_start = floor(0.047*fs);
-                  
-                  test = tmp_test(idx_start:idx_end);
-                  noise = tmp_noise(idx_start:idx_end);
-                end
-                % ---------------------------------
-                
-                IOparameters = [0.82 0.5 8000 0.6]; % parameters from Jørgensen and Dau (2011).
-                tmp = joergensen2011(test,noise,fs,IOparameters);
-                SNRenvs(k,n,q) = tmp.SNRenv;
-                Pcorrect(k,n,q) = tmp.P_correct;
-                
-                
-            end
-            
-        end
-        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress');
-        
+    if isempty(result)
+
+      amtdisp(['joergensen2011 started: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress')
+      for q = 1:NSpeechsamples
+
+          x = sentenceArray{q}';
+          fs = 22050;
+
+          sentenceFileLevel = -26.00; % The RMS level of all CLUE sentence files (in dB relative to 1)
+          SPL = 65; % speech presentation level
+          x = x*10^((SPL-sentenceFileLevel)/20);
+
+          % the level of the sentence is set such that the long-term RMS of all
+          % sentences are presented at a level of 65 dB SPL.
+
+          Ts = 1/fs;
+          T = length(x)/fs;
+          t = 0:Ts:T;
+          t = t(1:end-1);
+          N = length(t);
+
+          % load the noise file
+          noise_glob = amtload('joergensen2011','SSN_CLUE_22kHz.wav');
+
+          Nsegments = floor(length(noise_glob)/N);
+          % pick a random segment from the noise file
+          startIdx = randi(Nsegments-2 ,1)*N;
+          noise_glob = noise_glob(startIdx:startIdx+N -1)';
+
+          SNRs = [ -9 -6 -3 0 3 6 9 ];
+          conditions = [0 0.4 0.7 1.3 2.3];
+
+          for n = 1:length(conditions)
+
+              for k = 1:length(SNRs)
+
+                  noise = noise_glob/rms(noise_glob)*10^((SPL-SNRs(k))/20);
+                  if size(noise) ~= size(x)
+                      noise = noise';
+                  end
+                  test = noise + x;
+
+                  %     ------------ applying reverberation
+                  if n>1
+
+                    [tmp,Fs] = simulatedimpulseresponses(conditions(n));
+
+                    tmp = resample(tmp,fs,Fs); % downsampling to 22.05 kHz
+                    tmp_test = fconv(tmp',test); %
+                    tmp_noise = fconv(tmp',noise);
+                    test_env = abs(hilbert(tmp_test));
+
+                    [bb, aa] = butter(4, 20*2/fs);
+                    test_env = filter(bb,aa,test_env);
+                    cut =  0.05;
+                    threshold = floor(max(test_env)*cut);
+                    %         finding the index in the env vector corresponding to the
+                    %         threshold:
+                    idx = find(test_env(floor(length(test_env)/4):end) > threshold, 1,'last' );
+
+                    idx_end = idx + floor(length(tmp_test)/4);
+                    test_env(idx_end);
+                    idx_start = floor(0.047*fs);
+
+                    test = tmp_test(idx_start:idx_end);
+                    noise = tmp_noise(idx_start:idx_end);
+                  end
+                  % ---------------------------------
+
+                  IOparameters = [0.82 0.5 8000 0.6]; % parameters from Jørgensen and Dau (2011).
+                  tmp = joergensen2011(test,noise,fs,IOparameters);
+                  SNRenvs(k,n,q) = tmp.SNRenv;
+                  Pcorrect(k,n,q) = tmp.P_correct;
+
+
+              end
+
+          end
+          amtdisp(['sentence nr: ' num2str(q) '/' num2str(NSpeechsamples)],'progress');
+
+      end
+
+      result.Pcorrect = Pcorrect;
+      result.SNRenvs = SNRenvs;
+      result.conditions =conditions;
+      result.SNRs =SNRs;
+      amtcache('set',['fig5 NSpeechsamples=' num2str(NSpeechsamples)],result);
     end
-    
-    saveName = ['tmp_SNRenvs_specSub_' num2str(q) 'sent_' datestr(now, 'dd-mm-yyyy') '_1'];
-    result.Pcorrect = Pcorrect;
-    result.SNRenvs = SNRenvs;
-    result.conditions =conditions;
-    result.SNRs =SNRs;
-    save(saveName, 'result') % the mulktichannel SNRenv is stored.
-    
-    
-    
     
     %% Average across speech samples
     Pc_est_mean = mean(result.Pcorrect,3);
@@ -131,9 +140,10 @@ end
 
 if flags.do_fig6
     % Loads a cell array with 10 sentences from the CLUE material
-    load Danish_CLUE_10sentence_samples_22kHz
-    amtdisp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress')
+    x=amtload('joergensen2011','Danish_CLUE_10sentence_samples_22kHz.mat');
+    sentenceArray=x.sentenceArray;
     
+    amtdisp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress')    
     
     for q = 1:NSpeechsamples
         
@@ -187,7 +197,7 @@ if flags.do_fig6
                 %% --------- spec sub
                 %               Spectral subtraction is applied to both the noisy speech and the noise alone
                 factor = conditions(n);
-                [test2 noise2] = joergensen2011specsub(test,noise,W,padz,SP,factor);
+                [test2, noise2] = joergensen2011specsub(test,noise,W,padz,SP,factor);
                 
                 
                 %%         ---------------------------------------------------------
@@ -218,16 +228,13 @@ if flags.do_fig6
         
     end
     
-    saveName = ['tmp_SNRenvs_specSub_' num2str(q) 'sent_' datestr(now, 'dd-mm-yyyy') '_1'];
+%     s a v e Name = ['tmp_SNRenvs_specSub_' num2str(q) 'sent_' datestr(now, 'dd-mm-yyyy') '_1'];
     result.Pcorrect = Pcorrect;
     result.SNRenvs = SNRenvs;
     result.conditions =conditions;
     result.SNRs =SNRs;
-    save(saveName, 'result') % the mulktichannel SNRenv is stored.
-    
-    
-    
-    
+%     s a v e (s a v e Name, 'result') % the mulktichannel SNRenv is stored.
+        
     %% Average across speech samples
     Pc_est_mean = mean(result.Pcorrect,3);
     

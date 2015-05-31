@@ -1,4 +1,4 @@
-function varargout=amtload(model,data)
+function varargout=amtload(model,data,variable)
 %AMTLOAD Load auxiliary data of a model
 %   Usage: amtload(MODEL, DATA);
 %
@@ -49,7 +49,11 @@ switch lower(ext)
     varargout{1}=y;
     varargout{2}=fs;
   case '.mat'
-    varargout{1}=load(localfn);
+    if exist('variable','var'),
+        varargout{1}=load(localfn,variable);
+    else
+        varargout{1}=load(localfn);
+    end
   otherwise
     varargout{1}=localfn;
 end

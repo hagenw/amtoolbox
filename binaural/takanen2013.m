@@ -167,7 +167,7 @@ else
     [directionCues.rightMso,directionCues.rightLso,directionCues.rightWbMso] = takanen2013directionmapping(rightMso,rightLso,leftMso,rightWbMso);
     
     %2) Check cue consistency
-    [directionCues cueEnergies] = takanen2013cueconsistency(directionCues, cueEnergies,periph.fc);
+    [directionCues, cueEnergies] = takanen2013cueconsistency(directionCues, cueEnergies,periph.fc);
     
     %3) Derive two sets of where cues, one for each hemisphere, from the six
     %directional cues
@@ -203,6 +203,6 @@ else
     [whereRight, whatRight] = takanen2013onsetenhancement(whereRight,whatRight,fs,periph.fc);
     
     %% Forming of the binaural activity map
-    [output.activityMap output.colorGains output.colorMtrx output.levels] = ...
+    [output.activityMap, output.colorGains, output.colorMtrx, output.levels] = ...
         takanen2013formbinauralactivitymap(whereLeft,whereRight,whatLeft,whatRight,fs,periph.fc,printFigs,printMap);
 end

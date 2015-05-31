@@ -42,15 +42,7 @@ definput.flags.condition = {'BB','CL','N24','N18','N12','N9','N6','N3'};
 % Parse input options
 [flags,kv]  = ltfatarghelper({},definput,varargin);
 
-
 %% Extract data
-% if not(exist([mfilename '.mat'],'file'))
-%   amtdisp(['Downloading ' mfilename ' from http://www.kfs.oeaw.ac.at/']);
-%   targetfn = fullfile(amtbasepath,'humandata',[mfilename '.mat']);
-%   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' mfilename '.mat'];
-%   urlwrite(sourcefn,targetfn);
-% end
-% load(mfilename)
 x=amtload('goupell2010','data.mat');
 
 C = find(ismember(x.condition,flags.condition));

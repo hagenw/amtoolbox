@@ -127,7 +127,7 @@ outp.ic = interaural_vector_strength(outp.itf, tau, fs);
 
 % weighting of channels for cumulative ixd determination
 % sqrt(2) is due to half-wave rectification (included 28th Sep 07)
-outp.rms = kv.signal_level_dB_SPL*kv.compression_power + 20*log10(sqrt(2)*min(rms(abs(insig(:,:,1))),rms(abs(insig(:,:,2)))));
+outp.rms = kv.signal_level_dB_SPL*kv.compression_power + 20*log10(sqrt(2)*min(rms(squeeze(abs(insig(:,:,1)))),rms(squeeze(abs(insig(:,:,2))))));
 outp.rms = max(outp.rms,eps); % avoid negative weights
 
 end

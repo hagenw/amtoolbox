@@ -37,8 +37,16 @@ function [delay,data_mean,data_std]  = data_elberling2010(varargin)
 %   References: elberling2010evaluating
     
 % Define input flags
-definput.flags.type={'fig4','fig5','stim'};
+definput.flags.type={'missingflag','fig4','fig5','stim'};
 definput.flags.plot = {'noplot','plot'};
+
+[flags,keyvals]  = ltfatarghelper({},definput,varargin);
+
+if flags.do_missingflag
+    flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+        sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+    error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end
 
 % Font size
 ftsz=12;
@@ -46,8 +54,6 @@ ftsz=12;
 col=[0.7,0.7,0.7];
 
 fs=30000;
-
-[flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
 delay = [0 1.86 2.56 3.32 4.14 5.04];
 delay2 = [delay;delay;delay];

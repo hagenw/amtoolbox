@@ -1,8 +1,51 @@
 function varargout=amtcache(cmd,name,varargin)
 %AMTCACHE  Cache variables for later or retrieves variables from cache
-%   Usage: amtcache(..);
+%   Usage: var = amtcache('get',package,flags);
+%     amtcache('set',package,variables);
+%   
+%   `amtcache` supports the following commands:
 %
-%  
+%     'get'      gets the content of a package from the cache. 
+%                `variables = amtcache('get',package)` reads a `package` from the cache
+%                and outputs its content in `var`. `package` must a be a string
+%                identifying the package of variables. If the package contains multiple
+%                variables, `variables` can be a list of variables like 
+%                `[var1, var2, ... , varN] = ...`. The order of returned variables is the
+%                same as that used for saving in cache.
+%                `... = amtcache('get',package,flags)` allows to control the 
+%                behaviour of accessing the cache. `flags` can be:
+%                  'normal': package will be recalculated when locally not available. 
+%                  'redo': enforce the recalculation of the package. [..] = amtcache('get', [..]) outputs empty variables always. 
+%                  'cached': enforce using cached package. If the cached package is locally not available, it will be downloaded from the internet. If it is remotely not available, warning will be thrown and the package will be recalculated. Note that this method may by-pass the actual processing and thus does not test the corresponding functionality. It is, however, very convenient for fast access of results like plotting figures. On the internet, the cached packages are available only for the models from release version of the AMToolbox. 
+%
+%     'set'      stores variables as a package in the cache. 
+%                `amtcache('set',package, variables)` saves variables in the cache using
+%                the name `package`. `variables` can be a list of variables separated by
+%                comma.
+%                
+%     'getURL'   outputs the URL of the cache in the internet. 
+%
+%     'setURL'   sets the URL of the internet cache to a new URL. 
+%
+%     'clearAll' clears the cache directory. An interactive confirmation is
+%                required.
+%
+%
+%   This is an example of using the cache in a function:
+%
+%     definput.import={'amtcache'};
+%     [flags,~]  = ltfatarghelper({},definput,varargin);
+%
+%     [x,y,z] = amtcache('get', 'xyz', flags.cachemode);
+% 
+%     if isempty(x)
+%         calculate your variables x,y,z here
+%         amtcache('set','xyz',x,y,z);
+%     end
+%     use your variables x,y,z here
+%
+%   See also: data_ziegelwanger2013
+
 
 
 %   Author: Piotr Majdak, 2015

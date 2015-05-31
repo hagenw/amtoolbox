@@ -20,10 +20,9 @@ function output = exp_lindemann1986(varargin)
 %     'auto'     Re-calculate the file if it does not exist. Return 1 if the
 %                file exist, otherwise 0. This is the default
 %
-%     'refresh'  Always recalculate the file.
+%     'redo'     Always recalculate the results.
 %
-%     'cached'   Always use the cached version. Throws an error if the
-%                file does not exist.
+%     'cached'   Always use the cached version. Default.
 %
 %     'fig6'  Reproduce Fig.6 from Lindemann (1986).  The cross-correlation is
 %             calculated for different ITDs and different inhibition factors
@@ -219,8 +218,6 @@ if flags.do_missingflag
              sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
   error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
-
-save_format='-v6';
 
 %% ------ FIG 6 -----------------------------------------------------------
 if flags.do_fig6

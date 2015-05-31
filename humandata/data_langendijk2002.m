@@ -294,7 +294,7 @@ function data = data_langendijk2002(varargin)
     temp=data_langendijk2002([listener '_1oh']);
     response1oh=temp(2,:);
     medir1oh=gr2ir(med,'1oh',fs);
-    save(['data_langendijk2002' listener '.mat'],'-regexp','^med|^pol|^response|^target');
+    save(fullfile(amtauxdatapath, 'langendijk2002', [listener '_data.mat']),'-regexp','^med|^pol|^response|^target');
     
     clear
     amtdisp('Calculation for P6','progress');
@@ -324,7 +324,7 @@ function data = data_langendijk2002(varargin)
     temp=data_langendijk2002([listener '_1oh']);
     response1oh=temp(2,:);
     medir1oh=gr2ir(med,'1oh',fs);
-    save(['data_langendijk2002' listener '.mat'],'-regexp','^med|^pol|^response|^target');
+    save(fullfile(amtauxdatapath, 'langendijk2002', [listener '_data.mat']),'-regexp','^med|^pol|^response|^target');
   end
 
 end

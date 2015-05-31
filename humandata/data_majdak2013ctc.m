@@ -41,13 +41,6 @@ definput.flags.condition = {'A','B','Learn'};
 
 
 %% Extract data
-% if not(exist([mfilename '.mat'],'file'))
-%   amtdisp(['Downloading ' mfilename ' from http://www.kfs.oeaw.ac.at/']);
-%   targetfn = fullfile(amtbasepath,'humandata',[mfilename '.mat']);
-%   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' mfilename '.mat'];
-%   urlwrite(sourcefn,targetfn);
-% end
-% load(mfilename)
 x=amtload('majdak2013ctc','data.mat');
 
 C = find(ismember(x.condition,flags.condition));
