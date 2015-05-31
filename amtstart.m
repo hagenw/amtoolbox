@@ -68,10 +68,10 @@ printbanner=1;
 %  end;
 %end;
 
-if printbanner
-  amtdisp(['AMT version ',amt_version,'. (C) Peter L. Soendergaard and Piotr Majdak.'])
-end;
 
+if printbanner
+  disp(['AMT version ',amt_version,'. (C) Peter L. Soendergaard and Piotr Majdak.'])
+end;
 
 %% LTFAT package
 
@@ -86,7 +86,7 @@ if ~exist('ltfatstart','file')
 end
 
 % Start LTFAT
-amtdisp('*** Starting LTFAT ***');
+disp('*** Starting LTFAT ***');
 if exist('ltfatstart','file')
   ltfatstart;
     % set defaults again because ltfatstart is clearing all persistent vars
@@ -247,3 +247,5 @@ ltfatsetdefaults('amthelp','versiondata',amt_version,...
 amtdisp('*** AMT Ready to go! ***'); 
 amtdisp(['Auxiliary data (local): ' amtauxdatapath]);
 amtdisp(['Auxiliary data (web): ' amtauxdataurl]);
+
+

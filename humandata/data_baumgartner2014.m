@@ -14,8 +14,6 @@ function data = data_baumgartner2014(varargin)
 %     'baseline'  Same as 'pool', but also with experimental data for
 %                 baseline condition.
 %
-%     'recalib'   DTFs and recalibrated sensitivity paramters of all listeners.
-%
 %   The fields in the output contains the following information
 %
 %     .id         listener ID
@@ -63,21 +61,13 @@ function data = data_baumgartner2014(varargin)
 %% ------ Check input options --------------------------------------------
 
 % Define input flags
-% definput.flags.plot = {'noplot','plot'};
 definput.flags.type = {'pool','baseline'};
-definput.flags.recalib = {'norecalib','recalib'};
 definput.flags.HRTFformat = {'sofa','ari'};
 
-definput.import={'baumgartner2014'};
+definput.import={'baumgartner2014','amtcache'};
 
 % Parse input options
 [flags,kv]  = ltfatarghelper({'mrsmsp','gamma'},definput,varargin);
-
-% if flags.do_missingflag
-%   flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
-%              sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
-%   error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
-% end;
     
 
 %% Listener pool (listener-specific SP-DTFs) 
@@ -92,34 +82,34 @@ if flags.do_pool || flags.do_baseline
       
       data(ii).S = 0.5; % default sensitivity
       
-      filename = fullfile(SOFAdbPath,'baumgartner2014',...
-        ['ARI_' data(ii).id '_hrtf_M_dtf 256.sofa']);
-      
-      data(ii).Obj = SOFAload(filename);
+      data(ii).Obj = SOFAload(...
+        fullfile(SOFAdbPath,'baumgartner2014',...
+        ['ARI_' data(ii).id '_hrtf_M_dtf 256.sofa'])...
+        );
       data(ii).fs = data(ii).Obj.Data.SamplingRate;
       
     end
   
   
   %% Calibration of S
-  if not(exist('baumgartner2014calibration.mat','file')) || flags.do_recalib
+  fncalib = ['calibration_g' num2str(kv.gamma,'%u') ...
+    '_mrs' num2str(kv.mrsmsp,'%u') ...
+    '_do' num2str(kv.do,'%u')];
+  c = amtcache('get',fncalib,flags.cachemode);
+  if isempty(c) || not(isequal(c.kv,kv))
     
     data = loadBaselineData(data);
     amtdisp('Calibration procedure started. Please wait!','progress')
     data = baumgartner2014calibration(data,kv);
     
-    data_all = data;
-    data = rmfield(data,{'Obj','itemlist','fs','target','response'}); % reduce filesize
-    save(fullfile(amtbasepath,'modelstages','baumgartner2014calibration.mat'),'data')
-    data = data_all;
-    
-  else
+    c.data = rmfield(data,{'Obj','itemlist','fs','target','response'}); % reduce filesize
+    c.kv = kv;
+    amtcache('set',fncalib,c)
+  end
     
     if flags.do_baseline
       data = loadBaselineData(data);
     end
-    
-    c = load('baumgartner2014calibration.mat');
       
     for ss = 1:length(data)
       for ii = 1:length(c.data)
@@ -131,7 +121,7 @@ if flags.do_pool || flags.do_baseline
     
   end 
 
-end
+% end
     
 
 
