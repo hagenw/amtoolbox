@@ -24,7 +24,7 @@
 %
 %
 %  Additional functions
-%     PLOTZIEGELWANGER2014  - Plot the output of the Ziegelwanger2014 model
+%     plot_ziegelwanger2014  - Plot the output of the Ziegelwanger2014 model
 %     plot_lindemann1986     - Plot the binaural activity map
 %     LINDEMANN1986CENTROID - Centroid of the cross-correlation activation
 %

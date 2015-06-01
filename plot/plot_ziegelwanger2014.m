@@ -1,8 +1,8 @@
-function [h]=plotziegelwanger2014(Obj,data,type,color,ele,ch,time,style,width)
-%PLOTZIEGELWANGER2014   Plot time-of-arrival
-%   Usage: plotziegelwanger2014(Obj,data,type,color,ele,ch,time,style,width)
+function [h]=plot_ziegelwanger2014(Obj,data,type,color,ele,ch,time,style,width)
+%plot_ziegelwanger2014   Plot time-of-arrival
+%   Usage: plot_ziegelwanger2014(Obj,data,type,color,ele,ch,time,style,width)
 %
-%   `plotziegelwanger2014(Obj,data,type,color,ele,ch,time,style,width)`
+%   `plot_ziegelwanger2014(Obj,data,type,color,ele,ch,time,style,width)`
 %   plots TOA-data in horizontal planes.
 %
 %   Input:
@@ -37,7 +37,7 @@ function [h]=plotziegelwanger2014(Obj,data,type,color,ele,ch,time,style,width)
 %   To plot the modelled TOA in the horizontal plane after using
 %   ziegelwanger2014, use::
 %
-%       plotziegelwanger2014((Obj,Obj.Data.Delay,1,'b',0,1,1);
+%       plot_ziegelwanger2014((Obj,Obj.Data.Delay,1,'b',0,1,1);
 %
 %   See also: ziegelwanger2014onaxis, ziegelwanger2014offaxis,
 %   data_ziegelwanger2014, exp_ziegelwanger2014

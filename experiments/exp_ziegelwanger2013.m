@@ -146,11 +146,11 @@ if flags.do_fig1b
     MCM=tmp.toa;
     clear tmp
 
-    plotziegelwanger2013(data,MCM(:,1),4,[0 0 0]/255,0,1,1,'-',1);
+    plot_ziegelwanger2013(data,MCM(:,1),4,[0 0 0]/255,0,1,1,'-',1);
     hold on
-    plotziegelwanger2013(data,MAX(:,1),4,[0 0 80]/255,0,1,1,'--',1);
-    plotziegelwanger2013(data,CTD(:,1),4,[50 220 50]/255,0,1,1,'-',1);
-    plotziegelwanger2013(data,AGD(:,1),4,[250 80 80]/255,0,1,1,'--',1);
+    plot_ziegelwanger2013(data,MAX(:,1),4,[0 0 80]/255,0,1,1,'--',1);
+    plot_ziegelwanger2013(data,CTD(:,1),4,[50 220 50]/255,0,1,1,'-',1);
+    plot_ziegelwanger2013(data,AGD(:,1),4,[250 80 80]/255,0,1,1,'--',1);
     xlim([-10 370])
     ylim([0.65 2.05])
     grid off
@@ -276,17 +276,17 @@ if flags.do_fig2b
 
     clear sag_dev; clear sag_var;
 
-    plotziegelwanger2013(data,toaEst,4,'k',0,1,1,{'-'},1);
+    plot_ziegelwanger2013(data,toaEst,4,'k',0,1,1,{'-'},1);
     hold on
-    h=plotziegelwanger2013(data,indicator_sag.*toaEst,3,'w',0,1,1,{'^'},4);
+    h=plot_ziegelwanger2013(data,indicator_sag.*toaEst,3,'w',0,1,1,{'^'},4);
     set(h,'MarkerFaceColor','w','MarkerEdgeColor','w');
-    h=plotziegelwanger2013(data,indicator_hor.*toaEst,3,'w',0,1,1,{'v'},4);
+    h=plot_ziegelwanger2013(data,indicator_hor.*toaEst,3,'w',0,1,1,{'v'},4);
     set(h,'MarkerFaceColor','w','MarkerEdgeColor','w');
-    h=plotziegelwanger2013(data,indicator_sag.*toaEst,3,'b',0,1,1,{'^'},4);
+    h=plot_ziegelwanger2013(data,indicator_sag.*toaEst,3,'b',0,1,1,{'^'},4);
     set(h,'LineWidth',2);
-    h=plotziegelwanger2013(data,indicator_hor.*toaEst,3,'b',0,1,1,{'v'},4);
+    h=plot_ziegelwanger2013(data,indicator_hor.*toaEst,3,'b',0,1,1,{'v'},4);
     set(h,'LineWidth',2);
-    h=plotziegelwanger2013(data,(-indicator+1).*toaEst,3,'r',0,1,1,{'o'},4);
+    h=plot_ziegelwanger2013(data,(-indicator+1).*toaEst,3,'r',0,1,1,{'o'},4);
     set(h,'MarkerFaceColor','r','MarkerEdgeColor','r');
     ylabel('TOA (ms)')
     xlabel('Azimuth (deg)')

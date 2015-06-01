@@ -1,8 +1,8 @@
-function [h]=plotziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)
-%PLOTZIEGELWANGER2013 XXX Headline missing
-%   Usage: plotziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)
+function [h]=plot_ziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)
+%plot_ziegelwanger2013 XXX Headline missing
+%   Usage: plot_ziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)
 %
-%   `plotziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)`
+%   `plot_ziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)`
 %   plots TOA-data in horizontal planes.
 %
 %   Input:
@@ -28,7 +28,7 @@ function [h]=plotziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)
 %   To plot the modelled TOA in the horizontal plane after using
 %   ziegelwanger2013, use::
 %
-%       plotziegelwanger2013(Obj,Obj.Data.Delay,1,'b',0,1,1);
+%       plot_ziegelwanger2013(Obj,Obj.Data.Delay,1,'b',0,1,1);
 %
 %   See also: ziegelwanger2013onaxis, ziegelwanger2013offaxis,
 %             data_ziegelwanger2013, exp_ziegelwanger2013

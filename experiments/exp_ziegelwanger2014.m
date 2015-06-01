@@ -223,7 +223,7 @@ if flags.do_fig3
             if hrtf==4
                 Obj{4}.Data.toaEst{method}=Obj{4}.Data.toaEst{method}+110;
             end
-            h=plotziegelwanger2014(Obj{hrtf},Obj{hrtf}.Data.toaEst{method},4,'k',0,1,1,sty(hrtf,:),lw(hrtf));
+            h=plot_ziegelwanger2014(Obj{hrtf},Obj{hrtf}.Data.toaEst{method},4,'k',0,1,1,sty(hrtf,:),lw(hrtf));
             set(h,'color',clr(method,:));
             hold on
         end
@@ -800,12 +800,12 @@ if flags.do_fig9
 
 %plot figure
     h=subplot(1,1,1);
-    plotziegelwanger2014(Obj,toa2-min(min(toa1))-1,4,'k',0,1,1,'-',3);
-    h2=plotziegelwanger2014(Obj,toa1-min(min(toa1))-1,4,'k',0,1,1,'o',1);
+    plot_ziegelwanger2014(Obj,toa2-min(min(toa1))-1,4,'k',0,1,1,'-',3);
+    h2=plot_ziegelwanger2014(Obj,toa1-min(min(toa1))-1,4,'k',0,1,1,'o',1);
     set(h2,'MarkerFaceColor',[0 0 0]);
-    h3=plotziegelwanger2014(Obj,toa2-min(min(toa1))-1,4,'k',0,2,1,'-',3);
+    h3=plot_ziegelwanger2014(Obj,toa2-min(min(toa1))-1,4,'k',0,2,1,'-',3);
     set(h3,'Color',[0.5 0.5 0.5]);
-    h4=plotziegelwanger2014(Obj,toa1-min(min(toa1))-1,4,'k',0,2,1,'o',1);
+    h4=plot_ziegelwanger2014(Obj,toa1-min(min(toa1))-1,4,'k',0,2,1,'o',1);
     set(h4,'MarkerFaceColor',[.5 .5 .5],'MarkerEdgeColor',[.5 .5 .5]);
 
     xlim([-9 369])
