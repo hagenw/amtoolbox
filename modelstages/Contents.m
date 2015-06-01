@@ -35,7 +35,7 @@
 %     TAKANEN2013WBMSO      - Wideband medial superior olive model
 %
 %  Sagittal-plane localization models
-%     PLOTBAUMGARTNER2013 - plot probabilistic prediction matrixes
+%     plot_baumgartner2013 - plot probabilistic prediction matrixes
 %     BAUMGARTNERPMV20132PPP - Calculate psychophysical predictions from PMVs for baumgartner2013
 %     PLOTBAUMGARTNER2014 - plot probabilistic prediction matrixes
 %     BAUMGARTNER2014CALIBRATION - Calibration of the model

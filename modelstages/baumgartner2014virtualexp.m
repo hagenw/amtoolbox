@@ -31,7 +31,7 @@ function m = baumgartner2014virtualexp(p,tang,rang,varargin)
 %     'lat',lat     	Define the lateral target angles. 
 %                    	Default value is 0 deg.
 %
-%   See also: localizationerror, baumgartner2014, plotbaumgartner2013
+%   See also: localizationerror, baumgartner2014, plotbaumgartner2014
 %
 
 %   References: baumgartner2014modeling

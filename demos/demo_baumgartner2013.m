@@ -42,7 +42,7 @@ end
 [p,rang] = baumgartner2013(targets,s(ids).Obj,'u',s(ids).u,'lat',lateral);
 
 figure;
-plotbaumgartner2013(p,tang,rang);
+plot_baumgartner2013(p,tang,rang);
 title(['Baseline prediction for ' s(ids).id]);
 
 [qe,pe,pb] = baumgartner2013pmv2ppp(p,tang,rang,'print');

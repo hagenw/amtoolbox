@@ -754,15 +754,15 @@ if flags.do_fig19 || flags.do_fig20
       
       figure;
       subplot(1,3,1)
-      plotbaumgartner2013(s(1).pmv1{1},polang,respang,'cmax',0.1,'nocolorbar');
+      plot_baumgartner2013(s(1).pmv1{1},polang,respang,'cmax',0.1,'nocolorbar');
       title(['P: PE = ' num2str(s(1).pe1{1},2) '\circ, QE = ' num2str(s(1).qe1{1},2) '%'])
       
       subplot(1,3,2)
-      plotbaumgartner2013(s(1).pmv2{2},pol2{2},respang,'cmax',0.1,'nocolorbar');
+      plot_baumgartner2013(s(1).pmv2{2},pol2{2},respang,'cmax',0.1,'nocolorbar');
       title(['P: PE = ' num2str(s(1).pe2{2},2) '\circ, QE = ' num2str(s(1).qe2{2},2) '%'])
             
       subplot(1,3,3)
-      plotbaumgartner2013(s(1).pmv2{3},pol2{3},respang,'cmax',0.1,'nocolorbar');
+      plot_baumgartner2013(s(1).pmv2{3},pol2{3},respang,'cmax',0.1,'nocolorbar');
       title(['P: PE = ' num2str(s(1).pe2{3},2) '\circ, QE = ' num2str(s(1).qe2{3},2) '%'])
       
     elseif flags.do_fig20
