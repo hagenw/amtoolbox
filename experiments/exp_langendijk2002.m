@@ -53,8 +53,8 @@ function output = exp_langendijk2002(varargin)
 %
 %     exp_langendijk2002('fig9');
 %
-%   See also: langendijk2002, langendijk2002likelihood, plotlangendijk2002, 
-%             plotlangendijk2002likelihood, data_langendijk2002
+%   See also: langendijk2002, langendijk2002likelihood, plot_langendijk2002, 
+%             plot_langendijk2002likelihood, data_langendijk2002
 %
 %   References: langendijk2002contribution
 %
@@ -125,42 +125,42 @@ if flags.do_plot
   % pdf plots with actual responses
   subplot(2,3,1)
   hold all;    
-  plotlangendijk2002(pb,dtfdata.pol,dtfdata.pol,'nocolorbar');
+  plot_langendijk2002(pb,dtfdata.pol,dtfdata.pol,'nocolorbar');
   title(['Baseline']);    
   h=plot( dtfdata.targetb, dtfdata.responseb, 'ko');
   set(h, 'MarkerFaceColor','w');
 
   subplot(2,3,2)
   hold all;
-  plotlangendijk2002(p2o,dtfdata.pol,dtfdata.pol,'nocolorbar');
+  plot_langendijk2002(p2o,dtfdata.pol,dtfdata.pol,'nocolorbar');
   title(['2-oct (4-16kHz)']);
   h=plot( dtfdata.targetc, dtfdata.response2o, 'ko');
   set(h, 'MarkerFaceColor','w');
 
   subplot(2,3,3)
   hold all;
-  plotlangendijk2002(p1ol,dtfdata.pol,dtfdata.pol,'nocolorbar');
+  plot_langendijk2002(p1ol,dtfdata.pol,dtfdata.pol,'nocolorbar');
   title(['1-oct (low: 4-8kHz)']);
   h=plot( dtfdata.targetc, dtfdata.response1ol, 'ko');
   set(h, 'MarkerFaceColor','w');
 
   subplot(2,3,4)
   hold all;
-  plotlangendijk2002(p1om,dtfdata.pol,dtfdata.pol,'nocolorbar');
+  plot_langendijk2002(p1om,dtfdata.pol,dtfdata.pol,'nocolorbar');
   title(['1-oct (middle: 5.7-11.3kHz)']);
   h=plot( dtfdata.targetc, dtfdata.response1om, 'ko');
   set(h, 'MarkerFaceColor','w');
 
   subplot(2,3,5)
   hold all;
-  plotlangendijk2002(p1oh,dtfdata.pol,dtfdata.pol,'nocolorbar');
+  plot_langendijk2002(p1oh,dtfdata.pol,dtfdata.pol,'nocolorbar');
   title(['1-oct (high: 8-16kHz)']);
   h=plot( dtfdata.targetc, dtfdata.response1oh, 'ko');
   set(h,'MarkerFaceColor','w')
 
   % likelihood statistic
   subplot(2,3,6)
-  plotlangendijk2002likelihood(la,le,ci);
+  plot_langendijk2002likelihood(la,le,ci);
   set(gca,'XLim',[0.5 5.5])
 end
 

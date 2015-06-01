@@ -14,8 +14,8 @@
 %  The Langendijk model
 %     LANGENDIJK2002           - Langendijk & Bronkhorst 2002 auditory model 
 %     LANGENDIJK2002LIKELIHOOD - Likelihood estimation
-%     PLOTLANGENDIJK2002       - Plot the pdf-matrices with grey colormap
-%     PLOTLANGENDIJK2002LIKELIHOOD - Plot the likelihood statistics
+%     plot_langendijk2002       - Plot the pdf-matrices with grey colormap
+%     plot_langendijk2002LIKELIHOOD - Plot the likelihood statistics
 %
 %  The Roenne 2012 model
 %     ROENNE2012                - Simulate ABR to given stimulus

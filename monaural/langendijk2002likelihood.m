@@ -16,7 +16,7 @@ function [ la,le,ci ] = langendijk2002likelihood( p,rang,tang,target,response )
 %
 %   XXX Describe the function.
 %
-%   See also: plotlangendijk2002likelihood, langendijk2002
+%   See also: plot_langendijk2002likelihood, langendijk2002
 %
 %   References:langendijk2002contribution
 
