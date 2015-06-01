@@ -1,9 +1,9 @@
-function plotbaumgartner2014likelistat(la,le,ci,lr)
-% PLOTBAUMGARTNER2014LIKELISTAT plots likelihood statistics according to Langendijk
+function plot_baumgartner2014likelistat(la,le,ci,lr)
+% plot_baumgartner2014likelistat plots likelihood statistics according to Langendijk
 % et al. (2002)
-% Usage:           plotbaumgartner2014likelistat(la,le,ci)
-%                  plotbaumgartner2014likelistat(la,le,ci,lr)
-%                  plotbaumgartner2014likelistat(la,le,ci,lr)
+% Usage:           plot_baumgartner2014likelistat(la,le,ci)
+%                  plot_baumgartner2014likelistat(la,le,ci,lr)
+%                  plot_baumgartner2014likelistat(la,le,ci,lr)
 % Input arguments:
 %     la:          actual likelihood
 %     le:          expected likelihood
