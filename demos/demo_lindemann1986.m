@@ -20,7 +20,7 @@
 %      averaged over time for the desired frequency channel for a sinusoid
 %      with an ITD of 0.3 ms.
 %
-%   See also: lindemann1986, lindemann1986bincorr, plotlindemann1986
+%   See also: lindemann1986, lindemann1986bincorr, plot_lindemann1986
 
 
 % Sampling rate
@@ -49,7 +49,7 @@ sig = bmsin(f,mf,fs);
 tstr = sprintf(['Binaural modulated sinusoid\nf = %i Hz\nf_m = %i Hz\n',...
     'fc = %i\n'],f,mf,round(freqtoerb(f)));
 % Plot frequency channel 11, due to round(freqtoerb(500))==11
-plotlindemann1986(cc,t,'fc',f,'title',tstr);
+plot_lindemann1986(cc,t,'fc',f,'title',tstr);
 
 
 % ------ Fig 2. ----------------------------------------------------------
@@ -69,4 +69,4 @@ sig = sig(1:fs/2,:);
 tstr = sprintf('Sinusoid with an ITD\nf = %i Hz\nitd = %.1f ms\nfc = %i\n',...
     f,itd,round(freqtoerb(f)));
 % Plot frequency channel 11, due to round(freqtoerb(500))==11
-plotlindemann1986(cc,t,'fc',f,'title',tstr);
+plot_lindemann1986(cc,t,'fc',f,'title',tstr);

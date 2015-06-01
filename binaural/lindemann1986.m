@@ -77,9 +77,9 @@ function [crosscorr,t,ild,cfreq] = lindemann1986(insig,fs,varargin)
 %     [cc,t] = lindemann1986(sig,fs,'T_int',6);
 %
 %     % Plot frequency channel 11, due to round(freqtoerb(500))==11
-%     plotlindemann1986(cc,t,'fc',f);
+%     plot_lindemann1986(cc,t,'fc',f);
 %
-%   See also: lindemann1986bincorr, plotlindemann1986, gammatone, ufilterbankz
+%   See also: lindemann1986bincorr, plot_lindemann1986, gammatone, ufilterbankz
 %
 %   Demos: demo_lindemann1986
 %
