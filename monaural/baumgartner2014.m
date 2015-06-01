@@ -99,7 +99,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %   2) Data in hrtf/baumgartner2014
 %
 %
-%   See also: plotbaumgartner2014, data_baumgartner2014,
+%   See also: plot_baumgartner2014, data_baumgartner2014,
 %   exp_baumgartner2014, demo_baumgartner2014, baumgartner2014calibration,
 %   baumgartner2014likelistat, baumgartner2014pmv2ppp,
 %   baumgartner2014virtualexp

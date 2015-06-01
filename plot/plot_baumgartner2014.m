@@ -1,7 +1,7 @@
-function out = plotbaumgartner2014( p,tang,rang,varargin)
-%PLOTBAUMGARTNER2014 plot probabilistic prediction matrixes
-%   Usage:    plotbaumgartner2014(p,tang,rang);
-%             plotbaumgartner2014(p,tang,rang,exptang,exprang);
+function out = plot_baumgartner2014( p,tang,rang,varargin)
+%plot_baumgartner2014 plot probabilistic prediction matrixes
+%   Usage:    plot_baumgartner2014(p,tang,rang);
+%             plot_baumgartner2014(p,tang,rang,exptang,exprang);
 %
 %   Input parameters:
 %     p       : prediction matrix containing probability mass vectors (PMVs) 
@@ -11,15 +11,15 @@ function out = plotbaumgartner2014( p,tang,rang,varargin)
 %     rang    : polar response angles
 %     tang    : polar target angles
 %
-%   `plotbaumgartner2014(p,rang,tang)` plots predicted PMVs referring to  
+%   `plot_baumgartner2014(p,rang,tang)` plots predicted PMVs referring to  
 %   the polar response angles *rang* as a function of the target angles 
 %   *tang* with gray color coded probabilities similar to Baumgartner et al. 
 %   (2002). Actual response patterns from psychoacoustic experiments can be 
 %   overlayed optionally.
 %
-%   `h=plotbaumgartner2014(...)` additionally returns the figure handle.
+%   `h=plot_baumgartner2014(...)` additionally returns the figure handle.
 %
-%   `plotbaumgartner2014` accepts the following optional parameters:
+%   `plot_baumgartner2014` accepts the following optional parameters:
 %
 %     'exptang',exptang   Overlay actual response patterns with the   
 %                         experimetal polar target angles *exptang*.
@@ -33,7 +33,7 @@ function out = plotbaumgartner2014( p,tang,rang,varargin)
 %     'cmax',cmax         Set the maximum probability of the color code to 
 %                         *cmax*. Default value is 0.2.
 %
-%   `plotbaumgartner2014` takes the following flags at the end of the line 
+%   `plot_baumgartner2014` takes the following flags at the end of the line 
 %   of input arguments:
 %
 %     'colorbar'    Display the colorbar. This is the default.
@@ -56,7 +56,7 @@ definput.flags.colorbar = {'colorbar','nocolorbar'};
 
 %% Error handling
 if size(p,1) ~= length(rang) || size(p,2) ~= length(tang)
-  fprintf('\n Error: Dimension mismatch between p and rang/tang! \n Check the order of input arguments to fit plotbaumgartner2014(p,tang,rang). \n')
+  fprintf('\n Error: Dimension mismatch between p and rang/tang! \n Check the order of input arguments to fit plot_baumgartner2014(p,tang,rang). \n')
   return
 end
 

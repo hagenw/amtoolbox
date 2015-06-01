@@ -61,5 +61,5 @@ amtdisp(['Local polar error rate (%)        ' num2str(perMacpherson2003,'%4.1f')
 %% Plot results
 
 figure;
-plotbaumgartner2014(p,tang,rang,m(:,6),m(:,8));
+plot_baumgartner2014(p,tang,rang,m(:,6),m(:,8));
 title(['Baseline prediction for ' s(ids).id]);
