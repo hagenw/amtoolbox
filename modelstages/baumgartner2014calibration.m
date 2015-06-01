@@ -109,7 +109,7 @@ for ll = 1:length(s)
 
 end
 
-[qe_chance,pe_chance] = pmv2ppp(ones(49,44));
+[qe_chance,pe_chance] = baumgartner2014pmv2ppp(ones(49,44));
 distmetric =  (dQE/qe_chance).^2 + (dPE/pe_chance).^2; % Joint distance metric of QE and PE (standardized scatter)
 
 end

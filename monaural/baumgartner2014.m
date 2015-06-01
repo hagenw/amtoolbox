@@ -158,8 +158,9 @@ if ~isequal(kv.fs,kv.fsstim)
     amtdisp('Sorry, sampling rate of stimulus and HRIRs must be equal!')
     return
 end
-
+state=warning('off'); % convolve throws a warning
 tmp = convolve(target,kv.stim);
+warning(state);
 target = reshape(tmp,[size(tmp,1),size(target,2),size(target,3)]);
     
 

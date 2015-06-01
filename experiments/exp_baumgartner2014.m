@@ -11,19 +11,7 @@ function varargout = exp_baumgartner2014(varargin)
 %      contralateral gain of binaural weighting function
 %
 %
-%   The following flags can be specified;
-%
-%     'plot'    Plot the output of the experiment. This is the default.
-%
-%     'noplot'  Don't plot, only return data.
-%
-%     'autorefresh'  Re-calculate the file if it does not exist. Return 1 if the
-%                file exist, otherwise 0. This is the default
-%
-%     'refresh'  Always recalculate the file.
-%
-%     'cached'   Always use the cached version. Throws an error if the
-%                file does not exist.
+%   The following flags can be specified
 %
 %     'fig2'    Reproduce Fig.2:
 %               Binaural weighting function best fitting results from 
@@ -167,6 +155,11 @@ function varargout = exp_baumgartner2014(varargin)
 %               Across-listener averages of performance measures for
 %               contralateral ear. Bottom row: Contralateral re ipsilateral
 %               averages of performance measures.
+%
+%   Further, cache flags (see amtcache) and plot flags can be specified:
+%     'plot'    Plot the output of the experiment. This is the default.
+%
+%     'noplot'  Don't plot, only return data.
 %
 %   Requirements: 
 %   -------------
@@ -335,7 +328,7 @@ if flags.do_fig3 || flags.do_fig13
   latseg = [-20,0,20]; ii = 2; % centers of lateral segments
 %   dlat =  10;         % lateral range (+-) of each segment
 
-  s = data_baumgartner2014('baseline');
+  s = data_baumgartner2014('baseline',flags.cachemode);
   
   if flags.do_fig3
     idselect = ismember({s.id},{'NH15','NH22','NH62'});
@@ -409,7 +402,7 @@ if flags.do_fig4
       [s,qe, pe] = amtcache('get',cname);
       if isempty(s)
 
-        s = data_baumgartner2014('baseline','gamma',gamma(g),'mrsmsp',mrs(g));
+        s = data_baumgartner2014('baseline','gamma',gamma(g),'mrsmsp',mrs(g),flags.cachemode);
 
         qe_exp = zeros(length(s),length(latseg));
         pe_exp = zeros(length(s),length(latseg));
@@ -475,7 +468,6 @@ if flags.do_fig4
     for g = 1:length(gamma)
       fn = ['result_baseline_g' num2str(gamma(g),'%u') '_mrs' num2str(mrs(g),'%u')];
       [s,qerr(:,:,g), perr(:,:,g),qerr_exp,perr_exp] = amtcache('get',fn,flags.cachemode);
-%       amtcache('remove',fn)
     end
     
     % Number of targets for each listener and lateral segment
@@ -607,7 +599,7 @@ if flags.do_fig12 || flags.do_tab1
     latseg = -60:20:60; % centers of lateral segments
     dlat =  10;  % lateral range (+-) of each segment
 
-    s = data_baumgartner2014('baseline');
+    s = data_baumgartner2014('baseline',flags.cachemode);
 
     qe_exp = zeros(length(s),length(latseg));
     pe_exp = zeros(length(s),length(latseg));
@@ -762,13 +754,13 @@ if flags.do_fig14
   
   [s,qe,pe,qe_exp,pe_exp,latseg] = amtcache('get','baseline',flags.cachemode);
   if isempty(s)
-    exp_baumgartner2014('fig5',flags.redomode);
-    [s,qe,pe,qe_exp,pe_exp,latseg] = amtcache('get','baseline');
+    exp_baumgartner2014('fig5',flags.cachemode);
+    [s,qe,pe,qe_exp,pe_exp,latseg] = amtcache('get','baseline',flags.cachemode);
   end
   
   [paradata.perr,~,paradata.qerr,~,paradata.g,paradata.mrs] = ...
     amtcache('get','parametrization',flags.cachemode);
-  paradata = load([mfilename('fullpath'),'_parametrization.mat']);
+
   idmrs0 = paradata.g == 6 & paradata.mrs == 0;
   mrs0.pe = paradata.perr(:,:,idmrs0);
   mrs0.qe = paradata.qerr(:,:,idmrs0);
@@ -915,7 +907,7 @@ if flags.do_fig5
 
 
   %% Computations
-  s = data_baumgartner2014('pool');  
+  s = data_baumgartner2014('pool',flags.cachemode);  
   s = s(ismember({s.id},'NH12'));
   amtdisp(['Listener: ' s.id])
   chance = [];
@@ -1066,7 +1058,7 @@ if flags.do_fig6
     Conditions = {'BB','LP','W'};
 
     %% Computations
-    s = data_baumgartner2014('pool');
+    s = data_baumgartner2014('pool',flags.cachemode);
 %     chance = [];
     for C = 1:length(Conditions)
 
@@ -1310,7 +1302,7 @@ if flags.do_fig7
   N = [24,9,3];
 
   %% Computations
-  s = data_baumgartner2014('pool');
+  s = data_baumgartner2014('pool',flags.cachemode);
   s = s(ismember({s.id},'NH12')); 
   amtdisp(['Listener: ' s.id])
   chance = [];
@@ -1473,7 +1465,7 @@ if flags.do_fig8
 
 
     %% Computations
-    s = data_baumgartner2014('pool');
+    s = data_baumgartner2014('pool',flags.cachemode);
 %     chance = [];
     for C = 1:length(Conditions)
 
@@ -1732,7 +1724,7 @@ if flags.do_fig9
     latdivision = [-20,0,20];  % lateral center angles of SPs
     flow = 4e3;
 
-    s = data_baumgartner2014('pool');
+    s = data_baumgartner2014('pool',flags.cachemode);
     ns = length(s);
 
     % DTFs of the SPs
@@ -1927,9 +1919,9 @@ if flags.do_fig10
     for psge = 0:1
 
       if psge == 1
-        s = data_baumgartner2014('pool');
+        s = data_baumgartner2014('pool',flags.cachemode);
       else % recalib
-        s = data_baumgartner2014('pool','do',psge);
+        s = data_baumgartner2014('pool','do',psge,flags.cachemode);
       end
 
     latseg = 0;   % centers of lateral segments
@@ -1955,8 +1947,9 @@ if flags.do_fig10
         [f,r] = localizationerror(mflat,'sirpMacpherson2000');
         pe_flat(ll,ss) = localizationerror(mflat,f,r,'perMacpherson2003');
 
-        if plotpmv; 
-          figure; plotbaumgartner2014(pflat,tang,rang,mflat(:,6),mflat(:,8));title(num2str(pe_flat(ll,ss),2));pause(0.5); 
+        if plotpmv, 
+          figure; 
+          plotbaumgartner2014(pflat,tang,rang,mflat(:,6),mflat(:,8));title(num2str(pe_flat(ll,ss),2));pause(0.5); 
         end 
 
         if do_exp1  % Exp. I
@@ -2254,10 +2247,10 @@ if flags.do_fig11
     %% Model Data
     for do = 0:1
 
-      s = data_baumgartner2014('pool','do',do);
+      s = data_baumgartner2014('pool','do',do,flags.cachemode);
      
       cname = ['result_best2005noise_do' num2str(do,'%u')];
-      [ape_BBnoise,qe_BBnoise] = amtcache('get',cname);
+      [ape_BBnoise,qe_BBnoise] = amtcache('get',cname,flags.cachemode);
       if isempty(ape_BBnoise)
         ape_BBnoise = zeros(1,length(s),length(latseg));
         qe_BBnoise = ape_BBnoise;
@@ -2287,10 +2280,10 @@ if flags.do_fig11
     for kk = startSamp:NsampModel 
       for do = 0:1
         cname = ['result_best2005speech_samp' num2str(kk) '_do' num2str(do,'%u')];
-        [ape_lat,qe_lat] = amtcache('get',cname);
+        [ape_lat,qe_lat] = amtcache('get',cname,flags.cachemode);
         if isempty(ape_lat)
 
-          s = data_baumgartner2014('pool','do',do);
+          s = data_baumgartner2014('pool','do',do,flags.cachemode);
 
           ape_lat = zeros(length(lp),length(s),length(latseg));
           qe_lat = ape_lat;
@@ -2444,9 +2437,9 @@ if flags.do_tab2
     for ido = 0:1
 
       if ido == 1
-        s = data_baumgartner2014('pool');
+        s = data_baumgartner2014('pool',flags.cachemode);
       else % recalib
-        s = data_baumgartner2014('pool','do',0);
+        s = data_baumgartner2014('pool','do',0,flags.cachemode);
       end
     
       for C = 1:length(Conditions)
@@ -2650,7 +2643,7 @@ if flags.do_tab3
     latseg = -60:20:60; % centers of lateral segments
     dlat =  10;  % lateral range (+-) of each segment
 
-    s = data_baumgartner2014('baseline');
+    s = data_baumgartner2014('baseline',flags.cachemode);
 
     qe_exp = zeros(length(s),length(latseg));
     pe_exp = zeros(length(s),length(latseg));
@@ -2789,7 +2782,7 @@ if flags.do_fig5_baumgartner2015aro
 
     mrs = 17; % no sensorimotor mapping
 
-    s = data_baumgartner2014('pool');
+    s = data_baumgartner2014('pool',flags.cachemode);
 
     bwcoef = [13,+eps,-eps]; % configuration of binaural weighting stage (binaural, ipsilateral, contralateral
 
