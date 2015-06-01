@@ -22,9 +22,9 @@
 %     ROENNE2012CHIRP          - Simulate chirp evoked ABRs
 %     ROENNE2012CLICK          - Simulate ABR respone to click
 %     ROENNE2012TONEBURSTS     - Simulate tone burst evoked ABR wave V latencies
-%     PLOTROENNE2012            - Plot output of roenne2012
-%     PLOTROENNE2012CHIRP      - Plot output of roenne2012chirp
-%     PLOTROENNE2012TONEBURSTS - Plot output of roenne2012tonebursts
+%     plot_roenne2012            - Plot output of roenne2012
+%     plot_roenne2012CHIRP      - Plot output of roenne2012chirp
+%     plot_roenne2012TONEBURSTS - Plot output of roenne2012tonebursts
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

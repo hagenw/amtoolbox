@@ -151,6 +151,6 @@ if flags.do_plot
   ClickLatency = roenne2012click(stim_level); 
   
   figure;
-  plotroenne2012toneburst(waveVlat,click_latency);
+  plot_roenne2012toneburst(waveVlat,click_latency);
   
 end

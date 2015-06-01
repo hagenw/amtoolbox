@@ -24,14 +24,14 @@ function [waveVamp, waveVlat]  = roenne2012chirp(levels,chirps,varargin)
 %
 %     'noplot'  Do not plot main figure (fig 6 or 7).
 % 
-%     'plot'    Plot main figure (fig 6 or 7). See |plotroenne2012chirp|.
+%     'plot'    Plot main figure (fig 6 or 7). See |plot_roenne2012chirp|.
 %
 %   ---------
 %
 %   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
 %   this model.
 %
-%   See also: roenne2012, plotroenne2012chirp, exp_roenne2012
+%   See also: roenne2012, plot_roenne2012chirp, exp_roenne2012
 %  
 %   References: roenne2012modeling elberling2010evaluating zilany2007representation
 
@@ -153,5 +153,5 @@ waveVlat = waveVlat*1000/fs-15;
 
 if flags.do_plot
   figure;
-  plotroenne2012chirp(waveVamp, waveVlat);
+  plot_roenne2012chirp(waveVamp, waveVlat);
 end

@@ -1,16 +1,16 @@
-function plotlindemann1986(crosscorr,t,varargin)
-%PLOTLINDEMANN1986 Plots the binaural output pattern of the lindemann model
-%   Usage: plotlindemann1986(crosscorr,t,f,tstr);
-%          plotlindemann1986(crosscorr,t,f);
-%          plotlindemann1986(crosscorr,t,tstr);
-%          plotlindemann1986(crosscorr,t);
+function plot_lindemann1986(crosscorr,t,varargin)
+%plot_lindemann1986 Plots the binaural output pattern of the lindemann model
+%   Usage: plot_lindemann1986(crosscorr,t,f,tstr);
+%          plot_lindemann1986(crosscorr,t,f);
+%          plot_lindemann1986(crosscorr,t,tstr);
+%          plot_lindemann1986(crosscorr,t);
 %
 %   Input parameters:
 %       crosscorr : cross-correlation matrix, output from the lindemann
 %                   function
 %       t         : time vector of the analysed stimuli (used for t axis)
 %
-%   `plotlindemann1986(crosscorr,t)` plots the cross-correlation output from the
+%   `plot_lindemann1986(crosscorr,t)` plots the cross-correlation output from the
 %   lindemann function as a so called binaural activity map. This means the
 %   correlation value is plotted depending on time of the stimulus and
 %   the correlation-time delay. *t* is the time axis of the plot. *f* determines
@@ -30,7 +30,7 @@ function plotlindemann1986(crosscorr,t,varargin)
 %     'title',t  display t as the title overriding the default.
 %
 %   You may also supply the parameters in the input arguments in the
-%   following order: `plotlindemann1986(crosscorr,t,fc)`
+%   following order: `plot_lindemann1986(crosscorr,t,fc)`
 %  
 %   See also: lindemann1986, lindemann1986bincorr
 

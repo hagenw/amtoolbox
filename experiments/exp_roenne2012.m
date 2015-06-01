@@ -81,7 +81,7 @@ if flags.do_fig5
   end;
   
   if flags.do_plot;
-    plotroenne2012tonebursts(waveVlat,click_latency);
+    plot_roenne2012tonebursts(waveVlat,click_latency);
   end  ;  
 
 end;
@@ -101,7 +101,7 @@ if flags.do_fig6;
   end;
         
   if flags.do_plot
-    plotroenne2012chirp(waveVamp, waveVlat,'amponly');
+    plot_roenne2012chirp(waveVamp, waveVlat,'amponly');
   end
 end;
 
@@ -120,7 +120,7 @@ if flags.do_fig7;
   end;
         
   if flags.do_plot
-    plotroenne2012chirp(waveVamp, waveVlat,'latonly');
+    plot_roenne2012chirp(waveVamp, waveVlat,'latonly');
   end
 end;
 

@@ -21,7 +21,7 @@ function [waveVamp, waveVlat]  = roenne2012(stim,fsstim,stim_level,varargin)
 %
 %   The flag may be one of:
 %
-%     'plot'            Plot the output. See |plotroenne2012|.
+%     'plot'            Plot the output. See |plot_roenne2012|.
 %  
 %     'noplot'          Do not plot. This is the default.
 %
@@ -105,5 +105,5 @@ minpeak = min(simpot(find(simpot == max(simpot)):...
 waveVamp = (maxpeak-minpeak);                               
 
 if flags.do_plot
-  plotroenne2012(stim_level,waveVamp, waveVlat, simpot, ANout, 'flow',kv.flow, 'fhigh', kv.fhigh);
+  plot_roenne2012(stim_level,waveVamp, waveVlat, simpot, ANout, 'flow',kv.flow, 'fhigh', kv.fhigh);
 end

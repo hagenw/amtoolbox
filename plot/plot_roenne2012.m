@@ -1,12 +1,12 @@
-function plotroenne2012(stim_level,waveVamp,waveVlat, simpot, ANout,varargin)
-%PLOTROENNE2012 Plot the output from the Roenne 2012 model
-%   Usage: plotroenne2012(waveVamp,waveVlat,...);
+function plot_roenne2012(stim_level,waveVamp,waveVlat, simpot, ANout,varargin)
+%plot_roenne2012 Plot the output from the Roenne 2012 model
+%   Usage: plot_roenne2012(waveVamp,waveVlat,...);
 %
 %   Input parameters:
 %     waveVamp   : Amplitude of simulated ABR wave V.
 %     waveVlat   : Latency of simulated ABR wave V peak.
 %
-%   `plotroenne2012(stim_level,waveVamp,waveVlat)` plots the output from
+%   `plot_roenne2012(stim_level,waveVamp,waveVlat)` plots the output from
 %   |roenne2012|.
 %
 %   The flag may be one of:
