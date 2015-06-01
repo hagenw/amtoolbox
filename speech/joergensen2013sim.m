@@ -29,7 +29,7 @@ function [SRTs conditions] = joergensen2013sim(NSpeechsamples,varargin)
 %   Please cite Joergensen et al. (2013) if you use
 %   this model.
 %
-%   See also: joergensen2013, plotjoergensen2013, exp_joergensen2013
+%   See also: joergensen2013, plot_joergensen2013, exp_joergensen2013
 %
 %   References: joergensen2013 festen1990effects kjems2009role
   

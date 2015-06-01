@@ -1,8 +1,8 @@
-function plotjoergensen2011(dSRT, varargin)
-%PLOTJOERGENSEN2011  Plot Fig. 5 or 6 of Jørgensen and Dau (2011)
-%   Usage: plotjoergensen2011(dSRT,flag)
+function plot_joergensen2011(dSRT, varargin)
+%plot_joergensen2011  Plot Fig. 5 or 6 of Jørgensen and Dau (2011)
+%   Usage: plot_joergensen2011(dSRT,flag)
 %
-%   `plotjoergensen2011(dSRT)` plots the output of |joergensen2011| in the
+%   `plot_joergensen2011(dSRT)` plots the output of |joergensen2011| in the
 %   style of Fig. 5 or 6 of Jørgensen and Dau (2011).
 %
 %   The flag may be one of:
@@ -13,7 +13,7 @@ function plotjoergensen2011(dSRT, varargin)
 %     'fig6' : plots the data in the style of figure 6 of Jørgensen and Dau
 %              (2011)
 %
-%   See also: joergensen2011, plotjoergensen2011, exp_joergensen2011
+%   See also: joergensen2011, plot_joergensen2011, exp_joergensen2011
 
 % Define input flags
 definput.flags.type = {'fig5','fig6'};

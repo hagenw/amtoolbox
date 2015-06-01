@@ -42,7 +42,7 @@ function exp_joergensen2013(NSpeechsamples, varargin)
 %
 %     exp_joergensen2013('fig2_simAll');
 %  
-%   See also: joergensen2013, joergensen2013sim, plotjoergensen2013
+%   See also: joergensen2013, joergensen2013sim, plot_joergensen2013
 %
 %   ---------
 %
@@ -85,7 +85,7 @@ if flags.do_fig2_simAll;
     end;
     
     if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
+        plot_joergensen2013(SRTs,'fig2');
     end
 end;
 
@@ -105,7 +105,7 @@ if flags.do_fig2_specsub;
     end;
     
     if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
+        plot_joergensen2013(SRTs,'fig2');
     end
 end;
 
@@ -125,7 +125,7 @@ if flags.do_fig2_reverb;
     end;
     
     if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
+        plot_joergensen2013(SRTs,'fig2');
     end
 end;
 
@@ -145,7 +145,7 @@ if flags.do_fig2_kjems2009;
     end;
     
     if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
+        plot_joergensen2013(SRTs,'fig2');
     end
 end;
 
@@ -165,7 +165,7 @@ if flags.do_fig2_FP1990;
     end;
     
     if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
+        plot_joergensen2013(SRTs,'fig2');
     end
 end;
 
@@ -185,14 +185,14 @@ if flags.do_fig2_Jetal2013;
     end;
     
     if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
+        plot_joergensen2013(SRTs,'fig2');
     end
 end;
 
 if  flags.do_fig2_OrgSim
     %load('plotting_jasa2012_final_predictionsJetal2013_fig2')
     %if flags.do_plot
-    %    plotjoergensen2013(SRTs,'fig2');
+    %    plot_joergensen2013(SRTs,'fig2');
     %end
 end
 

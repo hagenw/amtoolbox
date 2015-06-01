@@ -16,7 +16,7 @@ function [dSRT] = joergensen2011sim(NSpeechsamples,varargin)
 %   Please cite Jørgensen and Dau (2011) if you use
 %   this model.
 %
-%   See also: joergensen2011, plotjoergensen2011, exp_joergensen2011
+%   See also: joergensen2011, plot_joergensen2011, exp_joergensen2011
 %
 %   References: joergensen2011predicting
 

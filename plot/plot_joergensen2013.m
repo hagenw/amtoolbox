@@ -1,8 +1,8 @@
-function plotjoergensen2013(simSRTs, varargin)
-%PLOTJOERGENSEN2013  Plot SRTs in the style of Fig. 2 from Joergensen et al., (2013)
-%   Usage: plotjoergensen2013(SRT,flag)
+function plot_joergensen2013(simSRTs, varargin)
+%plot_joergensen2013  Plot SRTs in the style of Fig. 2 from Joergensen et al., (2013)
+%   Usage: plot_joergensen2013(SRT,flag)
 %
-%   `plotjoergensen2013(SRT)` plots the output of
+%   `plot_joergensen2013(SRT)` plots the output of
 %   |joergensen2012| in the style of Fig. 2 of Joergensen et al., (2013).
 %
 %   The flag may be one of:

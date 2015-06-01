@@ -38,7 +38,7 @@ function exp_joergensen2011(varargin)
 %   Please cite Jørgensen and Dau (2011) if you use
 %   this model.
 %
-%   See also: joergensen2011, plotjoergensen2011, exp_joergensen2011
+%   See also: joergensen2011, plot_joergensen2011, exp_joergensen2011
 %
 %   References: joergensen2011predicting
 
@@ -67,7 +67,7 @@ if flags.do_fig5;
   end;
         
   if flags.do_plot
-    plotjoergensen2011(dSRT,'fig5');
+    plot_joergensen2011(dSRT,'fig5');
   end
 end;
 
@@ -82,6 +82,6 @@ if flags.do_fig6;
   end;
         
   if flags.do_plot
-    plotjoergensen2011(dSRT,'fig6');
+    plot_joergensen2011(dSRT,'fig6');
   end
 end;
