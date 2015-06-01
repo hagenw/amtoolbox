@@ -38,7 +38,7 @@ function amtstart(varargin)
 %
 %   `amtstart('verbose')` starts the AMT in the verbose mode and all output will be dispplayed. This is the default mode. 
 % 
-%   See also:  amtmex amtflags amtauxdataurl amtauxdatapath
+%   See also:  amtmex amtflags amtload amtcache
 %
   
 %   AUTHOR : Peter L. Soendergaard, Piotr Majdak 
@@ -56,21 +56,23 @@ else
     fclose(FID);
 end
 
-% Check if Octave was called using 'silent'
-printbanner=1;
-%if isoctave
-%  args=argv;
-%  for ii=1:numel(args)
-%    s=lower(args{ii});
-%    if strcmp(s,'--silent') || strcmp(s,'-q')
-%      printbanner=0;
-%    end;
-%  end;
-%end;
+% Check if 'silent' present in the flags
+silent=0;
+if isoctave, args=argv; else args=varargin; end
+ for ii=1:numel(args)
+   s=lower(args{ii});
+   if strcmp(s,'silent') || strcmp(s,'-q')
+     silent=1;
+   end;
+ end;
+% end;
 
 
-if printbanner
-  disp(['AMT version ',amt_version,'. (C) Peter L. Soendergaard and Piotr Majdak.'])
+if ~silent
+  disp('  ');
+  disp(['AMT version ',amt_version,'. (C) Peter L. Soendergaard and Piotr Majdak.']);
+  disp('  ');
+  disp('Starting toolboxes...');
 end;
 
 %% LTFAT package
@@ -86,17 +88,9 @@ if ~exist('ltfatstart','file')
 end
 
 % Start LTFAT
-disp('*** Starting LTFAT ***');
+% if ~silent, disp('*** Starting LTFAT ***'); end
 if exist('ltfatstart','file')
-  ltfatstart;
-    % set defaults again because ltfatstart is clearing all persistent vars
-  if isempty(varargin),
-  %   amtflags('verbose','download');
-    flags=amtflags('verbose');
-  else
-    flags=amtflags(varargin);
-  end
-  
+  if silent, ltfatstart(0); else ltfatstart; end;
 else
   error(['LTFAT package could not be found. Unable to continue.' 10 ...
         'Download LTFAT from http://ltfat.sourceforge.net ' 10 ...
@@ -105,25 +99,14 @@ end
 
 % Check for the correct version. 
 s=ltfathelp('version'); 
-s_r='1.0.9'; % set the required version
+s_r='2.0.0'; % set the required version
 v=sscanf(s,'%d.%d.%d'); v(4)=0;
 v_r=sscanf(s_r,'%d.%d.%d');
 if ~(v(1)>v_r(1) || (v(1)>=v_r(1) && v(2)>v_r(2)) || (v(1)>=v_r(1) && v(2)>=v_r(2) && v(3)>=v_r(3)) ),
     error(['You need LTFAT >= ' s_r ' to work with AMT. ' ...
       'Please update your package from http://ltfat.sourceforge.net ']);
 end
-
-
-%% define default start-up behaviour
-if isempty(varargin),
-%   amtflags('verbose','download');
-  flags=amtflags('verbose');
-else
-  flags=amtflags(varargin);
-end
-
-
-     
+    
 %% SOFA package
 
 % Search for SOFA package
@@ -137,22 +120,20 @@ if ~exist('SOFAstart','file')
 end
 
 % Start SOFA
-amtdisp('*** Starting SOFA ***');
+% if ~silent, disp('*** Starting SOFA ***'); end
 if exist('SOFAstart','file')
   SOFAdbPath(fullfile(basepath,'hrtf'));
   SOFAdbURL('http://www.sofacoustics.org/data/amt');
-  if flags.do_silent
-    SOFAstart('silent');
-  else
-    SOFAstart;
-  end
+  if silent, SOFAstart('silent'); else SOFAstart; end
 	warning('off','SOFA:upgrade');	% disable warning on upgrading older SOFA files
 	warning('off','SOFA:load'); % disable warnings on loading SOFA files
 else
-  amtdisp(['SOFA package could not be found. Continue without SOFA support.']);
-  amtdisp(['For SOFA support please download the package ' ...
+  if ~silent,
+  disp('SOFA package could not be found. Continue without SOFA support.');
+  disp(['For SOFA support please download the package ' ...
         'from http://sofacoustics.sourceforge.net ' ...
         'and copy to amtoolbox/thirdparty/SOFA.']); 
+  end
 end
 
 %% SFS package
@@ -174,11 +155,11 @@ if exist(fullfile(sfspath,'SFS_general','rms.m'),'file'),
 end
 
 % Start 
-amtdisp('*** Starting SFS ***');
+% if ~silent, disp('*** Starting SFS ***'); end
 if exist('SFS_start','file')
   SFS_start;
   s=SFS_version; s_r='1.0.0'; % set the required version
-  amtdisp(['Sound Field Synthesis Toolbox, version ' s]);
+  if ~silent, disp(['Sound Field Synthesis Toolbox, version ' s]); end
   v=sscanf(s,'%d.%d.%d'); v(4)=0;
   v_r=sscanf(s_r,'%d.%d.%d');
   if ~(v(1)>v_r(1) || (v(1)>=v_r(1) && v(2)>v_r(2)) || (v(1)>=v_r(1) && v(2)>=v_r(2) && v(3)>=v_r(3)) ),
@@ -186,14 +167,14 @@ if exist('SFS_start','file')
         'Please update your package from https://github.com/sfstoolbox/sfs ']);
   end  
 	
-else
-  amtdisp(['SFS package could not be found. Continue without SFS support.']);
-  amtdisp(['For SFS support please download the package ' ...
+elseif ~silent, 
+  disp('SFS package could not be found. Continue without SFS support.');
+  disp(['For SFS support please download the package ' ...
         'from https://github.com/sfstoolbox/sfs ' ...
         'and copy to amtoolbox/thirdparty/sfs.']); 
 end
 
-%% Install modules
+%% Install AMT modules
 % A directory called DIRNAME containing a file 'DIRNAMEinit.m' is
 % considered as a module. 
 % DIRNAMEinit.m must set the variable 'status' with the following value:
@@ -236,6 +217,8 @@ for ii=1:length(d)
   end;
 end;
 
+%% define default start-up behaviour
+flags=amtflags(varargin); % amtdisp and other amt-related functions work now!
 
 %% ---------- load information into ltfathelp ------------
 
@@ -243,9 +226,24 @@ end;
 ltfatsetdefaults('amthelp','versiondata',amt_version,...
                  'modulesdata',modules);
 
-               %% Initialize aux data
-amtdisp('*** AMT Ready to go! ***'); 
+%% Initialize aux data, cache, and display starting information
+amtdisp('  ');
+% amtdisp('  ');
+amtdisp('*** AMT ready to go! ***'); 
 amtdisp(['Auxiliary data (local): ' amtauxdatapath]);
 amtdisp(['Auxiliary data (web): ' amtauxdataurl]);
-
+if strcmp(flags.cachemode,'global'), flags.cachemode='normal'; end
+amtcache('setMode',flags.cachemode);
+switch flags.cachemode
+  case 'normal'
+    amtdisp('Cache mode: Download precalculated results.');
+    amtdisp('            exp_model(...)          shows precalculated results');
+    amtdisp('            exp_model(...,''redo'') enforces recalculation');
+  case 'localonly'
+    amtdisp('Cache mode: Use local cache or recalculate. Do not connect to remote cache.');
+  case 'cached'
+    amtdisp('Cache mode: Enforce using cache. Do not recalcalculate.');
+  case 'redo'
+    amtdisp('Cache mode: Recalculate always (be patient!).');
+end
 

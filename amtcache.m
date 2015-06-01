@@ -14,9 +14,11 @@ function varargout=amtcache(cmd,name,varargin)
 %                same as that used for saving in cache.
 %                `... = amtcache('get',package,flags)` allows to control the 
 %                behaviour of accessing the cache. `flags` can be:
-%                  'normal': package will be recalculated when locally not available. 
-%                  'redo': enforce the recalculation of the package. [..] = amtcache('get', [..]) outputs empty variables always. 
-%                  'cached': enforce using cached package. If the cached package is locally not available, it will be downloaded from the internet. If it is remotely not available, warning will be thrown and the package will be recalculated. Note that this method may by-pass the actual processing and thus does not test the corresponding functionality. It is, however, very convenient for fast access of results like plotting figures. On the internet, the cached packages are available only for the models from release version of the AMToolbox. 
+%                  'normal': Use cached package. If the cached package is locally not available, it will be downloaded from the internet. If it is remotely not available, enforce recalculation of the package. Note that this method may by-pass the actual processing and thus does not test the actual functionality of a model. It is, however, very convenient for fast access of results like plotting figures. On the internet, the cached packages are available for the release versions only. 
+%                  'cached': Enforce to use cached package. If the cached package is locally not available, it will be downloaded from the internet. If it is remotely not available, an error will be thrown.
+%                  'redo': Enforce the recalculation of the package. [..] = amtcache('get', [..]) outputs empty variables always. 
+%                  'localonly': Package will be recalculated when locally
+%                  not available. Do not connect to the internet. 
 %
 %     'set'      stores variables as a package in the cache. 
 %                `amtcache('set',package, variables)` saves variables in the cache using
@@ -50,9 +52,12 @@ function varargout=amtcache(cmd,name,varargin)
 
 %   Author: Piotr Majdak, 2015
 
-persistent CacheURL;
+persistent CacheURL CacheMode;
 if isempty(CacheURL)
   CacheURL=['http://www.sofacoustics.org/data/amt-' amthelp('version') '/cache'];
+end
+if isempty(CacheMode)
+  CacheMode='normal';
 end
 
 switch cmd
@@ -70,42 +75,80 @@ switch cmd
     end
     save(tokenfn,'cache','-v6');
     varargout{1}=tokenfn;
+    
   case 'get'
-    if nargin<3, varargin{1}='normal'; end    
+    if nargin<3, varargin{1}='global'; end  % if not provided: global
+    if strcmp(varargin{1},'global'), varargin{1}=CacheMode; end  % if global: use the stored cache mode
+      % now let's parse the cache mode
     switch varargin{1}
       case 'redo' % force recalculations in any case
         for ii=1:nargout, varargout{ii}=[]; end
 
-      case 'cached' % force using cached in any case
+      case 'cached' % use local cache. If not available download from the internet. If not available throw an error.
         f=dbstack('-completenames');
         fn=f(2).file;
         token=urlencode(strrep(fn(length(amtbasepath)+1:end),'\','/'));
         tokenpath=fullfile(amtbasepath,'cache',token);
         tokenfn=fullfile(tokenpath,[name '.mat']);
-
         if ~exist(tokenfn,'file'),
-          % TODO: implement downloading from the internet
+          webfn=[CacheURL '/' urlencode(token) '/' name '.mat'];
+          amtdisp(['Cache: Downloading ' name '.mat for ' token],'progress');
+          if ~exist(tokenpath,'dir'); mkdir(tokenpath); end
+          [~,stat]=urlwrite(webfn,tokenfn);
+          if ~stat
+            error(['Unable to download file from remote cache: ' webfn]);
+          end          
         end
         load(tokenfn);
         for ii=1:nargout
-          varargout{ii}=s(ii).value;
+          varargout{ii}=cache(ii).value;
         end
         
-      case {'normal','global'} % normal mode: redo if locally not available
+      case 'localonly' % use local cache only. If not available, enforce recalculation
         f=dbstack('-completenames');
         fn=f(2).file;
         token=urlencode(strrep(fn(length(amtbasepath)+1:end),'\','/'));
         tokenpath=fullfile(amtbasepath,'cache',token);
         tokenfn=fullfile(tokenpath,[name '.mat']);
-
-        if exist(tokenfn,'file'),
+        if ~exist(tokenfn,'file'),
+            amtdisp(['Cache not found: ' tokenfn]);
+            amtdisp('Enforce recalculation...');
+            for ii=1:nargout, varargout{ii}=[]; end % enforce recalculation
+        else
           load(tokenfn);
           for ii=1:nargout
             varargout{ii}=cache(ii).value;
           end
+        end
+
+      case 'normal' % use local cache. If not available download from the internet. If not available recalculate.
+        f=dbstack('-completenames');
+        fn=f(2).file;
+        token=urlencode(strrep(fn(length(amtbasepath)+1:end),'\','/'));
+        tokenpath=fullfile(amtbasepath,'cache',token);
+        tokenfn=fullfile(tokenpath,[name '.mat']);
+        if ~exist(tokenfn,'file'),
+          webfn=[CacheURL '/' urlencode(token) '/' name '.mat'];
+          amtdisp(['Cache: Downloading ' name '.mat for ' token],'progress');
+          if ~exist(tokenpath,'dir'); mkdir(tokenpath); end
+          [~,stat]=urlwrite(webfn,tokenfn);
+          if ~stat
+            amtdisp(['Cache not found: ' webfn ' Enforce recalculation...']);
+            amtdisp('Enforce recalculation...');
+            for ii=1:nargout, varargout{ii}=[]; end % enforce recalculation
+          else         
+            load(tokenfn);  % downloaded to local cache. Load...
+            for ii=1:nargout
+              varargout{ii}=cache(ii).value;
+            end
+          end 
         else
-          for ii=1:nargout, varargout{ii}=[]; end
-        end            
+          load(tokenfn);  % Locally available, load...
+          for ii=1:nargout
+            varargout{ii}=cache(ii).value;
+          end
+        end
+        
     end
   case 'setURL'
     CacheURL=name;
@@ -117,6 +160,8 @@ switch cmd
       amtdisp(['Clearing ' cachepath ' ...']);
       rmdir(cachepath, 's');       
     end
+  case 'setMode'
+    CacheMode = name;
   otherwise
     error('Unsupported command');
 end
