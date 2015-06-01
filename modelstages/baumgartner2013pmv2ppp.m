@@ -1,7 +1,7 @@
-function [ varargout ] = pmv2ppp( p,varargin )
-%PMV2PPP PMV to PPP conversion
-%   Usage:  [ qe,pe,eb ] = pmv2ppp( p,tang,rang );
-%           [ qe,pe,eb ] = pmv2ppp( p,tang,rang,exptang );
+function [ varargout ] = baumgartner2013pmv2ppp( p,varargin )
+%baumgartner2013pmv2ppp PMV to PPP conversion
+%   Usage:  [ qe,pe,eb ] = baumgartner2013pmv2ppp( p,tang,rang );
+%           [ qe,pe,eb ] = baumgartner2013pmv2ppp( p,tang,rang,exptang );
 %
 %   Input parameters:
 %     p          : prediction matrix (response PMVs)
@@ -15,7 +15,7 @@ function [ varargout ] = pmv2ppp( p,varargin )
 %     pe         : local polar RMS error in degrees
 %     eb         : elevation bias in degrees; QEs and up-rear quadrant excluded
 %
-%   `pmv2ppp(...)` retrieves commonly used PPPs (Psychoacoustic performance
+%   `baumgartner2013pmv2ppp(...)` retrieves commonly used PPPs (Psychoacoustic performance
 %   parameters) for sagittal-plane (SP) localization like quadrant error
 %   (QEs), local polar RMS error (PE), and elevation bias (EB) from
 %   response PMVs (probability mass vectors) predicted by a localization
@@ -23,12 +23,12 @@ function [ varargout ] = pmv2ppp( p,varargin )
 %   an average across all available target angles. The latter is the
 %   default.
 %
-%   `pmv2ppp` needs the following optional parameter in order to retrieve
+%   `baumgartner2013pmv2ppp` needs the following optional parameter in order to retrieve
 %   the PPPs for a specific (set of) target angles:
 %
 %     'exptang', exptang   experimental polar target angles
 %
-%   `pmv2ppp` accepts the following flag:
+%   `baumgartner2013pmv2ppp` accepts the following flag:
 %
 %     'print'      Display the outcomes.
 %
@@ -37,7 +37,7 @@ function [ varargout ] = pmv2ppp( p,varargin )
 %
 %   To evaluate chance performance of QE and PE use :::
 %
-%     [qe,pe] = pmv2ppp(ones(72,44));
+%     [qe,pe] = baumgartner2013pmv2ppp(ones(49,49));
 %
 %   References: baumgartner2013assessment baumgartner2012modelling
 
