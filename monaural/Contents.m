@@ -14,17 +14,12 @@
 %  The Langendijk model
 %     LANGENDIJK2002           - Langendijk & Bronkhorst 2002 auditory model 
 %     LANGENDIJK2002LIKELIHOOD - Likelihood estimation
-%     plot_langendijk2002       - Plot the pdf-matrices with grey colormap
-%     plot_langendijk2002LIKELIHOOD - Plot the likelihood statistics
 %
 %  The Roenne 2012 model
 %     ROENNE2012                - Simulate ABR to given stimulus
 %     ROENNE2012CHIRP          - Simulate chirp evoked ABRs
 %     ROENNE2012CLICK          - Simulate ABR respone to click
 %     ROENNE2012TONEBURSTS     - Simulate tone burst evoked ABR wave V latencies
-%     plot_roenne2012            - Plot output of roenne2012
-%     plot_roenne2012CHIRP      - Plot output of roenne2012chirp
-%     plot_roenne2012TONEBURSTS - Plot output of roenne2012tonebursts
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
