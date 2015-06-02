@@ -125,7 +125,7 @@ switch cmd
         tokenpath=fullfile(amtbasepath,'cache',token);
         tokenfn=fullfile(tokenpath,[name '.mat']);
         if ~exist(tokenfn,'file'),
-            amtdisp(['Cache not found: ' tokenfn]);
+            amtdisp(['Cached data not found: ' tokenfn]);
             amtdisp('Enforce recalculation...');
             for ii=1:nargout, varargout{ii}=[]; end % enforce recalculation
         else
@@ -147,7 +147,7 @@ switch cmd
           if ~exist(tokenpath,'dir'); mkdir(tokenpath); end
           [~,stat]=urlwrite(webfn,tokenfn);
           if ~stat
-            amtdisp(['Cache not found: ' webfn ' Enforce recalculation...']);
+            amtdisp(['Cached data not found: ' webfn]);
             amtdisp('Enforce recalculation...');
             for ii=1:nargout, varargout{ii}=[]; end % enforce recalculation
           else         

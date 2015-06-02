@@ -260,7 +260,6 @@ if flags.do_missingflag
   error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
 
-save_format='-v6';
 
 %% General Plot Settings
 TickLength = [0.02,0.04];
@@ -724,7 +723,7 @@ if flags.do_fig12 || flags.do_tab1
   
   if flags.do_tab1
 
-    Labels = {'ID','N','S','actual QE','predicted QE','actual PE','predicted PE','Likelihood fit'};    
+    Labels = {'ID','N','S','actual QE','predicted QE','actual PE','predicted PE'};    
 
     mtx = zeros(length(Labels),length(s));
     for ll = 1:length(s)
@@ -735,10 +734,8 @@ if flags.do_fig12 || flags.do_tab1
       mtx(5,ll) = qe(ll);
       mtx(6,ll) = s(ll).pe_exp;
       mtx(7,ll) = pe(ll);
-%       mtx(8,ll) = s(ll).pvalue;
     end
     
-%     [tmp,idsort] = sort([s.qe_exp]);
     [tmp,idsort] = sort(mtx(1,:)); % sort acc. to ID
     mtx = mtx(:,idsort);
     
@@ -853,7 +850,7 @@ if flags.do_fig14
     
     titstr = {['w/ SMM:  e_{PE} = ' num2str(dpe,'%0.1f') '\circ , r_{PE} = ' num2str(r_pe(2),'%0.2f')];...
       ['w/o SMM: e_{PE} = ' num2str(mrs0.dpe,'%0.1f') '\circ , r_{PE} = ' num2str(mrs0.r_pe(2),'%0.2f')]};
-    amtdisp(titstr,'progress')
+    amtdisp(titstr,'progress');
     title(titstr,'FontSize',kv.FontSize)
     set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[21.1,45.9],...
       'YMinorTick','on','FontSize',kv.FontSize,...
@@ -880,7 +877,7 @@ if flags.do_fig14
       'ok-','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w');
     titstr = {['w/ SMM:  e_{QE} = ' num2str(dqe,'%0.1f') '% , r_{QE} = ' num2str(r_qe(2),'%0.2f')];...
       ['w/o SMM: e_{QE} = ' num2str(mrs0.dqe,'%0.1f') '% , r_{QE} = ' num2str(mrs0.r_qe(2),'%0.2f')]};
-    amtdisp(titstr)
+    amtdisp(titstr,'progress');
     title(titstr,'FontSize',kv.FontSize)
     set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[2.1,26.9],...
       'XTick',latseg,'YMinorTick','on','FontSize',kv.FontSize,...
