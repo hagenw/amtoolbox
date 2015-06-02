@@ -42,10 +42,6 @@ function data = data_ziegelwanger2014(varargin)
 %                   output has the following fields: `data.hM`,
 %                   `data.meta` and `data.stimPar`.  
 %  
-%     'redo'        Recalculate the results  
-%
-%     'cached'      Use cached results. Default. 
-%
 %   The fields are given by:
 %
 %     `data.results`     Results for all HRTF sets
@@ -120,7 +116,7 @@ if flags.do_ARI
             [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
             [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
-        amtcache('set','CIPIC',results);
+        amtcache('set','ARI',results);
     end
     data.results=results;
     
