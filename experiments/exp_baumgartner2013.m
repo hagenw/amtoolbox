@@ -43,7 +43,7 @@ function varargout=exp_baumgartner2013(varargin)
 %   `data.qe`
 %      predicted quadrant error
 %
-%   The following flags can be specified;
+%   The following flags can be specified:
 %
 %     'plot'    Plot the output of the experiment. This is the default.
 %

@@ -40,7 +40,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
 %
 %     jelfs2011({0,'kemar'},{[330 90],'kemar'})
 %
-%   See also: plotjelfs2011, culling2005bmld, exp_jelfs2011
+%   See also: culling2005bmld, exp_jelfs2011
 % 
 %   References:  jelfs2011revision culling2010mapping lavandier2012binaural
   

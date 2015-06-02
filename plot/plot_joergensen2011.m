@@ -13,7 +13,7 @@ function plot_joergensen2011(dSRT, varargin)
 %     'fig6' : plots the data in the style of figure 6 of Jørgensen and Dau
 %              (2011)
 %
-%   See also: joergensen2011, plot_joergensen2011, exp_joergensen2011
+%   See also: joergensen2011, plot_joergensen2011
 
 % Define input flags
 definput.flags.type = {'fig5','fig6'};

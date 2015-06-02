@@ -76,6 +76,8 @@ function data = data_baumgartner2013(varargin)
 % Define input flags
 definput.flags.type = {'missingflag','tab1','pool'};
 definput.flags.HRTFformat = {'sofa','ari'};
+definput.import={'amtcache'};
+
 
 % Parse input options
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);

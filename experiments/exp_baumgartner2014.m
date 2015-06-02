@@ -1,6 +1,6 @@
 function varargout = exp_baumgartner2014(varargin)
 %EXP_BAUMGARTNER2014 Figures from Baumgartner et al. (2014)
-%   Usage: data = exp_baumgartner2014(flag)
+%   Usage: data = exp_baumgartner2014(flag) 
 %
 %   `exp_baumgartner2014(flag)` reproduces figures of the study from 
 %   Baumgartner et al. (2014).
@@ -150,11 +150,11 @@ function varargout = exp_baumgartner2014(varargin)
 %               average performances. 
 %
 %     'fig5_baumgartner2015aro'    Reproduce Fig.5 of baumgartner2015aro:
-%               Effect of background noise on reliability of contralateral  
-%               cues for various lateral eccentricities. Top row:
-%               Across-listener averages of performance measures for
-%               contralateral ear. Bottom row: Contralateral re ipsilateral
-%               averages of performance measures.
+%                                  Effect of background noise on reliability of contralateral  
+%                                  cues for various lateral eccentricities. Top row:
+%                                  Across-listener averages of performance measures for
+%                                  contralateral ear. Bottom row: Contralateral re ipsilateral
+%                                  averages of performance measures.
 %
 %   Further, cache flags (see amtcache) and plot flags can be specified:
 %     'plot'    Plot the output of the experiment. This is the default.
@@ -853,7 +853,7 @@ if flags.do_fig14
     
     titstr = {['w/ SMM:  e_{PE} = ' num2str(dpe,'%0.1f') '\circ , r_{PE} = ' num2str(r_pe(2),'%0.2f')];...
       ['w/o SMM: e_{PE} = ' num2str(mrs0.dpe,'%0.1f') '\circ , r_{PE} = ' num2str(mrs0.r_pe(2),'%0.2f')]};
-    amtdisp(titstr)
+    amtdisp(titstr,'progress')
     title(titstr,'FontSize',kv.FontSize)
     set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[21.1,45.9],...
       'YMinorTick','on','FontSize',kv.FontSize,...

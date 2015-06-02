@@ -118,8 +118,8 @@ function [outsig, fc] = drnl(insig,fs,varargin)
 %     'nlin_d',d     The *d* coefficient for the broken-stick non-linearity. Default
 %                    value is 1.
 %
-%   The output from DRNL can be conveniently visualized using the |plotfilterbank|
-%   function from LTFAT.
+%   The output from DRNL can be conveniently visualized using the
+%   `plotfilterbank` function from LTFAT.
 %
 %   See also: middleearfilter
 % 

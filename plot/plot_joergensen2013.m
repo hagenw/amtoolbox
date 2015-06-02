@@ -3,7 +3,7 @@ function plot_joergensen2013(simSRTs, varargin)
 %   Usage: plot_joergensen2013(SRT,flag)
 %
 %   `plot_joergensen2013(SRT)` plots the output of
-%   |joergensen2012| in the style of Fig. 2 of Joergensen et al., (2013).
+%   |joergensen2013| in the style of Fig. 2 of Joergensen et al., (2013).
 %
 %   The flag may be one of:
 %
@@ -13,7 +13,7 @@ function plot_joergensen2013(simSRTs, varargin)
 %
 %   Please cite Joergensen et al. (2013) if you use this model
 %
-%   See also: joergensen2013, joergensen2013sim, exp_joergensen2013
+%   See also: joergensen2013
 
 % Define input flags
 definput.flags.type = {'fig2'};

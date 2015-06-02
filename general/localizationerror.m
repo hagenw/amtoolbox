@@ -4,11 +4,14 @@ function [varargout] = localizationerror(m,varargin)
 %          [res, meta, par] = localizationerror(m,errorflag)
 %
 %   Input parameters:
-%     m       : item list of experiment
-%               Columns: 
-%                1:4 ...   azi_target,ele_target,azi_response,ele_response
-%                5:8 ...   lat_target,pol_target,lat_response,pol_response
-%                9   ...   F/B-C resolved pol_response
+%     m       : item list from a localization experiment. Columns: 
+% 
+%                 1:4 ...   azi_target,ele_target,azi_response,ele_response
+%
+%                 5:8 ...   lat_target,pol_target,lat_response,pol_response
+%
+%                 9   ...   F/B-C resolved pol_response
+%
 %
 %   `localizationerror(m,errorflag)` returns psychoacoustic performance 
 %   parameters for experimental response patterns. 

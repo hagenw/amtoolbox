@@ -1,6 +1,7 @@
 function analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,gamma_order,bandwidth_factor)
 %GFB_ANALYZER_NEW  Construct new analyzer object
 %   Usage:  analyzer = gfb_analyzer_new(fs,flow, basef, fhigh,filters_per_ERBaud,gamma_order,bandwidth_factor)
+%
 %   Input parameters:
 %      fs                 : The sampling frequency of the signals on which
 %                           the analyzer will operate

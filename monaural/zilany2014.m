@@ -18,7 +18,7 @@ function [ANresp,fc,varargout] = zilany2014(spl,stim,fsstim,varargin)
 %
 %   `zilany2014(...)` returns modeled responses of multiple AN fibers tuned to 
 %   various characteristic frequencies characterstic frequencies evenly spaced 
-%   along ERB scale (see |audspace|_).
+%   along ERB scale (see `audspace`).
 %
 %   Please cite the references below if you use this model.
 %

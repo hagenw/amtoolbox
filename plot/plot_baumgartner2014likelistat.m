@@ -1,14 +1,19 @@
 function plot_baumgartner2014likelistat(la,le,ci,lr)
-% plot_baumgartner2014likelistat plots likelihood statistics according to Langendijk
-% et al. (2002)
-% Usage:           plot_baumgartner2014likelistat(la,le,ci)
-%                  plot_baumgartner2014likelistat(la,le,ci,lr)
-%                  plot_baumgartner2014likelistat(la,le,ci,lr)
-% Input arguments:
-%     la:          actual likelihood
-%     le:          expected likelihood
-%     ci:          confidence interval for expected likelihood
-%     lr:          reference likelihoods
+%plot_baumgartner2014likelistat plots likelihood statistics according to Langendijk et al. (2002)
+%   Usage:           plot_baumgartner2014likelistat(la,le,ci)
+%                    plot_baumgartner2014likelistat(la,le,ci,lr)
+%                    plot_baumgartner2014likelistat(la,le,ci,lr)
+%
+%   Input arguments:
+%       la:          actual likelihood
+%
+%       le:          expected likelihood
+%
+%       ci:          confidence interval for expected likelihood
+%
+%       lr:          reference likelihoods
+%
+%   See also: baumgartner2014
 
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
 

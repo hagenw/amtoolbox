@@ -1,7 +1,7 @@
 function varargout=amtcache(cmd,name,varargin)
 %AMTCACHE  Cache variables for later or retrieves variables from cache
 %   Usage: var = amtcache('get',package,flags);
-%     amtcache('set',package,variables);
+%          amtcache('set',package,variables);
 %   
 %   `amtcache` supports the following commands:
 %
@@ -14,11 +14,25 @@ function varargout=amtcache(cmd,name,varargin)
 %                same as that used for saving in cache.
 %                `... = amtcache('get',package,flags)` allows to control the 
 %                behaviour of accessing the cache. `flags` can be:
-%                  'normal': Use cached package. If the cached package is locally not available, it will be downloaded from the internet. If it is remotely not available, enforce recalculation of the package. Note that this method may by-pass the actual processing and thus does not test the actual functionality of a model. It is, however, very convenient for fast access of results like plotting figures. On the internet, the cached packages are available for the release versions only. 
-%                  'cached': Enforce to use cached package. If the cached package is locally not available, it will be downloaded from the internet. If it is remotely not available, an error will be thrown.
-%                  'redo': Enforce the recalculation of the package. [..] = amtcache('get', [..]) outputs empty variables always. 
+%
+%                  'normal':    Use cached package. If the cached package is 
+%                               locally not available, it will be downloaded from the internet. 
+%                               If it is remotely not available, enforce recalculation of the package. 
+%                               Note that this method may by-pass the actual processing and thus 
+%                               does not always test the actual functionality of a model. 
+%                               It is, however, very convenient for fast access of results 
+%                               like plotting figures. On the internet, the cached packages 
+%                               are available for the release versions only. 
+%
+%                  'cached':    Enforce to use cached package. If the cached package is 
+%                               locally not available, it will be downloaded from the internet. 
+%                               If it is remotely not available, an error will be thrown.
+%
+%                  'redo':      Enforce the recalculation of the package. 
+%                               [..] = amtcache('get', [..]) outputs empty variables always. 
+%
 %                  'localonly': Package will be recalculated when locally
-%                  not available. Do not connect to the internet. 
+%                               not available. Do not connect to the internet. 
 %
 %     'set'      stores variables as a package in the cache. 
 %                `amtcache('set',package, variables)` saves variables in the cache using

@@ -56,7 +56,7 @@ function [V,Y,E,CF]=verhulst2012(sign,fs,fc,spl,normalizeRMS,subject,irregularit
 %               
 %   See also: verhulst2012,
 %
-%   References: verhulst2012, altoe2014transmission
+%   References: verhulst2012 altoe2014transmission
 %
 %   AUTHOR: Alessandro Altoe' 
 

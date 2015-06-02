@@ -1,6 +1,6 @@
 function exp_georganti2013(varargin)
 %EXP_GEORGANTI2013 Figures from Georganti et al. (2013)
-%   Usage: exp_georganti2013(flag);
+%   Usage: exp_georganti2013(flag); 
 % 
 %   `exp_georganti2013(flags)` reproduces figures from Georganti et al. (2013).
 %   

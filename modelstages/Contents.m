@@ -35,10 +35,11 @@
 %     TAKANEN2013WBMSO      - Wideband medial superior olive model
 %
 %  Sagittal-plane localization models
-%     BAUMGARTNERPMV20132PPP - Calculate psychophysical predictions from PMVs for baumgartner2013
+%     BAUMGARTNER2013PMV2PPP - Calculate psychophysical predictions from PMVs for baumgartner2013
 %     BAUMGARTNER2014CALIBRATION - Calibration of the model
 %     BAUMGARTNER2014VIRTUALEXP - Performs a virtual sound-localization experiment
 %     BAUMGARTNER2014PMV2PPP - Calculate psychophysical predictions from PMVs for baumgartner2014
+%     BAUMGARTNER2014LIKELISTAT - Calculate the likelihood statistics
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
