@@ -47,18 +47,27 @@ function varargout=amtcache(cmd,name,varargin)
 %                required.
 %
 %
-%   This is an example of using the cache in a function:
+%   This is an example of using the cache in a function. 
+%   In this example, we store the variables `x`, `y`, and `z` in the package
+%   *xyz*::
 %
 %     definput.import={'amtcache'};
 %     [flags,~]  = ltfatarghelper({},definput,varargin);
-%
 %     [x,y,z] = amtcache('get', 'xyz', flags.cachemode);
-% 
 %     if isempty(x)
-%         calculate your variables x,y,z here
+%         % calculate your variables x,y,z here
 %         amtcache('set','xyz',x,y,z);
 %     end
-%     use your variables x,y,z here
+%     %  use your variables x,y,z here
+%
+%   Note that in this example, the flags indicating the mode of caching are
+%   stored in `flags.cachemode` which can be achieved by::
+% 
+%     definput.import={'amtcache'};
+%     [flags,keyvals] = ltfatarghelper({},definput,varargin); 
+%
+%   at the begin of the function. This way, the cache mode can be provided by the 
+%   user if required. 
 %
 %   See also: data_ziegelwanger2013
 

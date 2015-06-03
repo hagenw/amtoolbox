@@ -33,5 +33,5 @@ for n = 1:size(itd,2)
     % by calling the output S and MU, phi is z-scored, thus improving the fitting
     phi(:,n)=polyval(lookup.p(:,n),itd(:,n),lookup.S{n},lookup.MU(:,n));
 end
-% neglect angles > 95°. WARNING => maybe systematic underestimation for azi ~ 90°
+% neglect angles > 95°. Warning => maybe systematic underestimation for azi ~ 90°
 phi(abs(phi)>95) = NaN;

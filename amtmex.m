@@ -76,7 +76,7 @@ if flags.do_compile
     filenames = arrayfun(@(lEl) lEl.name,L,'UniformOutput',0);
   
   if compile_amt(bp,ext,filenames)>1;                
-    s=sprintf('ERROR: The %s interfaces was not built.', extname);
+    s=sprintf('Error: The %s interfaces was not built.', extname);
     amtdisp(s);
   else
     amtdisp('Done.');
@@ -94,14 +94,14 @@ if flags.do_compile
     if ~isempty(mexdiff)
         amtdisp('========= Compiling MEX interfaces ==========')
         if compile_amt(bp,'mex',mexdiff)>1;                
-            s=sprintf('ERROR: The %s interfaces was not built.', extname);
+            s=sprintf('Error: The %s interfaces was not built.', extname);
             amtdisp(s);
         else
             if movefile([bp,filesep,'mex',filesep,'*.mex'],...
                         [bp,filesep,'oct'],'f');
                amtdisp('Done.');
             else
-               error(['ERROR: Compilation sucessful, but MEX files were not '...
+               error(['Error: Compilation sucessful, but MEX files were not '...
                'moved from mex to oct directory. Check your write permissions.\n']); 
             end
         end;

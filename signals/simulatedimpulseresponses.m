@@ -9,7 +9,7 @@ function [ir,fs]=simulatedimpulseresponses(duration)
 %   1.3, and 2.3 seconds.
 %
 %   `[ir,fs]=simulatedimpulseresponses(duration)` also returns the
-%   sampling frequency, *fs*=44100 Hz.
+%   sampling frequency, *fs* = 44100 Hz.
 %
 %   The impulse responses were created using the ODEON room acoustic
 %   software version 10 (Christensen, 2009). The simulated room was shaped
@@ -25,6 +25,8 @@ function [ir,fs]=simulatedimpulseresponses(duration)
 %   The corresponding clarity (C50), defined as the ratio of the energy of
 %   first 50 ms of the impulse response to the energy of the part, was 0.60,
 %   -2.9, -6.6, and -8.0 dB for the four different lengths, respectively.
+%
+%   See also: joergensen2011 joergensen2013
 
 switch(duration)
  case {0.4,0.7,1.3,2.3}

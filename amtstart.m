@@ -1,47 +1,99 @@
 function amtstart(varargin)
 %AMTSTART   Start the Auditory Modeling Toolbox
 %   Usage:  amtstart;
+%           amtstart(flags);
 %
 %   `amtstart` starts the Auditory Modeling Toolbox. This command must be
-%   run before using any of the function in the toolbox.
+%   run before using any of the function in the AMT.
 %
-%   The AMT depends on the Linear Time Frequency Analysis Toolbox (LTFAT). 
-%   You must first download LTFAT from
-%   http://ltfat.sourceforge.net/ and unpack the downloaded file. 
-%   In the AMT, there is a pre-prepared directory `thirdparty/ltfat`
-%   where the LTFAT can be stored. Alternatively, set the path to your
-%   LTFAT installation to the search path of Matlab/Octave.
+%   Requirements
+%   ------------
+%
+%   The AMT depends on the Linear Time Frequency Analysis Toolbox (*LTFAT*). 
+%   Download LTFAT from <http://ltfat.sourceforge.net/> and unpack the downloaded file. 
+%   In the AMT, there is a prepared directory `thirdparty/ltfat`
+%   where the LTFAT can be stored. Alternatively, save the LTFAT anywhere and add 
+%   the path to the search path.
 %
 %   In order to run all the AMT functionality, you will need to:
 %   
-%   1) install SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. `thirdparty/SOFA`)
-%   2) install SFS Toolbox from https://github.com/sfstoolbox/sfs
-%   4) install Python >2.6 with `numpy` and `scipi` packages. On Linux, use `sudo apt-get install python-scipy python-numpy`
-%   3) run `amtmex` and compile successfully
-%   5) run `make` (Linux) or `make.bat` (Windows) in `src/verhulst`
-%   6) have the Optimization Toolbox for Matlab installed
-% 
-%   Some of the AMT functions require a large processing time. Depending on the machine and the model, it might take even days. Thus, some AMT functions provide caching of calculated results. If you don't want to wait and just take a look at the results: download the cached data from https://sourceforge.net/projects/amtoolbox/files/, unzip to the root AMT directory, and run the particular AMT function.
+%   1) install the SOFA API from <http://sourceforge.net/projects/sofacoustics>.
+%      In the AMT, there is a prepared directory `thirdparty/SOFA`. Alternatively, save 
+%      the SOFA API anywhere and add the path to the search path. 
 %
-%   Most of the models require auxiliary data. The AMT will download these data on-demand. 
-%   Some of the models require HRTFs. The AMT will download alse these HRTFs on-demand.
-%   If you want to run the AMT completely offline, download the auxiliary data and HRTFs ahead. 
+%   2) install SFS Toolbox from <https://github.com/sfstoolbox/sfs>. 
+%      In the AMT, there is a prepared directory `thirdparty/sfs`. Alternatively, save 
+%      the SOFA API anywhere and add the path to the search path. 
+%
+%   4) install Python >2.6 with `numpy` and `scipi` packages. 
+%      On Linux, `sudo apt-get install python-scipy python-numpy` can be applied.
+%
+%   3) run `amtmex` to compile some models. You will need a compiler working in your 
+%      Matlab/Octave environment (see `help mex`).
+%
+%   5) in the directory `src/verhulst`, run `make` (Linux) or `make.bat` (Windows).
+%
+%   6) have the Optimization Toolbox for Matlab installed.
+%
+% 
+%   Supplementary files:
+%   --------------------
+% 
+%   Most of the models require *auxiliary data*. The AMT will download these data on-demand. 
 %   The download URL for the auxiliary data is given by `amtauxdataurl`. 
 %   The target directory for the auxiliary data is given by `amtauxdatapath`. 
+%   If you want to run the AMT offline, download the auxiliary data first. 
+%
+%   Some of the models require *HRTFs*. The AMT will download the HRTFs on-demand.
 %   The download URL for the HRTFs is given by `SOFAdbURL`.
 %   The target directory for the HRTFs is given by `SOFAdbPath`. 
+%   If you want to run the AMT offline, download the HRTFs first. 
 %
-%   `amtstart('documentation')` starts the AMT in the documentation compiling
-%   mode. The progress output will be suppressed.
+%   Global flags:
+%   -------------
 %
-%   `amtstart('silent')` starts the AMT in the silent mode where all output but figures will be suppressed.
+%   AMT uses *cache* to store precalculated results because some of the AMT functions 
+%   require large processing time. Depending on the machine and the model, it might take 
+%   even days. The global cache mode is controlled on start-up of the AMT. To change the 
+%   global cache mode choose a flags:
 %
-%   `amtstart('verbose')` starts the AMT in the verbose mode and all output will be dispplayed. This is the default mode. 
+%     'normal'      Use cached package as far as possible. This is default. 
+%                   This is kind of demonstration mode and very convenient 
+%                   for fast access of results like plotting figures.
+%                   This option, however, may by-pass the actual processing and thus 
+%                   does not always test the actual functionality of a model. 
+%                   If the cached package locally not available, downloaded from the internet. 
+%                   If remotely not available, enforce recalculation.
 % 
+%     'cached'      Enforce to use cached package. If the cached package is 
+%                   locally not available, it will be downloaded from the internet. 
+%                   If it is remotely not available, an error will be thrown.
+% 
+%     'redo'        Enforce the recalculation of the package. This option
+%                   actually tests the calculations.
+% 
+%     'localonly'   Package will be recalculated when locally
+%                   not available. Do not connect to the internet. 
+% 
+%   Many AMT functions support the cache mode as input flag in order to 
+%   overwrite the global cache mode. See |amtcache| for more details.
+%
+%
+%   The *output of the messages* to the command line can be controlled by one
+%   of the following flags:
+%
+%     'verbose'        All output will be displayed. This is default. 
+% 
+%     'documentation'  starts the AMT in the documentation compiling
+%                      mode. The output of calculation progress will be suppressed.
+% 
+%     'silent'         All output will be suppressed.
+% 
+%
 %   See also:  amtmex amtflags amtload amtcache
 %
   
-%   AUTHOR : Peter L. Soendergaard, Piotr Majdak 
+%   AUTHOR : Piotr Majdak, Peter L. Soendergaard
 
 
 %% Start AMT
@@ -70,7 +122,7 @@ if isoctave, args=argv; else args=varargin; end
 
 if ~silent
   disp('  ');
-  disp(['AMT version ',amt_version,'. (C) Peter L. Soendergaard and Piotr Majdak.']);
+  disp(['AMT version ',amt_version,'. (C) Piotr Majdak and Peter L. Soendergaard.']);
   disp('  ');
   disp('Starting toolboxes...');
 end;
@@ -242,7 +294,7 @@ switch flags.cachemode
   case 'localonly'
     amtdisp('Cache mode: Use local cache or recalculate. Do not connect to remote cache.');
   case 'cached'
-    amtdisp('Cache mode: Enforce using cache. Do not recalcalculate.');
+    amtdisp('Cache mode: Use cache or throw error. Do not recalcalculate.');
   case 'redo'
     amtdisp('Cache mode: Recalculate always (be patient!).');
 end

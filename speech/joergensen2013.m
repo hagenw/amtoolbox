@@ -5,35 +5,38 @@ function output = joergensen2013(x,y,fs_input,IO_param)
 %   `output = joergensen2013(x, y, fs, IO_param)` calculates the 
 %   signal-to-noise envelope-power (SNRenv) ratio using the 
 %   multi-resolution speech-based envelope spectrum model (mr-sEPSM)
-%   described in Joergensen et al. (2013)
+%   described in Joergensen et al. (2013). 
+%
 %   Input parameters:
-%     x: noisy speech mixture 
-%     y: noise alone
-%     fs: sample rate in Hz
-%     IO_param: (optional) vector with parameters for the ideal observer 
-%       that converts the SNRenv to probability of correct, assuming a
-%       given speech material. It contains four parameters of the ideal observer 
-%       formatted as *[k q m sigma_s]*.
+%
+%     x:         noisy speech mixture 
+%     y:         noise alone
+%     fs:        sample rate in Hz
+%     IO_param:  (optional) vector with parameters for the ideal observer 
+%                that converts the SNRenv to probability of correct, assuming a
+%                given speech material. It contains four parameters of the ideal observer 
+%                formatted as *[k q m sigma_s]*.
 %
 %   Output parameters:
-%     output.SNRenv: The SNRenv
 %
-%     output.P_correct: The probability of correct given the
-%       SNRenv. This field is only included if *IO_param* is specified.
-%       Its calculation requires the Statistics ToolBox. 
+%     output.SNRenv:     The SNRenv
+%     output.P_correct:  The probability of correct given the
+%                        SNRenv. This field is only included if *IO_param* is specified.
+%                        Its calculation requires the Statistics ToolBox. 
 %
 %   The model is based on the model from Joergensen et al. (2011), which consists of the following stages:
 %
-%   1)  A gammatone bandpass filterbank to simulate the auditory filters
+%   1) A gammatone bandpass filterbank to simulate the auditory filters
 %
-%   2)  An envelope extraction stage via the Hilbert Transform
+%   2) An envelope extraction stage via the Hilbert Transform
 %
-%   3)  A modulation filterbank
+%   3) A modulation filterbank
 %  
-%   4)  Computation of the long-term envelope power (*output.SNRenv*)
+%   4) Computation of the long-term envelope power (*output.SNRenv*)
 %
-%   5)  A decision mechanism based on a statistically ideal observer
+%   5) A decision mechanism based on a statistically ideal observer
 %   (*output.P_correct*)
+%
 % 
 %   The main difference between to the Joergensen et al. (2011) 
 %   model is that the present model estimates the envelope power
