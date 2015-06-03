@@ -2,6 +2,8 @@
 % frequency of 1000Hz and a 3dB-bandwidth of 100Hz, suitable for 
 % input signals with a sampling frequency of 10kHz.              
 %
+% FIXME: This is a demo of a single filter. Check, and move to demo_
+%
 % copyright: Universitaet Oldenburg
 % author   : tp
 % date     : Jan, Mar 2002, Nov 2006

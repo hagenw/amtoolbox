@@ -1,6 +1,7 @@
 % This Example demonstrates how to create and how to use the combined
 % analysis-synthesis Filterbank system.
 %
+% FIXME: This example seems to be a demo for hohmann2002. Check it.
 % copyright: Universitaet Oldenburg
 % author   : tp
 % date     : Jan, Mar 2002, Nov 2003, Nov 2006
