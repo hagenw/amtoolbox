@@ -17,15 +17,15 @@ function amtstart(varargin)
 %
 %   In order to run all the AMT functionality, you will need to:
 %   
-%   1) install the SOFA API from <http://sourceforge.net/projects/sofacoustics>.
+%   1) install the SOFA API version >= 1.0 from <http://sourceforge.net/projects/sofacoustics>.
 %      In the AMT, there is a prepared directory `thirdparty/SOFA`. Alternatively, save 
 %      the SOFA API anywhere and add the path to the search path. 
 %
-%   2) install SFS Toolbox from <https://github.com/sfstoolbox/sfs>. 
+%   2) install SFS Toolbox version >= 1.0 from <https://github.com/sfstoolbox/sfs>. 
 %      In the AMT, there is a prepared directory `thirdparty/sfs`. Alternatively, save 
 %      the SOFA API anywhere and add the path to the search path. 
 %
-%   4) install Python >2.6 with `numpy` and `scipi` packages. 
+%   4) install Python version >= 2.6 with `numpy` and `scipi` packages. 
 %      On Linux, `sudo apt-get install python-scipy python-numpy` can be applied.
 %
 %   3) run `amtmex` to compile some models. You will need a compiler working in your 
@@ -172,11 +172,10 @@ if ~exist('SOFAstart','file')
 end
 
 % Start SOFA
-% if ~silent, disp('*** Starting SOFA ***'); end
 if exist('SOFAstart','file')
   SOFAdbPath(fullfile(basepath,'hrtf'));
   SOFAdbURL('http://www.sofacoustics.org/data/amt');
-  if silent, SOFAstart('silent'); else SOFAstart; end
+  if silent, SOFAstart('silent'); else SOFAstart('short'); end
 	warning('off','SOFA:upgrade');	% disable warning on upgrading older SOFA files
 	warning('off','SOFA:load'); % disable warnings on loading SOFA files
 else
@@ -288,8 +287,8 @@ if strcmp(flags.cachemode,'global'), flags.cachemode='normal'; end
 amtcache('setMode',flags.cachemode);
 switch flags.cachemode
   case 'normal'
-    amtdisp('Cache mode: Download precalculated results.');
-    amtdisp('            exp_model(...)          shows precalculated results');
+    amtdisp('Cache mode: Download precalculated results. Examples:');
+    amtdisp('            exp_model(...)        shows precalculated results');
     amtdisp('            exp_model(...,''redo'') enforces recalculation');
   case 'localonly'
     amtdisp('Cache mode: Use local cache or recalculate. Do not connect to remote cache.');
