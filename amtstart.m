@@ -12,10 +12,10 @@ function amtstart(varargin)
 %   The AMT depends on the Linear Time Frequency Analysis Toolbox (*LTFAT*). 
 %   Download LTFAT from <http://ltfat.sourceforge.net/> and unpack the downloaded file. 
 %   In the AMT, there is a prepared directory `thirdparty/ltfat`
-%   where the LTFAT can be stored. Alternatively, save the LTFAT anywhere and add 
-%   the path to the search path.
+%   where the LTFAT can be stored and automatically recognized by the AMT. 
+%   Alternatively, save the LTFAT anywhere and add the main LTFAT path to the search path.
 %
-%   In order to run all the AMT functionality, you will need to:
+%   In order to run all the AMT functionality:
 %   
 %   1) install the SOFA API version >= 1.0 from <http://sourceforge.net/projects/sofacoustics>.
 %      In the AMT, there is a prepared directory `thirdparty/SOFA`. Alternatively, save 
@@ -25,10 +25,10 @@ function amtstart(varargin)
 %      In the AMT, there is a prepared directory `thirdparty/sfs`. Alternatively, save 
 %      the SOFA API anywhere and add the path to the search path. 
 %
-%   4) install Python version >= 2.6 with `numpy` and `scipi` packages. 
+%   3) install Python version >= 2.6 with `numpy` and `scipi` packages. 
 %      On Linux, `sudo apt-get install python-scipy python-numpy` can be applied.
 %
-%   3) run `amtmex` to compile some models. You will need a compiler working in your 
+%   4) run `amtmex` to compile some models. You will need a compiler working in your 
 %      Matlab/Octave environment (see `help mex`).
 %
 %   5) in the directory `src/verhulst`, run `make` (Linux) or `make.bat` (Windows).
@@ -174,7 +174,7 @@ end
 % Start SOFA
 if exist('SOFAstart','file')
   SOFAdbPath(fullfile(basepath,'hrtf'));
-  SOFAdbURL('http://www.sofacoustics.org/data/amt');
+  SOFAdbURL('http://www.sofacoustics.org/data'); % This is a default path and will be overwritten later
   if silent, SOFAstart('silent'); else SOFAstart('short'); end
 	warning('off','SOFA:upgrade');	% disable warning on upgrading older SOFA files
 	warning('off','SOFA:load'); % disable warnings on loading SOFA files
@@ -277,24 +277,31 @@ flags=amtflags(varargin); % amtdisp and other amt-related functions work now!
 ltfatsetdefaults('amthelp','versiondata',amt_version,...
                  'modulesdata',modules);
 
+%% Set the correct path to remote HRTFs
+if exist('SOFAdbURL','file'),
+    SOFAdbURL(['http://www.sofacoustics.org/data/amt-' amthelp('version') '/hrtf']);
+end
+
 %% Initialize aux data, cache, and display starting information
 amtdisp('  ');
 % amtdisp('  ');
-amtdisp('*** AMT ready to go! ***'); 
-amtdisp(['Auxiliary data (local): ' amtauxdatapath]);
-amtdisp(['Auxiliary data (web): ' amtauxdataurl]);
+amtdisp('AMT configuration:'); 
+amtdisp(['  Auxiliary data (local): ' amtauxdatapath]);
+amtdisp(['  Auxiliary data (web): ' amtauxdataurl]);
 if strcmp(flags.cachemode,'global'), flags.cachemode='normal'; end
 amtcache('setMode',flags.cachemode);
 switch flags.cachemode
   case 'normal'
-    amtdisp('Cache mode: Download precalculated results. Examples:');
-    amtdisp('            exp_model(...)        shows precalculated results');
-    amtdisp('            exp_model(...,''redo'') enforces recalculation');
+    amtdisp('  Cache mode: Download precalculated results. Examples:');
+    amtdisp('              exp_model(...)        shows precalculated results');
+    amtdisp('              exp_model(...,''redo'') enforces recalculation');
   case 'localonly'
-    amtdisp('Cache mode: Use local cache or recalculate. Do not connect to remote cache.');
+    amtdisp('  Cache mode: Use local cache or recalculate. Do not connect to remote cache.');
   case 'cached'
-    amtdisp('Cache mode: Use cache or throw error. Do not recalcalculate.');
+    amtdisp('  Cache mode: Use cache or throw error. Do not recalcalculate.');
   case 'redo'
-    amtdisp('Cache mode: Recalculate always (be patient!).');
+    amtdisp('  Cache mode: Recalculate always (be patient!).');
 end
+amtdisp(' ');
+amtdisp('Type "help amtstart" for more details...');
 
