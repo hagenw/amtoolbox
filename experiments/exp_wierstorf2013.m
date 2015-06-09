@@ -844,7 +844,7 @@ if flags.do_fig12a
   
     output = amtcache('get', 'fig12a', flags.cachemode);      
     if isempty(output)
-        amtdisp('\nWarning: this will take a long time!\n\n','progress');
+        amtdisp('Warning: this will take a long time!','progress');
         % 14 speakers
         amtdisp('Calculating figure 1/6','progress');
         [~,aud_event_14,~,xaxis_21,yaxis_21,x0_14] = ...
