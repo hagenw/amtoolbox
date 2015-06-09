@@ -4,8 +4,6 @@ function example_output = exp_spille2013(varargin)
 %   `exp_spille2013` reproduce Fig. no. 6 from the Spille et
 %   al. 2013 AABBA chapter.
 %
-%   Requires exp_spille2013_s123456.wav in amtbasepath/signals/
-%
 %   Examples:
 %   ---------
 %
