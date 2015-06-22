@@ -99,6 +99,14 @@ function amtstart(varargin)
 %% Start AMT
 bp=amtbasepath;
 
+% Search for LTAFT package
+if ~exist('ltfatstart','file')
+  ltfatpath=fullfile(bp,'thirdparty','ltfat');
+  if exist(ltfatpath,'dir')
+    addpath(ltfatpath);
+  end
+end
+
 % Load the version number
 [FID, MSG] = fopen ([bp,'amtoolbox_version'],'r');
 if FID == -1
@@ -128,16 +136,6 @@ if ~silent
 end;
 
 %% LTFAT package
-
-% Search for LTAFT package
-basepath=which('amtstart');
-basepath=basepath(1:end-11);
-if ~exist('ltfatstart','file')
-  ltfatpath=fullfile(basepath,'thirdparty','ltfat');
-  if exist(ltfatpath,'dir')
-    addpath(ltfatpath);
-  end
-end
 
 % Start LTFAT
 % if ~silent, disp('*** Starting LTFAT ***'); end
