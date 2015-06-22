@@ -1,5 +1,5 @@
 function varargout = exp_baumgartner2014(varargin)
-%EXP_BAUMGARTNER2014 Figures from Baumgartner et al. (2014)
+%EXP_BAUMGARTNER2014 Results from Baumgartner et al. (2014)
 %   Usage: data = exp_baumgartner2014(flag) 
 %
 %   `exp_baumgartner2014(flag)` reproduces figures of the study from 

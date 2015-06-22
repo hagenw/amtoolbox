@@ -1,5 +1,5 @@
 function varargout = baumgartner2013( target,template,varargin )
-%BAUMGARTNER2013 Model for sound localization in saggital planes
+%BAUMGARTNER2013 Model for sound localization in sagittal planes
 %   Usage:    pmv = baumgartner2013( target,template )
 %             [pmv,respang,tang] = baumgartner2013(target,template,u,lat,flow,fhigh,stim,fsstim,polsamp)
 %

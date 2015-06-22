@@ -1,5 +1,5 @@
 function varargout = baumgartner2014( target,template,varargin )
-%BAUMGARTNER2014 Model for localization in saggital planes
+%BAUMGARTNER2014 Model for localization in sagittal planes
 %   Usage:    [p,rang] = baumgartner2014( target,template )
 %             [p,rang,tang] = baumgartner2014( target,template )
 %             [p,rang,tang] = baumgartner2014( target,template,fs,S,lat,stim,fsstim )
