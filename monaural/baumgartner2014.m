@@ -102,7 +102,10 @@ function varargout = baumgartner2014( target,template,varargin )
 %   See also: plot_baumgartner2014, data_baumgartner2014,
 %   exp_baumgartner2014, demo_baumgartner2014, baumgartner2014calibration,
 %   baumgartner2014likelistat, baumgartner2014pmv2ppp,
-%   baumgartner2014virtualexp
+%   baumgartner2014virtualexp, baumgartner2014spectralanalysis,
+%   baumgartner2014gradientextraction, baumgartner2014comparisonprocess,
+%   baumgartner2014similarityestimation, baumgartner2014binauralweighting,
+%   baumgartner2014sensorimotormapping
 %
 %   References: baumgartner2014modeling lyon1997
 
@@ -114,19 +117,21 @@ function varargout = baumgartner2014( target,template,varargin )
 definput.import={'baumgartner2014'};
 
 [flags,kv]=ltfatarghelper(...
-  {'fs','S','lat','stim','fsstim','space','do','flow','fhigh',...
+  {'fs','S','lat','stim','space','do','flow','fhigh',... %'fsstim'
   'bwcoef','polsamp','rangsamp','mrsmsp','gamma'},definput,varargin);
 
-% Print Settings
+%% Print Settings
+
 if flags.do_print 
-  if flags.do_mrs
-    fprintf('Settings: PSGE = %1.0f; Gamma = %1.0u; Epsilon = %1.0f deg \n',kv.do,kv.gamma,kv.mrsmsp)
-  else
-    fprintf('Settings: PSGE = %1.0f; Gamma = %1.0u; Epsilon = 0 deg \n',kv.do,kv.gamma)
+  if flags.do_nomrs
+    kv.mrsmsp = 0;
   end
+  amtdisp(['Settings: PSGE = ' num2str(kv.do,'%1.0f') '; Gamma = ' ...
+    num2str(kv.gamma,'%1.0u') '; Epsilon = ' num2str(kv.mrsmsp,'%1.0f') ' deg'])
 end
 
-% HRTF format conversion
+%% Extract HRTFs of sagittal plane
+
 if isstruct(target) % Targets given in SOFA format
   kv.fs = target.Data.SamplingRate;
   [target,tang] = extractsp( kv.lat,target );
@@ -136,7 +141,6 @@ if isstruct(template) % Template given in SOFA format
   [template,kv.polsamp] = extractsp( kv.lat,template );
 end
 
-
 % Error handling
 if size(template,2) ~= length(kv.polsamp)
   fprintf('\n Error: Second dimension of template and length of polsamp need to be of the same size! \n')
@@ -144,139 +148,53 @@ if size(template,2) ~= length(kv.polsamp)
 end
 
 
-%% Stimulus 
-if isempty(kv.stim) 
-    kv.stim = [1;0];
-    kv.fsstim = kv.fs;
-elseif isempty(kv.fsstim) 
-    kv.fsstim = kv.fs;
-end
-
 
 %% DTF filtering, Eq.(1)
-if ~isequal(kv.fs,kv.fsstim)
-    amtdisp('Sorry, sampling rate of stimulus and HRIRs must be equal!')
-    return
+
+if not(isempty(kv.stim))
+  target = lconv(target,kv.stim);
 end
-state=warning('off'); % convolve throws a warning
-tmp = convolve(target,kv.stim);
-warning(state);
-target = reshape(tmp,[size(tmp,1),size(target,2),size(target,3)]);
-    
+
 
 %% Spectral Analysis, Eq.(2)
 
-if kv.space == 1 % Standard spacing of 1 ERB
-  [ireptar,fc] = auditoryfilterbank(target(:,:),kv.fs,...
-      'flow',kv.flow,'fhigh',kv.fhigh);
-  ireptem = auditoryfilterbank(template(:,:),kv.fs,...
-      'flow',kv.flow,'fhigh',kv.fhigh);
-else
-  fc = audspacebw(kv.flow,kv.fhigh,kv.space,'erb');
-  [bgt,agt] = gammatone(fc,kv.fs,'complex');
-  ireptar = 2*real(ufilterbankz(bgt,agt,target(:,:)));  % channel (3rd) dimension resolved
-  ireptem = 2*real(ufilterbankz(bgt,agt,template(:,:)));
-end
-Nfc = length(fc);   % # of bands
+[ireptar,fc] = baumgartner2014spectralanalysis(target,kv,flags);
+ireptem = baumgartner2014spectralanalysis(template,kv,flags);
 
-% Set back the channel dimension
-ireptar = reshape(ireptar,[size(target,1),Nfc,size(target,2),size(target,3)]);
-ireptem = reshape(ireptem,[size(template,1),Nfc,size(template,2),size(template,3)]);
-
-% Averaging over time (RMS)
-ireptar = 20*log10(squeeze(rms(ireptar)));      % in dB
-ireptem = 20*log10(squeeze(rms(ireptem)));
-
-if size(ireptar,2) ~= size(target,2) % retreive polar dimension if squeezed out
-    ireptar = reshape(ireptar,[size(ireptar,1),size(target,2),size(target,3)]);
-end
 
 %% Positive spectral gradient extraction, Eq.(3)
 
-nrep.tem = zeros(size(ireptem,1)-kv.do,size(ireptem,2),size(ireptem,3)); %init
-nrep.tar = zeros(size(ireptar,1)-kv.do,size(ireptar,2),size(ireptar,3)); %init
-for ch = 1:size(ireptar,3)
-  if kv.do == 1 % DCN inspired feature extraction
-      nrep.tem(:,:,ch) = max(diff(ireptem(:,:,ch),kv.do),0);
-      nrep.tar(:,:,ch) = max(diff(ireptar(:,:,ch),kv.do),0);
-  elseif kv.do == 2 % proposed by Zakarauskas & Cynader (1993)
-      nrep.tem(:,:,ch) = diff(ireptem(:,:,ch),kv.do);
-      nrep.tar(:,:,ch) = diff(ireptar(:,:,ch),kv.do);
-  else
-      nrep.tem(:,:,ch) = ireptem(:,:,ch);
-      nrep.tar(:,:,ch) = ireptar(:,:,ch);
-  end
+if kv.do == 1 % DCN inspired feature extraction
+  nrep.tem = baumgartner2014gradientextraction(ireptem,fc);
+  nrep.tar = baumgartner2014gradientextraction(ireptar,fc);
+else
+  nrep.tem = ireptem;
+  nrep.tar = ireptar;
 end
+
 
 %% Comparison process, Eq.(4)
 
-sigma=zeros(size(ireptem,2),size(ireptar,2),size(ireptem,3)); % init
-for ch = 1:size(ireptar,3)
-  for it = 1:size(ireptar,2)
-    isd = repmat(nrep.tar(:,it,ch),[1,size(nrep.tem(:,:,ch),2),1]) - nrep.tem(:,:,ch); 
-    if kv.do == 0
-      sigma(:,it,ch) = sqrt(squeeze(var(isd))); % standard dev. across frequencies
-    else
-      sigma(:,it,ch) = mean(abs(isd)); % L1-norm across frequencies
-    end
-  end
-end
+sigma = baumgartner2014comparisonprocess(nrep.tar,nrep.tem,kv,flags);
+
 
 %% Similarity estimation, Eq.(5)
 
-si=zeros(size(sigma)); % init
-for ch = 1:size(ireptar,3)
-  for it = 1:size(ireptar,2)
-    si(:,it,ch) = 1+eps - (1+exp(-kv.gamma*(sigma(:,it,ch)-kv.S))).^-1;
-  end
-end
+si = baumgartner2014similarityestimation(sigma,kv,flags);
 
 
 %% Binaural weighting, Eq.(6)
 
-if size(si,3) == 2
-    binw = 1./(1+exp(-kv.lat/kv.bwcoef)); % weight of left ear signal with 0 <= binw <= 1
-    si = binw * si(:,:,1) + (1-binw) * si(:,:,2);
-end
-
-
-%% Interpolation (regularize polar angular sampling)
-if flags.do_regular
-    rang0 = ceil(min(kv.polsamp)*1/kv.rangsamp)*kv.rangsamp;    % ceil to kv.rangsamp deg
-    rangs = rang0:kv.rangsamp:max(kv.polsamp);
-    siint = zeros(length(rangs),size(si,2));
-    for tt = 1:size(si,2)
-        siint(:,tt) = interp1(kv.polsamp,si(:,tt),rangs,'spline');
-    end
-    si = siint;
-    si(si<0) = 0; % SIs must be positive (necessary due to spline interp)
-else
-    rangs = kv.polsamp;
-end
+si = baumgartner2014binauralweighting(si,kv,flags);
 
 
 %% Sensorimotor mapping, Eq.(7)
-if flags.do_mrs && flags.do_regular && kv.mrsmsp > 0
-  
-    angbelow = -90:kv.rangsamp:min(rangs)-kv.rangsamp;
-    angabove = max(rangs)+kv.rangsamp:kv.rangsamp:265;
-    rangs = [angbelow,rangs,angabove];
-    si = [zeros(length(angbelow),size(si,2)) ; si ; zeros(length(angabove),size(si,2))];
-    
-    mrs = kv.mrsmsp/cos(deg2rad(kv.lat)); % direction dependent scatter (derivation: const. length rel. to the circumferences of circles considered as cross sections of a unit sphere)
-    
-    x = 0:2*pi/length(rangs):2*pi-2*pi/length(rangs);
-    kappa = 1/deg2rad(mrs)^2; % concentration parameter (~1/sigma^2 of normpdf)
-    mrspdf = exp(kappa*cos(x)) / (2*pi*besseli(0,kappa)); % von Mises PDF 
-    for tt = 1:size(si,2)
-      si(:,tt) = pconv(si(:,tt),mrspdf(:));
-    end
-    
-end
+
+[si,rangs] = baumgartner2014sensorimotormapping(si,kv,flags);
 
 
 %% Normalization to PMV, Eq.(8)
-p = si ./ repmat(sum(si),size(si,1),1);
+p = si ./ repmat(sum(si)+eps,size(si,1),1);
 
 
 %% Output

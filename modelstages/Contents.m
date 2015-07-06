@@ -35,11 +35,17 @@
 %     TAKANEN2013WBMSO      - Wideband medial superior olive model
 %
 %  Sagittal-plane localization models
-%     BAUMGARTNER2013PMV2PPP - Calculate psychophysical predictions from PMVs for baumgartner2013
+%     BAUMGARTNER2013PMV2PPP - Calculate performance predictions from PMVs for baumgartner2013
+%     BAUMGARTNER2014SPECTRALANALYSIS - Approximation of spectral analysis by auditory periphery
+%     BAUMGARTNER2014GRADIENTEXTRACTION - Extraction of positive spectral gradients
+%     BAUMGARTNER2014COMPARISONPROCESS - Comparison with direction-specific templates
+%     BAUMGARTNER2014SIMILARITYESTIMATION - Similarity estimation with listener-specific sensitivity
+%     BAUMGARTNER2014BINAURALWEIGHTING - Binaural combination of monaural similarity estimates
+%     BAUMGARTNER2014SENSORIMOTORMAPPING - Response scatter induced by localization task
 %     BAUMGARTNER2014CALIBRATION - Calibration of the model
 %     BAUMGARTNER2014VIRTUALEXP - Performs a virtual sound-localization experiment
-%     BAUMGARTNER2014PMV2PPP - Calculate psychophysical predictions from PMVs for baumgartner2014
-%     BAUMGARTNER2014LIKELISTAT - Calculate the likelihood statistics
+%     BAUMGARTNER2014PMV2PPP - Performance predictions from PMVs of baumgartner2014
+%     BAUMGARTNER2014LIKELISTAT - Likelihood statistics for evaluation of model performance
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

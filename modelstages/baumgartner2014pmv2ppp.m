@@ -1,5 +1,5 @@
 function [ varargout ] = baumgartner2014pmv2ppp( varargin )
-%BAUMGARTNER2014PMV2PPP PMV to PPP conversion
+%BAUMGARTNER2014PMV2PPP - Performance predictions from PMVs of baumgartner2014
 %   Usage:  [ qe,pe,eb ] = baumgartner2014pmv2ppp( p,tang,rang );
 %           [ qe,pe,eb ] = baumgartner2014pmv2ppp( p,tang,rang,exptang );
 %

@@ -1,5 +1,5 @@
 function scalib = baumgartner2014calibration(s,kv,TolX)
-%baumgartner2014calibration  Calibration of listener-specific sensitivity thresholds to experimental performance
+%BAUMGARTNER2014CALIBRATION - Calibration of the model
 %   Usage: scalib = baumgartner2014calibration(s)
 %
 %   Input parameter:

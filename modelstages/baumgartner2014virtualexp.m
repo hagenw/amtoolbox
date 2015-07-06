@@ -1,5 +1,5 @@
 function m = baumgartner2014virtualexp(p,tang,rang,varargin)
-%BAUMGARTNER2014VIRTUALEXP Response patterns of virtual localization experiments
+%BAUMGARTNER2014VIRTUALEXP - Performs a virtual sound-localization experiment
 %   Usage:    m = baumgartner2014virtualexp(p,tang,rang)
 %
 %   Input parameters:
