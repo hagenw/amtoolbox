@@ -1,4 +1,4 @@
-function sibin = baumgartner2014binauralweighting(simon,kv,flags)
+function sibin = baumgartner2014binauralweighting(simon,varargin)
 %BAUMGARTNER2014BINAURALWEIGHTING - Binaural combination of monaural similarity estimates
 %   Usage:     sibin = baumgartner2014binauralweighting(simon)
 %              sibin = baumgartner2014binauralweighting(simon,kv,flags)
@@ -23,9 +23,13 @@ function sibin = baumgartner2014binauralweighting(simon,kv,flags)
 
 % AUTHOR: Robert Baumgartner
 
-if not(exist('flags','var') || exist('kv','var'))
-  definput.import={'baumgartner2014'};
-  [flags,kv]=ltfatarghelper({},definput,{});
+if nargin > 1
+  if isstruct(varargin{1})
+    kv = varargin{1};
+  else
+    definput.import={'baumgartner2014'};
+    [flags,kv]=ltfatarghelper({},definput,varargin);
+  end
 end
 
 %% Binaural weighting, Eq.(6)

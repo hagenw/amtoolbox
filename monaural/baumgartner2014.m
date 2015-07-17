@@ -3,6 +3,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %   Usage:    [p,rang] = baumgartner2014( target,template )
 %             [p,rang,tang] = baumgartner2014( target,template )
 %             [p,rang,tang] = baumgartner2014( target,template,fs,S,lat,stim,fsstim )
+%             [err,pred] = baumgartner2015( target,template,errorflag )
 %
 %   Input parameters:
 %     target  : binaural impulse response(s) referring to the directional 
@@ -27,6 +28,9 @@ function varargout = baumgartner2014( target,template,varargin )
 %               sampling)
 %     tang    : polar target angles (usefull if sagittal-plane HRTFs are
 %               extracted directly from SOFA object)
+%     err     : predicted localization error (acc. to performance measure
+%               defined in *errorflag*
+%     pred    : structure with fields *p*, *rang*, *tang*
 %
 %   `baumgartner2014(...)` is a model for sound-source localization
 %   in sagittal planes (SPs). It bases on the comparison of internal sound 
@@ -90,6 +94,9 @@ function varargout = baumgartner2014( target,template,varargin )
 %                    This is the default.
 %
 %     'noregular'    Disable regularization of angular sampling.
+%
+%     'errorflag'    May be one of the error flags defined in
+%                    `baumgartner2014pmv2ppp` or `localizationerror`.
 %
 %   Requirements: 
 %   -------------
@@ -175,7 +182,7 @@ end
 
 %% Comparison process, Eq.(4)
 
-sigma = baumgartner2014comparisonprocess(nrep.tar,nrep.tem,kv,flags);
+sigma = baumgartner2014comparisonprocess(nrep.tar,nrep.tem);
 
 
 %% Similarity estimation, Eq.(5)
@@ -190,24 +197,51 @@ si = baumgartner2014binauralweighting(si,kv,flags);
 
 %% Sensorimotor mapping, Eq.(7)
 
-[si,rangs] = baumgartner2014sensorimotormapping(si,kv,flags);
+[si,rang] = baumgartner2014sensorimotormapping(si,kv,flags);
 
 
 %% Normalization to PMV, Eq.(8)
 p = si ./ repmat(sum(si)+eps,size(si,1),1);
 
 
+%% Performance measures
+if not(isempty(flags.localizationerror))
+  
+  % Calculate directly via probabilities:
+  if sum(ismember(flags.localizationerror,{'QE_PE_EB','QE','PE','EB','absPE'})) 
+    if strcmp(flags.localizationerror,'QE_PE_EB')
+      [err.qe,err.pe,err.pb] = baumgartner2014pmv2ppp(p,tang,rang);
+    else
+      err = baumgartner2014pmv2ppp(p,tang,rang,flags.localizationerror);
+    end
+  % Simulate virtual experiments:
+  else 
+    m = baumgartner2014virtualexp(p,tang,rang);
+    err = localizationerror(m,flags.localizationerror);
+  end
+  
+end
+
+
+
 %% Output
-varargout{1} = p;
-if nargout >= 2
-    varargout{2} = rangs;
+if isempty(flags.localizationerror)
+  varargout{1} = p;
+  if nargout >= 2
+    varargout{2} = rang;
     if nargout >= 3
       try
         varargout{3} = tang;
       catch
-        amtdisp('SOFA Object of target DTFs is required to output target angles.')
+        disp('SOFA Object of target DTFs is required to output target angles.')
       end
     end
+  end
+else
+  varargout{1} = err;
+  if nargout > 1
+    varargout{2} = struct('p',p,'rang',rang,'tang',tang);
+  end
 end
   
 end

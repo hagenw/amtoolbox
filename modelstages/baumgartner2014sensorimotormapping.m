@@ -1,4 +1,4 @@
-function [ri,rang] = baumgartner2014sensorimotormapping(si,kv,flags)
+function [ri,rang] = baumgartner2014sensorimotormapping(si,varargin)
 %BAUMGARTNER2014SENSORIMOTORMAPPING - Response scatter induced by
 %localization task
 %   Usage:     [ri,rang] = baumgartner2014sensorimotormapping(si)
@@ -24,9 +24,16 @@ function [ri,rang] = baumgartner2014sensorimotormapping(si,kv,flags)
 
 % AUTHOR: Robert Baumgartner
 
-if not(exist('flags','var') || exist('kv','var'))
-  definput.import={'baumgartner2014'};
-  [flags,kv]=ltfatarghelper({},definput,{});
+definput.import={'baumgartner2014'};
+
+if length(varargin) == 1 && isstruct(varargin{1})
+  kv = varargin{1};
+  flags=ltfatarghelper({},definput,varargin);
+elseif length(varargin) == 2 && isstruct(varargin{1}) && isstruct(varargin{2})
+  kv = varargin{1};
+  flags = varargin{2};
+else
+  [flags,kv]=ltfatarghelper({},definput,varargin);
 end
 
 %% Interpolation (regularize polar angular sampling)
