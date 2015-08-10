@@ -145,11 +145,13 @@ if flags.do_missingflag
 end;
 
 % Checking for the Sound-Field-Synthesis Toolbox
-if ~which('SFS_start') | ~strcmp(SFS_version,'1.0.0')
+if ~exist('SFS_start') | ~strcmp(SFS_version,'1.0.0')
     error(['%s: you need to install the Sound-Field-Synthesis Toolbox.\n', ...
         'You can download it at https://github.com/sfstoolbox/sfs.\n', ...
         'You need version 1.0.0 of the Toolbox (commit 3730bc0).'], ...
         upper(mfilename));
+else
+    SFS_start;
 end
 
 
