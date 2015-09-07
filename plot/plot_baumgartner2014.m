@@ -31,7 +31,7 @@ function out = plot_baumgartner2014( p,tang,rang,varargin)
 %                         response pattern to *ms*. Default value is 6.
 %
 %     'cmax',cmax         Set the maximum probability of the color code to 
-%                         *cmax*. Default value is 0.2.
+%                         *cmax*. Default value is 0.1.
 %
 %   `plot_baumgartner2014` takes the following flags at the end of the line 
 %   of input arguments:

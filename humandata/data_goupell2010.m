@@ -9,7 +9,7 @@ function data = data_goupell2010(varargin)
 %
 %   The *condition* flag may be one of:
 %
-%     'BB'   Broadband DTFs (baseline condition)
+%     'BB'   Broadband DTFs (baseline condition). This is the default.
 %     'CL'   Click trains with unlimited number of channels
 %     'N24'  24 vocoder channels
 %     'N18'  18 vocoder channels

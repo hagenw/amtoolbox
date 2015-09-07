@@ -121,7 +121,7 @@ function varargout = baumgartner2014( target,template,varargin )
 
 %% Check input
 
-definput.import={'baumgartner2014'};
+definput.import={'baumgartner2014','baumgartner2014pmv2ppp','localizationerror'};
 
 [flags,kv]=ltfatarghelper(...
   {'fs','S','lat','stim','space','do','flow','fhigh',... %'fsstim'
@@ -205,27 +205,42 @@ p = si ./ repmat(sum(si)+eps,size(si,1),1);
 
 
 %% Performance measures
-if not(isempty(flags.localizationerror))
+if not(isempty(flags.errorflag)) % Simulate virtual experiments
   
-  % Calculate directly via probabilities:
-  if sum(ismember(flags.localizationerror,{'QE_PE_EB','QE','PE','EB','absPE'})) 
-    if strcmp(flags.localizationerror,'QE_PE_EB')
-      [err.qe,err.pe,err.pb] = baumgartner2014pmv2ppp(p,tang,rang);
-    else
-      err = baumgartner2014pmv2ppp(p,tang,rang,flags.localizationerror);
-    end
-  % Simulate virtual experiments:
-  else 
-    m = baumgartner2014virtualexp(p,tang,rang);
-    err = localizationerror(m,flags.localizationerror);
+  m = baumgartner2014virtualexp(p,tang,rang);
+  err = localizationerror(m,flags.errorflag);
+  
+elseif not(isempty(flags.ppp)) % Calculate directly via probabilities
+
+  if flags.do_QE_PE_EB
+    [err.qe,err.pe,err.pb] = baumgartner2014pmv2ppp(p,tang,rang);
+  else
+    err = baumgartner2014pmv2ppp(p,tang,rang,flags.ppp);
   end
-  
+    
 end
+
+% if not(isempty(flags.localizationerror))
+%   
+%   % Calculate directly via probabilities:
+%   if sum(ismember(flags.localizationerror,{'QE_PE_EB','QE','PE','EB','absPE'})) 
+%     if strcmp(flags.localizationerror,'QE_PE_EB')
+%       [err.qe,err.pe,err.pb] = baumgartner2014pmv2ppp(p,tang,rang);
+%     else
+%       err = baumgartner2014pmv2ppp(p,tang,rang,flags.localizationerror);
+%     end
+%   % Simulate virtual experiments:
+%   else 
+%     m = baumgartner2014virtualexp(p,tang,rang);
+%     err = localizationerror(m,flags.localizationerror);
+%   end
+%   
+% end
 
 
 
 %% Output
-if isempty(flags.localizationerror)
+if isempty([flags.errorflag,flags.ppp])
   varargout{1} = p;
   if nargout >= 2
     varargout{2} = rang;

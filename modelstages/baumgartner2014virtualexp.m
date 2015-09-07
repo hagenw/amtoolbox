@@ -23,7 +23,7 @@ function m = baumgartner2014virtualexp(p,tang,rang,varargin)
 %   `baumgartner2014virtualexp` accepts the following optional parameters:
 %
 %     'runs',runs    	Define the number of runs. 
-%                    	Default value is 1.
+%                    	Default value is 10.
 %
 %     'targetset',ts  Define the set of polar target angles.
 %                    	As default 'tang' is used.
@@ -39,7 +39,7 @@ function m = baumgartner2014virtualexp(p,tang,rang,varargin)
     
 % AUTHOR: Robert Baumgartner
 
-definput.keyvals.runs = 1;
+definput.keyvals.runs = 10;
 definput.keyvals.targetset = [];
 definput.keyvals.lat = 0;
 % definput.flags.colorbar = {'colorbar','nocolorbar'};

@@ -1,7 +1,7 @@
-function gp = baumgartner2014gradientextraction(mp,fc)
+function [gp,gfc] = baumgartner2014gradientextraction(mp,fc)
 %BAUMGARTNER2014GRADIENTEXTRACTION - Extraction of positive spectral
 %gradients
-%   Usage:      gp = baumgartner2014gradientextraction(mp,fc)
+%   Usage:      [gp,gfc] = baumgartner2014gradientextraction(mp,fc)
 %
 %   Input parameters:
 %     mp      : spectral magnitude profile in dB
@@ -9,6 +9,7 @@ function gp = baumgartner2014gradientextraction(mp,fc)
 %
 %   Output parameters:
 %     gp      : positive spectral gradient profile
+%     gfc     : center frequencies of gradient profile
 %
 %   `baumgartner2014gradientextraction(...)` is a spectral cue extractor
 %    inspired by functionality of dorsal cochlear nucleus in cats.
@@ -34,4 +35,9 @@ end
 
 gp = (gp + c2*abs(gp))/2; %disp('only rising edges')
 % gp(gp<0) = nmp;
+
+gfc = fc(dgpt2+1:end);
+
+% if nargout > 1
+
 end
