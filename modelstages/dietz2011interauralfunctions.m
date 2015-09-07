@@ -143,15 +143,14 @@ function outsig = lowpass(sig, a)
   %   tau = 1/(2*pi*f_c)      where f_c is the cutoff frequency of the filter
   %   a = exp(-1/(fs*tau))   where fs - sampling frequency
   %
-  % if we have 3 dimensions switch the two last ones to get
-  % [samples ears channels]
   if ndims(sig)==3
-    sig = permute(sig,[1 3 2]);
+    sig = permute(sig,[1 3 2]); % => [samples ears channels]
     channels = size(sig,3);
     outsig = zeros(size(sig));
     for ii=1:channels
       outsig(:,:,ii) = filter([1-a(ii)], [1, -a(ii)], sig(:,:,ii));
     end
+    sig = permute(outsig,[1 3 2]); % => [samples channels ears]
   else
     channels = size(sig,2);
     outsig = zeros(size(sig));
