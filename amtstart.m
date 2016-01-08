@@ -140,7 +140,9 @@ end;
 % Start LTFAT
 % if ~silent, disp('*** Starting LTFAT ***'); end
 if exist('ltfatstart','file')
+  curdir=pwd; % save the current directory
   if silent, ltfatstart(0); else ltfatstart; end;
+  cd(curdir); % go back to the saved directory because LTFAT 2.1.1 is messing up the directory in Octave
 else
   error(['LTFAT package could not be found. Unable to continue.' 10 ...
         'Download LTFAT from http://ltfat.sourceforge.net ' 10 ...
