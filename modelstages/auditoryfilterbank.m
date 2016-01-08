@@ -27,8 +27,6 @@ function [outsig, fc] = auditoryfilterbank(insig, fs, varargin);
 %                    in the filterbank. The default value of [] means
 %                    no default.
 %
-%     'langendijk'   Use rectangular filters as in Langendijk (2002).        
-%
 %   AUTHOR : Peter L. Søndergaard
   
 % ------ Checking of input parameters ------------
