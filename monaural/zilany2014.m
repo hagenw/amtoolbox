@@ -46,6 +46,9 @@ function [ANresp,fc,varargout] = zilany2014(spl,stim,fsstim,varargin)
 %     'cihc',cihc     IHC scaling factor: 1 denotes normal IHC function (default); 
 %                     0 denotes complete IHC dysfunction.
 %
+%     'nrep',nrep     Number of repetitions for the mean rate, 
+%                     rate variance & psth calculation. Default is 1.
+%
 %   `zilany2014` accepts the following flag:
 %
 %     'human'         Use model parameters for humans. This is the default.
@@ -85,8 +88,9 @@ definput.keyvals.fsmod   = 100e3;
 definput.keyvals.fiberType = 2;
 definput.keyvals.cohc    = 1;
 definput.keyvals.cihc    = 1;
+definput.keyvals.nrep    = 1;
 [flags,kv]  = ltfatarghelper({'flow','fhigh','nfibers','fsmod',...
-  'fiberType','cohc','cihc'},definput,varargin);
+  'fiberType','cohc','cihc','nrep'},definput,varargin);
 
 % Species settings
 if flags.do_cat
@@ -105,9 +109,6 @@ fc = audspace(kv.flow,kv.fhigh,kv.nfibers,'erb');
 
 % tdres is the binsize in seconds, i.e., the reciprocal of the sampling rate
 tdres   = 1/kv.fsmod;   
-
-% nrep is the number of repetitions for the mean rate, rate variance & psth calculation
-nrep = 1;
 
 % reptime is the time between stimulus repetitions in seconds; -> set 
 % twice the duration of stim
@@ -130,11 +131,11 @@ for jj = 1:kv.nfibers
   
   % Call IHC model (mex'ed C model)
   vihc(jj,:) = comp_zilany2014_model_IHC(...
-    stim,fc(jj),nrep,tdres,reptime,kv.cohc,kv.cihc,species);
+    stim,fc(jj),kv.nrep,tdres,reptime,kv.cohc,kv.cihc,species);
   
   % Call Synapse model
   [ANresp(jj,:),varrate,psth(jj,:)] = comp_zilany2014_model_Synapse(...
-    vihc(jj,:),fc(jj),nrep,tdres,kv.fiberType,noiseType,implnt);
+    vihc(jj,:),fc(jj),kv.nrep,tdres,kv.fiberType,noiseType,implnt);
           
 end
 
