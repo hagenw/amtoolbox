@@ -118,7 +118,7 @@ end
 
 % Check if 'silent' present in the flags
 silent=0;
-if isoctave, args=argv; else args=varargin; end
+if exist('OCTAVE_VERSION','builtin'), args=argv; else args=varargin; end
  for ii=1:numel(args)
    s=lower(args{ii});
    if strcmp(s,'silent') || strcmp(s,'-q')
