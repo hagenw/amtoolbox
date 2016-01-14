@@ -1,4 +1,4 @@
-function analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,gamma_order,bandwidth_factor)
+function analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,varargin)
 %GFB_ANALYZER_NEW  Construct new analyzer object
 %   Usage:  analyzer = gfb_analyzer_new(fs,flow, basef, fhigh,filters_per_ERBaud,gamma_order,bandwidth_factor)
 %
@@ -14,8 +14,7 @@ function analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,gamm
 %      filters_per_ERBaud : The density of gammatone filters on the ERB
 %                           scale.
 %      gamma_order        : The order of the gammatone filters in this
-%                           filterbank. If unspecified, the default value from
-%                           gfb_set_constants.m is used.
+%                           filterbank. Default is 4.
 %      bandwidth_factor   : The bandwidth parameter of the individual filters
 %                           is calculated from the Equivalent Rectangular
 %                           Bandwidth (ERB) according to equation 14 in
@@ -24,8 +23,7 @@ function analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,gamm
 %                           (equation 13 in Hohmann (2002)).
 %                           Using this parameter, it is possible to widen or
 %                           narrow all filters of the filterbank with a
-%                           constant bandwidth factor.
-%                           Default value is 1.0
+%                           constant bandwidth factor. Default is 1.0
 %
 %   Output parameters:
 %      analyzer           : The constructed gfb_analyzer object.
@@ -46,40 +44,38 @@ function analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,gamm
 % author   : tp
 % date     : Jan 2002, Jan, Sep 2003, Nov 2006, Jan 2007
 
-if (nargin < 6)
-  % The order of the gammatone filter is derived from the global constant
-  % GFB_PREFERED_GAMMA_ORDER defined in "gfb_set_constants.m".  Usually,
-  % this is equal to 4.
-  global GFB_PREFERED_GAMMA_ORDER;
-  gfb_set_constants;
-  gamma_order = GFB_PREFERED_GAMMA_ORDER;
-end
-if (nargin < 7)
-  bandwidth_factor = 1.0;
-end
+definput.keyvals.L=24.7; % see equation (17) in [Hohmann 2002]
+definput.keyvals.Q=9.265; % see equation (17) in [Hohmann 2002]
+definput.keyvals.gamma_order=4;
+definput.keyvals.gaincalc_iterations=100; % number of iterations for the approximation of the gain factors
+definput.keyvals.bandwidth_factor=1.0; 
 
-% To avoid storing information in global variables, we use Matlab
-% structures:
+[~,kv]  = ltfatarghelper({'L','Q','gamma_order','gaincalc_iterations','bandwidth_factor'},definput,varargin);
+
+
 analyzer.type                          = 'gfb_analyzer';
-analyzer.fs         = fs;
-analyzer.flow     = flow;
+analyzer.fs = fs;
+analyzer.flow = flow;
 analyzer.basef = basef;
-analyzer.fhigh     = fhigh;
-analyzer.filters_per_ERBaud            = filters_per_ERBaud;
-analyzer.bandwidth_factor              = bandwidth_factor;
-analyzer.fast                          = 0;
+analyzer.fhigh = fhigh;
+analyzer.filters_per_ERBaud = filters_per_ERBaud;
+analyzer.bandwidth_factor = kv.bandwidth_factor;
+analyzer.fast = 0;
 
+analyzer.L = kv.L;
+analyzer.Q = kv.Q;
+analyzer.gamma_order = kv.gamma_order;
+analyzer.gaincalc_iterations = kv.gaincalc_iterations;
 
-%
 analyzer.center_frequencies_hz = ...
     erbspacebw(flow,fhigh,1/filters_per_ERBaud,basef);
 
 % This loop actually creates the gammatone filters:
-for band = [1:length(analyzer.center_frequencies_hz)]
+for band = 1:length(analyzer.center_frequencies_hz)
   center_frequency_hz = analyzer.center_frequencies_hz(band);
 
   % Construct gammatone filter with one ERBaud bandwidth:
   analyzer.filters(1,band) = ...
       gfb_filter_new(fs, center_frequency_hz, ...
-                     gamma_order, bandwidth_factor);
+                     kv.gamma_order, kv.bandwidth_factor);
 end

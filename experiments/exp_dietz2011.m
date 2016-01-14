@@ -61,8 +61,9 @@ lookup = amtload('dietz2011','itd2anglelookuptable.mat');
 
 if flags.do_fig3
 
-    signal=competingtalkers('five_speakers');
+    signal=repmat(competingtalkers('five_speakers'),2,[]);
     fs = 16000;
+    signal=signal(1:5*fs,:);
     s_pos = [-80 -30 0 30 80];
     ic_threshold=0.98;
     panellabel = 'ab';
@@ -124,7 +125,7 @@ if flags.do_fig4
     
     % This reproduces Figure 4 from Dietz et al Speech Comm. 2011
 
-    signal=competingtalkers('two_speakers');
+    signal=repmat(competingtalkers('two_speakers'),2,[]);
     fs = 16000;
     s_pos = [-80 -30 0 30 80];
     ic_threshold=0.98;

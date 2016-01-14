@@ -125,14 +125,14 @@ function exp_hohmann2002(varargin)
         fhigh  = 1000;              % Highest center frequency in Hz;
         filters_per_ERBaud = 1;     % Filterband density on ERB scale;     
         gamma_order= 4;             % Filter order;
-        bandwidth_factor = 0.75;    % Bandwidth factor;
+        bandwidth_factor = 0.85;    % Bandwidth factor;
 
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow, basef, fhigh,filters_per_ERBaud,gamma_order,bandwidth_factor);
+        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,'gamma_order',gamma_order,'bandwidth_factor',bandwidth_factor);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];
         % Filter signal;
-        [impulse_response, analyzer] = gfb_analyzer_process(analyzer, impulse);
+        impulse_response = gfb_analyzer_process(analyzer, impulse);
 
         %Plot;
         figure;
@@ -160,14 +160,14 @@ function exp_hohmann2002(varargin)
         fhigh  = 1000;              % Highest center frequency in Hz;
         filters_per_ERBaud = 1;     % Filterband density on ERB scale;     
         gamma_order= 4;             % Filter order;
-        bandwidth_factor = 0.75;    % Bandwidth factor;
+        bandwidth_factor = 0.88;    % Bandwidth factor;
 
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,gamma_order,bandwidth_factor);
+        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,'gamma_order',gamma_order,'bandwidth_factor',bandwidth_factor);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];
         % Filter signal;
-        [impulse_response, analyzer] = gfb_analyzer_process(analyzer, impulse);
+        impulse_response = gfb_analyzer_process(analyzer, impulse);
         % Frequency response;
         frequency_response = fft(real(impulse_response)');                     
         % Normalized frequency vector;
@@ -227,16 +227,14 @@ function exp_hohmann2002(varargin)
         flow = 70;                  % Lowest center frequency in Hz;
         basef = 1000;               % Base center frequency in Hz;
         fhigh = 6700;               % Highest center frequency in Hz;
-        gamma_order= 4;             % Filter order;
         filters_per_ERBaud = 1.0;   % Filterband density on ERB scale; 
-        bandwidth_factor = 1.0;     % Bandwidth factor;
         
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,gamma_order,bandwidth_factor);
+        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];                                          
         % Filter signal;
-        [impulse_response, analyzer] = gfb_analyzer_process(analyzer, impulse);
+        impulse_response = gfb_analyzer_process(analyzer, impulse);
         % Frequency response;
         frequency_response = fft(real(impulse_response)');                     
         % Frequency vector;
@@ -258,16 +256,14 @@ function exp_hohmann2002(varargin)
     if flags.do_fig4
         
         fs = 16276;                 % Sampling rate in Hz;
-        flow = 1879.16;             % Lowest center frequency in Hz;
-        basef = 1879.16;            % Base center frequency in Hz;
-        fhigh = 1879.16;            % Highest center frequency in Hz;
-        gamma_order= 4;             % Filter order;
-        filters_per_ERBaud = 1.0;   % Filterband density on ERB scale; 
-        bandwidth_factor = 1.0;     % Bandwidth factor;
+        flow = 2160;             % Lowest center frequency in Hz;
+        basef = 2160;            % Base center frequency in Hz;
+        fhigh = 2160;            % Highest center frequency in Hz;
+        filters_per_ERBaud = 1;   % Filterband density on ERB scale; 
         delay_samples = 65;         % Desired delay in Samples;
         
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,gamma_order,bandwidth_factor);
+        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];                                          
         % Filter signal;
@@ -276,7 +272,7 @@ function exp_hohmann2002(varargin)
         delay = gfb_delay_new(analyzer,delay_samples);
         % Delay filtered signal;
         insig = impulse_response;   % Impulse response as input signal;
-        [outsig, delay] = gfb_delay_process(delay, insig);
+        outsig = gfb_delay_process(delay, insig);
         outsigdelayenv = hilbert(real(outsig),fs);
         
         % Plot;
@@ -318,16 +314,14 @@ function exp_hohmann2002(varargin)
     if flags.do_fig5
         
         fs = 16276;                 % Sampling rate in Hz;
-        flow = 80;                  % Lowest center frequency in Hz;
-        basef = 80;                 % Base center frequency in Hz;
-        fhigh = 80;                 % Highest center frequency in Hz;
-        gamma_order= 4;             % Filter order;
+        flow = 73;                  % Lowest center frequency in Hz;
+        basef = 73;                 % Base center frequency in Hz;
+        fhigh = 73;                 % Highest center frequency in Hz;
         filters_per_ERBaud = 1.0;   % Filterband density on ERB scale; 
-        bandwidth_factor = 1.0;     % Bandwidth factor;
         delay_samples = 65;         % Desired delay in Samples;
         
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,gamma_order,bandwidth_factor);
+        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];                                          
         % Filter signal;
@@ -376,12 +370,10 @@ function exp_hohmann2002(varargin)
         basef = 1000;               % Base center frequency in Hz;
         fhigh = 6700;               % Highest center frequency in Hz;      
         filters_per_ERBaud = 1.0;   % Filterband density on ERB scale; 
-        filter_order = 4;           % Filter order;
-        bw_factor = 1.0;            % Bandwidth factor;
         desired_delay = 0.004;      % Desired delay in seconds;
         
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,filter_order,bw_factor);
+        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud);
         % Build synthesizer for an analysis-synthesis delay of desired_delay in seconds.
         synthesizer = gfb_synthesizer_new(analyzer, desired_delay);
         % Impulse signal;
@@ -431,12 +423,10 @@ function exp_hohmann2002(varargin)
         basef = 1000;               % Base center frequency in Hz;
         fhigh = 6700;               % Highest center frequency in Hz;      
         filters_per_ERBaud = 1.0;   % Filterband density on ERB scale; 
-        filter_order = 4;           % Filter order;
-        bw_factor = 1.0;            % Bandwidth factor;
         desired_delay = 0.004;      % Desired delay in seconds;
         
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,filter_order,bw_factor);
+        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud);
         % Build synthesizer for an analysis-synthesis delay of desired_delay in seconds.
         synthesizer = gfb_synthesizer_new(analyzer, desired_delay);
         % Impulse signal;

@@ -289,11 +289,9 @@
     basef = 888.44;             % Base center frequency in Hz;
     fhigh  = 4000;              % Highest center frequency in Hz;
     filters_per_ERBaud = 1;     % Filterband density on ERB scale;     
-    gamma_order= 4;             % Filter order;
-    bandwidth_factor = 1;       % Bandwidth factor;
     
     % Construct new analyzer object;
-    analyzer = gfb_analyzer_new(fs,flow, basef, fhigh,filters_per_ERBaud,gamma_order,bandwidth_factor);
+    analyzer = gfb_analyzer_new(fs,flow, basef, fhigh,filters_per_ERBaud);
     % Impulse signal;
     impulse = [1, zeros(1,8191)];
     % Filter signal;
