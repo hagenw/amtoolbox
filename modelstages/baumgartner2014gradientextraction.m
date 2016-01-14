@@ -1,4 +1,4 @@
-function [gp,gfc] = baumgartner2014gradientextraction(mp,fc)
+function [gp,gfc] = baumgartner2014gradientextraction(mp,fc,c2)
 %BAUMGARTNER2014GRADIENTEXTRACTION - Extraction of positive spectral
 %gradients
 %   Usage:      [gp,gfc] = baumgartner2014gradientextraction(mp,fc)
@@ -19,7 +19,9 @@ function [gp,gfc] = baumgartner2014gradientextraction(mp,fc)
 % AUTHOR: Robert Baumgartner
 
 %% Parameter Settings
-c2 = 1; % inhibitory coupling between type II mpd type IV neurons
+if not(exist('c2','var'))
+  c2 = 1; % inhibitory coupling between type II mpd type IV neurons
+end
 c4 = 1; % coupling between AN and type IV neuron
 dilatation = 1; % of tonotopical 1-ERB-spacing between type IV mpd II neurons
 
@@ -28,9 +30,9 @@ erb = audfiltbw(fc);
 %% Calculations
 Nb = size(mp,1); % # auditory bands
 dgpt2 = round(mean(erb(2:end)./diff(fc))*dilatation); % tonotopical distance between type IV mpd II neurons
-gp = zeros(Nb-dgpt2,size(mp,2),size(mp,3),size(mp,4)); % type IV output
+gp = zeros(Nb-dgpt2,size(mp,2),size(mp,3),size(mp,4),size(mp,5)); % type IV output
 for b = 1:Nb-dgpt2
-  gp(b,:,:,:) = c4 * mp(b+dgpt2,:,:,:) - c2 * mp(b,:,:,:);
+  gp(b,:,:,:,:) = c4 * mp(b+dgpt2,:,:,:,:) - c2 * mp(b,:,:,:,:);
 end
 
 gp = (gp + c2*abs(gp))/2; %disp('only rising edges')

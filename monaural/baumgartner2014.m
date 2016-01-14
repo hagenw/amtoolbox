@@ -117,8 +117,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %   baumgartner2014sensorimotormapping
 %
 %   References: baumgartner2014modeling lyon1997
-
-    
+  
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
 %% Check input
@@ -129,6 +128,7 @@ definput.import={'baumgartner2014','baumgartner2014pmv2ppp','localizationerror'}
   {'fs','S','lat','stim','space','do','flow','fhigh',... %'fsstim'
   'bwcoef','polsamp','rangsamp','mrsmsp','gamma'},definput,varargin);
 
+
 %% Print Settings
 
 if flags.do_print 
@@ -138,6 +138,7 @@ if flags.do_print
   amtdisp(['Settings: PSGE = ' num2str(kv.do,'%1.0f') '; Gamma = ' ...
     num2str(kv.gamma,'%1.0u') '; Epsilon = ' num2str(kv.mrsmsp,'%1.0f') ' deg'])
 end
+
 
 %% Extract HRTFs of sagittal plane
 
@@ -155,7 +156,6 @@ if size(template,2) ~= length(kv.polsamp)
   fprintf('\n Error: Second dimension of template and length of polsamp need to be of the same size! \n')
   return
 end
-
 
 
 %% DTF filtering, Eq.(1)
@@ -209,36 +209,18 @@ p = si ./ repmat(sum(si)+eps,size(si,1),1);
 %% Performance measures
 if not(isempty(flags.errorflag)) % Simulate virtual experiments
   
-  m = baumgartner2014virtualexp(p,tang,rang);
+  m = baumgartner2014virtualexp(p,tang,rang,'targetset',kv.exptang);
   err = localizationerror(m,flags.errorflag);
   
 elseif not(isempty(flags.ppp)) % Calculate directly via probabilities
 
   if flags.do_QE_PE_EB
-    [err.qe,err.pe,err.pb] = baumgartner2014pmv2ppp(p,tang,rang);
+    [err.qe,err.pe,err.pb] = baumgartner2014pmv2ppp(p,tang,rang,'exptang',kv.exptang);
   else
-    err = baumgartner2014pmv2ppp(p,tang,rang,flags.ppp);
+    err = baumgartner2014pmv2ppp(p,tang,rang,flags.ppp,'exptang',kv.exptang);
   end
     
 end
-
-% if not(isempty(flags.localizationerror))
-%   
-%   % Calculate directly via probabilities:
-%   if sum(ismember(flags.localizationerror,{'QE_PE_EB','QE','PE','EB','absPE'})) 
-%     if strcmp(flags.localizationerror,'QE_PE_EB')
-%       [err.qe,err.pe,err.pb] = baumgartner2014pmv2ppp(p,tang,rang);
-%     else
-%       err = baumgartner2014pmv2ppp(p,tang,rang,flags.localizationerror);
-%     end
-%   % Simulate virtual experiments:
-%   else 
-%     m = baumgartner2014virtualexp(p,tang,rang);
-%     err = localizationerror(m,flags.localizationerror);
-%   end
-%   
-% end
-
 
 
 %% Output
