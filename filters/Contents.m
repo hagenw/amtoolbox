@@ -12,16 +12,13 @@
 %     GAMMATONE        - Calculate Gammatone filter coefficients
 %     CQDFT            - FFT-based filter bank with constant relative bandwidth
 %
-%   Hohmann (2002) Gammatone filterbank framework
-%     GFB_ANALYZER_NEW            - Gammatone filterbank implementation, see demo_hohmann2012
-%     GFB_ANALYZER_PROCESS        - All gfb functions are part of the hohmann2012 model
-%     GFB_DELAY_NEW               - .
-%     GFB_DELAY_PROCESS           - .
-%     GFB_FILTER_NEW              - .
-%     GFB_FILTER_PROCESS          - .
-%     GFB_MIXER_NEW               - .
-%     GFB_SYNTHESIZER_NEW         - .
-%     HOHMANN2002CLEARSTATE       - Clears the state of the filterbank objects
+%   Gammatone filterbank framework from Hohmann (2002)
+%     HOHMANN2002DELAY            - Create a delay object
+%     HOHMANN2002MIXER            - Create a mixer object
+%     HOHMANN2002SYNTH            - Create a synthesis object 
+%     HOHMANN2002FILT             - Create a single Gammatone filter object
+%     HOHMANN2002PROCESS          - Process the input signals by the corresponding filterbank object
+%     HOHMANN2002CLEARSTATE       - Clears the state of the filterbank object
 %     HOHMANN2002FREQZ            - Calculates frequency response of a filterbank object
 %
 %   Averaging

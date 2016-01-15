@@ -21,8 +21,10 @@ function mixer = gfb_mixer_new(analyzer, delay, iterations)
 %   given delay.  The gain factors are computed using a numerical optimization
 %   method described in Herzke & Hohmann (2007).
 
-% author   : tp (Jan 2002, Nov 2003, Mar & Nov 2006, Jan Feb 2007)
-% author   : PM (14.1.2016)
+% author   : tp 
+% date     : Jan 2002, Nov 2003, Mar & Nov 2006, Jan Feb 2007
+
+warning('Warning: GFB_MIXER_NEW will be removed in a future release. Use HOHMANN2002MIXER instead. ');
 
 if (nargin < 4)
   iterations = analyzer.gaincalc_iterations;

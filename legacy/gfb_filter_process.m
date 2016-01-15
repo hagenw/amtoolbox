@@ -18,6 +18,7 @@ function [output, filter_obj] = gfb_filter_process(filter_obj, input)
 % author   : tp
 % date     : Jan 2002, Nov 2006, Jan 2007
 
+warning('Warning: GFB_FILTER_PROCESS will be removed in a future release. Use HOHMANN2002PROCESS instead. ');
 
 factor = filter_obj.normalization_factor;
 

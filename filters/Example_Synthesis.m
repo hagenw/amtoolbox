@@ -19,7 +19,7 @@ filter_order              =     4;
 bandwidth_factor          =     1.0;
 
 amtdisp(['Building analysis filterbank']);
-analyzer = gfb_analyzer_new(sampling_rate_hz, flow, ...
+analyzer = hohmann2002(sampling_rate_hz, flow, ...
                             base_frequency_hz, fhigh,...
 			    filters_per_ERB, filter_order, bandwidth_factor);
 
@@ -28,7 +28,7 @@ analyzer = gfb_analyzer_new(sampling_rate_hz, flow, ...
 
 amtdisp(['Building synthesizer for an analysis-synthesis delay of ', ...
       num2str(desired_delay_in_seconds), ' seconds']);
-synthesizer = gfb_synthesizer_new(analyzer, desired_delay_in_seconds);
+synthesizer = hohmann2002synth(analyzer, desired_delay_in_seconds);
 
 %%% Extract the synthesizer's parameters %%%
 amtdisp(['The synthesizers parameters:';...
@@ -54,9 +54,9 @@ end
 %%%  analysis-synthesis system                                         %%%
 
 impulse = [1, zeros(1,8191)];                                          
-[analyzed_impulse, analyzer] = gfb_analyzer_process(analyzer, impulse);
+[analyzed_impulse, analyzer] = hohmann2002process(analyzer, impulse);
 [resynthesized_impulse, synthesizer] = ...
-    gfb_synthesizer_process(synthesizer, analyzed_impulse);
+    hohmann2002process(synthesizer, analyzed_impulse);
 
 figure(1);
 plot([0:8191]/sampling_rate_hz*1e3, resynthesized_impulse);

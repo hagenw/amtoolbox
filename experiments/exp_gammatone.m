@@ -297,7 +297,7 @@ function exp_gammatone(varargin)
 %
 %   References: patterson1987efficient lyon1997 hohmann2002 moore1983
 %
-%   See also: gammatone exp_hohmann2002 demo_gammatone demo_hohmann2002 gfb_analyzer_new gfb_analyzer_process               
+%   See also: gammatone exp_hohmann2002 demo_gammatone demo_hohmann2002 hohmann2002 hohmann2002process
 
 % AUTHOR: CK, 2014
 

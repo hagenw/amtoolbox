@@ -10,6 +10,7 @@
 %     BAUMGARTNER2014     - Localization in saggital planes
 %     ZILANY2007HUMANIZED  - Humanized auditory nerve model
 %     ZILANY2014           - Auditory cochlear processing 
+%     HOHMANN2002          - invertible Gammatone filterbank 
 %
 %  The Langendijk model
 %     LANGENDIJK2002           - Langendijk & Bronkhorst 2002 auditory model 

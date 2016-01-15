@@ -106,8 +106,8 @@ for ii=1:length(fc_fine)
   gammatone_filter = hohmann2002filter (fs, fc_fine(ii), ...
     fc_fine(ii)/kv.fine_filter_finesse, ...
     kv.filter_attenuation_db, kv.filter_order);
-  outsig_fine(:,ii,1) = gfb_filter_process(gammatone_filter, insig_fine(:,ii,1)');
-  outsig_fine(:,ii,2) = gfb_filter_process(gammatone_filter, insig_fine(:,ii,2)');
+  outsig_fine(:,ii,1) = hohmann2002process(gammatone_filter, insig_fine(:,ii,1)');
+  outsig_fine(:,ii,2) = hohmann2002process(gammatone_filter, insig_fine(:,ii,2)');
 end
 
 % --- modulation/envelope filter ---
@@ -117,8 +117,8 @@ gammatone_filter = hohmann2002filter (fs, kv.mod_center_frequency_hz, ...
   kv.mod_center_frequency_hz/kv.mod_filter_finesse, ...
   kv.filter_attenuation_db, kv.filter_order);
 for ii=1:length(fc_env)
-  outsig_env(:,ii,1) = gfb_filter_process(gammatone_filter, insig_env(:,ii,1)');
-  outsig_env(:,ii,2) = gfb_filter_process(gammatone_filter, insig_env(:,ii,2)');
+  outsig_env(:,ii,1) = hohmann2002process(gammatone_filter, insig_env(:,ii,1)');
+  outsig_env(:,ii,2) = hohmann2002process(gammatone_filter, insig_env(:,ii,2)');
 end
 
 % --- ILD filter ---

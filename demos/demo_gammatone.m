@@ -291,19 +291,19 @@
     filters_per_ERBaud = 1;     % Filterband density on ERB scale;     
     
     % Construct new analyzer object;
-    analyzer = gfb_analyzer_new(fs,flow, basef, fhigh,filters_per_ERBaud);
+    analyzer = hohmann2002(fs,flow, basef, fhigh,filters_per_ERBaud);
     % Impulse signal;
     impulse = [1, zeros(1,8191)];
     % Filter signal;
-    [impulse_response, analyzer] = gfb_analyzer_process(analyzer, impulse);
+    [impulse_response, analyzer] = hohmann2002process(analyzer, impulse);
        
     % Find peak at envelope maximum for lowest channel and add one sample;
     delay_samples = find(abs(impulse_response(1,:)) == max(abs(impulse_response(1,:)))) + 1;
     
     % 
-    delay = gfb_delay_new(analyzer, delay_samples);
+    delay = hohmann2002delay(analyzer, delay_samples);
      
-    [outsig, delay] = gfb_delay_process(delay, impulse_response);
+    [outsig, delay] = hohmann2002process(delay, impulse_response);
     
     % Figure 4;
     type1   = 'plotted as they are';   % Type of implemantion for headline;

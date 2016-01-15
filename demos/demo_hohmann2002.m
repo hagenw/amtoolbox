@@ -1,11 +1,9 @@
 %DEMO_HOHMANN2002  Filterbank example
 %
-%   This example program demonstrates how to create and use an analysis
-%   gammatone filterbank.
-%   It seems to implement Hohmann (2002).
+%   This example program demonstrates how to create and use the
+%   gammatone filterbank within the framework of Hohmann (2002).
 %
-%   See also: exp_gammatone gammatone demo_gammatone exp_hohmann2002 
-%   gfb_analyzer_new gfb_analyzer_process
+%   See also: exp_hohmann2002 hohmann2002 hohmann2002process
 
 % author   : tp
 % date     : Jan, Mar 2002, Nov 2006
@@ -42,10 +40,6 @@ end
 
 %% plot the frequency response of the individual filters     
 
-% impulse = [1, zeros(1,8191)];                                          
-% [impulse_response, analyzer] = gfb_analyzer_process(analyzer, impulse);
-% frequency_response = fft(real(impulse_response)');                     
-% frequency = [0:8191] * sampling_rate_hz / 8192;                        
 frequency = 0:2:fs/2;
 h=hohmann2002freqz(analyzer,exp(2*1i*pi*frequency/fs));
 

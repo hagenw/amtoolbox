@@ -36,6 +36,7 @@ function delay = gfb_delay_new(analyzer, delay_samples)
 % author   : tp
 % date     : Jan 2002; Nov 2003; Mar Jun Nov 2006; Jan Feb 2007
 
+warning('Warning: GFB_DELAY_NEW will be removed in a future release. Use HOHMANN2002DELAY instead. ');
 
 delay.type           = 'gfb_Delay';
 

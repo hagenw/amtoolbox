@@ -94,8 +94,8 @@ function exp_hohmann2002(varargin)
 %
 %   References: hohmann2002
 %
-%   See also: demo_hohmann2002 hohmann2002 gfb_analyzer_process
-%   demo_gammatone exp_gammatone gammatone 
+%   See also: demo_hohmann2002 hohmann2002 hohmann2002process hohmann2002delay hohmann2002synth hohmann2002mixer
+
 
 % AUTHOR: CK, 2014
 
@@ -130,7 +130,7 @@ function exp_hohmann2002(varargin)
         % Impulse signal;
         impulse = [1, zeros(1,8191)];
         % Filter signal;
-        impulse_response = gfb_filter_process(filter, impulse);
+        impulse_response = hohmann2002process(filter, impulse);
 
         %Plot;
         figure;
@@ -163,7 +163,7 @@ function exp_hohmann2002(varargin)
         % Impulse signal;
         impulse = [1, zeros(1,8191)];
         % Filter signal;
-        impulse_response = gfb_filter_process(filter, impulse);
+        impulse_response = hohmann2002process(filter, impulse);
         % Frequency response;
         frequency_response = fft(real(impulse_response)');                     
         % Normalized frequency vector;
@@ -230,7 +230,7 @@ function exp_hohmann2002(varargin)
         % Impulse signal;
         impulse = [1, zeros(1,8191)];                                          
         % Filter signal;
-        impulse_response = gfb_analyzer_process(analyzer, impulse);
+        impulse_response = hohmann2002process(analyzer, impulse);
         % Frequency response;
         frequency_response = fft(real(impulse_response)');                     
         % Frequency vector;
@@ -251,24 +251,24 @@ function exp_hohmann2002(varargin)
 
     if flags.do_fig4
         
-        fs = 16276;                 % Sampling rate in Hz;
+        fs = 16276;              % Sampling rate in Hz;
         flow = 2160;             % Lowest center frequency in Hz;
         basef = 2160;            % Base center frequency in Hz;
         fhigh = 2160;            % Highest center frequency in Hz;
-        filters_per_ERBaud = 1;   % Filterband density on ERB scale; 
-        delay_samples = 65;         % Desired delay in Samples;
+        filters_per_ERBaud = 1;  % Filterband density on ERB scale; 
+        delay_samples = 65;      % Desired delay in Samples;
         
         % Construct new analyzer object;
         analyzer = hohmann2002 (fs,flow,basef,fhigh,filters_per_ERBaud);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];                                          
         % Filter signal;
-        [impulse_response, analyzer] = gfb_analyzer_process(analyzer, impulse);
+        [impulse_response, analyzer] = hohmann2002process(analyzer, impulse);
         % Construct new delay object, which holds samples to delay and phase factors.
-        delay = gfb_delay_new(analyzer,delay_samples);
+        delay = hohmann2002delay(analyzer,delay_samples);
         % Delay filtered signal;
         insig = impulse_response;   % Impulse response as input signal;
-        outsig = gfb_delay_process(delay, insig);
+        outsig = hohmann2002process(delay, insig);
         outsigdelayenv = hilbert(real(outsig),fs);
         
         % Plot;
@@ -321,12 +321,12 @@ function exp_hohmann2002(varargin)
         % Impulse signal;
         impulse = [1, zeros(1,8191)];                                          
         % Filter signal;
-        [impulse_response, analyzer] = gfb_analyzer_process(analyzer, impulse);
+        [impulse_response, analyzer] = hohmann2002process(analyzer, impulse);
         % Construct new delay object, which holds samples to delay and phase factors.
-        delay = gfb_delay_new(analyzer,delay_samples);
+        delay = hohmann2002delay(analyzer,delay_samples);
         % Delay filtered signal;
         insig = impulse_response;   % Impulse response as input signal;
-        [outsig, delay] = gfb_delay_process(delay, insig);
+        outsig = hohmann2002process(delay, insig);
         outsigdelayenv = hilbert(real(outsig),fs);
         
         % Plot;
@@ -371,13 +371,13 @@ function exp_hohmann2002(varargin)
         % Construct new analyzer object;
         analyzer = hohmann2002 (fs,flow,basef,fhigh,filters_per_ERBaud);
         % Build synthesizer for an analysis-synthesis delay of desired_delay in seconds.
-        synthesizer = gfb_synthesizer_new(analyzer, desired_delay);
+        synthesizer = hohmann2002synth(analyzer, desired_delay);
         % Impulse signal;
         impulse = [1, zeros(1,8191)]; 
         % Filter signal;
-        [analyzed_impulse, analyzer] = gfb_analyzer_process(analyzer, impulse);
+        [analyzed_impulse, analyzer] = hohmann2002process(analyzer, impulse);
         % Resynthesize filtered impulse response from above.
-        [resynthesized_impulse, synthesizer] = gfb_synthesizer_process(synthesizer, analyzed_impulse);
+        [resynthesized_impulse, synthesizer] = hohmann2002process(synthesizer, analyzed_impulse);
     
         % Plot;
         figure('units','normalized','outerposition',[0.25 0.05 0.5 0.9])
@@ -424,15 +424,15 @@ function exp_hohmann2002(varargin)
         % Construct new analyzer object;
         analyzer = hohmann2002 (fs,flow,basef,fhigh,filters_per_ERBaud);
         % Build synthesizer for an analysis-synthesis delay of desired_delay in seconds.
-        synthesizer = gfb_synthesizer_new(analyzer, desired_delay);
+        synthesizer = hohmann2002synth(analyzer, desired_delay);
         % Impulse signal;
         impulse = [1, zeros(1,8191)]; 
         % Filter signal;
-        [analyzed_impulse, analyzer] = gfb_analyzer_process(analyzer, impulse);
+        analyzed_impulse = hohmann2002process(analyzer, impulse);
         % Resynthesize filtered impulse response from above.
-        [resynthesized_impulse, synthesizer] = gfb_synthesizer_process(synthesizer, analyzed_impulse);
+        resynthesized_impulse = hohmann2002process(synthesizer, analyzed_impulse);
         % Normalized frequency vector;
-        frequency = [0:8191] * fs / 8192;
+        frequency = (0:8191) * fs / 8192;
         % Transfer function;
         resynthesized_spectra = fft(resynthesized_impulse);
         % Group delay;
