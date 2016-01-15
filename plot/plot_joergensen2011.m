@@ -1,17 +1,24 @@
 function plot_joergensen2011(dSRT, varargin)
-%plot_joergensen2011  Plot Fig. 5 or 6 of Jørgensen and Dau (2011)
+%plot_joergensen2011  Plot Fig. 5 or 6 of Joergensen and Dau (2011)
 %   Usage: plot_joergensen2011(dSRT,flag)
 %
 %   `plot_joergensen2011(dSRT)` plots the output of |joergensen2011| in the
-%   style of Fig. 5 or 6 of Jørgensen and Dau (2011).
+%   style of Fig. 5 or 6 of Joergensen and Dau (2011).
 %
 %   The flag may be one of:
 %
-%     'fig5' : plots the data in the style of figure 5 of Jørgensen and Dau
-%              (2011)
-% 
-%     'fig6' : plots the data in the style of figure 6 of Jørgensen and Dau
-%              (2011)
+%     'fig5' : The measured change in SRT (open squares), averaged across 6 
+%              normal-hearing listeners, as a function of the reverberation 
+%              time, T30. The mean SRT in the reference condition was -3 dB. 
+%              Model predictions are indicated by the filled squares. The 
+%              linear correlation coefficient (q) and RMSE is indicated in 
+%              the upper left corner.
+%     'fig6' : DSRT (left ordinate) as a function of the over-subtraction 
+%              factor a for 4 normal-hearing listeners (open squares) and 
+%              sEPSM predictions (filled squares). The right ordinate (with 
+%              a reversed scale) shows the corresponding sSTI values as filled 
+%              gray circles. These values are, however, not converted to DSRT 
+%              values since these would be outside the left ordinate scale.
 %
 %   See also: joergensen2011, plot_joergensen2011
 
@@ -20,7 +27,7 @@ definput.flags.type = {'fig5','fig6'};
 
 [flags,kv]  = ltfatarghelper({}, definput,varargin);
 
-%% Plot figure 5 from Jørgensen and Dau (2011)
+%% Plot figure 5 from Joergensen and Dau (2011)
 if flags.do_fig5
     % Get measured dSRT
     [dSRTdata,SRTdata_std ] = data_joergensen2011('fig5');
@@ -54,7 +61,7 @@ set(fig,'Position',[2*sh, 0.15*sh, 1.2*sh, 1*sh]);
     
     offset = 0.15;
     h = plot(0,0,'color',[1 1 1]);
-errorbar(x,dSRTdata,-SRTdata_std,SRTdata_std,...
+errorbar(x,dSRTdata,SRTdata_std,...
             'linestyle',    'none',...
             'linewidth',    1,...
             'color',           mark_col(1,:),...
@@ -85,7 +92,7 @@ set(gcf, 'Color', 'w');
     
 end
 
-%% Plot figure 6 from Jørgensen and Dau (2011)
+%% Plot figure 6 from Joergensen and Dau (2011)
 if flags.do_fig6
     % Get measured dSRT
     [dSRTdata,SRTdata_std ] = data_joergensen2011('fig6');
@@ -123,7 +130,7 @@ if flags.do_fig6
     h = plot(0,0,'color',[1 1 1]);
     
     
-    errorbar(x,dSRTdata,-SRTdata_std,SRTdata_std,...
+    errorbar(x,dSRTdata,SRTdata_std,...
         'linestyle',    'none',...
         'linewidth',    1,...
         'color',           mark_col(1,:),...

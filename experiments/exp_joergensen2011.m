@@ -1,9 +1,9 @@
 function exp_joergensen2011(varargin)
-%EXP_JOERGENSEN2011 Figures from Jørgensen and Dau (2011)
+%EXP_JOERGENSEN2011 Figures from Joergensen and Dau (2011)
 %   Usage: output = exp_joergensen2011(flag)
 %
 %   `exp_joergensen2011(flag)` reproduces the results for the figure given
-%   by flag from the Jørgensen and Dau (2011) paper. 
+%   by flag from the Joergensen and Dau (2011) paper. 
 %    
 %   The following flags can be specified;
 %
@@ -17,9 +17,9 @@ function exp_joergensen2011(varargin)
 %
 %     'cached'   Always use the cached version. Default.
 %
-%     'fig5'     Plot Fig. 5 (Jørgensen and Dau, 2011).
+%     'fig5'     Plot Fig. 5 (Joergensen and Dau, 2011).
 %
-%     'fig6'     Plot Fig. 6 (Jørgensen and Dau, 2011). 
+%     'fig6'     Plot Fig. 6 (Joergensen and Dau, 2011). 
 % 
 %
 %   Examples:
@@ -35,8 +35,7 @@ function exp_joergensen2011(varargin)
 %
 %   ---------
 %
-%   Please cite Jørgensen and Dau (2011) if you use
-%   this model.
+%   Please cite Joergensen and Dau (2011) if you use this model.
 %
 %   See also: joergensen2011, plot_joergensen2011, exp_joergensen2011
 %
