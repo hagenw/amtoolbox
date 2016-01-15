@@ -24,6 +24,16 @@
 %     ROENNE2012CLICK          - Simulate ABR respone to click
 %     ROENNE2012TONEBURSTS     - Simulate tone burst evoked ABR wave V latencies
 %
+%   Gammatone filterbank framework from Hohmann (2002)
+%     HOHMANN2002DELAY            - Create a delay object
+%     HOHMANN2002MIXER            - Create a mixer object
+%     HOHMANN2002SYNTH            - Create a synthesis object 
+%     HOHMANN2002FILT             - Create a single Gammatone filter object
+%     HOHMANN2002PROCESS          - Process the input signals by the corresponding filterbank object
+%     HOHMANN2002CLEARSTATE       - Clears the state of the filterbank object
+%     HOHMANN2002FREQZ            - Calculates frequency response of a filterbank object
+%     HOHMANN2002CLEARSTATE       - Clears the state of the filterbank objects
+%     HOHMANN2002FREQZ            - Calculates frequency response of a filterbank object
 %
 %  The Takanen 2013 model   - Takanen 2013 binaural auditory model
 %     TAKANEN2013CONTRACOMPARISON - Enhance contrast between hemispheres
