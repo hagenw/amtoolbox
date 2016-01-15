@@ -49,7 +49,7 @@ end
 % frequency_response = fft(real(impulse_response)');                     
 % frequency = [0:8191] * sampling_rate_hz / 8192;                        
 frequency = 0:2:fs/2;
-h=gfb_analyzer_zresponse(analyzer,exp(2*1i*pi*frequency/fs));
+h=hohmann2002freqz(analyzer,exp(2*1i*pi*frequency/fs));
 
 figure(1);
 plot(frequency, 20 * log10(abs(h)));

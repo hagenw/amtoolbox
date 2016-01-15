@@ -40,8 +40,8 @@ mixer.gains = ones(number_of_bands, 1);
 
 % compute the frequency response of each filter (col) at the center
 % frequencies of all filters (row)
-  pos_f_response = gfb_analyzer_zresponse(analyzer, z_c);
-  neg_f_response = gfb_analyzer_zresponse(analyzer, conj(z_c));
+  pos_f_response = hohmann2002freqz(analyzer, z_c);
+  neg_f_response = hohmann2002freqz(analyzer, conj(z_c));
 
 % apply delay and phase correction
 for band = [1:number_of_bands]

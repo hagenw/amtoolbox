@@ -39,7 +39,7 @@ function delay = gfb_delay_new(analyzer, delay_samples)
 
 delay.type           = 'gfb_Delay';
 
-  analyzer             = gfb_analyzer_clear_state(analyzer);
+  analyzer             = hohmann2002clearstate(analyzer);
   impulse              = zeros(1, delay_samples + 2);
   impulse(1)           = 1;
 
