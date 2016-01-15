@@ -115,6 +115,10 @@ if flags.do_tab1 || flags.do_pool
     f={'id', 'u', 'goupell10', 'walder10'};
     data=cell2struct(listeners,f,2);
 
+    if flags.do_tab1
+      amtdisp('Note that NH68 and NH69 are the same.')
+    end
+    
 end
 
 %% Listener pool (listener-specific SP-DTFs)
