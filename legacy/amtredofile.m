@@ -15,8 +15,8 @@ function doit=amtredofile(filename,varargin)
 %     'cached'       Always use the cached version. Throws an error if the
 %                    file does not exist.
 
-warning('amtredofile is deprecated and will be removed in future releases.\n For caching your data use AMTCACHE instead.');
-  
+warning('Warning: AMTREDOFILE will be removed in a future release. Use AMTCACHE instead. ');  
+
 if nargin<2
   error('%s: Too few input parameters.',upper(mfilename));
 end;
