@@ -14,5 +14,7 @@ function zresponse = gfb_filter_zresponse(filter, z)
 % author   : tp
 % date     : Jan & Nov 2006
 
+warning('Warning: GFB_FILTER_ZRESPONSE will be removed in a future release. Use HOHMANN2002FREQZ instead. ');
+
 zresponse = (1 - filter.coefficient ./ z) .^ -filter.gamma_order * ...
     filter.normalization_factor;

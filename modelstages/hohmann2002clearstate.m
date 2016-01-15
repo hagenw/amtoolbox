@@ -30,4 +30,6 @@ switch(obj.type)
     obj.memory = zeros(size(obj.memory));
   case 'gfb_Synthesizer'
     obj.delay.memory = zeros(size(obj.delay.memory));
+  otherwise
+    error('Unknown type of HOHMANN2002 filter object');    
 end

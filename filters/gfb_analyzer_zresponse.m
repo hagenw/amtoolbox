@@ -19,6 +19,8 @@ function zresponse = gfb_analyzer_zresponse(analyzer, z)
 % author   : tp
 % date     : Jan & Nov 2006, Jan Feb 2007
 
+warning('Warning: GFB_ANALYZER_ZRESPONSE will be removed in a future release. Use HOHMANN2002FREQZ instead. ');
+
 number_of_bands = length(analyzer.center_frequencies_hz);
 z = z(:);
 zresponse = ones(length(z), number_of_bands);
