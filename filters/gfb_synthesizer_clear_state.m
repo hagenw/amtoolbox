@@ -13,6 +13,8 @@ function synthesizer = gfb_synthesizer_clear_state(synthesizer)
 
 % filename : gfb_synthesizer_clear_state.m
 
+warning('Warning: GFB_SYNTHESIZER_CLEAR_STATE will be removed in a future release. Use HOHMANN2002CLEARSTATE instead. ');
+
 
 synthesizer.delay = gfb_delay_clear_state(synthesizer.delay);
 

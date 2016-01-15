@@ -12,5 +12,7 @@ function delay = gfb_delay_clear_state(delay)
 % author   : tp
 % date     : Jan 2002, Nov 2006
 
+warning('Warning: GFB_SYNTHESIZER_CLEAR_STATE will be removed in a future release. Use HOHMANN2002CLEARSTATE instead. ');
+
 delay.memory = zeros(size(delay.memory));
 

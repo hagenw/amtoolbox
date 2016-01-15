@@ -15,6 +15,7 @@ function filter = gfb_filter_clear_state(filter)
 % author   : tp
 % date     : Jan 2002, Nov 2006
 
+warning('Warning: GFB_FILTER_CLEAR_STATE will be removed in a future release. Use HOHMANN2002CLEARSTATE instead. ');
 
 filter.state = zeros(1, filter.gamma_order);
 

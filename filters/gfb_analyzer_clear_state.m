@@ -9,7 +9,9 @@ function analyzer = gfb_analyzer_clear_state(analyzer)
 % author   : tp
 % date     : Jan 2002, Nov 2006, Feb 2007
 
-for band = [1:length(analyzer.center_frequencies_hz)]
+warning('Warning: GFB_ANALYZER_CLEAR_STATE will be removed in a future release. Use HOHMANN2002CLEARSTATE instead. ');
+
+for band = 1:length(analyzer.center_frequencies_hz)
   analyzer.filters(1, band) = ...
       gfb_filter_clear_state(analyzer.filters(1, band));
 end
