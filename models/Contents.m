@@ -14,6 +14,7 @@
 %     ZILANY2007HUMANIZED   - Humanized auditory nerve model
 %     ZILANY2014            - Auditory cochlear processing 
 %     ROENNE2012            - Simulate ABR to given stimulus
+%     KARJALAINEN1996       - Adaptation network
 %
 %  Spatial models
 %     BAUMGARTNER2013       - Localization in saggital planes
