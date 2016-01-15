@@ -25,14 +25,18 @@ function amtstart(varargin)
 %      In the AMT, there is a prepared directory `thirdparty/sfs`. Alternatively, save 
 %      the SOFA API anywhere and add the path to the search path. 
 %
-%   3) install Python version >= 2.6 with `numpy` and `scipi` packages. 
+%   3) install Python (version >= 2.6), and the packages `numpy` and `scipi`. 
 %      On Linux, `sudo apt-get install python-scipy python-numpy` can be applied.
+%      On Windows, intall python from <https://www.python.org/>, add python.exe to path,
+%      and install the packages separately.
 %
 %   4) run `amtmex` to compile some models. You will need a compiler working in your 
 %      Matlab/Octave environment (see `help mex`).
 %
 %   5) in the directory `src/verhulst`, run `make` (Linux) or `make.bat` (Windows).
-%
+%      You will need gcc (see <https://gcc.gnu.org/>) installed and 
+%      available at the command line.
+%   
 %   6) have the Optimization Toolbox for Matlab installed.
 %
 % 
@@ -125,7 +129,6 @@ if exist('OCTAVE_VERSION','builtin'), args=argv; else args=varargin; end
      silent=1;
    end;
  end;
-% end;
 
 
 if ~silent

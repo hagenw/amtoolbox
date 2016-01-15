@@ -1,7 +1,5 @@
 Auditory-Modeling Toolbox (AMT)
 
---------- Running the AMT --------------------
-
 AMT depends on LTFAT.  You must first download LTFAT from
 http://ltfat.sourceforge.net/ and unpack the downloaded file. 
 In the AMT, there is a pre-prepared directory /thirdparty/ltfat
@@ -15,26 +13,6 @@ The "amtstart" command will add all the necessary
 subdirectories (so please don't add these manually), and will print
 statements telling you which backend you are currently using.
 
-In order to run all the AMT functionality:
-  
-  1) install the SOFA API version >= 1.0 from <http://sourceforge.net/projects/sofacoustics>.
-     In the AMT, there is a prepared directory `thirdparty/SOFA`. Alternatively, save 
-     the SOFA API anywhere and add the path to the search path. 
-
-  2) install SFS Toolbox version >= 1.0 from <https://github.com/sfstoolbox/sfs>. 
-     In the AMT, there is a prepared directory `thirdparty/sfs`. Alternatively, save 
-     the SOFA API anywhere and add the path to the search path. 
-
-  3) install Python version >= 2.6 with `numpy` and `scipi` packages. 
-     On Linux, `sudo apt-get install python-scipy python-numpy` can be applied.
-
-  4) run `amtmex` to compile some models. You will need a compiler working in your 
-     Matlab/Octave environment (see `help mex`).
-
-  5) in the directory `src/verhulst`, run `make` (Linux) or `make.bat` (Windows).
-
-  6) have the Optimization Toolbox for Matlab installed.
-
-See <http://amtoolbox.sourceforge.net/doc/index.php> for more details.
-
-More help on the start of the AMT is available by typing "help amtstart".
+Other packages are required to run all the AMT functionality. See 
+<http://amtoolbox.sourceforge.net/doc/index.php> and "help amtstart" 
+for more details.

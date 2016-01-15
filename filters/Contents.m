@@ -9,10 +9,10 @@
 %     FILTERBANK_BLOCK - Filterbank block processing
 %
 %   Auditory filters
-%     GAMMATONE        - Gammatone filter coefficients
+%     GAMMATONE        - Calculate Gammatone filter coefficients
 %     CQDFT            - FFT-based filter bank with constant relative bandwidth
 %
-%   Hohmann (2002) filterbank
+%   Hohmann (2002) Gammatone filterbank framework
 %     GFB_ANALYZER_NEW            - Gammatone filterbank implementation, see demo_hohmann2012
 %     GFB_ANALYZER_PROCESS        - All gfb functions are part of the hohmann2012 model
 %     GFB_DELAY_NEW               - .
@@ -21,6 +21,8 @@
 %     GFB_FILTER_PROCESS          - .
 %     GFB_MIXER_NEW               - .
 %     GFB_SYNTHESIZER_NEW         - .
+%     HOHMANN2002CLEARSTATE       - Clears the state of the filterbank objects
+%     HOHMANN2002FREQZ            - Calculates frequency response of a filterbank object
 %
 %   Averaging
 %     WEIGHTEDAVERAGEFILTER       - Part of the takanen2013 model

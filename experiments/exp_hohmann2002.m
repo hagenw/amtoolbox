@@ -119,20 +119,18 @@ function exp_hohmann2002(varargin)
 
     if flags.do_fig1
 
-        fs = 10000;                 % Sampling rate in Hz;
-        flow = 1000;                % Lowest center frequency in Hz;
-        basef = 1000;               % Base center frequency in Hz;
-        fhigh  = 1000;              % Highest center frequency in Hz;
-        filters_per_ERBaud = 1;     % Filterband density on ERB scale;     
-        gamma_order= 4;             % Filter order;
-        bandwidth_factor = 0.85;    % Bandwidth factor;
+        fs = 10000;           % Sampling rate in Hz;
+        fc = 1000;            % Center frequency in Hz;
+        bw = 100;             % Bandwidth of 100 Hz
+        attenuation_db = 3;   % Attenuation of the filter at the bandwidth
+        gamma_order= 4;       % Filter order;
 
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,'gamma_order',gamma_order,'bandwidth_factor',bandwidth_factor);
+        filter = gfb_filter_new (fs, fc, bw, attenuation_db, gamma_order);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];
         % Filter signal;
-        impulse_response = gfb_analyzer_process(analyzer, impulse);
+        impulse_response = gfb_filter_process(filter, impulse);
 
         %Plot;
         figure;
@@ -154,20 +152,18 @@ function exp_hohmann2002(varargin)
 
     if flags.do_fig2
 
-        fs = 10000;                 % Sampling rate in Hz;
-        flow = 1000;                % Lowest center frequency in Hz;
-        basef = 1000;               % Base center frequency in Hz;
-        fhigh  = 1000;              % Highest center frequency in Hz;
-        filters_per_ERBaud = 1;     % Filterband density on ERB scale;     
-        gamma_order= 4;             % Filter order;
-        bandwidth_factor = 0.88;    % Bandwidth factor;
+        fs = 10000;           % Sampling rate in Hz;
+        fc = 1000;            % Center frequency in Hz;
+        bw = 100;             % Bandwidth of 100 Hz
+        attenuation_db = 3;   % Attenuation of the filter at the bandwidth
+        gamma_order= 4;       % Filter order;
 
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,'gamma_order',gamma_order,'bandwidth_factor',bandwidth_factor);
+        filter = gfb_filter_new (fs, fc, bw, attenuation_db, gamma_order);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];
         % Filter signal;
-        impulse_response = gfb_analyzer_process(analyzer, impulse);
+        impulse_response = gfb_filter_process(filter, impulse);
         % Frequency response;
         frequency_response = fft(real(impulse_response)');                     
         % Normalized frequency vector;
