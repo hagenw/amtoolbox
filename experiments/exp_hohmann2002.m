@@ -94,7 +94,7 @@ function exp_hohmann2002(varargin)
 %
 %   References: hohmann2002
 %
-%   See also: demo_hohmann2002 gfb_analyzer_new gfb_analyzer_process
+%   See also: demo_hohmann2002 hohmann2002 gfb_analyzer_process
 %   demo_gammatone exp_gammatone gammatone 
 
 % AUTHOR: CK, 2014
@@ -126,7 +126,7 @@ function exp_hohmann2002(varargin)
         gamma_order= 4;       % Filter order;
 
         % Construct new analyzer object;
-        filter = gfb_filter_new (fs, fc, bw, attenuation_db, gamma_order);
+        filter = hohmann2002filter (fs, fc, bw, attenuation_db, gamma_order);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];
         % Filter signal;
@@ -159,7 +159,7 @@ function exp_hohmann2002(varargin)
         gamma_order= 4;       % Filter order;
 
         % Construct new analyzer object;
-        filter = gfb_filter_new (fs, fc, bw, attenuation_db, gamma_order);
+        filter = hohmann2002filter (fs, fc, bw, attenuation_db, gamma_order);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];
         % Filter signal;
@@ -226,7 +226,7 @@ function exp_hohmann2002(varargin)
         filters_per_ERBaud = 1.0;   % Filterband density on ERB scale; 
         
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud);
+        analyzer = hohmann2002 (fs,flow,basef,fhigh,filters_per_ERBaud);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];                                          
         % Filter signal;
@@ -259,7 +259,7 @@ function exp_hohmann2002(varargin)
         delay_samples = 65;         % Desired delay in Samples;
         
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud);
+        analyzer = hohmann2002 (fs,flow,basef,fhigh,filters_per_ERBaud);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];                                          
         % Filter signal;
@@ -317,7 +317,7 @@ function exp_hohmann2002(varargin)
         delay_samples = 65;         % Desired delay in Samples;
         
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud);
+        analyzer = hohmann2002 (fs,flow,basef,fhigh,filters_per_ERBaud);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];                                          
         % Filter signal;
@@ -369,7 +369,7 @@ function exp_hohmann2002(varargin)
         desired_delay = 0.004;      % Desired delay in seconds;
         
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud);
+        analyzer = hohmann2002 (fs,flow,basef,fhigh,filters_per_ERBaud);
         % Build synthesizer for an analysis-synthesis delay of desired_delay in seconds.
         synthesizer = gfb_synthesizer_new(analyzer, desired_delay);
         % Impulse signal;
@@ -422,7 +422,7 @@ function exp_hohmann2002(varargin)
         desired_delay = 0.004;      % Desired delay in seconds;
         
         % Construct new analyzer object;
-        analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud);
+        analyzer = hohmann2002 (fs,flow,basef,fhigh,filters_per_ERBaud);
         % Build synthesizer for an analysis-synthesis delay of desired_delay in seconds.
         synthesizer = gfb_synthesizer_new(analyzer, desired_delay);
         % Impulse signal;

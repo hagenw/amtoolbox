@@ -36,6 +36,7 @@ function filter = gfb_filter_new(arg1,arg2,arg3,arg4,arg5)
 
 %   AUTHOR: tp, modifications: PM (14.1.2016)
 
+warning('Warning: GFB_FILTER_NEW will be removed in a future release. Use HOHMANN2002FILTER instead. ');
 
 filter.type = 'gfb_Filter';
 switch nargin

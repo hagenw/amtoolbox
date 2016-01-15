@@ -44,6 +44,8 @@ function analyzer = gfb_analyzer_new(fs,flow,basef,fhigh,filters_per_ERBaud,vara
 % author   : tp
 % date     : Jan 2002, Jan, Sep 2003, Nov 2006, Jan 2007
 
+warning('Warning: GFB_ANALYZER_NEW will be removed in a future release. Use HOHMANN2002 instead. ');
+
 definput.keyvals.L=24.7; % see equation (17) in [Hohmann 2002]
 definput.keyvals.Q=9.265; % see equation (17) in [Hohmann 2002]
 definput.keyvals.gamma_order=4;
@@ -51,7 +53,6 @@ definput.keyvals.gaincalc_iterations=100; % number of iterations for the approxi
 definput.keyvals.bandwidth_factor=1.0; 
 
 [~,kv]  = ltfatarghelper({'L','Q','gamma_order','gaincalc_iterations','bandwidth_factor'},definput,varargin);
-
 
 analyzer.type                          = 'gfb_analyzer';
 analyzer.fs = fs;

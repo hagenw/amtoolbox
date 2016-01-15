@@ -23,9 +23,7 @@ amtdisp(['Upper cutoff frequency: ', num2str(fhigh), 'Hz']);
 amtdisp(['Base frequency        : ', num2str(base_frequency_hz), 'Hz']);
 amtdisp(['filters per ERB       : ', num2str(filters_per_ERB)]);
 amtdisp(' ')
-analyzer = gfb_analyzer_new(fs, flow, ...
-                            base_frequency_hz, fhigh,...
-			    filters_per_ERB);
+analyzer = hohmann2002(fs, flow, base_frequency_hz, fhigh, filters_per_ERB);
 bands = length(analyzer.center_frequencies_hz);
 amtdisp(['filterbank contains ', num2str(bands), ' filters:']);
 
