@@ -378,7 +378,7 @@ if flags.do_fig6
     end;    
 end;
 
-if flags_do_fig6_spille2013
+if flags.do_fig6_spille2013
   
   signal=amtload('dietz2011','s123456.wav');
   fs=44100;
