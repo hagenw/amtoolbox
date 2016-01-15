@@ -20,6 +20,8 @@
 %     HOHMANN2002PROCESS          - Process the input signals by the corresponding filterbank object
 %     HOHMANN2002CLEARSTATE       - Clears the state of the filterbank object
 %     HOHMANN2002FREQZ            - Calculates frequency response of a filterbank object
+%     HOHMANN2002CLEARSTATE       - Clears the state of the filterbank objects
+%     HOHMANN2002FREQZ            - Calculates frequency response of a filterbank object
 %
 %   Averaging
 %     WEIGHTEDAVERAGEFILTER       - Part of the takanen2013 model
