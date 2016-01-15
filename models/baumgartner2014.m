@@ -105,6 +105,8 @@ function varargout = baumgartner2014( target,template,varargin )
 % 
 %   2) Data in hrtf/baumgartner2014
 %
+%   3) Circular Statistics Toolbox from http://www.mathworks.com/matlabcentral/fileexchange/10676-circular-statistics-toolbox--directional-statistics-
+%
 %
 %   See also: plot_baumgartner2014, data_baumgartner2014,
 %   exp_baumgartner2014, demo_baumgartner2014, baumgartner2014calibration,

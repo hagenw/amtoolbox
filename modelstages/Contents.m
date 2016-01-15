@@ -2,17 +2,6 @@
 %
 %  The AMT team, 2011 - 2014.
 %
-%  Peripheral stages
-%     HEADPHONEFILTER    - FIR filter to model headphones 
-%     MIDDLEEARFILTER    - FIR filter to model the middle ear
-%     AUDITORYFILTERBANK - Linear auditory filterbank.
-%     IHCENVELOPE        - Inner hair cell envelope extration.
-%     ADAPTLOOP          - Adaptation loops.
-%     KARJALAINEN1996    - Adaptation network.
-%     DRNL               - Dual resonance non-linear filterbank.
-%     MODFILTERBANK      - Modulation filter bank.
-%     MODFILTERBANKEPSM  - Modulation filter bank from Joergensen model.
-%
 %  Binaural processing stages
 %     LANGENDIJK2002COMP     - Comparison process from Langendijk 20002.
 %     LINDEMANN1986BINCORR - Running cross-correlation between two signals.
@@ -22,6 +11,29 @@
 %     DIETZ2011FILTERBANK - filterbank of Dietz 2011 binaural model
 %     DIETZ2011INTERAURALFUNCTIONS - Calculate interaural parameters for Dietz 2011 model
 %     WIERSTORF2013ESTIMATEAZIMUTH - Azimuth position estimation based on dietz2011 or lindemann1986
+%     ZIEGELWANGER2014OFFAXIS - synthesis of TOAs for the off-axis model
+%     ZIEGELWANGER2014ONAXIS  - synthesis of TOAs for the on-axis model
+%     LANGENDIJK2002LIKELIHOOD - Likelihood estimation
+%
+%  Preprocessing stages
+%     BREEBAART2001PREPROC  - EI-cell output
+%
+%     LINDEMANN1986CENTROID - Centroid of the cross-correlation activation
+%
+%     ROENNE2012CHIRP          - Simulate chirp evoked ABRs
+%     ROENNE2012CLICK          - Simulate ABR respone to click
+%     ROENNE2012TONEBURSTS     - Simulate tone burst evoked ABR wave V latencies
+%
+%   Gammatone filterbank framework from Hohmann (2002)
+%     HOHMANN2002DELAY            - Create a delay object
+%     HOHMANN2002MIXER            - Create a mixer object
+%     HOHMANN2002SYNTH            - Create a synthesis object 
+%     HOHMANN2002FILT             - Create a single Gammatone filter object
+%     HOHMANN2002PROCESS          - Process the input signals by the corresponding filterbank object
+%     HOHMANN2002CLEARSTATE       - Clears the state of the filterbank object
+%     HOHMANN2002FREQZ            - Calculates frequency response of a filterbank object
+%     HOHMANN2002CLEARSTATE       - Clears the state of the filterbank objects
+%     HOHMANN2002FREQZ            - Calculates frequency response of a filterbank object
 %
 %  The Takanen 2013 model   - Takanen 2013 binaural auditory model
 %     TAKANEN2013CONTRACOMPARISON - Enhance contrast between hemispheres

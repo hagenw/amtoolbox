@@ -36,10 +36,11 @@ function delay = gfb_delay_new(analyzer, delay_samples)
 % author   : tp
 % date     : Jan 2002; Nov 2003; Mar Jun Nov 2006; Jan Feb 2007
 
+warning('Warning: GFB_DELAY_NEW will be removed in a future release. Use HOHMANN2002DELAY instead. ');
 
 delay.type           = 'gfb_Delay';
 
-  analyzer             = gfb_analyzer_clear_state(analyzer);
+  analyzer             = hohmann2002clearstate(analyzer);
   impulse              = zeros(1, delay_samples + 2);
   impulse(1)           = 1;
 

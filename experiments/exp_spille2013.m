@@ -16,15 +16,6 @@ function example_output = exp_spille2013(varargin)
 
 % AUTHOR: Mathias Dietz
 
-% choose input signal (e.g. spille2013_s123456)
-% fn = 'exp_spille2013_s123456.wav';
-% targetfn = fullfile(amtbasepath,'signals',fn);
-% if not(exist(targetfn,'file'))
-%   amtdisp(['Downloading ' fn ' from http://amtoolbox.sourceforge.net/data/signals/']);  
-%   sourcefn = ['http://amtoolbox.sourceforge.net/data/signals/' fn];
-%   urlwrite(sourcefn,targetfn);
-% end
-% signal=wavread(targetfn);
 signal=amtload('spille2013','s123456.wav');
 fs=44100;
 s_pos =[-75 -40 -10 10 40 75];

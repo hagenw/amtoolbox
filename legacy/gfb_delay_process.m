@@ -23,6 +23,8 @@ function [outsig, delay] = gfb_delay_process(delay, insig)
 % author   : tp
 % date     : Jan 2002, Nov 2006
 
+warning('Warning: GFB_DELAY_PROCESS will be removed in a future release. Use HOHMANN2002PROCESS instead. ');
+
 [number_of_bands, number_of_samples] = size(insig);
 if (number_of_bands ~= length(delay.delays_samples))
   error('input rows must match the number of bands');

@@ -18,6 +18,7 @@ function [output, synthesizer] = gfb_synthesizer_process(synthesizer, input)
 
 % filename : gfb_synthesizer_process.m
 
+warning('Warning: GFB_SYNTHESIZER_PROCESS will be removed in a future release. Use HOHMANN2002PROCESS instead. ');
 
 [output, synthesizer.delay] = gfb_delay_process(synthesizer.delay, input);
 [output, synthesizer.mixer] = gfb_mixer_process(synthesizer.mixer, output);
