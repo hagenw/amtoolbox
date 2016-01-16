@@ -102,9 +102,9 @@ probes=fc;
 [path,name,ext]=fileparts(which('verhulst2012'));
 [path,name,ext]=fileparts(path);
 act_path=pwd;
-cd(strcat(path,'/src/verhulst/')); 
+cd(strcat(path,'/bin/verhulst2012/')); 
 if ~exist('tridiag.so','file')
-	error('tridiag.so library is missing. Goto to AMT/src/verhulst and compile by executing the makefile');
+	error('tridiag.so library is missing. Goto to AMT/bin/verhulst2012 and compile by executing the makefile');
 end
 save('input.mat','stim','Fs','channels','spl','subject','sheraPo','irregularities','probes','-v7');
 system('python run_cochlear_model.py');

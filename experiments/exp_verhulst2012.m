@@ -12,7 +12,7 @@ function output=exp_verhulst2012(varargin)
 %
 %   1) Python >2.6 is required with numpy and scipi packages. On Linux, use sudo apt-get install python-scipy python-numpy
 % 
-%   2) Compiled files with a C-compiler, e.g. gcc. In amtbase/src/verhulst start make (Linux) or make.bat (Windows)
+%   2) Compiled files with a C-compiler, e.g. gcc. In amtbase/bin/verhulst2012 start make (Linux) or make.bat (Windows)
 %
 %   3) On linux, when problems with GFORTRAN lib appear, try sudo ln -sf /usr/lib64/libgfortran.so.3.0.0 /mymatlabroot/sys/os/glnxa64/libgfortran.so.3 (mymatlabroot is usually /usr/local/MATLAB/version
 %               
