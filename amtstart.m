@@ -31,13 +31,9 @@ function amtstart(varargin)
 %      and install the packages separately.
 %
 %   4) run `amtmex` to compile some models. You will need a compiler working in your 
-%      Matlab/Octave environment (see `help mex`).
+%      Matlab/Octave environment (see `help mex`) and the GCC installed on your system.
 %
-%   5) in the directory `src/verhulst2012`, run `make` (Linux) or `make.bat` (Windows).
-%      You will need gcc (see <https://gcc.gnu.org/>) installed and 
-%      available at the command line.
-%   
-%   6) have the Optimization Toolbox for Matlab installed.
+%   5) have the Optimization Toolbox for Matlab installed.
 %
 % 
 %   Supplementary files:
