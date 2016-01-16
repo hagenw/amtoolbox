@@ -130,13 +130,11 @@ psth = vihc;
 for jj = 1:kv.nfibers
   
   % Call IHC model (mex'ed C model)
-  vihc(jj,:) = comp_zilany2014_model_IHC(...
-    stim,fc(jj),kv.nrep,tdres,reptime,kv.cohc,kv.cihc,species);
+  vihc(jj,:) = comp_zilany2014IHC(stim,fc(jj),kv.nrep,tdres,reptime,kv.cohc,kv.cihc,species);
   
   % Call Synapse model
-  [ANresp(jj,:),varrate,psth(jj,:)] = comp_zilany2014_model_Synapse(...
+  [ANresp(jj,:),varrate,psth(jj,:)] = comp_zilany2014Synapse(...
     vihc(jj,:),fc(jj),kv.nrep,tdres,kv.fiberType,noiseType,implnt);
-          
 end
 
 

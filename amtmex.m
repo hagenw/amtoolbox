@@ -64,16 +64,16 @@ if flags.do_compile
 
   s=sprintf('========= Compiling %s interfaces ==========', extname);
   amtdisp(s);
+      % Get the list of files.
   if isoctave
     ext='oct';
     L=dir([bp,filesep,'oct',filesep,'*.cc']);
   else
     ext=mexext;
-    % Get the list of files.
     L=dir([bp,filesep,'mex',filesep,'comp_*.c']);
     L=[L; dir([bp,filesep,'mex',filesep,'comp_*.cpp'])];
   end;
-    filenames = arrayfun(@(lEl) lEl.name,L,'UniformOutput',0);
+  filenames = arrayfun(@(lEl) lEl.name,L,'UniformOutput',0);
   
   if compile_amt(bp,ext,filenames)>1;                
     s=sprintf('Error: The %s interfaces was not built.', extname);
