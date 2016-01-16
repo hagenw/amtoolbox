@@ -30,17 +30,18 @@ function amtstart(varargin)
 %      On Windows, intall python from <https://www.python.org/>, add python.exe to path,
 %      and install the packages separately.
 %
-%   4) run `amtmex` to compile some models. You will need a compiler working in your 
-%      Matlab/Octave environment (see `help mex`).
+%   4) have the Optimization Toolbox for Matlab installed.
 %
-%   5) in the directory `src/verhulst2012`, run `make` (Linux) or `make.bat` (Windows).
-%      You will need gcc (see <https://gcc.gnu.org/>) installed and 
-%      available at the command line.
-%   
-%   6) have the Optimization Toolbox for Matlab installed.
 %
+%   Installation
+%   ------------
 % 
-%   Supplementary files:
+%   Run `amtmex` to compile some models. This will compile AMT-related binaries on your
+%   system (see |amtmex|). You will need a compiler working in your 
+%   Matlab/Octave environment (see `help mex`) and the GCC installed on your OS.
+%
+%
+%   Supplementary files
 %   --------------------
 % 
 %   Most of the models require *auxiliary data*. The AMT will download these data on-demand. 
