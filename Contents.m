@@ -9,7 +9,7 @@
 %
 %  Start and installation
 %    AMTSTART     -  Start the AMT
-%    AMTMEX       -  Compile Mex/Oct interfaces
+%    AMTMEX       -  Compile Mex/Oct and other binary interfaces
 %    AMTFLAGS     -  The start-up flags of the AMT
 %
 %  General functions

@@ -2,6 +2,10 @@
 Release history of the AMT
 *************************************************************
 
+*** Version 0.9.8
+* New
+
+
 *** Version 0.9.7
 * New:
   - Caching of data: see amtcache and the cache directory.
