@@ -44,7 +44,7 @@ insig=[zeros(2*part,1);
 
 insig=max(insig,minlvl);
 
-figure(1);
+figure;
 
 x=(0:siglen-1)/fs;
 subplot(3,1,1);
@@ -69,7 +69,7 @@ xlabel('time / s');
 insig=abs(insig+0.001*randn(siglen,1));
 insig=max(insig,minlvl);
 
-figure(2);
+figure;
 
 subplot(3,1,1);
 plot(x,20*log10(insig));

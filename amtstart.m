@@ -33,7 +33,7 @@ function amtstart(varargin)
 %   4) run `amtmex` to compile some models. You will need a compiler working in your 
 %      Matlab/Octave environment (see `help mex`).
 %
-%   5) in the directory `src/verhulst`, run `make` (Linux) or `make.bat` (Windows).
+%   5) in the directory `src/verhulst2012`, run `make` (Linux) or `make.bat` (Windows).
 %      You will need gcc (see <https://gcc.gnu.org/>) installed and 
 %      available at the command line.
 %   
