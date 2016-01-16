@@ -2055,7 +2055,7 @@ if flags.do_localevel
   e_qerr(mm) = mean(rms([pred.qe]-[ref.qe]));
     
   amtdisp(' e_PE  r_PE  e_QE   r_QE')
-  amtdisp([num2str(e_perr(mm),'%2.1f') '°  ' num2str(r_perr(mm),'%2.2f') '  ' num2str(e_qerr(mm),'%2.1f') '%  ' num2str(r_qerr(mm),'%2.2f')])
+  amtdisp([num2str(e_perr(mm),'%2.1f') '\deg  ' num2str(r_perr(mm),'%2.2f') '  ' num2str(e_qerr(mm),'%2.1f') '%  ' num2str(r_qerr(mm),'%2.2f')])
   
   varargout{1} = 0.5* (e_perr(mm)/90 + e_qerr(mm)/100);
   

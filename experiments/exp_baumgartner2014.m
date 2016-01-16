@@ -166,7 +166,7 @@ function varargout = exp_baumgartner2014(varargin)
 %     'fig4_baumgartner2015jaes'   Reproduce Fig.4 of Baumgartner and Majdak (2015):
 %                                  Response predictions to sounds created by VBAP with two 
 %                                  loudspeakers in the median plane positioned at polar 
-%                                  angles of ?15 and 30 deg, respectively. Predictions for 
+%                                  angles of -15 and 30 deg, respectively. Predictions for 
 %                                  two exemplary listeners and pooled across all listeners. 
 %                                  Each column of a panel shows the predicted PMV of 
 %                                  polar-angle responses to a certain sound. Note the 
@@ -193,7 +193,7 @@ function varargout = exp_baumgartner2014(varargin)
 %                                  mixed. Dotted horizontal line: polar angle of the reference 
 %                                  source. Hor- izontal line within box: median; 
 %                                  box: inter-quartile range (IQR); 
-%                                  whisker: within quartile ±1.5·IQR; 
+%                                  whisker: within quartile $\pm 1.5$ IQR; 
 %                                  star: outlier. 
 %                                  Note that the simulations predicted a bias similar to 
 %                                  the results from Pulkki (2001) for the reference source at 0 deg.
@@ -211,7 +211,7 @@ function varargout = exp_baumgartner2014(varargin)
 %                                  Increase in polar error (defined as in Fig. 5) as a function 
 %                                  of loudspeaker span in the median plane with panning ratio 
 %                                  R = 0 dB. Black line with gray area indicates mean 
-%                                  +/-1 standard deviation across listeners. Note that the 
+%                                  $\pm 1$ standard deviation across listeners. Note that the 
 %                                  increase in polar error monotonically increases with 
 %                                  loudspeaker span.
 %
