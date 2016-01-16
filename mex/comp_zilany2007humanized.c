@@ -1,10 +1,12 @@
+/* Adapted to AMT by Robert Baumgarnter (2015) and Piotr Majdak (2016) */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <mex.h>
 #include <time.h>
-#include "../src/zilany5/complex.c"
+#include "zilany2014/complex.c"
 
 
 /* This is Version 1 of the code for the "humanized" auditory

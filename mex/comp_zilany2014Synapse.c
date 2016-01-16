@@ -1,3 +1,6 @@
+/* Adapted to AMT by Robert Baumgarnter (2015) and Piotr Majdak (2016) */
+
+
 /* This is Version 5 of the code for auditory periphery model of:
 
     Zilany, M.S.A., Bruce, I.C., Nelson, P.C., and Carney, L.H. (2009). "A Phenomenological
@@ -41,7 +44,7 @@
 /* #include <iostream.h> */
 
 /* #include "zilany2013_complex.hpp" */
-#include "../src/zilany2014/complex.c"
+#include "zilany2014/complex.c"
 
 #define MAXSPIKES 1000000
 #ifndef TWOPI
