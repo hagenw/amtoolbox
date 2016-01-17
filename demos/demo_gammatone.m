@@ -35,8 +35,8 @@
 %   such that their maxima are aligned across frequency channels.
 %
 %
-%   See also: exp_gammatone gammatone exp_hohmann2002 demo_hohmann2002
-%   gfb_analyzer_new gfb_analyzer_process
+%   See also: exp_gammatone gammatone exp_hohmann2002 demo_hohmann2002 hohmann2002
+
 
 % AUTHOR: Christian Klemenschitz, 2014
 

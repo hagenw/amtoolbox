@@ -3042,13 +3042,17 @@ if flags.do_fig2_baumgartner2015jaes
 
     set(gca,'LineWidth',1)
     plotfft(fft(dtfphant),fs,'posfreq')
-    set(gca,'LineStyleOrder','-','LineWidth',1,'ColorOrderIndex',1)
+%     set(gca,'LineStyleOrder','-','LineWidth',1,'ColorOrderIndex',1) % FIXME:    this does not work in Matlab2013
+    set(gca,'LineStyleOrder','-','LineWidth',1)
     hold on
-    set(gca,'LineStyleOrder','--','LineWidth',1,'ColorOrderIndex',2)
+%     set(gca,'LineStyleOrder','--','LineWidth',1,'ColorOrderIndex',2) % FIXME:    this does not work in Matlab2013
+    set(gca,'LineStyleOrder','--','LineWidth',1)
     plotfft(fft(dtfreal),fs,'posfreq')
-    set(gca,'LineStyleOrder',':','LineWidth',0.5,'ColorOrderIndex',6)
+%     set(gca,'LineStyleOrder',':','LineWidth',0.5,'ColorOrderIndex',6) % FIXME:    this does not work in Matlab2013
+    set(gca,'LineStyleOrder',':','LineWidth',0.5)
     plotfft(fft(dtf1),fs,'posfreq')
-    set(gca,'LineStyleOrder',':','LineWidth',0.5,'ColorOrderIndex',5)
+%     set(gca,'LineStyleOrder',':','LineWidth',0.5,'ColorOrderIndex',5) % FIXME:    this does not work in Matlab2013
+    set(gca,'LineStyleOrder',':','LineWidth',0.5)
     plotfft(fft(dtf2),fs,'posfreq');
 
     leg = legend([num2str(polphant) '\circ VBAP'],...
@@ -3149,7 +3153,8 @@ if flags.do_fig4_baumgartner2015jaes
       if strcmp(s(ll).id,id1)
         subplot(1,4,1)
         plot_baumgartner2014(s(ll).p2,pol0,respang,'cmax',0.08)
-        colormap parula
+%         colormap parula % FIXME: does not work in Matlab 2013
+        colormap jet
         title(s(ll).id,'FontSize',kv.FontSize)
         xlabel(''); 
         ylabel('Response angle (deg)','FontSize',kv.FontSize);
@@ -3157,7 +3162,8 @@ if flags.do_fig4_baumgartner2015jaes
       elseif strcmp(s(ll).id,id2)
         subplot(1,4,2)
         plot_baumgartner2014(s(ll).p2,pol0,respang,'cmax',0.08)
-        colormap parula
+%         colormap parula % FIXME: does not work in Matlab 2013
+        colormap jet
         xlabel('Panning angle (deg)','FontSize',kv.FontSize);      
         ylabel(''); set(gca,'YTickLabel',[]);
         title(s(ll).id,'FontSize',kv.FontSize)
@@ -3167,7 +3173,8 @@ if flags.do_fig4_baumgartner2015jaes
     p_pool = mean(p_pool,3);
     subplot(1,4,3)
     plot_baumgartner2014(p_pool,pol0,respang,'cmax',0.08)
-    colormap parula
+%         colormap parula % FIXME: does not work in Matlab 2013
+    colormap jet
     title('Pool','FontSize',kv.FontSize)
     xlabel(''); 
     ylabel(''); set(gca,'YTickLabel',[]);
@@ -3180,7 +3187,8 @@ if flags.do_fig4_baumgartner2015jaes
     pcolor(1:2,y,repmat(y(:),1,2))
     shading flat
     axis tight
-    colormap parula
+%         colormap parula % FIXME: does not work in Matlab 2013
+    colormap jet
     title({' ';' '})
     set(gca,'XTick',[],'YTick',0:1:ymax,... 
       'YDir','normal','YAxisLocation','right','FontSize',kv.FontSize)

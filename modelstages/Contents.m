@@ -2,6 +2,12 @@
 %
 %  The AMT team, 2011 - 2014.
 %
+%  HRTF processing
+%     ZIEGELWANGER2014ONAXIS      - On-axis version of Ziegelwanger et al. (2014)
+%     ZIEGELWANGER2014OFFAXIS     - Off-axis version of Ziegelwanger et al. (2014)
+%     ZIEGELWANGER2013ONAXIS      - On-axis version of Ziegelwanger et al. (2013) (legacy only)
+%     ZIEGELWANGER2013OFFAXIS     - Off-axis version of Ziegelwanger et al. (2013) (legacy only)
+%
 %  Binaural processing stages
 %     LANGENDIJK2002COMP     - Comparison process from Langendijk 20002.
 %     LINDEMANN1986BINCORR - Running cross-correlation between two signals.
