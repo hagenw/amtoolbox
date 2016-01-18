@@ -3037,24 +3037,28 @@ if flags.do_fig2_baumgartner2015jaes
 
   %%
   if flags.do_plot
-
+    
     figure
 
     set(gca,'LineWidth',1)
     plotfft(fft(dtfphant),fs,'posfreq')
-%     set(gca,'LineStyleOrder','-','LineWidth',1,'ColorOrderIndex',1) % FIXME:    this does not work in Matlab2013
-    set(gca,'LineStyleOrder','-','LineWidth',1)
     hold on
-%     set(gca,'LineStyleOrder','--','LineWidth',1,'ColorOrderIndex',2) % FIXME:    this does not work in Matlab2013
-    set(gca,'LineStyleOrder','--','LineWidth',1)
     plotfft(fft(dtfreal),fs,'posfreq')
-%     set(gca,'LineStyleOrder',':','LineWidth',0.5,'ColorOrderIndex',6) % FIXME:    this does not work in Matlab2013
-    set(gca,'LineStyleOrder',':','LineWidth',0.5)
     plotfft(fft(dtf1),fs,'posfreq')
-%     set(gca,'LineStyleOrder',':','LineWidth',0.5,'ColorOrderIndex',5) % FIXME:    this does not work in Matlab2013
-    set(gca,'LineStyleOrder',':','LineWidth',0.5)
     plotfft(fft(dtf2),fs,'posfreq');
-
+    
+    % Set line styles
+    Color =  {[0.4660    0.6740    0.1880];...
+              [0.3010    0.7450    0.9330];...
+              [0.8500    0.3250    0.0980];...
+              [     0    0.4470    0.7410]};
+    LineWidth = [.5,.5,1,1];
+    LineStyle = {':',':','--','-'};
+    ch = get(gca,'Children');
+    for ii = 1:length(ch)
+      set(ch(ii),'Color',Color{ii},'LineStyle',LineStyle{ii},'LineWidth',LineWidth(ii));
+    end
+    
     leg = legend([num2str(polphant) '\circ VBAP'],...
       [num2str(polphant) '\circ source'],...
       ['  ' num2str(pol1) '\circ source'],...
@@ -3145,6 +3149,27 @@ if flags.do_fig4_baumgartner2015jaes
   
   if flags.do_plot
     
+    cmp= [0.2081    0.1663    0.5292;
+          0.2052    0.2467    0.6931;
+          0.0843    0.3472    0.8573;
+          0.0157    0.4257    0.8789;
+          0.0658    0.4776    0.8532;
+          0.0777    0.5300    0.8279;
+          0.0356    0.5946    0.8203;
+          0.0230    0.6443    0.7883;
+          0.0485    0.6793    0.7341;
+          0.1401    0.7085    0.6680;
+          0.2653    0.7327    0.5916;
+          0.4176    0.7471    0.5142;
+          0.5624    0.7487    0.4529;
+          0.6872    0.7433    0.4029;
+          0.7996    0.7344    0.3576;
+          0.9057    0.7261    0.3105;
+          0.9944    0.7464    0.2390;
+          0.9847    0.8141    0.1734;
+          0.9596    0.8869    0.1190;
+          0.9763    0.9831    0.0538]; % parula colormap (defined for compatibility with older Matlab versions)
+    
     figure
 
     p_pool = nan(size(s(1).p2,1),size(s(1).p2,2),length(s));
@@ -3153,8 +3178,7 @@ if flags.do_fig4_baumgartner2015jaes
       if strcmp(s(ll).id,id1)
         subplot(1,4,1)
         plot_baumgartner2014(s(ll).p2,pol0,respang,'cmax',0.08)
-%         colormap parula % FIXME: does not work in Matlab 2013
-        colormap jet
+        colormap(cmp)
         title(s(ll).id,'FontSize',kv.FontSize)
         xlabel(''); 
         ylabel('Response angle (deg)','FontSize',kv.FontSize);
@@ -3162,8 +3186,7 @@ if flags.do_fig4_baumgartner2015jaes
       elseif strcmp(s(ll).id,id2)
         subplot(1,4,2)
         plot_baumgartner2014(s(ll).p2,pol0,respang,'cmax',0.08)
-%         colormap parula % FIXME: does not work in Matlab 2013
-        colormap jet
+        colormap(cmp)
         xlabel('Panning angle (deg)','FontSize',kv.FontSize);      
         ylabel(''); set(gca,'YTickLabel',[]);
         title(s(ll).id,'FontSize',kv.FontSize)
@@ -3173,8 +3196,7 @@ if flags.do_fig4_baumgartner2015jaes
     p_pool = mean(p_pool,3);
     subplot(1,4,3)
     plot_baumgartner2014(p_pool,pol0,respang,'cmax',0.08)
-%         colormap parula % FIXME: does not work in Matlab 2013
-    colormap jet
+    colormap(cmp)
     title('Pool','FontSize',kv.FontSize)
     xlabel(''); 
     ylabel(''); set(gca,'YTickLabel',[]);
@@ -3187,8 +3209,7 @@ if flags.do_fig4_baumgartner2015jaes
     pcolor(1:2,y,repmat(y(:),1,2))
     shading flat
     axis tight
-%         colormap parula % FIXME: does not work in Matlab 2013
-    colormap jet
+    colormap(cmp)
     title({' ';' '})
     set(gca,'XTick',[],'YTick',0:1:ymax,... 
       'YDir','normal','YAxisLocation','right','FontSize',kv.FontSize)
