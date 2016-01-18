@@ -2370,11 +2370,11 @@ if flags.do_fig11
     lp{4} = x.fir60db;
 
     %% Model Data
-    for do = 0:1
+    for psge = 0:1
 
-      s = data_baumgartner2014('pool','do',do,flags.cachemode);
+      s = data_baumgartner2014('pool','do',psge,flags.cachemode);
      
-      cname = ['result_best2005noise_do' num2str(do,'%u')];
+      cname = ['result_best2005noise_do' num2str(psge,'%u')];
       [ape_BBnoise,qe_BBnoise] = amtcache('get',cname,flags.cachemode);
       if isempty(ape_BBnoise)
         ape_BBnoise = zeros(1,length(s),length(latseg));
@@ -2382,7 +2382,7 @@ if flags.do_fig11
         for ss = 1:length(s)
           for ll = 1:length(latseg)
             [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
-            [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',do,...
+            [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',psge,...
                   'S',s(ss).S,'polsamp',polang,'lat',latseg(ll),'notprint');
             ape_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
             qe_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang);
@@ -2403,12 +2403,12 @@ if flags.do_fig11
     ape_all = zeros(length(lp),length(s),NsampModel-startSamp+1,2);
     qe_all = ape_all;
     for kk = startSamp:NsampModel 
-      for do = 0:1
-        cname = ['result_best2005speech_samp' num2str(kk) '_do' num2str(do,'%u')];
+      for psge = 0:1
+        cname = ['result_best2005speech_samp' num2str(kk) '_do' num2str(psge,'%u')];
         [ape_lat,qe_lat] = amtcache('get',cname,flags.cachemode);
         if isempty(ape_lat)
 
-          s = data_baumgartner2014('pool','do',do,flags.cachemode);
+          s = data_baumgartner2014('pool','do',psge,flags.cachemode);
 
           ape_lat = zeros(length(lp),length(s),length(latseg));
           qe_lat = ape_lat;
@@ -2421,7 +2421,7 @@ if flags.do_fig11
                 if plotspec; figure; audspecgram(stim(:),fs,'dynrange',150); end
 
                 [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
-                [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',do,...
+                [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',psge,...
                   'S',s(ss).S,'polsamp',polang,...
                   'lat',latseg(ll),'stim',stim,'notprint');
                 ape_lat(ilp,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
@@ -2440,8 +2440,8 @@ if flags.do_fig11
           amtcache('set',cname,ape_lat,qe_lat)
           amtdisp([num2str(kk,'%1.0u') ' of ' num2str(NsampModel,'%2.0u') ' samples completed'],'progress')
         end
-        ape_all(:,:,kk,do+1) = ape_lat;
-        qe_all(:,:,kk,do+1) = qe_lat;
+        ape_all(:,:,kk,psge+1) = ape_lat;
+        qe_all(:,:,kk,psge+1) = qe_lat;
 
       end
     end
