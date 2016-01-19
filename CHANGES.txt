@@ -4,8 +4,32 @@ Release history of the AMT
 
 *** Version 0.9.8
 * New
-
-
+  - baumgartner2016: level-dependent sagittal-plane sound localization model for NH and HI listeners
+  - hohmann2002: the gfb_ framework of Gammatone filterbank integrated as hohmann2002 framework
+  
+* Structure changes:
+  - baumgartner2014 decomposed into model stages
+  - directories re-structured:
+	- main scripts of a model go to: "model". They are called "nameyear.m"
+    - scripts with model stages (other model scripts than the main one) go to: "modelstages". They are called "nameyearpostfix.m"
+    - scripts being not a part of a specific model go to: "general". They do not (!) start with model name.
+    - scripts generating audio signals go to: "signals"
+    - scripts returning measured data go to: "data". They are called "data_nameyear.m"
+    - scripts with default parameters of other scripts go to: "defaults". They are called "arg_myfunction.m"
+    - files being compiled to mex files go to: "mex"
+    - files being compiled to oct files go to: "oct"
+    - other files requiring compilation/installation go to: "bin". Their compilation must be considered in make.bat (Windows) and Makefile (Linux/MacOS).
+    - HRTFs go to "hrtfs". They must be in SOFA.
+    - "binaural", "monaural", "speech", "filters" removed
+  - exp_spille2013 merged into exp_dietz2011
+  
+* Other updates:
+  - dietz2011: minor bug fixes
+  - data_joergensen2011: completion of data
+  - exp_baumgartner2014: new figures, compatibility improved
+  - demo_hohmann2002: new figures
+  - installation simplified (amtmex does all the installation now)
+  
 *** Version 0.9.7
 * New:
   - Caching of data: see amtcache and the cache directory.
