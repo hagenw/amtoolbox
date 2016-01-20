@@ -160,10 +160,16 @@ end
 
 %% DTF filtering, Eq.(1)
 
+dimtar = size(target); % for lconv dim check
+
 if not(isempty(kv.stim))
   target = lconv(target,kv.stim);
 end
 
+% check that lconv preserved matrix dimensions (earlier bug in lconv)
+if size(target,2) ~= dimtar(2)
+  target = reshape(target,[size(target,1),dimtar(2:end)]);
+end
 
 %% Spectral Analysis, Eq.(2)
 
