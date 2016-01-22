@@ -1,7 +1,18 @@
 function definput=arg_baumgartner2016(definput)
-  
+
+definput = arg_baumgartner2016calibration(definput);
+definput = arg_localizationerror(definput);
+definput = arg_baumgartner2014pmv2ppp(definput);
+definput = arg_amtcache(definput);
+
+definput.keyvals.ID = 'NHx';
+definput.keyvals.Condition = 'baseline';%'Long';
+
+definput.keyvals.temstim = noise(8e3,1,'white'); % "frozen" alternative: mls(13)
+
 definput.flags.fbank = {'zilany2014','zilany2007humanized','gammatone'};   % ,'drnl'
 definput.keyvals.fiberTypes=1:3;  % IHC scaling factor: 1 denotes normal IHC function; 0 denotes complete IHC dysfunction.
+definput.flags.redoSpectralAnalysis= {'','redoSpectralAnalysis'};
 
 definput.flags.Ifw = {'nointensityweighting','intensityweighting'};
 definput.flags.diff = {'','diff','nodiff'};
@@ -22,7 +33,7 @@ definput.keyvals.fs=48000;      % Hz
 definput.keyvals.S=0.5;         % listener-specific sensitivity parameter
 definput.keyvals.lat=0;         % deg
 definput.keyvals.stim=[];
-definput.keyvals.fsstim=[];
+definput.keyvals.fsstim=48e3;
 definput.keyvals.space=1;       % No. of ERBs (Cams) 
 definput.keyvals.do=1;
 definput.keyvals.flow=700;      % Hz
@@ -39,7 +50,6 @@ definput.keyvals.prior=0;       % parameter of Pratt prior
 definput.keyvals.priordist.x = [-90,270]; % angles of prior distribution
 definput.keyvals.priordist.y = [1,1];     % values of prior distribution
 
-
 definput.keyvals.SimDL=eps; % Difference limen of similarity estimation
 definput.keyvals.SimThresh=[]; % Threshold of similarity estimation
 
@@ -47,17 +57,6 @@ definput.keyvals.nf = 28;      % # AN fibers for zilany model
 definput.keyvals.fsmod = 100e3; % Hz, sampling rate of zilany model
 definput.keyvals.cohc=1;      % OHC scaling factor: 1 denotes normal OHC function; 0 denotes complete OHC dysfunction.
 definput.keyvals.cihc=1;      % IHC scaling factor: 1 denotes normal IHC function; 0 denotes complete IHC dysfunction.
-  
-
-definput.flags.localizationerror = {'','accL','precL','precLcentral','accP','precP','querr','accE',...
-  'absaccE','absaccL','accabsL','accPnoquerr','precE','querr90','accE','precPmedian',...
-  'precPmedianlocal','precPnoquerr','rmsL','rmsPmedianlocal','rmsPmedian',...
-  'querrMiddlebrooks','corrcoefL','corrcoefP','SCC',...
-  'gainLstats','gainL','pVeridicalL','precLregress'...
-  'sirpMacpherson2000','gainPfront','gainPrear','gainP','perMacpherson2003',...
-  'pVeridicalPfront','pVeridicalPrear','precPregressFront','precPregressRear',...
-  'QE_PE_EB','QE','PE','EB','absPE'};
-
 
 definput.keyvals.gammashortfact = 1; % adaptation factor for duration-dependent gamma
 definput.keyvals.Sshortfact = 1; % adaptation factor for duration-dependent sensitivity

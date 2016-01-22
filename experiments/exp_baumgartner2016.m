@@ -121,7 +121,7 @@ function varargout = exp_baumgartner2016(varargin)
 %
 %     exp_baumgartner2016('numchan');
 %
-%   See also: baumgartner2014 data_baumgartner2014for2016
+%   See also: baumgartner2014 data_baumgartner2016
 %
 %   References: baumgartner2014modeling majdak2013spatstrat goupell2010numchan  
 %   
@@ -132,63 +132,83 @@ function varargout = exp_baumgartner2016(varargin)
 
 %% ------ Check input options --------------------------------------------
 
-definput.import={'baumgartner2016','localizationerror','baumgartner2014pmv2ppp','amtcache'};
+definput.import={'amtcache','localizationerror','baumgartner2014pmv2ppp'};
+
+definput.flags.experiment = {'missingflag','baseline','baseline_ex',...
+   'baseline_lat','parametrization',...
+   'spatstrat_ex','spatstrat','numchan_ex','numchan',...
+   'sabin2005','impairment','effectOnCues','dynrangecheck',...
+   'localevel','hearingthreshold'};
+     
+definput.keyvals.ModelSettings = {};
+ 
+% Figure Settings
+definput.flags.plot = {'plot','noplot'};
 definput.keyvals.FontSize = 10;
 definput.keyvals.MarkerSize = 6;
-definput.keyvals.SL2SPL = 10;
-definput.keyvals.subjects = [];
 definput.keyvals.gap = 0;
 definput.keyvals.marg_h = [.08,.05];
 definput.keyvals.marg_w = .05;
-definput.flags.type = {'missingflag','baseline_ex','baseline','baseline_lat','parametrization',...
-                       'spatstrat_ex','spatstrat','numchan_ex','numchan',...
-                       'sabin2005','impairment','effectOnCues','dynrangecheck',...
-                       'localevel','hearingthreshold'};
-definput.flags.TL = {'','TLisSPL'};
-definput.flags.plot = {'plot','noplot'};
-definput.flags.localevelplot = {'performance','pmv'};
-definput.flags.parametrize = {'gamma','mrsandgamma'};
-definput.flags.statistics = {'stat','nostat'};
+definput.keyvals.TickLength = [0.02,0.04];
+
+% For: sabin2005
+definput.keyvals.SL2SPL = 10;
 definput.flags.gainInDeg = {'','gainInDeg'};
-definput.flags.dynrangecheck = {'','dynrangeDiff','dprime'};
-definput.flags.recalib={'','recalib'};
-definput.flags.effectOnCues={'OHC','FT'};
+
+% For: impairment
+definput.keyvals.subjects = [];
 definput.flags.impairment={'FTlabel','noFTlabel'};
 
+% For: localevel
+definput.flags.TL = {'','TLisSPL'};
+definput.flags.localevelplot = {'performance','pmv'};
 
-[flags,kv]  = ltfatarghelper({'FontSize','MarkerSize','SL2SPL'},definput,varargin);
+% For: parametrization
+definput.flags.parametrize = {'gamma','mrsandgamma'};
+
+% For: dynrangecheck
+definput.flags.dynrangecheck = {'','dynrangeDiff','dprime'};
+definput.flags.dynrangecheck_comb = {'separate','combined'};
+
+definput.flags.effectOnCues={'OHC','FT'};
+
+% General: availability of Statistics Toolbox
+definput.flags.statistics = {'stat','nostat'};
+
+[flags,kv]  = ltfatarghelper({},definput,varargin);
+
+model.definput.import={'baumgartner2016'};
+[model.flags,model.kv] = ltfatarghelper({},model.definput,kv.ModelSettings);
 
 errorflag = [flags.errorflag,flags.ppp];
 
 if flags.do_missingflag
-  flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
-             sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+  flagnames=[sprintf('%s, ',definput.flags.experiment{2:end-2}),...
+             sprintf('%s or %s',definput.flags.experiment{end-1},definput.flags.experiment{end})];
   error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
 
 %% Define cache name according to settings for auditory periphery model
 
-cachename = ['g' num2str(kv.gamma,'%u') ...
-      '_mrs' num2str(kv.mrsmsp,'%u') ...
-      '_do' num2str(kv.do,'%u') ...
-      '_tem' num2str(kv.SPLtem,'%u') 'dB_' flags.fbank];
-if flags.do_gammatone
-  cachename = [cachename '_'  num2str(1/kv.space,'%u') 'bpERB'];
-  if flags.do_middleear; cachename = [cachename '_middleear']; end
-  if flags.do_ihc; cachename = [cachename '_ihc']; end
+cachename = ['g' num2str(model.kv.gamma,'%u') ...
+      '_mrs' num2str(model.kv.mrsmsp,'%u') ...
+      '_do' num2str(model.kv.do,'%u') ...
+      '_tem' num2str(model.kv.SPLtem,'%u') 'dB_' model.flags.fbank];
+if model.flags.do_gammatone
+  cachename = [cachename '_'  num2str(1/model.kv.space,'%u') 'bpERB'];
+  if model.flags.do_middleear; cachename = [cachename '_middleear']; end
+  if model.flags.do_ihc; cachename = [cachename '_ihc']; end
 else % zilany
-  cachename = [cachename '_' flags.fibertypeseparation];
+  cachename = [cachename '_' model.flags.fibertypeseparation];
 end
-if kv.prior > 0 
-  cachename = [cachename '_prior' num2str(kv.prior,'%u')];
+if model.kv.prior > 0 
+  cachename = [cachename '_prior' num2str(model.kv.prior,'%u')];
 end
-if kv.tiwin < 0.5
-  cachename = [cachename '_tiwin' num2str(kv.tiwin*1e3) 'ms']; 
+if model.kv.tiwin < 0.5
+  cachename = [cachename '_tiwin' num2str(model.kv.tiwin*1e3) 'ms']; 
 end
-cachename = [cachename '_mgs' num2str(kv.mgs)]; 
+cachename = [cachename '_mgs' num2str(model.kv.mgs)]; 
 
-%% General Plot Settings
-TickLength = [0.02,0.04];
 
 %% Hearing thresholds following OHC dysfunction
 if flags.do_hearingthreshold
@@ -203,7 +223,7 @@ if flags.do_hearingthreshold
   t = 0:1/fs:0.1; % s
   cf = audspace(flow,fhigh,Ncf); % CFs under test
 
-  afr = amtcache('get',['hearingthreshold_' flags.fbank '_' flags.fibertypeseparation]);
+  afr = amtcache('get',['hearingthreshold_' model.flags.fbank '_' model.flags.fibertypeseparation]);
   if isempty(afr)
     afr = nan(length(cf),length(cOHC),length(spl),3);
     for ff = 1:length(cf)
@@ -285,7 +305,7 @@ if flags.do_hearingthreshold
       hold on
     end
     set(h,'MarkerFaceColor','w','MarkerSize',kv.MarkerSize)
-    set(gca,'XLim',[cf(1),cf(end)],'YDir','reverse','FontSize',kv.FontSize,'TickLength',TickLength)
+    set(gca,'XLim',[cf(1),cf(end)],'YDir','reverse','FontSize',kv.FontSize,'TickLength',kv.TickLength)
     % set(gca,'XTickLabel',{'0.2','0.3','','0.5','','0.7','','','1','2','3','','5','','7','','','10'})
     set(gca,'Layer', 'top')
     xlabel('Frequency (Hz)','FontSize',kv.FontSize)
@@ -304,12 +324,9 @@ if flags.do_baseline_ex
   latseg = 0;ii=1;%[-20,0,20]; ii = 2; % centers of lateral segments
 %   dlat =  10;         % lateral range (+-) of each segment
 
-  s = data_baumgartner2014for2016('baseline',...
-    'gamma',kv.gamma,'SPLtem',kv.SPLtem,'prior',kv.prior,...
-    'tiwin',kv.tiwin,flags.fbank,flags.fibertypeseparation,'SPL',kv.SPL,...
-    flags.recalib,'mgs',kv.mgs);
+  s = data_baumgartner2016('argimport',model.flags,model.kv);
   
-  idselect = ismember({s.id},{'NH15','NH22','NH62','NH12','NH39','NH18'});
+%   idselect = ismember({s.id},{'NH15','NH22','NH62','NH12','NH39','NH18'});
   idselect = 19:23;
   s = s(idselect);
 
@@ -323,10 +340,10 @@ if flags.do_baseline_ex
 
       [s(ll).sphrtfs{ii},polang] = extractsp( latseg(ii),s(ll).Obj );
       [s(ll).p{ii},respangs] = baumgartner2016(...
-          s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).id,'fs',s(ll).fs,...
+          s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},'argimport',model.flags,model.kv,...
+          'ID',s(ll).id,'fs',s(ll).fs,...
           'mrsmsp',s(ll).mrs,'S',s(ll).S,'lat',latseg(ii),'polsamp',polang,...
-          'prior',kv.prior,'priordist',s(ll).priordist,'SPLtem',kv.SPLtem,'gamma',kv.gamma,...
-          'tiwin',kv.tiwin,flags.fbank,flags.fibertypeseparation,'mgs',kv.mgs); 
+          'priordist',s(ll).priordist); 
 
       [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014pmv2ppp( ...
           s(ll).p{ii} , polang , respangs , s(ll).target{ii});
@@ -370,9 +387,7 @@ if flags.do_parametrization
       tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_parametrization'); % temporary folder
       mkdir(tempfn)
 
-      s = data_baumgartner2014for2016('baseline',...
-        'SPLtem',kv.SPLtem,'prior',kv.prior,'tiwin',kv.tiwin,'mgs',kv.mgs,...
-        flags.fibertypeseparation,flags.fbank,'SPL',kv.SPL,flags.recalib);
+      s = data_baumgartner2016('argimport',model.flags,model.kv);
       [gamma,mrs] = baumgartner2016parametrization(s,'SPLtem',kv.SPLtem,...
         flags.fbank,flags.fibertypeseparation,'mgs',kv.mgs);
 
@@ -386,9 +401,7 @@ if flags.do_parametrization
     
     dtot = nan(size(gamma));
     for g = 1:length(gamma)
-      d = exp_baumgartner2016('baseline',...
-        'SPLtem',kv.SPLtem,'gamma',gamma(g),'prior',kv.prior,'tiwin',kv.tiwin,'mgs',kv.mgs,...
-        flags.fbank,flags.fibertypeseparation,'SPL',kv.SPL,'noplot',flags.cachemode,flags.recalib);
+      d = exp_baumgartner2016('argimport',model.flags,model.kv,'baseline','gamma',gamma(g));
       dtot(g) = d.total;
     end
     [d_opt,id_opt] = min(dtot);
@@ -409,24 +422,19 @@ end
 %% ------ BASELINE ----------------------------------------------------------
 if flags.do_baseline
   
-  cachename = ['baseline_tar' num2str(kv.SPL,'%u') 'dB_' cachename];
+  cachename = ['baseline_tar' num2str(model.kv.SPL,'%u') 'dB_' cachename];
   [r,d,s] = amtcache('get',cachename,flags.cachemode);
   
   if isempty(r)
 
-    s = data_baumgartner2014for2016('baseline',...
-      'SPLtem',kv.SPLtem,'gamma',kv.gamma,'prior',kv.prior,'tiwin',kv.tiwin,'mgs',kv.mgs,...
-      flags.fbank,flags.fibertypeseparation,'SPL',kv.SPL,flags.recalib);
+    s = data_baumgartner2016('argimport',model.flags,model.kv);
 
 %     qe_pred = nan(size(qe_exp));
 %     pe_pred = qe_pred;
     for ii = 1:length(s)
-      [p,rang,tang] = baumgartner2016(s(ii).Obj,s(ii).Obj,s(ii).id,'mrsmsp',s(ii).mrs,'S',s(ii).S,...
-            'SPLtem',kv.SPLtem,'SPL',kv.SPL,'gamma',kv.gamma,'prior',kv.prior,'priordist',s(ii).priordist,...
-            'tiwin',kv.tiwin,flags.fbank,flags.fibertypeseparation,'mgs',kv.mgs);
-  %     p = baumgartner2014(s(ii).Obj,s(ii).Obj,'S',s(ii).S);
+      [p,rang,tang] = baumgartner2016(s(ii).Obj,s(ii).Obj,'argimport',model.flags,model.kv,...
+            'ID',s(ii).id,'Condition','baseline','mrsmsp',s(ii).mrs,'S',s(ii).S,'priordist',s(ii).priordist);
       [s(ii).qe_pred,s(ii).pe_pred] = baumgartner2014pmv2ppp(p,tang,rang,s(ii).itemlist(:,6));
-%       figure; plot_baumgartner2014(p,tang,rang,s(ii).itemlist(:,6),s(ii).itemlist(:,8))
     end
     
     qe_exp = cat(1,s.qe_exp);
@@ -513,9 +521,7 @@ if flags.do_spatstrat_ex
 
 
   %% Computations
-  s = data_baumgartner2014for2016('pool',...
-    'SPLtem',kv.SPLtem,'gamma',kv.gamma,'prior',kv.prior,'tiwin',kv.tiwin,'mgs',kv.mgs,...
-    flags.fibertypeseparation,flags.fbank,'SPL',kv.SPL,flags.recalib);  
+  s = data_baumgartner2016('argimport',model.flags,model.kv);  
   s = s(ismember({s.id},'NH58'));
   amtdisp(['Listener: ' s.id])
   chance = [];
@@ -580,11 +586,11 @@ if flags.do_spatstrat_ex
             clabel = 'warped';
         end
         [s(ll).p{ii},rang] = baumgartner2016(...
-              s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},{s(ll).id,clabel},'fs',s(ll).fs,...
+              s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},...
+              'argimport',model.flags,model.kv,...
+              'ID',s(ll).id,'Condition',clabel,'fs',s(ll).fs,...
               'mrsmsp',s(ll).mrs,'S',s(ll).S,'lat',latdivision(ii),...
-              'polsamp',s(ll).polang{ii},'prior',kv.prior,'priordist',s(ll).priordist,...
-              'SPLtem',kv.SPLtem,'gamma',kv.gamma,'tiwin',kv.tiwin,'mgs',kv.mgs,...
-              flags.fibertypeseparation,flags.fbank);
+              'polsamp',s(ll).polang{ii},'priordist',s(ll).priordist);
         respangs{ii} = rang;
 
         [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp(s(ll).p{ii} , s(ll).polang{ii} , rang);
@@ -664,8 +670,8 @@ end
 %% ------ SPATSTRAT -----------------------------------------------------------
 if flags.do_spatstrat
   
-  cachename = ['spatstrat_tar' num2str(kv.SPL,'%u') 'dB_' cachename];
-  [r,d,s] = amtcache('get',cachename,flags.cachemode);
+  cachename = ['spatstrat_tar' num2str(model.kv.SPL,'%u') 'dB_' cachename];
+  [r,d,s,act,pred] = amtcache('get',cachename,flags.cachemode);
   
   if isempty(r)
     
@@ -676,9 +682,7 @@ if flags.do_spatstrat
     Conditions = {'BB','LP','W'};
 
     %% Computations
-    s = data_baumgartner2014for2016('pool',...
-      'gamma',kv.gamma,'SPLtem',kv.SPLtem,'prior',kv.prior,'tiwin',kv.tiwin,'mgs',kv.mgs,...
-      flags.fbank,flags.fibertypeseparation,'SPL',kv.SPL,flags.recalib);
+    s = data_baumgartner2016('argimport',model.flags,model.kv);
     for C = 1:length(Conditions)
 
       Cond = Conditions{C};
@@ -742,11 +746,10 @@ if flags.do_spatstrat
           if sum(ismember({data.id},s(ll).id)) % if actual participant actual targets
             idpart = [idpart,ll];
             [s(ll).p{ii},rang] = baumgartner2016(...
-              s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},{s(ll).id,clabel},'fs',s(ll).fs,...
+              s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},'argimport',model.flags,model.kv,...
+              'ID',s(ll).id,'Condition',clabel,'fs',s(ll).fs,...
               'mrsmsp',s(ll).mrs,'S',s(ll).S,'lat',latdivision(ii),...
-              'polsamp',s(ll).polang{ii},'prior',kv.prior,'priordist',s(ll).priordist,...
-              'SPLtem',kv.SPLtem,'SPL',kv.SPL,'tiwin',kv.tiwin,'mgs',kv.mgs,...
-              'gamma',kv.gamma,'prior',kv.prior,flags.fbank,flags.fibertypeseparation);
+              'polsamp',s(ll).polang{ii},'priordist',s(ll).priordist);
             
             [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
                 s(ll).p{ii} , s(ll).polang{ii} , rang , s(ll).target{ii} );
@@ -789,12 +792,10 @@ if flags.do_spatstrat
     % Correlation coefficients
     [rmtx,p] =  corrcoef(act.qe,pred.qe);
     r.qe = rmtx(2);
-%     r.qe.p = p(2);
     disp(['QE: r = ' num2str(r.qe,'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
 
     [rmtx,p] =  corrcoef(act.pe,pred.pe);
     r.pe = rmtx(2);
-%     r.pe.p = p(2);
     disp(['PE: r = ' num2str(r.pe,'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
 
 
@@ -807,7 +808,7 @@ if flags.do_spatstrat
     sd_qe = (pred.qe-act.qe).^2;
     d.qe = sqrt(relfreq(:)' * sd_qe(:));
   
-    amtcache('set',cachename,r,d,s);
+    amtcache('set',cachename,r,d,s,act,pred);
   end
   
   d.total = (d.pe/90 + d.qe/100) /2;
@@ -912,9 +913,7 @@ if flags.do_numchan_ex
   fhigh = 16000;  % highest corner frequency
 
   %% Computations
-  s = data_baumgartner2014for2016('pool',...
-    'gamma',kv.gamma,'SPLtem',kv.SPLtem,'prior',kv.prior,'tiwin',kv.tiwin,...
-    flags.fbank,flags.fibertypeseparation,'SPL',kv.SPL,flags.recalib,'mgs',kv.mgs);
+  s = data_baumgartner2016('argimport',model.flags,model.kv);
   s = s(ismember({s.id},'NH33')); 
   disp(['Listener: ' s.id])
   chance = [];
@@ -975,7 +974,6 @@ if flags.do_numchan_ex
                   cond(:,ang,ch) = channelize('', 0.5*ref(:,ang,ch), ref(:,1), imp, n, corners, [], ...
                                   GETtrain, stimPar, 1, 0.01*s(ll).fs, 0.01*s(ll).fs);
               end
-
           end
 
           s(ll).spdtfs_c{ii} = cond;
@@ -993,7 +991,8 @@ if flags.do_numchan_ex
         stim = noise(8e3,1,'white');
       end
       sig = lconv(stim,s(ll).spdtfs_c{ii});
-     [mp,fc] = baumgartner2015spectralanalysis(sig,kv.SPL,'target',[s(ll).id '_' Cond],kv,flags);
+     [mp,fc] = baumgartner2016spectralanalysis(sig,kv.SPL,...
+       'argimport',model.flags,model.kv,'target','ID',s(ll).id,'Condition',Cond);
      pcolor(fc,s(ll).polang{ii},mp(:,:,1)')
      shading flat
      xlabel('Frequency (Hz)')
@@ -1013,11 +1012,11 @@ if flags.do_numchan_ex
           stim = [];
         end
         [p,rang] = baumgartner2016(...
-              s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},{s(ll).id,Cond},...
-              'stim',stim,'fsstim',s(ll).fs,'mgs',kv.mgs,...
-              'mrsmsp',s(ll).mrs,'S',s(ll).S,'lat',latdivision(ii),'tiwin',kv.tiwin,...
-              'polsamp',s(ll).polang{ii},'prior',kv.prior,'priordist',s(ll).priordist,'gamma',kv.gamma,...
-              'SPLtem',kv.SPLtem,flags.fibertypeseparation,flags.fbank);
+              s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},'argimport',model.flags,model.kv,...
+              'ID',s(ll).id,'Condition',Cond,...
+              'stim',stim,'fsstim',s(ll).fs,...
+              'mrsmsp',s(ll).mrs,'S',s(ll).S,'lat',latdivision(ii),...
+              'polsamp',s(ll).polang{ii},'priordist',s(ll).priordist);
 
         [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp(p , s(ll).polang{ii} , rang);
 
@@ -1083,7 +1082,7 @@ end
 %% ------ FIG NUMCHAN ----------------------------------------------------------
 if flags.do_numchan
   
-  cachename = ['numchan_tar' num2str(kv.SPL,'%u') 'dB_' cachename];
+  cachename = ['numchan_tar' num2str(model.kv.SPL,'%u') 'dB_' cachename];
   [N,r,d,s] = amtcache('get',cachename,flags.cachemode);
   if isempty(N)
     
@@ -1101,9 +1100,7 @@ if flags.do_numchan
 
 
     %% Computations
-    s = data_baumgartner2014for2016('pool',...
-      'gamma',kv.gamma,'SPLtem',kv.SPLtem,'prior',kv.prior,'tiwin',kv.tiwin,...
-      flags.fbank,flags.fibertypeseparation,'SPL',kv.SPL,flags.recalib,'mgs',kv.mgs);
+    s = data_baumgartner2016('argimport',model.flags,model.kv);
     for C = 1:length(Conditions)
 
       Cond = Conditions{C};
@@ -1189,12 +1186,12 @@ if flags.do_numchan
             end
             
             [p,rang] = baumgartner2016(...
-                s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},{s(ll).id,Cond},...
+                s(ll).spdtfs_c{ii},s(ll).spdtfs{ii},...
+                'argimport',model.flags,model.kv,...
+                'ID',s(ll).id,'Condition',Cond,...
                 'stim',stim,'fsstim',s(ll).fs,...
                 'mrsmsp',s(ll).mrs,'S',s(ll).S,'lat',latdivision(ii),...
-                'polsamp',s(ll).polang{ii},'prior',kv.prior,'priordist',s(ll).priordist,...
-                'gamma',kv.gamma,'SPLtem',kv.SPLtem,'SPL',kv.SPL,...
-                'tiwin',kv.tiwin,flags.fbank,flags.fibertypeseparation,'mgs',kv.mgs);
+                'polsamp',s(ll).polang{ii},'priordist',s(ll).priordist);
               
             [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
                 p , s(ll).polang{ii} , rang , s(ll).target{ii} );
@@ -1349,25 +1346,20 @@ end
 
 if flags.do_sabin2005
   
-%   SL2SPL = 10;
-  
   cachename = ['sabin2005_' cachename '_SL2SPL' num2str(kv.SL2SPL) 'dB'];
-  if kv.lat ~= 0
-    cachename = [cachename '_lat' num2str(kv.lat)];
+  if model.kv.lat ~= 0
+    cachename = [cachename '_lat' num2str(model.kv.lat)];
   end
   if flags.do_TLisSPL
     cachename = [cachename '_TLisSPL'];
   end
-  if flags.do_gammatone
-    cachename = [cachename '_minSPL' num2str(kv.GT_minSPL)];
+  if model.flags.do_gammatone
+    cachename = [cachename '_minSPL' num2str(model.kv.GT_minSPL)];
   end
   pred = amtcache('get',cachename,flags.cachemode);
   if isempty(pred)
   
-    s = data_baumgartner2014for2016('baseline',...
-      'gamma',kv.gamma,'SPLtem',kv.SPLtem,'prior',kv.prior,'tiwin',kv.tiwin,...
-      flags.fbank,flags.fibertypeseparation,'SPL',kv.SPL,flags.recalib,'mgs',kv.mgs);
-% s = s(1:8);
+    s = data_baumgartner2016('argimport',model.flags,model.kv);
     
     SPL = [0:5:20,30:10:70]+kv.SL2SPL;
 
@@ -1386,11 +1378,10 @@ if flags.do_sabin2005
         end
         if flags.do_nostat
           [pred.qe(ll,ii),pred.prob{ll,ii},m] = baumgartner2016(...
-            s(ii).Obj,s(ii).Obj,s(ii).id,'lat',kv.lat,...
-            'S',s(ii).S,'SPL',SPL(ll),'SPLtem',kv.SPLtem,...
-            'mrsmsp',kv.mrsmsp,'gamma',kv.gamma,'prior',kv.prior,'priordist',s(ii).priordist,...
-            flags.fbank,flags.fibertypeseparation,'QE',...
-            'tiwin',kv.tiwin,'GT_minSPL',kv.GT_minSPL,'mgs',kv.mgs);
+            s(ii).Obj,s(ii).Obj,...
+            'argimport',model.flags,model.kv,...
+            'ID',s(ii).id,'S',s(ii).S,'SPL',SPL(ll),...
+            'priordist',s(ii).priordist,'QE');
           pred.pvfront(ll,ii) = nan;
           pred.pvrear(ll,ii) = nan;
           pred.gfront(ll,ii) = nan;
@@ -1399,11 +1390,10 @@ if flags.do_sabin2005
           pred.precrear(ll,ii) = nan;
         else
           [pred.pvfront(ll,ii),pred.prob{ll,ii},m] = baumgartner2016(...
-            s(ii).Obj,s(ii).Obj,s(ii).id,'lat',kv.lat,...
-            'S',s(ii).S,'SPL',SPL(ll),'SPLtem',kv.SPLtem,...
-            'mrsmsp',kv.mrsmsp,'gamma',kv.gamma,'prior',kv.prior,'priordist',s(ii).priordist,...
-            flags.fbank,flags.fibertypeseparation,'pVeridicalPfront',...
-            'tiwin',kv.tiwin,'GT_minSPL',kv.GT_minSPL,'mgs',kv.mgs);
+            s(ii).Obj,s(ii).Obj,...
+            'argimport',model.flags,model.kv,...
+            'ID',s(ii).id,'S',s(ii).S,'SPL',SPL(ll),...
+            'priordist',s(ii).priordist,'pVeridicalPfront');
           pred.pvrear(ll,ii) = localizationerror(m,'pVeridicalPrear');
           pred.gfront(ll,ii) = localizationerror(m,'gainPfront');
           pred.grear(ll,ii) = localizationerror(m,'gainPrear');
@@ -1571,9 +1561,7 @@ if flags.do_impairment
   s = amtcache('get',cachename,flags.cachemode);
   if isempty(s)
     
-    s = data_baumgartner2014for2016('baseline',...
-      'gamma',kv.gamma,'SPLtem',kv.SPLtem,'prior',kv.prior,'tiwin',kv.tiwin,...
-      flags.fbank,flags.fibertypeseparation,'SPL',kv.SPL,flags.recalib,'mgs',kv.mgs);
+    s = data_baumgartner2016('argimport',model.flags,model.kv);
       
     if not(isempty(kv.subjects))
       s = s(kv.subjects);
@@ -1583,10 +1571,9 @@ if flags.do_impairment
       for cc=1:length(cohc)
         for ll=1:length(SPL)
           for ff=1:length(ft)
-            err = baumgartner2016(s(ii).Obj,s(ii).Obj,{s(ii).id},...
-              'S',s(ii).S,'cohc',cohc(cc),'SPL',SPL(ll),'prior',kv.prior,'priordist',s(ii).priordist,...
-              'gamma',kv.gamma,'SPLtem',kv.SPLtem,'fiberTypes',ft{ff},'mgs',kv.mgs,...
-              'tiwin',kv.tiwin,flags.fbank,flags.fibertypeseparation,errorflag);
+            err = baumgartner2016(s(ii).Obj,s(ii).Obj,...
+              'argimport',model.flags,model.kv,'ID',s(ii).id,errorflag,'fiberTypes',ft{ff},...
+              'S',s(ii).S,'cohc',cohc(cc),'SPL',SPL(ll),'priordist',s(ii).priordist);
             s(ii).err(cc,ff,ll) = err;
             s(ii).cohc(cc,ff,ll) = cohc(cc);
             s(ii).SPL(cc,ff,ll) = SPL(ll);
@@ -1742,9 +1729,7 @@ if flags.do_effectOnCues
   spl = kv.SPL;   % SPL in dB
 %   tang = 0;   % target polar angle
   
-  s = data_baumgartner2014for2016('baseline',...
-    'gamma',kv.gamma,'SPLtem',kv.SPLtem,'prior',kv.prior,'tiwin',kv.tiwin,...
-    flags.fibertypeseparation,flags.recalib,'mgs',kv.mgs);
+  s = data_baumgartner2016('argimport',model.flags,model.kv);
   [dtf,polang] = extractsp(0,s(sid).Obj);
   sig = lconv(noise(8e3,1,'white'),dtf);
       
@@ -1761,8 +1746,8 @@ if flags.do_effectOnCues
     gp_ft = cell(length(FT),length(spl));
     for ll = 1:length(spl)
       for ft = 1:length(FT)
-        [mp_ft{ft,ll},fc] = baumgartner2015spectralanalysis(sig,spl(ll),...
-          'target',[s(sid).id '_baseline'],'fiberTypes',FT{ft});
+        [mp_ft{ft,ll},fc] = baumgartner2016spectralanalysis(sig,spl(ll),...
+          'target','ID',s(sid).id ,'Condition','baseline','fiberTypes',FT{ft},flags.amtcache);
         [gp_ft{ft,ll},gfc] = baumgartner2016gradientextraction(mp_ft{ft,ll},fc,'mgs',kv.mgs);
       end
     end
@@ -1798,8 +1783,8 @@ if flags.do_effectOnCues
     gp_cohc = cell(length(cohc),length(spl));
     for ll = 1:length(spl)
       for cc = 1:length(cohc)
-        [mp,fc] = baumgartner2015spectralanalysis(sig,spl(ll),...
-          'target',[s(sid).id '_baseline'],'cohc',cohc(cc));
+        [mp,fc] = baumgartner2016spectralanalysis(sig,spl(ll),'target',...
+          'ID',s(sid).id,'Condition','baseline','cohc',cohc(cc),flags.amtcache);
         [gp_cohc{cc,ll},gfc] = baumgartner2016gradientextraction(mp,fc,'mgs',kv.mgs);
       end
     end
@@ -1847,17 +1832,6 @@ if flags.do_effectOnCues
       set(c,'Position',[.935,.25,.02,.5])
       set(get(c,'Label'),'String','Spikes/s/ERB','FontSize',kv.FontSize)
       
-%       axes(ha(5))
-%       y = ymin:1:ymax;
-%       Ny = length(y);
-%       pcolor(1:2,y,repmat(y(:),1,2))
-%       shading flat
-%       axis tight
-%       title({' ';' '})
-%       set(gca,'XTick',[],'YTick',ymin+1:ymax-1,... %,'TickLength',[0.12,0.12]
-%         'YDir','normal','YAxisLocation','right','FontSize',kv.FontSize)
-%       ylabel({'Spikes/s/ERB'},'FontSize',kv.FontSize)
-%       set(gca,'Position',get(gca,'Position').*[1.03,1.8,0.25,0.8])
     end
   end
   
@@ -1867,7 +1841,6 @@ if flags.do_dynrangecheck
   
   splmax = 140; % dB
   splHRTF = [50,80]; % dB
-  flags.do_separate = true;
 
   panels = {'C_{OHC} = 1','C_{OHC} = 0.5','C_{OHC} = 0.1','C_{OHC} = 0'};
   if flags.do_separate
@@ -1889,14 +1862,14 @@ if flags.do_dynrangecheck
     mp = zeros(kv.nf,length(spl),2,3);
     if flags.do_separate
       for ii = 1:length(spl)
-        [mp(:,ii,:,:),fc] = baumgartner2015spectralanalysis(cat(3,sig,sig),spl(ii),...
-            'target','dynrangecheck','fiberTypes',1:3,'ftopt','cohc',cohc(cc));
+        [mp(:,ii,:,:),fc] = baumgartner2016spectralanalysis(cat(3,sig,sig),spl(ii),...
+            'target','ID','','Condition','dynrangecheck','fiberTypes',1:3,'ftopt','cohc',cohc(cc));
       end
     else
       fiberTypes = {1:3,2:3,3};
       for ft = 1:length(fiberTypes)
         for ii = 1:length(spl)
-          [mp(:,ii,:,ft),fc] = baumgartner2015spectralanalysis(cat(3,sig,sig),spl(ii),...
+          [mp(:,ii,:,ft),fc] = baumgartner2016spectralanalysis(cat(3,sig,sig),spl(ii),...
               'target','dynrangecheck','fiberTypes',fiberTypes{ft},'cohc',cohc(cc));
         end
       end
@@ -1975,7 +1948,7 @@ end
 if flags.do_localevel
   
   dlat = 30; % deg
-  condition = data_baumgartner2016('ConditionNames');
+  condition = data_baumgartner2015('ConditionNames');
   
   cachename = ['localevel_' cachename];
   if not(kv.gammashortfact == 1)
@@ -2001,7 +1974,7 @@ if flags.do_localevel
     ref.pe = pred.qe;
     for cc = 1:length(condition)
 
-      data = data_baumgartner2016(condition{cc},'model','gamma',kv.gamma,...
+      data = data_baumgartner2015(condition{cc},'model','gamma',kv.gamma,...
         'tiwin',kv.tiwin,flags.fbank,flags.fibertypeseparation,flags.recalib,'mgs',kv.mgs);
 
       for ll = 1:length(data)
@@ -2018,14 +1991,15 @@ if flags.do_localevel
         if flags.do_TLisSPL
           kv.SPLtem = data(ll).SPL;
         end
-        [err,pmv] = baumgartner2016(...
-            data(ll).Obj,data(ll).Obj,data(ll).id,...
+        if strcmp(condition{cc},'Long')
+          clbl = condition{cc};
+        else % short
+          clbl = '';
+        end
+        [err,pmv] = baumgartner2016(data(ll).Obj,data(ll).Obj,...
+            'argimport',model.flags,model.kv,'ID',data(ll).id,'Condition',clbl,'S',data(ll).S,...
             'stim',data(ll).stim,'fsstim',data(ll).fsstim,'SPL',data(ll).SPL,...
-            'S',data(ll).S,'SPLtem',kv.SPLtem,'QE_PE_EB','exptang',exptang,'gamma',kv.gamma,...
-            'prior',kv.prior,'priordist',data(ll).priordist,...
-            'gammashortfact',kv.gammashortfact,'psgeshort',kv.psgeshort,'Sshortfact',kv.Sshortfact,...
-            'tiwin',kv.tiwin,flags.fbank,flags.fibertypeseparation,...
-            'GT_minSPL',kv.GT_minSPL,'GT_maxSPL',kv.GT_maxSPL,'mgs',kv.mgs);
+            'QE_PE_EB','exptang',exptang,'priordist',data(ll).priordist);
         pred.pmv{ll,cc} = pmv;
         pred.qe(ll,cc) = err.qe;
         pred.pe(ll,cc) = err.pe;
@@ -2065,7 +2039,6 @@ if flags.do_localevel
     if flags.do_performance
     
       LineWidth = 1;
-      TickLength = [0.02 0.05];
 
       symb = {...
             'rs-';...
@@ -2098,7 +2071,7 @@ if flags.do_localevel
 
         set(gca,'YAxisLocation','right','YMinorTick','on')
     %     set(gca,'XTick',xval,'YTick',10:20:50)
-        set(gca,'TickLength',TickLength)
+        set(gca,'TickLength',kv.TickLength)
 
         hold on
         hshort = plot(xval,perrmtx(2:end,ii),symbExp);
@@ -2121,7 +2094,7 @@ if flags.do_localevel
       axes(ha(2*ii+2));
       hlong = errorbar(50,mean(perrmtx(1,:)),std(perrmtx(1,:)),symbExp(1:2));
       set(hlong,'MarkerFaceColor',symbExp(1),'LineWidth',LineWidth)
-      set(gca,'YAxisLocation','right','YMinorTick','on','TickLength',TickLength)
+      set(gca,'YAxisLocation','right','YMinorTick','on','TickLength',kv.TickLength)
       hold on
       hshort = errorbar(xval,mean(perrmtx(2:end,:),2),std(perrmtx(2:end,:),1,2),symbExp);
       set(hshort,'MarkerFaceColor','w','LineWidth',LineWidth)
@@ -2142,7 +2115,7 @@ if flags.do_localevel
 
         set(gca,'YMinorTick','on')
     %     set(gca,'XTick',xval,'YTick',10:20:50)
-        set(gca,'TickLength',TickLength)
+        set(gca,'TickLength',kv.TickLength)
 
         set(hlong,'MarkerFaceColor',symbExp(1),'LineWidth',LineWidth)
         hold on
@@ -2170,7 +2143,7 @@ if flags.do_localevel
       axes(ha(2*ii+1));
       hlong = errorbar(50,mean(qerrmtx(1,:)),std(qerrmtx(1,:)),symbExp(1:2));
       set(hlong,'MarkerFaceColor',symbExp(1),'LineWidth',LineWidth)
-      set(gca,'YMinorTick','on','TickLength',TickLength)
+      set(gca,'YMinorTick','on','TickLength',kv.TickLength)
       hold on
       hshort = errorbar(xval,mean(qerrmtx(2:end,:),2),std(qerrmtx(2:end,:),1,2),symbExp);
       set(hshort,'MarkerFaceColor','w','LineWidth',LineWidth)
@@ -2186,7 +2159,7 @@ if flags.do_localevel
     
     if flags.do_pmv
       
-      conditions = data_baumgartner2016('ConditionNames');
+      conditions = data_baumgartner2015('ConditionNames');
       idcond = [1,2,5,8]; %{'Long','10dB','30dB','50dB','70dB'};
       Nc = length(idcond);
       
@@ -2195,7 +2168,7 @@ if flags.do_localevel
       
       for cc=1:Nc
         idc = idcond(cc);
-        data = data_baumgartner2016(conditions{idc});
+        data = data_baumgartner2015(conditions{idc});
         
         for ll=1:Nsub
           axes( ha(cc + Nc*(ll-1)) )

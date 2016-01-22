@@ -19,15 +19,19 @@ function [gp,gfc] = baumgartner2016gradientextraction(mp,fc,varargin)
 
 % AUTHOR: Robert Baumgartner
 
-if isempty(varargin) || not(isempty(varargin)) && not(isstruct(varargin{1}))
-  definput.import={'baumgartner2016','amtcache'};
-  definput.keyvals.c2 = 1;
-  [flags,kv]=ltfatarghelper({'c2'},definput,varargin);
-else % kv and flags directly transfered
-  kv = varargin{1};
-  flags = varargin{2};
-  kv.c2 = 1;
-end
+definput.import={'baumgartner2016'};
+definput.keyvals.c2 = 1;
+[flags,kv]=ltfatarghelper({'c2'},definput,varargin);
+
+% if isempty(varargin) || not(isempty(varargin)) && not(isstruct(varargin{1}))
+%   definput.import={'baumgartner2016','amtcache'};
+%   definput.keyvals.c2 = 1;
+%   [flags,kv]=ltfatarghelper({'c2'},definput,varargin);
+% else % kv and flags directly transfered
+%   kv = varargin{1};
+%   flags = varargin{2};
+%   kv.c2 = 1;
+% end
 
 %% Parameter Settings
 % if not(exist('c2','var'))

@@ -1,7 +1,6 @@
-function varargout = baumgartner2016spectralanalysis(sig,spl,type,name,varargin)
+function varargout = baumgartner2016spectralanalysis(sig,spl,varargin)
 %baumgartner2016spectralanalysis Spectral analysis
-%   Usage:     mp = baumgartner2016spectralanalysis(sig,spl)
-%              [mp,fc] = baumgartner2016spectralanalysis(sig,spl,type,name,kv,flags)
+%   Usage:     [mp,fc] = baumgartner2016spectralanalysis(sig,spl)
 %
 %   Input parameters:
 %     sig     : incoming time-domain signal
@@ -18,41 +17,47 @@ function varargout = baumgartner2016spectralanalysis(sig,spl,type,name,varargin)
 %
 %   `baumgartner2016spectralanalysis` accepts the following optional parameters:
 %
-%     'flags',flags  Transfer flags. If not defaults of baumgartner2016 are used.
+%     'ID'        Listener's ID (important for caching).
 %
-%     'kv',kv        Transfer key-value pairs. If not defaults of baumgartner2016 are used.
+%     'Condition' Label of experimental condition (also for caching).
+%
+%   `baumgartner2016spectralanalysis` accepts these optional flags:
+%
+%     'target'    Processing of a target sound (for caching). This is the
+%                 default.
+%
+%     'template'  Processing of a template sound (for caching).
 %
 %   References: 
 
 % AUTHOR: Robert Baumgartner
 
-if not(isempty(varargin)) && not(isstruct(varargin{1}))
-  definput.import={'baumgartner2016','amtcache'};
-  [flags,kv]=ltfatarghelper({},definput,varargin);
-else % kv and flags directly transfered
-  kv = varargin{1};
-  flags = varargin{2};
-end
+definput.import={'baumgartner2016'};
+definput.flags.type={'target','template'};
 
-% Target vs template mode.
-if not(exist('type','var')) || strcmp(type,'target')
-  flags.do_target = true;
-elseif strcmp(type,'template')
-  flags.do_target = false;
-else
-  error('Unsuitable flag for target vs template mode.') 
-end
+[flags,kv]=ltfatarghelper({},definput,varargin);
+
+% Set cachename
 if flags.do_target
   cachenameprefix = 'ireptar_';
   if size(sig,1) > kv.tiwin*kv.fs; cachenameprefix = [cachenameprefix 'tiwin' num2str(kv.tiwin*1e3) 'ms_']; end
+  if not(isempty(kv.ID))
+    cachenameprefix = [cachenameprefix kv.ID '_'];
+  end
+  if not(isempty(kv.Condition))
+    cachenameprefix = [cachenameprefix kv.Condition '_'];
+  end
+  %%% equalized conditions (don't run periphery model again on it)
+  cachenameprefix = strrep(cachenameprefix,'BB','baseline');
+  cachenameprefix = strrep(cachenameprefix,'CL','baseline');
+  %%%
 else
   cachenameprefix = 'ireptem_';
+  if not(isempty(kv.ID))
+    cachenameprefix = [cachenameprefix kv.ID '_'];
+  end
 end
-
-name = strrep(name,'BB','baseline');
-name = strrep(name,'CL','baseline');
-
-cachenameprefix = [cachenameprefix name '_lat' num2str(kv.lat) '_' num2str(spl) 'dB'];
+cachenameprefix = [cachenameprefix 'lat' num2str(kv.lat) '_' num2str(spl) 'dB'];
 
 %% Remove pausings (at beginning and end)
 idnz = diff(mean(sig(:,:).^2,2)) ~= 0;

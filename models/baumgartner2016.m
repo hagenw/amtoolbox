@@ -1,8 +1,7 @@
-function varargout = baumgartner2016( target,template,label,varargin )
-%baumgartner2016 Model for localization in sagittal planes
+function varargout = baumgartner2016( target,template,varargin )
+%varargout = baumgartner2016( target,template,label,varargin )
+%BAUMGARTNER2016 Level-dependent model for localization in sagittal planes
 %   Usage:    [p,rang] = baumgartner2016( target,template )
-%             [p,rang,tang] = baumgartner2016( target,template,id )
-%             [p,rang,tang] = baumgartner2016( target,template,fs,S,lat,stim,fsstim )
 %             [err,pred,m] = baumgartner2016( target,template,errorflag )
 %
 %   Input parameters:
@@ -37,6 +36,10 @@ function varargout = baumgartner2016( target,template,label,varargin )
 %
 %   `baumgartner2016` accepts the following optional parameters:
 %
+%     'ID'           Listener's ID (important for caching).
+%
+%     'Condition'    Label of experimental condition (also for caching).
+%
 %     'fs',fs        Define the sampling rate of the impulse responses. 
 %                    Default value is 48000 Hz.
 %
@@ -49,11 +52,14 @@ function varargout = baumgartner2016( target,template,label,varargin )
 %     'lat',lat      Set the apparent lateral angle of the target sound to
 %                    *lat*. Default value is 0 degree (median SP).
 %
-%     'stim',stim    Define the stimulus (source signal without directional
-%                    features). As default an impulse is used.
+%     'stim'         Define the stimulus (source signal without directional
+%                    features). As default *temstim* is used.
 %
-%     'fsstim',fss   Define the sampling rate of the stimulus. 
+%     'fsstim'       Define the sampling rate of the stimulus. 
 %                    Default value is 48000 Hz.
+%
+%     'temstim'      Define the dummy stimulus used to create the templates.
+%                    The default is Gaussian white noise with a duration of 170 ms.
 %
 %     'SPL',L        Set the SPL of the stimulus to *L*dB. 
 %                    Default value is 80dB.
@@ -100,12 +106,10 @@ function varargout = baumgartner2016( target,template,label,varargin )
 %
 %   `baumgartner2016` accepts the following flags:
 %
-%     'gammatone'    Use the Gammatone filterbank for peripheral processing. 
-%                    This is the default.
+%     'zilany2014'   Use the model from Zilany et al. (2009,2014) for spectral 
+%                    analysis. This is the default.
 %
-%     'cqdft'        Use a filterbank approximation based on DFT with 
-%                    constant relative bandwidth for peripheral processing. 
-%                    This was used by Langendijk and Bronkhorst (2002).
+%     'gammatone'    Use the Gammatone filterbank for spectral analysis. 
 %
 %     'ihc'          Incorporate the transduction model of inner hair 
 %                    cells used by Dau et al. (1996).
@@ -121,6 +125,8 @@ function varargout = baumgartner2016( target,template,label,varargin )
 %     'errorflag'    May be one of the error flags defined in
 %                    `baumgartner2014pmv2ppp` or `localizationerror`.
 %
+%     'redoSpectralAnalysis' FIX ME
+%
 %   Requirements: 
 %   -------------
 %
@@ -129,7 +135,7 @@ function varargout = baumgartner2016( target,template,label,varargin )
 %   2) Data in hrtf/baumgartner2016
 %
 %
-%   See also: plotbaumgartner2014, data_baumgartner2014for2016,
+%   See also: plotbaumgartner2014, data_baumgartner2016,
 %   exp_baumgartner2016, baumgartner2016calibration,
 %   baumgartner2014pmv2ppp,
 %   baumgartner2014virtualexp, localizationerror,
@@ -142,37 +148,15 @@ function varargout = baumgartner2016( target,template,label,varargin )
 
 %% Check input options 
 
-definput.import={'baumgartner2016','localizationerror','baumgartner2014pmv2ppp','amtcache'};
+definput.import={'baumgartner2016'};
+posdepnames = {'fs','S','lat','stim','fsstim'};
 
-[flags,kv]=ltfatarghelper(...
-  {'fs','S','lat','stim','fsstim','space','do','flow','fhigh',...
-  'SPL','SPLtem','bwcoef','polsamp','mrsmsp','gamma','nf','fsmod',...
-  'SimDL','SimThresh','prior','priordist','cihc','cohc','fiberTypes'},definput,varargin);
+[flags,kv]=ltfatarghelper(posdepnames,definput,varargin);
 
-% Set default condition label
-if isempty(kv.stim)
-  defaultConditionLabel = 'baseline';
-else
-  if length(kv.stim)/kv.fsstim < 0.005 % short stimulus
-    defaultConditionLabel = '';
-  else % long stimulus
-    defaultConditionLabel = 'Long';
-  end
+% Check default condition label for short stimuli
+if length(kv.stim)/kv.fsstim < 0.005 && strcmp(kv.Condition,'Long') % short stimulus
+  kv.Condition = '';
 end
-
-% Set condition label
-if not(exist('label','var')) % meta information for caching the AN model output
-  label = {'NHx'};
-  clabel = defaultConditionLabel;
-elseif length(label) == 1
-  clabel = defaultConditionLabel;
-elseif length(label) == 2
-  clabel = label{2};
-elseif ischar(label)
-  label = {label};
-  clabel = defaultConditionLabel;
-end
-id = label{1};
 
 % Extract sagittal-plane HRTFs
 if isstruct(target) % Targets given in SOFA format
@@ -193,13 +177,10 @@ end
 
 %% Stimulus 
 
-% temstim = mls(13,1); % template dummy stimulus: 170 ms (frozen) MLS noise burst
-temstim = noise(8e3,1,'white');
-
-flags.temstim = false;
+% flags.temstim = false;
 if isempty(kv.stim) 
-    kv.stim = temstim;
-    flags.temstim = true;
+    kv.stim = kv.temstim;
+%     flags.temstim = true;
     kv.fsstim = kv.fs;
 elseif isempty(kv.fsstim) 
     kv.fsstim = kv.fs;
@@ -217,20 +198,21 @@ if ~isequal(kv.fs,kv.fsstim)
     return
 end
 
-target = lconv(target,kv.stim);
-% target = reshape(tmp,[size(tmp,1),size(target,2),size(target,3)]);
+tmp = lconv(target,kv.stim);
+target = reshape(tmp,[size(tmp,1),size(target,2),size(target,3)]); % workaround for lconv bug
 
-template = lconv(template,temstim);
+tmp = lconv(template,kv.temstim);
+template = reshape(tmp,[size(tmp,1),size(template,2),size(template,3)]); % workaround for lconv bug
     
 %% Cochlear filter bank -> internal representations
 
-if isempty(clabel)
-  cname = id;
+if flags.do_redoSpectralAnalysis
+  redoSAflag = 'redo';
 else
-  cname = [id '_' clabel];
+  redoSAflag = 'normal';
 end
-[mreptar,fc] = baumgartner2016spectralanalysis(target,kv.SPL,'target',cname,kv,flags);
-mreptem = baumgartner2016spectralanalysis(template,kv.SPLtem,'template',id,kv,flags);
+[mreptar,fc] = baumgartner2016spectralanalysis(target,kv.SPL,'target','argimport',flags,kv,redoSAflag);
+mreptem = baumgartner2016spectralanalysis(template,kv.SPLtem,'template','argimport',flags,kv,redoSAflag);
 
 %% Positive spectral gradient extraction
 
@@ -247,8 +229,8 @@ if kv.do == 1 && flags.do_psge
     greptar = baumgartner2014gradientextraction(mreptar,fc,c2);
     greptem = baumgartner2014gradientextraction(mreptem,fc);
   else % zilany
-    greptar = baumgartner2016gradientextraction(mreptar,fc,kv,flags);
-    greptem = baumgartner2016gradientextraction(mreptem,fc,kv,flags);
+    greptar = baumgartner2016gradientextraction(mreptar,fc,'argimport',flags,kv);
+    greptem = baumgartner2016gradientextraction(mreptem,fc,'argimport',flags,kv);
   end
     
 else
@@ -406,7 +388,7 @@ if flags.do_isd && flags.do_sigmoid
   if not(flags.do_gammatone)
     sigma = 10*sigma;
   end
-  si = baumgartner2014similarityestimation(sigma,kv,flags);
+  si = baumgartner2014similarityestimation(sigma,'S',kv.S,'gamma',kv.gamma);
 
 else
   
@@ -448,14 +430,16 @@ end
   
 %% Binaural weighting
 
-si = baumgartner2014binauralweighting(si,kv,flags);
+si = baumgartner2014binauralweighting(si,'lat',kv.lat,'bwcoef',kv.bwcoef);
 
 
 %% Interpolation, prior, sensorimotor mapping
 if kv.prior==0
   
-  [si,rang] = baumgartner2014sensorimotormapping(si,kv,flags);
-
+  [si,rang] = baumgartner2014sensorimotormapping(si,...
+    'rangsamp',kv.rangsamp,'polsamp',kv.polsamp,'lat',kv.lat,'mrsmsp',kv.mrsmsp,...
+    flags.regularization,flags.motoricresponsescatter);
+  
 else
   
 %   amtdisp('Sensorimotor mapping different to baumgartner2014','progress')
