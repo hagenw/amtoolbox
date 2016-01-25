@@ -48,6 +48,12 @@ function varargout = baumgartner2014( target,template,varargin )
 %                    distance metric and similarity index) to *S*. 
 %                    Default value is 1.
 %
+%     'gamma',G      Set the degree of selectivity 
+%                    (slope of the sigmoid link function representing 
+%                    the psychometric link between transformation from the
+%                    distance metric and similarity index) to *G*. 
+%                    Default value is 6.
+%
 %     'lat',lat      Set the apparent lateral angle of the target sound to
 %                    *lat*. Default value is 0 degree (median SP).
 %
@@ -173,8 +179,8 @@ end
 
 %% Spectral Analysis, Eq.(2)
 
-[ireptar,fc] = baumgartner2014spectralanalysis(target,kv,flags);
-ireptem = baumgartner2014spectralanalysis(template,kv,flags);
+[ireptar,fc] = baumgartner2014spectralanalysis(target,'argimport',flags,kv);
+ireptem = baumgartner2014spectralanalysis(template,'argimport',flags,kv);
 
 
 %% Positive spectral gradient extraction, Eq.(3)
@@ -195,17 +201,17 @@ sigma = baumgartner2014comparisonprocess(nrep.tar,nrep.tem);
 
 %% Similarity estimation, Eq.(5)
 
-si = baumgartner2014similarityestimation(sigma,kv,flags);
+si = baumgartner2014similarityestimation(sigma,'argimport',flags,kv);
 
 
 %% Binaural weighting, Eq.(6)
 
-si = baumgartner2014binauralweighting(si,kv,flags);
+si = baumgartner2014binauralweighting(si,'argimport',flags,kv);
 
 
 %% Sensorimotor mapping, Eq.(7)
 
-[si,rang] = baumgartner2014sensorimotormapping(si,kv,flags);
+[si,rang] = baumgartner2014sensorimotormapping(si,'argimport',flags,kv);
 
 
 %% Normalization to PMV, Eq.(8)

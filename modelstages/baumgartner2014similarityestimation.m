@@ -1,7 +1,6 @@
 function si = baumgartner2014similarityestimation(sigma,varargin)
 %BAUMGARTNER2014SIMILARITYESTIMATION - Similarity estimation with listener-specific sensitivity
 %   Usage:     si = baumgartner2014similarityestimation(sigma)
-%              si = baumgartner2014similarityestimation(sigma,kv,flags)
 %
 %   Input parameters:
 %     sigma   : internal distance metrics
@@ -15,22 +14,24 @@ function si = baumgartner2014similarityestimation(sigma,varargin)
 %
 %   `baumgartner2014similarityestimation` accepts the following optional parameters:
 %
-%     'kv',kv        Transfer key-value pairs. If not defaults of baumgartner2014 are used.
+%     'S',S          Set the listener-specific sensitivity threshold 
+%                    (threshold of the sigmoid link function representing 
+%                    the psychometric link between transformation from the
+%                    distance metric and similarity index) to *S*. 
+%                    Default value is 1.
 %
-%     'flags',flags  Transfer flags. If not defaults of baumgartner2014 are used.
+%     'gamma',G      Set the degree of selectivity 
+%                    (slope of the sigmoid link function representing 
+%                    the psychometric link between transformation from the
+%                    distance metric and similarity index) to *G*. 
+%                    Default value is 6.
 %
 %   References: baumgartner2014modeling
 
 % AUTHOR: Robert Baumgartner
 
-if nargin > 1
-  if isstruct(varargin{1})
-    kv = varargin{1};
-  else
-    definput.import={'baumgartner2014'};
-    [flags,kv]=ltfatarghelper({},definput,varargin);
-  end
-end
+definput.import={'baumgartner2014'};
+[flags,kv]=ltfatarghelper({},definput,varargin);
 
 %% Similarity estimation, Eq.(5)
 

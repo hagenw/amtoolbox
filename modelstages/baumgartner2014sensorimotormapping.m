@@ -2,7 +2,6 @@ function [ri,rang] = baumgartner2014sensorimotormapping(si,varargin)
 %BAUMGARTNER2014SENSORIMOTORMAPPING - Response scatter induced by
 %localization task
 %   Usage:     [ri,rang] = baumgartner2014sensorimotormapping(si)
-%              [ri,rang] = baumgartner2014sensorimotormapping(si,flags,kv)
 %
 %   Input parameters:
 %     ri      : response index
@@ -16,25 +15,23 @@ function [ri,rang] = baumgartner2014sensorimotormapping(si,varargin)
 %
 %   `baumgartner2014sensorimotormapping` accepts the following optional parameters:
 %
-%     'flags',flags  Transfer flags. If not defaults of baumgartner2014 are used.
+%     'polsamp',ps   Define the polar-angle sampling of the acoustic data
+%                    provided for the current sagittal plane. As default the 
+%                    sampling of ARI's HRTFs in the median SP is used, i.e.,
+%                    *ps* = [-30:5:70,80,100,110:5:210] degrees.
 %
-%     'kv',kv        Transfer key-value pairs. If not defaults of baumgartner2014 are used.
+%     'rangsamp',rs  Define the equi-polar sampling of the response predictions.
+%                    The default is *rs* = 5 degrees.
+%
+%     'mrsmsp',eps   Set the motoric response scatter *eps* within the median 
+%                    sagittal plane. Default value is 17 degrees.
 %
 %   References: baumgartner2014modeling
 
 % AUTHOR: Robert Baumgartner
 
 definput.import={'baumgartner2014'};
-
-if length(varargin) == 1 && isstruct(varargin{1})
-  kv = varargin{1};
-  flags=ltfatarghelper({},definput,varargin);
-elseif length(varargin) == 2 && isstruct(varargin{1}) && isstruct(varargin{2})
-  kv = varargin{1};
-  flags = varargin{2};
-else
-  [flags,kv]=ltfatarghelper({},definput,varargin);
-end
+[flags,kv]=ltfatarghelper({},definput,varargin);
 
 %% Interpolation (regularize polar angular sampling)
 if flags.do_regular

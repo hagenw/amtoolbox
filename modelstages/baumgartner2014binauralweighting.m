@@ -1,7 +1,6 @@
 function sibin = baumgartner2014binauralweighting(simon,varargin)
 %BAUMGARTNER2014BINAURALWEIGHTING - Binaural combination of monaural similarity estimates
 %   Usage:     sibin = baumgartner2014binauralweighting(simon)
-%              sibin = baumgartner2014binauralweighting(simon,kv,flags)
 %
 %   Input parameters:
 %     simon   : monaural similarity indices
@@ -15,22 +14,18 @@ function sibin = baumgartner2014binauralweighting(simon,varargin)
 %
 %   `baumgartner2014binauralweighting` accepts the following optional parameters:
 %
-%     'flags',flags  Transfer flags. If not defaults of baumgartner2014 are used.
+%     'bwcoef',bwc   Set the binaural weighting coefficient *bwc*.
+%                    Default value is 13 degrees.
 %
-%     'kv',kv        Transfer key-value pairs. If not defaults of baumgartner2014 are used.
+%     'lat',lat      Set the apparent lateral angle of the target sound to
+%                    *lat*. Default value is 0 degree (median SP).
 %
 %   References: baumgartner2014modeling
 
 % AUTHOR: Robert Baumgartner
 
-if nargin > 1
-  if isstruct(varargin{1})
-    kv = varargin{1};
-  else
-    definput.import={'baumgartner2014'};
-    [flags,kv]=ltfatarghelper({},definput,varargin);
-  end
-end
+definput.import={'baumgartner2014'};
+[flags,kv]=ltfatarghelper({},definput,varargin);
 
 %% Binaural weighting, Eq.(6)
 

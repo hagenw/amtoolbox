@@ -2305,14 +2305,15 @@ if flags.do_fig11
   noDCN = amtcache('get','highfreqatten_do0',flags.cachemode);
   if isempty(ape_all) || isempty(noDCN.ape_all)
     
-    fnHarvard = fullfile(amtbasepath,'signals','HarvardWords');
-    if not(exist(fnHarvard,'dir'))
-      amtdisp('The Harvard word list is missing.') 
-      amtdisp('Please, contact Virginia Best (ginbest@bu.edu) or Craig Jin (craig.jin@sydney.edu.au) for providing their speech recordings.')
-      amtdisp(['Then, move the folder labeled HarvardWords to: ' fullfile(amtbasepath,'signals') '.'])
-      return
-    end
-    
+%     fnHarvard = fullfile(amtbasepath,'signals','HarvardWords');
+%     if not(exist(fnHarvard,'dir'))
+%       amtdisp('The Harvard word list is missing.') 
+%       amtdisp('Please, contact Virginia Best (ginbest@bu.edu) or Craig Jin (craig.jin@sydney.edu.au) for providing their speech recordings.')
+%       amtdisp(['Then, move the folder labeled HarvardWords to: ' fullfile(amtbasepath,'signals') '.'])
+%       return
+%     end
+    fnHarvard = fullfile(amtbasepath,'auxdata','baumgartner2014','HarvardWords');
+      
     amtdisp('Note that this computation may take several hours!','progress')
     
     %% Settings
@@ -2343,12 +2344,14 @@ if flags.do_fig11
       lsamp = 120000*p_resamp;
       speechsample = cell(Nsamp,1);
       for ii = 1:Nlists
-        tmp.path = fullfile(fnHarvard,['list' num2str(ii,'%1.0u')]);
+        tmp.list = ['list' num2str(ii,'%1.0u')];
+        tmp.path = fullfile(fnHarvard,tmp.list);
         tmp.dir = dir(fullfile(tmp.path,'*.mat'));
         for jj = 1:length(tmp.dir)
           if jj > Nsamp; break; end
-          load(fullfile(tmp.path,tmp.dir(jj).name))
-          signal = resample(word,p_resamp*10,10);
+%           load(fullfile(tmp.path,tmp.dir(jj).name))
+          sig = amtload('baumgartner2014',fullfile('HarvardWords',tmp.list,tmp.dir(jj).name));
+          signal = resample(sig.word,p_resamp*10,10);
           gcurve = exp(-0.5 * (0:0.001:10).^2) ./ (sqrt(2*pi));
           env = filter(gcurve,1,signal.^2);
           idon = max(find(env > 5e7,1,'first')-1e3,1);

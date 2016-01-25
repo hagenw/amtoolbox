@@ -1,7 +1,6 @@
-function varargout = baumgartner2014spectralanalysis(sig,kv,flags)
+function varargout = baumgartner2014spectralanalysis(sig,varargin)
 %BAUMGARTNER2014SPECTRALANALYSIS - Approximation of spectral analysis by auditory periphery
 %   Usage:     mp = baumgartner2014spectralanalysis(sig)
-%              [mp,fc] = baumgartner2014spectralanalysis(sig,kv,flags)
 %
 %   Input parameters:
 %     sig     : incoming time-domain signal
@@ -15,18 +14,26 @@ function varargout = baumgartner2014spectralanalysis(sig,kv,flags)
 %
 %   `baumgartner2014spectralanalysis` accepts the following optional parameters:
 %
-%     'flags',flags  Transfer flags. If not defaults of baumgartner2014 are used.
+%     'flow',flow    Set the lowest frequency in the filterbank to
+%                    *flow*. Default value is 700 Hz.
 %
-%     'kv',kv        Transfer key-value pairs. If not defaults of baumgartner2014 are used.
+%     'fhigh',fhigh  Set the highest frequency in the filterbank to
+%                    *fhigh*. Default value is 18000 Hz.
+%
+%     'fs',fs        Define the sampling rate of the impulse responses. 
+%                    Default value is 48000 Hz.
+%
+%     'space',sp     Set spacing of auditory filter bands (i.e., distance 
+%                    between neighbouring bands) to *sp* in number of
+%                    equivalent rectangular bandwidths (ERBs). 
+%                    Default value is 1 ERB.
 %
 %   References: baumgartner2014modeling
 
 % AUTHOR: Robert Baumgartner
 
-if not(exist('flags','var') || exist('kv','var'))
-  definput.import={'baumgartner2014'};
-  [flags,kv]=ltfatarghelper({},definput,{});
-end
+definput.import={'baumgartner2014'};
+[flags,kv]=ltfatarghelper({},definput,{});
 
 %% Spectral Analysis, Eq.(2)
 
