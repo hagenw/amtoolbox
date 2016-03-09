@@ -35,8 +35,8 @@
 %   such that their maxima are aligned across frequency channels.
 %
 %
-%   See also: exp_gammatone gammatone exp_hohmann2002 demo_hohmann2002
-%   gfb_analyzer_new gfb_analyzer_process
+%   See also: exp_gammatone gammatone exp_hohmann2002 demo_hohmann2002 hohmann2002
+
 
 % AUTHOR: Christian Klemenschitz, 2014
 
@@ -289,23 +289,21 @@
     basef = 888.44;             % Base center frequency in Hz;
     fhigh  = 4000;              % Highest center frequency in Hz;
     filters_per_ERBaud = 1;     % Filterband density on ERB scale;     
-    gamma_order= 4;             % Filter order;
-    bandwidth_factor = 1;       % Bandwidth factor;
     
     % Construct new analyzer object;
-    analyzer = gfb_analyzer_new(fs,flow, basef, fhigh,filters_per_ERBaud,gamma_order,bandwidth_factor);
+    analyzer = hohmann2002(fs,flow, basef, fhigh,filters_per_ERBaud);
     % Impulse signal;
     impulse = [1, zeros(1,8191)];
     % Filter signal;
-    [impulse_response, analyzer] = gfb_analyzer_process(analyzer, impulse);
+    [impulse_response, analyzer] = hohmann2002process(analyzer, impulse);
        
     % Find peak at envelope maximum for lowest channel and add one sample;
     delay_samples = find(abs(impulse_response(1,:)) == max(abs(impulse_response(1,:)))) + 1;
     
     % 
-    delay = gfb_delay_new(analyzer, delay_samples);
+    delay = hohmann2002delay(analyzer, delay_samples);
      
-    [outsig, delay] = gfb_delay_process(delay, impulse_response);
+    [outsig, delay] = hohmann2002process(delay, impulse_response);
     
     % Figure 4;
     type1   = 'plotted as they are';   % Type of implemantion for headline;

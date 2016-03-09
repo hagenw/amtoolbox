@@ -15,12 +15,9 @@ function exp_joergensen2013(NSpeechsamples, varargin)
 %
 %     'noplot'   Don't plot, only return data.
 %
-%     'auto '    Redo the experiment if a cached dataset does not exist. This is the default.
-% 
-%     'refresh'  Always recalculate the experiment.
+%     'redo'     Always recalculate the experiment.
 %
-%     'cached'   Always use the cached version. This throws an error if the
-%                file does not exist.
+%     'cached'   Always use the cached version. Default.
 % 
 %   Only one of the following:
 %     'fig2_simAll'     Simualte all data in fig2 of Jørgensen, Ewert and Dau (2013).
@@ -45,7 +42,7 @@ function exp_joergensen2013(NSpeechsamples, varargin)
 %
 %     exp_joergensen2013('fig2_simAll');
 %  
-%   See also: joergensen2013, joergensen2013sim, plotjoergensen2013
+%   See also: joergensen2013, joergensen2013sim, plot_joergensen2013
 %
 %   ---------
 %
@@ -54,19 +51,23 @@ function exp_joergensen2013(NSpeechsamples, varargin)
 % 
 %   References: joergensen2013 joergensen2011predicting kjems2009role festen1990effects
 
-definput.import={'amtredofile'};
-definput.flags.type={'fig2_simAll','fig2_specsub','fig2_reverb','fig2_kjems2009','fig2_FP1990','fig2_OrgSim','fig2_Jetal2013'};
+definput.import={'amtcache'};
+definput.flags.type={'missingflag','fig2_simAll','fig2_specsub','fig2_reverb','fig2_kjems2009','fig2_FP1990','fig2_OrgSim','fig2_Jetal2013'};
 definput.flags.plot={'plot','noplot'};
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
-save_format='-v6';
+if flags.do_missingflag
+    flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+        sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+    error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end
+
 %% ------ FIG 2 -----------------------------------------------------------
 if flags.do_fig2_simAll;
         
-    s = [mfilename('fullpath'),'_fig2_' num2str(NSpeechsamples)  'sntcs.mat'];
-    
-    if amtredofile(s,flags.redomode)
+    SRTs = amtcache('get',['fig2_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
+    if isempty(SRTs)
                        
         [SRTs_specsub specsubConds] = joergensen2013sim(NSpeechsamples,'JandD2011specsub');
         [SRTs_reverb reverbConds] = joergensen2013sim(NSpeechsamples,'JandD2011reverb');
@@ -80,75 +81,58 @@ if flags.do_fig2_simAll;
         SRTs.simSRTs_Kjems2009 = SRTs_simKjems2009;
         SRTs.simSRTs_FP1990 = SRTs_simFP1990;
         
-        
-        save(s,'SRTs',save_format);
-        
-    else
-        
-        s = load(s);
-        SRTs = s.SRTs;
+        amtcache('set',['fig2_' num2str(NSpeechsamples)  'sntcs'],SRTs);
     end;
     
     if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
+        plot_joergensen2013(SRTs,'fig2');
     end
 end;
 
 if flags.do_fig2_specsub;
     
-    s = [mfilename('fullpath'),'_fig2_specsub_' num2str(NSpeechsamples)  'sntcs.mat'];
-    
-    if amtredofile(s,flags.redomode)
+    SRTs = amtcache('get',['fig2_specsub_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
+    if isempty(SRTs)
                
-         [SRTs_specsub specsubConds] = joergensen2013sim(NSpeechsamples,'JandD2011specsub');
-         SRTs.simSRTs_specsub = SRTs_specsub;
-         SRTs.simSRTs_Kjems2009 = [ NaN NaN NaN NaN ] ;
+        [SRTs_specsub specsubConds] = joergensen2013sim(NSpeechsamples,'JandD2011specsub');
+        SRTs.simSRTs_specsub = SRTs_specsub;
+        SRTs.simSRTs_Kjems2009 = [ NaN NaN NaN NaN ] ;
         SRTs.simSRTs_FP1990 =[ NaN NaN NaN ];
         SRTs.simSRTs_Jetal2013 = [ NaN NaN NaN  ];
         SRTs.simSRTs_reverb =[ NaN NaN NaN NaN NaN  ];
 
-        save(s,'SRTs',save_format);
-        
-    else
-        s = load(s);
-        SRTs = s.SRTs;
+        amtcache('set', ['fig2_specsub_' num2str(NSpeechsamples)  'sntcs'], SRTs);
     end;
     
     if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
+        plot_joergensen2013(SRTs,'fig2');
     end
 end;
 
 if flags.do_fig2_reverb;
  
-    s = [mfilename('fullpath'),'_fig2_reverb_' num2str(NSpeechsamples)  'sntcs.mat'];
-    
-    if amtredofile(s,flags.redomode)
+    SRTs = amtcache('get',['fig2_reverb_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
+    if isempty(SRTs)
                        
         [SRTs_reverb reverbConds] = joergensen2013sim(NSpeechsamples,'JandD2011reverb');
-         SRTs.simSRTs_specsub = [ NaN NaN NaN NaN NaN NaN ];
-         SRTs.simSRTs_Kjems2009 = [ NaN NaN NaN NaN ];
+        SRTs.simSRTs_specsub = [ NaN NaN NaN NaN NaN NaN ];
+        SRTs.simSRTs_Kjems2009 = [ NaN NaN NaN NaN ];
         SRTs.simSRTs_FP1990 = [ NaN NaN NaN ];
         SRTs.simSRTs_Jetal2013 = [ NaN NaN NaN ];
         SRTs.simSRTs_reverb = SRTs_reverb;
 
-        save(s,'SRTs',save_format);
-        
-    else
-        s = load(s);
-        SRTs = s.SRTs;
+        amtcache('set', ['fig2_reverb_' num2str(NSpeechsamples)  'sntcs'], SRTs);
     end;
     
     if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
+        plot_joergensen2013(SRTs,'fig2');
     end
 end;
 
 if flags.do_fig2_kjems2009;
    
-    s = [mfilename('fullpath'),'_fig2_Kjems2009_' num2str(NSpeechsamples)  'sntcs.mat'];
-    
-    if amtredofile(s,flags.redomode)
+    SRTs = amtcache('get',['fig2_Kjems2009_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
+    if isempty(SRTs)
                        
         [SRTs_Kjems2009 Kjems2009Conds] = joergensen2013sim(NSpeechsamples,'Kjems2009');
          SRTs.simSRTs_specsub = [ NaN NaN NaN NaN NaN NaN ];
@@ -157,73 +141,59 @@ if flags.do_fig2_kjems2009;
         SRTs.simSRTs_Jetal2013 = [ NaN NaN NaN  ];
         SRTs.simSRTs_reverb = [ NaN NaN NaN NaN NaN  ];
 
-        save(s,'SRTs',save_format);
-        
-    else
-        s = load(s);
-        SRT = s.SRTs;
+        amtcache('set', ['fig2_Kjems2009_' num2str(NSpeechsamples)  'sntcs'], SRTs);
     end;
     
     if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
+        plot_joergensen2013(SRTs,'fig2');
     end
 end;
 
 if flags.do_fig2_FP1990;
    
-    s = [mfilename('fullpath'),'_fig2_FP1990_' num2str(NSpeechsamples)  'sntcs.mat'];
-    
-    if amtredofile(s,flags.redomode)
+    SRTs = amtcache('get',['fig2_FP1990_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
+    if isempty(SRTs)
                       
         [SRTs_FP1990 FP1990Conds] = joergensen2013sim(NSpeechsamples,'FP1990');
-         SRTs.simSRTs_specsub = [ NaN NaN NaN NaN NaN NaN ];
-         SRTs.simSRTs_Kjems2009 = [ NaN NaN NaN NaN  ];
+        SRTs.simSRTs_specsub = [ NaN NaN NaN NaN NaN NaN ];
+        SRTs.simSRTs_Kjems2009 = [ NaN NaN NaN NaN  ];
         SRTs.simSRTs_FP1990 = SRTs_FP1990;
         SRTs.simSRTs_Jetal2013 = [ NaN NaN NaN  ];
         SRTs.simSRTs_reverb = [ NaN NaN NaN NaN NaN  ];
 
-        save(s,'SRTs',save_format);
-        
-    else
-        s = load(s);
-        SRTs = s.SRTs;
+        amtcache('set', ['fig2_FP1990_' num2str(NSpeechsamples)  'sntcs'], SRTs);
     end;
     
     if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
+        plot_joergensen2013(SRTs,'fig2');
     end
 end;
 
 if flags.do_fig2_Jetal2013;
    
-    s = [mfilename('fullpath'),'_fig2_Jetal2013_' num2str(NSpeechsamples)  'sntcs.mat'];
-    
-    if amtredofile(s,flags.redomode)
+    SRTs = amtcache('get',['fig2_Jetal2013_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
+    if isempty(SRTs)
                       
         [SRTs_Jetal2013 Jetal2013Conds] = joergensen2013sim(NSpeechsamples,'Jetal2013');
-         SRTs.simSRTs_specsub = [ NaN NaN NaN NaN NaN NaN ];
-         SRTs.simSRTs_Kjems2009 = [ NaN NaN NaN NaN  ];
+        SRTs.simSRTs_specsub = [ NaN NaN NaN NaN NaN NaN ];
+        SRTs.simSRTs_Kjems2009 = [ NaN NaN NaN NaN  ];
         SRTs.simSRTs_FP1990 = [ NaN NaN NaN  ];
         SRTs.simSRTs_Jetal2013 = SRTs_Jetal2013;
         SRTs.simSRTs_reverb = [ NaN NaN NaN NaN NaN  ];
 
-        save(s,'SRTs',save_format);
-        
-    else
-        s = load(s);
-        SRTs = s.SRTs;
+        amtcache('set', ['fig2_Jetal2013_' num2str(NSpeechsamples)  'sntcs'], SRTs);
     end;
     
     if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
+        plot_joergensen2013(SRTs,'fig2');
     end
 end;
 
 if  flags.do_fig2_OrgSim
-    load('plotting_jasa2012_final_predictionsJetal2013_fig2')
-    if flags.do_plot
-        plotjoergensen2013(SRTs,'fig2');
-    end
+    %load('plotting_jasa2012_final_predictionsJetal2013_fig2')
+    %if flags.do_plot
+    %    plot_joergensen2013(SRTs,'fig2');
+    %end
 end
 
 

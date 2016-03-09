@@ -43,7 +43,7 @@ function varargout=exp_baumgartner2013(varargin)
 %   `data.qe`
 %      predicted quadrant error
 %
-%   The following flags can be specified;
+%   The following flags can be specified:
 %
 %     'plot'    Plot the output of the experiment. This is the default.
 %
@@ -181,6 +181,7 @@ function varargout=exp_baumgartner2013(varargin)
     'fig12','fig13','fig14','fig15',... % Ch. 4.1 (binaural rec.)
     'fig18','fig19','fig20','fig22','fig23'}; % Ch. 4
   definput.flags.plot = {'plot','noplot'};
+  definput.import={'amtcache'};
 
   % Parse input options
   [flags,kv]  = ltfatarghelper({},definput,varargin);
@@ -196,7 +197,7 @@ end;
 
 if flags.do_fig12
   
-  s = data_baumgartner2013('pool');
+  s = data_baumgartner2013('pool', flags.cachemode);
   
   s = s([2 1 14]);  % NH12, NH58, NH33
   
@@ -259,51 +260,57 @@ end
 if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
   
   latdivision = [-20,0,20];  % lateral center angles of SPs
-  
-  s = data_baumgartner2013('pool');
-  ns = length(s);
 
-  % DTFs of the SPs
-  for ll = 1:ns
-    for ii = 1:length(latdivision)
-      
-      s(ll).latang{ii} = latdivision(ii);
-      s(ll).polangs{ii} = [];
-      s(ll).spdtfs{ii} = [];
-      [s(ll).spdtfs{ii},s(ll).polangs{ii}] = extractsp(...
-        s(ll).latang{ii},s(ll).Obj);
-      
-    end
-  end
-  
-  %fprintf('\n Please wait a little! \n');
-  qe = zeros(ns,ns,length(latdivision)); % init QEs
-  pe = qe;                               % init PEs
-  for ll = 1:ns    % listener
-      for jj = 1:ns    % ears
-          for ii = 1:length(latdivision) % SPs
-            
-            s(ll).pmv{jj,ii} = [];
-            s(ll).respangs{ii} = [];
-            [s(ll).pmv{jj,ii},s(ll).respangs{ii}] = baumgartner2013(...
-                s(jj).spdtfs{ii},s(ll).spdtfs{ii},s(ll).fs,...
-                'u',s(ll).u,'lat',s(ll).latang{ii},...
-                'polsamp',s(ll).polangs{ii});
+  [s,qe,pe]=amtcache('get','fig13to15',flags.cachemode);
+  if isempty(s)
 
-            [ qe(ll,jj,ii),pe(ll,jj,ii) ] = pmv2ppp( ...
-                s(ll).pmv{jj,ii} , s(jj).polangs{ii} , s(ll).respangs{ii});
+    s = data_baumgartner2013('pool', flags.cachemode);
+    ns = length(s);
 
-          end
+    % DTFs of the SPs
+    for ll = 1:ns
+      for ii = 1:length(latdivision)
+
+        s(ll).latang{ii} = latdivision(ii);
+        s(ll).polangs{ii} = [];
+        s(ll).spdtfs{ii} = [];
+        [s(ll).spdtfs{ii},s(ll).polangs{ii}] = extractsp(...
+          s(ll).latang{ii},s(ll).Obj);
+
       end
-      amtdisp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress');
-  end
+    end
 
-  qe = mean(qe,3);
-  pe = mean(pe,3);
-  for ll = 1:length(s)
-    s(ll).pe = pe(ll,:);
-    s(ll).qe = qe(ll,:);
-  end 
+    %fprintf('\n Please wait a little! \n');
+    qe = zeros(ns,ns,length(latdivision)); % init QEs
+    pe = qe;                               % init PEs
+    for ll = 1:ns    % listener
+        for jj = 1:ns    % ears
+            for ii = 1:length(latdivision) % SPs
+
+              s(ll).pmv{jj,ii} = [];
+              s(ll).respangs{ii} = [];
+              [s(ll).pmv{jj,ii},s(ll).respangs{ii}] = baumgartner2013(...
+                  s(jj).spdtfs{ii},s(ll).spdtfs{ii},s(ll).fs,...
+                  'u',s(ll).u,'lat',s(ll).latang{ii},...
+                  'polsamp',s(ll).polangs{ii});
+
+              [ qe(ll,jj,ii),pe(ll,jj,ii) ] = baumgartner2013pmv2ppp( ...
+                  s(ll).pmv{jj,ii} , s(jj).polangs{ii} , s(ll).respangs{ii});
+
+            end
+        end
+        amtdisp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress');
+    end
+
+    qe = mean(qe,3);
+    pe = mean(pe,3);
+    for ll = 1:length(s)
+      s(ll).pe = pe(ll,:);
+      s(ll).qe = qe(ll,:);
+    end 
+    amtcache('set','fig13to15',s,qe,pe);
+  end  
+  ns = length(s);
   
   if nargout == 1
     varargout{1} = s; % SAME for Fig. 13-15!!!!
@@ -315,7 +322,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
 
       markersize = 4;
 
-      [qechance,pechance] = pmv2ppp(ones(49,44));
+      [qechance,pechance] = baumgartner2013pmv2ppp(ones(49,44));
       
       % IDs for XTick of plots
       for ll = 1:ns
@@ -388,7 +395,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
     
     if flags.do_plot
       
-      [qechance,pechance] = pmv2ppp(ones(49,44));
+      [qechance,pechance] = baumgartner2013pmv2ppp(ones(49,44));
       
       % IDs for XTick of plots
       for ll = 1:ns
@@ -451,7 +458,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
       
       markersize = 4;
 
-      [qechance,pechance] = pmv2ppp(ones(49,44));
+      [qechance,pechance] = baumgartner2013pmv2ppp(ones(49,44));
       
       % IDs for XTick of plots
       for ll = 1:ns
@@ -506,106 +513,112 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
   % Coordinates (azi,ele) of loudspeakers
   if flags.do_fig18
     LSPsetup{1} = [ 30,0 ; 150,0 ];                  % lat: 30 deg.
+    package='fig18';
   elseif flags.do_fig22
     LSPsetup{1} = [ 30,0 ; 110,0 ];                  % 5.1
     LSPsetup{2} = [ 30,0 ; 45,45 ; 110,0 ];          % 10.2
     LSPsetup{3} = [ 30,0 ; 30,30 ; 110,30 ; 110,0 ]; % 9.1
+    package='fig22';
   elseif flags.do_fig23
     LSPsetup{1} = [ 30,0 ; 30,30 ; 110,30 ; 110,0 ]; % 9.1
     LSPsetup{2} = [ 30,0 ; 30,30 ; 140,30 ; 110,0 ]; % 9.1 (prop. LSH)
     LSPsetup{3} = [ 30,0 ; 30,30 ; 140,30 ; 140,0 ]; % 9.1 (prop. LSH&LS)
+    package='fig23';
   end
   
   dpol = 5;    % step size in deg
 
-  s = data_baumgartner2013('pool');
-  ns = length(s);
-  
-  for ss = 1:length(LSPsetup)
-  
-    LSPsph = LSPsetup{ss};
-    nLSP = size(LSPsph,1);
-    LSPhp = zeros(nLSP,2);
-    [LSPhp(:,1),LSPhp(:,2)] = sph2horpolar(LSPsph(:,1),LSPsph(:,2));
-    LSPcart = zeros(nLSP,3);
-    [LSPcart(:,1),LSPcart(:,2),LSPcart(:,3)] = ...
-          sph2cart(LSPsph(:,1),LSPsph(:,2),ones(nLSP,1));
+  [s, D]=amtcache('get',package,flags.cachemode);
+  if isempty(s),
+    s = data_baumgartner2013('pool', flags.cachemode);
+    ns = length(s);
 
-    D = LSPhp(1,2):dpol:LSPhp(nLSP,2);     % Desired polar angle    
+    for ss = 1:length(LSPsetup)
 
-    %fprintf('\n Please wait a little! \n');
-    for ll = 1:ns
-      
-      s(ll).pos(:,1)=bsxfun(@times,s(ll).Obj.SourcePosition(:,1),ones(s(ll).Obj.API.M,1));
-      s(ll).pos(:,2)=bsxfun(@times,s(ll).Obj.SourcePosition(:,2),ones(s(ll).Obj.API.M,1));
-      [poscart(:,1),poscart(:,2),poscart(:,3)] = ...
-          sph2cart(s(ll).pos(:,1),s(ll).pos(:,2),ones(size(s(ll).pos,1),1));
+      LSPsph = LSPsetup{ss};
+      nLSP = size(LSPsph,1);
+      LSPhp = zeros(nLSP,2);
+      [LSPhp(:,1),LSPhp(:,2)] = sph2horpolar(LSPsph(:,1),LSPsph(:,2));
+      LSPcart = zeros(nLSP,3);
+      [LSPcart(:,1),LSPcart(:,2),LSPcart(:,3)] = ...
+            sph2cart(LSPsph(:,1),LSPsph(:,2),ones(nLSP,1));
 
-      % DTF indices of LSPs
-      idLSP = zeros(nLSP,1);
-      for ii = 1:nLSP
-        e = poscart-repmat(LSPcart(ii,:),size(poscart,1),1);
-        [tmp,idLSP(ii)] = min( sqrt(sum(e.^2,2)) ); % minimum euclidean distance
-      end
-      clear poscart
+      D = LSPhp(1,2):dpol:LSPhp(nLSP,2);     % Desired polar angle    
 
-      Lp = 1;  % LSP pair index
-      for d = 1:length(D)
+      %fprintf('\n Please wait a little! \n');
+      for ll = 1:ns
 
-        if D(d) > LSPhp(Lp+1,2)  % Switch to next LSP pair?
-          Lp = Lp + 1;
+        s(ll).pos(:,1)=bsxfun(@times,s(ll).Obj.SourcePosition(:,1),ones(s(ll).Obj.API.M,1));
+        s(ll).pos(:,2)=bsxfun(@times,s(ll).Obj.SourcePosition(:,2),ones(s(ll).Obj.API.M,1));
+        [poscart(:,1),poscart(:,2),poscart(:,3)] = ...
+            sph2cart(s(ll).pos(:,1),s(ll).pos(:,2),ones(size(s(ll).pos,1),1));
+
+        % DTF indices of LSPs
+        idLSP = zeros(nLSP,1);
+        for ii = 1:nLSP
+          e = poscart-repmat(LSPcart(ii,:),size(poscart,1),1);
+          [tmp,idLSP(ii)] = min( sqrt(sum(e.^2,2)) ); % minimum euclidean distance
         end
-        pol1 = LSPhp(Lp,2);
-        pol2 = LSPhp(Lp+1,2);
+        clear poscart
 
-        if abs(pol1-pol2) < 180
+        Lp = 1;  % LSP pair index
+        for d = 1:length(D)
 
-          pol0 = mean([pol1 pol2]);   % polar angle of center
-          phi0 = abs(pol1-pol2)/2;    % basis angle
-          M = (1-tan(deg2rad(pol0-D(d)))/tan(deg2rad(phi0)))/2;
+          if D(d) > LSPhp(Lp+1,2)  % Switch to next LSP pair?
+            Lp = Lp + 1;
+          end
+          pol1 = LSPhp(Lp,2);
+          pol2 = LSPhp(Lp+1,2);
 
-        else
+          if abs(pol1-pol2) < 180
 
-          M = (D(d)-pol1) / (pol2-pol1);
+            pol0 = mean([pol1 pol2]);   % polar angle of center
+            phi0 = abs(pol1-pol2)/2;    % basis angle
+            M = (1-tan(deg2rad(pol0-D(d)))/tan(deg2rad(phi0)))/2;
+
+          else
+
+            M = (D(d)-pol1) / (pol2-pol1);
+
+          end
+
+          lat1 = LSPhp(Lp,1);
+          lat2 = LSPhp(Lp+1,1);
+          lat0 = mean([lat1 lat2]);   % lateral angle of center
+          phi0 = abs(lat1-lat2)/2;    % basis angle
+          phiM = rad2deg( atan( tan(deg2rad(phi0)) * (1-2*M) ) );
+          latM = lat0 - phiM;
+
+          s(ll).dtfs = permute(double(s(ll).Obj.Data.IR),[3 1 2]);
+
+          dtfLSP = (1-M)*s(ll).dtfs(:,idLSP(Lp),:) + M*s(ll).dtfs(:,idLSP(Lp+1),:);
+          [spdtfs,polangs] = extractsp(latM,s(ll).Obj);
+
+          [pmv,respangs] = baumgartner2013(dtfLSP,spdtfs,s(ll).fs,...
+              'lat',latM,'u',s(ll).u,...
+              'polsamp',polangs);
+          idP = respangs >= -30 & respangs <= 210;
+          s(ll).pmv{ss}(:,d) = pmv(idP)/sum(pmv(idP));
+          s(ll).respangs = respangs(idP);
 
         end
 
-        lat1 = LSPhp(Lp,1);
-        lat2 = LSPhp(Lp+1,1);
-        lat0 = mean([lat1 lat2]);   % lateral angle of center
-        phi0 = abs(lat1-lat2)/2;    % basis angle
-        phiM = rad2deg( atan( tan(deg2rad(phi0)) * (1-2*M) ) );
-        latM = lat0 - phiM;
-        
-        s(ll).dtfs = permute(double(s(ll).Obj.Data.IR),[3 1 2]);
-        
-        dtfLSP = (1-M)*s(ll).dtfs(:,idLSP(Lp),:) + M*s(ll).dtfs(:,idLSP(Lp+1),:);
-        [spdtfs,polangs] = extractsp(latM,s(ll).Obj);
-
-        [pmv,respangs] = baumgartner2013(dtfLSP,spdtfs,s(ll).fs,...
-            'lat',latM,'u',s(ll).u,...
-            'polsamp',polangs);
-        idP = respangs >= -30 & respangs <= 210;
-        s(ll).pmv{ss}(:,d) = pmv(idP)/sum(pmv(idP));
-        s(ll).respangs = respangs(idP);
+        amtdisp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress')
 
       end
 
-      amtdisp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress')
+      % Pool
+      ppool = zeros(size(s(1).pmv{ss}));
+      for ll = 1:ns
+          ppool = ppool + s(ll).pmv{ss};
+      end
+      s(ns+1).pmv{ss} = ppool/length(s);
+      s(ns+1).respangs = s(1).respangs;
+      s(ns+1).id = 'Pool';
 
     end
-
-    % Pool
-    ppool = zeros(size(s(1).pmv{ss}));
-    for ll = 1:ns
-        ppool = ppool + s(ll).pmv{ss};
-    end
-    s(ns+1).pmv{ss} = ppool/length(s);
-    s(ns+1).respangs = s(1).respangs;
-    s(ns+1).id = 'Pool';
-  
+    amtcache('set',package,s,D);
   end
-  
   % Output
   if nargout == 1
     varargout{1} = s;
@@ -670,7 +683,7 @@ end
 
 if flags.do_fig19 || flags.do_fig20
   
-  s = data_baumgartner2013('pool');
+  s = data_baumgartner2013('pool', flags.cachemode);
   
   if flags.do_fig19
     dPol = [0 30,60];
@@ -718,9 +731,9 @@ if flags.do_fig19 || flags.do_fig20
           s(ll).dtfs2{ii},s(ll).spdtfs,s(ll).fs,'u',s(ll).u,...
           'polsamp',polang);
 
-        [s(ll).qe1{ii},s(ll).pe1{ii}] = pmv2ppp(...
+        [s(ll).qe1{ii},s(ll).pe1{ii}] = baumgartner2013pmv2ppp(...
           s(ll).pmv1{ii},polang(id0),respang);
-        [s(ll).qe2{ii},s(ll).pe2{ii}] = pmv2ppp(...
+        [s(ll).qe2{ii},s(ll).pe2{ii}] = baumgartner2013pmv2ppp(...
           s(ll).pmv2{ii},pol2{ii},respang);
         
         % Increse of error
@@ -741,15 +754,15 @@ if flags.do_fig19 || flags.do_fig20
       
       figure;
       subplot(1,3,1)
-      plotbaumgartner2013(s(1).pmv1{1},polang,respang,'cmax',0.1,'nocolorbar');
+      plot_baumgartner2013(s(1).pmv1{1},polang,respang,'cmax',0.1,'nocolorbar');
       title(['P: PE = ' num2str(s(1).pe1{1},2) '\circ, QE = ' num2str(s(1).qe1{1},2) '%'])
       
       subplot(1,3,2)
-      plotbaumgartner2013(s(1).pmv2{2},pol2{2},respang,'cmax',0.1,'nocolorbar');
+      plot_baumgartner2013(s(1).pmv2{2},pol2{2},respang,'cmax',0.1,'nocolorbar');
       title(['P: PE = ' num2str(s(1).pe2{2},2) '\circ, QE = ' num2str(s(1).qe2{2},2) '%'])
             
       subplot(1,3,3)
-      plotbaumgartner2013(s(1).pmv2{3},pol2{3},respang,'cmax',0.1,'nocolorbar');
+      plot_baumgartner2013(s(1).pmv2{3},pol2{3},respang,'cmax',0.1,'nocolorbar');
       title(['P: PE = ' num2str(s(1).pe2{3},2) '\circ, QE = ' num2str(s(1).qe2{3},2) '%'])
       
     elseif flags.do_fig20

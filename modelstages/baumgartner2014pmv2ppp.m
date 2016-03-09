@@ -1,5 +1,5 @@
 function [ varargout ] = baumgartner2014pmv2ppp( varargin )
-%BAUMGARTNER2014PMV2PPP PMV to PPP conversion
+%BAUMGARTNER2014PMV2PPP - Performance predictions from PMVs of baumgartner2014
 %   Usage:  [ qe,pe,eb ] = baumgartner2014pmv2ppp( p,tang,rang );
 %           [ qe,pe,eb ] = baumgartner2014pmv2ppp( p,tang,rang,exptang );
 %
@@ -48,14 +48,7 @@ function [ varargout ] = baumgartner2014pmv2ppp( varargin )
 
 % AUTHOR : Robert Baumgartner
 
-definput.keyvals.p=ones(72,44);
-definput.keyvals.rang=-90:5:269;
-definput.keyvals.tang=[-30:5:70,80,100,110:5:210];
-definput.keyvals.exptang=[];
-
-definput.flags.print = {'noprint','print'};
-definput.flags.chance = {'','chance'};
-definput.flags.ppp = {'QE_PE_EB','QE','PE','EB','absPE'};
+definput.import={'baumgartner2014pmv2ppp'};
 
 [flags,kv]=ltfatarghelper({'p','tang','rang','exptang'},definput,varargin);
 
@@ -74,7 +67,7 @@ tang = kv.tang(:);
 rang = kv.rang(:);
 nt = length(tang);
 
-if flags.do_QE_PE_EB || flags.do_PE || flags.do_QE || flags.do_EB
+if not(flags.do_absPE)
   
   qet = zeros(nt,1); % QE for each target angle
   pet = zeros(nt,1); % PE for each target angle
@@ -135,20 +128,20 @@ if flags.do_QE_PE_EB || flags.do_PE || flags.do_QE || flags.do_EB
   pe = mean(pet);
   eb = mean(ebt);
 
-  if flags.do_QE_PE_EB
+  if isempty(flags.ppp) || flags.do_QE_PE_EB
     varargout{1} = qe;
     varargout{2} = pe;
     varargout{3} = eb;
   elseif flags.do_PE 
-    varargout{1} = qe;
-  elseif flags.do_QE 
     varargout{1} = pe;
+  elseif flags.do_QE 
+    varargout{1} = qe;
   elseif flags.do_EB
     varargout{1} = eb;
   end
   
   
-elseif flags.do_absPE
+else % flags.do_absPE
   
   apet = zeros(nt,1);
   for ii = 1:nt % for all target positions
@@ -170,7 +163,7 @@ end
 %% Print Output
 
 if flags.do_print
-  if flags.do_QE_PE_EB
+  if isempty(flags.ppp) || flags.do_QE_PE_EB
     fprintf('Quadrant errors (%%) \t\t %4.1f \n',qe)
     fprintf('Local polar RMS error (deg) \t %4.1f \n',pe)
     if nargout==3

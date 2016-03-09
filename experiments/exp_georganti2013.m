@@ -1,6 +1,6 @@
 function exp_georganti2013(varargin)
 %EXP_GEORGANTI2013 Figures from Georganti et al. (2013)
-%   Usage: exp_georganti2013(flag);
+%   Usage: exp_georganti2013(flag); 
 % 
 %   `exp_georganti2013(flags)` reproduces figures from Georganti et al. (2013).
 %   
@@ -19,10 +19,9 @@ function exp_georganti2013(varargin)
 %
 %   The BSMD-STD is related to the standard deviation of the
 %   magnitude spectrum of room impulse response, which is known to depend on 
-%   the source/receiver distance. See |georganti2013application| for more
+%   the source/receiver distance. See Georganti et al. (2013) for more
 %   information on applications.
 %
-%   Requirements: exp_georganti2013_*.mat files from requireddata-signals.zip
 %
 %   Examples:
 %   ---------
@@ -34,6 +33,8 @@ function exp_georganti2013(varargin)
 %   To display Fig. 10 use :::
 %
 %     exp_georganti2013('fig10');
+%
+%   See also: georganti2013
 %
 %   References: georganti2013 georganti2013application
 %

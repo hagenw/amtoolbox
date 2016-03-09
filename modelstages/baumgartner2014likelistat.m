@@ -1,27 +1,36 @@
 function [ la,le,ci,lr,pvalue ] = baumgartner2014likelistat( p,tang,rang,target,response,varargin )
-%BAUMGARTNER2014LIKELISTAT Likelihood estimation for evaluating model performance
-%   Usage:  
-%     [la,le,ci,lr,pvalue] = baumgartner2014likelistat(p,tang,rang,target,response,varargin)
-%
+%BAUMGARTNER2014LIKELISTAT - Likelihood statistics for evaluation of model performance
+%   Usage: [la,le,ci,lr,pvalue] = baumgartner2014likelistat(p,tang,rang,target,response,varargin)
+%   
 %   Input arguments:
-%     p:           pdf matrix
-%     tang:        polar angles of possible target angles
-%     rang:        polar angles of possible response angles
-%     target:      target polar angles of localization test
-%     response:    response polar angles of localization test
-%     varargin:    use 'normalize' for normalization of likelihoods,
-%                  1 corresponds to unitary. This is the default.
-%                  use 'original' according to Langendijk et al. (2002).
+%     'p'              pdf matrix
 %
+%     'tang'           polar angles of possible target angles
+%
+%     'rang'           polar angles of possible response angles
+%
+%     'target'         target polar angles of localization test
+%
+%     'response'       response polar angles of localization test
+%
+%     'varargin'       Use 'normalize' for normalization of likelihoods.
+%                      1 corresponds to unitary likelihood. This is the default.
+%                      Use 'original' according to Langendijk et al. (2002).
+% 
 %   Output arguments:
-%     la:          actual likelihood
-%     le:          expected likelihood
-%     ci:          99% confidence interval for expected likelihood
-%     lr:          reference likelihoods
-%                  1st dim: unimodal (1 gaussian dist.: std=17 deg, mu=0)
-%                  2nd dim: bimodal  (2 gaussians: mu1=0, mu2=180)
-%                  3rd dim: trimodal (mu1=0, mu2=90, mu3=180)
-%                  4th dim: unitary
+%     'la'             actual likelihood
+%
+%     'le'             expected likelihood
+%
+%     'ci'             99% confidence interval for expected likelihood
+%
+%     'lr'             reference likelihoods
+%                      1st dim: unimodal (1 gaussian dist.: std=17 deg, mu=0)
+%                      2nd dim: bimodal  (2 gaussians: mu1=0, mu2=180)
+%                      3rd dim: trimodal (mu1=0, mu2=90, mu3=180)
+%                      4th dim: unitary
+%   
+%   See also: baumgartner2014
 
 % AUTHOR : Robert Baumgartner
 
@@ -236,7 +245,7 @@ else
 end
   
 if flags.do_plot
-  plotbaumgartner2014likelistat(la,le,ci,lr)
+  plot_baumgartner2014likelistat(la,le,ci,lr)
 end
   
 end

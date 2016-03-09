@@ -1,12 +1,9 @@
-function exp_joergensen2011(NSpeechsamples,varargin)
-%EXP_JOERGENSEN2011 Figures from Jørgensen and Dau (2011)
+function exp_joergensen2011(varargin)
+%EXP_JOERGENSEN2011 Figures from Joergensen and Dau (2011)
 %   Usage: output = exp_joergensen2011(flag)
 %
 %   `exp_joergensen2011(flag)` reproduces the results for the figure given
-%   by flag from the Jørgensen and Dau (2011) paper. 
-% 
-%   Inputs:
-%      NSpeechsamples: specify the number of speech samples to be used fro the simulations. The simulation takes longer the more samples are used. A minimum of 50 should be used for final validation.  
+%   by flag from the Joergensen and Dau (2011) paper. 
 %    
 %   The following flags can be specified;
 %
@@ -16,17 +13,14 @@ function exp_joergensen2011(NSpeechsamples,varargin)
 %     'noplot'   Don't plot, only return data.
 %
 %
-%     'auto '    Redo the experiment if a cached dataset does not exist. This
-%                is the default.
+%     'redo'     Always recalculate the experiment results.
+%
+%     'cached'   Always use the cached version. Default.
+%
+%     'fig5'     Plot Fig. 5 (Joergensen and Dau, 2011).
+%
+%     'fig6'     Plot Fig. 6 (Joergensen and Dau, 2011). 
 % 
-%     'refresh'  Always recalculate the experiment.
-%
-%     'cached'   Always use the cached version. This throws an error if the
-%                file does not exist.
-%
-%     'fig5'     Plot Fig. 5 (Jørgensen and Dau, 2011).
-%
-%     'fig6'     Plot Fig. 6 (Jørgensen and Dau, 2011). 
 %
 %   Examples:
 %   ---------
@@ -41,62 +35,52 @@ function exp_joergensen2011(NSpeechsamples,varargin)
 %
 %   ---------
 %
-%   Please cite Jørgensen and Dau (2011) if you use
-%   this model.
+%   Please cite Joergensen and Dau (2011) if you use this model.
 %
-%   See also: joergensen2011, plotjoergensen2011, exp_joergensen2011
+%   See also: joergensen2011, plot_joergensen2011, exp_joergensen2011
 %
 %   References: joergensen2011predicting
 
-definput.import={'amtredofile'};
-definput.flags.type={'fig5','fig6'};
+definput.import={'amtcache'};
+definput.flags.type={'missingflag','fig5','fig6'};
 definput.flags.plot={'plot','noplot'};
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
-save_format='-v6';
+if flags.do_missingflag
+    flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+        sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+    error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end
+
+NSpeechsamples = 10; % specify the number of speech samples to be used fro the simulations. The simulation takes longer the more samples are used. A minimum of 50 should be used for final validation.  
+
 %% ------ FIG 5 -----------------------------------------------------------
 if flags.do_fig5;
 
-          
+  dSRT = amtcache('get', ['fig5_' num2str(NSpeechsamples) 'sntcs'], flags.cachemode);
 
-  s = [mfilename('fullpath'),'_fig5_' num2str(NSpeechsamples)  'sntcs.mat'];
-
-  if amtredofile(s,flags.redomode)
-
-    [dSRT] = joergensen2011sim(NSpeechsamples,'fig5');
-
-    save(s,'dSRT',save_format);
-  else
-
-    s = load(s);
-   dSRT = s.dSRT;
+  if isempty(dSRT)
+    dSRT = joergensen2011sim(NSpeechsamples,'fig5');
+    amtcache('set',['fig5_' num2str(NSpeechsamples) 'sntcs'],dSRT);
   end;
         
   if flags.do_plot
-    plotjoergensen2011(dSRT,'fig5');
+    plot_joergensen2011(dSRT,'fig5');
   end
 end;
 
 %% ------ FIG 6 -----------------------------------------------------------
 if flags.do_fig6;
 
-          
+  dSRT = amtcache('get', ['fig6_' num2str(NSpeechsamples) 'sntcs'], flags.cachemode);
+  if isempty(dSRT)
 
-  s = [mfilename('fullpath'),'_fig6_' num2str(NSpeechsamples)  'sntcs.mat'];
-
-  if amtredofile(s,flags.redomode)
-
-    [dSRT] = joergensen2011sim(NSpeechsamples,'fig6');
-
-    save(s,'dSRT',save_format);
-  else
-
-    s = load(s);
-   dSRT = s.ans;
+    dSRT = joergensen2011sim(NSpeechsamples,'fig6');
+		amtcache('set',['fig6_' num2str(NSpeechsamples) 'sntcs'],dSRT);
   end;
         
   if flags.do_plot
-    plotjoergensen2011(dSRT,'fig6');
+    plot_joergensen2011(dSRT,'fig6');
   end
 end;

@@ -5,13 +5,27 @@ function amtmex(varargin)
 %
 %   `amtmex` compiles the C backend in order to speed up the execution of
 %   the toolbox. The C backend is linked to Matlab and Octave through mex
-%   and Octave C++ interfaces.
+%   and Octave C++ interfaces. Also other binaries are compiled
 %
 %   The action of `amtmex` is determined by one of the following flags:
 %
 %     'compile'  Compile stuff. This is the default.
+%                On Matlab, all `comp_*.c` and `comp_*.cpp` files from theare
+%                `mex` directory are compiled to system-dependent `mex*` files. 
+%                On Octave, all `comp_*.cc` files from the `oct` directory
+%                are compiled to `oct` files. Then, the remaining files from 
+%                the `mex` directory are compiled to `mex` and moved to `oct`.
+%                On both systems, other binaries are handled by calling
+%                `make` from the `bin` directory.
 %
 %     'clean'    Removes the compiled functions.
+%                On Matlab, all system-dependent `mex*` files from the `mex`
+%                directory are removed.
+%                On Octave, all `oct`, `o`, and `mex` files from the `oct`
+%                directory are removed.
+%                On both systems, other binaries are cleared by calling 
+%                `clean` and `make clean` on Windows and other systems, respectively, 
+%                in the `bin` directory. 
 
 %   AUTHOR : Peter Søndergaard.
 %   TESTING: NA
@@ -52,9 +66,18 @@ if flags.do_clean
     deletefiles([bp,'mex'],['*.',mexext]);
   end;
 
+  amtdisp('========= Cleaning binary interfaces ==========');
+  cd([bp,'bin']); 
+  if ispc, 
+    [~, output]=system('clean'); 
+  else
+    [~, output]=system('make clean');
+  end
+  amtdisp(output);
+  
   if ~isoctave
     recycle(oldstate);
-  end;  
+  end;
   
 end;
 
@@ -64,19 +87,19 @@ if flags.do_compile
 
   s=sprintf('========= Compiling %s interfaces ==========', extname);
   amtdisp(s);
+      % Get the list of files.
   if isoctave
     ext='oct';
     L=dir([bp,filesep,'oct',filesep,'*.cc']);
   else
     ext=mexext;
-    % Get the list of files.
     L=dir([bp,filesep,'mex',filesep,'comp_*.c']);
     L=[L; dir([bp,filesep,'mex',filesep,'comp_*.cpp'])];
   end;
-    filenames = arrayfun(@(lEl) lEl.name,L,'UniformOutput',0);
+  filenames = arrayfun(@(lEl) lEl.name,L,'UniformOutput',0);
   
   if compile_amt(bp,ext,filenames)>1;                
-    s=sprintf('ERROR: The %s interfaces was not built.', extname);
+    s=sprintf('Error: The %s interfaces was not built.', extname);
     amtdisp(s);
   else
     amtdisp('Done.');
@@ -94,20 +117,26 @@ if flags.do_compile
     if ~isempty(mexdiff)
         amtdisp('========= Compiling MEX interfaces ==========')
         if compile_amt(bp,'mex',mexdiff)>1;                
-            s=sprintf('ERROR: The %s interfaces was not built.', extname);
+            s=sprintf('Error: The %s interfaces was not built.', extname);
             amtdisp(s);
         else
             if movefile([bp,filesep,'mex',filesep,'*.mex'],...
                         [bp,filesep,'oct'],'f');
                amtdisp('Done.');
             else
-               error(['ERROR: Compilation sucessful, but MEX files were not '...
+               error(['Error: Compilation sucessful, but MEX files were not '...
                'moved from mex to oct directory. Check your write permissions.\n']); 
             end
         end;
     end
  end;
 
+  amtdisp('========= Compiling binary interfaces ==========');
+  cd([bp,'bin']); 
+  [~, output]=system('make');  
+  amtdisp(output);
+  amtdisp('Done.');
+ 
 % Jump back to the original directory.
 cd(curdir);
 end

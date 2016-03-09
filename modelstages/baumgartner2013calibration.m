@@ -58,7 +58,7 @@ for ll = 1:length(s)
         s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
         'u',u,'lat',kv.latseg(ii),'polsamp',polang);
 
-    [ qe(ii),pe(ii) ] = pmv2ppp( ...
+    [ qe(ii),pe(ii) ] = baumgartner2013pmv2ppp( ...
         s(ll).p{ii} , polang , respangs , s(ll).target{ii});
 
     qeM(ll) = qeM(ll) + qe(ii)*s(ll).Ntargets{ii}/sum([s(ll).Ntargets{:}]);
@@ -71,7 +71,7 @@ for ll = 1:length(s)
 
 end
 
-[qe_chance,pe_chance] = pmv2ppp(ones(49,44));
+[qe_chance,pe_chance] = baumgartner2013pmv2ppp(ones(49,44));
 distmetric =  (dQE/qe_chance).^2 + (dPE/pe_chance).^2; % Joint distance metric of QE and PE (standardized scatter)
 
 end

@@ -17,12 +17,9 @@ function [waveVamp, waveVlat] = exp_roenne2012(varargin)
 %                Note that this creates lots of extra figures (3 for each
 %                simulated data point)
 %
-%     'auto '    Redo the experiment if a cached dataset does not exist. This is the default.
+%     'redo'     Recalculate the experiment results.
 %
-%     'refresh'  Always recalculate the experiment.
-%
-%     'cached'   Always use the cached version. This throws an error if the
-%                file does not exist.
+%     'cached'   Use cached results. Default.
 %
 %     'fig5'     Plot Fig. 5 (Rønne et al., 2012). Latency of simulated ABR
 %                wave V's compared to Neely et al. (1988) and Harte et al.
@@ -56,41 +53,35 @@ function [waveVamp, waveVlat] = exp_roenne2012(varargin)
 %   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
 %   this model.
 %
-definput.import={'amtredofile'};
-definput.flags.type={'fig5','fig6','fig7'};
+definput.import={'amtcache'};
+definput.flags.type={'missingflag','fig5','fig6','fig7'};
 definput.flags.plot={'plot','noplot'};
 
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
-save_format='-v6';
+if flags.do_missingflag
+		flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}), ...
+				sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+		error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end;
+
 
 %% ------ FIG 5 -----------------------------------------------------------
 if flags.do_fig5
   
-  s = [mfilename('fullpath'),'_fig5.mat'];
-
   waveVamp = 0;
 
   stim_level = 40:10:100; % Default stimulus levels
-  
-  if amtredofile(s,flags.redomode);
 
+  [waveVlat, click_latency] = amtcache('get','fig5',flags.cachemode);  
+  if isempty(waveVlat);
     [click_amplitude, click_latency]    = roenne2012click(stim_level);     
-
-    waveVlat = roenne2012tonebursts(stim_level);
-    
-    save(s,'waveVlat','click_latency',save_format);
-  
-  else
-    
-    s = load(s);
-    waveVlat      = s.waveVlat;
-    click_latency = s.click_latency;
-
+    waveVlat = roenne2012tonebursts(stim_level);    
+    amtcache('set','fig5',waveVlat,click_latency);
   end;
   
   if flags.do_plot;
-    plotroenne2012tonebursts(waveVlat,click_latency);
+    plot_roenne2012tonebursts(waveVlat,click_latency);
   end  ;  
 
 end;
@@ -103,22 +94,14 @@ if flags.do_fig6;
   % Default chirp numbers. 1 = click, 2 to 6 = chirp 1 to 5.
   chirp_number  = 1:6;              
 
-  s = [mfilename('fullpath'),'_fig6.mat'];
-
-  if amtredofile(s,flags.redomode)
-
+  [waveVamp, waveVlat] = amtcache('get','fig6',flags.cachemode);
+  if isempty(waveVamp)
     [waveVamp, waveVlat] = roenne2012chirp(stim_level, chirp_number);
-
-    save(s,'waveVamp','waveVlat',save_format);
-  else
-
-    s = load(s);
-    waveVamp = s.waveVamp;
-    waveVlat = s.waveVlat;
+    amtcache('set','fig6',waveVamp,waveVlat);
   end;
         
   if flags.do_plot
-    plotroenne2012chirp(waveVamp, waveVlat,'amponly');
+    plot_roenne2012chirp(waveVamp, waveVlat,'amponly');
   end
 end;
 
@@ -130,22 +113,14 @@ if flags.do_fig7;
   % Default chirp numbers. 1 = click, 2 to 6 = chirp 1 to 5.
   chirp_number  = 1:6;              
 
-  s = [mfilename('fullpath'),'_fig7.mat'];
-
-  if amtredofile(s,flags.redomode)
-
+  [waveVamp, waveVlat] = amtcache('get','fig7',flags.cachemode);
+  if isempty(waveVamp)
     [waveVamp, waveVlat] = roenne2012chirp(stim_level, chirp_number);
-
-    save(s,'waveVamp','waveVlat',save_format);
-  else
-
-    s = load(s);
-    waveVamp = s.waveVamp;
-    waveVlat = s.waveVlat;
+    amtcache('set','fig7',waveVamp,waveVlat);
   end;
         
   if flags.do_plot
-    plotroenne2012chirp(waveVamp, waveVlat,'latonly');
+    plot_roenne2012chirp(waveVamp, waveVlat,'latonly');
   end
 end;
 

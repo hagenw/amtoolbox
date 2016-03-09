@@ -1,4 +1,4 @@
-function [activityMap colorGains colorMtrx levels] = takanen2013formbinauralactivitymap(thetaL,thetaR,eL,eR,fs,fc,printFigs,printMap)
+function [activityMap, colorGains, colorMtrx, levels] = takanen2013formbinauralactivitymap(thetaL,thetaR,eL,eR,fs,fc,printFigs,printMap)
 %TAKANEN2013FORMBINAURALACTIVITYMAP Steer the "what" cues on a topographic map using the "where" cues                 
 %   Usage: [activityMap colorGains colorMtrx levels] = takanen2013formbinauralactivitymap(thetaL,thetaR,eL,eR,fs,fc,printFigs);
 %
@@ -95,9 +95,9 @@ for bandInd =1:(length(ranges)-1)
    %if desired, the operations involved in *contralateralcomparison*
    %procedure are illustrated on one frequency area
    if bandInd==2
-       [mapTemp gainTemp] = takanen2013contracomparison(thetaL(:,temp==1),thetaR(:,temp==1),levels,eL(:,temp==1),eR(:,temp==1),fs,printFigs);
+       [mapTemp, gainTemp] = takanen2013contracomparison(thetaL(:,temp==1),thetaR(:,temp==1),levels,eL(:,temp==1),eR(:,temp==1),fs,printFigs);
    else
-       [mapTemp gainTemp] = takanen2013contracomparison(thetaL(:,temp==1),thetaR(:,temp==1),levels,eL(:,temp==1),eR(:,temp==1),fs,0);
+       [mapTemp, gainTemp] = takanen2013contracomparison(thetaL(:,temp==1),thetaR(:,temp==1),levels,eL(:,temp==1),eR(:,temp==1),fs,0);
    end
    activityMap(:,bandInd:length(ranges)-1:nXBins) = mapTemp*bandInd;
    colorGains(:,bandInd:length(ranges)-1:nXBins) = gainTemp;
@@ -108,14 +108,14 @@ clear thetaL thetaR eL eR gainTemp mapTemp
 colorGains(colorGains>1) =1;
 %a 3-D matrix is created to store the rgb-values of the figure for
 %each time and activation instant
-outputMtrx = single(zeros(dims(1),nXBins,3));
-for colorInd=1:size(colorMtrx,1)
-    temp = find((activityMap==(colorInd-1))==1);
-    outputMtrx(temp) = colorGains(temp)*colorMtrx(colorInd,1);
-    outputMtrx(temp+dims(1)*nXBins) = colorGains(temp)*colorMtrx(colorInd,2);
-    outputMtrx(temp+2*dims(1)*nXBins) = colorGains(temp)*colorMtrx(colorInd,3);
-end
 if(printMap==1)
+    outputMtrx = single(zeros(dims(1),nXBins,3));
+    for colorInd=1:size(colorMtrx,1)
+        temp = find((activityMap==(colorInd-1))==1);
+        outputMtrx(temp) = colorGains(temp)*colorMtrx(colorInd,1);
+        outputMtrx(temp+dims(1)*nXBins) = colorGains(temp)*colorMtrx(colorInd,2);
+        outputMtrx(temp+2*dims(1)*nXBins) = colorGains(temp)*colorMtrx(colorInd,3);
+    end
     figure(99);
     imagesc(levels./90,(dims(1)-1:-20:0)/fs,outputMtrx(1:20:end,:,:));
     set(gca,'Xtick', -.95:0.38:.95);

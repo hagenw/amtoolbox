@@ -20,10 +20,9 @@ function output = exp_lindemann1986(varargin)
 %     'auto'     Re-calculate the file if it does not exist. Return 1 if the
 %                file exist, otherwise 0. This is the default
 %
-%     'refresh'  Always recalculate the file.
+%     'redo'     Always recalculate the results.
 %
-%     'cached'   Always use the cached version. Throws an error if the
-%                file does not exist.
+%     'cached'   Always use the cached version. Default.
 %
 %     'fig6'  Reproduce Fig.6 from Lindemann (1986).  The cross-correlation is
 %             calculated for different ITDs and different inhibition factors
@@ -204,7 +203,7 @@ function output = exp_lindemann1986(varargin)
 
 %   AUTHOR: Hagen Wierstorf
 
-definput.import={'amtredofile'};
+definput.import={'amtcache'};
 definput.flags.type={'missingflag','fig6','fig7','fig8','fig10','fig11',...
                     'fig12','fig13','fig14a','fig14b','fig15',...
                     'fig16','fig17','fig18'};
@@ -220,12 +219,8 @@ if flags.do_missingflag
   error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
 
-save_format='-v6';
-
 %% ------ FIG 6 -----------------------------------------------------------
 if flags.do_fig6
-
-  s = [mfilename('fullpath'),'_fig6.mat'];
     
   % Sampling rate
   fs = 44100;
@@ -252,8 +247,9 @@ if flags.do_fig6
   ndl = round(fs/1000)+1;   % length of the delay line (see lindemann1986bincorr.m)
   itd = linspace(0,1,nitds);
   
-  if amtredofile(s,flags.redomode)
-
+  output=amtcache('get','fig6',flags.cachemode);
+  
+  if isempty(output)
     output = zeros(length(c_s),nitds,ndl);
     for ii = 1:nitds; 
         % Generate ITD shifted sinusoid
@@ -272,10 +268,7 @@ if flags.do_fig6
         end
     end
 
-    save(s,'output',save_format);
-  else
-    s = load(s);
-    output = s.output;
+    amtcache('set','fig6',output);
   end;
     
   if flags.do_plot
@@ -302,8 +295,6 @@ end;
 %% ------ FIG 7 -----------------------------------------------------------
 if flags.do_fig7
     
-    s = [mfilename('fullpath'),'_fig7.mat'];
-  
     % Sampling rate
     fs = 44100;
     % Frequency of the sinusoid
@@ -328,7 +319,8 @@ if flags.do_fig7
     nitds = 21; % number of used ITDs
     itd = linspace(0,1,nitds);
     
-    if amtredofile(s,flags.redomode)
+    output=amtcache('get','fig7',flags.cachemode);
+    if isempty(output)
       
       output = zeros(length(c_s),nitds);
       for ii = 1:nitds 
@@ -349,11 +341,7 @@ if flags.do_fig7
           output(jj,ii) = lindemann1986centroid(cc);
         end
       end
-
-      save(s,'output',save_format);
-    else
-      s = load(s);
-      output = s.output;
+      amtcache('set','fig7',output);
     end;
     
     if flags.do_plot
@@ -374,8 +362,6 @@ end;
 
 %% ------ FIG 8 -----------------------------------------------------------
 if flags.do_fig8
-  
-  s = [mfilename('fullpath'),'_fig8.mat'];
   
   % Sampling rate
   fs = 44100;
@@ -402,7 +388,8 @@ if flags.do_fig8
   ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
   ild = linspace(0,25,nilds);
   
-  if amtredofile(s,flags.redomode)
+  output=amtcache('get','fig8',flags.cachemode);
+  if isempty(output)
     
     output = zeros(2,nilds,ndl);
     for ii = 1:nilds 
@@ -422,10 +409,7 @@ if flags.do_fig8
       end
     end
     
-    save(s,'output',save_format);
-  else
-    s = load(s);
-    output = s.output;
+    amtcache('set','fig8',output);
   end;
   
   if flags.do_plot
@@ -452,8 +436,6 @@ end;
 %% ------ FIG 10 ----------------------------------------------------------
 if flags.do_fig10
 
-  s = [mfilename('fullpath'),'_fig10.mat'];
-
   % Sampling rate
   fs = 44100;
   % Frequency of the sinusoid
@@ -479,7 +461,8 @@ if flags.do_fig10
   ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
   ild = linspace(0,25,nilds);
   
-  if amtredofile(s,flags.redomode)
+  output=amtcache('get','fig10',flags.cachemode);
+  if isempty(output)
 
     output = zeros(length(c_s),nilds,ndl);
     for ii = 1:nilds 
@@ -499,10 +482,7 @@ if flags.do_fig10
       end
     end
     
-    save(s,'output',save_format);
-  else
-    s = load(s);
-    output = s.output;
+    amtcache('set','fig10',output);
   end;
   
   
@@ -530,8 +510,6 @@ end;
 %% ------ FIG 11 ----------------------------------------------------------
 if flags.do_fig11
 
-  s = [mfilename('fullpath'),'_fig11.mat'];
-
     % Sampling rate
     fs = 44100;
     % Frequency of the sinusoid
@@ -555,9 +533,9 @@ if flags.do_fig11
     % Caelculate crosscorrelations for 26 ILD points between 0~dB and 25~dB
     nilds = 26; % number of used ILDs
     ild = linspace(0,25,nilds);
-    
-      
-    if amtredofile(s,flags.redomode)
+          
+    output=amtcache('get','fig11',flags.cachemode);
+    if isempty(output)
       
       output = zeros(length(c_s),nilds);
       for ii = 1:nilds 
@@ -578,10 +556,7 @@ if flags.do_fig11
         end
       end
       
-      save(s,'output',save_format);
-    else
-      s = load(s);
-      output = s.output;
+      amtcache('set','fig11',output);
     end;
 
 
@@ -610,8 +585,6 @@ end;
 %% ------ FIG 12 ----------------------------------------------------------
 if flags.do_fig12
 
-    s = [mfilename('fullpath'),'_fig12.mat'];
-
     % Sampling rate
     fs = 44100;
     % Frequency of the sinusoid
@@ -638,7 +611,8 @@ if flags.do_fig12
     ild = linspace(0,10,nilds);
     itd = linspace(-1,0,nitds);
 
-    if amtredofile(s,flags.redomode)
+    output=amtcache('get','fig12',flags.cachemode);
+    if isempty(output)
 
     
       % Calculate the centroids for ILD+ITD stimuli
@@ -670,10 +644,7 @@ if flags.do_fig12
         output(ii) = ild(idx);
       end
       
-      save(s,'output',save_format);
-    else
-      s = load(s);
-      output = s.output;
+      amtcache('set','fig12',output);
     end;
 
     if flags.do_plot
@@ -696,8 +667,6 @@ end;
 
 %% ------ FIG 13 ----------------------------------------------------------
 if flags.do_fig13
-
-  s = [mfilename('fullpath'),'_fig13.mat'];
 
     % Sampling rate
     fs = 44100;
@@ -729,7 +698,8 @@ if flags.do_fig13
     itd_t = linspace(-1,1,nitds_t);
     ild_t = [-3,0,3,9,15,25];
 
-    if amtredofile(s,flags.redomode)
+    output=amtcache('get','fig13',flags.cachemode);
+    if isempty(output)
       
       % Calculate the centroids for the ILD only stimuli
       cen_p = zeros(1,nilds_p);
@@ -772,10 +742,7 @@ if flags.do_fig13
         end
       end
       
-      save(s,'output',save_format);
-    else
-      s = load(s);
-      output = s.output;
+      amtcache('set','fig13',output);
     end;
     
     if flags.do_plot
@@ -812,8 +779,6 @@ end;
 %% ------ FIG 14a ---------------------------------------------------------
 if flags.do_fig14a
 
-  s = [mfilename('fullpath'),'_fig14a.mat'];
-
     % Sampling rate
     fs = 44100;
     % Frequency of the sinusoid
@@ -840,7 +805,8 @@ if flags.do_fig14a
     ild = linspace(-3,3,nilds);
     itd = 2000/f;
     
-    if amtredofile(s,flags.redomode)
+    output=amtcache('get','fig14a',flags.cachemode);
+    if isempty(output)
      
       output = zeros(length(c_s),nilds);
       for ii = 1:nilds 
@@ -864,10 +830,7 @@ if flags.do_fig14a
         end
       end
       
-      save(s,'output',save_format);
-    else
-      s = load(s);
-      output = s.output;
+      amtcache('set','fig14a',output);
     end;
     
     if flags.do_plot
@@ -888,8 +851,6 @@ end;
 
 %% ------ FIG 14b ---------------------------------------------------------
 if flags.do_fig14b
-
-    s = [mfilename('fullpath'),'_fig14b.mat'];
 
     % Sampling rate
     fs = 44100;
@@ -917,7 +878,8 @@ if flags.do_fig14b
     itd = linspace(0,1,nitds);
     ild_std = [1,2,3,4,5];
     
-    if amtredofile(s,flags.redomode)
+    output=amtcache('get','fig14b',flags.cachemode);
+    if isempty(output)
 
       amtdisp('NOTE: this test function will need a lot of time!','progress');
 
@@ -954,10 +916,7 @@ if flags.do_fig14b
         end
       end
       
-      save(s,'output',save_format);
-    else
-      s = load(s);
-      output = s.output;
+      amtcache('set','fig14b',output);
     end;
 
     if flags.do_plot
@@ -977,8 +936,6 @@ end;
 
 %% ------ FIG 15 ----------------------------------------------------------
 if flags.do_fig15
-
-  s = [mfilename('fullpath'),'_fig15.mat'];
 
     % Sampling rate
     fs = 44100;
@@ -1006,9 +963,9 @@ if flags.do_fig15
     ild = linspace(0,25,nilds);
     itd = -0.5;
     
+    output=amtcache('get','fig15',flags.cachemode);
+    if isempty(output)
         
-    if amtredofile(s,flags.redomode)
-
       output = zeros(length(c_s),nilds,ndl);
       for ii = 1:nilds 
         % Generate sinusoid with given ILD
@@ -1027,10 +984,7 @@ if flags.do_fig15
         end
       end
 
-      save(s,'output',save_format);
-    else
-      s = load(s);
-      output = s.output;
+      amtcache('set','fig15',output);
     end;
 
     if flags.do_plot
@@ -1087,7 +1041,8 @@ if flags.do_fig16
     ild = linspace(0,10,nilds);
     itd = linspace(-1,0,nitds);
 
-    if amtredofile(s,flags.redomode)
+    output=amtcache('get','fig16',flags.cachemode);
+    if isempty(output)
       
       % Calculate the centroids for ILD+ITD stimuli
       cc = zeros(nitds,nilds,ndl);
@@ -1116,10 +1071,7 @@ if flags.do_fig16
         output(ii) = ild(idx);
       end
 
-      save(s,'output',save_format);
-    else
-      s = load(s);
-      output = s.output;
+      amtcache('set','fig16',output);
     end;
     
       
@@ -1142,8 +1094,6 @@ end;
 if flags.do_fig17
 
   
-  s = [mfilename('fullpath'),'_fig17.mat'];
-
     % Sampling rate
     fs = 44100;
     % Frequency of the sinusoid
@@ -1172,7 +1122,8 @@ if flags.do_fig17
     ild_t = linspace(-9,9,nilds_t);
     itd_t = [0,0.09,0.18,0.27];
 
-    if amtredofile(s,flags.redomode)
+    output=amtcache('get','fig17',flags.cachemode);
+    if isempty(output)
       
       % Calculate the centroids for the ITD only stimuli
       cen_p = zeros(1,nitds_p);
@@ -1223,10 +1174,7 @@ if flags.do_fig17
         end
       end
       
-      save(s,'output',save_format);
-    else
-      s = load(s);
-      output = s.output;
+      amtcache('set','fig17',output);
     end;
     
       
@@ -1274,9 +1222,6 @@ end;
 if flags.do_fig18
 
   
-  s = [mfilename('fullpath'),'_fig18.mat'];
-
-  
     % Sampling rate
     fs = 44100;
     % Frequency of the sinusoid
@@ -1301,7 +1246,8 @@ if flags.do_fig18
     ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
     iac = linspace(0,1,niacs);
     
-    if amtredofile(s,flags.redomode)
+    output=amtcache('get','fig18',flags.cachemode);
+    if isempty(output)
 
       output = zeros(niacs,ndl);
       for ii = 1:niacs; 
@@ -1315,11 +1261,7 @@ if flags.do_fig18
         % calculation starts with channel 5, so we have to subtract 4.
         output(ii,:) =  tmp(:,fc-4);
       end
-      
-      save(s,'output',save_format);
-    else
-      s = load(s);
-      output = s.output;
+      amtcache('set','fig18',output);
     end;
 
     if flags.do_plot

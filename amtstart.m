@@ -1,51 +1,116 @@
 function amtstart(varargin)
 %AMTSTART   Start the Auditory Modeling Toolbox
 %   Usage:  amtstart;
+%           amtstart(flags);
 %
 %   `amtstart` starts the Auditory Modeling Toolbox. This command must be
-%   run before using any of the function in the toolbox.
+%   run before using any of the function in the AMT.
 %
-%   The AMT depends on the Linear Time Frequency Analysis Toolbox (LTFAT). 
-%   You must first download LTFAT from
-%   http://ltfat.sourceforge.net/ and unpack the downloaded file. 
-%   In the AMT, there is a pre-prepared directory `thirdparty/ltfat`
-%   where the LTFAT can be stored. Alternatively, set the path to your
-%   LTFAT installation to the search path of Matlab/Octave.
+%   Requirements
+%   ------------
 %
-%   In order to run all the AMT functionality, you will need to:
+%   The AMT depends on the Linear Time Frequency Analysis Toolbox (*LTFAT*). 
+%   Download LTFAT from <http://ltfat.sourceforge.net/> and unpack the downloaded file. 
+%   In the AMT, there is a prepared directory `thirdparty/ltfat`
+%   where the LTFAT can be stored and automatically recognized by the AMT. 
+%   Alternatively, save the LTFAT anywhere and add the main LTFAT path to the search path.
+%
+%   In order to run all the AMT functionality:
 %   
-%   1) install SOFA API from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. `thirdparty/SOFA`)
-%   2) install SFS Toolbox from https://github.com/sfstoolbox/sfs
-%   4) install Python >2.6 with `numpy` and `scipi` packages. On Linux, use `sudo apt-get install python-scipy python-numpy`
-%   3) run `amtmex` and compile successfully
-%   5) run `make` (Linux) or `make.bat` (Windows) in `src/verhulst`
-%   6) have the Optimization Toolbox for Matlab installed
-% 
-%   Some of the AMT functions require a large processing time. Depending on the machine and the model, it might take even days. Thus, some AMT functions provide caching of calculated results. If you don't want to wait and just take a look at the results: download the cached data from https://sourceforge.net/projects/amtoolbox/files/, unzip to the root AMT directory, and run the particular AMT function.
+%   1) install the SOFA API version >= 1.0 from <http://sourceforge.net/projects/sofacoustics>.
+%      In the AMT, there is a prepared directory `thirdparty/SOFA`. Alternatively, save 
+%      the SOFA API anywhere and add the path to the search path. 
 %
-%   Most of the models require auxiliary data. The AMT will download these data on-demand. 
-%   Some of the models require HRTFs. The AMT will download alse these HRTFs on-demand.
-%   If you want to run the AMT completely offline, download the auxiliary data and HRTFs ahead. 
+%   2) install SFS Toolbox version >= 1.0 from <https://github.com/sfstoolbox/sfs>. 
+%      In the AMT, there is a prepared directory `thirdparty/sfs`. Alternatively, save 
+%      the SOFA API anywhere and add the path to the search path. 
+%
+%   3) install Python (version >= 2.6), and the packages `numpy` and `scipi`. 
+%      On Linux, `sudo apt-get install python-scipy python-numpy` can be applied.
+%      On Windows, intall python from <https://www.python.org/>, add python.exe to path,
+%      and install the packages separately.
+%
+%   4) have the Optimization Toolbox for Matlab installed.
+%
+%
+%   Installation
+%   ------------
+% 
+%   Run `amtmex` to compile some models. This will compile AMT-related binaries on your
+%   system (see |amtmex|). You will need a compiler working in your 
+%   Matlab/Octave environment (see `help mex`) and the GCC installed on your OS.
+%
+%
+%   Supplementary files
+%   --------------------
+% 
+%   Most of the models require *auxiliary data*. The AMT will download these data on-demand. 
 %   The download URL for the auxiliary data is given by `amtauxdataurl`. 
 %   The target directory for the auxiliary data is given by `amtauxdatapath`. 
+%   If you want to run the AMT offline, download the auxiliary data first. 
+%
+%   Some of the models require *HRTFs*. The AMT will download the HRTFs on-demand.
 %   The download URL for the HRTFs is given by `SOFAdbURL`.
 %   The target directory for the HRTFs is given by `SOFAdbPath`. 
+%   If you want to run the AMT offline, download the HRTFs first. 
 %
-%   `amtstart('documentation')` starts the AMT in the documentation compiling
-%   mode. The progress output will be suppressed.
+%   Global flags:
+%   -------------
 %
-%   `amtstart('silent')` starts the AMT in the silent mode where all output but figures will be suppressed.
+%   AMT uses *cache* to store precalculated results because some of the AMT functions 
+%   require large processing time. Depending on the machine and the model, it might take 
+%   even days. The global cache mode is controlled on start-up of the AMT. To change the 
+%   global cache mode choose a flags:
 %
-%   `amtstart('verbose')` starts the AMT in the verbose mode and all output will be dispplayed. This is the default mode. 
+%     'normal'      Use cached package as far as possible. This is default. 
+%                   This is kind of demonstration mode and very convenient 
+%                   for fast access of results like plotting figures.
+%                   This option, however, may by-pass the actual processing and thus 
+%                   does not always test the actual functionality of a model. 
+%                   If the cached package locally not available, downloaded from the internet. 
+%                   If remotely not available, enforce recalculation.
 % 
-%   See also:  amtmex amtflags amtauxdataurl amtauxdatapath
+%     'cached'      Enforce to use cached package. If the cached package is 
+%                   locally not available, it will be downloaded from the internet. 
+%                   If it is remotely not available, an error will be thrown.
+% 
+%     'redo'        Enforce the recalculation of the package. This option
+%                   actually tests the calculations.
+% 
+%     'localonly'   Package will be recalculated when locally
+%                   not available. Do not connect to the internet. 
+% 
+%   Many AMT functions support the cache mode as input flag in order to 
+%   overwrite the global cache mode. See |amtcache| for more details.
+%
+%
+%   The *output of the messages* to the command line can be controlled by one
+%   of the following flags:
+%
+%     'verbose'        All output will be displayed. This is default. 
+% 
+%     'documentation'  starts the AMT in the documentation compiling
+%                      mode. The output of calculation progress will be suppressed.
+% 
+%     'silent'         All output will be suppressed.
+% 
+%
+%   See also:  amtmex amtflags amtload amtcache
 %
   
-%   AUTHOR : Peter L. Soendergaard, Piotr Majdak 
+%   AUTHOR : Piotr Majdak, Peter L. Soendergaard
 
 
 %% Start AMT
 bp=amtbasepath;
+
+% Search for LTAFT package
+if ~exist('ltfatstart','file')
+  ltfatpath=fullfile(bp,'thirdparty','ltfat');
+  if exist(ltfatpath,'dir')
+    addpath(ltfatpath);
+  end
+end
 
 % Load the version number
 [FID, MSG] = fopen ([bp,'amtoolbox_version'],'r');
@@ -56,47 +121,32 @@ else
     fclose(FID);
 end
 
-% Check if Octave was called using 'silent'
-printbanner=1;
-%if isoctave
-%  args=argv;
-%  for ii=1:numel(args)
-%    s=lower(args{ii});
-%    if strcmp(s,'--silent') || strcmp(s,'-q')
-%      printbanner=0;
-%    end;
-%  end;
-%end;
+% Check if 'silent' present in the flags
+silent=0;
+if exist('OCTAVE_VERSION','builtin'), args=argv; else args=varargin; end
+ for ii=1:numel(args)
+   s=lower(args{ii});
+   if strcmp(s,'silent') || strcmp(s,'-q')
+     silent=1;
+   end;
+ end;
 
-if printbanner
-  amtdisp(['AMT version ',amt_version,'. (C) Peter L. Soendergaard and Piotr Majdak.'])
+
+if ~silent
+  disp('  ');
+  disp(['AMT version ',amt_version,'. (C) Piotr Majdak and Peter L. Soendergaard.']);
+  disp('  ');
+  disp('Starting toolboxes...');
 end;
-
 
 %% LTFAT package
 
-% Search for LTAFT package
-basepath=which('amtstart');
-basepath=basepath(1:end-11);
-if ~exist('ltfatstart','file')
-  ltfatpath=fullfile(basepath,'thirdparty','ltfat');
-  if exist(ltfatpath,'dir')
-    addpath(ltfatpath);
-  end
-end
-
 % Start LTFAT
-amtdisp('*** Starting LTFAT ***');
+% if ~silent, disp('*** Starting LTFAT ***'); end
 if exist('ltfatstart','file')
-  ltfatstart;
-    % set defaults again because ltfatstart is clearing all persistent vars
-  if isempty(varargin),
-  %   amtflags('verbose','download');
-    flags=amtflags('verbose');
-  else
-    flags=amtflags(varargin);
-  end
-  
+  curdir=pwd; % save the current directory
+  if silent, ltfatstart(0); else ltfatstart; end;
+  cd(curdir); % go back to the saved directory because LTFAT 2.1.1 is messing up the directory in Octave
 else
   error(['LTFAT package could not be found. Unable to continue.' 10 ...
         'Download LTFAT from http://ltfat.sourceforge.net ' 10 ...
@@ -105,25 +155,14 @@ end
 
 % Check for the correct version. 
 s=ltfathelp('version'); 
-s_r='1.0.9'; % set the required version
+s_r='2.0.0'; % set the required version
 v=sscanf(s,'%d.%d.%d'); v(4)=0;
 v_r=sscanf(s_r,'%d.%d.%d');
 if ~(v(1)>v_r(1) || (v(1)>=v_r(1) && v(2)>v_r(2)) || (v(1)>=v_r(1) && v(2)>=v_r(2) && v(3)>=v_r(3)) ),
     error(['You need LTFAT >= ' s_r ' to work with AMT. ' ...
       'Please update your package from http://ltfat.sourceforge.net ']);
 end
-
-
-%% define default start-up behaviour
-if isempty(varargin),
-%   amtflags('verbose','download');
-  flags=amtflags('verbose');
-else
-  flags=amtflags(varargin);
-end
-
-
-     
+    
 %% SOFA package
 
 % Search for SOFA package
@@ -137,21 +176,19 @@ if ~exist('SOFAstart','file')
 end
 
 % Start SOFA
-amtdisp('*** Starting SOFA ***');
 if exist('SOFAstart','file')
   SOFAdbPath(fullfile(basepath,'hrtf'));
-  SOFAdbURL('http://www.sofacoustics.org/data/amt');
-  if flags.do_silent
-    SOFAstart('silent');
-  else
-    SOFAstart;
-  end
-	warning('off','SOFA:upgrade');	% disable warning when loading older SOFA files
+  SOFAdbURL('http://www.sofacoustics.org/data'); % This is a default path and will be overwritten later
+  if silent, SOFAstart('silent'); else SOFAstart('short'); end
+	warning('off','SOFA:upgrade');	% disable warning on upgrading older SOFA files
+	warning('off','SOFA:load'); % disable warnings on loading SOFA files
 else
-  amtdisp(['SOFA package could not be found. Continue without SOFA support.']);
-  amtdisp(['For SOFA support please download the package ' ...
+  if ~silent,
+  disp('SOFA package could not be found. Continue without SOFA support.');
+  disp(['For SOFA support please download the package ' ...
         'from http://sofacoustics.sourceforge.net ' ...
         'and copy to amtoolbox/thirdparty/SOFA.']); 
+  end
 end
 
 %% SFS package
@@ -173,11 +210,11 @@ if exist(fullfile(sfspath,'SFS_general','rms.m'),'file'),
 end
 
 % Start 
-amtdisp('*** Starting SFS ***');
+% if ~silent, disp('*** Starting SFS ***'); end
 if exist('SFS_start','file')
   SFS_start;
-  s=SFS_version; s_r='1.2.0'; % set the required version
-  amtdisp(['Sound Field Synthesis Toolbox, version ' s]);
+  s=SFS_version; s_r='2.0.0'; % set the required version
+  if ~silent, disp(['Sound Field Synthesis Toolbox, version ' s]); end
   v=sscanf(s,'%d.%d.%d'); v(4)=0;
   v_r=sscanf(s_r,'%d.%d.%d');
   if ~(v(1)>v_r(1) || (v(1)>=v_r(1) && v(2)>v_r(2)) || (v(1)>=v_r(1) && v(2)>=v_r(2) && v(3)>=v_r(3)) ),
@@ -185,14 +222,14 @@ if exist('SFS_start','file')
         'Please update your package from https://github.com/sfstoolbox/sfs ']);
   end  
 	
-else
-  amtdisp(['SFS package could not be found. Continue without SFS support.']);
-  amtdisp(['For SFS support please download the package ' ...
+elseif ~silent, 
+  disp('SFS package could not be found. Continue without SFS support.');
+  disp(['For SFS support please download the package ' ...
         'from https://github.com/sfstoolbox/sfs ' ...
         'and copy to amtoolbox/thirdparty/sfs.']); 
 end
 
-%% Install modules
+%% Install AMT modules
 % A directory called DIRNAME containing a file 'DIRNAMEinit.m' is
 % considered as a module. 
 % DIRNAMEinit.m must set the variable 'status' with the following value:
@@ -235,6 +272,8 @@ for ii=1:length(d)
   end;
 end;
 
+%% define default start-up behaviour
+flags=amtflags(varargin); % amtdisp and other amt-related functions work now!
 
 %% ---------- load information into ltfathelp ------------
 
@@ -242,7 +281,31 @@ end;
 ltfatsetdefaults('amthelp','versiondata',amt_version,...
                  'modulesdata',modules);
 
-               %% Initialize aux data
-amtdisp('*** AMT Ready to go! ***'); 
-amtdisp(['Auxiliary data (local): ' amtauxdatapath]);
-amtdisp(['Auxiliary data (web): ' amtauxdataurl]);
+%% Set the correct path to remote HRTFs
+if exist('SOFAdbURL','file'),
+    SOFAdbURL(['http://www.sofacoustics.org/data/amt-' amthelp('version') '/hrtf']);
+end
+
+%% Initialize aux data, cache, and display starting information
+amtdisp('  ');
+% amtdisp('  ');
+amtdisp('AMT configuration:'); 
+amtdisp(['  Auxiliary data (local): ' amtauxdatapath]);
+amtdisp(['  Auxiliary data (web): ' amtauxdataurl]);
+if strcmp(flags.cachemode,'global'), flags.cachemode='normal'; end
+amtcache('setMode',flags.cachemode);
+switch flags.cachemode
+  case 'normal'
+    amtdisp('  Cache mode: Download precalculated results. Examples:');
+    amtdisp('              exp_model(...)        shows precalculated results');
+    amtdisp('              exp_model(...,''redo'') enforces recalculation');
+  case 'localonly'
+    amtdisp('  Cache mode: Use local cache or recalculate. Do not connect to remote cache.');
+  case 'cached'
+    amtdisp('  Cache mode: Use cache or throw error. Do not recalcalculate.');
+  case 'redo'
+    amtdisp('  Cache mode: Recalculate always (be patient!).');
+end
+amtdisp(' ');
+amtdisp('Type "help amtstart" for more details...');
+

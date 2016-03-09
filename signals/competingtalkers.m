@@ -58,9 +58,5 @@ if flags.do_missingflag
 end;
 
 
-% f=mfilename('fullpath');
-% 
-% fname=[f,'_',flags.sigtype,'.wav'];
-% s = wavread(fname);
 % fs = 16000;
 [s,fs]=amtload('competingtalkers',[flags.sigtype '.wav']);

@@ -171,3 +171,5 @@ thirdparty/SOFA/HRTFs/TU-Berlin KEMAR/readme.txt
 thirdparty/SOFA/doc/API_MO specs 0.3.pdf
 thirdparty/SOFA/doc/SOFA specs 0.5.pdf
 SOFA
+auxdata
+cache

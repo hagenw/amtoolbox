@@ -1,6 +1,6 @@
 function varargout = exp_baumgartner2014(varargin)
-%EXP_BAUMGARTNER2014 Figures from Baumgartner et al. (2014)
-%   Usage: data = exp_baumgartner2014(flag)
+%EXP_BAUMGARTNER2014 Results from Baumgartner et al. (2014)
+%   Usage: data = exp_baumgartner2014(flag) 
 %
 %   `exp_baumgartner2014(flag)` reproduces figures of the study from 
 %   Baumgartner et al. (2014).
@@ -11,24 +11,12 @@ function varargout = exp_baumgartner2014(varargin)
 %      contralateral gain of binaural weighting function
 %
 %
-%   The following flags can be specified;
-%
-%     'plot'    Plot the output of the experiment. This is the default.
-%
-%     'noplot'  Don't plot, only return data.
-%
-%     'autorefresh'  Re-calculate the file if it does not exist. Return 1 if the
-%                file exist, otherwise 0. This is the default
-%
-%     'refresh'  Always recalculate the file.
-%
-%     'cached'   Always use the cached version. Throws an error if the
-%                file does not exist.
+%   The following flags can be specified
 %
 %     'fig2'    Reproduce Fig.2:
 %               Binaural weighting function best fitting results from 
-%               morimoto2001 labeled as $[1]$ and macpherson2007 labeled as 
-%               $[2]$ in a least squared error sense.
+%               Morimoto (2001) labeled as $[1]$ and Macpherson and Sabin (2007) 
+%               labeled as $[2]$ in a least squared error sense.
 %
 %     'fig3'    Reproduce Fig.3:
 %               Prediction examples. Actual responses and response predictions 
@@ -58,7 +46,7 @@ function varargout = exp_baumgartner2014(varargin)
 %               Effect of band limitation and spectral warping. 
 %               Listeners were tested with broadband (BB), low-pass 
 %               filtered (LP), and spectrally warped (W) DTFs. 
-%               Actual: experimental results from majdak2013. 
+%               Actual: experimental results from Majdak et al. (2013). 
 %               Part.: Model predictions for the actual eight participants 
 %               based on the actually tested target positions. Pool: Model 
 %               predictions for our listener pool based on all possible 
@@ -79,7 +67,7 @@ function varargout = exp_baumgartner2014(varargin)
 %     'fig8'    Reproduce Fig.8:
 %               Effect of spectral resolution in terms of varying the number 
 %               of spectral channels of a channel vocoder. Actual experimental 
-%               results are from goupell2010numchan. Stimulation with broadband 
+%               results are from Goupell et al. (2010). Stimulation with broadband 
 %               click trains (CL) represents an unlimited number of channels. 
 %               All other conventions are as in Fig.6.
 %
@@ -87,7 +75,7 @@ function varargout = exp_baumgartner2014(varargin)
 %               Effect of non-individualized HRTFs in terms of untrained 
 %               localization with others' instead of own ears. Statistics 
 %               summaries with open symbols represent actual experimental 
-%               results replotted from Fig.\,13 of middlebrooks1999nonindividualized, 
+%               results replotted from Fig.\,13 of Middlebrooks (1999), 
 %               statistics with filled symbols represent predicted results.
 %               Horizontal lines represent 25th, 50th, and 75th percentiles, 
 %               the whiskers represent 5th and 95th percentiles, and crosses 
@@ -95,7 +83,7 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %     'fig10'   Reproduce Fig.10:
 %               Effect of spectral ripples. Actual experimental results (circles) 
-%               are from macpherson2003ripples. Predicted results (filled circles) 
+%               are from Macpherson and Middlebrooks (2003). Predicted results (filled circles) 
 %               were modeled for our listener pool (squares). Either the ripple 
 %               depth of 40\,dB (top) or the ripple density of one ripple/octave 
 %               (bottom) was kept constant. Ordinates show the listener-specific 
@@ -108,7 +96,7 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %     'fig11'   Reproduce Fig.11:
 %               Effect of high-frequency attenuation in speech localization. 
-%               Actual experimental results are from best2005highfrequency. 
+%               Actual experimental results are from Best et al. (2005). 
 %               Absolute polar angle errors (top) and QE (bottom) were averaged 
 %               across listeners. Circles and squares show actual and predicted 
 %               results, respectively. Diamonds with dashed lines show predictions 
@@ -148,7 +136,7 @@ function varargout = exp_baumgartner2014(varargin)
 %               stimulus bandwidth. Prediction residues between actual and 
 %               predicted PE and QE are listed for acute performance with 
 %               the broadband (BB), low-passed (LP) and warping (W) conditions 
-%               of the experiments from majdak2013spatstrat.
+%               of the experiments from Majdak et al. (2013).
 %
 %     'tab3'    Reproduce Tab.3:
 %               Performance predictions for binaural, ipsilateral, and 
@@ -161,12 +149,102 @@ function varargout = exp_baumgartner2014(varargin)
 %               actual and predicted results are shown together with predicted 
 %               average performances. 
 %
-%     'fig5_baumgartner2015aro'    Reproduce Fig.5 of baumgartner2015aro:
-%               Effect of background noise on reliability of contralateral  
-%               cues for various lateral eccentricities. Top row:
-%               Across-listener averages of performance measures for
-%               contralateral ear. Bottom row: Contralateral re ipsilateral
-%               averages of performance measures.
+%     'fig5_baumgartner2015aro'    Reproduce Fig.5 of Baumgartner et al. (2015):
+%                                  Effect of background noise on reliability of contralateral  
+%                                  cues for various lateral eccentricities. Top row:
+%                                  Across-listener averages of performance measures for
+%                                  contralateral ear. Bottom row: Contralateral re ipsilateral
+%                                  averages of performance measures.
+%
+%     'fig2_baumgartner2015jaes'   Reproduce Fig.2 of Baumgartner and Majdak (2015):
+%                                  Example showing the spectral discrepancies obtained by VBAP. 
+%                                  The targeted spectrum is the HRTF for 20 deg polar angle. 
+%                                  The spectrum obtained by VBAP is the superposition of two 
+%                                  HRTFs from directions 40 deg polar angle apart of each 
+%                                  other with the tar- geted source direction centered in between.
+%
+%     'fig4_baumgartner2015jaes'   Reproduce Fig.4 of Baumgartner and Majdak (2015):
+%                                  Response predictions to sounds created by VBAP with two 
+%                                  loudspeakers in the median plane positioned at polar 
+%                                  angles of -15 and 30 deg, respectively. Predictions for 
+%                                  two exemplary listeners and pooled across all listeners. 
+%                                  Each column of a panel shows the predicted PMV of 
+%                                  polar-angle responses to a certain sound. Note the 
+%                                  inter-individual differences and the generally small 
+%                                  probabilities at response angles not occupied by the loudspeakers.
+%
+%     'fig5_baumgartner2015jaes'   Reproduce Fig.5 of Baumgartner and Majdak (2015):
+%                                  Listener-specific increases in polar error as a function of 
+%                                  the panning angle. Increase in polar error defined as 
+%                                  the difference between the polar error obtained by the 
+%                                  VBAP source and the polar error obtained by the real 
+%                                  source at the corresponding panning angle. Same loudspeaker 
+%                                  arrangement as for Fig. 4. Note the large inter-individual 
+%                                  differences and the increase in polar error being largest 
+%                                  at panning angles centered between the loudspeakers, i.e., 
+%                                  at panning ratios around R = 0 dB.
+%
+%     'fig6_baumgartner2015jaes'   Reproduce Fig.6 of Baumgartner and Majdak (2015):
+%                                  Panning angles for the loudspeaker arrangement of Fig. 4 
+%                                  judged best for reference sources at polar angles of 
+%                                  0 or 15 deg in the median plane. Comparison between 
+%                                  experimental results from [2] and simulated results 
+%                                  based on various response strategies: PM, CM, and both 
+%                                  mixed. Dotted horizontal line: polar angle of the reference 
+%                                  source. Hor- izontal line within box: median; 
+%                                  box: inter-quartile range (IQR); 
+%                                  whisker: within quartile $\pm 1.5$ IQR; 
+%                                  star: outlier. 
+%                                  Note that the simulations predicted a bias similar to 
+%                                  the results from Pulkki (2001) for the reference source at 0 deg.
+%
+%     'tab1_baumgartner2015jaes'   Reproduce Tab.1 of Baumgartner and Majdak (2015):
+%                                  Means and standard deviations of responded panning angles for the 
+%                                  two reference sources (Ref.) together with corresponding GOFs 
+%                                  evaluated for the actual results from Pulkki (2001) and 
+%                                  predicted results based on various response strategies. 
+%                                  Note the relatively large GOFs for the simulations based on 
+%                                  mixed response strategies indicating a good correspondence 
+%                                  between actual and predicted results.
+%
+%     'fig7_baumgartner2015jaes'   Reproduce Fig.7 of Baumgartner and Majdak (2015):
+%                                  Increase in polar error (defined as in Fig. 5) as a function 
+%                                  of loudspeaker span in the median plane with panning ratio 
+%                                  R = 0 dB. Black line with gray area indicates mean 
+%                                  $\pm 1$ standard deviation across listeners. Note that the 
+%                                  increase in polar error monotonically increases with 
+%                                  loudspeaker span.
+%
+%     'fig8_baumgartner2015jaes'   Reproduce Fig.8 of Baumgartner and Majdak (2015):
+%                                  Effect of loudspeaker span in the median plane on coefficient 
+%                                  of determination, r^2, for virtual source directions 
+%                                  created by VBAP. Separate analysis for frontal, rear, 
+%                                  and overall (frontal and rear) targets. Data pooled 
+%                                  across listeners. Note the correspondence with the 
+%                                  results obtained by Bremen et al. (2010).
+%
+%     'tab3_baumgartner2015jaes'   Reproduce Tab.3 of Baumgartner and Majdak (2015):
+%                                  Predicted across-listener average of increase in polar 
+%                                  errors as referred to a reference system containing 
+%                                  loudspeakers at all considered directions. Distinction 
+%                                  between mean and maximum degradation across directions. 
+%                                  N: Number of loudspeakers. Ele.: Elevation of second layer. 
+%                                  Notice that this elevation has a larger effect on mean 
+%                                  and maximum degradation than N.
+%
+%     'fig9_baumgartner2015jaes'   Reproduce Fig.9 of Baumgartner and Majdak (2015):
+%                                  Predicted polar error as a function of the lateral and 
+%                                  polar angle of a virtual source created by VBAP in 
+%                                  various multichannel systems. Open circles indicate 
+%                                  loudspeaker directions. Reference shows polar error 
+%                                  predicted for a real source placed at the virtual 
+%                                  source directions investigated for systems A, ..., F.
+%
+%   Further, cache flags (see amtcache) and plot flags can be specified:
+%
+%     'plot'    Plot the output of the experiment. This is the default.
+%
+%     'noplot'  Don't plot, only return data.
 %
 %   Requirements: 
 %   -------------
@@ -232,15 +310,52 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %     exp_baumgartner2014('fig14');
 %
-%   To display Fig.5 of baumgartner2015contralateral use :::
+%   To display Fig.5 of Baumgartner et al. (2015) use :::
 %
 %     exp_baumgartner2014('fig5_baumgartner2015aro');
+%
+%   To display Fig.2 of Baumgartner and Majdak (2015) use :::
+%
+%     exp_baumgartner2014('fig2_baumgartner2015jaes');
+%
+%   To display Fig.4 of Baumgartner and Majdak (2015) use :::
+%
+%     exp_baumgartner2014('fig4_baumgartner2015jaes');
+%
+%   To display Fig.5 of Baumgartner and Majdak (2015) use :::
+%
+%     exp_baumgartner2014('fig5_baumgartner2015jaes');
+%
+%   To display Fig.6 of Baumgartner and Majdak (2015) use :::
+%
+%     exp_baumgartner2014('fig6_baumgartner2015jaes');
+%
+%   To display Fig.7 of Baumgartner and Majdak (2015) use :::
+%
+%     exp_baumgartner2014('fig7_baumgartner2015jaes');
+%
+%   To display Fig.8 of Baumgartner and Majdak (2015) use :::
+%
+%     exp_baumgartner2014('fig8_baumgartner2015jaes');
+%
+%   To display Fig.9 of Baumgartner and Majdak (2015) use :::
+%
+%     exp_baumgartner2014('fig9_baumgartner2015jaes');
+%
+%   To display Tab.1 of Baumgartner and Majdak (2015) use :::
+%
+%     exp_baumgartner2014('tab1_baumgartner2015jaes');
+%
+%   To display Tab.3 of Baumgartner and Majdak (2015) use :::
+%
+%     exp_baumgartner2014('tab3_baumgartner2015jaes');
 %
 %   See also: baumgartner2014 data_baumgartner2014
 %
 %   References: baumgartner2014modeling majdak2013spatstrat morimoto2001
 %   macpherson2007 goupell2010numchan middlebrooks1999nonindividualized 
-%   macpherson2003ripples baumgartner2015aro
+%   macpherson2003ripples baumgartner2015aro baumgartner2015vbap
+%   pulkki2001localization bremen2010pinna baumgartner2015vbap
 
 
 % AUTHOR: Robert Baumgartner
@@ -248,13 +363,19 @@ function varargout = exp_baumgartner2014(varargin)
 
 %% ------ Check input options --------------------------------------------
 
-definput.import={'amtredofile'};
+definput.import={'amtcache'};
 definput.keyvals.FontSize = 12;
 definput.keyvals.MarkerSize = 6;
 definput.flags.type = {'missingflag','fig2','fig3','fig4','fig5','fig6',...
                        'fig7','fig8','fig9','fig10','fig11','fig12','fig13',...
                        'fig14','tab1','tab2','tab3',...
-                       'fig5_baumgartner2015aro'};
+                       'fig5_baumgartner2015aro',...
+                       'fig2_baumgartner2015jaes','fig4_baumgartner2015jaes',...
+                       'fig5_baumgartner2015jaes','fig6_baumgartner2015jaes',...
+                       'fig7_baumgartner2015jaes','fig8_baumgartner2015jaes',...
+                       'fig9_baumgartner2015jaes','tab1_baumgartner2015jaes',...
+                       'tab3_baumgartner2015jaes',...
+                       };
 definput.flags.plot = {'plot','noplot'};
 
 
@@ -267,7 +388,6 @@ if flags.do_missingflag
   error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
 
-save_format='-v6';
 
 %% General Plot Settings
 TickLength = [0.02,0.04];
@@ -304,7 +424,7 @@ if flags.do_fig2
   binw_right = 1-binw_left;
   
   if flags.do_plot
-    fig = figure;
+    figure;
     plot(lat,binw_left)
     hold on
     plot(lat,binw_right,'r--')
@@ -335,7 +455,7 @@ if flags.do_fig3 || flags.do_fig13
   latseg = [-20,0,20]; ii = 2; % centers of lateral segments
 %   dlat =  10;         % lateral range (+-) of each segment
 
-  s = data_baumgartner2014('baseline');
+  s = data_baumgartner2014('baseline',flags.cachemode);
   
   if flags.do_fig3
     idselect = ismember({s.id},{'NH15','NH22','NH62'});
@@ -365,7 +485,7 @@ if flags.do_fig3 || flags.do_fig13
         subplot(1,3,ll)
         Nmax = min(150,s(ll).Ntargets{ii});
         idplot = round(1:s(ll).Ntargets{ii}/Nmax:s(ll).Ntargets{ii});
-        plotbaumgartner2014(s(ll).p{ii},polang,respangs,...
+        plot_baumgartner2014(s(ll).p{ii},polang,respangs,...
                   s(ll).target{ii}(idplot),s(ll).response{ii}(idplot),...
                   'MarkerSize',kv.MarkerSize,'cmax',0.05,'nocolorbar');
         title({['A: PE = ' num2str(s(ll).pe_exp_lat(ii),2) '\circ, QE = ' num2str(s(ll).qe_exp_lat(ii),2) '%'];['P: PE = ' num2str(pe(ll,ii),2) '\circ, QE = ' num2str(qe(ll,ii),2) '%']},...
@@ -390,151 +510,115 @@ end
 %% ------ FIG 4 -----------------------------------------------------------
 if flags.do_fig4
   
-  fn = [mfilename('fullpath'),'_parametrization.mat'];
+  [perr,perr_exp,qerr,qerr_exp,gamma,mrs,Ntargets] = amtcache('get','parametrization',flags.cachemode);
   
-  if amtredofile(fn,flags.redomode)
-    
-    autorefreshnotification(fn,flags)
+  if isempty(perr)
     amtdisp('Note that this procedure may last several hours!','progress')
     
-    tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_parametrization'); % temporary folder
-    mkdir(tempfn)
-    
     gamma = [1,3,3,3,4,4,4,5,5,5,6,6,6,6,6,6,6,6,6,6,6,6,7,7,7,8,8,8,9,9,9,...
-      10,10,10,12,12,12,16,16,16,30,30,30,100,100,100];
+      10,10,10,12,12,12,16,16,16,30,30,30];%,100,100,100];
     mrs = [0,17,18,19,19,20,21,19,20,21, 0,10,100,16,17,18,19,20,21,23,30, 5,...
-      19,20,21,19,20,21,19,20,21,19,20,21,19,20,21,19,20,21,19,20,21,19,20,21];
+      19,20,21,19,20,21,19,20,21,19,20,21,19,20,21,19,20,21,19,20,21];%,19,20,21];
 
+    latseg = -60:20:60; % centers of lateral segments
+    dlat =  10;  % lateral range (+-) of each segment
+        
     for g = 1:length(gamma)
+      
+      cname = ['result_baseline_g' num2str(gamma(g),'%u') '_mrs' num2str(mrs(g),'%u')];
+      [s,qe, pe] = amtcache('get',cname);
+      if isempty(s)
 
-      latseg = -60:20:60; % centers of lateral segments
-      dlat =  10;  % lateral range (+-) of each segment
+        s = data_baumgartner2014('baseline','gamma',gamma(g),'mrsmsp',mrs(g),flags.cachemode);
 
-      s = data_baumgartner2014('baseline','recalib','gamma',gamma(g),'mrsmsp',mrs(g));
+        qe_exp = zeros(length(s),length(latseg));
+        pe_exp = zeros(length(s),length(latseg));
+        for ll = 1:length(s)
 
-      qe_exp = zeros(length(s),length(latseg));
-      pe_exp = zeros(length(s),length(latseg));
-      for ll = 1:length(s)
+          s(ll).target = [];
+          s(ll).response = [];
+          s(ll).Nt = [];
+          for ii = 1:length(latseg)
 
-        s(ll).target = [];
-        s(ll).response = [];
-        s(ll).Nt = [];
-        for ii = 1:length(latseg)
+            latresp = s(ll).itemlist(:,7);
+            idlat = latresp <= latseg(ii)+dlat & latresp > latseg(ii)-dlat;
+            s(ll).mm2 = s(ll).itemlist(idlat,:);
 
-          latresp = s(ll).itemlist(:,7);
-          idlat = latresp <= latseg(ii)+dlat & latresp > latseg(ii)-dlat;
-          s(ll).mm2 = s(ll).itemlist(idlat,:);
+            s(ll).mm2(:,7) = 0; % set lateral angle to 0deg such that localizationerror works also outside +-30deg
 
-          s(ll).mm2(:,7) = 0; % set lateral angle to 0deg such that localizationerror works also outside +-30deg
+            pe_exp(ll,ii) = real(localizationerror(s(ll).mm2,'rmsPmedianlocal'));
+            qe_exp(ll,ii) = real(localizationerror(s(ll).mm2,'querrMiddlebrooks'));
 
-          pe_exp(ll,ii) = real(localizationerror(s(ll).mm2,'rmsPmedianlocal'));
-          qe_exp(ll,ii) = real(localizationerror(s(ll).mm2,'querrMiddlebrooks'));
+            s(ll).target{ii} = real(s(ll).mm2(:,6)); % polar angle of target
+            s(ll).response{ii} = real(s(ll).mm2(:,8)); % polar angle of response
+            s(ll).Nt{ii} = length(s(ll).target{ii});
 
-          s(ll).target{ii} = real(s(ll).mm2(:,6)); % polar angle of target
-          s(ll).response{ii} = real(s(ll).mm2(:,8)); % polar angle of response
-          s(ll).Nt{ii} = length(s(ll).target{ii});
-
+          end
         end
-      end
 
 
-      %% LocaMo
-      qe = zeros(length(s),length(latseg));
-      pe = zeros(length(s),length(latseg));
-      for ll = 1:length(s)
+        %% LocaMo
+        qe = zeros(length(s),length(latseg));
+        pe = zeros(length(s),length(latseg));
+        for ll = 1:length(s)
 
-        for ii = 1:length(latseg)
+          for ii = 1:length(latseg)
 
-          s(ll).sphrtfs{ii} = 0;     % init
-          s(ll).p{ii} = 0;        % init
+            s(ll).sphrtfs{ii} = 0;     % init
+            s(ll).p{ii} = 0;        % init
 
-          [s(ll).sphrtfs{ii},polang] = extractsp( latseg(ii),s(ll).Obj );
-          [s(ll).p{ii},respangs] = baumgartner2014(...
-              s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
-              'S',s(ll).S,'lat',latseg(ii),'polsamp',polang,...
-              'gamma',gamma(g),'mrsmsp',mrs(g)); 
+            [s(ll).sphrtfs{ii},polang] = extractsp( latseg(ii),s(ll).Obj );
+            [s(ll).p{ii},respangs] = baumgartner2014(...
+                s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
+                'S',s(ll).S,'lat',latseg(ii),'polsamp',polang,...
+                'gamma',gamma(g),'mrsmsp',mrs(g)); 
 
-          if s(ll).Nt{ii} > 0
-            [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014pmv2ppp( ...
-                s(ll).p{ii} , polang , respangs , s(ll).target{ii});
-          else
-            qe(ll,ii) = NaN; 
-            pe(ll,ii) = NaN;
+            if s(ll).Nt{ii} > 0
+              [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014pmv2ppp( ...
+                  s(ll).p{ii} , polang , respangs , s(ll).target{ii});
+            else
+              qe(ll,ii) = NaN; 
+              pe(ll,ii) = NaN;
+            end
+
           end
 
         end
-
+        s = rmfield(s,{'Obj','itemlist','mm2','sphrtfs'}); % reduce file size
+        amtcache('set',cname,s,qe, pe, qe_exp, pe_exp)
       end
-      s = rmfield(s,{'Obj','itemlist','mm2','sphrtfs'}); % reduce file size
-      savename = ['result_baseline_g' num2str(gamma(g),'%u') '_mrs' num2str(mrs(g),'%u')];
-      save(fullfile(tempfn,savename),'s', 'qe', 'pe', 'qe_exp', 'pe_exp', 'latseg')
     end
 
     %% Combine results to single mat file
-    fname = dir(fullfile(tempfn,'result_baseline_g*.mat'));
-    perr = zeros(length(s),7,length(fn));
+    perr = zeros(length(s),length(latseg),length(gamma));
     qerr = perr;
-    for ii = 1:length(fname)
-      tmp = load(fullfile(tempfn,fname(ii).name));
-      perr(:,:,ii) = tmp.pe;
-      qerr(:,:,ii) = tmp.qe;
-
-      if ii == 1
-        perr_exp = tmp.pe_exp;
-        qerr_exp = tmp.qe_exp;
-      end
-
-      gKey = '_g';
-      gIndex = strfind(fname(ii).name,gKey);
-      g(ii) = sscanf(fname(ii).name(gIndex(1) + length(gKey):end), '%g', 1);
-
-      mrsKey = '_mrs';
-      mrsIndex = strfind(fname(ii).name,mrsKey);
-      mrs(ii) = sscanf(fname(ii).name(mrsIndex(1) + length(mrsKey):end), '%g', 1);
+    for g = 1:length(gamma)
+      fn = ['result_baseline_g' num2str(gamma(g),'%u') '_mrs' num2str(mrs(g),'%u')];
+      [s,qerr(:,:,g), perr(:,:,g),qerr_exp,perr_exp] = amtcache('get',fn,flags.cachemode);
     end
     
-    % Sort data acc. to ascending gamma
-    [g,ig] = sort(g);
-    mrs = mrs(ig);
-    perr = perr(:,:,ig);
-    qerr = qerr(:,:,ig);
-
-    % Number of targets for each listeners (1st dim) and lateral segment (2nd
-    % dim)
-
+    % Number of targets for each listener and lateral segment
     Ntargets = zeros(length(s),7);
     for jj = 1:length(s)
-      Ntargets(jj,:) = [tmp.s(jj).Nt{:}];
+      Ntargets(jj,:) = [s(jj).Nt{:}];
     end
     
-    save(fn,'perr','perr_exp','qerr','qerr_exp','g','mrs','Ntargets',save_format);
-    
-    rmdir(tempfn,'s')
-    delete(fullfile(amtbasepath,'modelstages','baumgartner2014calibration.mat'))
-    
-  else
-    load(fn);
+    amtcache('set','parametrization',perr,perr_exp,qerr,qerr_exp,gamma,mrs,Ntargets)
+   
   end
-  varargout{1} = load(fn);
   
   [qerr0,perr0] = baumgartner2014pmv2ppp(ones(72,44)); % chance performances
 
   % extract all different gammas
-  gamma = g(1);
-  for ii =2:length(g)
-    if g(ii) > gamma(end)
-      gamma = [gamma;g(ii)];
-    end
-  end
+  g = gamma;
+  gamma = unique(gamma);
 
-  Nlat = size(perr,2);
   Nset = size(perr,3);
   idnum = Ntargets ~= 0;
   relNt = Ntargets/sum(Ntargets(:));
 
-
   % Compute all residues
-  resid.perr = zeros(length(g),1);
+  resid.perr = zeros(length(gamma),1);
   resid.qerr = resid.perr;
   for ii = 1:Nset
 
@@ -563,7 +647,6 @@ if flags.do_fig4
   eqerr_g = eqerr_g / eqerr_g(idopt);
   amtdisp(['Optimal Gamma: ' num2str(gamma(idopt),'%u') ' dB^-1'])
 
-
   % Select residues for optimal gamma and various mrs
   idgammaopt = find(g == gamma(idopt));
   mrs_gopt = mrs(idgammaopt);
@@ -588,7 +671,7 @@ if flags.do_fig4
     dtot_int = interp1(log10(gamma),etotal_g,log10(gamma_int),inttype);
 
     % Plot
-    fig=figure;
+    figure;
     subplot(1,2,1)
     semilogx(gamma_int,dperr_int,'k: ')
     hold on
@@ -637,15 +720,13 @@ end
 %% ------ FIG 12 & TAB 1 -------------------------------------------------
 if flags.do_fig12 || flags.do_tab1
   
-  fn = [mfilename('fullpath'),'_baseline.mat'];
-  
-  if amtredofile(fn,flags.redomode)
-    autorefreshnotification(fn,flags)
+  [s,qe,pe,qe_exp,pe_exp,latseg] = amtcache('get','baseline',flags.cachemode);
+  if isempty(s)
     
     latseg = -60:20:60; % centers of lateral segments
     dlat =  10;  % lateral range (+-) of each segment
 
-    s = data_baumgartner2014('baseline');
+    s = data_baumgartner2014('baseline',flags.cachemode);
 
     qe_exp = zeros(length(s),length(latseg));
     pe_exp = zeros(length(s),length(latseg));
@@ -705,19 +786,18 @@ if flags.do_fig12 || flags.do_tab1
 %     sum( ci(:,1)-la' <=0 & ci(:,2)-la' >=0 )
 
     s = rmfield(s,{'Obj','itemlist','mm2','sphrtfs'}); % reduce file size 
-    save(fn,'s', 'qe', 'pe', 'qe_exp', 'pe_exp', 'latseg',save_format);
-    
+    amtcache('set','baseline',s,qe,pe,qe_exp,pe_exp,latseg)
   end
   
-  load(fn);
-  varargout{1} = load(fn);
-  
+  varargout{1} = struct('s',s, 'qe',qe, 'pe',pe, 'qe_exp',qe_exp, 'pe_exp',pe_exp,...
+      'latseg',latseg);
   
   flags.do_pm30deglat = true; % consider lateral range of +-30 deg
 
   
   Ns = length(s);
   relfreq = zeros(Ns,length(latseg));
+  Ntall = nan(1,Ns);
   for jj = 1:Ns
     Ntlat = [s(jj).Nt{:}];
     Ntall(jj) = sum(Ntlat);
@@ -737,8 +817,9 @@ if flags.do_fig12 || flags.do_tab1
   if flags.do_fig12
 
     % IDs for xlabel
+    NHs = nan(Ns,4);
     for ll = 1:Ns
-        NHs(ll,:) = s(ll).id;
+      NHs(ll,:) = s(ll).id;
     end
 
     if flags.do_plot
@@ -751,7 +832,7 @@ if flags.do_fig12 || flags.do_tab1
       
       fig=figure;
 
-      plotbaumgartner2014likelistat(la(idsort),le(idsort),ci(idsort,:),lr(idsort,:))
+      plot_baumgartner2014likelistat(la(idsort),le(idsort),ci(idsort,:),lr(idsort,:))
       ylabel({'Likelihood'},'FontSize',kv.FontSize)
       xlabel('Listener (NH)','FontSize',kv.FontSize)
       set(gca,'XLim',[0 Ns+1],'XTickLabel',NHs(idsort,3:4),...
@@ -770,21 +851,19 @@ if flags.do_fig12 || flags.do_tab1
   
   if flags.do_tab1
 
-    Labels = {'ID','N','S','actual QE','predicted QE','actual PE','predicted PE','Likelihood fit'};    
+    Labels = {'ID','N','S','actual QE','predicted QE','actual PE','predicted PE'};    
 
     mtx = zeros(length(Labels),length(s));
     for ll = 1:length(s)
-      mtx(1,ll) = str2num(s(ll).id(3:end));
+      mtx(1,ll) = str2double(s(ll).id(3:end));
       mtx(2,ll) = sum([s(ll).Ntargets{:}]);
       mtx(3,ll) = s(ll).S;
       mtx(4,ll) = s(ll).qe_exp;
       mtx(5,ll) = qe(ll);
       mtx(6,ll) = s(ll).pe_exp;
       mtx(7,ll) = pe(ll);
-%       mtx(8,ll) = s(ll).pvalue;
     end
     
-%     [tmp,idsort] = sort([s.qe_exp]);
     [tmp,idsort] = sort(mtx(1,:)); % sort acc. to ID
     mtx = mtx(:,idsort);
     
@@ -798,21 +877,15 @@ end
 %% ------ FIG 14 ----------------------------------------------------------
 if flags.do_fig14
   
-  fn = [mfilename('fullpath'),'_baseline.mat'];
-  
-  if amtredofile(fn,flags.redomode)
-    autorefreshnotification(fn,flags)
-    if flags.do_refresh
-      exp_baumgartner2014('fig5','refresh');
-    else
-      exp_baumgartner2014('fig5');
-    end
-  else
-    varargout{1} = load(fn);
-    load(fn);
+  [s,qe,pe,qe_exp,pe_exp,latseg] = amtcache('get','baseline',flags.cachemode);
+  if isempty(s)
+    exp_baumgartner2014('fig5',flags.cachemode);
+    [s,qe,pe,qe_exp,pe_exp,latseg] = amtcache('get','baseline',flags.cachemode);
   end
   
-  paradata = load([mfilename('fullpath'),'_parametrization.mat']);
+  [paradata.perr,~,paradata.qerr,~,paradata.g,paradata.mrs] = ...
+    amtcache('get','parametrization',flags.cachemode);
+
   idmrs0 = paradata.g == 6 & paradata.mrs == 0;
   mrs0.pe = paradata.perr(:,:,idmrs0);
   mrs0.qe = paradata.qerr(:,:,idmrs0);
@@ -850,8 +923,8 @@ if flags.do_fig14
   idnum = not(isnan(pe_exp) | isnan(pe));
   dpe = sqrt( relfreq(idnum)' * (pe_exp(idnum) - pe(idnum)).^2 );
   dqe = sqrt( relfreq(idnum)' * (qe_exp(idnum) - qe(idnum)).^2 );
-  [r_pe,p_pe] = corrcoef(pe_exp(idnum),pe(idnum));
-  [r_qe,p_qe] = corrcoef(qe_exp(idnum),qe(idnum));
+  r_pe = corrcoef(pe_exp(idnum),pe(idnum));
+  r_qe = corrcoef(qe_exp(idnum),qe(idnum));
 
   mrs0.dpe = sqrt( relfreq(idnum)' * (pe_exp(idnum) - mrs0.pe(idnum)).^2 );
   mrs0.dqe = sqrt( relfreq(idnum)' * (qe_exp(idnum) - mrs0.qe(idnum)).^2 );
@@ -905,7 +978,7 @@ if flags.do_fig14
     
     titstr = {['w/ SMM:  e_{PE} = ' num2str(dpe,'%0.1f') '\circ , r_{PE} = ' num2str(r_pe(2),'%0.2f')];...
       ['w/o SMM: e_{PE} = ' num2str(mrs0.dpe,'%0.1f') '\circ , r_{PE} = ' num2str(mrs0.r_pe(2),'%0.2f')]};
-    amtdisp(titstr)
+    amtdisp(titstr,'progress');
     title(titstr,'FontSize',kv.FontSize)
     set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[21.1,45.9],...
       'YMinorTick','on','FontSize',kv.FontSize,...
@@ -932,7 +1005,7 @@ if flags.do_fig14
       'ok-','MarkerSize',kv.MarkerSize,'MarkerFaceColor','w');
     titstr = {['w/ SMM:  e_{QE} = ' num2str(dqe,'%0.1f') '% , r_{QE} = ' num2str(r_qe(2),'%0.2f')];...
       ['w/o SMM: e_{QE} = ' num2str(mrs0.dqe,'%0.1f') '% , r_{QE} = ' num2str(mrs0.r_qe(2),'%0.2f')]};
-    amtdisp(titstr)
+    amtdisp(titstr,'progress');
     title(titstr,'FontSize',kv.FontSize)
     set(gca,'XLim',[min(latseg)-2*dx,max(latseg)+2*dx],'YLim',[2.1,26.9],...
       'XTick',latseg,'YMinorTick','on','FontSize',kv.FontSize,...
@@ -959,7 +1032,7 @@ if flags.do_fig5
 
 
   %% Computations
-  s = data_baumgartner2014('pool');  
+  s = data_baumgartner2014('pool',flags.cachemode);  
   s = s(ismember({s.id},'NH12'));
   amtdisp(['Listener: ' s.id])
   chance = [];
@@ -996,13 +1069,6 @@ if flags.do_fig5
             if C == 1       % Learn 
                 s(ll).spdtfs_c{ii} = s(ll).spdtfs{ii};
             elseif C == 2   % Dummy
-%                 fn_filters = 'data_baumgartner2014_spatstrat_lpfilter.mat';
-%                 if not(exist(fn_filters,'file'))
-%                   amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
-%                   targetfn = fullfile(amtbasepath,'humandata',fn_filters);
-%                   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
-%                   urlwrite(sourcefn,targetfn);
-%                 end
                 temp=amtload('baumgartner2014','spatstrat_lpfilter.mat');
                 s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
             elseif C == 3   % Warped
@@ -1073,7 +1139,7 @@ if flags.do_fig5
             responses = [responses;s(ll).response{jj}];
             targets = [targets;s(ll).target{jj}];
           end
-          plotbaumgartner2014(s(ll).p{ii},s(ll).polang{ii},rang,...
+          plot_baumgartner2014(s(ll).p{ii},s(ll).polang{ii},rang,...
                 targets,responses,'MarkerSize',kv.MarkerSize,'cmax',0.05,'nocolorbar')
           text(90,240,Cond,...
             'FontSize',kv.FontSize,'Color','w','HorizontalAlignment','center')
@@ -1107,11 +1173,8 @@ end
 %% ------ FIG 6 -----------------------------------------------------------
 if flags.do_fig6
   
-  fn = [mfilename('fullpath'),'_spatstrat.mat'];
-  
-  if amtredofile(fn,flags.redomode)
-    
-    autorefreshnotification(fn,flags)
+  [s,cc] = amtcache('get','spatstrat',flags.cachemode);
+  if isempty(s)
     
     latdivision = [-20,0,20];            % lateral angle
     dlat = 10;
@@ -1120,7 +1183,7 @@ if flags.do_fig6
     Conditions = {'BB','LP','W'};
 
     %% Computations
-    s = data_baumgartner2014('pool');
+    s = data_baumgartner2014('pool',flags.cachemode);
 %     chance = [];
     for C = 1:length(Conditions)
 
@@ -1155,13 +1218,6 @@ if flags.do_fig6
               if C == 1       % Learn 
                   s(ll).spdtfs_c{ii} = s(ll).spdtfs{ii};
               elseif C == 2   % Dummy
-%                 fn_filters = 'data_baumgartner2014_spatstrat_lpfilter.mat';
-%                 if not(exist(fn_filters,'file'))
-%                   amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
-%                   targetfn = fullfile(amtbasepath,'humandata',fn_filters);
-%                   sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
-%                   urlwrite(sourcefn,targetfn);
-%                 end
                 temp=amtload('baumgartner2014','spatstrat_lpfilter.mat');
                 s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
               elseif C == 3   % Warped
@@ -1247,11 +1303,10 @@ if flags.do_fig6
     cc.pe.p = p(2);
     amtdisp(['PE: r = ' num2str(r(2),'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
 
-    save(fn,'cc', 's',save_format);
-  else
-    load(fn);
+    amtcache('set','spatstrat',s,cc)
   end
-  varargout{1} = load(fn);
+  varargout{1} = s;
+  varargout{2} = cc;
   
   %% Measures
 
@@ -1369,11 +1424,10 @@ if flags.do_fig7
   % Vocoder Settings 
   flow = 300;     % lowest corner frequency
   fhigh = 16000;  % highest corner frequency
-%   N = [inf,24,9];
   N = [24,9,3];
 
   %% Computations
-  s = data_baumgartner2014('pool');
+  s = data_baumgartner2014('pool',flags.cachemode);
   s = s(ismember({s.id},'NH12')); 
   amtdisp(['Listener: ' s.id])
   chance = [];
@@ -1490,9 +1544,9 @@ if flags.do_fig7
 
         if flags.do_plot && latdivision(ii) == 0
 
-          if C==1; fp = figure; end
+          if C==1; figure; end
           subplot(1,3,C)
-          plotbaumgartner2014(p,s(ll).polang{ii},rang,...
+          plot_baumgartner2014(p,s(ll).polang{ii},rang,...
                 s(ll).target{ii},s(ll).response{ii},...
                     'MarkerSize',kv.MarkerSize,'cmax',0.05,'nocolorbar');
           title({['A: PE = ' num2str(s(ll).pe_exp(C,1),2) '\circ, QE = ' num2str(s(ll).qe_exp(C,1),2) '%'];...
@@ -1519,11 +1573,8 @@ end
 %% ------ FIG 8 ----------------------------------------------------------
 if flags.do_fig8
   
-  fn = [mfilename('fullpath'),'_numchan.mat'];
-  
-  if amtredofile(fn,flags.redomode)
-    
-    autorefreshnotification(fn,flags)
+  [s,cc,N] = amtcache('get','numchan',flags.cachemode);
+  if isempty(s)
     
     % Model Settings
     latdivision = 0; % lateral angle
@@ -1539,7 +1590,7 @@ if flags.do_fig8
 
 
     %% Computations
-    s = data_baumgartner2014('pool');
+    s = data_baumgartner2014('pool',flags.cachemode);
 %     chance = [];
     for C = 1:length(Conditions)
 
@@ -1679,11 +1730,11 @@ if flags.do_fig8
     
     s = rmfield(s,{'spdtfs','spdtfs_c','Obj','itemlist'});
     
-    save(fn,'N', 'cc', 's',save_format);
-  else
-    load(fn);
+    amtcache('set','numchan',s,cc,N)
   end
-  varargout{1} = load(fn);
+  varargout{1} = s;
+  varargout{2} = cc;
+  varargout{3} = N;
   
   %% Measures
 
@@ -1791,17 +1842,14 @@ end
 %% ------ FIG 9 ----------------------------------------------------------
 if flags.do_fig9
   
-  fn = [mfilename('fullpath'),'_nonindividual.mat'];
-  
-  if amtredofile(fn,flags.redomode)
-    
-    autorefreshnotification(fn,flags)
+  [qe_pool,pe_pool,pb_pool] = amtcache('get','nonindividual',flags.cachemode);
+  if isempty(qe_pool)
     
     % Settings
     latdivision = [-20,0,20];  % lateral center angles of SPs
     flow = 4e3;
 
-    s = data_baumgartner2014('pool');
+    s = data_baumgartner2014('pool',flags.cachemode);
     ns = length(s);
 
     % DTFs of the SPs
@@ -1847,12 +1895,9 @@ if flags.do_fig9
     pe_pool = sum(pe.*lat_weight,3);
     pb_pool = sum(pb.*lat_weight,3);
 
-
-    save(fn,'qe_pool', 'pe_pool','pb_pool',save_format);
-  else
-    load(fn);
+    amtcache('set','nonindividual',qe_pool,pe_pool,pb_pool);
   end
-  varargout{1} = load(fn);
+  varargout{1} = {qe_pool,pe_pool,pb_pool};
   
   data = data_middlebrooks1999;
   
@@ -1882,7 +1927,7 @@ if flags.do_fig9
     MFC = 'k'; % Marker Face Color
     data.MFC = 'w';
     
-    fig = figure;
+    figure;
     subplot(131)
     middlebroxplot(1-dx,qe_own.quantiles,kv.MarkerSize)
     plot(1-dx,qe_own.mean,Marker,'MarkerSize',kv.MarkerSize,'MarkerFaceColor',MFC)
@@ -1935,11 +1980,8 @@ end
 %% ------ FIG 10 ----------------------------------------------------------
 if flags.do_fig10
   
-  fn = [mfilename('fullpath'),'_ripples.mat'];
-  
-  if amtredofile(fn,flags.redomode)
-    
-    autorefreshnotification(fn,flags)
+  [pe_exp1,pe_exp2,pe_flat,noDCN] = amtcache('get','ripples',flags.cachemode);
+  if isempty(pe_exp1)
     
     do_exp1 = true;
     do_exp2 = true;
@@ -1981,9 +2023,10 @@ if flags.do_fig10
     Sexp1(idlow:idhigh,:,1) = (40/2* sin(2*pi*density'*O+ 0))';  % depth: 40dB, 0-phase
     Sexp1(idlow:idhigh,:,2) = (40/2* sin(2*pi*density'*O+pi))';  % depth: 40dB, pi-phase
     Sexp1 = repmat(ramp',[1,length(density),2]) .* Sexp1;
-    Sexp1 = [Sexp1;Sexp1(Nf-1:-1:2,:,:)];
+    Sexp1 = [Sexp1;Sexp1(Nf:-1:2,:,:)];
     Sexp1(isnan(Sexp1)) = -100;
-    sexp1 = ifftreal(10.^(Sexp1/20),2*Nf);
+%     sexp1 = ifftreal(10.^(Sexp1/20),2*Nf);
+    sexp1 = real(ifft(10.^(Sexp1/20),2*Nf));
     sexp1 = circshift(sexp1,Nf);  % IR corresponding to ripple modification
     % Ripples of Experiment II
     Sexp2 = zeros(Nf+1,length(depth),2);  % 3rd dim: 1:0-phase 2:pi-phase
@@ -1992,7 +2035,8 @@ if flags.do_fig10
     Sexp2 = repmat(ramp',[1,length(depth),2]) .* Sexp2;
     Sexp2 = [Sexp2;Sexp2(Nf-1:-1:2,:,:)];
     Sexp2(isnan(Sexp2)) = -100;
-    sexp2 = ifftreal(10.^(Sexp2/20),2*Nf);
+%     sexp2 = ifftreal(10.^(Sexp2/20),2*Nf);
+    sexp2 = real(ifft(10.^(Sexp2/20),2*Nf));
     sexp2 = circshift(sexp2,Nf);  % IR corresponding to ripple modification
 
 
@@ -2000,9 +2044,9 @@ if flags.do_fig10
     for psge = 0:1
 
       if psge == 1
-        s = data_baumgartner2014('pool');
+        s = data_baumgartner2014('pool',flags.cachemode);
       else % recalib
-        s = data_baumgartner2014('pool','recalib','do',psge);
+        s = data_baumgartner2014('pool','do',psge,flags.cachemode);
       end
 
     latseg = 0;   % centers of lateral segments
@@ -2028,7 +2072,10 @@ if flags.do_fig10
         [f,r] = localizationerror(mflat,'sirpMacpherson2000');
         pe_flat(ll,ss) = localizationerror(mflat,f,r,'perMacpherson2003');
 
-        if plotpmv; figure; plotbaumgartner2014(pflat,tang,rang,mflat(:,6),mflat(:,8));title(num2str(pe_flat(ll,ss),2));pause(0.5); end 
+        if plotpmv, 
+          figure; 
+          plot_baumgartner2014(pflat,tang,rang,mflat(:,6),mflat(:,8));title(num2str(pe_flat(ll,ss),2));pause(0.5); 
+        end 
 
         if do_exp1  % Exp. I
         for ii = 1:2*length(density)
@@ -2039,7 +2086,7 @@ if flags.do_fig10
           m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
           pe_exp1(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
-          if plotpmv; figure; plotbaumgartner2014(p,tang,rang,m(:,6),m(:,8));title([num2str(density(mod(ii-1,10)+1)) 'ripples/oct; PE:' num2str(pe_exp1(ll,ss,ii),2) '%']);pause(0.5); end
+          if plotpmv; figure; plot_baumgartner2014(p,tang,rang,m(:,6),m(:,8));title([num2str(density(mod(ii-1,10)+1)) 'ripples/oct; PE:' num2str(pe_exp1(ll,ss,ii),2) '%']);pause(0.5); end
 
         end
         end
@@ -2053,7 +2100,7 @@ if flags.do_fig10
           m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
           pe_exp2(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
-          if plotpmv; plotbaumgartner2014(p,tang,rang,m(:,6),m(:,8));title([num2str(depth(mod(ii-1,4)+1)) 'dB; PE:' num2str(pe_exp2(ll,ss,ii),2) '%']);pause(0.5); end
+          if plotpmv; plot_baumgartner2014(p,tang,rang,m(:,6),m(:,8));title([num2str(depth(mod(ii-1,4)+1)) 'dB; PE:' num2str(pe_exp2(ll,ss,ii),2) '%']);pause(0.5); end
 
         end
         end
@@ -2083,11 +2130,9 @@ if flags.do_fig10
       end
     end
 
-    save(fn,'pe_exp1','pe_exp2','pe_flat','noDCN',save_format);
-  else
-    load(fn);
+    amtcache('set','ripples',pe_exp1,pe_exp2,pe_flat,noDCN)
   end
-  varargout{1} = load(fn);
+  varargout{1} = {pe_exp1,pe_exp2,pe_flat,noDCN};
   
   dcn_flag = true;
   
@@ -2140,7 +2185,7 @@ if flags.do_fig10
     MarkerSize = kv.MarkerSize;
     
     % Exp1
-    fig = figure;
+    figure;
     
     subplot(2,8,1:8)
     errorbar(data.density/dx,quart_pe_exp1(2,:,idphase),...
@@ -2256,27 +2301,26 @@ end
 %% ------ FIG 11 ----------------------------------------------------------
 if flags.do_fig11
   
-  fn = [mfilename('fullpath'),'_highfreqatten.mat'];
-  
-  if amtredofile(fn,flags.redomode)
+  [ape_all,qe_all,ape_BBnoise,qe_BBnoise] = amtcache('get','highfreqatten_do1',flags.cachemode);
+  noDCN = amtcache('get','highfreqatten_do0',flags.cachemode);
+  if isempty(ape_all) || isempty(noDCN.ape_all)
     
-    fnHarvard = fullfile(amtbasepath,'signals','HarvardWords');
-    if not(exist(fnHarvard,'dir'))
-      amtdisp('The Harvard word list is missing.') 
-      amtdisp('Please, contact Virginia Best (ginbest@bu.edu) or Craig Jin (craig.jin@sydney.edu.au) for providing their speech recordings.')
-      amtdisp(['Then, move the folder labeled HarvardWords to: ' fullfile(amtbasepath,'signals') '.'])
-      return
-    end
-    
-    autorefreshnotification(fn,flags)
+%     fnHarvard = fullfile(amtbasepath,'signals','HarvardWords');
+%     if not(exist(fnHarvard,'dir'))
+%       amtdisp('The Harvard word list is missing.') 
+%       amtdisp('Please, contact Virginia Best (ginbest@bu.edu) or Craig Jin (craig.jin@sydney.edu.au) for providing their speech recordings.')
+%       amtdisp(['Then, move the folder labeled HarvardWords to: ' fullfile(amtbasepath,'signals') '.'])
+%       return
+%     end
+    fnHarvard = fullfile(amtbasepath,'auxdata','baumgartner2014','HarvardWords');
+      
     amtdisp('Note that this computation may take several hours!','progress')
     
     %% Settings
     latseg = 0;%[-20,0,20];   % centers of lateral segments
-    NsampModel = 200; % # of modeled speech samples (takes 30min/sample); max: 260
-    startSamp = 51;
+    NsampModel = 260; % # of modeled speech samples (takes 30min/sample); max: 260
+    startSamp = 1; 
 
-    saveflag = true;
     plotpmv = false;
     plotspec = false;
 
@@ -2284,146 +2328,141 @@ if flags.do_fig11
     %% Load Data
 
     % Speech Samples from Harvard Word list
-    fs_orig = 80e3; % Hz
-    fs = 48e3;   % Hz
-    p_resamp = fs/fs_orig;
-    kk = 1;
-    if NsampModel <= 51
-      Nsamp = NsampModel;
-      Nlists = 1;
-    else
-      Nsamp = 260;
-      Nlists = 5;
-    end
-    lsamp = 120000*p_resamp;
-    speechsample = cell(Nsamp,1);
-    for ii = 1:Nlists
-      tmp.path = fullfile(fnHarvard,['list' num2str(ii,'%1.0u')]);
-      tmp.dir = dir(fullfile(tmp.path,'*.mat'));
-      for jj = 1:length(tmp.dir)
-        if jj > Nsamp; break; end
-        load(fullfile(tmp.path,tmp.dir(jj).name))
-        signal = resample(word,p_resamp*10,10);
-        gcurve = exp(-0.5 * (0:0.001:10).^2) ./ (sqrt(2*pi));
-        env = filter(gcurve,1,signal.^2);
-        idon = max(find(env > 5e7,1,'first')-1e3,1);
-        idoff = min(find(env > 5e7,1,'last')+1e3,lsamp);
-        lwin = idoff-idon+1;
-        speechsample{kk} = signal(idon:idoff) .* tukeywin(lwin,0.01)';
-        kk = kk + 1;
+    speechsample = amtcache('get','best2005speechSamples');
+    if isempty(speechsample)
+      fs_orig = 80e3; % Hz
+      fs = 48e3;   % Hz
+      p_resamp = fs/fs_orig;
+      kk = 1;
+      if NsampModel <= 51
+        Nsamp = NsampModel;
+        Nlists = 1;
+      else
+        Nsamp = 260;
+        Nlists = 5;
       end
+      lsamp = 120000*p_resamp;
+      speechsample = cell(Nsamp,1);
+      for ii = 1:Nlists
+        tmp.list = ['list' num2str(ii,'%1.0u')];
+        tmp.path = fullfile(fnHarvard,tmp.list);
+        tmp.dir = dir(fullfile(tmp.path,'*.mat'));
+        for jj = 1:length(tmp.dir)
+          if jj > Nsamp; break; end
+%           load(fullfile(tmp.path,tmp.dir(jj).name))
+          sig = amtload('baumgartner2014',fullfile('HarvardWords',tmp.list,tmp.dir(jj).name));
+          signal = resample(sig.word,p_resamp*10,10);
+          gcurve = exp(-0.5 * (0:0.001:10).^2) ./ (sqrt(2*pi));
+          env = filter(gcurve,1,signal.^2);
+          idon = max(find(env > 5e7,1,'first')-1e3,1);
+          idoff = min(find(env > 5e7,1,'last')+1e3,lsamp);
+          lwin = idoff-idon+1;
+          speechsample{kk} = signal(idon:idoff) .* tukeywin(lwin,0.01)';
+          kk = kk + 1;
+        end
+      end
+      amtcache('set','best2005speechSamples',speechsample)
     end
-
 
     % FIR Low-pass filters at 8kHz
     % Brick-wall (aka sinc-filter): fir1(200,1/3) -> -60 dB
-%     fn_filters = 'exp_baumgartner2014_highfreqatten_filters.mat';
-%     if not(exist(fn_filters,'file'))
-%       amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
-%       targetfn = fullfile(amtbasepath,'humandata',fn_filters);
-%       sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
-%       urlwrite(sourcefn,targetfn);
-%     end
-    x=load('baumgartner2014','highfreqatten_filters.mat');
+    x=amtload('baumgartner2014','highfreqatten_filters.mat');
     lp{1} = [1 zeros(1,100)];
     lp{2} = x.fir20db;
     lp{3} = x.fir40db;
     lp{4} = x.fir60db;
 
     %% Model Data
-    for ii = 0:1
+    for psge = 0:1
 
-      if ii == 1
-        s = data_baumgartner2014('pool','recalib');
-        tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_highfreqatten'); % temporary folder
-      else % recalib
-        s = data_baumgartner2014('pool','recalib','do',0);
-        tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_highfreqatten_do0'); % temporary folder
-      end
-      mkdir(tempfn)
-      
-    ape_BBnoise = zeros(1,length(s),length(latseg));
-    qe_BBnoise = ape_BBnoise;
-    for ss = 1:length(s)
-      for ll = 1:length(latseg)
-        [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
-        [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',ii,...
-              'S',s(ss).S,'polsamp',polang,'lat',latseg(ll),'notprint');
-        ape_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
-        qe_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang);
-
-        if plotpmv; figure; plotbaumgartner2014(p,polang,rang); title(num2str(ape_BBnoise(1,ss,ll),2)); end
-
-      end
-    end
-
-    %%
-    ape_all = zeros(length(lp),length(s),length(latseg));
-    qe_all = ape_all;
-    for kk = startSamp:NsampModel % start with 104
-      for ss = 1:length(s)
-        for ll = 1:length(latseg)
-          for ii = 1:length(lp)
-
-            stim = filter(lp{ii},1,speechsample{kk});
-
-            if plotspec; figure; audspecgram(stim(:),fs,'dynrange',150); end
-
+      s = data_baumgartner2014('pool','do',psge,flags.cachemode);
+     
+      cname = ['result_best2005noise_do' num2str(psge,'%u')];
+      [ape_BBnoise,qe_BBnoise] = amtcache('get',cname,flags.cachemode);
+      if isempty(ape_BBnoise)
+        ape_BBnoise = zeros(1,length(s),length(latseg));
+        qe_BBnoise = ape_BBnoise;
+        for ss = 1:length(s)
+          for ll = 1:length(latseg)
             [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
-            [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',ii,...
-              'S',s(ss).S,'polsamp',polang,...
-              'lat',latseg(ll),'stim',stim,'notprint');
-            ape_all(ii,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
-            qe_all(ii,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang);
+            [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',psge,...
+                  'S',s(ss).S,'polsamp',polang,'lat',latseg(ll),'notprint');
+            ape_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
+            qe_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang);
 
-            if plotpmv; figure; plotbaumgartner2014(p,polang,rang); title(num2str(ape_all(ii,ss,ll),2)); end
+            if plotpmv; figure; plot_baumgartner2014(p,polang,rang); title(num2str(ape_BBnoise(1,ss,ll),2)); end
 
           end
         end
+        % Pool Lateral Segments
+        if length(latseg) > 1
+          ape_BBnoise = mean(ape_BBnoise,3);
+          qe_BBnoise = mean(qe_BBnoise,3);
+        end
+        amtcache('set',cname,ape_BBnoise,qe_BBnoise);
       end
-
-      % % Pool Lateral Segments
-      if length(latseg) > 1
-        ape_BBnoise = mean(ape_BBnoise,3);
-        ape_all = mean(ape_all,3);
-        qe_BBnoise = mean(qe_BBnoise,3);
-        qe_all = mean(qe_all,3);
-      end
-
-      if saveflag
-        savename = fullfile(tempfn,['result_best2005speech_samp' num2str(kk)]);
-        save(savename,'ape_all','qe_all','ape_BBnoise','qe_BBnoise')
-      end
-      
-      amtdisp([num2str(kk,'%1.0u') ' of ' num2str(NsampModel,'%2.0u') ' samples completed'],'progress')
     end
     
-    results = dir(fullfile(tempfn,'result_best2005speech_samp*.mat'));
-    tmp = load(fullfile(tempfn,results(1).name));
-    ape_BBnoise = tmp.ape_BBnoise;
-    qe_BBnoise = tmp.qe_BBnoise;
-    ape_all = zeros([size(tmp.ape_all) length(results)]);
+    ape_all = zeros(length(lp),length(s),NsampModel-startSamp+1,2);
     qe_all = ape_all;
-    for ii = 1:length(results)
-      tmp = load(fullfile(tempfn,results(ii).name));
-      ape_all(:,:,ii) = tmp.ape_all;
-      qe_all(:,:,ii) = tmp.qe_all;
+    for kk = startSamp:NsampModel 
+      for psge = 0:1
+        cname = ['result_best2005speech_samp' num2str(kk) '_do' num2str(psge,'%u')];
+        [ape_lat,qe_lat] = amtcache('get',cname,flags.cachemode);
+        if isempty(ape_lat)
+
+          s = data_baumgartner2014('pool','do',psge,flags.cachemode);
+
+          ape_lat = zeros(length(lp),length(s),length(latseg));
+          qe_lat = ape_lat;
+          for ss = 1:length(s)
+            for ll = 1:length(latseg)
+              for ilp = 1:length(lp)
+
+                stim = filter(lp{ilp},1,speechsample{kk});
+
+                if plotspec; figure; audspecgram(stim(:),fs,'dynrange',150); end
+
+                [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
+                [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',psge,...
+                  'S',s(ss).S,'polsamp',polang,...
+                  'lat',latseg(ll),'stim',stim,'notprint');
+                ape_lat(ilp,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
+                qe_lat(ilp,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang);
+
+                if plotpmv; figure; plot_baumgartner2014(p,polang,rang); title(num2str(ape_lat(ilp,ss,ll),2)); end
+
+              end
+            end
+          end
+          % Pool Lateral Segments
+          if length(latseg) > 1
+            ape_lat = mean(ape_lat,3);
+            qe_lat = mean(qe_lat,3);
+          end
+          amtcache('set',cname,ape_lat,qe_lat)
+          amtdisp([num2str(kk,'%1.0u') ' of ' num2str(NsampModel,'%2.0u') ' samples completed'],'progress')
+        end
+        ape_all(:,:,kk,psge+1) = ape_lat;
+        qe_all(:,:,kk,psge+1) = qe_lat;
+
+      end
     end
+
+    noDCN.ape_all = ape_all(:,:,:,1);
+    noDCN.qe_all = qe_all(:,:,:,1);
+    [noDCN.ape_BBnoise,noDCN.qe_BBnoise] = amtcache('get','result_best2005noise_do1');
+    amtcache('set','highfreqatten_do0',noDCN)
     
-    if ii == 0
-      save([fn(1:end-4) '_do0.mat'],'ape_all','qe_all','ape_BBnoise','qe_BBnoise',save_format);
-    else
-      save(fn,'ape_all','qe_all','ape_BBnoise','qe_BBnoise',save_format);
-    end
-%     rmdir(tempfn,'s');
-    end
-    noDCN = load([fn(1:end-4) '_do0.mat']);
-  else
-    load(fn);
-    noDCN = load([fn(1:end-4) '_do0.mat']);
+    ape_all = ape_all(:,:,:,2);
+    qe_all = qe_all(:,:,:,2);
+    [ape_BBnoise,qe_BBnoise] = amtcache('get','result_best2005noise_do1');
+    amtcache('set','highfreqatten_do1',ape_all,qe_all,ape_BBnoise,qe_BBnoise)
+    
   end
-  varargout{1} = load(fn);
-  varargout{2} = load([fn(1:end-4) '_do0.mat']);
+  
+  varargout{1} = {ape_all,qe_all,ape_BBnoise,qe_BBnoise};
+  varargout{2} = noDCN;
   
   data = data_best2005;
   
@@ -2466,7 +2505,7 @@ if flags.do_fig11
     xticks = 0:size(ape_all,1);
     ape0 = baumgartner2014pmv2ppp('absPE','chance');
     
-    fig = figure;
+    figure;
     subplot(211)
     h(1) = errorbar(xticks-dx,ape,seape,'ks');
     set(h(1),'MarkerFaceColor','k','MarkerSize',MarkerSize,'LineStyle','-')
@@ -2513,11 +2552,8 @@ end
 %% ------ TAB 2 ---------------------------------------------------------- 
 if flags.do_tab2
   
-  
-  fn = [mfilename('fullpath'),'_spatstrat_do0.mat'];
-  
-  if amtredofile(fn,flags.redomode)
-    autorefreshnotification(fn,flags)
+  [qe_exp,pe_exp,qe_part,pe_part] = amtcache('get','spatstrat_do0',flags.cachemode);
+  if isempty(qe_exp)
     
     latdivision = [-20,0,20];            % lateral angle
     dlat = 10;
@@ -2529,9 +2565,9 @@ if flags.do_tab2
     for ido = 0:1
 
       if ido == 1
-        s = data_baumgartner2014('pool','recalib');
+        s = data_baumgartner2014('pool',flags.cachemode);
       else % recalib
-        s = data_baumgartner2014('pool','recalib','do',0);
+        s = data_baumgartner2014('pool','do',0,flags.cachemode);
       end
     
       for C = 1:length(Conditions)
@@ -2572,13 +2608,6 @@ if flags.do_tab2
             if C == 1       % Learn 
                 s(ll).spdtfs_c{ii} = s(ll).spdtfs{ii};
             elseif C == 2   % Dummy
-%               fn_filters = 'data_baumgartner2014_spatstrat_lpfilter.mat';
-%               if not(exist(fn_filters,'file'))
-%                 amtdisp(['Downloading ' fn_filters ' from http://www.kfs.oeaw.ac.at/']);
-%                 targetfn = fullfile(amtbasepath,'humandata',fn_filters);
-%                 sourcefn = ['http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/' fn_filters];
-%                 urlwrite(sourcefn,targetfn);
-%               end
               temp=amtload('baumgartner2014','spatstrat_lpfilter.mat');
               s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
             elseif C == 3   % Warped
@@ -2642,13 +2671,11 @@ if flags.do_tab2
         end
       end
     end
-%     delete(which('baumgartner2014calibration.mat'))
     s = rmfield(s,{'Obj','spdtfs_c','spdtfs'});% reduce file size
-    save(fn,'qe_exp','pe_exp','qe_part','pe_part',save_format);
+    amtcache('set','spatstrat_do0',qe_exp,pe_exp,qe_part,pe_part)
   end
   
-  result = load(fn);
-  varargout{1} = load(fn);
+  result = struct('qe_exp',qe_exp,'pe_exp',pe_exp,'qe_part',qe_part,'pe_part',pe_part);
   
   meta = {'DCN no,  BWA yes';...
           'DCN no,  BWA no ';...
@@ -2662,10 +2689,6 @@ if flags.do_tab2
   pe_exp = permute(result.pe_exp,[2,1]);
   qe_all = permute(result.qe_part,[2,1,3]);
   pe_all = permute(result.pe_part,[2,1,3]);
-%   for im = 1:length(model)
-%     qe_all = [result.s.qe_part];
-%     pe_all(:,:,im) = [result.s.pe_part];
-%   end
 
   % Statistics
   for cond = 1:3
@@ -2741,17 +2764,14 @@ end
 %% ------ TAB 3 ----------------------------------------------------------    
 if flags.do_tab3
   
-  
-  fn = [mfilename('fullpath'),'_binWeighting.mat'];
-  
-  if amtredofile(fn,flags.redomode)
-    autorefreshnotification(fn,flags)
+  [s,qe,pe,qe_exp,pe_exp,latseg,bwcoef] = amtcache('get','binWeighting',flags.cachemode);
+  if isempty(s)
     
     bwcoef = [13 eps -eps Inf];
     latseg = -60:20:60; % centers of lateral segments
     dlat =  10;  % lateral range (+-) of each segment
 
-    s = data_baumgartner2014('baseline');
+    s = data_baumgartner2014('baseline',flags.cachemode);
 
     qe_exp = zeros(length(s),length(latseg));
     pe_exp = zeros(length(s),length(latseg));
@@ -2813,12 +2833,12 @@ if flags.do_tab3
     end
     
     s = rmfield(s,{'Obj','itemlist','mm2','sphrtfs'}); % reduce file size 
-    save(fn,'s', 'qe', 'pe', 'qe_exp', 'pe_exp', 'latseg','bwcoef',save_format);
+    amtcache('set','binWeighting',s,qe,pe,qe_exp,pe_exp,latseg,bwcoef)
     
   end
   
-  load(fn);
-  varargout{1} = load(fn);
+%   load(fn);
+  varargout{1} = {s,qe,pe,qe_exp,pe_exp,latseg,bwcoef};
   
   %% # of targets
   Ns = length(s);
@@ -2881,10 +2901,8 @@ end
 %% ------ FIG 5 of baumgartner2015aro -------------------------------------
 if flags.do_fig5_baumgartner2015aro
   
-  fn = [mfilename('fullpath'),'_fig5_baumgartner2015aro.mat'];
-  
-  if amtredofile(fn,flags.redomode)
-    autorefreshnotification(fn,flags)
+  [perr,qerr,snrFront,bwcoef,lat] = amtcache('get','fig5_baumgartner2015aro',flags.cachemode);
+  if isempty(perr)
     
     snrFront = -20:2:40; % in dB
 
@@ -2892,7 +2910,7 @@ if flags.do_fig5_baumgartner2015aro
 
     mrs = 17; % no sensorimotor mapping
 
-    s = data_baumgartner2014('pool');
+    s = data_baumgartner2014('pool',flags.cachemode);
 
     bwcoef = [13,+eps,-eps]; % configuration of binaural weighting stage (binaural, ipsilateral, contralateral
 
@@ -2927,12 +2945,12 @@ if flags.do_fig5_baumgartner2015aro
       amtdisp([num2str(isub) ' of ' num2str(length(s)) ' completed'])
     end
 
-    save(fn,'perr','qerr','snrFront','bwcoef','lat',save_format);
+    amtcache('set','fig5_baumgartner2015aro',perr,qerr,snrFront,bwcoef,lat)
     
   end
   
-  r = load(fn);
-  varargout{1} = load(fn);
+  r = struct('perr',perr,'qerr',qerr,'snrFront',snrFront,'bwcoef',bwcoef,'lat',lat);
+  varargout{1} = r;
   
   if flags.do_plot
     
@@ -2999,6 +3017,889 @@ if flags.do_fig5_baumgartner2015aro
   
 end
 
+%% ------------------------------------------------------------------------
+%  ---- baumgartner2015jaes -----------------------------------------------
+%  ------------------------------------------------------------------------
+%% ------ FIG 2 of baumgartner2015jaes ------------------------------------
+if flags.do_fig2_baumgartner2015jaes
+  pol1 = 0;
+  pol2 = 40;
+
+  s = data_baumgartner2014('pool');
+
+  fs = s(1).Obj.Data.SamplingRate;
+
+  [dtfs,pol] = extractsp(0,s(1).Obj);
+
+  polphant = pol1 + (pol2-pol1)/2;
+
+  dtf1 = 10*dtfs(:,pol==pol1,1);
+  dtf2 = 10*dtfs(:,pol==pol2,1);
+  dtfreal = 10*dtfs(:,pol==polphant,1);
+  dtfphant = (dtf1+dtf2)/2;
+
+  %%
+  if flags.do_plot
+    
+    figure
+
+    set(gca,'LineWidth',1)
+    plotfft(fft(dtfphant),fs,'posfreq')
+    hold on
+    plotfft(fft(dtfreal),fs,'posfreq')
+    plotfft(fft(dtf1),fs,'posfreq')
+    plotfft(fft(dtf2),fs,'posfreq');
+    
+    % Set line styles
+    Color =  {[0.4660    0.6740    0.1880];...
+              [0.3010    0.7450    0.9330];...
+              [0.8500    0.3250    0.0980];...
+              [     0    0.4470    0.7410]};
+    LineWidth = [.5,.5,1,1];
+    LineStyle = {':',':','--','-'};
+    ch = get(gca,'Children');
+    for ii = 1:length(ch)
+      set(ch(ii),'Color',Color{ii},'LineStyle',LineStyle{ii},'LineWidth',LineWidth(ii));
+    end
+    
+    leg = legend([num2str(polphant) '\circ VBAP'],...
+      [num2str(polphant) '\circ source'],...
+      ['  ' num2str(pol1) '\circ source'],...
+      [num2str(pol2) '\circ source']);
+    set(leg,'Location','southeast','FontSize',kv.FontSize)
+
+    set(gca,'XLim',[500,17500],'YLim',[-39.9,9.9],'FontSize',kv.FontSize)
+
+    xticks = get(gca,'XTick');
+    set(gca,'XTickLabel',xticks/1000)
+    xlabel({'Frequency (kHz)';' '},'FontSize',kv.FontSize)
+    
+  end
+  
+end
+
+%% ------ FIG 4 of baumgartner2015jaes ------------------------------------
+if flags.do_fig4_baumgartner2015jaes
+  
+  [peI,s,pol0,DL,respang] = amtcache('get','panningangle',flags.cachemode);
+  
+  if isempty(peI)
+  
+    MRS = 0;
+
+    pol1 = -15; % polar angle of lower Lsp.
+    pol2 = 30; % polar angle of higher Lsp.
+
+    lat = 0; % must be 0 otherwise VBAP wrong!
+
+    s = data_baumgartner2014('pool');
+
+    dPol = pol2-pol1;
+    s(1).spdtfs = [];
+    [s(1).spdtfs,polang] = extractsp(lat,s(1).Obj); 
+    idtest = find(polang >= pol1 & polang <= pol2);
+    qeI = zeros(length(s),length(idtest));
+    peI = qeI;
+
+    for ii = 1:length(idtest)
+
+      id1 = idtest(1); % ID lower pos.
+      id2 = idtest(end); % ID higher pos.
+      id0 = idtest(ii);  % ID pos. of phantom source
+      pol0(ii) = polang(id0);
+
+      % VBAP
+      [p(1,1),p(1,2),p(1,3)] = sph2cart(lat,deg2rad(pol0(ii)),1);
+      [L(1,1),L(1,2),L(1,3)] = sph2cart(lat,deg2rad(pol1),1);
+      [L(2,1),L(2,2),L(2,3)] = sph2cart(lat,deg2rad(pol2),1);
+      g = p/L;
+      g = g/norm(g);
+
+      DL(ii) = db(g(1)) - db(g(2));
+
+      for ll = 1:length(s)
+
+          s(ll).spdtfs = extractsp(lat,s(ll).Obj);
+
+          % superposition
+          s(ll).dtfs2{ii} = g(1)*s(ll).spdtfs(:,id1,:) + g(2)*s(ll).spdtfs(:,id2,:);
+
+          [s(ll).p1(:,ii),respang] = baumgartner2014(...
+            s(ll).spdtfs(:,id0,:),s(ll).spdtfs,s(ll).fs,'S',s(ll).S,...
+            'mrsmsp',MRS,'polsamp',polang);
+          s(ll).p2(:,ii) = baumgartner2014(...
+            s(ll).dtfs2{ii},s(ll).spdtfs,s(ll).fs,'S',s(ll).S,...
+            'mrsmsp',MRS,'polsamp',polang);
+
+          [s(ll).qe1(ii),s(ll).pe1(ii)] = baumgartner2014pmv2ppp(...
+            s(ll).p1(:,ii),polang(id0),respang);
+          [s(ll).qe2(ii),s(ll).pe2(ii)] = baumgartner2014pmv2ppp(...
+            s(ll).p2(:,ii),polang(id0),respang);
+
+          % Increse of error
+          qeI(ll,ii) = s(ll).qe2(ii) - s(ll).qe1(ii);
+          peI(ll,ii) = s(ll).pe2(ii) - s(ll).pe1(ii);
+      end
+      amtdisp([num2str(ii) ' of ' num2str(length(idtest)) ' completed'],'progress');
+    end
+
+    amtcache('set','panningangle',peI,s,pol0,DL,respang);
+    
+  end
+  
+  id1 = 'NH71'; % positive example
+  id2 = 'NH62'; % negative example
+  
+  if flags.do_plot
+    
+    cmp= [0.2081    0.1663    0.5292;
+          0.2052    0.2467    0.6931;
+          0.0843    0.3472    0.8573;
+          0.0157    0.4257    0.8789;
+          0.0658    0.4776    0.8532;
+          0.0777    0.5300    0.8279;
+          0.0356    0.5946    0.8203;
+          0.0230    0.6443    0.7883;
+          0.0485    0.6793    0.7341;
+          0.1401    0.7085    0.6680;
+          0.2653    0.7327    0.5916;
+          0.4176    0.7471    0.5142;
+          0.5624    0.7487    0.4529;
+          0.6872    0.7433    0.4029;
+          0.7996    0.7344    0.3576;
+          0.9057    0.7261    0.3105;
+          0.9944    0.7464    0.2390;
+          0.9847    0.8141    0.1734;
+          0.9596    0.8869    0.1190;
+          0.9763    0.9831    0.0538]; % parula colormap (defined for compatibility with older Matlab versions)
+    
+    figure
+
+    p_pool = nan(size(s(1).p2,1),size(s(1).p2,2),length(s));
+    for ll = 1:length(s)
+      p_pool(:,:,ll) = s(ll).p2;
+      if strcmp(s(ll).id,id1)
+        subplot(1,4,1)
+        plot_baumgartner2014(s(ll).p2,pol0,respang,'cmax',0.08)
+        colormap(cmp)
+        title(s(ll).id,'FontSize',kv.FontSize)
+        xlabel(''); 
+        ylabel('Response angle (deg)','FontSize',kv.FontSize);
+        colorbar off
+      elseif strcmp(s(ll).id,id2)
+        subplot(1,4,2)
+        plot_baumgartner2014(s(ll).p2,pol0,respang,'cmax',0.08)
+        colormap(cmp)
+        xlabel('Panning angle (deg)','FontSize',kv.FontSize);      
+        ylabel(''); set(gca,'YTickLabel',[]);
+        title(s(ll).id,'FontSize',kv.FontSize)
+        colorbar off
+      end
+    end
+    p_pool = mean(p_pool,3);
+    subplot(1,4,3)
+    plot_baumgartner2014(p_pool,pol0,respang,'cmax',0.08)
+    colormap(cmp)
+    title('Pool','FontSize',kv.FontSize)
+    xlabel(''); 
+    ylabel(''); set(gca,'YTickLabel',[]);
+    colorbar off
+
+    subplot(1,4,4)
+    ymax = 8;
+    y = -0.15:0.1:ymax+0.15;
+    Ny = length(y);
+    pcolor(1:2,y,repmat(y(:),1,2))
+    shading flat
+    axis tight
+    colormap(cmp)
+    title({' ';' '})
+    set(gca,'XTick',[],'YTick',0:1:ymax,... 
+      'YDir','normal','YAxisLocation','right','FontSize',kv.FontSize)
+    ylabel({'Probability density (% per 5\circ)'},'FontSize',kv.FontSize)
+    set(gca,'Position',get(gca,'Position').*[1.05,1,0.3,1])
+  
+  end
+  
+end
+
+%% ------ FIG 5 of baumgartner2015jaes ------------------------------------
+if flags.do_fig5_baumgartner2015jaes
+  
+  [peI,s,pol0,DL,respang] = amtcache('get','panningangle',flags.cachemode);
+  
+  if isempty(peI)
+    exp_baumgartner2014('fig4_baumgartner2015jaes','noplot',flags.cachemode);
+    [peI,s,pol0,DL,respang] = amtcache('get','panningangle',flags.cachemode);
+  end
+  
+  figure
+
+  plot(peI')
+  ylabel('Increase in polar error (deg)')
+
+  % Panning angle axis
+  set(gca,'XTick',1:10,'XTickLabel',round(pol0),...
+      'YMinorTick','on','XLim',[1,10],'YLim',[-9,59])
+  xlabel('Panning angle (deg)')
+  
+end
+
+%% ------ FIG 6 of baumgartner2015jaes ------------------------------------
+if flags.do_fig6_baumgartner2015jaes
+  
+  results = amtcache('get','replicatePulkki2001',flags.cachemode);
+   
+  if isempty(results)
+  
+    amtdisp('Results may slightly vary from simulation to simulation because noise stimulus is not fixed.','progress')
+    
+    MRS = 0;
+
+    pol1 = -15; % polar angle of lower Lsp.
+    pol2 = 30; % polar angle of higher Lsp.
+
+    polphant = [0,15]; % polar angles of phantom sources
+    Pmax = nan(length(polphant),23); % max Probabilities
+    panang_Pmax = nan(length(polphant),23); % panning angle selected by max P
+    panang_Cen = nan(length(polphant),23); % panning angle selected by centroid
+    for pp = 1:length(polphant)
+
+    lat = 0; % must be 0 otherwise VBAP wrong!
+
+    s = data_baumgartner2014('pool');
+
+    s(1).spdtfs = [];
+    [s(1).spdtfs,polang] = extractsp(lat,s(1).Obj); 
+
+    % restrict response range
+    idrang = find(polang >= pol1 & polang <= pol2); % to range between loudspeakers
+    % idrang = find(polang <= 90); % to the front
+
+    idtest = find(polang >= pol1 & polang <= pol2);
+    id1 = find(polang >= pol1,1); % ID lower pos.
+    id2 = find(polang <= pol2,1,'last'); % ID higher pos.
+    tang = polang(id1:id2);
+
+    for ll = 1:length(s)
+      s(ll).spdtfs = extractsp(lat,s(ll).Obj);
+
+      for ii = 1:length(idtest)
+
+        id0 = idtest(ii);  % ID pos. of phantom source
+
+        % VBAP
+        [p(1,1),p(1,2),p(1,3)] = sph2cart(lat,deg2rad(polang(id0)),1);
+        [L(1,1),L(1,2),L(1,3)] = sph2cart(lat,deg2rad(pol1),1);
+        [L(2,1),L(2,2),L(2,3)] = sph2cart(lat,deg2rad(pol2),1);
+        g = p/L;
+        g = g/norm(g);
+
+        DL(ii) = db(g(1)) - db(g(2));
+
+        % superposition
+        s(ll).dtfs2{ii} = g(1)*s(ll).spdtfs(:,id1,:) + g(2)*s(ll).spdtfs(:,id2,:);    
+
+        [s(ll).p(:,ii),rang] = baumgartner2014(...
+              s(ll).dtfs2{ii},s(ll).spdtfs(:,idrang,:),s(ll).fs,'S',s(ll).S,...
+              'mrsmsp',MRS,'polsamp',polang(idrang),'rangsamp',5,...
+              'stim',noise(10000,1,'pink')); % phantom source
+
+      end
+
+      id_rang = rang == polphant(pp);
+
+      % interpolation between target angles
+      tang_int = tang(1):1:tang(end);
+      p_int = interp2(tang(:)',rang(:),s(ll).p,tang_int(:)',rang(:),'spline');
+      p_int = p_int./repmat(sum(p_int,1),size(p_int,1),1); % normalize to PMVs
+
+      % Variant 1: max P at source direction
+      [Pmax(pp,ll),id_best_pan] = max(p_int(id_rang,:));
+      panang_Pmax(pp,ll) = tang_int(id_best_pan);
+
+      % Variant 2: centroid closest to source direction
+      M = rang*p_int;
+      [tmp,id_best_pan] = min(abs(M-polphant(pp)));
+      panang_Cen(pp,ll) = tang_int(id_best_pan);
+
+    end
+      fprintf([num2str(pp) ' of ' num2str(length(polphant)) ' completed \n']);
+    end
+
+    results = struct('panang_Pmax',panang_Pmax,'Pmax',Pmax,...
+      'panang_Cen',panang_Cen,'polphant',polphant,'DL',DL,'rang',rang);
+    
+    amtcache('set','replicatePulkki2001',results);
+    
+  end
+  
+  [panang_varStrat,nCM_varStrat,p_varStrat,muhat,sigmahat] = amtcache('get','replicatePulkki2001_varStrat',flags.cachemode);
+  if isempty(panang_varStrat)
+    
+    pulkki01 = data_pulkki2001;
+    [muhat(1),sigmahat(1)] = normfit(pulkki01(1,:));
+    [muhat(2),sigmahat(2)] = normfit(pulkki01(2,:));
+    
+    Nsub = size(results.panang_Cen,2);
+    panang_all = [];
+    p = [];
+    nCM = [];
+    ii = 1;
+    for inCM = 1:Nsub+1
+      c = nchoosek(1:Nsub,inCM-1); % listeners with CM strategy
+      lenC = size(c,1);
+      nCM = [nCM;repmat(inCM,lenC,1)];
+      panang_all = cat(3,panang_all , nan(2,Nsub,lenC));
+      p = [p ; nan(lenC,2)];
+      for ic = 1:lenC
+        idCM = false(1,Nsub);
+        idCM(c(ic,:)) = true;
+        panang_all(:,:,ii) = [results.panang_Cen(:,idCM) results.panang_Pmax(:,not(idCM))];
+        [tmp.h1,p(ii,1)] = kstest((panang_all(1,:,ii)-muhat(1))/sigmahat(1)); % center data acc. to target distribution and then test similarity to standard normal distribution
+        [tmp.h2,p(ii,2)] = kstest((panang_all(2,:,ii)-muhat(2))/sigmahat(2));
+        ii = ii+1;
+      end
+      disp([num2str(inCM) ' of ' num2str(Nsub+1) ' done'])
+    end
+    [tmp.min,idmax] = max(sum(p,2)); % best fit
+    panang_varStrat = panang_all(:,:,idmax);
+    nCM_varStrat = nCM(idmax);
+    p_varStrat = p(idmax,:);
+    
+    amtcache('set','replicatePulkki2001_varStrat',panang_varStrat,nCM_varStrat,p_varStrat,muhat,sigmahat)
+    
+  end
+  
+  if flags.do_plot
+    
+    pulkki01 = data_pulkki2001;
+    Nsub = size(results.panang_Cen,2);
+    
+    figure
+    for ii = 1:2
+
+      subplot(1,2,ii)
+
+      X = nan(size(pulkki01,2)*size(pulkki01,3),4);
+      X(:,1) = pulkki01(ii,:);
+      X(1:Nsub,2) = results.panang_Pmax(ii,:)';
+      X(1:Nsub,3) = results.panang_Cen(ii,:)';
+
+      X(1:Nsub,4) = panang_varStrat(ii,:)';
+
+      plot([0,5],(ii-1)*15*[1,1],'k:') 
+      hold on
+
+      boxplot(X,'symbol','k*','outliersize',3)
+
+      set(gca,'YLim',[-17,32],...
+        'XTickLabel',{'[2]','PM','CM','Mixed'},'XTickLabelRotation',45)
+      if ii==1; 
+        ylabel('Panning angle (deg)')
+        text(0.7,27.5,'0\circ')
+      else
+        set(gca,'YTickLabel',[]); 
+        text(0.7,27.5,'15\circ')
+      end
+    end
+    
+  end
+  
+end
+
+%% ------ FIG 7 of baumgartner2015jaes ------------------------------------
+if flags.do_fig7_baumgartner2015jaes
+  
+  [peI,dPol] = amtcache('get','loudspeakerspan',flags.cachemode);
+  
+  if isempty(peI)
+    
+    MRS = 0;
+
+    flags.do_fig20 = false;
+    flags.do_fig19 = false;
+
+    s = data_baumgartner2014('pool');
+
+    if flags.do_fig19
+      dPol = [0 30,60];
+      s = s(2); % NH12
+    else
+      dPol = 10:10:90; 
+    end
+    lat = 0;
+
+    s(1).spdtfs = [];
+    [s(1).spdtfs,polang] = extractsp(lat,s(1).Obj); 
+    peI = zeros(length(s),length(dPol));
+    peA = zeros(length(s),length(dPol)+1);
+    ii = 0;
+    while ii < length(dPol)
+      ii = ii + 1;
+
+      % find comparable angles
+      id0 = [];
+      id1 = [];
+      id2 = [];
+      for jj = 1: length(polang)
+          t0 = find( round(polang) == round(polang(jj)+dPol(ii)/2) );
+          t2 = find( round(polang) == round(polang(jj)+dPol(ii)) );
+          if ~isempty(t0) && ~isempty(t2)
+              id0 = [id0 t0];
+              id1 = [id1 jj];
+              id2 = [id2 t2];
+          end
+      end
+      pol2{ii} = (polang(id1)+polang(id2)) /2;
+
+      amtdisp([' Span: ' num2str(dPol(ii)) 'deg'],'progress');
+      for ll = 1:length(s)
+
+          s(ll).spdtfs = extractsp(lat,s(ll).Obj);
+
+          % superposition
+          s(ll).dtfs2{ii} = s(ll).spdtfs(:,id1,:) + s(ll).spdtfs(:,id2,:);
+
+          [s(ll).p1{ii},respang] = baumgartner2014(...
+            s(ll).spdtfs(:,id0,:),s(ll).spdtfs,s(ll).fs,'S',s(ll).S,...
+            'mrsmsp',MRS,'polsamp',polang);
+          s(ll).p2{ii} = baumgartner2014(...
+            s(ll).dtfs2{ii},s(ll).spdtfs,s(ll).fs,'S',s(ll).S,...
+            'mrsmsp',MRS,'polsamp',polang);
+
+          % RMS Error
+          [s(ll).qe1{ii},s(ll).pe1{ii}] = baumgartner2014pmv2ppp(...
+            s(ll).p1{ii},polang(id0),respang);
+          [s(ll).qe2{ii},s(ll).pe2{ii}] = baumgartner2014pmv2ppp(...
+            s(ll).p2{ii},pol2{ii},respang);
+
+          % Increse of error
+          peI(ll,ii) = s(ll).pe2{ii} - s(ll).pe1{ii};
+
+      end
+
+    end
+
+    amtcache('set','loudspeakerspan',peI,dPol)
+    
+  end
+    
+  peIm = mean(peI,1);
+  peIstd = std(peI,1,1);
+    
+  if flags.do_plot
+    
+    figure
+    p = patch([dPol,fliplr(dPol)],[peIm+peIstd,fliplr(peIm-peIstd)],.7*[1,1,1]);
+    set(p,'EdgeColor',.7*[1,1,1]);
+    hold on
+    h = plot(dPol,peIm,'k');
+    set(h,'LineWidth',1)
+    set(gca,'XTick',dPol,'XTickLabel',dPol,...
+          'YMinorTick','on','Box','on','Layer','top')
+    axis([9.8,90.2,-2,27])
+    ylabel({'Increase in polar error (deg)'})
+    xlabel({'Loudspeaker span (deg)';''})
+    
+  end
+  
+end
+
+%% ------ FIG 8 of baumgartner2015jaes ------------------------------------
+if flags.do_fig8_baumgartner2015jaes
+  
+  [r2,dPol] = amtcache('get','loudspeakerspan_r2',flags.cachemode);
+  
+  if isempty(r2)
+    MRS = 0;
+
+    s = data_baumgartner2014('pool');
+
+    dPol = 0:10:105; 
+
+    lat = 0;
+    runs = 100;
+
+    
+    DL = -13:5:7; % panning ratios in dB
+    
+    s(1).spdtfs = [];
+    [s(1).spdtfs,polang] = extractsp(lat,s(1).Obj); 
+    r2 = zeros(length(s),length(dPol));
+    ii = 0;
+    while ii < length(dPol) % various spans
+      ii = ii + 1;
+
+      disp([' Span: ' num2str(dPol(ii)) 'deg']);
+
+      r2total = nan(length(s),length(DL));
+      r2front = nan(length(s),length(DL));
+      r2rear = nan(length(s),length(DL));
+      for idl = 1:length(DL)
+
+      % find comparable angles
+      id1 = []; % id of speaker with smaller polar angle
+      id2 = []; % id of speaker with larger polar angle
+      for jj = 1: length(polang)
+%           t0 = find( round(polang) == round(polang(jj)+ipf*dPol(ii)/polFrac) );
+          t2 = find( round(polang) == round(polang(jj)+dPol(ii)) );
+          if ~isempty(t2)
+%               id0 = [id0 t0];
+              id1 = [id1 jj];
+              id2 = [id2 t2];
+          end
+      end
+
+      g = inv([1,1;1,-10^(DL(idl)/20)]) * [1;0]; % derived from db(g1/g2)=DL and g1+g2=1 (chosen arbitrarily since energy preservation is not relevant here)
+      
+      pol0 = nan(length(id1),1); % panning angles
+      for jj = 1:length(id1)
+        [L(1,1),L(1,2),L(1,3)] = sph2cart(0,deg2rad(polang(id1(jj))),1);
+        [L(2,1),L(2,2),L(2,3)] = sph2cart(0,deg2rad(polang(id2(jj))),1);
+        t = g'*L;
+        [azi,ele,tmp.r] = cart2sph(t(1),t(2),t(3));
+        [tmp.lat,pol0(jj)] = sph2hor(rad2deg(azi),rad2deg(ele));
+      end
+
+      for ll = 1:length(s) % various listeners
+
+          s(ll).spdtfs = extractsp(lat,s(ll).Obj);
+
+          % superposition
+          s(ll).dtfs2{ii} = g(1)*s(ll).spdtfs(:,id1,:) + g(2)*s(ll).spdtfs(:,id2,:);
+
+          [s(ll).p2{ii},rang] = baumgartner2014(...
+            s(ll).dtfs2{ii},s(ll).spdtfs,s(ll).fs,'S',s(ll).S,...
+            'mrsmsp',MRS,'polsamp',polang,'rangsamp',1); % phantom
+
+          % total polar range 
+          m2 = baumgartner2014virtualexp(s(ll).p2{ii},pol0,rang,'runs',runs);
+
+          % R2 via correlation coefficient
+          r = corrcoef(m2(:,8),m2(:,6));
+          r2total(ll,idl) = r(2);
+
+          % restricted to frontal polar range 
+          idfront = rang <= 90;
+          respangfront = rang(idfront);
+          idpol0front = pol0 <= 90;
+          pol0front = pol0(idpol0front);
+          p = s(ll).p2{ii}(idfront,idpol0front);
+
+          m2front = baumgartner2014virtualexp(p,pol0front,respangfront,'runs',runs);
+
+          r = corrcoef(m2front(:,8),m2front(:,6));
+          r2front(ll,idl) = r(2);
+
+          % restricted to rear polar range 
+          idrear = rang >= 90;
+          respangrear = rang(idrear);
+          idpol0rear = pol0 >= 90;
+          pol0rear = pol0(idpol0rear);
+          p = s(ll).p2{ii}(idrear,idpol0rear);
+
+          m2rear = baumgartner2014virtualexp(p,pol0rear,respangrear,'runs',runs);
+
+          r = corrcoef(m2rear(:,8),m2rear(:,6));
+          r2rear(ll,idl) = r(2);
+
+      end
+      end
+      r2.total(:,ii) =  nanmean(r2total,2);
+      r2.front(:,ii) =  nanmean(r2front,2); 
+      r2.rear(:,ii) =  nanmean(r2rear,2);
+    end
+ 
+    amtcache('set','loudspeakerspan_r2',r2,dPol)
+
+  end
+    
+  % data extracted from Fig.6 (data:AVG) of Bremen et al. (2010, J Neurosci,
+  % 30:194-204) via http://arohatgi.info/WebPlotDigitizer
+  bremen2010.pol = 15:15:105;
+  bremen2010.r2 = [.85 , .81 , .63 , .38 , .19 , .11 , .21];
+  
+  if flags.do_plot
+
+    figure
+    h(1) = plot(bremen2010.pol,bremen2010.r2,'bo-');
+    hold on
+    h(2) = plot(dPol,mean(r2.front),'bo-');
+
+    h(3) = plot(dPol,mean(r2.rear),'rs-');
+    h(4) = plot(dPol,mean(r2.total),'kd-');
+
+    set(h(1),'MarkerSize',kv.MarkerSize,'MarkerFaceColor','b')
+    set(h(2:4),'MarkerSize',kv.MarkerSize,'MarkerFaceColor','w')
+    set(gca,'XLim',[-5,110],'YLim',[-.05,1.05])
+
+    leg = legend('Frontal from [18]','Frontal','Rear','Overall','Location','best');
+    set(leg,'FontSize',kv.FontSize)
+
+    xlabel({'Loudspeaker span (deg)';''})
+    ylabel('\it{r}^{ 2}')
+  end
+  
+end
+
+%% ------ FIG 9 of baumgartner2015jaes ------------------------------------
+if flags.do_fig9_baumgartner2015jaes
+  
+  SysName{1}  = 'NHK 22.2 (without bottom layer)';
+  LSPsetup{1} = [ 0,0 ; 30,0 ; 60,0 ;  90,0 ; 135,0 ; ...
+                180,0 ;-30,0 ;-60,0 ; -90,0 ;-135,0 ; ...
+                  0,45; 45,45; 90,45; 135,45; 180,45; ...
+               -135,45;-90,45;-45,45;   0,90];
+
+  SysName{2}  = 'Samsung 11.2';
+  LSPsetup{2} = [ 0,0 ; 60,0 ;  90,0 ; 135,0 ; ...
+                       -60,0 ; -90,0 ;-135,0 ; ...
+                 45,45;135,45; -45,45;-135,45];
+
+  SysName{3}  = 'Samsung 10.2';
+  LSPsetup{3} = [ 0,0 ; 60,0 ;  90,0 ; 135,0 ; ...
+                       -60,0 ; -90,0 ;-135,0 ; ...
+                 45,45;180,45; -45,45];
+
+  SysName{4}  = 'USC 10.2';
+  LSPsetup{4} = [ 0,0 ; 30,0 ; 60,0 ;  115,0 ; ...
+                180,0 ;-30,0 ;-60,0 ; -115,0 ; ...
+                 45,45;-45,45];
+
+  SysName{5}  = 'Auro-3D 10.1';
+  LSPsetup{5} = [ 30,0 ; 30,30 ; 135,30 ; 135,0;...
+            0,0 ;-30,0 ;-30,30 ;-135,30 ;-135,0; 0,90];        
+
+  SysName{6}  = 'Auro-3D 9.1';
+  LSPsetup{6} = [ 30,0 ; 30,30 ; 135,30 ; 135,0;...
+            0,0 ;-30,0 ;-30,30 ;-135,30 ;-135,0]; 
+  
+  latall = -45:5:45;
+  polall = 0:10:180;
+          
+  pe = amtcache('get','locaVBAP',flags.cachemode);
+  
+  if isempty(pe)
+    
+    MRS = 0;
+
+    s = data_baumgartner2014('pool');
+    
+    pe = zeros(length(latall),length(polall),length(s),length(LSPsetup),2); % predicted local polar RMS errors
+    for ll = 1:length(LSPsetup)
+      for aa = 1:length(latall)
+        lat = latall(aa);
+
+        for pp = 1:length(polall)
+          pol = polall(pp);
+
+          % Select LSP-Triangle and compute VBAP gains
+          [source_pos(1),source_pos(2)] = hor2sph(lat,pol);
+          Nlsp = length(LSPsetup{ll});
+          [g,IDsp] = vbap(LSPsetup{ll},source_pos);
+
+
+          for jj = 1:length(s)
+
+            % Compute binaural impulse response of loudspeaker triple
+            dtfs = permute(double(s(jj).Obj.Data.IR),[3 1 2]);
+            lsp_hrirs = zeros(length(IDsp),size(dtfs,1),2);
+            for ii = 1:length(IDsp)
+    %           [lat_sp,pol_sp] = sph2horpolar(LSPsetup{ll}(IDsp(ii),1),LSPsetup{ll}(IDsp(ii),2));
+              idx = findNearestPos_locaVBAP(...
+                LSPsetup{ll}(IDsp(ii),1:2),s(jj).Obj.SourcePosition(:,1:2));
+              lsp_hrirs(ii,:,:) = squeeze(dtfs(:,idx,:));
+            end
+            target(:,1,1) = g*lsp_hrirs(:,:,1);
+            target(:,1,2) = g*lsp_hrirs(:,:,2);
+
+            % SP-template
+            [spdtfs,polang] = extractsp(lat,s(jj).Obj);
+
+            % Run loca model
+            [p,rang] = baumgartner2014(...
+                    target,spdtfs,s(jj).fs,'S',s(jj).S,...
+                    'lat',lat,'polsamp',polang,'mrsmsp',MRS);
+
+            m = baumgartner2014virtualexp(p,pol,rang,'runs',1000);
+            pe(aa,pp,jj,ll,1) = localizationerror(m,'precPnoquerr');
+            [~,pe(aa,pp,jj,ll,2)] = baumgartner2014pmv2ppp(p,pol,rang);
+
+          end
+        end
+      end
+      amtdisp([num2str(ll) ' of ' num2str(length(LSPsetup)) ' done'],'progress')
+    end
+    amtcache('set','locaVBAP',pe)
+  end
+  
+  pe_ref = amtcache('get','locaVBAP_ref',flags.cachemode);
+  if isempty(pe_ref)
+    
+    MRS = 0;
+
+    s = data_baumgartner2014('pool');
+
+    latall = -45:5:45;
+    polall = 0:10:180;
+    pe_ref = zeros(length(latall),length(polall),length(s),1,2); % predicted local polar RMS errors
+
+    %% Computations
+
+    for jj = 1:length(s)
+
+      dtfs = permute(double(s(jj).Obj.Data.IR),[3 1 2]);
+
+      for aa = 1:length(latall)
+        lat = latall(aa);
+        for pp = 1:length(polall)
+          pol = polall(pp);
+          [lat_sp,pol_sp,idx] = findNearestPos_locaVBAP_ref(lat,pol,s(jj).Obj.SourcePosition(:,1:2));
+          target = dtfs(:,idx,:);
+
+          % SP-template
+          [spdtfs,polang] = extractsp(lat,s(jj).Obj);
+
+          % Run loca model
+          [p,rang] = baumgartner2014(...
+                  target,spdtfs,s(jj).fs,'S',s(jj).S,...
+                  'mrsmsp',MRS,'lat',lat,'polsamp',polang);
+
+          m = baumgartner2014virtualexp(p,pol,rang,'runs',1000);
+          pe_ref(aa,pp,jj,1,1) = localizationerror(m,'precPnoquerr');
+          [~,pe_ref(aa,pp,jj,1,2)] = baumgartner2014pmv2ppp(p,pol,rang);
+
+        end
+      end
+    end
+    
+    amtcache('set','locaVBAP_ref',pe_ref)
+  end
+
+  N = length(LSPsetup);
+  eRMS = pe_ref(:,:,:,:,2);
+  eRMS(:,:,:,2:N+1) = pe(:,:,:,:,2);
+
+  if flags.do_plot
+
+    labels = {'Reference';'\it A';'\it B';'\it C';'\it D';'\it E';'\it F'};
+    labels = labels(1:N+1,:);
+    
+    figure 
+    for ll = 1:N+1
+
+      pemean = squeeze(mean(eRMS(:,:,:,ll),3));
+      subplot(1,N+2,ll)
+      imagesc(latall,polall,pemean')
+      set(gca,'YTick',0:30:180,'XTick',-30:30:30)
+      axis equal tight
+      colormap hot
+      if MRS == 0
+        ymin = 15.5;
+        ymax = 49.5;
+      else
+        ymin = 15.5;
+        ymax = 49.5;
+      end
+      caxis([ymin ymax])
+      if ll==1; 
+        ylabel('Polar angle (deg)','FontName','Helvetica'); 
+      else 
+        set(gca,'YTickLabel',[])
+      end
+
+      if ll==4; xlabel('Lateral angle (deg)','FontName','Helvetica'); end
+
+      title(labels{ll},'FontName','Helvetica')
+
+      % Loudspeaker positions
+      if ll > 1
+        [lat_lsp,pol_lsp] = sph2hor(LSPsetup{ll-1}(:,1),LSPsetup{ll-1}(:,2));
+        idlat = abs(lat_lsp) <= max(abs(latall))+1;
+        hold on
+        h2 = plot(lat_lsp(idlat),pol_lsp(idlat),'wo');
+        h2.MarkerSize = 2*3.5;
+        h1 = plot(lat_lsp(idlat),pol_lsp(idlat),'ko');
+        h1.MarkerSize = 2*3;
+      end
+
+    end
+
+    subplot(1,N+2,N+2)
+    y = ymin:1:ymax;
+    Ny = length(y);
+    pcolor(1:2,y,repmat(y(:),1,2))
+    shading flat
+    axis tight
+    colormap hot
+    title({' ';' '})
+    set(gca,'XTick',[],'YTick',20:5:45,... %,'TickLength',[0.12,0.12]
+      'YDir','normal','YAxisLocation','right','FontSize',kv.FontSize)
+    ylabel({'Polar error (deg)'},'FontSize',kv.FontSize)
+    set(gca,'Position',get(gca,'Position').*[1.03,1.8,0.3,0.8])
+  end
+  
+end
+
+%% ------ Tab 1 of baumgartner2015jaes ------------------------------------
+if flags.do_tab1_baumgartner2015jaes
+  
+  results = amtcache('get','replicatePulkki2001',flags.cachemode);
+  [panang_varStrat,nCM_varStrat,p_varStrat,muhat,sigmahat] = amtcache('get','replicatePulkki2001_varStrat',flags.cachemode);
+  if isempty(panang_varStrat)
+    exp_baumgartner2014('fig6_baumgartner2015jaes','noplot',flags.cachemode)
+  end
+  
+  pulkki01 = data_pulkki2001;
+  
+  [h1_pul,p1_pul] = kstest((pulkki01(1,:)-muhat(1))/sigmahat(1)); % center data acc. to target distribution and then test similarity to standard normal distribution
+  [h2_pul,p2_pul] = kstest((pulkki01(2,:)-muhat(2))/sigmahat(2));
+  [h1_pm,p1_pm] = kstest((results.panang_Pmax(1,:)-muhat(1))/sigmahat(1)); % center data acc. to target distribution and then test similarity to standard normal distribution
+  [h2_pm,p2_pm] = kstest((results.panang_Pmax(2,:)-muhat(2))/sigmahat(2));
+  [h1_cm,p1_cm] = kstest((results.panang_Cen(1,:)-muhat(1))/sigmahat(1)); % center data acc. to target distribution and then test similarity to standard normal distribution
+  [h2_cm,p2_cm] = kstest((results.panang_Cen(2,:)-muhat(2))/sigmahat(2));
+
+  amtdisp('p-values of K.S.-test:')
+  amtdisp('Real source at 0 deg:')
+  amtdisp(['Results Pulkki (2001): p = ' num2str(p1_pul,'%3.2f')])
+  amtdisp(['Probability Maximiz.:  p = ' num2str(p1_pm,'%3.2f')])
+  amtdisp(['Centroid Match:        p = ' num2str(p1_cm,'%3.2f')])
+  amtdisp(['Individual strategy:   p = ' num2str(p_varStrat(1),'%3.2f') ' (#CM = ' num2str(nCM_varStrat) ')'])
+  amtdisp('Real source at 15 deg:')
+  amtdisp(['Results Pulkki (2001): p = ' num2str(p2_pul,'%3.2f')])
+  amtdisp(['Probability Maximi.:   p = ' num2str(p2_pm,'%3.2f')])
+  amtdisp(['Centroid Match:        p = ' num2str(p2_cm,'%3.2f')])
+  amtdisp(['Individual strategy:   p = ' num2str(p_varStrat(2),'%3.2f') ' (#CM = ' num2str(nCM_varStrat) ')'])
+  
+end
+
+%% ------ Tab 3 of baumgartner2015jaes ------------------------------------
+if flags.do_tab3_baumgartner2015jaes
+  
+  pe = amtcache('get','locaVBAP',flags.cachemode);
+  pe_ref = amtcache('get','locaVBAP_ref',flags.cachemode);
+  if isempty(pe)
+    exp_baumgartner2014('fig9_baumgartner2015jaes','noplot',flags.cachemode);
+  end
+  
+  N = size(pe,4); % # loudspeakers
+  eRMS = pe_ref(:,:,:,:,2);
+  eRMS(:,:,:,2:N+1) = pe(:,:,:,:,2);
+  
+  labels = {'Reference';'\it A';'\it B';'\it C';'\it D';'\it E';'\it F'};
+  labels = labels(1:N+1,:);
+
+  amtdisp('RMS error difference from reference averaged across directions')
+  amtdisp('System  min  mean  max')
+  for ll = 2:N+1
+    IeRMS = eRMS(:,:,:,ll) - eRMS(:,:,:,1);
+    IeRMS = mean(IeRMS,3); % average across listeners
+    amtdisp([labels{ll} ' ' num2str(min(IeRMS(:)),'%2.1f') ' ' num2str(mean(IeRMS(:)),'%2.1f') ' ' num2str(max(IeRMS(:)),'%2.1f')])
+  end
+  
+end
+
 end
 
 
@@ -3006,16 +3907,6 @@ end
 %% ------------------------------------------------------------------------
 %  ---- INTERNAL FUNCTIONS ------------------------------------------------
 %  ------------------------------------------------------------------------
-function autorefreshnotification(fn,flags)
-if flags.do_autorefresh
-  amtdisp(['Calculation of ' fn ' started.'],'progress')
-  amtdisp('Results can be also downloaded here:') 
-  amtdisp(' http://www.kfs.oeaw.ac.at/research/experimental_audiology/projects/amt/exp_baumgartner2014.zip')
-  amtdisp('Unzip the folder and move the single files into:')
-  amtdisp([' ' fullfile(amtbasepath,'experiments')])
-end
-end
-
 function hM_warped = warp_hrtf(hM,fs)
 % warps HRTFs acc. to Walder (2010)
 % Usage: hM_warped = warp_hrtf(hM,fs)
@@ -3107,7 +3998,8 @@ if extendedrange == 1
     Gamma(12) = 6000;
 end
 N = duration*GaussRate; % number of pulses
-Genv=zeros(N,nsamples);
+fN = floor(N);
+Genv=zeros(fN,nsamples);
 GETtrain=zeros(channum,nsamples);
 
 % Make pulse trains
@@ -3131,9 +4023,9 @@ for i = 1:channum
     else
     % if modulation depth is 100%, make modulated pulses and replicate
         T=(0.5)/N*duration;
-        Genv=zeros(N,nsamples);
+        Genv=zeros(fN,nsamples);
         Genv(1,:) = sqrt(Gamma(i)) * exp(-pi*(Gamma(i)*(t-T)).^2) .* sin(2*pi*cf(i)*t - T + pi/4); %!!! (t-T)
-        Genv=repmat(Genv(1,:),[N 1]);
+        Genv=repmat(Genv(1,:),[fN 1]);
         for n=1:N
             T = round((n)/N*nsamples);
             Genv(n,:)=circshift(Genv(n,:),[1 T-1]);
@@ -3344,5 +4236,92 @@ line([x,x],quantiles(2:3),'Color','k') % connector lower whisker
 line([x,x],quantiles(5:6),'Color','k') % connector upper whisker
 line([x,x]-lilen,quantiles([3,5]),'Color','k') % left box edge
 line([x,x]+lilen,quantiles([3,5]),'Color','k') % left box edge
+
+end
+
+function [idx,posN] = findNearestPos_locaVBAP(posdesired,posexist)
+% FINDNEARESTPOS_LOCAVABAP finds nearest position. Data given in spherical
+% coordinates
+%
+% Usage:    [idx,posN] = findNearestPos(posdesired,posexist)
+
+ds = deg2rad(posdesired);
+es = deg2rad(posexist);
+
+[d(:,1),d(:,2),d(:,3)] = sph2cart(ds(:,1),ds(:,2),ones(size(ds,1),1));
+[e(:,1),e(:,2),e(:,3)] = sph2cart(es(:,1),es(:,2),ones(size(es,1),1));
+
+D = e-repmat(d,length(es),1);
+[Dmin,idx] = min(sum(D.^2,2));
+
+posN = posexist(idx,:);
+
+end
+
+function [latN,polN,idx] = findNearestPos_locaVBAP_ref(lat,pol,aziele)
+% FINDNEARESTPOS_LOCAVBAP_REF finds nearest position according to lat. and pol. angle
+%
+% Usage:    [latN,polN,idx] = findNearestPos(lat,pol,aziele)
+
+[positions(:,1),positions(:,2)] = sph2hor(aziele(:,1),aziele(:,2));
+d_lat = abs(lat-positions(:,1));
+d_pol = abs(pol-positions(:,2));
+d = d_lat+d_pol;
+[d_min,idx] = min(d);
+latN = positions(idx,1);
+polN = positions(idx,2);
+
+end
+
+function [g,IDspeaker] = vbap(lsp_coord,source_pos)
+%VBAP Returns array of gains for VBAP triplet of speakers.         
+%   Usage: [g,IDspeaker] = vbap(speaker_coord,source_pos)
+%
+%   Input Parameters:
+%     lsp_coord  : spherical (azi,ele) coordinates of loudspeakers
+%     source_pos : spherical (azi,ele) coordinates of phantom source
+%
+%   Output Parameters:
+%     g          : VBAP gains of loudspeaker triplet
+%     IDspeaker  : indices of selected loudspeaker triplet
+
+Nlsp = size(lsp_coord,1);
+
+% Convert to spherical coordinates winth angles in radians
+speaker_sph = deg2rad(lsp_coord);
+source_sph = deg2rad(source_pos);
+
+% Convert to cartesian coordinates
+[speaker_cart(:,1),speaker_cart(:,2),speaker_cart(:,3)] = sph2cart(...
+  speaker_sph(:,1),speaker_sph(:,2),ones(Nlsp,1));
+[source_cart(1),source_cart(2),source_cart(3)] = sph2cart(...
+  source_sph(1),source_sph(2),1);
+
+% Add imaginary speaker below
+if min(lsp_coord(:,2)) >= 0
+  speaker_cart = [speaker_cart;0,0,-10];
+end
+
+% Select lsp. triplet
+dt = DelaunayTri(speaker_cart);
+ch = convexHull(dt);
+% figure; trisurf(ch, dt.X(:,1),dt.X(:,2),dt.X(:,3), 'FaceColor', 'cyan')
+d = zeros(length(ch),1);
+for ii = 1:length(ch)
+  d(ii) = sum(dist(source_cart,speaker_cart(ch(ii,:),:)));
+end
+[~,IDch] = min(d);
+IDspeaker = ch(IDch,:);
+
+% Compute lsp. gains
+g = source_cart / speaker_cart(IDspeaker,:);
+g = g / norm(g);
+
+
+end
+
+function d = dist(x,Y)
+
+d = sqrt(sum((repmat(x,size(Y,1),1)-Y).^2,2));
 
 end

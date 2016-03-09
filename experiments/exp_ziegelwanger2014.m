@@ -7,7 +7,8 @@ function exp_ziegelwanger2014(varargin)
 %
 %   The following flags can be specified:
 %
-%     'redo'  Recalculate results.
+%     'redo'    Recalculate results.
+%     'cached'  Use cached results. Default. 
 %
 %     'fig3'    Reproduce Fig. 3:
 %               
@@ -114,7 +115,7 @@ function exp_ziegelwanger2014(varargin)
 % 
 %   2) Optimization Toolbox for Matlab
 %
-%   3) Data in hrtf/ziegelwanger2014
+%   3) Optional: Data in hrtf/ziegelwanger2014. Will be downloaded on demand.
 %
 %   Examples:
 %   ---------
@@ -185,7 +186,7 @@ definput.flags.type = {'missingflag',...
 'fig3','fig5','fig6','fig7','fig8','fig9',...
 'fig10','fig12','tab1','tab2','tab3','tab5',...
 'tab6'};
-definput.flags.redo = {'missingflag','redo'};
+definput.import={'amtcache'}; % get the flags of amtcache
 
 % Parse input options
 [flags,~]  = ltfatarghelper({},definput,varargin);
@@ -200,10 +201,10 @@ end;
 if flags.do_fig3
 
 %load data
-    Obj{1}=data_ziegelwanger2014('Sphere');
-    Obj{2}=data_ziegelwanger2014('SAT');
-    Obj{3}=data_ziegelwanger2014('STP');
-    Obj{4}=data_ziegelwanger2014('NH89');
+    Obj{1}=data_ziegelwanger2014('Sphere',flags.cachemode);
+    Obj{2}=data_ziegelwanger2014('SAT',flags.cachemode);
+    Obj{3}=data_ziegelwanger2014('STP',flags.cachemode);
+    Obj{4}=data_ziegelwanger2014('NH89',flags.cachemode);
     
 %plot figure
     figure('Position',[ 520   221   732   577]);
@@ -222,7 +223,7 @@ if flags.do_fig3
             if hrtf==4
                 Obj{4}.Data.toaEst{method}=Obj{4}.Data.toaEst{method}+110;
             end
-            h=plotziegelwanger2014(Obj{hrtf},Obj{hrtf}.Data.toaEst{method},4,'k',0,1,1,sty(hrtf,:),lw(hrtf));
+            h=plot_ziegelwanger2014(Obj{hrtf},Obj{hrtf}.Data.toaEst{method},4,'k',0,1,1,sty(hrtf,:),lw(hrtf));
             set(h,'color',clr(method,:));
             hold on
         end
@@ -276,11 +277,7 @@ end
 if flags.do_fig5
 
 %load data
-    if flags.do_redo
-        data=data_ziegelwanger2014('SPHERE_ROT','redo');
-    else
-        data=data_ziegelwanger2014('SPHERE_ROT');
-    end
+    data=data_ziegelwanger2014('SPHERE_ROT',flags.cachemode);
     for ii=1:length(data.results)
         p_onaxis{1}(:,:,ii)=data.results(ii).MAX{1}.p_onaxis;
         p_onaxis{2}(:,:,ii)=data.results(ii).CTD{1}.p_onaxis;
@@ -397,11 +394,7 @@ if flags.do_fig6
 %load data
     hrtf={'ARI','CIPIC','LISTEN'};
     for kk=1:length(hrtf)
-        if flags.do_redo
-            data=data_ziegelwanger2014(hrtf{kk},'redo');
-        else
-            data=data_ziegelwanger2014(hrtf{kk});
-        end
+        data=data_ziegelwanger2014(hrtf{kk},flags.cachemode);
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
@@ -534,7 +527,7 @@ if flags.do_fig6
     ylim([-1,25])
     xlabel('   _e (deg)','Fontname','Arial','Fontsize',fs)
     set(gca,'xtick',[60 80 100 120]);
-    set(gca,'xticklabel',{'±60','±80','±100','±120'});
+    set(gca,'xticklabel',{'\pm60','\pm80','\pm100','\pm120'});
     set(gca,'yticklabel',[]);
     tmp=get(gca,'Position');
     set(gca,'Position',tmp+[-0.02 0.03 0.04 0]);
@@ -601,11 +594,7 @@ if flags.do_fig7
 %load data
     hrtf={'ARI','CIPIC','LISTEN'};
     for kk=1:length(hrtf)
-        if flags.do_redo
-            data=data_ziegelwanger2014(hrtf{kk},'redo');
-        else
-            data=data_ziegelwanger2014(hrtf{kk});
-        end
+        data=data_ziegelwanger2014(hrtf{kk},flags.cachemode);
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
@@ -619,33 +608,25 @@ if flags.do_fig7
         p_offaxis{kk,2}=temp3;
         clear data temp1 temp2 temp3
     end
-    if flags.do_redo
-        data=data_ziegelwanger2014('SPHERE_ROT','redo');
-    else
-        data=data_ziegelwanger2014('SPHERE_ROT');
-    end
+    data=data_ziegelwanger2014('SPHERE_ROT',flags.cachemode);
     for ii=1:length(data.results)
         temp(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
     end
     p_onaxis{4}=temp;
     clear data temp
-    Obj=data_ziegelwanger2014('Sphere');
+    Obj=data_ziegelwanger2014('Sphere',flags.cachemode);
     [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
     p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
     clear data temp Obj
-    Obj=data_ziegelwanger2014('SAT');
+    Obj=data_ziegelwanger2014('SAT',flags.cachemode);
     [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
     p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
     clear data temp Obj
-    Obj=data_ziegelwanger2014('STP');
+    Obj=data_ziegelwanger2014('STP',flags.cachemode);
     [~,temp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
     p_onaxis{4}(:,:,end+1)=temp.p_onaxis;
     clear data temp Obj
-    if flags.do_redo
-        data=data_ziegelwanger2014('SPHERE_DIS','redo');
-    else
-        data=data_ziegelwanger2014('SPHERE_DIS');
-    end
+    data=data_ziegelwanger2014('SPHERE_DIS',flags.cachemode);
     for ii=1:length(data.results)
         temp1(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
         temp2(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
@@ -728,14 +709,14 @@ if flags.do_fig8
     siglevel=0.05;
     outlierrate=0.01; % upper bound for the outlier rate
 
-    Obj=data_ziegelwanger2014('STP');
+    Obj=data_ziegelwanger2014('STP',flags.cachemode);
     idx=Obj.Data.toaEst{4}(:,1)>-100000;
     stpEst=Obj.Data.toaEst{4}(idx,1);
     [~,results]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,2);
     stpMod=results.toa(idx,1);
     stpRes=stpEst-stpMod;
 
-    Obj=data_ziegelwanger2014('NH89');
+    Obj=data_ziegelwanger2014('NH89',flags.cachemode);
     fs=Obj.Data.SamplingRate*1e-6;
     idx=Obj.Data.toaEst{4}(:,1)>-100000;
     sp=Obj.SourcePosition(idx,:);
@@ -757,7 +738,7 @@ if flags.do_fig8
     plot(lat(idx),est(idx)/fs-min(est/fs),'.k','MarkerSize',24);
     axis([-99 99 -50 995]);
     set(gca,'XTickLabel',[],'FontName','Arial');
-    ylabel('Relative TOA (µs)','FontName','Arial','FontSize',18);
+    ylabel('Relative TOA (\mus)','FontName','Arial','FontSize',18);
     tmp=get(gca,'Position');
     set(gca,'Position',tmp+[0 0 0.06 0]);
 
@@ -769,7 +750,7 @@ if flags.do_fig8
     line([-99 99],1./[fs fs],'LineStyle','--','Color',[0 0 0]);
     axis([-99 99 -80 195])
     xlabel('\Phi_h (deg)','FontName','Arial','FontSize',18);
-    ylabel('Residual error (µs)','FontName','Arial','FontSize',18);
+    ylabel('Residual error (\mus)','FontName','Arial','FontSize',18);
     tmp=get(gca,'Position');
     set(gca,'Position',tmp+[0 0.11 0.06 0]);
 
@@ -812,19 +793,19 @@ end
 if flags.do_fig9
     
 %load data
-    Obj=data_ziegelwanger2014('NH89');
+    Obj=data_ziegelwanger2014('NH89',flags.cachemode);
     toa1=Obj.Data.toaEst{4};
     [~,tmp]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
     toa2=tmp.toa;
 
 %plot figure
     h=subplot(1,1,1);
-    plotziegelwanger2014(Obj,toa2-min(min(toa1))-1,4,'k',0,1,1,'-',3);
-    h2=plotziegelwanger2014(Obj,toa1-min(min(toa1))-1,4,'k',0,1,1,'o',1);
+    plot_ziegelwanger2014(Obj,toa2-min(min(toa1))-1,4,'k',0,1,1,'-',3);
+    h2=plot_ziegelwanger2014(Obj,toa1-min(min(toa1))-1,4,'k',0,1,1,'o',1);
     set(h2,'MarkerFaceColor',[0 0 0]);
-    h3=plotziegelwanger2014(Obj,toa2-min(min(toa1))-1,4,'k',0,2,1,'-',3);
+    h3=plot_ziegelwanger2014(Obj,toa2-min(min(toa1))-1,4,'k',0,2,1,'-',3);
     set(h3,'Color',[0.5 0.5 0.5]);
-    h4=plotziegelwanger2014(Obj,toa1-min(min(toa1))-1,4,'k',0,2,1,'o',1);
+    h4=plot_ziegelwanger2014(Obj,toa1-min(min(toa1))-1,4,'k',0,2,1,'o',1);
     set(h4,'MarkerFaceColor',[.5 .5 .5],'MarkerEdgeColor',[.5 .5 .5]);
 
     xlim([-9 369])
@@ -844,11 +825,7 @@ end
 if flags.do_fig10
 
 %load data
-    if flags.do_redo
-        data=data_ziegelwanger2014('SPHERE_DIS','redo');
-    else
-        data=data_ziegelwanger2014('SPHERE_DIS');
-    end
+    data=data_ziegelwanger2014('SPHERE_DIS',flags.cachemode);
     for ii=1:length(data.results)
         p_onaxis(:,:,ii)=data.results(ii).MCM{1}.p_onaxis;
     end
@@ -917,11 +894,7 @@ end
 if flags.do_fig12
 
 %load data
-    if flags.do_redo
-        data=data_ziegelwanger2014('SPHERE_DIS','redo');
-    else
-        data=data_ziegelwanger2014('SPHERE_DIS');
-    end
+    data=data_ziegelwanger2014('SPHERE_DIS',flags.cachemode);
     for ii=1:length(data.results)
         p_offaxis(:,:,ii)=data.results(ii).MCM{1}.p_offaxis;
     end
@@ -1036,7 +1009,7 @@ if flags.do_fig12
     set(gca,'xtick',1:size(var,1))
     set(gca,'xticklabel',[])
     set(gca,'ytick',[85 90 95])
-    set(gca,'yticklabel',{'±85','±90','±95'})
+    set(gca,'yticklabel',{'\pm85','\pm90','\pm95'})
     tmp=get(gca,'Position');
     set(gca,'Position',tmp+[0 0.08 0 0]);
     clear var;
@@ -1076,11 +1049,7 @@ end
 if flags.do_tab1
     
 %load data
-    if flags.do_redo
-        data=data_ziegelwanger2014('SPHERE_ROT','redo');
-    else
-        data=data_ziegelwanger2014('SPHERE_ROT');
-    end
+    data=data_ziegelwanger2014('SPHERE_ROT',flags.cachemode);
     for ii=1:length(data.results)
         p_onaxis{1}(:,:,ii)=data.results(ii).MAX{1}.p_onaxis;
         p_onaxis{2}(:,:,ii)=data.results(ii).CTD{1}.p_onaxis;
@@ -1180,12 +1149,12 @@ if flags.do_tab1
         'MCM ||'];...
     fprintf('\nTab. I.:\n')
     fprintf('----------------------------------------------------------------------\n')
-    fprintf('EST || r error (mm) | phi_e error (deg) | theta_e errror |  ANR (µs)  \n')
+    fprintf('EST || r error (mm) | phi_e error (deg) | theta_e errror |  ANR (\mus)  \n')
     fprintf('----------------------------------------------------------------------\n')
     fprintf('----------------------------------------------------------------------\n')
     for ii=1:4
         fprintf(rows(ii,:))
-        fprintf('   %4.1f ± %3.1f |        %4.1f ± %3.1f |     %4.1f ± %3.1f | %4.1f ± %3.1f\n',out(ii,:)');
+        fprintf('   %4.1f \pm %3.1f |        %4.1f \pm %3.1f |     %4.1f \pm %3.1f | %4.1f \pm %3.1f\n',out(ii,:)');
     end
     fprintf('----------------------------------------------------------------------\n\n')
 
@@ -1196,7 +1165,7 @@ if flags.do_tab2
 
 %load data
     out=zeros(3,16);
-    Obj1=data_ziegelwanger2014('Sphere');
+    Obj1=data_ziegelwanger2014('Sphere',flags.cachemode);
     for method=1:4
         [Obj1,results]=ziegelwanger2014(Obj1,Obj1.Data.toaEst{method},0,1,[[0.08; pi/18*8; 0; 0] [0.08; -pi/18*10; 0; 0]]);
         out(1,method+0)=results.p_onaxis(1,1)*1000;
@@ -1204,7 +1173,7 @@ if flags.do_tab2
         out(1,method+8)=results.p_onaxis(3,1)*180/pi-1;
         out(1,method+12)=results.performance.on_axis{1}.resnormS*1e06;
     end
-    Obj2=data_ziegelwanger2014('SAT');
+    Obj2=data_ziegelwanger2014('SAT',flags.cachemode);
     for method=1:4
         [Obj2,results]=ziegelwanger2014(Obj2,Obj2.Data.toaEst{method},0,1,[[0.08; pi/18*8; 0; 0] [0.08; -pi/18*10; 0; 0]]);
         out(2,method+0)=results.p_onaxis(1,1)*1000;
@@ -1212,7 +1181,7 @@ if flags.do_tab2
         out(2,method+8)=results.p_onaxis(3,1)*180/pi-1;
         out(2,method+12)=results.performance.on_axis{1}.resnormS*1e06;
     end
-    Obj3=data_ziegelwanger2014('STP');
+    Obj3=data_ziegelwanger2014('STP',flags.cachemode);
     for method=1:4
         [Obj3,results]=ziegelwanger2014(Obj3,Obj3.Data.toaEst{method},0,1,[[0.08; pi/18*8; 0; 0] [0.08; -pi/18*10; 0; 0]]);
         out(3,method+0)=results.p_onaxis(1,1)*1000;
@@ -1227,7 +1196,7 @@ if flags.do_tab2
         'STP    ||'];
     fprintf('\nTab. II.:\n')
     fprintf('----------------------------------------------------------------------------------------------------------\n')
-    fprintf('       ||     r error (mm)       |   phi_e error (deg)   |    theta_e errror     |       ANR (µs)        \n')
+    fprintf('       ||     r error (mm)       |   phi_e error (deg)   |    theta_e errror     |       ANR (\mus)        \n')
     fprintf('       || MAX | CTD | AGD  | MCM | MAX | CTD | AGD | MCM | MAX | CTD | AGD | MCM | MAX | CTD | AGD | MCM \n')
     fprintf('----------------------------------------------------------------------------------------------------------\n')
     fprintf('----------------------------------------------------------------------------------------------------------\n')
@@ -1246,11 +1215,7 @@ if flags.do_tab3
     out=zeros(4,8);
     hrtf={'ARI','CIPIC','LISTEN'};
     for kk=1:length(hrtf)
-        if flags.do_redo
-            data=data_ziegelwanger2014(hrtf{kk},'redo');
-        else
-            data=data_ziegelwanger2014(hrtf{kk});
-        end
+        data=data_ziegelwanger2014(hrtf{kk},flags.cachemode);
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
@@ -1318,7 +1283,7 @@ if flags.do_tab3
     out(2,7)=mean([resnormS_onaxis_right{1} resnormS_onaxis_right{2} resnormS_onaxis_right{3}])*1e6;
     out(2,8)=std([resnormS_onaxis_right{1} resnormS_onaxis_right{2} resnormS_onaxis_right{3}])*1e6;
 
-    Obj=data_ziegelwanger2014('NH89');
+    Obj=data_ziegelwanger2014('NH89',flags.cachemode);
     [~,results]=ziegelwanger2014(Obj,4,0,1);
 
     out(3:4,[1 3 5])=results.p_onaxis(1:3,:)'.*([1;1]*[1000 180/pi 180/pi]);
@@ -1332,12 +1297,12 @@ if flags.do_tab3
         '     |  R  ||'];...
     fprintf('\nTab. III.:\n')
     fprintf('-----------------------------------------------------------------------\n')
-    fprintf('     | Ear || r (mm)       | phi_e (deg)  | theta_e (deg) |  ANR (µs)  \n')
+    fprintf('     | Ear || r (mm)       | phi_e (deg)  | theta_e (deg) |  ANR (\mus)  \n')
     fprintf('-----------------------------------------------------------------------\n')
     fprintf('-----------------------------------------------------------------------\n')
     for ii=1:4
         fprintf(rows(ii,:))
-        fprintf(' %5.1f ± %4.1f | %5.1f ± %4.1f |   %5.1f ± %3.1f | %4.1f ± %4.1f\n',out(ii,:)');
+        fprintf(' %5.1f \pm %4.1f | %5.1f \pm %4.1f |   %5.1f \pm %3.1f | %4.1f \pm %4.1f\n',out(ii,:)');
     end
     fprintf('-----------------------------------------------------------------------\n\n')
 
@@ -1348,7 +1313,7 @@ if flags.do_tab5
     
 %load data
     out=zeros(12,14);
-    Obj=data_ziegelwanger2014('SAT');
+    Obj=data_ziegelwanger2014('SAT',flags.cachemode);
     [~,results]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
     out(1:2,[1 7 9 11 3 5])=results.p_offaxis([1:4 6:7],:)'.*([1;1]*[1000 1000 1000 1000 180/pi 180/pi]);
     out(1,13)=results.performance.off_axis{1}.resnormS*1e6;
@@ -1359,7 +1324,7 @@ if flags.do_tab5
     out(3,13)=results.performance.off_axis{1}.resnormS*1e6;
     out(4,13)=results.performance.off_axis{2}.resnormS*1e6;
 
-    Obj=data_ziegelwanger2014('STP');
+    Obj=data_ziegelwanger2014('STP',flags.cachemode);
     [~,results]=ziegelwanger2014(Obj,Obj.Data.toaEst{4},0,1);
     out(5:6,[1 7 9 11 3 5])=results.p_offaxis([1:4 6:7],:)'.*([1;1]*[1000 1000 1000 1000 180/pi 180/pi]);
     out(5,13)=results.performance.off_axis{1}.resnormS*1e6;
@@ -1374,11 +1339,7 @@ if flags.do_tab5
 
     hrtf={'ARI','CIPIC','LISTEN'};
     for kk=1:length(hrtf)
-        if flags.do_redo
-            data=data_ziegelwanger2014(hrtf{kk},'redo');
-        else
-            data=data_ziegelwanger2014(hrtf{kk});
-        end
+        data=data_ziegelwanger2014(hrtf{kk},flags.cachemode);
         if kk==3
             data.results=data.results([1:27 29:end]);
         end
@@ -1520,12 +1481,12 @@ if flags.do_tab5
         '    |  O-A   |  R  ||'];
     fprintf('\nTab. V.:\n')
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
-    fprintf('    | TOAset | Ear || r (mm)     | phi_e (deg) | theta_e (deg)| x_M (mm)    | y_M (mm)    | z_M (mm)    |  ANR (µs)  \n')
+    fprintf('    | TOAset | Ear || r (mm)     | phi_e (deg) | theta_e (deg)| x_M (mm)    | y_M (mm)    | z_M (mm)    |  ANR (\mus)  \n')
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
     for ii=1:12
         fprintf(rows(ii,:))
-        fprintf(' %4.1f ± %3.1f | %5.1f ± %3.1f |  %5.1f ± %4.1f | %4.1f ± %4.1f | %4.1f ± %4.1f | %4.1f ± %4.1f | %4.1f ± %4.1f\n',out(ii,:)');
+        fprintf(' %4.1f \pm %3.1f | %5.1f \pm %3.1f |  %5.1f \pm %4.1f | %4.1f \pm %4.1f | %4.1f \pm %4.1f | %4.1f \pm %4.1f | %4.1f \pm %4.1f\n',out(ii,:)');
     end
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n\n')
 
@@ -1539,11 +1500,7 @@ if flags.do_tab6
 
     hrtf={'SPHERE_ROT','SPHERE_DIS'};
     for kk=1:length(hrtf)
-        if flags.do_redo
-            data=data_ziegelwanger2014(hrtf{kk},'redo');
-        else
-            data=data_ziegelwanger2014(hrtf{kk});
-        end
+        data=data_ziegelwanger2014(hrtf{kk},flags.cachemode);
         for jj=1:2
             for ii=1:length(data.results)
                 temp1(:,:,ii)=data.results(ii).MCM{jj}.p_offaxis;
@@ -1621,12 +1578,12 @@ if flags.do_tab6
         '             |  O-A   |  R  ||'];
     fprintf('\nTab. V.:\n')
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
-    fprintf('Condition    | TOAset | Ear || r error (mm) | phi_e error (deg) | theta_e errror | x_M error (mm) | y_M error (mm) | z_M error (mm) |  ANR (µs)  \n')
+    fprintf('Condition    | TOAset | Ear || r error (mm) | phi_e error (deg) | theta_e errror | x_M error (mm) | y_M error (mm) | z_M error (mm) |  ANR (\mus)  \n')
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n')
     for ii=1:8
         fprintf(rows(ii,:))
-        fprintf('   %4.1f ± %3.1f |        %4.1f ± %3.1f |     %4.1f ± %3.1f |      %4.1f ± %3.1f |     %4.1f ± %3.1f |     %4.1f ± %3.1f | %4.1f ± %3.1f\n',out(ii,:)');
+        fprintf('   %4.1f \pm %3.1f |        %4.1f \pm %3.1f |     %4.1f \pm %3.1f |      %4.1f \pm %3.1f |     %4.1f \pm %3.1f |     %4.1f \pm %3.1f | %4.1f \pm %3.1f\n',out(ii,:)');
     end
     fprintf('-------------------------------------------------------------------------------------------------------------------------------------------------\n\n')
 

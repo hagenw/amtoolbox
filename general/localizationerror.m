@@ -4,11 +4,14 @@ function [varargout] = localizationerror(m,varargin)
 %          [res, meta, par] = localizationerror(m,errorflag)
 %
 %   Input parameters:
-%     m       : item list of experiment
-%               Columns: 
-%                1:4 ...   azi_target,ele_target,azi_response,ele_response
-%                5:8 ...   lat_target,pol_target,lat_response,pol_response
-%                9   ...   F/B-C resolved pol_response
+%     m       : item list from a localization experiment. Columns: 
+% 
+%                 1:4 ...   azi_target,ele_target,azi_response,ele_response
+%
+%                 5:8 ...   lat_target,pol_target,lat_response,pol_response
+%
+%                 9   ...   F/B-C resolved pol_response
+%
 %
 %   `localizationerror(m,errorflag)` returns psychoacoustic performance 
 %   parameters for experimental response patterns. 
@@ -113,6 +116,9 @@ function [varargout] = localizationerror(m,varargin)
 %     pVeridicalPrear    Proportion of quasi-verdical polar responses in
 %                        the back
 %
+%     pVeridicalP        Proportion of quasi-verdical polar responses in
+%                        total
+%
 %     precPregressFront  polar scatter around linear regression line for
 %                        the front (only quasi-veridical responses included).
 %
@@ -136,15 +142,7 @@ function [varargout] = localizationerror(m,varargin)
 
 %% Check input options 
 
-definput.flags.errorflag = {'','accL','precL','precLcentral','accP','precP','querr','accE',...
-  'absaccE','absaccL','accabsL','accPnoquerr','precE','querr90','accE','precPmedian',...
-  'precPmedianlocal','precPnoquerr','rmsL','rmsPmedianlocal','rmsPmedian',...
-  'querrMiddlebrooks','corrcoefL','corrcoefP','SCC',...
-  'gainLstats','gainL','pVeridicalL','precLregress'...
-  'sirpMacpherson2000','gainPfront','gainPrear','gainP','perMacpherson2003',...
-  'pVeridicalPfront','pVeridicalPrear','precPregressFront','precPregressRear'};
-definput.keyvals.f=[];       % regress structure of frontal hemisphere
-definput.keyvals.r=[];       % regress structure of rear hemisphere
+definput.import={'localizationerror'};
 
 [flags,kv]=ltfatarghelper({'f','r'},definput,varargin);
 
@@ -481,6 +479,29 @@ else
       
       varargout{1}=pVer*100;
       meta.ylabel = '% quasi-veridical (rear)';
+     
+    case 'pVeridicalP'
+      
+      tol = 45; % tolerance of polar angle error for quasi-veridical responses
+      [f,r] = localizationerror(m,'sirpMacpherson2000');
+      
+      mf = m( abs(m(:,7))<=30 & m(:,6)< 90 ,:); % frontal central data
+      mr = m( abs(m(:,7))<=30 & m(:,6)>=90 ,:); % rear central data
+      
+      x = -90:270;
+      yf = f.b(2)*mf(:,6) + f.b(1); % linear prediction for flat, frontal targets
+      yr = r.b(2)*mr(:,6) + r.b(1); % linear prediction for flat, rear targets
+      
+      devf = mod( (mf(:,8)-yf) +180,360) -180; % deviation wrapped to +-180 deg
+      devr = mod( (mr(:,8)-yr) +180,360) -180; % deviation wrapped to +-180 deg
+      
+      pVerf = sum(abs(devf) <= tol) / length(devf);
+      pVerr = sum(abs(devr) <= tol) / length(devr);
+      
+      pVer = (pVerf + pVerr)/2;
+      
+      varargout{1}=pVer*100;
+      meta.ylabel = '% quasi-veridical';
      
     case 'precPregressFront'
       

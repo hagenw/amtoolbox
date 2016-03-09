@@ -26,7 +26,6 @@
 %
 %   Speech models
 %       EXP_JELFS2011        - Binaural speech intelligibility advantage
-%       EXP_SPILLE2013       - Figures from Spille et al. (2013)
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

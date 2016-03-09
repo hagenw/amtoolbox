@@ -1,5 +1,5 @@
 function m = baumgartner2014virtualexp(p,tang,rang,varargin)
-%BAUMGARTNER2014VIRTUALEXP Response patterns of virtual localization experiments
+%BAUMGARTNER2014VIRTUALEXP - Performs a virtual sound-localization experiment
 %   Usage:    m = baumgartner2014virtualexp(p,tang,rang)
 %
 %   Input parameters:
@@ -23,7 +23,7 @@ function m = baumgartner2014virtualexp(p,tang,rang,varargin)
 %   `baumgartner2014virtualexp` accepts the following optional parameters:
 %
 %     'runs',runs    	Define the number of runs. 
-%                    	Default value is 1.
+%                    	Default value is 10.
 %
 %     'targetset',ts  Define the set of polar target angles.
 %                    	As default 'tang' is used.
@@ -31,7 +31,7 @@ function m = baumgartner2014virtualexp(p,tang,rang,varargin)
 %     'lat',lat     	Define the lateral target angles. 
 %                    	Default value is 0 deg.
 %
-%   See also: localizationerror, baumgartner2014, plotbaumgartner2013
+%   See also: localizationerror, baumgartner2014, plot_baumgartner2014
 %
 
 %   References: baumgartner2014modeling
@@ -39,7 +39,7 @@ function m = baumgartner2014virtualexp(p,tang,rang,varargin)
     
 % AUTHOR: Robert Baumgartner
 
-definput.keyvals.runs = 1;
+definput.keyvals.runs = 10;
 definput.keyvals.targetset = [];
 definput.keyvals.lat = 0;
 % definput.flags.colorbar = {'colorbar','nocolorbar'};
