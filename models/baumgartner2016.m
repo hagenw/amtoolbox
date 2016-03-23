@@ -1,7 +1,7 @@
 function varargout = baumgartner2016( target,template,varargin )
 %varargout = baumgartner2016( target,template,label,varargin )
 %BAUMGARTNER2016 Level-dependent model for localization in sagittal planes
-%   Usage:    [p,rang] = baumgartner2016( target,template )
+%   Usage:    [p,rang,tang] = baumgartner2016( target,template )
 %             [err,pred,m] = baumgartner2016( target,template,errorflag )
 %
 %   Input parameters:
@@ -62,10 +62,12 @@ function varargout = baumgartner2016( target,template,varargin )
 %                    The default is Gaussian white noise with a duration of 170 ms.
 %
 %     'SPL',L        Set the SPL of the stimulus to *L*dB. 
-%                    Default value is 80dB.
+%                    Default value is 60dB.
 %
-%     'SPLtem',Lt    Set the SPL of the templates to *Lt*dB. 
-%                    Default value is 80dB.
+%     'SPLtem',Lt    Set the SPL of the templates to a specific SPL of *Lt*dB
+%                    if *Lt* is a scalar or define a SPL range between
+%                    *Lt(1)* and *Lt(2)*dB if *Lt* is a two-element vector.
+%                    Default range is 40 to 70dB.
 %
 %     'flow',flow    Set the lowest frequency in the filterbank to
 %                    *flow*. Default value is 700 Hz.
@@ -110,6 +112,12 @@ function varargout = baumgartner2016( target,template,varargin )
 %                    analysis. This is the default.
 %
 %     'gammatone'    Use the Gammatone filterbank for spectral analysis. 
+%
+%     'SPLtemAdapt'  Set SPL of templates acc. to target (*Lt*=*L*). 
+%
+%     'NHtem'        No adaptation of templates to hearing impairment,
+%                    i.e., templates are processed with *cohc=cihc=1* and
+%                    *fT = 1:3*.
 %
 %     'ihc'          Incorporate the transduction model of inner hair 
 %                    cells used by Dau et al. (1996).
@@ -211,8 +219,34 @@ if flags.do_redoSpectralAnalysis
 else
   redoSAflag = 'normal';
 end
-[mreptar,fc] = baumgartner2016spectralanalysis(target,kv.SPL,'target','argimport',flags,kv,redoSAflag);
-mreptem = baumgartner2016spectralanalysis(template,kv.SPLtem,'template','argimport',flags,kv,redoSAflag);
+
+% Target profile
+[mreptar,fc] = baumgartner2016spectralanalysis(target,kv.SPL,'target',...
+  'argimport',flags,kv,redoSAflag);
+
+% Template profile
+if flags.do_NHtem
+  kv.cohc = 1;
+  kv.cihc = 1;
+  kv.fiberTypes = 1:3;
+end
+if flags.do_SPLtemAdapt
+  kv.SPLtem = kv.SPL;
+end
+if isscalar(kv.SPLtem) % all templates represented at a fixed SPL
+  mreptem = baumgartner2016spectralanalysis(template,kv.SPLtem,'template',...
+    'argimport',flags,kv,redoSAflag);
+else % average across SPL range
+  mreptem = baumgartner2016spectralanalysis(template,kv.SPLtem(1),'template',...
+    'argimport',flags,kv,redoSAflag);
+  SPLtemRange = kv.SPLtem(1):10:kv.SPLtem(2);
+  for ii = 2:length(SPLtemRange)
+    mreptem = mreptem + ...
+      baumgartner2016spectralanalysis(template,SPLtemRange(ii),'template',...
+        'argimport',flags,kv,redoSAflag);
+  end
+  mreptem = mreptem/length(SPLtemRange);
+end
 
 %% Positive spectral gradient extraction
 

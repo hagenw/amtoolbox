@@ -2,13 +2,15 @@ function [ varargout ] = baumgartner2014pmv2ppp( varargin )
 %BAUMGARTNER2014PMV2PPP - Performance predictions from PMVs of baumgartner2014
 %   Usage:  [ qe,pe,eb ] = baumgartner2014pmv2ppp( p,tang,rang );
 %           [ qe,pe,eb ] = baumgartner2014pmv2ppp( p,tang,rang,exptang );
+%           [ qe,pe,eb ] = baumgartner2014pmv2ppp( pred );
 %
 %   Input parameters:
 %     p          : prediction matrix (response PMVs)
 %     tang       : possible polar target angles. As default, ARI's MSP 
 %                  polar angles in the median SP is used.
 %     rang       : polar angles of possible response angles.
-%                  As default regular 5 deg.-sampling is used (-90:5:265).    
+%                  As default regular 5 deg.-sampling is used (-90:5:265).
+%     pred       : structure including all input parameters above.     
 %
 %   Output parameters:
 %     qe         : quadrant error rate
@@ -36,6 +38,7 @@ function [ varargout ] = baumgartner2014pmv2ppp( varargin )
 %     'PE'         Compute PE.
 %     'EB'         Compute EB.
 %     'absPE'      Compute absolute polar error.
+%     'chance'     Compute chance performance for QE and PE.
 %
 %   Example:
 %   ---------
@@ -52,7 +55,13 @@ definput.import={'baumgartner2014pmv2ppp'};
 
 [flags,kv]=ltfatarghelper({'p','tang','rang','exptang'},definput,varargin);
 
-p = kv.p;
+if isstruct(kv.p) % input as *pred* structure 
+  p = kv.p.p;
+  kv.rang = kv.p.rang;
+  kv.tang = kv.p.tang;
+else
+  p = kv.p;
+end
 
 if flags.do_chance
   p = ones(length(kv.rang),length(kv.tang));

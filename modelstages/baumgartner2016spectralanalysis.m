@@ -9,7 +9,9 @@ function varargout = baumgartner2016spectralanalysis(sig,spl,varargin)
 %     name    : identifying string for caching (e.g., 'NH12_baseline') 
 %
 %   Output parameters:
-%     mp      : spectral magintude profile
+%     mp      : spectral magintude profile. Dimensions (4-6 optional): 
+%               1) frequency, 2) position (polar angle), 3) channel, 4)
+%               fiber type, 5) time frame.
 %     fc      : center frequencies of auditory filters
 %
 %   `baumgartner2016spectralanalysis(...)` computes temporally integrated
@@ -195,7 +197,7 @@ if flags.do_zilany2007humanized || flags.do_zilany2014
           % Compensate for cochlear delay?!?
           
           % Check stimulus onset
-          ionset = find(diff(mean(ANout.^2,2)) ~= 0,1,'first');
+          ionset = find(diff(mean(ANout.^2,1)) ~= 0,1,'first');
 
           ANresp(:,:,ii,ch) = ANout(:,(1:len)+ionset-1)';
           
@@ -216,7 +218,7 @@ if flags.do_zilany2007humanized || flags.do_zilany2014
 %         ANresp = reshape(ANresp,[size(len,length(fc),size(sig,2),size(sig,3)]); % retreive polar dimension if squeezed out
         time = 0;
       end
-      mp = shiftdim(mean(ANresp));
+      mp = shiftdim(mean(ANresp),1);
 
       amtcache('set',cachename,mp,fc,time);
     end

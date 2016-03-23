@@ -1,10 +1,16 @@
 function varargout = exp_baumgartner2016(varargin)
 %EXP_BAUMGARTNER2016 evaluation of baumgartner2016 model
-%   Usage: data = exp_baumgartner2016(flag)
+%   Usage: [d,r,s,N] = exp_baumgartner2016(flag)
 %
 %   `exp_baumgartner2016(flag)` reproduces figures of the study from 
 %   Baumgartner et al. (2014).
 %
+%   Output parameter:
+%     d  :  Prediction residuum. Structure with fields: qe, pe, and total
+%     r  :  Correlation coefficient between actual and predicted results. 
+%           Structure with fields: qe, pe, and total.
+%     s  :  Structure containing listener-sepcific data and results. 
+%     N  :  Number of spectral channels (only for 'numchan'). 
 %
 %   The following flags can be specified;
 %
@@ -66,7 +72,7 @@ function varargout = exp_baumgartner2016(varargin)
 %               Effect of spectral resolution in terms of varying the number 
 %               of spectral channels of a channel vocoder. Actual experimental 
 %               results are from goupell2010numchan. Stimulation with broadband 
-%               click trains (CL) represents an unlimited number of channels. 
+%               click trains (CT) represents an unlimited number of channels. 
 %               All other conventions are as in Fig.6. 
 %
 %     'baseline' 
@@ -80,6 +86,9 @@ function varargout = exp_baumgartner2016(varargin)
 %
 %     'hearingthreshold' 
 %               Estimation of hearing thresholds in correspondence to OHC dysfunctions.  
+%
+%     'ratelevelcurves' 
+%               Rate-level curves of fibers with different SRs (CF: 1kHz). 
 %
 %   Requirements: 
 %   -------------
@@ -111,7 +120,7 @@ function varargout = exp_baumgartner2016(varargin)
 %
 %   To display spatstrat prediction use :::
 %
-%     exp_baumgartner2016('spatstrat');
+%     [d,r,s] = exp_baumgartner2016('spatstrat');
 %
 %   To display numchan prediction examples use :::
 %
@@ -119,7 +128,7 @@ function varargout = exp_baumgartner2016(varargin)
 %
 %   To display numchan prediction use :::
 %
-%     exp_baumgartner2016('numchan');
+%     [d,r,s,N] = exp_baumgartner2016('numchan');
 %
 %   See also: baumgartner2014 data_baumgartner2016
 %
@@ -137,8 +146,9 @@ definput.import={'amtcache','localizationerror','baumgartner2014pmv2ppp'};
 definput.flags.experiment = {'missingflag','baseline','baseline_ex',...
    'baseline_lat','parametrization',...
    'spatstrat_ex','spatstrat','numchan_ex','numchan',...
+   'evalSPLtem','cOHCvsSens',...
    'sabin2005','impairment','effectOnCues','dynrangecheck',...
-   'localevel','hearingthreshold'};
+   'localevel','hearingthreshold','ratelevelcurves','evalSpectralContrast'};
      
 definput.keyvals.ModelSettings = {};
  
@@ -154,20 +164,25 @@ definput.keyvals.TickLength = [0.02,0.04];
 % For: sabin2005
 definput.keyvals.SL2SPL = 10;
 definput.flags.gainInDeg = {'','gainInDeg'};
+definput.keyvals.sabin2005_Sdivisor = 1;
+definput.flags.sabin2005nomrs = {'','nomrs'};
 
 % For: impairment
 definput.keyvals.subjects = [];
+definput.keyvals.SPLset = 60;
+definput.keyvals.FTset = {1:3,1,2,3};
+definput.keyvals.cOHCset = [1,0.4,0.1,0];
 definput.flags.impairment={'FTlabel','noFTlabel'};
+definput.flags.SPLseparation={'splitSPL','compriseSPL'};
 
 % For: localevel
-definput.flags.TL = {'','TLisSPL'};
 definput.flags.localevelplot = {'performance','pmv'};
 
 % For: parametrization
 definput.flags.parametrize = {'gamma','mrsandgamma'};
 
 % For: dynrangecheck
-definput.flags.dynrangecheck = {'','dynrangeDiff','dprime'};
+definput.flags.dynrangecheck = {'ratelevel','dynrangeDiff','dprime'};
 definput.flags.dynrangecheck_comb = {'separate','combined'};
 
 definput.flags.effectOnCues={'OHC','FT'};
@@ -213,7 +228,7 @@ cachename = [cachename '_mgs' num2str(model.kv.mgs)];
 %% Hearing thresholds following OHC dysfunction
 if flags.do_hearingthreshold
 
-  cOHC = [1,0.5,0.1,0];
+  cOHC = kv.cOHCset;
   flow = 125;%700; % Hz
   fhigh = 18000; % Hz
   spl = -20:100; % dB
@@ -223,7 +238,11 @@ if flags.do_hearingthreshold
   t = 0:1/fs:0.1; % s
   cf = audspace(flow,fhigh,Ncf); % CFs under test
 
-  afr = amtcache('get',['hearingthreshold_' model.flags.fbank '_' model.flags.fibertypeseparation]);
+  cachename = [model.flags.fbank '_' model.flags.fibertypeseparation];
+  cachename = [cachename '_cohc' num2str(cOHC)];
+  cachename = strrep(cachename,' ','');cachename = strrep(cachename,'.','p');
+  cachename = ['hearingthreshold_' cachename];
+  afr = amtcache('get',cachename,flags.cachemode);
   if isempty(afr)
     afr = nan(length(cf),length(cOHC),length(spl),3);
     for ff = 1:length(cf)
@@ -241,7 +260,7 @@ if flags.do_hearingthreshold
       end
       amtdisp([num2str(ff) ' of ' num2str(length(cf)) '  done.'],'progress')
     end
-  amtcache('set',['hearingthreshold' cachename],afr)
+  amtcache('set',cachename,afr)
   end
 
 
@@ -320,6 +339,9 @@ end
 
 %% ------ BASELINE EXAMPLES --------------------------------------------------------
 if flags.do_baseline_ex
+  
+  SL = 50; % presentation level of stimuli
+  model.kv.SPL = SL + kv.SL2SPL;
   
   latseg = 0;ii=1;%[-20,0,20]; ii = 2; % centers of lateral segments
 %   dlat =  10;         % lateral range (+-) of each segment
@@ -422,89 +444,134 @@ end
 %% ------ BASELINE ----------------------------------------------------------
 if flags.do_baseline
   
+  SL = 50; % presentation level of stimuli
+  model.kv.SPL = SL + kv.SL2SPL;
+  
   cachename = ['baseline_tar' num2str(model.kv.SPL,'%u') 'dB_' cachename];
+  if not(isempty(model.flags.errorflag))
+    cachename = [cachename '_' model.flags.errorflag];
+  end
   [r,d,s] = amtcache('get',cachename,flags.cachemode);
   
   if isempty(r)
 
     s = data_baumgartner2016('argimport',model.flags,model.kv);
-
-%     qe_pred = nan(size(qe_exp));
-%     pe_pred = qe_pred;
-    for ii = 1:length(s)
-      [p,rang,tang] = baumgartner2016(s(ii).Obj,s(ii).Obj,'argimport',model.flags,model.kv,...
-            'ID',s(ii).id,'Condition','baseline','mrsmsp',s(ii).mrs,'S',s(ii).S,'priordist',s(ii).priordist);
-      [s(ii).qe_pred,s(ii).pe_pred] = baumgartner2014pmv2ppp(p,tang,rang,s(ii).itemlist(:,6));
-    end
     
-    qe_exp = cat(1,s.qe_exp);
-    pe_exp = cat(1,s.pe_exp);
-    qe_pred = cat(1,s.qe_pred);
-    pe_pred = cat(1,s.pe_pred);
-    r_qe = corrcoef(qe_exp,qe_pred);
-    r.qe = r_qe(2);
-    r_pe = corrcoef(pe_exp,pe_pred);
-    r.pe = r_pe(2);
-
-    % prediction residues
+    % # of targets for evaluation of prediction residues
     Ntargets = cat(1,s.Ntar); % # of targets
     Ntargets = cat(1,Ntargets{:});
     relfreq = Ntargets/sum(Ntargets(:));
-    sd_pe = (pe_pred-pe_exp).^2; % squared differences
-    d.pe = sqrt(relfreq(:)' * sd_pe(:));    % weighted RMS diff.
-    sd_qe = (qe_pred-qe_exp).^2;
-    d.qe = sqrt(relfreq(:)' * sd_qe(:));
+
+    if isempty(model.flags.errorflag)
+      errorflag = 'querrMiddlebrooks';
+    else
+      errorflag = model.flags.errorflag;
+    end
+    for ii = 1:length(s)
+      [s(ii).err,pred,m] = baumgartner2016(s(ii).Obj,s(ii).Obj,...
+        'argimport',model.flags,model.kv,'ID',s(ii).id,'Condition','baseline',...
+        'mrsmsp',s(ii).mrs,'S',s(ii).S,'priordist',s(ii).priordist,errorflag);
+      [s(ii).qe_pred,s(ii).pe_pred] = baumgartner2014pmv2ppp(pred,'exptang',s(ii).itemlist(:,6));
+    end
+    
+    if isempty(model.flags.errorflag) % QE and PE
+    
+      qe_exp = cat(1,s.qe_exp);
+      pe_exp = cat(1,s.pe_exp);
+      qe_pred = cat(1,s.qe_pred);
+      pe_pred = cat(1,s.pe_pred);
+      
+      % correlation
+      r.qe = corrcoeff(qe_exp,qe_pred,2);
+      r.pe = corrcoeff(pe_exp,pe_pred,2);
+
+      % prediction residues
+      sd_pe = (pe_pred-pe_exp).^2; % squared differences
+      d.pe = sqrt(relfreq(:)' * sd_pe(:));    % weighted RMS diff.
+      sd_qe = (qe_pred-qe_exp).^2;
+      d.qe = sqrt(relfreq(:)' * sd_qe(:));
+      
+    else % arbitrary localization measure
+      
+      for ii = 1:length(s)
+        s(ii).err_exp = localizationerror(s(ii).itemlist,model.flags.errorflag);
+      end
+      err_exp = cat(1,s.err_exp);
+      err_pred = cat(1,s.err);
+      r = corrcoeff(err_exp,err_pred,2);
+      sd = (err_pred-err_exp).^2; % squared differences
+      d = sqrt(relfreq(:)' * sd(:));    % weighted RMS diff.
+      
+    end
 
     s = rmfield(s,{'Obj'});
     
     amtcache('set',cachename,r,d,s)
   end
   
-  d.total = (d.pe/90 + d.qe/100) /2;
+  if isempty(model.flags.errorflag)
+    d.total = (d.pe/90 + d.qe/100) /2;
+    amtdisp(['Corr. QE: ' num2str(r.qe,'%2.2f') ', PE: ' num2str(r.pe,'%2.2f') ', QE+PE: ' num2str((r.qe+r.pe)/2,'%2.2f')])
+  end
   
   if nargout >0; varargout{1} = d;	end
   if nargout >1; varargout{2} = r;	end
   if nargout >2; varargout{3} = s;	end
   
-  amtdisp(['Corr. QE: ' num2str(r.qe,'%2.2f') ', PE: ' num2str(r.pe,'%2.2f') ', QE+PE: ' num2str((r.qe+r.pe)/2,'%2.2f')])
-    
   if flags.do_plot
     
-    qe_exp = cat(1,s.qe_exp);
-    pe_exp = cat(1,s.pe_exp);
-    qe_pred = cat(1,s.qe_pred);
-    pe_pred = cat(1,s.pe_pred);
+    if isempty(model.flags.errorflag)
     
-    figure
-    subplot(121)
-    minqe = min([qe_exp(:);qe_pred(:)])-2;
-    maxqe = max([qe_exp(:);qe_pred(:)])+2;
-    limqe = [minqe,maxqe];
-    plot(limqe,limqe,'k--')
-    hold on
-    plot(qe_exp,qe_pred,'ko')
-    axis equal
-    axis([minqe maxqe minqe maxqe])
+      qe_exp = cat(1,s.qe_exp);
+      pe_exp = cat(1,s.pe_exp);
+      qe_pred = cat(1,s.qe_pred);
+      pe_pred = cat(1,s.pe_pred);
 
-    xlabel('Actual QE','FontSize',kv.FontSize)
-    ylabel('Predicted QE','FontSize',kv.FontSize)
-    title(['e_{QE} = ' num2str(d.qe,'%0.1f') '% , r_{QE} = ' num2str(r.qe,'%0.2f')],...
+      figure
+      subplot(122)
+      minqe = min([qe_exp(:);qe_pred(:)])-2;
+      maxqe = max([qe_exp(:);qe_pred(:)])+2;
+      limqe = [minqe,maxqe];
+      plot(limqe,limqe,'k--')
+      hold on
+      plot(qe_exp,qe_pred,'ko')
+      axis equal
+      axis([minqe maxqe minqe maxqe])
+
+      xlabel('Actual QE','FontSize',kv.FontSize)
+      ylabel('Predicted QE','FontSize',kv.FontSize)
+      title(['e_{QE} = ' num2str(d.qe,'%0.1f') '% , r_{QE} = ' num2str(r.qe,'%0.2f')],...
+          'FontSize',kv.FontSize)
+
+      subplot(121)
+      minpe = min([pe_exp(:);pe_pred(:)])-2;
+      maxpe = max([pe_exp(:);pe_pred(:)])+2;
+      limpe = [minpe,maxpe];
+      plot(limpe,limpe,'k--')
+      hold on
+      plot(pe_exp,pe_pred,'ko')
+      axis equal
+      axis([minpe maxpe minpe maxpe])
+      xlabel('Actual PE','FontSize',kv.FontSize)
+      ylabel('Predicted PE','FontSize',kv.FontSize)
+      title(['e_{PE} = ' num2str(d.pe,'%0.1f') '\circ , r_{PE} = ' num2str(r.pe,'%0.2f')],...
+          'FontSize',kv.FontSize)
+
+    else
+      
+      figure
+      plot(cat(1,s.err_exp),cat(1,s.err),'ko')
+      axis equal square
+      xlim = get(gca,'XLim');
+      hold on
+      plot(xlim,xlim,'k:')
+      xlabel('Actual','FontSize',kv.FontSize)
+      ylabel('Predicted','FontSize',kv.FontSize)
+      title({model.flags.errorflag;...
+        ['(e = ' num2str(d,'%0.1f') ' , r = ' num2str(r,'%0.2f') ')']},...
         'FontSize',kv.FontSize)
-
-    subplot(122)
-    minpe = min([pe_exp(:);pe_pred(:)])-2;
-    maxpe = max([pe_exp(:);pe_pred(:)])+2;
-    limpe = [minpe,maxpe];
-    plot(limpe,limpe,'k--')
-    hold on
-    plot(pe_exp,pe_pred,'ko')
-    axis equal
-    axis([minpe maxpe minpe maxpe])
-    xlabel('Actual PE','FontSize',kv.FontSize)
-    ylabel('Predicted PE','FontSize',kv.FontSize)
-    title(['e_{PE} = ' num2str(d.pe,'%0.1f') '\circ , r_{PE} = ' num2str(r.pe,'%0.2f')],...
-        'FontSize',kv.FontSize)
-
+      
+    end
   end
   
 end
@@ -512,6 +579,9 @@ end
 
 %% ------ SPATSTRAT EXAMPLES -----------------------------------------------------------
 if flags.do_spatstrat_ex
+  
+  SL = 50; % presentation level of stimuli
+  model.kv.SPL = SL + kv.SL2SPL;
   
   latdivision = 0;  % lateral angle
   dlat = 15;
@@ -670,6 +740,9 @@ end
 %% ------ SPATSTRAT -----------------------------------------------------------
 if flags.do_spatstrat
   
+  SL = 50; % presentation level of stimuli
+  model.kv.SPL = SL + kv.SL2SPL;
+  
   cachename = ['spatstrat_tar' num2str(model.kv.SPL,'%u') 'dB_' cachename];
   [r,d,s,act,pred] = amtcache('get',cachename,flags.cachemode);
   
@@ -790,13 +863,11 @@ if flags.do_spatstrat
     pred.pe = [s(idpart).pe_part]';
     
     % Correlation coefficients
-    [rmtx,p] =  corrcoef(act.qe,pred.qe);
-    r.qe = rmtx(2);
-    disp(['QE: r = ' num2str(r.qe,'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
+    r.qe =  corrcoeff(act.qe,pred.qe,2);
+    disp(['QE: r = ' num2str(r.qe,'%0.2f')]);
 
-    [rmtx,p] =  corrcoef(act.pe,pred.pe);
-    r.pe = rmtx(2);
-    disp(['PE: r = ' num2str(r.pe,'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
+    r.pe =  corrcoeff(act.pe,pred.pe,2);
+    disp(['PE: r = ' num2str(r.pe,'%0.2f')]);
 
 
     % RMS Differences
@@ -809,7 +880,14 @@ if flags.do_spatstrat
     d.qe = sqrt(relfreq(:)' * sd_qe(:));
   
     amtcache('set',cachename,r,d,s,act,pred);
+  else
+    
+    data = data_majdak2013;
+    idpart = ismember({s.id},{data.id});
+  
   end
+  
+  s = s(idpart);
   
   d.total = (d.pe/90 + d.qe/100) /2;
   
@@ -829,7 +907,8 @@ if flags.do_spatstrat
     quart_qe_exp = quantile(act.qe,[.25 .50 .75]);
 
     % Chance performance
-    [qe0,pe0] = baumgartner2014pmv2ppp('chance');
+    [qe0,pe0] = baumgartner2014pmv2ppp('chance',...
+      'rang',-30-model.kv.mrsmsp:1:210+model.kv.mrsmsp);
     
     
     %% Plots
@@ -850,7 +929,7 @@ if flags.do_spatstrat
         'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','w');
 
-    plot([0,4],[pe0,pe0],'k:')
+    plot([0,4],[pe0,pe0],'k--')
 
     title(['e_{PE} = ' num2str(d.pe,'%0.1f') '\circ , r_{PE} = ' num2str(r.pe,'%0.2f')],...
       'FontSize',kv.FontSize)
@@ -858,10 +937,12 @@ if flags.do_spatstrat
     set(gca,...
         'XLim',[0.5 3.5],...
         'XTick',1:3,...
-        'YLim',[27 54.9],...
+        'YLim',[27 57.5],...
         'XTickLabel',{'BB';'LP';'W'},...
         'YMinorTick','on','FontSize',kv.FontSize,...
         'TickLength',2*get(gca,'TickLength'))
+    l = legend('Model','Actual');
+    set(l,'Location','north','FontSize',kv.FontSize-1)
 
     subplot(122)
     errorbar((1:3)+dx,quart_qe_part(2,:),...
@@ -875,10 +956,8 @@ if flags.do_spatstrat
         quart_qe_exp(3,:) - quart_qe_exp(2,:),...
         'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','w');
-    l = legend('Model','Actual');
-    set(l,'Location','northwest','FontSize',kv.FontSize-1)
     
-    plot([0,4],[qe0 qe0],'k:')
+    plot([0,4],[qe0 qe0],'k--')
 
     title(['e_{QE} = ' num2str(d.qe,'%0.1f') '% , r_{QE} = ' num2str(r.qe,'%0.2f')],...
       'FontSize',kv.FontSize)
@@ -886,7 +965,7 @@ if flags.do_spatstrat
     set(gca,...
         'XLim',[0.5 3.5],...
         'XTick',1:3,...
-        'YLim',[0.1 54],...
+        'YLim',[0.1 49],...
         'XTickLabel',{'BB';'LP';'W'},...
         'YAxisLocation','left',...
         'YMinorTick','on','FontSize',kv.FontSize,...
@@ -900,7 +979,11 @@ end
 %% ------ NUMCHAN EXAMPLES -----------------------------------------------------------
 if flags.do_numchan_ex
   
+  % Stimulus Level
+  SL = 50; % presentation level of stimuli
+  
   % Model Settings
+  model.kv.SPL = SL + kv.SL2SPL;
   latdivision = 0;            % lateral angle
   dlat = 10;
 
@@ -1082,6 +1165,10 @@ end
 %% ------ FIG NUMCHAN ----------------------------------------------------------
 if flags.do_numchan
   
+  % Stimulus Level
+  SL = 50; % presentation level of stimuli
+  model.kv.SPL = SL + kv.SL2SPL;
+  
   cachename = ['numchan_tar' num2str(model.kv.SPL,'%u') 'dB_' cachename];
   [N,r,d,s] = amtcache('get',cachename,flags.cachemode);
   if isempty(N)
@@ -1176,9 +1263,9 @@ if flags.do_numchan
       idpart = [];
       for ll = 1:length(s)
         clear qe pe qe_t pe_t
-        for ii = 1:length(latdivision)
-
-          if sum(ismember({data.id},s(ll).id)) % if actual participant actual targets
+        if sum(ismember({data.id},s(ll).id)) % if actual participant actual targets
+          
+          for ii = 1:length(latdivision)
             if strcmp(Cond,'CL')
               stim = repmat([1;zeros(s(ll).fs/100-1,1)],17,1); % pulse train with 100pps
             else
@@ -1196,10 +1283,7 @@ if flags.do_numchan
             [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
                 p , s(ll).polang{ii} , rang , s(ll).target{ii} );
           end
-
-        end
-
-        if sum(ismember({data.id},s(ll).id)) % if actual participant 
+          
           idpart = [idpart,ll];
           % Actual experimental results
           s(ll).qe_exp(C,1) = localizationerror(s(ll).itemlist,'querrMiddlebrooks');
@@ -1226,25 +1310,20 @@ if flags.do_numchan
       disp(['Condition ' Cond ' completed.'])
     end
     
-    act.qe = [s(idpart).qe_exp]';
-    act.pe = [s(idpart).pe_exp]';
-    pred.qe = [s(idpart).qe_part]';
-    pred.pe = [s(idpart).pe_part]';
+    act.qe = [s(idpart).qe_exp];
+    act.pe = [s(idpart).pe_exp];
+    pred.qe = [s(idpart).qe_part];
+    pred.pe = [s(idpart).pe_part];
     
-    [rmtx,p] =  corrcoef(act.qe,pred.qe);
-    r.qe = rmtx(2);
-%     r.qe.p = p(2);
-    
-    disp(['QE: r = ' num2str(r.qe,'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
+    r.qe =  corrcoeff(act.qe,pred.qe,1);
+    disp(['QE: r = ' num2str(r.qe,'%0.2f')]);
 
-    [rmtx,p] =  corrcoef(act.pe,pred.pe);
-    r.pe = rmtx(2);
-%     r.pe.p = p(2);
-    disp(['PE: r = ' num2str(r.pe,'%0.2f') ', p = ' num2str(p(2),'%0.3f')]);
+    r.pe =  corrcoeff(act.pe,pred.pe,1);
+    disp(['PE: r = ' num2str(r.pe,'%0.2f')]);
     
     % RMS Differences
     % individual:
-    Ntargets = [s.Nt]'; % # of targets
+    Ntargets = [s.Nt]; % # of targets
     relfreq = Ntargets/sum(Ntargets(:));
     sd_pe = (pred.pe-act.pe).^2; % squared differences
     d.pe = sqrt(relfreq(:)' * sd_pe(:));    % weighted RMS diff.
@@ -1256,6 +1335,10 @@ if flags.do_numchan
     amtcache('set',cachename,N,r,d,s)
   end
   
+  data = data_goupell2010;
+  idpart = ismember({s.id},{data.id});
+  s = s(idpart);
+  
   d.total = (d.pe/90 + d.qe/100) /2;
   
   if nargout >0; varargout{1} = d;	end
@@ -1266,9 +1349,6 @@ if flags.do_numchan
 
   if flags.do_plot
     
-    data = data_goupell2010;
-    idpart = ismember({s.id},{data.id});
-    
     %% Quartiles
     quart_pe_part = fliplr(quantile([s(idpart).pe_part]',[.25 .50 .75]));
     quart_qe_part = fliplr(quantile([s(idpart).qe_part]',[.25 .50 .75]));
@@ -1276,7 +1356,8 @@ if flags.do_numchan
     quart_pe_exp = fliplr(quantile([s(idpart).pe_exp]',[.25 .50 .75]));
     quart_qe_exp = fliplr(quantile([s(idpart).qe_exp]',[.25 .50 .75]));
 
-    [qe0,pe0] = baumgartner2014pmv2ppp('chance');
+    [qe0,pe0] = baumgartner2014pmv2ppp('chance',...
+      'rang',-30-model.kv.mrsmsp:1:210+model.kv.mrsmsp);
     
     
     %% Plot
@@ -1298,15 +1379,18 @@ if flags.do_numchan
         'MarkerFaceColor','w');
     plot([0,2*max(N)],[pe0,pe0],'k--')
     xlabel('Num. of channels','FontSize',kv.FontSize)
-    ylabel('LPE (deg)','FontSize',kv.FontSize)
+    ylabel('RMS of local errors (deg)','FontSize',kv.FontSize)
 
     title(['e = ' num2str(d.pe,'%0.1f') '\circ , r = ' num2str(r.pe,'%0.2f')],...
       'FontSize',kv.FontSize,'FontWeight','normal')
     set(gca,'XLim',[1 max(N)+2],'XTick',fliplr(N),...%[3 6 9 12 18 24 30],...
         'XTickLabel',{3;6;'';12;18;24;'CL';'BB'},...
-        'YLim',[27 54.9],...
+        'YLim',[27 57.5],...
         'YMinorTick','on','FontSize',kv.FontSize,...
         'TickLength',2*get(gca,'TickLength'))
+      
+    l = legend('Model','Actual');
+    set(l,'Location','northeast','FontSize',kv.FontSize)
 
     %% QE
     subplot(122)
@@ -1322,18 +1406,15 @@ if flags.do_numchan
         'ko-','MarkerSize',kv.MarkerSize,...
         'MarkerFaceColor','w');
       
-    l = legend('Model','Actual');
-    set(l,'Location','northeast','FontSize',kv.FontSize-1)
-      
     plot([0,2*max(N)],[qe0,qe0],'k--')
       
     title(['e = ' num2str(d.qe,'%0.1f') '% , r = ' num2str(r.qe,'%0.2f')],...
       'FontSize',kv.FontSize,'FontWeight','normal')
     xlabel('Num. of channels','FontSize',kv.FontSize)
-    ylabel('QER (%)','FontSize',kv.FontSize)
+    ylabel('% Quadrant errors','FontSize',kv.FontSize)
     set(gca,'XLim',[1 max(N)+2],'XTick',fliplr(N),...%[3 6 9 12 18 24 30],...
         'XTickLabel',{3;6;'';12;18;24;'CL';'BB'},...
-        'YLim',[0.1 54],...
+        'YLim',[0.1 49],...
         'YMinorTick','on',...
         'YAxisLocation','left','FontSize',kv.FontSize,...
         'TickLength',2*get(gca,'TickLength'))
@@ -1344,17 +1425,151 @@ if flags.do_numchan
   end
 end
 
+%% SPLtem evaluation based on SpatStrat and NumChan
+if flags.do_evalSPLtem
+  
+  SL2SPL = kv.SL2SPL;
+
+  SPLtem = 40:10:80;
+  SPLtemR = [40,80];
+
+  for ll = 1:length(SPLtem)
+%     [bl(ll).d,bl(ll).r,bl(ll).s] = exp_baumgartner2016('baseline','noplot',...
+%       'ModelSettings',{'SPLtem',SPLtem(ll)},'SL2SPL',SL2SPL);
+    [nc(ll).d,nc(ll).r,nc(ll).s] = exp_baumgartner2016('numchan','noplot',...
+      'ModelSettings',{'argimport',model.flags,model.kv,'SPLtem',SPLtem(ll)},...
+      'SL2SPL',SL2SPL);
+    [ss(ll).d,ss(ll).r,ss(ll).s] = exp_baumgartner2016('spatstrat','noplot',...
+      'ModelSettings',{'argimport',model.flags,model.kv,'SPLtem',SPLtem(ll)},...
+      'SL2SPL',SL2SPL);
+  end
+
+  ll = length(SPLtem)+1;
+%   [bl(ll).d,bl(ll).r,bl(ll).s] = exp_baumgartner2016('baseline','noplot',...
+%     'ModelSettings',{'SPLtem',SPLtemR},'SL2SPL',SL2SPL);
+  [nc(ll).d,nc(ll).r,nc(ll).s] = exp_baumgartner2016('numchan','noplot',...
+    'ModelSettings',{'argimport',model.flags,model.kv,'SPLtem',SPLtemR},'SL2SPL',SL2SPL);
+  [ss(ll).d,ss(ll).r,ss(ll).s] = exp_baumgartner2016('spatstrat','noplot',...
+    'ModelSettings',{'argimport',model.flags,model.kv,'SPLtem',SPLtemR},'SL2SPL',SL2SPL);
+
+  %% Number of listener-specific data points (#subjects * #conditions)
+%   N.bl = length(bl(1).s);
+  N.nc = length(nc(1).s)*length(nc(1).s(1).pe_exp);
+  N.ss = length(ss(1).s)*length(ss(1).s(1).pe_exp);
+%   N.all = N.bl + N.nc + N.ss;
+  N.all = N.nc + N.ss;
+
+%   %% Pool correlations across experiments (averaged acc. to #data)
+%   for ll = 1:length(SPLtem)+1
+% %     r.qe(ll) = (N.bl*bl(ll).r.qe + N.nc*nc(ll).r.qe + N.ss*ss(ll).r.qe) / N.all;
+% %     r.pe(ll) = (N.bl*bl(ll).r.pe + N.nc*nc(ll).r.pe + N.ss*ss(ll).r.pe) / N.all;
+%     r.qe(ll) = (N.nc*nc(ll).r.qe + N.ss*ss(ll).r.qe) / N.all;
+%     r.pe(ll) = (N.nc*nc(ll).r.pe + N.ss*ss(ll).r.pe) / N.all;
+%   end
+%   r.avg = (r.qe + r.pe)/2;
+
+  %% Pool residues across experiments (averaged acc. to #data)
+  for ll = 1:length(SPLtem)+1
+%     dtotal(ll) = (N.bl*bl(ll).d.total + N.nc*nc(ll).d.total + N.ss*ss(ll).d.total) / N.all;
+%     dpe(ll) = (N.bl*bl(ll).d.pe + N.nc*nc(ll).d.pe + N.ss*ss(ll).d.pe) / N.all;
+%     dqe(ll) = (N.bl*bl(ll).d.qe + N.nc*nc(ll).d.qe + N.ss*ss(ll).d.qe) / N.all;
+    dtotal(ll) = (N.nc*nc(ll).d.total + N.ss*ss(ll).d.total) / N.all;
+    dpe(ll) = (N.nc*nc(ll).d.pe + N.ss*ss(ll).d.pe) / N.all;
+    dqe(ll) = (N.nc*nc(ll).d.qe + N.ss*ss(ll).d.qe) / N.all;
+  end
+
+  %% Prediction residuum obtained by chance prediction
+%   pe_all = cat(1,cat(1,bl(1).s.pe_exp),cat(1,nc(1).s.pe_exp),cat(1,ss(1).s.pe_exp));
+%   qe_all = cat(1,cat(1,bl(1).s.qe_exp),cat(1,nc(1).s.qe_exp),cat(1,ss(1).s.qe_exp));
+%   [chance.qe,chance.pe] = baumgartner2014pmv2ppp('chance');
+%   chance.dpe = rms(pe_all-chance.pe);
+%   chance.dqe = rms(qe_all-chance.qe);
+%   chance.dtotal = ( chance.dqe/100 + chance.dpe/90 ) /2;
+  chance.dpe = 1;
+  chance.dqe = 1;
+  chance.dtotal = 1;
+
+  %% Plots
+  XLim = [SPLtem(1),SPLtem(end)]+[-1,1]*3;
+  
+  figure
+  hax = tight_subplot(1,1,kv.gap,kv.marg_h,kv.marg_w);
+  axes(hax(1))
+  % single-SPL
+  hi(1,1) = plot(SPLtem,dqe(1:length(SPLtem))/chance.dqe,'d-');
+  hold on
+  hi(2,1) = plot(SPLtem,dpe(1:length(SPLtem))/chance.dpe,'s-');
+%   ha(1) = plot(SPLtem,dtotal(1:length(SPLtem))/chance.dtotal,'ok-');
+  % multiple-SPL
+  hi(3,1) = plot(SPLtemR,dqe(end)/chance.dqe*[1,1],'--');
+  hi(5,1) = plot(mean(SPLtemR),dqe(end)/chance.dqe,'d');
+  hi(4,1) = plot(SPLtemR,dpe(end)/chance.dpe*[1,1],'--');
+  hi(6,1) = plot(mean(SPLtemR),dpe(end)/chance.dpe,'s');
+%   ha(3) = plot(SPLtemR,dtotal(end)/chance.dtotal*[1,1],'ok');
+  % general
+  set(gca,'YLim',[3.1,10.9],'XLim',XLim)
+%   xlabel('Template SPL (dB)')
+  ylabel('Prediction residuum')
+
+  amtdisp('Predictive power for SpatStrat and NumChan.')
+%   amtdisp('Prediction residuum normalized by residuum of guessing model.')
+
+  xlabel('Template SPL (dB)')
+  
+%   axes(hax(2))
+%   % single-SPL
+%   hi(1,2) = plot(SPLtem,r.qe(1:length(SPLtem)),'d-');
+%   hold on
+%   hi(2,2) = plot(SPLtem,r.pe(1:length(SPLtem)),'s-');
+% %   ha(2) = plot(SPLtem,r.avg(1:length(SPLtem)),'ok-');
+%   % multiple-SPL
+%   hi(3,2) = plot(SPLtemR,r.qe(end)*[1,1],'--');
+%   hi(5,2) = plot(mean(SPLtemR),r.qe(end),'d');
+%   hi(4,2) = plot(SPLtemR,r.pe(end)*[1,1],'--');
+%   hi(6,2) = plot(mean(SPLtemR),r.pe(end),'s');
+  htmp = plot([0,0],[0,0],'k-');
+% %   ha(4) = plot(SPLtemR,r.avg(end)*[1,1],'ok');
+%   set(hax(1),'XTickLabel',[])
+%   xlabel(hax(2),'Template SPL (dB)','FontWeight','bold')
+%   ylabel('Correlation, \it{r} ','FontWeight','bold')
+%   set(gca,'YLim',[0.709,0.849],'XLim',XLim)
+
+  leg = legend([hi(5:6,1);htmp;hi(3,1)],...
+    '% Quadrant errors','Local RMS error (deg)','Single SPL','Multiple SPLs');
+  set(leg,'Location','northoutside','Orientation','vertical')
+  
+  set(hi,'LineWidth',1,'MarkerSize',kv.MarkerSize,'Color',zeros(1,3))
+  set(hi,'MarkerFaceColor',zeros(1,3))
+%   set(hi(2,:),'MarkerFaceColor','r')
+%   set(ha,'LineWidth',2,'MarkerSize',5,'MarkerFaceColor','k')
+%   set([hi(3:4,:);ha(3:4)],'LineStyle','--')
+  set(hi(3:4,:),'LineStyle','--')
+  
+end
+
+%% Modeling Sabin et al. (2005)
 if flags.do_sabin2005
   
-  cachename = ['sabin2005_' cachename '_SL2SPL' num2str(kv.SL2SPL) 'dB'];
+  % Presentation level of baseline stimuli (for calibration)
+  SL = 50; 
+  model.kv.SPL = SL + kv.SL2SPL;
+  
+  cachename = ['sabin2005_calibtar' num2str(model.kv.SPL,'%u') 'dB_' cachename];
+  cachename = [cachename '_SL2SPL' num2str(kv.SL2SPL) 'dB'];
   if model.kv.lat ~= 0
     cachename = [cachename '_lat' num2str(model.kv.lat)];
   end
-  if flags.do_TLisSPL
-    cachename = [cachename '_TLisSPL'];
+  if model.flags.do_SPLtemAdapt
+    cachename = [cachename '_SPLtemAdapt'];
   end
   if model.flags.do_gammatone
     cachename = [cachename '_minSPL' num2str(model.kv.GT_minSPL)];
+  end
+  if kv.sabin2005_Sdivisor ~= 1
+    cachename = [cachename '_Sdiv' num2str(kv.sabin2005_Sdivisor*10)];
+  end
+  if flags.do_nomrs
+    cachename = [cachename '_nomrs'];
   end
   pred = amtcache('get',cachename,flags.cachemode);
   if isempty(pred)
@@ -1363,24 +1578,27 @@ if flags.do_sabin2005
     
     SPL = [0:5:20,30:10:70]+kv.SL2SPL;
 
+    if flags.do_nomrs
+      model.kv.mrsmsp = 0;
+    end
+    
     pred.pvfront = nan(length(SPL),length(s));
     pred.pvrear = nan(length(SPL),length(s));
     pred.gfront = nan(length(SPL),length(s));
     pred.grear = nan(length(SPL),length(s));
     pred.precfront = nan(length(SPL),length(s));
     pred.precrear = nan(length(SPL),length(s));
+    pred.qe = nan(length(SPL),length(s));
+    pred.pe = nan(length(SPL),length(s));
     pred.prob = cell(length(SPL),length(s));
     for ii = 1:length(s)
 % if ii == 1; figure; end
       for ll = 1:length(SPL)
-        if flags.do_TLisSPL
-          kv.SPLtem = SPL(ll);
-        end
         if flags.do_nostat
           [pred.qe(ll,ii),pred.prob{ll,ii},m] = baumgartner2016(...
             s(ii).Obj,s(ii).Obj,...
             'argimport',model.flags,model.kv,...
-            'ID',s(ii).id,'S',s(ii).S,'SPL',SPL(ll),...
+            'ID',s(ii).id,'S',s(ii).S/kv.sabin2005_Sdivisor,'SPL',SPL(ll),...
             'priordist',s(ii).priordist,'QE');
           pred.pvfront(ll,ii) = nan;
           pred.pvrear(ll,ii) = nan;
@@ -1392,13 +1610,15 @@ if flags.do_sabin2005
           [pred.pvfront(ll,ii),pred.prob{ll,ii},m] = baumgartner2016(...
             s(ii).Obj,s(ii).Obj,...
             'argimport',model.flags,model.kv,...
-            'ID',s(ii).id,'S',s(ii).S,'SPL',SPL(ll),...
+            'ID',s(ii).id,'S',s(ii).S/kv.sabin2005_Sdivisor,'SPL',SPL(ll),...
             'priordist',s(ii).priordist,'pVeridicalPfront');
           pred.pvrear(ll,ii) = localizationerror(m,'pVeridicalPrear');
           pred.gfront(ll,ii) = localizationerror(m,'gainPfront');
           pred.grear(ll,ii) = localizationerror(m,'gainPrear');
           pred.precfront(ll,ii) = localizationerror(m,'precPregressFront');
           pred.precrear(ll,ii) = localizationerror(m,'precPregressRear');
+          pred.qe(ll,ii) = localizationerror(m,'querrMiddlebrooks');
+          pred.pe(ll,ii) = localizationerror(m,'rmsPmedianlocal');
         end
 % if ii == 1
 %   subplot(3,3,ll)
@@ -1433,48 +1653,89 @@ if flags.do_sabin2005
   SL = pred.SPL-kv.SL2SPL; % assumption on SL
   SPL = pred.SPL;
   
-  minSLf = 10;
-  minSLr = 15;
+%   minSLf = 10;
+%   minSLr = 15;
+%   
+%   % Set to NAN
+%   for ii = 1:length(mvar)
+%     eval(['data.' dvar{ii} '.f.m(data.SL < minSLf) = nan;'])
+%     eval(['data.' dvar{ii} '.f.sd(data.SL < minSLf) = nan;'])
+%     eval(['pred.' mvar{ii} 'front(SL < minSLf,:) = nan;'])
+%     
+%     eval(['data.' dvar{ii} '.r.m(data.SL < minSLr) = nan;'])
+%     eval(['data.' dvar{ii} '.r.sd(data.SL < minSLr) = nan;'])
+%     eval(['pred.' mvar{ii} 'rear(SL < minSLr,:) = nan;'])
+%   end
   
+  minSL = 15;
+  iddata = data.SL >= minSL;
+  idpred = SL >= minSL;
+
+  % Remove
   for ii = 1:length(mvar)
-    eval(['data.' dvar{ii} '.f.m(data.SL < minSLf) = nan;'])
-    eval(['data.' dvar{ii} '.f.sd(data.SL < minSLf) = nan;'])
-    eval(['pred.' mvar{ii} 'front(SL < minSLf,:) = nan;'])
+    eval(['data.' dvar{ii} '.f.m = data.' dvar{ii} '.f.m(iddata);'])
+    eval(['data.' dvar{ii} '.f.sd = data.' dvar{ii} '.f.sd(iddata);'])
+    eval(['pred.' mvar{ii} 'front = pred.' mvar{ii} 'front(idpred,:);'])
     
-    eval(['data.' dvar{ii} '.r.m(data.SL < minSLr) = nan;'])
-    eval(['data.' dvar{ii} '.r.sd(data.SL < minSLr) = nan;'])
-    eval(['pred.' mvar{ii} 'rear(SL < minSLr,:) = nan;'])
+    eval(['data.' dvar{ii} '.r.m = data.' dvar{ii} '.r.m(iddata);'])
+    eval(['data.' dvar{ii} '.r.sd = data.' dvar{ii} '.r.sd(iddata);'])
+    eval(['pred.' mvar{ii} 'rear = pred.' mvar{ii} 'rear(idpred,:);'])
+  end
+  data.SL = data.SL(iddata);
+  data.SPL = data.SPL(iddata);
+  SL = SL(idpred);
+  SPL = SPL(idpred);
+  pred.SPL = SPL;
+  pred.SL = SL;
+  
+  %% Pool data for 20 dB
+  id20 = find(data.SL == 20,2,'first');
+  data20p = data; % init
+  for ii = 1:length(mvar)
+    eval(['data20p.' dvar{ii} '.f.m = [data.' dvar{ii} '.f.m(1:' num2str(id20(1)-1) '),mean(data.' dvar{ii} '.f.m(' num2str(id20(1)) ':'  num2str(id20(2)) ')),data.' dvar{ii} '.f.m(' num2str(id20(2)+1) ':end)];']) % 20dB SL pooled
+    eval(['data20p.' dvar{ii} '.r.m = [data.' dvar{ii} '.r.m(1:' num2str(id20(1)-1) '),mean(data.' dvar{ii} '.r.m(' num2str(id20(1)) ':'  num2str(id20(2)) ')),data.' dvar{ii} '.r.m(' num2str(id20(2)+1) ':end)];'])
   end
   
   %% Prediction deviation score
   limits = {'90','100','45'}; % for normalization
-  idc = ismember(pred.SPL,data.SPL);
+  idc = ismember(SL,data.SL);
   
   d = zeros(length(mvar),2);
   for ii = 1:length(mvar)
-    eval(['d20pooled.f = [data.' dvar{ii} '.f.m(1:4),mean(data.' dvar{ii} '.f.m(5:6)),data.' dvar{ii} '.f.m(7:end)];']) % 20dB SL pooled
-    eval(['d20pooled.r = [data.' dvar{ii} '.r.m(1:4),mean(data.' dvar{ii} '.r.m(5:6)),data.' dvar{ii} '.r.m(7:end)];'])
     if flags.do_nostat
-      eval(['d(ii,1) = sqrt(mean((mean(pred.' mvar{ii} 'front(idc,:)),2) - transpose(d20pooled.f)).^2))/' limits{ii} ';'])
-      eval(['d(ii,2) = sqrt(mean((mean(pred.' mvar{ii} 'rear(idc,:),2) - transpose(d20pooled.r)).^2))/' limits{ii} ';'])
+      eval(['d(ii,1) = sqrt(mean((mean(pred.' mvar{ii} 'front(idc,:)),2) - transpose(data20p.' dvar{ii} '.f.m)).^2))/' limits{ii} ';'])
+      eval(['d(ii,2) = sqrt(mean((mean(pred.' mvar{ii} 'rear(idc,:),2) - transpose(data20p.' dvar{ii} '.r.m)).^2))/' limits{ii} ';'])
     else
-      eval(['d(ii,1) = sqrt(nanmean((nanmean(pred.' mvar{ii} 'front(idc,:),2) - transpose(d20pooled.f)).^2))/' limits{ii} ';'])
-      eval(['d(ii,2) = sqrt(nanmean((nanmean(pred.' mvar{ii} 'rear(idc,:),2) - transpose(d20pooled.r)).^2))/' limits{ii} ';'])
+      eval(['d(ii,1) = sqrt(nanmean((nanmean(pred.' mvar{ii} 'front(idc,:),2) - transpose(data20p.' dvar{ii} '.f.m)).^2))/' limits{ii} ';'])
+      eval(['d(ii,2) = sqrt(nanmean((nanmean(pred.' mvar{ii} 'rear(idc,:),2) - transpose(data20p.' dvar{ii} '.r.m)).^2))/' limits{ii} ';'])
     end
   end
   d = mean(d(:));
   amtdisp(['Prediction deviation score: ' num2str(d)])
   
+  %% Correlation coefficient
+  
+  r = zeros(length(mvar),2);
+  for ii = 1:length(mvar)
+    if flags.do_stat
+      eval(['r(ii,1) = corrcoeff( nanmean(pred.' mvar{ii} 'front(idc,:),2) , transpose(data20p.' dvar{ii} '.f.m) );'])
+      eval(['r(ii,2) = corrcoeff( nanmean(pred.' mvar{ii} 'rear(idc,:),2) , transpose(data20p.' dvar{ii} '.r.m) );'])
+    end
+  end
+  r = mean(r(:));
+  amtdisp(['Correlation coefficient: ' num2str(r)])
+  
   %% Output
   varargout{1}=d;
-  varargout{2}=pred;
-  varargout{3}=data;
+  varargout{2}=r;
+  varargout{3}=pred;
+  varargout{4}=data;
 
   %% Plot
   if flags.do_plot
     
-    minSPLf = minSLf + kv.SL2SPL;
-    minSPLr = minSLr + kv.SL2SPL;
+    minSPLf = minSL + kv.SL2SPL; % minSLf
+    minSPLr = minSL + kv.SL2SPL; % minSLr
     maxSPL = 70 + kv.SL2SPL;
     marSPL = 4.9; % margin of SL
     
@@ -1553,11 +1814,23 @@ if flags.do_impairment
     amtdisp('Localization performance measure not chosen -> QE used.')
   end
   
-  cohc = [1,0.5,0.1,0];
-  ft = {1:3;1;2;3};
-  SPL = [80,50];
+  cohc = sort(kv.cOHCset,'descend'); % default: [1,0.4,0.1,0];
+  ft = kv.FTset; % default: {1:3;1;2;3};
+  SPL = sort(kv.SPLset,'ascend'); % default: [80, 50]
   
   cachename = ['impairment_' cachename '_' errorflag];
+  if length(SPL) == 1
+    cachename = [cachename '_SPL' num2str(SPL)];
+  elseif length(SPL) == 2
+    cachename = [cachename '_SPLs' num2str(SPL(1)) 'and' num2str(SPL(2))];
+  end
+  if model.flags.do_SPLtemAdapt
+    cachename = [cachename '_SPLtemAdapt'];
+  end
+  if model.flags.do_NHtem
+    cachename = [cachename '_NHtem'];
+  end
+  cachename = strrep([cachename '_cohc' num2str(cohc)],' ','');cachename = strrep(cachename,'.','p');
   s = amtcache('get',cachename,flags.cachemode);
   if isempty(s)
     
@@ -1599,7 +1872,12 @@ if flags.do_impairment
   mtx.err = reshape(shiftdim(err,3),[Nsub,Ncond]);
   
   % labels
-  cohcstr = num2str(s(1).cohc(:),'%2.1f');
+  cohcstrA = num2str(s(1).cohc(:),'%2.1f');
+  cohcstr = cell(length(cohcstrA),1);
+  for ii = 1:length(cohcstrA)
+    cohcstr{ii} = strrep(cohcstrA(ii,:),'1.0','1');
+    cohcstr{ii} = strrep(cohcstr{ii},'0.0','0');
+  end
   SPLstr = num2str(s(1).SPL(:),'%2.0f');
   ftnum = s(1).ft(:);
   ftstr = cell(length(ftnum),1);
@@ -1607,13 +1885,13 @@ if flags.do_impairment
   for ii = 1:length(ftnum)
     lab = ['cohc: ' cohcstr(ii,:) ', ' SPLstr(ii,:) 'dB, '];
     if ftnum{ii} == 1
-      ftstr{ii} = 'LSR';
+      ftstr{ii} = 'low-SR';
     elseif ftnum{ii} == 2
-      ftstr{ii} = 'MSR';
+      ftstr{ii} = 'med-SR';
     elseif ftnum{ii} == 3
-      ftstr{ii} = 'HSR';
+      ftstr{ii} = 'high-SR';
     else % ft{ii} == 1:3
-      ftstr{ii} = 'All';
+      ftstr{ii} = 'all SRs';
     end
     XTickLabel{ii} = [lab ftstr{ii}];
   end
@@ -1625,72 +1903,134 @@ if flags.do_impairment
   SPLstr = cellstr(SPLstr(idSPLsort,:));
   mtx.err = mtx.err(:,idSPLsort,:);
     
+  % Output meta data
+  meta(1).name = 'Listener';
+  meta(2).name = 'Condition';
+  meta(2).data = {ftstr(:),cohcstr(:),SPLstr(:)};
+  
   if flags.do_plot
     
     % interaction plots
     merr = mean(err,4); % average across subjects; dims: [cohc,ft,SPL]
-    figure
-    % OHC-SPL
-    subplot(1,3,1)
-    err_OHC_SPL = squeeze(mean(merr,2));
-    plot(cohc,err_OHC_SPL)
-    legend(num2str(SPL(:)))
-    xlabel('C_{OHC}')
-    ylabel(errorflag)
-    % OHC-FT
-    subplot(1,3,2)
-    err_OHC_FT = squeeze(mean(merr,3));
-    plot(cohc,err_OHC_FT)
-    legend('All','LSR','MSR','HSR')
-    xlabel('C_{OHC}')
-    % SPL-FT
-    subplot(1,3,3)
-    err_FT_SPL = squeeze(mean(merr,1));
-    plot(SPL,err_FT_SPL)
-    legend('All','LSR','MSR','HSR')
-    xlabel('SPL')
-    
+    fig(1) = figure('Name','Interaction Plots');
+    if length(kv.SPLset) > 1
+      % OHC-SPL
+      subplot(1,3,1)
+      err_OHC_SPL = squeeze(mean(merr,2));
+      plot(cohc,err_OHC_SPL)
+      legend(num2str(SPL(:)))
+      xlabel('C_{OHC}')
+      ylabel(errorflag)
+      % OHC-FT
+      subplot(1,3,2)
+      err_OHC_FT = squeeze(mean(merr,3));
+      plot(cohc,err_OHC_FT)
+      legend('All','LSR','MSR','HSR')
+      xlabel('C_{OHC}')
+      % SPL-FT
+      subplot(1,3,3)
+      err_FT_SPL = squeeze(mean(merr,1));
+      plot(SPL,err_FT_SPL)
+      legend('All','LSR','MSR','HSR')
+      xlabel('SPL')
+    else % only OHC-FT
+      plot(cohc,merr)
+      legend('All','LSR','MSR','HSR')
+      xlabel('C_{OHC}')
+    end
     
     emax = max(mtx.err(:))+0.5;
     emin = min(mtx.err(:))-0.5;
     De = emax-emin;
     
-    figure;
-    b = boxplot(mtx.err,{ftstr(:),cohcstr(:),SPLstr(:)},...
-        'plotstyle','compact','colors',repmat([.5,.5,.5;0,0,0],Ncond/Nspl,1),'medianstyle','line',...
-        'factorgap',[],'labelverbosity','all','symbol','');
-    hold on
-    if flags.do_FTlabel
-      for ii = 1:Nft
-        jj = 1+(ii-1)*Nspl*Ncohc;
-        yftlbl = emax;
-        text(jj,yftlbl,ftstr{ii*Ncohc},'FontSize',kv.FontSize) % inside panel
+    [qe0,pe0] = baumgartner2014pmv2ppp('chance',...
+      'rang', -30-model.kv.mrsmsp : 1 : 210+model.kv.mrsmsp );
+    
+    if flags.do_splitSPL
+      
+%       fig(2) = figure;
+%       ha = tight_subplot(1,length(kv.SPLset),kv.gap,kv.marg_h,kv.marg_w);
+      colors = {(1-1/length(kv.SPLset))*ones(1,3),zeros(1,3)};
+      for ll = length(kv.SPLset):-1:1
+        
+        NcondPlot = Ncond/length(kv.SPLset);
+         
+        fig(ll+1) = figure;
+        id = SPL(ll)==str2double(SPLstr);
+%         axes(ha(ll))
+        b = boxplot(mtx.err(:,id),{ftstr(id),cohcstr(id),SPLstr(id)},...
+          'plotstyle','compact','medianstyle','line','colors',colors{ll},...
+          'factorgap',[],'labelverbosity','all','symbol','');
+%         title([num2str(SPL(ll)) ' dB SPL'])
+
+        hold on
+        % chance performance
+        if strcmp(errorflag,'QE')
+          echance = qe0;
+        elseif strcmp(errorflag,'PE')
+          echance = pe0;
+        end
+        h = plot([0.5,NcondPlot+0.5],[echance,echance],'k--');uistack(h,'bottom')
+        
+        if flags.do_FTlabel
+          for ii = 1:Nft
+            jj = 1+(ii-1)*Ncohc;
+            yftlbl = 1.05*max(emax,echance);
+            text(jj,yftlbl,ftstr{ii*Ncohc},'FontSize',kv.FontSize) % inside panel
+          end
+        end
+
+        axis([0.5,NcondPlot+0.5,emin-De/20,emax+De/8])
+        set(gca,'XTick',1:NcondPlot,'XTickLabel',cohcstr(1:NcondPlot),'FontSize',kv.FontSize);
+        xlabel({'OHC gain, C_{OHC}'},'FontSize',kv.FontSize,'FontWeight','bold')
+        ylabel(errorflag,'FontSize',kv.FontSize,'FontWeight','bold') 
+        
       end
+      
+    else % compriseSPL
+      
+      fig(2) = figure;
+      b = boxplot(mtx.err,{ftstr(:),cohcstr(:),SPLstr(:)},...
+          'plotstyle','compact','colors',repmat([.5,.5,.5;0,0,0],Ncond/Nspl,1),'medianstyle','line',...
+          'factorgap',[],'labelverbosity','all','symbol','');
+      hold on
+      if flags.do_FTlabel
+        for ii = 1:Nft
+          jj = 1+(ii-1)*Nspl*Ncohc;
+          yftlbl = emax;
+          text(jj,yftlbl,ftstr{ii*Ncohc},'FontSize',kv.FontSize) % inside panel
+        end
+      end
+
+      % chance performance
+      if strcmp(errorflag,'QE')
+        h = plot([0.5,Ncond+0.5],[qe0,qe0],'k--');uistack(h, 'bottom')
+      elseif strcmp(errorflag,'PE')
+        h = plot([0.5,Ncond+0.5],[pe0,pe0],'k--');uistack(h, 'bottom')
+      end
+
+      axis([0.5,Ncond+0.5,emin-De/20,emax+De/8])
+      set(gca,'XTick',1.5:2:Ncond,'XTickLabel',cohcstr(1:Ncohc),'FontSize',kv.FontSize);
+      xlabel({'OHC gain, C_{OHC}'},'FontSize',kv.FontSize,'FontWeight','bold')
+      ylabel(errorflag,'FontSize',kv.FontSize,'FontWeight','bold') 
     end
-    
-    [qe0,pe0] = baumgartner2014pmv2ppp('chance');
-    if strcmp(errorflag,'QE')
-      h = plot([0.5,Ncond+0.5],[qe0,qe0],'k--');uistack(h, 'bottom')
-    elseif strcmp(errorflag,'PE')
-      h = plot([0.5,Ncond+0.5],[pe0,pe0],'k--');uistack(h, 'bottom')
-    end
-    
-    axis([0.5,Ncond+0.5,emin-De/20,emax+De/8])
-    set(gca,'XTick',1.5:2:Ncond,'XTickLabel',cohcstr(1:Ncohc),'FontSize',kv.FontSize);
-    xlabel({'C_{OHC}'},'FontSize',kv.FontSize,'FontWeight','bold')
-    ylabel(errorflag,'FontSize',kv.FontSize,'FontWeight','bold') 
-    
+  else
+    fig = [];
   end
   
   if flags.do_stat
     s = rmfield(s,{'pe_exp','qe_exp','S','pe_exp_lat','qe_exp_lat','target','response','Ntar','mrs','fs'});
     
     t = array2table(mtx.err);
-    within = table(SPLstr,cohcstr,ftstr,'VariableNames',{'SPL','Cohc','FT'});
-    rm = fitrm(t,['Var1-Var' num2str(Ncond) ' ~ 1'],'WithinDesign',within); % no between-subjects factors -> only intercept
-    
-    % 3-way repeated-measures ANOVA
-    [tbl.ranova,A,C,D] = ranova(rm,'WithinModel','Cohc*SPL*FT');
+    if length(kv.SPLset) > 1 % 3-way repeated-measures ANOVA
+      within = table(SPLstr,cohcstr,ftstr,'VariableNames',{'SPL','Cohc','FT'});
+      rm = fitrm(t,['Var1-Var' num2str(Ncond) ' ~ 1'],'WithinDesign',within); % no between-subjects factors -> only intercept    
+      [tbl.ranova,A,C,D] = ranova(rm,'WithinModel','Cohc*SPL*FT');
+    else  % 2-way repeated-measures ANOVA
+      within = table(cohcstr,ftstr,'VariableNames',{'Cohc','FT'});
+      rm = fitrm(t,['Var1-Var' num2str(Ncond) ' ~ 1'],'WithinDesign',within); % no between-subjects factors -> only intercept    
+      [tbl.ranova,A,C,D] = ranova(rm,'WithinModel','Cohc*FT');
+    end
     tbl.ranova.Properties.RowNames = strrep(tbl.ranova.Properties.RowNames,'(Intercept):','');
     
     % Mauchly's test for sphericity
@@ -1710,34 +2050,66 @@ if flags.do_impairment
     tbl.posthoc.FT = multcompare(rm,'FT');
     
     % Display results
-    amtdisp(['3-way repeated-measures ANOVA for ' errorflag])
+    amtdisp(['Repeated-measures ANOVA for ' errorflag])
     amtdisp(tbl.ranova)
     amtdisp('Mauchly test and sphericity corrections')
     amtdisp([tbl.mauchly,tbl.eps])
     amtdisp('Posthoc analysis')
     amtdisp(tbl.posthoc.Cohc)
     amtdisp(tbl.posthoc.FT)
+    amtdisp('Reported in publication:')
+    amtdisp(tbl.ranova(3:end,[9,4]))
     
-    varargout{1} = tbl;
+  else
+    tbl = [];
+  end
+  
+  varargout = {tbl;fig;mtx.err;meta};
+  
+end
+
+if flags.do_cOHCvsSens
+  
+  [sens,meta.sens] = exp_baumgartner2016('dynrangecheck','dprime','noplot',...
+    'ModelSettings',{'argimport',model.flags,model.kv});
+  idSPL = meta.sens(1).data == model.kv.SPL;
+  Sensitivity = squeeze(sens(idSPL,:,:))'; % cOHC x  SR
+  Sensitivity = circshift(Sensitivity,1,2); % all SRs first
+  errorlabel = {'QE';'PE'};
+  for ee = 1:length(errorlabel)
+    
+    [~,~,errorPrediction,meta.err] = exp_baumgartner2016('impairment',errorlabel{ee},...
+      'noplot','nostat','ModelSettings',{'argimport',model.flags,model.kv});
+    
+    [r,p]=corrcoef(mean(errorPrediction,1)',Sensitivity(:));
+    if not(isscalar(r))
+      r = r(2);
+    end
+    
+    amtdisp(['Correlation between average ',errorlabel{ee},...
+      ' and intensity discriminability:'])
+    amtdisp(['  r = ',num2str(r),' ( p = ',num2str(p),' )']);
     
   end
+  
 end
 
 if flags.do_effectOnCues
   
   sid = 10;    % listener No.
-  spl = kv.SPL;   % SPL in dB
+%   spl = model.kv.SPL;   % SPL in dB
 %   tang = 0;   % target polar angle
   
   s = data_baumgartner2016('argimport',model.flags,model.kv);
   [dtf,polang] = extractsp(0,s(sid).Obj);
-  sig = lconv(noise(8e3,1,'white'),dtf);
+  tmp = lconv(noise(8e3,1,'white'),dtf);
+  sig = reshape(tmp,[size(tmp,1),size(dtf,2),size(dtf,3)]);
       
   amtdisp(['Exemplary listener: ' s(sid).id])
   
   ymin = 0;
-  ymax = kv.mgs*pi;
-  spl = [50,80];
+  ymax = model.kv.mgs*pi;
+  spl = kv.SPLset;
   
   if flags.do_FT
     % Effect of FT  
@@ -1747,7 +2119,7 @@ if flags.do_effectOnCues
     for ll = 1:length(spl)
       for ft = 1:length(FT)
         [mp_ft{ft,ll},fc] = baumgartner2016spectralanalysis(sig,spl(ll),...
-          'target','ID',s(sid).id ,'Condition','baseline','fiberTypes',FT{ft},flags.amtcache);
+          'target','ID',s(sid).id ,'Condition','baseline','fiberTypes',FT{ft},flags.cachemode);
         [gp_ft{ft,ll},gfc] = baumgartner2016gradientextraction(mp_ft{ft,ll},fc,'mgs',kv.mgs);
       end
     end
@@ -1765,8 +2137,8 @@ if flags.do_effectOnCues
           shading flat
           caxis([ymin,ymax])
           title(labels{ft})
-          xlabel('Frequency (kHz)')
-          ylabel('Polar angle (deg)')
+          xlabel('Frequency (kHz)','FontWeight','bold')
+          ylabel('Polar angle (deg)','FontWeight','bold')
           set(gca,'XScale','log','FontSize',kv.FontSize)
           set(gca,'layer','top',...
             'XTick',[1,2,4,8,16]*1e3,...
@@ -1779,13 +2151,13 @@ if flags.do_effectOnCues
 
   else
     % Effect of C_OHC
-    cohc = [1,0.5,0.1,0];
+    cohc = kv.cOHCset;
     gp_cohc = cell(length(cohc),length(spl));
     for ll = 1:length(spl)
       for cc = 1:length(cohc)
         [mp,fc] = baumgartner2016spectralanalysis(sig,spl(ll),'target',...
-          'ID',s(sid).id,'Condition','baseline','cohc',cohc(cc),flags.amtcache);
-        [gp_cohc{cc,ll},gfc] = baumgartner2016gradientextraction(mp,fc,'mgs',kv.mgs);
+          'argimport',flags,kv,'ID',s(sid).id,'Condition','baseline','cohc',cohc(cc));
+        [gp_cohc{cc,ll},gfc] = baumgartner2016gradientextraction(mp,fc,'mgs',model.kv.mgs);
       end
     end
 
@@ -1794,7 +2166,7 @@ if flags.do_effectOnCues
       ha = tight_subplot(length(spl),length(cohc),[.02,.01],kv.marg_h,kv.marg_w);
       colormap gray
       colormap(flipud(colormap))
-      labels = {'C_{OHC} = 1','C_{OHC} = 0.5','C_{OHC} = 0.1','C_{OHC} = 0'};
+      labels = {'C_{OHC} = 1',['C_{OHC} = ' num2str(cohc(2),'%1.1f')],['C_{OHC} = ' num2str(cohc(3),'%1.1f')],'C_{OHC} = 0'};
       for ll = 1:length(spl)
         for cc = 1:length(cohc)
           axes(ha(cc+(ll-1)*length(cohc)))
@@ -1803,19 +2175,23 @@ if flags.do_effectOnCues
           caxis([ymin,ymax])
           % xlabel and COHC
           set(gca,'XTick',[1,2,4,8,16]*1e3,'XTickLabel',[1,2,4,8,16])
-          if ll == 2
+          if ll == 1
+            title(labels{cc},'FontSize',kv.FontSize)
+          end
+          if ll == length(spl)
             if cc == 2
               xlabel(['                                            ',...
-                'Frequency (kHz)'],'FontSize',kv.FontSize)
+                'Frequency (kHz)'],'FontSize',kv.FontSize,'FontWeight','bold')
             end
           else
-            title(labels{cc},'FontSize',kv.FontSize)
             set(gca,'XTickLabel',[])
           end
           % ylabel and SPL
           if cc == 1
-            ylabel('Polar angle (deg)','FontSize',kv.FontSize)
-            text(180,200,[num2str(spl(ll)) ' dB'],'FontWeight','bold','FontSize',kv.FontSize)
+            ylabel('Polar angle (deg)','FontSize',kv.FontSize,'FontWeight','bold')
+            if length(spl) > 1
+              text(180,200,[num2str(spl(ll)) ' dB'],'FontWeight','bold','FontSize',kv.FontSize)
+            end
           else
             set(gca,'YTickLabel',[])
           end
@@ -1829,7 +2205,7 @@ if flags.do_effectOnCues
       
       c = colorbar;
 %       pos = get(c,'Position');
-      set(c,'Position',[.935,.25,.02,.5])
+      set(c,'Position',[.93,.2,.02,.6])
       set(get(c,'Label'),'String','Spikes/s/ERB','FontSize',kv.FontSize)
       
     end
@@ -1837,29 +2213,104 @@ if flags.do_effectOnCues
   
 end
 
+if flags.do_evalSpectralContrast
+  
+  sid = 10;    % listener No.
+%   spl = model.kv.SPL;   % SPL in dB
+%   tang = 0;   % target polar angle
+  
+  s = data_baumgartner2016('argimport',model.flags,model.kv);
+  [dtf,polang] = extractsp(0,s(sid).Obj);
+  tmp = lconv(noise(8e3,1,'white'),dtf);
+  sig = reshape(tmp,[size(tmp,1),size(dtf,2),size(dtf,3)]);
+      
+  amtdisp(['Exemplary listener: ' s(sid).id])
+  
+  spl = kv.SPLset;
+  
+  FT = {1:3,1,2,3};
+  mp_ft = cell(length(FT),length(spl));
+  for ll = 1:length(spl)
+    for ft = 1:length(FT)
+      [mp_ft{ft,ll},fc] = baumgartner2016spectralanalysis(sig,spl(ll),...
+        'target','ID',s(sid).id ,'Condition','baseline','fiberTypes',FT{ft},flags.cachemode);
+      spectRange(ft,ll) = range(mp_ft{ft,ll}(:));
+    end
+    spectralContrast(:,ll) = spectRange(2:end,ll)/spectRange(1,ll);
+  end
+  FTlabels = {'low-SR','med-SR','high-SR'};
+  tab = table(spectralContrast,'RowNames',FTlabels);
+  amtdisp(tab)
+  varargout{1} = tab;
+end
+
+if flags.do_ratelevelcurves
+  
+  splmax = 160; % dB
+  splminplot = 5;
+  fc = 4000; % Hz
+  
+  sig = noise(0.5*48e3,1,'white'); % 100-ms Gaussian white noise burst
+  spl = 0:10:splmax;
+  
+  mp = zeros(1,length(spl),2,3);
+  for ii = 1:length(spl)
+    mp(:,ii,:,:) = baumgartner2016spectralanalysis(cat(3,sig,sig),spl(ii),...
+        'target','ID','','Condition','ratelevelcurves','fiberTypes',1:3,...
+        'ftopt','cohc',1,'flow',fc,'fhigh',fc,'nf',1);
+  end
+  
+  % Plot Rate-intensity curves
+  if flags.do_plot
+    figure
+    sty = {'kv-','ko-','k^-'};
+    for ft = 1:3
+      h(ft) = plot(spl,mean(mp(:,:,1,ft),1),sty{ft});
+      hold on
+      xlabel('SPL (dB)','FontSize',kv.FontSize)
+      ylabel('Firing rate (spikes/s)','FontSize',kv.FontSize)
+    end
+    set(h,'MarkerFaceColor','k')
+    leg = legend(h,{'low-SR','med-SR','high-SR'});
+    set(leg,'Location','northoutside','FontSize',kv.FontSize,'Orientation','horizontal')
+%     set(leg,'Position',[.4,.96,.33,.03])
+    
+    axis([splminplot,splmax-5,-30,369])
+    XTick = round(splminplot/10)*10:10:splmax;
+    XTickLabel = num2cell(XTick);
+    XTickLabel(2:2:end) = {' '};
+    set(gca,'XTick',XTick,'XTickLabel',XTickLabel,'FontSize',kv.FontSize)
+  
+  end
+  
+end
+
 if flags.do_dynrangecheck
   
-  splmax = 140; % dB
-  splHRTF = [50,80]; % dB
-
-  panels = {'C_{OHC} = 1','C_{OHC} = 0.5','C_{OHC} = 0.1','C_{OHC} = 0'};
+  splmax = 130; % dB
+  splHRTF = kv.SPLset; % dB (SPL range of targets)
+  splminplot = 15;
+  
+  sig = noise(0.1*48e3,1,'white'); % 100-ms Gaussian white noise burst
+  spl = 0:10:splmax;
+  cohc = kv.cOHCset;
+  
+  panels = {'C_{OHC} = 1',['C_{OHC} = ' num2str(cohc(2),'%1.1f')],['C_{OHC} = ' num2str(cohc(3),'%1.1f')],'C_{OHC} = 0'};
   if flags.do_separate
-    labels = {'LSR','MSR','HSR'};
+    labels = {'low-SR','med-SR','high-SR','all SRs'};
   else
     labels = {'LMH','MH','H'};
   end
-
-  splminplot = 15;
   
   figure
   ha = tight_subplot(4,1,kv.gap,kv.marg_h,kv.marg_w);
-  
-  cohc = [1,0.5,0.1,0];
+  if flags.do_ratelevel
+    Y = nan(length(spl),4,length(cohc));
+  else
+    Y = nan(length(spl)-1,4,length(cohc));
+  end
   for cc = 1:length(cohc)
-  
-    sig = noise(0.1*48e3,1,'white'); % 100-ms Gaussian white noise burst
-    spl = 0:10:splmax;
-    mp = zeros(kv.nf,length(spl),2,3);
+    mp = zeros(model.kv.nf,length(spl),2,3);
     if flags.do_separate
       for ii = 1:length(spl)
         [mp(:,ii,:,:),fc] = baumgartner2016spectralanalysis(cat(3,sig,sig),spl(ii),...
@@ -1875,22 +2326,26 @@ if flags.do_dynrangecheck
       end
     end
 
+    splplot = spl;
     if flags.do_dynrangeDiff
       mp = diff(mp,1,2)/mean(diff(spl));
-      spl = spl(2:end);
+      splplot = spl(2:end);
     end
     
     if flags.do_dprime
       sd = 2.6*mp.^0.34;
       sdDiff = sqrt(sd(:,1:length(spl)-1,:,:).^2 + sd(:,2:length(spl),:,:).^2);
       mp = diff(mp,1,2)./sdDiff;
-      spl = spl(2:end);
+      splplot = spl(2:end);
     end
 
     axes(ha(cc))
     
     % target HRTF range
-    color = {.9*ones(1,3),.8*ones(1,3)};
+    color = {.8*ones(1,3)};
+    if length(splHRTF) == 2
+      color = {.9*ones(1,3),color{1}};
+    end
     for ll = 1:length(splHRTF)
       a(1) = area(splHRTF(ll)+[-10,10],[1e3,1e3],'EdgeColor',ones(1,3));
       hold on
@@ -1900,12 +2355,13 @@ if flags.do_dynrangecheck
     set(gca,'Layer','top')
     
     % Rate-intensity curves
-    sty = {'kv-','ks-','k^-'};
+    sty = {'kv-','ko-','k^-'};
     for ft = 1:3
-      h(ft) = plot(spl,mean(mp(:,:,1,ft),1),sty{ft});
+      Y(:,ft,cc) = mean(mp(:,:,1,ft),1);
+      h(ft) = plot(splplot,Y(:,ft,cc),sty{ft});
       hold on
       if cc == length(cohc)
-        xlabel('SPL (dB)','FontSize',kv.FontSize)
+        xlabel('SPL (dB)','FontSize',kv.FontSize,'FontWeight','bold')
       end
       if flags.do_dynrangeDiff
         text(splminplot+5,9,panels{cc},'FontSize',kv.FontSize)
@@ -1913,7 +2369,7 @@ if flags.do_dynrangecheck
       elseif flags.do_dprime
         text(splminplot+5,5,panels{cc},'FontSize',kv.FontSize)
         if cc==3
-          text(0,6,{'d^{\prime}'},'FontSize',kv.FontSize)
+          text(0,6,{'d´'},'FontSize',kv.FontSize,'FontWeight','bold')
         end
 %         ylabel({'d^{\prime}'},'FontSize',kv.FontSize)
       else
@@ -1921,10 +2377,15 @@ if flags.do_dynrangecheck
         ylabel('Firing rate (spikes/s)','FontSize',kv.FontSize)
       end
     end
+    % All SRs combined
+    ftd = [0.16,0.23,0.61]; % Liberman (1978)
+    Y(:,4,cc) = Y(:,1:3,cc) * ftd';
+    h(4) = plot(splplot,Y(:,4,cc),'k--');
+    
     set(h,'MarkerFaceColor','k')
     if cc == 1%length(cohc)
       leg = legend(h,labels);
-      set(leg,'Location','northoutside','FontSize',kv.FontSize,'Orientation','horizontal')
+      set(leg,'Location','northoutside','FontSize',kv.FontSize,'Orientation','vertical')
       set(leg,'Position',[.4,.96,.33,.03])
     end
     
@@ -1932,7 +2393,7 @@ if flags.do_dynrangecheck
       plot([0,splmax],[0,0],'k--') % sensitivity threshold
       axis([splminplot,splmax-5,-1,10.5])
     elseif flags.do_dprime
-      axis([splminplot,splmax-5,-1,5.9])  
+      axis([splminplot,splmax-5,-1.5,5.9])  
     else
       axis([splminplot,splmax-5,-20,399])
     end
@@ -1942,6 +2403,13 @@ if flags.do_dynrangecheck
     set(gca,'XTick',XTick,'XTickLabel',XTickLabel,'FontSize',kv.FontSize)
   
   end
+  meta(1).name = 'SPL';
+  meta(1).data = splplot;
+  meta(2).name = labels;
+  meta(2).data = {1,2,3,1:3};
+  meta(3).name = 'OHC gain';
+  meta(3).data = cohc;
+  varargout = {Y;meta};
   
 end
   
@@ -1951,20 +2419,20 @@ if flags.do_localevel
   condition = data_baumgartner2015('ConditionNames');
   
   cachename = ['localevel_' cachename];
-  if not(kv.gammashortfact == 1)
-    cachename = [cachename '_gsf' num2str(kv.gammashortfact,'%1.1f')];
+  if not(model.kv.gammashortfact == 1)
+    cachename = [cachename '_gsf' num2str(model.kv.gammashortfact,'%1.1f')];
   end
-  if not(kv.Sshortfact == 1)
-    cachename = [cachename '_Ssf' num2str(kv.Sshortfact,'%1.1f')];
+  if not(model.kv.Sshortfact == 1)
+    cachename = [cachename '_Ssf' num2str(model.kv.Sshortfact,'%1.1f')];
   end
-  if not(kv.psgeshort == 1)
-    cachename = [cachename '_psgec' num2str(kv.psgeshort,'%1.1f')];
+  if not(model.kv.psgeshort == 1)
+    cachename = [cachename '_psgec' num2str(model.kv.psgeshort,'%1.1f')];
   end
-  if flags.do_TLisSPL
-    cachename = [cachename '_TLisSPL'];
+  if model.flags.do_SPLtemAdapt
+    cachename = [cachename '_SPLtemAdapt'];
   end
-  if flags.do_gammatone
-    cachename = [cachename '_minSPL' num2str(kv.GT_minSPL) '_maxSPL' num2str(kv.GT_maxSPL)];
+  if model.flags.do_gammatone
+    cachename = [cachename '_minSPL' num2str(model.kv.GT_minSPL) '_maxSPL' num2str(model.kv.GT_maxSPL)];
   end
   [pred,ref] = amtcache('get', cachename, flags.cachemode);
   if isempty(pred)
@@ -1974,8 +2442,7 @@ if flags.do_localevel
     ref.pe = pred.qe;
     for cc = 1:length(condition)
 
-      data = data_baumgartner2015(condition{cc},'model','gamma',kv.gamma,...
-        'tiwin',kv.tiwin,flags.fbank,flags.fibertypeseparation,flags.recalib,'mgs',kv.mgs);
+      data = data_baumgartner2016(condition{cc},'model','argimport',model.flags,model.kv);
 
       for ll = 1:length(data)
 
@@ -1988,9 +2455,6 @@ if flags.do_localevel
         ref.pe(ll,cc) = real(localizationerror(itemlist,'rmsPmedianlocal'));
         ref.qe(ll,cc) = real(localizationerror(itemlist,'querrMiddlebrooks'));
 
-        if flags.do_TLisSPL
-          kv.SPLtem = data(ll).SPL;
-        end
         if strcmp(condition{cc},'Long')
           clbl = condition{cc};
         else % short
@@ -2008,7 +2472,7 @@ if flags.do_localevel
     end
     amtcache('set',cachename,pred,ref);
   else
-    data = data_baumgartner2016;
+    data = data_baumgartner2016('all');
   end
   
   perrmtx = ref.pe';
@@ -2020,12 +2484,10 @@ if flags.do_localevel
   
   %% Prediction residues 
   mm = 1;
-  [r,p] = corrcoef([pred.pe],[ref.pe]);
-  r_perr(mm) = r(2);
+  r_perr(mm) = corrcoeff([pred.pe],[ref.pe],2);
   e_perr(mm) = mean(rms([pred.pe]-[ref.pe]));
 
-  [r,p] = corrcoef([pred.qe],[ref.qe]);
-  r_qerr(mm) = r(2);
+  r_qerr(mm) = corrcoeff([pred.qe],[ref.qe],2);
   e_qerr(mm) = mean(rms([pred.qe]-[ref.qe]));
     
   amtdisp(' e_PE  r_PE  e_QE   r_QE')
@@ -2594,4 +3056,42 @@ function s = gain2slope(g)
 % s = gain2slope(g)
 
 s = rad2deg(acos(1./sqrt(g.^2+1)));
+end
+
+function r = corrcoeff(x,y,dim)
+% internal function to evaluate correlation coefficients in order to prevent 
+% conflict between MATLAB statistics toolbox and biosig plugin of EEGlab
+%
+%   Usage: r = corrcoeff(x,y,dim)
+
+if not(size(x) == size(y))
+  error('corrcoeff: x and y must have same size!')
+end
+
+% if not(exist('dim','var'))
+%   dim = 0;
+% end
+% 
+% if ndims(x) == 1
+%   
+%   r = cov(x,y)/std(x)/std(y);
+%   
+% elseif ndims(x) == 2 % rm-corrleation via anova
+%   
+%   if dim == 1
+%     subj = repmat(1:size(y,2),[size(y,1),1]);
+%   else
+%     subj = 1:size(y,1);
+%     subj = repmat(subj(:),[1,size(y,2)]);
+%   end
+%   [p,tab,stats] = anovan(y(:),{x(:) num2str(subj(:))},'display','off',...
+%                   'varnames',{'Prediction','Listener'});
+%   SSpred = tab{2,2};
+%   SSresid = tab{4,2};
+%   r = sqrt( SSpred / (SSpred+SSresid) );
+%   
+% else
+  r = cov(x(:),y(:))/std(x(:))/std(y(:));
+% end
+
 end

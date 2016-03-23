@@ -8,11 +8,14 @@ definput = arg_amtcache(definput);
 definput.keyvals.ID = 'NHx';
 definput.keyvals.Condition = 'baseline';%'Long';
 
-definput.keyvals.temstim = noise(8e3,1,'white'); % "frozen" alternative: mls(13)
+tmp = amtload('baumgartner2016','temstim.mat'); % frozen version of noise(8e3,1,'white'); potential alternative: mls(13)
+definput.keyvals.temstim = tmp.temstim;
 
 definput.flags.fbank = {'zilany2014','zilany2007humanized','gammatone'};   % ,'drnl'
 definput.keyvals.fiberTypes=1:3;  % IHC scaling factor: 1 denotes normal IHC function; 0 denotes complete IHC dysfunction.
 definput.flags.redoSpectralAnalysis= {'','redoSpectralAnalysis'};
+definput.flags.SPLtemAdapt = {'','SPLtemAdapt'};
+definput.flags.normalHearingTemplate = {'','NHtem'};
 
 definput.flags.Ifw = {'nointensityweighting','intensityweighting'};
 definput.flags.diff = {'','diff','nodiff'};
@@ -38,8 +41,8 @@ definput.keyvals.space=1;       % No. of ERBs (Cams)
 definput.keyvals.do=1;
 definput.keyvals.flow=700;      % Hz
 definput.keyvals.fhigh=18000;   % Hz
-definput.keyvals.SPL = 80; 	% dB SPL
-definput.keyvals.SPLtem = 80;  	% dB SPL
+definput.keyvals.SPL = 60; 	% dB SPL
+definput.keyvals.SPLtem = [40,80];	% dB SPL
 definput.keyvals.SL = [];       % db/ERB; spectral density of target sound re absolut detection threshold
 definput.keyvals.bwcoef=13;     % steepness in degrees of binaural weighting function
 definput.keyvals.polsamp=[-30:5:70 80 100 110:5:210];  % polar sampling (for regular)
