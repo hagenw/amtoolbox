@@ -134,6 +134,11 @@ definput.import={'baumgartner2014','baumgartner2014pmv2ppp','localizationerror'}
   {'fs','S','lat','stim','space','do','flow','fhigh',... %'fsstim'
   'bwcoef','polsamp','rangsamp','mrsmsp','gamma'},definput,varargin);
 
+if not(isstruct(target)) && ndims(target) == 2
+  target = permute(target,[1,3,2]);
+  warning('Matrix dimensions of target should be: time x direction x channel/ear.')
+  warning('Since 3rd dimension was empty, 2nd dimension was used as channel dimension.')
+end
 
 %% Print Settings
 
