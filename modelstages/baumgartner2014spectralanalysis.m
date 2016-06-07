@@ -33,7 +33,7 @@ function varargout = baumgartner2014spectralanalysis(sig,varargin)
 % AUTHOR: Robert Baumgartner
 
 definput.import={'baumgartner2014'};
-[flags,kv]=ltfatarghelper({},definput,{});
+[flags,kv]=ltfatarghelper({},definput,varargin);
 
 %% Spectral Analysis, Eq.(2)
 

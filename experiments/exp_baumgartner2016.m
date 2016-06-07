@@ -328,7 +328,7 @@ if flags.do_hearingthreshold
     % set(gca,'XTickLabel',{'0.2','0.3','','0.5','','0.7','','','1','2','3','','5','','7','','','10'})
     set(gca,'Layer', 'top')
     xlabel('Frequency (Hz)','FontSize',kv.FontSize)
-    ylabel('Hearing threshold (dB)','FontSize',kv.FontSize)
+    ylabel('Hearing threshold (dB SPL)','FontSize',kv.FontSize)
 
     leg = legend(legendentries,'Location','southwest');
     set(leg,'FontSize',kv.FontSize)
@@ -534,7 +534,7 @@ if flags.do_baseline
       limqe = [minqe,maxqe];
       plot(limqe,limqe,'k--')
       hold on
-      plot(qe_exp,qe_pred,'ko')
+      h(1) = plot(qe_exp,qe_pred,'kd');
       axis equal
       axis([minqe maxqe minqe maxqe])
 
@@ -549,7 +549,8 @@ if flags.do_baseline
       limpe = [minpe,maxpe];
       plot(limpe,limpe,'k--')
       hold on
-      plot(pe_exp,pe_pred,'ko')
+      h(2) = plot(pe_exp,pe_pred,'ks');
+      set(h,'MarkerFaceColor','w')
       axis equal
       axis([minpe maxpe minpe maxpe])
       xlabel('Actual PE','FontSize',kv.FontSize)
@@ -2246,7 +2247,7 @@ end
 
 if flags.do_ratelevelcurves
   
-  splmax = 160; % dB
+  splmax = 130; % dB
   splminplot = 5;
   fc = 4000; % Hz
   
