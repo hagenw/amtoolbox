@@ -2309,7 +2309,7 @@ if flags.do_fig11
 %     if not(exist(fnHarvard,'dir'))
 %       amtdisp('The Harvard word list is missing.') 
 %       amtdisp('Please, contact Virginia Best (ginbest@bu.edu) or Craig Jin (craig.jin@sydney.edu.au) for providing their speech recordings.')
-%       amtdisp(['Then, move the folder labeled HarvardWords to: ' fullfile(amtbasepath,'signals') '.'])
+%       amtdisp(['Then, move the folder labeled HarvardWords to: ' fullfile(amtbasepath,'auxdata','baumgartner2014') '.'])
 %       return
 %     end
     fnHarvard = fullfile(amtbasepath,'auxdata','baumgartner2014','HarvardWords');

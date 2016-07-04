@@ -71,6 +71,8 @@ function data = data_baumgartner2013(varargin)
 
 % AUTHOR : Robert Baumgartner
 
+% TODO: explain Data in description;
+
 %% ------ Check input options --------------------------------------------
 
 % Define input flags

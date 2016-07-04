@@ -22,6 +22,8 @@ function [ur,fs]  = data_roenne2012(varargin)
 %     magresp(ur,fs,90,'fir','1');
 %
 %   References: roenne2012modeling
+
+% TODO: explain "unitary response"
   
 s=amtload('roenne2012','ur.mat');
 ur=s.ur;

@@ -35,6 +35,8 @@ function [delay,data_mean,data_std]  = data_elberling2010(varargin)
 %     data_elberling2010('fig5','plot');
 %
 %   References: elberling2010evaluating
+
+% TODO: explain Data in description;
     
 % Define input flags
 definput.flags.type={'missingflag','fig4','fig5','stim'};

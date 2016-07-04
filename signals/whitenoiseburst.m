@@ -1,6 +1,9 @@
 function sig = whitenoiseburst(fs)
 % Generate the noise signal used for the binaural model to predict the perceived
 % direction
+
+% TODO: used by wierstorf2013, integrate in AMT 
+
 noise_length = 700;
 pause_length = 300;
 slope_length = 20;

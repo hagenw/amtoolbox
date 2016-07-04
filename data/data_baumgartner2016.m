@@ -95,6 +95,8 @@ function data = data_baumgartner2016(varargin)
 
 % AUTHOR : Robert Baumgartner
 
+% TODO: explain Data in description;
+
 %% ------ Check input options --------------------------------------------
 
 definput.import={'baumgartner2016'};

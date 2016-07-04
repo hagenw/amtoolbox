@@ -23,6 +23,8 @@ function data = data_goode1994(varargin)
 %
 %   References: goode1994nkf
 
+% TODO: explain Data in description;
+
 %   AUTHOR: Peter L. Søndergaard
 
 

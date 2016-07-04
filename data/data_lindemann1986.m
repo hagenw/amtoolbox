@@ -75,6 +75,8 @@ function data = data_lindemann1986(varargin)
 
 %   AUTHOR: Hagen Wierstorf
 
+% TODO: explain Data in description;
+
 
 %% ------ Check input options --------------------------------------------
 

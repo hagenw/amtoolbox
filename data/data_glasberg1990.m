@@ -15,6 +15,9 @@ function [delta,sym,asymR,asymL]=data_glasberg1990(varargin)
 % 
 %   References: glasberg1990daf moore1990auditory
 
+
+% TODO: explain Data in description;
+
 % Parse input options
 definput.flags.plot = {'noplot','plot'};
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);

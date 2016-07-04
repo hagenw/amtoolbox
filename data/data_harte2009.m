@@ -7,6 +7,8 @@ function [hartestim,fs]  = data_harte2009()
 %
 %   References: harte2009comparison
 
+% TODO: explain stimuli in description;
+
 hartestim = amtload('harte2009','stim.mat');
   
 fs = 48e3;
