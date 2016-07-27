@@ -2538,7 +2538,11 @@ if flags.do_fig11
     hold on
     h(3) = plot(xticks+dx,noDCN.qe,'kd');
     set(h(3),'MarkerFaceColor','k','MarkerSize',MarkerSize-1,'LineStyle','--')
-    h(2) = plot(xticks([1 2 5]),data.qe([1 2 5]),'ko');
+    h(2) = plot(xticks([1 2 5]),data.qe([1 2 5]),'ko'); 
+    % In Baumgartner et al. (2014), we accidentially missed the actual data 
+    % for the -20dB and -40dB conditions. Uncomment the following line to   
+    % also show these data points.
+%     h(2) = plot(xticks,data.qe,'ko');
     set(h(2),'MarkerFaceColor','w','MarkerSize',MarkerSize,'LineStyle','-')
     plot([-0.5 4.5],[qe0 qe0],'k:') % chance performance
     ylabel('Quadrant Err. (%)','FontSize',FontSize)

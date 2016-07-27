@@ -16,10 +16,10 @@ function data = data_best2005
 
 % AUTHOR: Robert Baumgartner
 
-% Mean quadrant error rates from Tab.2 (Exp. I)
-data.qe =     [3.0,8.4,nan,nan,16.4];
+% Mean quadrant error rates from Tab.2 (Exp. I) and Tab. 4 (Exp. II)
+data.qe =     [3.0,mean([8.4,6.7]),12.0,13.8,16.4];
 
-% Mean absolute polar angle errors from Fig.5b (Exp. I) Fig.10b (Exp. II)
+% Mean absolute polar angle errors from Fig.5b (Exp. I) and Fig.10b (Exp. II)
 data.ape =    [21,30,38,42.5,46];
 data.seape =  ones(1,5);
 
