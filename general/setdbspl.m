@@ -27,7 +27,7 @@ definput.flags.mean={'noac','ac'};
 definput.keyvals.dboffset=100;
 [flags,kv]=ltfatarghelper({'dboffset'},definput,varargin);
 
-error(nargchk(1,5,nargin));
+narginchk(1,5);
 
 if ~isnumeric(inoutsig)
   error('%s: insig must be numeric.',upper(mfilename));
