@@ -18,13 +18,68 @@ function varargout = exp_baumgartner2016(varargin)
 %
 %     'noplot'  Don't plot, only return data.
 %
-%     'autorefresh'  Re-calculate the file if it does not exist. Return 1 if the
-%                file exist, otherwise 0. This is the default
+%     'fig2' or 'ratelevelcurves'
+%               Rate-level curves of the three different fiber types
+%               represented in the auditory-periphery model. Firing rates were
+%               evaluated at a CF of 4 kHz in response to Gaussian white noise at
+%               various SPLs. Note that high-SR fibers saturate already at low SPLs,
+%               medium-SR fibers at moderate SPLs, and low-SR fibers not at all.
 %
-%     'refresh'  Always recalculate the file.
+%     'fig3' or 'baseline'
+%               Correspondence between actual and predicted
+%               baseline performance for the 23 normal-hearing listeners after
+%               listener-specific calibration of the model?s sensitivity parameter (S).
 %
-%     'cached'   Always use the cached version. Throws an error if the
-%                file does not exist.
+%     'fig4' or 'tab1' or 'hearingthreshold'
+%               Hearing thresholds estimated for simulated OHC gains
+%               (COHC) within the range of 1 (normal active cochlea) to 0 (passive
+%               cochlea). The selected set of OHC gains results in approximately
+%               equal increments of high-frequency thresholds.
+%               Table I: Simulated Conditions of OHC Dysfunction,  
+%               Estimated PTAs, and Corresponding Hearing Loss Categories.
+%
+%     'fig5' or 'numchan' and 'spatstrat'
+%               Model evaluation for normal-hearing listeners tested
+%               on the effects of spectral resolution (by number of vocoder
+%               channels in Goupell et al., 2010) and spectral warping (Majdak,
+%               Walder, et al., 2013). Model data (filled circles) are compared
+%               with actual data (open circles) from the two studies. Error bars
+%               represent SDs. Symbols are slightly shifted along the abscissa for
+%               better visibility. BB = broadband noise burst; CL = broadband click
+%               train (infinite number of channels); LP = low-pass filtered at
+%               8.5 kHz; W = HRTFs spectrally warped from 2.8 to 16 kHz to
+%               2.8 to 8.5 kHz.
+%
+%     'fig6' or 'evalSPLtem'
+%               Effect of template SPL on predictive power of the
+%               model for the two studies (Goupell et al., 2010; Majdak, Walder,
+%               et al., 2013) shown in Figure 5. Predictions based on a single
+%               template SPL equivalent to the actual SPL of the target sounds of
+%               60 dB result in similar prediction residues as based on templates
+%               mixed across a broad range of SPLs. Higher plausibility of the
+%               mixed-SPL templates was the reason to choose this representation
+%               for all further simulations (including predictions shown in Figure 5).
+%
+%     'fig7' or 'impairment'
+%               Effects of OHC dysfunctions and selective activity of
+%               AN fibers on predicted quadrant error rates (top) and local RMS
+%               errors (bottom). Thick bar: interquartile range (IQR). Thin
+%               bar: data range within 1.5 IQR. Horizontal line within thick
+%               bar: average. Dashed horizontal line: chance performance.
+%
+%     'fig8' or 'sensitivity'
+%               Sensitivity (dprime) of AN fibers in level discrimination
+%               as function of SPL predicted for different fiber types and OHC
+%               dysfunctions. Sensitivities were evaluated for SPL increments of
+%               10 dB and averaged across 28 CFs from 0.7 to 18 kHz. Gray area:
+%               stimulus range of target sounds at 60 dB SPL.
+%
+%     'fig9' or 'effectOnCues'
+%               Effect of OHC dysfunction on positive spectral gradients.  
+%               Exemplary median-plane HRTFs from one listener (NH46). Note the
+%               distinct direction-specific patterns for the normal and moderate 
+%               OHC dysfunctions (COHC>=0.4), which are almost absent in the 
+%               cases of the severe and complete OHC dysfunctions (COHC<=0.1).
 %
 %     'baseline_ex' 
 %               Prediction examples. Actual responses and response predictions 
@@ -35,9 +90,6 @@ function varargout = exp_baumgartner2016(varargin)
 %               according to the color bar to the right. Actual (A:) and 
 %               predicted (P:) quadrant error rates (QE) and local polar 
 %               RMS errors (PE) are listed above each panel.
-%               
-%     'parameterization'
-%               Model parametrization. 
 %
 %     'spatstrat_ex' 
 %               Effect of band limitation and spectral warping. Actual 
@@ -46,49 +98,12 @@ function varargout = exp_baumgartner2016(varargin)
 %               spectrally warped (W) DTFs of the median plane. Data were 
 %               pooled within $\pm15^\circ$ of lateral angle.
 %
-%     'spatstrat' 
-%               Effect of band limitation and spectral warping. 
-%               Listeners were tested with broadband (BB), low-pass 
-%               filtered (LP), and spectrally warped (W) DTFs. 
-%               Actual: experimental results from majdak2013. 
-%               Part.: Model predictions for the actual eight participants 
-%               based on the actually tested target positions. Pool: Model 
-%               predictions for our listener pool based on all possible 
-%               target positions. Symbols and whiskers show median values 
-%               and inter-quartile ranges, respectively. Symbols were 
-%               horizontally shifted to avoid overlaps. Dotted horizontal 
-%               lines represent chance rate. Correlation coefficients, $r$, 
-%               and prediction residues, $e$, specify the correspondence 
-%               between actual and predicted listener-specific performances.
-%
 %     'numchan_ex'
 %               Effect of spectral resolution in terms of varying the number 
 %               of spectral channels of a channel vocoder. Actual responses 
 %               and response predictions for exemplary listener NH12. 
 %               Results for 24, 9, and 3 channels are shown. All other 
 %               conventions are as in Fig.3.
-%
-%     'numchan' 
-%               Effect of spectral resolution in terms of varying the number 
-%               of spectral channels of a channel vocoder. Actual experimental 
-%               results are from goupell2010numchan. Stimulation with broadband 
-%               click trains (CT) represents an unlimited number of channels. 
-%               All other conventions are as in Fig.6. 
-%
-%     'baseline' 
-%               Baseline performance as a function of the magnitude of the 
-%               lateral response angle. Symbols and whiskers show median 
-%               values and inter-quartile ranges, respectively. Open symbols 
-%               represent actual and closed symbols predicted results. Symbols 
-%               were horizontally shifted to avoid overlaps. Triangles with 
-%               dashed lines show predictions (P) of the model without the 
-%               sensomotoric mapping (SMM) stage.  
-%
-%     'hearingthreshold' 
-%               Estimation of hearing thresholds in correspondence to OHC dysfunctions.  
-%
-%     'ratelevelcurves' 
-%               Rate-level curves of fibers with different SRs (CF: 1kHz). 
 %
 %   Requirements: 
 %   -------------
@@ -102,37 +117,41 @@ function varargout = exp_baumgartner2016(varargin)
 %   Examples:
 %   ---------
 %
-%   To display the baseline prediction examples use :::
+%   To display the rate-level curves use :::
 %
-%     exp_baumgartner2016('baseline_ex');
+%     exp_baumgartner2016('fig2');
 %
 %   To display the baseline prediction use :::
 %
-%     exp_baumgartner2016('baseline');
+%     exp_baumgartner2016('fig3');
 %
-%   To display parametrization results use :::
+%   To display estimations of hearing thresholds use :::
 %
-%     exp_baumgartner2016('parametrization');
+%     exp_baumgartner2016('fig4');
 %
-%   To display spatstrat prediction examples use :::
+%   To display model evaluation for normal-hearing listeners use :::
 %
-%     exp_baumgartner2016('spatstrat_ex');
+%     exp_baumgartner2016('fig5');
 %
-%   To display spatstrat prediction use :::
+%   To display evaluation results for template SPL use :::
 %
-%     [d,r,s] = exp_baumgartner2016('spatstrat');
+%     exp_baumgartner2016('fig6');
 %
-%   To display numchan prediction examples use :::
+%   To display predicted effects of sensorineural hearing loss use :::
 %
-%     exp_baumgartner2016('numchan_ex');
+%     exp_baumgartner2016('fig7');
 %
-%   To display numchan prediction use :::
+%   To display sensitivity evaluation for different fiber types use :::
 %
-%     [d,r,s,N] = exp_baumgartner2016('numchan');
+%     exp_baumgartner2016('fig8');
 %
-%   See also: baumgartner2014 data_baumgartner2016
+%   To display effect of OHC damage on exemplary spectral cue representation use :::
 %
-%   References: baumgartner2014modeling majdak2013spatstrat goupell2010numchan  
+%     exp_baumgartner2016('fig9');
+%
+%   See also: baumgartner2016 data_baumgartner2016
+%
+%   References: baumgartner2016 majdak2013spatstrat goupell2010numchan  
 %   
 
 
@@ -143,7 +162,9 @@ function varargout = exp_baumgartner2016(varargin)
 
 definput.import={'amtcache','localizationerror','baumgartner2014pmv2ppp'};
 
-definput.flags.experiment = {'missingflag','baseline','baseline_ex',...
+definput.flags.experiment = {'missingflag',...
+  'fig2','fig3','fig4','fig5','fig6','fig7','fig8','fig9','tab1',...
+   'sensitivity','baseline','baseline_ex',...
    'baseline_lat','parametrization',...
    'spatstrat_ex','spatstrat','numchan_ex','numchan',...
    'evalSPLtem','cOHCvsSens',...
@@ -226,7 +247,7 @@ cachename = [cachename '_mgs' num2str(model.kv.mgs)];
 
 
 %% Hearing thresholds following OHC dysfunction
-if flags.do_hearingthreshold
+if flags.do_hearingthreshold || flags.do_fig4
 
   cOHC = kv.cOHCset;
   flow = 125;%700; % Hz
@@ -442,7 +463,7 @@ if flags.do_parametrization
 end
 
 %% ------ BASELINE ----------------------------------------------------------
-if flags.do_baseline
+if flags.do_baseline || flags.do_fig3
   
   SL = 50; % presentation level of stimuli
   model.kv.SPL = SL + kv.SL2SPL;
@@ -1427,7 +1448,7 @@ if flags.do_numchan
 end
 
 %% SPLtem evaluation based on SpatStrat and NumChan
-if flags.do_evalSPLtem
+if flags.do_evalSPLtem  || flags.do_fig6
   
   SL2SPL = kv.SL2SPL;
 
@@ -1446,46 +1467,24 @@ if flags.do_evalSPLtem
   end
 
   ll = length(SPLtem)+1;
-%   [bl(ll).d,bl(ll).r,bl(ll).s] = exp_baumgartner2016('baseline','noplot',...
-%     'ModelSettings',{'SPLtem',SPLtemR},'SL2SPL',SL2SPL);
   [nc(ll).d,nc(ll).r,nc(ll).s] = exp_baumgartner2016('numchan','noplot',...
     'ModelSettings',{'argimport',model.flags,model.kv,'SPLtem',SPLtemR},'SL2SPL',SL2SPL);
   [ss(ll).d,ss(ll).r,ss(ll).s] = exp_baumgartner2016('spatstrat','noplot',...
     'ModelSettings',{'argimport',model.flags,model.kv,'SPLtem',SPLtemR},'SL2SPL',SL2SPL);
 
   %% Number of listener-specific data points (#subjects * #conditions)
-%   N.bl = length(bl(1).s);
   N.nc = length(nc(1).s)*length(nc(1).s(1).pe_exp);
   N.ss = length(ss(1).s)*length(ss(1).s(1).pe_exp);
-%   N.all = N.bl + N.nc + N.ss;
   N.all = N.nc + N.ss;
-
-%   %% Pool correlations across experiments (averaged acc. to #data)
-%   for ll = 1:length(SPLtem)+1
-% %     r.qe(ll) = (N.bl*bl(ll).r.qe + N.nc*nc(ll).r.qe + N.ss*ss(ll).r.qe) / N.all;
-% %     r.pe(ll) = (N.bl*bl(ll).r.pe + N.nc*nc(ll).r.pe + N.ss*ss(ll).r.pe) / N.all;
-%     r.qe(ll) = (N.nc*nc(ll).r.qe + N.ss*ss(ll).r.qe) / N.all;
-%     r.pe(ll) = (N.nc*nc(ll).r.pe + N.ss*ss(ll).r.pe) / N.all;
-%   end
-%   r.avg = (r.qe + r.pe)/2;
 
   %% Pool residues across experiments (averaged acc. to #data)
   for ll = 1:length(SPLtem)+1
-%     dtotal(ll) = (N.bl*bl(ll).d.total + N.nc*nc(ll).d.total + N.ss*ss(ll).d.total) / N.all;
-%     dpe(ll) = (N.bl*bl(ll).d.pe + N.nc*nc(ll).d.pe + N.ss*ss(ll).d.pe) / N.all;
-%     dqe(ll) = (N.bl*bl(ll).d.qe + N.nc*nc(ll).d.qe + N.ss*ss(ll).d.qe) / N.all;
     dtotal(ll) = (N.nc*nc(ll).d.total + N.ss*ss(ll).d.total) / N.all;
     dpe(ll) = (N.nc*nc(ll).d.pe + N.ss*ss(ll).d.pe) / N.all;
     dqe(ll) = (N.nc*nc(ll).d.qe + N.ss*ss(ll).d.qe) / N.all;
   end
 
   %% Prediction residuum obtained by chance prediction
-%   pe_all = cat(1,cat(1,bl(1).s.pe_exp),cat(1,nc(1).s.pe_exp),cat(1,ss(1).s.pe_exp));
-%   qe_all = cat(1,cat(1,bl(1).s.qe_exp),cat(1,nc(1).s.qe_exp),cat(1,ss(1).s.qe_exp));
-%   [chance.qe,chance.pe] = baumgartner2014pmv2ppp('chance');
-%   chance.dpe = rms(pe_all-chance.pe);
-%   chance.dqe = rms(qe_all-chance.qe);
-%   chance.dtotal = ( chance.dqe/100 + chance.dpe/90 ) /2;
   chance.dpe = 1;
   chance.dqe = 1;
   chance.dtotal = 1;
@@ -1500,40 +1499,21 @@ if flags.do_evalSPLtem
   hi(1,1) = plot(SPLtem,dqe(1:length(SPLtem))/chance.dqe,'d-');
   hold on
   hi(2,1) = plot(SPLtem,dpe(1:length(SPLtem))/chance.dpe,'s-');
-%   ha(1) = plot(SPLtem,dtotal(1:length(SPLtem))/chance.dtotal,'ok-');
   % multiple-SPL
   hi(3,1) = plot(SPLtemR,dqe(end)/chance.dqe*[1,1],'--');
   hi(5,1) = plot(mean(SPLtemR),dqe(end)/chance.dqe,'d');
   hi(4,1) = plot(SPLtemR,dpe(end)/chance.dpe*[1,1],'--');
   hi(6,1) = plot(mean(SPLtemR),dpe(end)/chance.dpe,'s');
-%   ha(3) = plot(SPLtemR,dtotal(end)/chance.dtotal*[1,1],'ok');
   % general
   set(gca,'YLim',[3.1,10.9],'XLim',XLim)
 %   xlabel('Template SPL (dB)')
   ylabel('Prediction residuum')
 
   amtdisp('Predictive power for SpatStrat and NumChan.')
-%   amtdisp('Prediction residuum normalized by residuum of guessing model.')
 
   xlabel('Template SPL (dB)')
   
-%   axes(hax(2))
-%   % single-SPL
-%   hi(1,2) = plot(SPLtem,r.qe(1:length(SPLtem)),'d-');
-%   hold on
-%   hi(2,2) = plot(SPLtem,r.pe(1:length(SPLtem)),'s-');
-% %   ha(2) = plot(SPLtem,r.avg(1:length(SPLtem)),'ok-');
-%   % multiple-SPL
-%   hi(3,2) = plot(SPLtemR,r.qe(end)*[1,1],'--');
-%   hi(5,2) = plot(mean(SPLtemR),r.qe(end),'d');
-%   hi(4,2) = plot(SPLtemR,r.pe(end)*[1,1],'--');
-%   hi(6,2) = plot(mean(SPLtemR),r.pe(end),'s');
   htmp = plot([0,0],[0,0],'k-');
-% %   ha(4) = plot(SPLtemR,r.avg(end)*[1,1],'ok');
-%   set(hax(1),'XTickLabel',[])
-%   xlabel(hax(2),'Template SPL (dB)','FontWeight','bold')
-%   ylabel('Correlation, \it{r} ','FontWeight','bold')
-%   set(gca,'YLim',[0.709,0.849],'XLim',XLim)
 
   leg = legend([hi(5:6,1);htmp;hi(3,1)],...
     '% Quadrant errors','Local RMS error (deg)','Single SPL','Multiple SPLs');
@@ -1541,9 +1521,6 @@ if flags.do_evalSPLtem
   
   set(hi,'LineWidth',1,'MarkerSize',kv.MarkerSize,'Color',zeros(1,3))
   set(hi,'MarkerFaceColor',zeros(1,3))
-%   set(hi(2,:),'MarkerFaceColor','r')
-%   set(ha,'LineWidth',2,'MarkerSize',5,'MarkerFaceColor','k')
-%   set([hi(3:4,:);ha(3:4)],'LineStyle','--')
   set(hi(3:4,:),'LineStyle','--')
   
 end
@@ -1593,7 +1570,6 @@ if flags.do_sabin2005
     pred.pe = nan(length(SPL),length(s));
     pred.prob = cell(length(SPL),length(s));
     for ii = 1:length(s)
-% if ii == 1; figure; end
       for ll = 1:length(SPL)
         if flags.do_nostat
           [pred.qe(ll,ii),pred.prob{ll,ii},m] = baumgartner2016(...
@@ -1621,12 +1597,6 @@ if flags.do_sabin2005
           pred.qe(ll,ii) = localizationerror(m,'querrMiddlebrooks');
           pred.pe(ll,ii) = localizationerror(m,'rmsPmedianlocal');
         end
-% if ii == 1
-%   subplot(3,3,ll)
-%   plot_baumgartner2014(pred.prob{ll,ii}.p,pred.prob{ll,ii}.tang,pred.prob{ll,ii}.rang,m(:,6),m(:,8))
-%   colorbar off
-%   title(SPL(ll))
-% end
       end
       amtdisp([num2str(ii,'%u') ' of ' num2str(length(s),'%u') ' done'],'progress')
     end
@@ -1653,20 +1623,6 @@ if flags.do_sabin2005
   mvar = {'g','pv','prec'}; % modeled variable names
   SL = pred.SPL-kv.SL2SPL; % assumption on SL
   SPL = pred.SPL;
-  
-%   minSLf = 10;
-%   minSLr = 15;
-%   
-%   % Set to NAN
-%   for ii = 1:length(mvar)
-%     eval(['data.' dvar{ii} '.f.m(data.SL < minSLf) = nan;'])
-%     eval(['data.' dvar{ii} '.f.sd(data.SL < minSLf) = nan;'])
-%     eval(['pred.' mvar{ii} 'front(SL < minSLf,:) = nan;'])
-%     
-%     eval(['data.' dvar{ii} '.r.m(data.SL < minSLr) = nan;'])
-%     eval(['data.' dvar{ii} '.r.sd(data.SL < minSLr) = nan;'])
-%     eval(['pred.' mvar{ii} 'rear(SL < minSLr,:) = nan;'])
-%   end
   
   minSL = 15;
   iddata = data.SL >= minSL;
@@ -1751,7 +1707,6 @@ if flags.do_sabin2005
     figure;
     ha = tight_subplot(3,2,kv.gap,kv.marg_h,kv.marg_w);
     for ii = 1:length(mvar)
-%       subplot(3,2,1+(ii-1)*2)
       axes(ha(1+(ii-1)*2))
       if ii == 1
         plot([-10,100],[45,45],'k--') % ideal slope
@@ -1762,7 +1717,6 @@ if flags.do_sabin2005
       eval(['p2 = errorbar(data.SPL+0.3,data.' dvar{ii} '.f.m,data.' dvar{ii} '.f.sd);'])
       set(p1,'MarkerFaceColor','k','Marker','^','Color','k','MarkerSize',kv.MarkerSize)
       set(p2,'MarkerFaceColor','w','Marker','^','Color','k','MarkerSize',kv.MarkerSize)
-%       axis([-8,68,ylim{ii}])
       axis([minSPLf-marSPL,maxSPL+marSPL,ylim{ii}])
       ylabel(elabel{ii},'FontSize',kv.FontSize)
       set(gca,'XTick',round(minSPLf/10)*10:10:maxSPL)
@@ -1772,14 +1726,11 @@ if flags.do_sabin2005
         title('Front','FontSize',kv.FontSize)
       elseif ii == 3
         xlabel('SPL (dB)','FontSize',kv.FontSize)
-%         leg = legend('Model','Actual');
-%         set(leg,'Location','north','FontSize',kv.FontSize)
       end
       if ii<3
         set(gca,'XTickLabel',[])
       end
       
-%       subplot(3,2,2+(ii-1)*2)
       axes(ha(2+(ii-1)*2))  
       if ii == 1
         plot([-10,100],[45,45],'k--') % ideal slope
@@ -1790,17 +1741,13 @@ if flags.do_sabin2005
       eval(['p2 = errorbar(data.SPL+0.3,data.' dvar{ii} '.r.m,data.' dvar{ii} '.r.sd);'])
       set(p1,'MarkerFaceColor','k','Marker','o','Color','k','MarkerSize',kv.MarkerSize)
       set(p2,'MarkerFaceColor','w','Marker','o','Color','k','MarkerSize',kv.MarkerSize)
-%       axis([-8,68,ylim{ii}])
       axis([minSPLr-marSPL,maxSPL+marSPL,ylim{ii}])
       set(gca,'XTick',round(minSPLr/10)*10:10:maxSPL,'YTickLabel',[])
       set(gca,'TickLength',2*get(gca,'TickLength'),'FontSize',kv.FontSize)
-%       ylabel(elabel{ii},'FontSize',kv.FontSize)
       if ii == 1
         title('Rear','FontSize',kv.FontSize)
       elseif ii == 3
         xlabel('SPL (dB)','FontSize',kv.FontSize)
-%         leg = legend('Model','Actual');
-%         set(leg,'Location','north','FontSize',kv.FontSize)
       end
       
     end
@@ -1949,8 +1896,6 @@ if flags.do_impairment
     
     if flags.do_splitSPL
       
-%       fig(2) = figure;
-%       ha = tight_subplot(1,length(kv.SPLset),kv.gap,kv.marg_h,kv.marg_w);
       colors = {(1-1/length(kv.SPLset))*ones(1,3),zeros(1,3)};
       for ll = length(kv.SPLset):-1:1
         
@@ -1958,11 +1903,9 @@ if flags.do_impairment
          
         fig(ll+1) = figure;
         id = SPL(ll)==str2double(SPLstr);
-%         axes(ha(ll))
         b = boxplot(mtx.err(:,id),{ftstr(id),cohcstr(id),SPLstr(id)},...
           'plotstyle','compact','medianstyle','line','colors',colors{ll},...
           'factorgap',[],'labelverbosity','all','symbol','');
-%         title([num2str(SPL(ll)) ' dB SPL'])
 
         hold on
         % chance performance
@@ -2046,6 +1989,13 @@ if flags.do_impairment
     idrep = round(0.5:0.5:length(tbl.eps.GreenhouseGeisser)); % repeat iteratively
     tbl.ranova.DFGG = tbl.ranova.DF .* tbl.eps.GreenhouseGeisser(idrep);
     
+    % Add effect sizes to ranova table
+    SSeffect = tbl.ranova.SumSq(1:2:end);
+    SSerror = tbl.ranova.SumSq(2:2:end);
+    eta_pSq = nan(2*length(SSerror),1);
+    eta_pSq(1:2:end) = SSeffect./(SSeffect+SSerror); % effect size per (eta_partial)^2
+    tbl.ranova.eta_pSq = eta_pSq;
+    
     % Post-hoc analysis
     tbl.posthoc.Cohc = multcompare(rm,'Cohc');
     tbl.posthoc.FT = multcompare(rm,'FT');
@@ -2059,13 +2009,88 @@ if flags.do_impairment
     amtdisp(tbl.posthoc.Cohc)
     amtdisp(tbl.posthoc.FT)
     amtdisp('Reported in publication:')
-    amtdisp(tbl.ranova(3:end,[9,4]))
+    amtdisp(tbl.ranova(3:end,[9,4,6,10]))
     
   else
     tbl = [];
   end
   
   varargout = {tbl;fig;mtx.err;meta};
+  
+end
+
+if flags.do_fig7
+  
+  errorflag = {...
+    'QE','% Quadrant errors';...
+    'PE','Local RMS error (deg)';...
+    };
+  
+  SPLset = 60;
+  
+  NHtemflag = '';%'NHtem';
+
+  for ii = 1:length(errorflag)
+    tbl = exp_baumgartner2016('impairment',errorflag{ii,1},'SPLset',SPLset,...
+      'noFTlabel','FontSize',kv.FontSize,flags.cachemode,'ModelSettings',{NHtemflag});
+    ylabel(errorflag{ii,2},'FontSize',kv.FontSize)
+    fig(ii) = gcf;
+    ax(ii) = gca;
+  end
+
+  % Combine panels and add FT labels
+  N.cohc = 4;
+  N.ft = 4;
+  labels = {'all SRs','low-SR','med-SR','high-SR'};
+  
+  figC = figure;
+  marg = [.11,.06;.11,.03];
+  ha = tight_subplot(length(errorflag),length(SPLset),0,marg(1,:),marg(2,:));
+  for ii = 1:length(ha)
+    
+    axes(ha(ii));
+    copyobj(allchild(ax(ii)),ha(ii))
+    set(ha(ii),'XTick',ax(ii).XTick)
+    set(ha(ii),'XTickLabel',ax(ii).XTickLabel)
+    set(ha(ii),'YTick',ax(ii).YTick)
+    set(ha(ii),'YTickLabel',ax(ii).YTickLabel)
+    if ii <= length(SPLset) % add SPL and FT labels at top panels
+      if length(SPLset) > 1
+        title([num2str(SPLset(ii)) ' dB SPL'])
+      end
+      if length(SPLset) == 1
+        yy = 49; % like title
+      else
+        yy = 55;
+      end
+      set(gca,'YLim',[-2,yy])
+      for ff = 1:N.ft
+        jj = (ff-0.5)*N.cohc+.5;
+        text(jj,52,labels{ff},'FontWeight','bold','HorizontalAlignment','center')
+      end
+    else
+      if length(SPLset) == 1
+        yy = 51.5; % like title
+      else
+        yy = 54;
+      end
+      set(gca,'YLim',[17,yy])
+    end
+    if ii == 1 % show ylabel at left panels
+      ylabel(errorflag{1,2},'FontWeight','bold')
+    elseif ii == length(SPLset)+1
+      ylabel(errorflag{2,2},'FontWeight','bold')
+    else
+      set(gca,'YTickLabel','')
+      ylabel('')
+    end
+    if ii > length(SPLset) % show ylabel at bottom panels
+      xlabel({' ';'OHC gain, C_{OHC}'},'FontWeight','bold')
+    end
+  end
+  set(findall(figC,'-property','FontSize'),'FontSize',kv.FontSize)
+  
+  close(fig)
   
 end
 
@@ -2095,11 +2120,9 @@ if flags.do_cOHCvsSens
   
 end
 
-if flags.do_effectOnCues
+if flags.do_effectOnCues || flags.do_fig9
   
   sid = 10;    % listener No.
-%   spl = model.kv.SPL;   % SPL in dB
-%   tang = 0;   % target polar angle
   
   s = data_baumgartner2016('argimport',model.flags,model.kv);
   [dtf,polang] = extractsp(0,s(sid).Obj);
@@ -2205,7 +2228,6 @@ if flags.do_effectOnCues
       end
       
       c = colorbar;
-%       pos = get(c,'Position');
       set(c,'Position',[.93,.2,.02,.6])
       set(get(c,'Label'),'String','Spikes/s/ERB','FontSize',kv.FontSize)
       
@@ -2217,8 +2239,6 @@ end
 if flags.do_evalSpectralContrast
   
   sid = 10;    % listener No.
-%   spl = model.kv.SPL;   % SPL in dB
-%   tang = 0;   % target polar angle
   
   s = data_baumgartner2016('argimport',model.flags,model.kv);
   [dtf,polang] = extractsp(0,s(sid).Obj);
@@ -2245,7 +2265,7 @@ if flags.do_evalSpectralContrast
   varargout{1} = tab;
 end
 
-if flags.do_ratelevelcurves
+if flags.do_ratelevelcurves || flags.do_fig2
   
   splmax = 130; % dB
   splminplot = 5;
@@ -2274,7 +2294,6 @@ if flags.do_ratelevelcurves
     set(h,'MarkerFaceColor','k')
     leg = legend(h,{'low-SR','med-SR','high-SR'});
     set(leg,'Location','northoutside','FontSize',kv.FontSize,'Orientation','horizontal')
-%     set(leg,'Position',[.4,.96,.33,.03])
     
     axis([splminplot,splmax-5,-30,369])
     XTick = round(splminplot/10)*10:10:splmax;
@@ -2284,6 +2303,64 @@ if flags.do_ratelevelcurves
   
   end
   
+end
+
+if flags.do_fig5
+  exp_baumgartner2016('numchan','FontSize',kv.FontSize,'MarkerSize',4,flags.cachemode);
+  singleFig(1) = gcf;
+  axNumChan = get(gcf,'Children');
+  exp_baumgartner2016('spatstrat','FontSize',kv.FontSize,'MarkerSize',4,flags.cachemode);
+  singleFig(2) = gcf;
+  axSpatStrat = get(gcf,'Children');
+
+  % Adjust marker symbols
+  set([allchild(axNumChan(1)),allchild(axSpatStrat(1))],'Marker','d') % QE
+  set([allchild(axNumChan(3)),allchild(axSpatStrat(3))],'Marker','s') % PE
+
+  % Combined plot
+  fig = figure;
+  ha = tight_subplot(2,2,0,[.1,.05],[.11,.02]);
+
+  % Data
+  copyobj(allchild(axNumChan(1)),ha(1))
+  copyobj(allchild(axNumChan(3)),ha(3))
+  copyobj(allchild(axSpatStrat(1)),ha(2))
+  copyobj(allchild(axSpatStrat(3)),ha(4))
+
+  % Labels
+  QElabel = '% Quadrant errors';
+  PElabel = 'Local RMS error (deg)';
+  title(ha(1),'Goupell et al. (2010)')
+  title(ha(2),'Majdak et al. (2013)')
+  ylabel(ha(1),QElabel,'FontWeight','bold')
+  ylabel(ha(3),PElabel,'FontWeight','bold')
+  xlabel(ha(3),'Num. of channels','FontWeight','bold')
+  xlabel(ha(4),'Spectral modification','FontWeight','bold')
+  legend(ha(3),{'Model','Actual'},'Position',[0.5 0.80 0.1147 0.0440]);
+
+  % Limits
+  set(ha([1,3]),'XLim',axNumChan(1).XLim)
+  set(ha([2,4]),'XLim',axSpatStrat(1).XLim)
+  set(ha([1,2]),'YLim',[1,45.9])
+  set(ha([3,4]),'YLim',[26,54])
+
+  % Ticks
+  set(ha,'TickLength',[0.02,.01],'Box','on')
+  set(ha(1:2),'YTick',axNumChan(1).YTick)
+  set(ha(3:4),'YTick',axNumChan(3).YTick)
+  set(ha(1),'YTickLabel',axNumChan(1).YTickLabel)
+  set(ha(3),'YTickLabel',axNumChan(3).YTickLabel)
+  set(ha([1,3]),'XTick',axNumChan(1).XTick)
+  set(ha([2,4]),'XTick',axSpatStrat(1).XTick)
+  set(ha(3),'XTickLabel',axNumChan(1).XTickLabel)
+  set(ha(4),'XTickLabel',axSpatStrat(1).XTickLabel)
+  
+  close(singleFig)
+end
+
+if flags.do_sensitivity || flags.do_fig8
+  exp_baumgartner2016('dynrangecheck','dprime','SPLset',60,...
+    'FontSize',kv.FontSize,flags.cachemode,'marg_w',[.15,.01],'marg_h',[.05,.05])
 end
 
 if flags.do_dynrangecheck
@@ -2372,7 +2449,6 @@ if flags.do_dynrangecheck
         if cc==3
           text(0,6,{'d´'},'FontSize',kv.FontSize,'FontWeight','bold')
         end
-%         ylabel({'d^{\prime}'},'FontSize',kv.FontSize)
       else
         text(splminplot+5,330,panels{cc},'FontSize',kv.FontSize)
         ylabel('Firing rate (spikes/s)','FontSize',kv.FontSize)
@@ -2515,10 +2591,8 @@ if flags.do_localevel
       name{mm} = 'Pred.';
       % Legend
       legendentry = {'Actual, long';'Actual, short'};
-    %   for mm = 1:length(pred)
-        legendentry{2+2*mm-1} = [name{mm} ', long'];
-        legendentry{2+2*mm} = [name{mm} ', short'];
-    %   end
+      legendentry{2+2*mm-1} = [name{mm} ', long'];
+      legendentry{2+2*mm} = [name{mm} ', short'];
 
       xval = 10:10:70;
       xtext = 10;
@@ -2533,7 +2607,6 @@ if flags.do_localevel
         set(hlong,'MarkerFaceColor',symbExp(1),'LineWidth',LineWidth)
 
         set(gca,'YAxisLocation','right','YMinorTick','on')
-    %     set(gca,'XTick',xval,'YTick',10:20:50)
         set(gca,'TickLength',kv.TickLength)
 
         hold on
@@ -2577,7 +2650,6 @@ if flags.do_localevel
         hlong = plot(50,qerrmtx(1,ii),symbExp(1:2));
 
         set(gca,'YMinorTick','on')
-    %     set(gca,'XTick',xval,'YTick',10:20:50)
         set(gca,'TickLength',kv.TickLength)
 
         set(hlong,'MarkerFaceColor',symbExp(1),'LineWidth',LineWidth)
@@ -2600,7 +2672,6 @@ if flags.do_localevel
 
         % Listener ID
         ylabel([data(ii).id '            '],'FontSize',kv.FontSize,'Rotation',0,'FontWeight','bold');
-    %     text(xtext,30,data(ii).id,'FontSize',kv.FontSize)
       end
       % Pooled
       axes(ha(2*ii+1));
@@ -2651,8 +2722,6 @@ if flags.do_localevel
             set(gca,'XTickLabel',[])
             xlabel('')
           else
-%             XTickLabel = get(gca,'XTickLabel');
-%             XTickLabel(end:-2:1) = {' '};
             set(gca,'XTickLabelRotation',90)
             xlabel('')
           	if cc==3
