@@ -5,7 +5,7 @@ function lookup = itd2anglelookuptable(irs,varargin)
 %          lookup = itd2anglelookuptable(irs);
 %
 %   Input parameters:
-%       irs    : HRTF data set (at the moment only TU Berlin irs format)
+%       irs    : HRTF data set (TU Berlin's irs format or SOFA format)
 %       fs     : sampling rate, (default: 44100) / Hz
 %       model  : binaural model to use:
 %                   'dietz2011' uses the Dietz binaural model (default)
@@ -31,17 +31,25 @@ function lookup = itd2anglelookuptable(irs,varargin)
 %   References: dietz2011auditory wierstorf2013 wierstorf2011hrtf
 
 % AUTHOR: Hagen Wierstorf
+% last modified: Robert Baumgartner (SOFA compatibility)
 
 
 %% ===== Checking of input parameters ===================================
-nargmin = 1;
-nargmax = 3;
-error(nargchk(nargmin,nargmax,nargin));
+narginchk(1,3);
 
 definput.flags.model = {'dietz2011','lindemann1986'};
 definput.keyvals.fs = 44100;
 [flags,kv]=ltfatarghelper({'fs'},definput,varargin);
 
+% HRTF format
+if isfield(irs,'GLOBAL_Conventions')
+  flags.do_SOFA = true;
+  flags.do_TUB = not(flags.do_SOFA);
+  Obj = irs;
+else
+  flags.do_TUB = true;
+  flags.do_SOFA = not(flags.do_TUB);
+end
 
 %% ===== Configuration ==================================================
 % Samplingrate
@@ -51,19 +59,32 @@ nsamples = fs;
 % noise type to use
 noise_type = 'white';
 % SFS Toolbox settings
-conf.ir.useinterpolation = true;
-conf.fs = fs;
+if flags.do_TUB
+  conf.ir.useinterpolation = true;
+  conf.fs = fs;
+end
 
 
 %% ===== Calculation ====================================================
 % generate noise signal
 sig_noise = noise(nsamples,1,noise_type);
+
 % get only the -90 to 90 degree part of the irs set
-idx = (( irs.apparent_azimuth>-pi/2 & irs.apparent_azimuth<pi/2 & ...
-    irs.apparent_elevation==0 ));
-irs = slice_irs(irs,idx);
+if flags.do_TUB
+  idx = (( irs.apparent_azimuth>-pi/2 & irs.apparent_azimuth<pi/2 & ...
+      irs.apparent_elevation==0 ));
+  irs = slice_irs(irs,idx);
+  azi = irs.apparent_azimuth'./pi*180;
+else % SOFA
+  ele = 0;
+  idFrontHor = Obj.SourcePosition(:,2) == ele & ... % horizontal plane
+    (Obj.SourcePosition(:,1) >= -90 | Obj.SourcePosition(:,1) >= 270) & ... % front right
+    Obj.SourcePosition(:,1) <= 90; % front left
+  azi = Obj.SourcePosition(idFrontHor,1);
+end
+
 % iterate over azimuth angles
-nangles = length(irs.apparent_azimuth);
+nangles = length(azi);
 % create an empty mod_itd, because the lindemann model didn't use it
 mod_itd = [];
 
@@ -74,8 +95,12 @@ if flags.do_dietz2011
     ild = zeros(nangles,23);
     for ii = 1:nangles
         % generate noise coming from the given direction
-        ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance],'spherical',conf);
-        sig = auralize_ir(ir,sig_noise,1,conf);
+        if flags.do_TUB
+          ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance],'spherical',conf);
+          sig = auralize_ir(ir,sig_noise,1,conf);
+        else % SOFA
+          sig = SOFAspat(sig_noise,Obj,azi(ii),ele);
+        end
         % calculate binaural parameters
         [fine, cfreqs, ild_tmp, env] = dietz2011(sig,fs);
         % unwrap ITD
@@ -94,8 +119,12 @@ elseif flags.do_lindemann1986
     ild = zeros(nangles,36);
     for ii = 1:nangles
         % generate noise coming from the given direction
-        ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance],conf);
-        sig = auralize_ir(ir,sig_noise,1,conf);
+        if flags.do_TUB
+          ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance],conf);
+          sig = auralize_ir(ir,sig_noise,1,conf);
+        else % SOFA
+          sig = SOFAspat(sig_noise,irs,azi(ii),ele);
+        end
         % Ten fold upsampling to have a smoother output
         %sig = resample(sig,10*fs,fs);
         % calculate binaural parameters
@@ -120,9 +149,8 @@ end
 
 % Fit the lookup data
 for n = 1:size(itd,2)
-    [p(:,n),S{n},MU(:,n)] = polyfit(itd(:,n),irs.apparent_azimuth'./pi*180,12);
-    [p_ild(:,n),S_ild{n},MU_ild(:,n)] = ...
-        polyfit(ild(:,n),irs.apparent_azimuth'./pi*180,12);
+    [p(:,n),S{n},MU(:,n)] = polyfit(itd(:,n),azi,12);
+    [p_ild(:,n),S_ild{n},MU_ild(:,n)] = polyfit(ild(:,n),azi,12);
 end
 % Create lookup struct
 lookup.p = p;
