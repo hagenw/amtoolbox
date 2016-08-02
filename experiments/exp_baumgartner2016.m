@@ -503,8 +503,8 @@ if flags.do_baseline || flags.do_fig3
       pe_pred = cat(1,s.pe_pred);
       
       % correlation
-      r.qe = corrcoeff(qe_exp,qe_pred,2);
-      r.pe = corrcoeff(pe_exp,pe_pred,2);
+      [Pcorr.qe.r,Pcorr.qe.p] = corrcoeff(qe_exp,qe_pred);
+      [Pcorr.pe.r,Pcorr.pe.p] = corrcoeff(pe_exp,pe_pred);
 
       % prediction residues
       sd_pe = (pe_pred-pe_exp).^2; % squared differences
@@ -519,7 +519,7 @@ if flags.do_baseline || flags.do_fig3
       end
       err_exp = cat(1,s.err_exp);
       err_pred = cat(1,s.err);
-      r = corrcoeff(err_exp,err_pred,2);
+      [Pcorr.r,Pcorr.p] = corrcoeff(err_exp,err_pred,2);
       sd = (err_pred-err_exp).^2; % squared differences
       d = sqrt(relfreq(:)' * sd(:));    % weighted RMS diff.
       
@@ -527,12 +527,12 @@ if flags.do_baseline || flags.do_fig3
 
     s = rmfield(s,{'Obj'});
     
-    amtcache('set',cachename,r,d,s)
+    amtcache('set',cachename,Pcorr,d,s)
   end
   
   if isempty(model.flags.errorflag)
     d.total = (d.pe/90 + d.qe/100) /2;
-    amtdisp(['Corr. QE: ' num2str(r.qe,'%2.2f') ', PE: ' num2str(r.pe,'%2.2f') ', QE+PE: ' num2str((r.qe+r.pe)/2,'%2.2f')])
+    amtdisp(['Corr. QE: ' num2str(Pcorr.qe.r,'%2.2f') ' (p = ',num2str(Pcorr.qe.p,'%0.3f'),'), PE: ' num2str(Pcorr.pe.r,'%2.2f') ' (p = ',num2str(Pcorr.pe.p,'%0.3f'),'), QE+PE: ' num2str((Pcorr.qe.r+Pcorr.pe.r)/2,'%2.2f')])
   end
   
   if nargout >0; varargout{1} = d;	end
@@ -561,7 +561,7 @@ if flags.do_baseline || flags.do_fig3
 
       xlabel('Actual QE','FontSize',kv.FontSize)
       ylabel('Predicted QE','FontSize',kv.FontSize)
-      title(['e_{QE} = ' num2str(d.qe,'%0.1f') '% , r_{QE} = ' num2str(r.qe,'%0.2f')],...
+      title(['e_{QE} = ' num2str(d.qe,'%0.1f') '% , r_{QE} = ' num2str(Pcorr.qe.r,'%0.2f')],...
           'FontSize',kv.FontSize)
 
       subplot(121)
@@ -576,7 +576,7 @@ if flags.do_baseline || flags.do_fig3
       axis([minpe maxpe minpe maxpe])
       xlabel('Actual PE','FontSize',kv.FontSize)
       ylabel('Predicted PE','FontSize',kv.FontSize)
-      title(['e_{PE} = ' num2str(d.pe,'%0.1f') '\circ , r_{PE} = ' num2str(r.pe,'%0.2f')],...
+      title(['e_{PE} = ' num2str(d.pe,'%0.1f') '\circ , r_{PE} = ' num2str(Pcorr.pe.r,'%0.2f')],...
           'FontSize',kv.FontSize)
 
     else
@@ -885,10 +885,10 @@ if flags.do_spatstrat
     pred.pe = [s(idpart).pe_part]';
     
     % Correlation coefficients
-    r.qe =  corrcoeff(act.qe,pred.qe,2);
+    r.qe =  corrcoeff(act.qe,pred.qe);
     disp(['QE: r = ' num2str(r.qe,'%0.2f')]);
 
-    r.pe =  corrcoeff(act.pe,pred.pe,2);
+    r.pe =  corrcoeff(act.pe,pred.pe);
     disp(['PE: r = ' num2str(r.pe,'%0.2f')]);
 
 
@@ -1337,10 +1337,10 @@ if flags.do_numchan
     pred.qe = [s(idpart).qe_part];
     pred.pe = [s(idpart).pe_part];
     
-    r.qe =  corrcoeff(act.qe,pred.qe,1);
+    r.qe =  corrcoeff(act.qe,pred.qe);
     disp(['QE: r = ' num2str(r.qe,'%0.2f')]);
 
-    r.pe =  corrcoeff(act.pe,pred.pe,1);
+    r.pe =  corrcoeff(act.pe,pred.pe);
     disp(['PE: r = ' num2str(r.pe,'%0.2f')]);
     
     % RMS Differences
@@ -2031,7 +2031,7 @@ if flags.do_fig7
   NHtemflag = '';%'NHtem';
 
   for ii = 1:length(errorflag)
-    tbl = exp_baumgartner2016('impairment',errorflag{ii,1},'SPLset',SPLset,...
+    tbl{ii} = exp_baumgartner2016('impairment',errorflag{ii,1},'SPLset',SPLset,...
       'noFTlabel','FontSize',kv.FontSize,flags.cachemode,'ModelSettings',{NHtemflag});
     ylabel(errorflag{ii,2},'FontSize',kv.FontSize)
     fig(ii) = gcf;
@@ -2091,6 +2091,8 @@ if flags.do_fig7
   set(findall(figC,'-property','FontSize'),'FontSize',kv.FontSize)
   
   close(fig)
+  
+  varargout = {tbl,errorflag};
   
 end
 
@@ -2359,8 +2361,19 @@ if flags.do_fig5
 end
 
 if flags.do_sensitivity || flags.do_fig8
-  exp_baumgartner2016('dynrangecheck','dprime','SPLset',60,...
-    'FontSize',kv.FontSize,flags.cachemode,'marg_w',[.15,.01],'marg_h',[.05,.05])
+  
+  [data,meta] = exp_baumgartner2016('dynrangecheck','dprime','SPLset',60,...
+    'FontSize',kv.FontSize,flags.cachemode,'marg_w',[.15,.01],'marg_h',[.05,.05]);
+  dprime60dB = squeeze(data(meta(1).data == 60,[4,1:3],:))';
+  
+  [~,~,qe,errmeta] = exp_baumgartner2016('impairment','QE','SPLset',60);
+  [correlation_QE.r,correlation_QE.p] = corrcoeff(mean(qe,1)',dprime60dB(:));
+  amtdisp(correlation_QE)
+  
+  [~,~,pe] = exp_baumgartner2016('impairment','PE','SPLset',60);
+  [correlation_PE.r,correlation_PE.p] = corrcoeff(mean(pe,1)',dprime60dB(:));
+  amtdisp(correlation_PE)
+  
 end
 
 if flags.do_dynrangecheck
@@ -2561,10 +2574,10 @@ if flags.do_localevel
   
   %% Prediction residues 
   mm = 1;
-  r_perr(mm) = corrcoeff([pred.pe],[ref.pe],2);
+  r_perr(mm) = corrcoeff([pred.pe],[ref.pe]);
   e_perr(mm) = mean(rms([pred.pe]-[ref.pe]));
 
-  r_qerr(mm) = corrcoeff([pred.qe],[ref.qe],2);
+  r_qerr(mm) = corrcoeff([pred.qe],[ref.qe]);
   e_qerr(mm) = mean(rms([pred.qe]-[ref.qe]));
     
   amtdisp(' e_PE  r_PE  e_QE   r_QE')
@@ -3128,40 +3141,27 @@ function s = gain2slope(g)
 s = rad2deg(acos(1./sqrt(g.^2+1)));
 end
 
-function r = corrcoeff(x,y,dim)
-% internal function to evaluate correlation coefficients in order to prevent 
-% conflict between MATLAB statistics toolbox and biosig plugin of EEGlab
+function [r,p] = corrcoeff(x,y)
+% internal function to evaluate correlation coefficients in order to avoid 
+% dependence on MATLAB statistics toolbox
 %
-%   Usage: r = corrcoeff(x,y,dim)
+%   Usage: r = corrcoeff(x,y)
 
 if not(size(x) == size(y))
   error('corrcoeff: x and y must have same size!')
 end
 
-% if not(exist('dim','var'))
-%   dim = 0;
-% end
-% 
-% if ndims(x) == 1
-%   
-%   r = cov(x,y)/std(x)/std(y);
-%   
-% elseif ndims(x) == 2 % rm-corrleation via anova
-%   
-%   if dim == 1
-%     subj = repmat(1:size(y,2),[size(y,1),1]);
-%   else
-%     subj = 1:size(y,1);
-%     subj = repmat(subj(:),[1,size(y,2)]);
-%   end
-%   [p,tab,stats] = anovan(y(:),{x(:) num2str(subj(:))},'display','off',...
-%                   'varnames',{'Prediction','Listener'});
-%   SSpred = tab{2,2};
-%   SSresid = tab{4,2};
-%   r = sqrt( SSpred / (SSpred+SSresid) );
-%   
-% else
+try
+  [r,p] = corrcoef(x,y);
+  r = r(2);
+  p = p(2);
+catch
   r = cov(x(:),y(:))/std(x(:))/std(y(:));
-% end
+  r = r(2);
+  n = length(y(:));
+  df = n-2;
+  t = r/sqrt((1-r^2)/df);
+  p = 2*(1-tcdf(t,df));
+end
 
 end
