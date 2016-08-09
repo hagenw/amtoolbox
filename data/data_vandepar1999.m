@@ -3,13 +3,13 @@ function data = data_vandepar1999(varargin)
 %   Usage: data = data_vandepar1999(figure,nfc)
 %
 %
-%   The figure may be one of:
-%   'fig1_N0S0'     (default) Returns the N0S0 values for figure 1
+%   The flags for the figure may be one of:
+%   'fig1_N0S0'     Returns the N0S0 values for figure 1
 %   'fig1_N0Sp'     Returns the N0Spi values for figure 1
 %   'fig1_NpiSo'    Returns the NpiS0 values for figure 1
 %
 %   The nfc (center frequency of noise) may be one of: 
-%   'nfc125' (default),'nfc250','nfc500','nfc1000','nfc2000','nfc4000'
+%   'nfc125','nfc250','nfc500','nfc1000','nfc2000','nfc4000'
 %
 %   Examples:
 %   ---------
@@ -28,12 +28,23 @@ function data = data_vandepar1999(varargin)
 %% ------ Check input options --------------------------------------------
 
 % Define input flags
-definput.flags.type={'fig1_N0S0','fig1_N0Spi','fig1_NpiS0'};
-definput.flags.nfc = {'nfc125','nfc250','nfc500','nfc1000','nfc2000','nfc4000'};
+definput.flags.type={'missingflag','fig1_N0S0','fig1_N0Spi','fig1_NpiS0'};
+definput.flags.nfc = {'missingnfc','nfc125','nfc250','nfc500','nfc1000','nfc2000','nfc4000'};
 
 % Parse input options
 [flags,keyvals]  = ltfatarghelper({},definput,varargin);
 
+if flags.do_missingflag
+  flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
+             sprintf('%s or %s',definput.flags.type{end-1},definput.flags.type{end})];
+  error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
+end;
+
+if flags.do_missingnfc
+  nfcnames=[sprintf('%s, ',definput.flags.nfc{2:end-2}),...
+             sprintf('%s or %s',definput.flags.nfc{end-1},definput.flags.nfc{end})];
+  error('%s: You must specify one of the following center frequencies: %s.',upper(mfilename),nfcnames);
+end;
 
 %% ------ Data points from the paper ------------------------------------
 %
@@ -49,7 +60,7 @@ if flags.do_fig1_N0S0
         data = [2.5 1.5 -1 -2 -3.5 -6 -8.5 -11.5 -15.5];
     elseif flags.do_nfc2000
         data = [3 2 0 -2 -3.5 -4 -4.5 -9 -12.5 -17];
-    elseif flags.do_nfc400
+    elseif flags.do_nfc4000
         data = [2 3 0 -1.5 -2.5 -5.5 -4.5 -5.5 -8.5 -13];
     end
     
@@ -64,7 +75,7 @@ elseif flags.do_fig1_N0Spi
         data = [-18.5 -19.5 -19.5 -20 -21 -19 -18 -22 -22.5];
     elseif flags.do_nfc2000
         data = [-13.5  -14.5 -13.7 -16 -16.5 -13.3 -13.7 -13.5 -17 -21];
-    elseif flags.do_nfc400
+    elseif flags.do_nfc4000
         data = [-9.5 -8.5 -9.5 -8.5 -11.7 -12.5 -11.5 -10.5 -10 -15];
     end
     
