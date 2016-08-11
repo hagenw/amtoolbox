@@ -5,7 +5,7 @@ function data = data_vandepar1999(varargin)
 %
 %   The flags for the figure may be one of:
 %   'fig1_N0S0'     Returns the N0S0 values for figure 1
-%   'fig1_N0Sp'     Returns the N0Spi values for figure 1
+%   'fig1_N0Spi'     Returns the N0Spi values for figure 1
 %   'fig1_NpiSo'    Returns the NpiS0 values for figure 1
 %
 %   The nfc (center frequency of noise) may be one of: 
