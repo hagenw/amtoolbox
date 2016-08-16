@@ -21,11 +21,11 @@ function output=exp_breebaart2001(varargin)
 %
 %   To display Figure 2 of the 2001a paper use :::
 %
-%     exp_breebaart2001('afig2');
+%     out = exp_breebaart2001('afig2');
 %
 
 %
-%   References:
+%   References: breebaart2001a, breebaart2001b
   
 %  AUTHOR: Martina Kreuzbichler
 
@@ -47,7 +47,7 @@ if flags.do_missingflag
   error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
 
-%% Breebaart et al. (2001a) fig. 2
+% Breebaart et al. (2001a) fig. 2
 if flags.do_afig2
     
     testsigadlo = amtcache('get','afig2',flags.cachemode);
@@ -68,7 +68,7 @@ if flags.do_afig2
 
         for counter = 1:2
 
-            testsigoutmiddle(:,counter) = outmiddleartransfunct(testsig(:,counter),48000);
+            testsigoutmiddle(:,counter) = breebaart2001outmiddlefilter(testsig(:,counter),48000);
 
             [testsigaudfilt(:,:,counter), ~] = auditoryfilterbank(testsigoutmiddle(:,counter),48000,'argimport',flags,keyvals);
 
@@ -83,37 +83,92 @@ if flags.do_afig2
     
     output = testsigadlo;
     
-% elseif flags.do_afig6
-%     definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','eicell'};
-%     definput.importdefaults={'fhigh',8000,'ihc_breebaart','adt_breebaart'};
-% 
-%     [flags,keyvals,flow,fhigh,basef]  = ltfatarghelper({'flow', 'fhigh', ...
-%                         'basef'},definput,varargin);
-%                     
-%     testsig(:,1) = bandpassnoisefreq(2000,4800, par.ndur,par.nl,par.nbw);
-%     
-%     testsigoutmiddle(:,counter) = outmiddleartransfunct(testsig(:,counter),48000);
-%     
-%     [testsigaudfilt(:,:,counter), ~] = auditoryfilterbank(testsigoutmiddle(:,counter),48000,'argimport',flags,keyvals);
-%     
-%     testsigihc(:,:,counter) = ihcenvelope(testsigaudfilt(:,:,counter),48000,'argimport',flags,keyvals);
-% 
-%     testsigadlo(:,:,counter) = adaptloop(testsigihc(:,:,counter),48000,'argimport',flags,keyvals);
-% 
-%     %[siglen,nfreqchannels,naudiochannels,nsignals] = size(testsigadlo);
-%     %ei_map = zeros(siglen, nfreqchannels, nsignals);
-% 
-%     taucount = 1;
-%     ildcount = 1;
-%     for tau = -0.002:0.0001:0.002
-%         for ild = -10:0.5:10
-%             ei_map_(taucount,ildcount,:) = eicell(squeeze(testsigadlo(:,9,:,1)),fs,tau,ild); % 9 ist Filter bei 500 Hz
-%             ildcount = ildcount + 1;
-%         end
-%         ildcount = 1;
-%         taucount = taucount + 1;
-%     end
+% Breebaart et al. (2001a) fig. 6   
+elseif flags.do_afig6
+    
+    [ei_map_n_mean,ei_map_diff_mean] = ...
+        amtcache('get','afig6',flags.cachemode);
+    
+    if isempty(ei_map_n_mean)
+    % do computation
+    
+        definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','eicell'};
+        definput.importdefaults={'fhigh',8000,'ihc_breebaart','adt_breebaart'};
 
+        [flags,keyvals,flow,fhigh,basef]  = ltfatarghelper({'flow', 'fhigh', ...
+                            'basef'},definput,varargin);
+
+        fs = 32000;
+
+        insig(:,1) = bandpassnoisefreq(2000,fs,1,70,4000);
+        insig(:,2) = insig(:,1);
+        insig = setdbspl(insig,70);
+        insig(:,3) = sin(2*pi*(0:(1*fs)-1)'*500/fs);
+        insig(:,4) = sin(2*pi*(0:(1*fs)-1)'*500/fs-pi);
+        insig(:,3:4) = setdbspl(insig(:,3:4),50);
+        insig(:,3:4) = insig(:,3:4) + insig(:,1:2);
+        signalcounter = 1;
+
+        for counter = 1:2
+
+            sig = insig(:,signalcounter:signalcounter+1);
+
+            for earnumber = 1:2
+                outsig(:,earnumber) = breebaart2001outmiddlefilter(sig(:,earnumber),fs);
+            end
+
+            [outsig, ~] = auditoryfilterbank(outsig,fs,'argimport',flags,keyvals);
+
+            outsig = ihcenvelope(outsig,fs,'argimport',flags,keyvals);
+
+            outsig = adaptloop(outsig,fs,'argimport',flags,keyvals);
+            outsig = squeeze(outsig(:,9,:)); % 9 is filter at ~ 520 Hz
+
+            ei_map{counter} = zeros(41,41,length(outsig));
+
+            taucount = 1;
+            ildcount = 1;
+            for tau = -0.002:0.0001:0.002
+                for ild = -10:0.5:10
+                    n = round( abs(tau) * fs );
+                    l=outsig(:,1);
+                    r=outsig(:,2);
+                    if tau > 0,
+                        l = [zeros(n,1) ; l(1:end-n)];
+                    else
+                        r = [zeros(n,1) ; r(1:end-n)];
+                    end
+                    % apply characteristic ILD:
+                    l=gaindb(l, ild/2);
+                    r=gaindb(r,-ild/2);
+                    % compute instanteneous EI output:
+                    x = (l - r).^2;
+                    % temporal smoothing:
+                    A=[1 -exp(-1/(fs*30e-3))];
+                    B=[1-exp(-1/(fs*30e-3))];
+                    y= filtfilt(B,A,x);
+
+                    z =0.1*log(0.00002*y+1);
+                    ei_map{counter}(taucount,ildcount,:) = z; 
+                    ildcount = ildcount + 1;
+                end
+                ildcount = 1;
+                taucount = taucount + 1;
+            end
+            signalcounter = signalcounter + 2;
+        end
+        ei_map_n_mean = mean(ei_map{1}(:,:,1:3200,1),3); % mean of first 100 ms
+        ei_map_sn_mean = mean(ei_map{2}(:,:,1:3200,1),3); % mean of first 100 ms
+        ei_map_diff_mean = ei_map_sn_mean/ei_map_n_mean;
+
+        amtcache('set','afig6',ei_map_n_mean,ei_map_diff_mean);
+    end
+    
+    output = struct('ei_map_noise',ei_map_n_mean,'ei_map_diff',ei_map_diff_mean);
+
+
+
+% Breebaart et al. (2001b) fig. 3
 elseif flags.do_bfig3
     
     [N0Spi125,N0Spi250,N0Spi500,N0Spi1000,N0Spi2000,N0Spi4000] = ...
@@ -123,16 +178,18 @@ elseif flags.do_bfig3
     % do computation
         
         parout = [];
-        expset = {'intnum',3,'rule',[2 1],'stepin',8,'stepr',[0.5 2],...
-            'stepmin',[1 8],'expstart',65};
+        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,'expvarsteprule',[0.5 2],...
+            'stepmin',[1 8],'expvarstart',65};
         parout = amtafcexp('expinit',parout,expset);
-
-        modelset = {'name','breebaart2001preprocbimono','input1','expsignal',...
-            'input2',32000,'input3',0,'input4',0,'outputs',[1 2 3]};
+        
+        % input2 = fs; input3 = tau; input4 = ild; 
+        modelset = {'name','breebaart2001preprocbimono','input1',...
+            'expsignal', 'input2',32000,'input3',0,'input4',0,...
+            'outputs',[1 2 3]};
         parout = amtafcexp('modelinit',parout,modelset);
-
-        decisionset = {'name','breebaart2001centralproc','input1','modelout',...
-            'input2','modelout', 'input3','modelout'};
+        
+        decisionset = {'name','breebaart2001centralproc','input1',...
+            'modelout','input2','modelout', 'input3','modelout'};
         parout = amtafcexp('decisioninit',parout,decisionset);
 
         centerfreq = [125 250 500 1000 2000 4000];
@@ -146,10 +203,89 @@ elseif flags.do_bfig3
             %loop for all bandwidths
             for bwcount = 1:length(bw)
 
+                %input3 = signallevel; input4 = signalduration;
+                %input5 = signalphase; input7 = noiselevel;
+                %input8 = noiseduration; input9 = noisephase;
+                %input10 = hanning ramp duration; input11 = fs;
+                signalset = {'name','breebaart2001siggen','input1',...
+                    'inttyp', 'input2',centerfreq(freqcount),'input3',...
+                    'expvar','input4',0.3,'input5',pi,'input6',...
+                    bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
+                    'input10',0.05,'input11', 32000};
+                parout = amtafcexp('signalinit',parout,signalset);
 
-                signalset = {'name','breebaart2001siggen','input1','inttyp',...
-                    'input2',centerfreq(freqcount),'input3','expvar',...
-                    'input4',0.3,'input5',pi,'input6',...
+                % loop for experimental runs
+                for runcounter = 1:6
+                    result = amtafcexp('run',parout);
+                    resultbwvec(runcounter) = result(1)-nl;
+                end
+
+                resultvec(bwcount) = mean(resultbwvec);
+                resultvecstd(bwcount) = std(resultbwvec,1);
+                resultbwvec = zeros(6,1);
+                amtdisp(['Progress: ' num2str(round(bwcount/length(bw)*100)) '% calculated'],'progress') ;
+
+            end
+
+            N0Spi_temp =sprintf('N0Spi%i',centerfreq(freqcount));
+            output.(N0Spi_temp) = [resultvec, resultvecstd];
+
+            if freqcount <= length(bwadd)
+                bw(end+1) = bwadd(bwcount);
+            end
+
+        end
+        amtcache('set','bfig3',N0Spi125,N0Spi250,N0Spi500,N0Spi1000,...
+            N0Spi2000,N0Spi4000);
+   
+    else
+        output = struct('N0Spi125',N0Spi125,'N0Spi250',N0Spi250,...
+            'N0Spi500',N0Spi500,'N0Spi1000',N0Spi1000,'N0Spi2000',...
+            N0Spi2000,'N0Spi40000',N0Spi4000); 
+    end
+
+elseif flags.do_bfig6
+    
+    [NpiS0125,NpiS0250,NpiS0500,NpiS01000] = ...
+        amtcache('get','bfig6',flags.cachemode);
+    
+    if isempty(NpiS0125)
+    % do computation
+        
+        parout = [];
+        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,'expvarsteprule',[0.5 2],...
+            'stepmin',[1 8],'expvarstart',85};
+        parout = amtafcexp('expinit',parout,expset);
+
+        decisionset = {'name','breebaart2001centralproc','input1',...
+            'modelout','input2','modelout', 'input3','modelout'};
+        parout = amtafcexp('decisioninit',parout,decisionset);
+
+        centerfreq = [125 250 500 1000];
+        bw = [5 10 25 50 100 250];
+        bwadd = [500 1000 2000];
+        tau = [0.0039 0.002 0.001 0.0005];
+        nl = 70;
+
+        % loop for all center freq.
+        for freqcount = 1:length(centerfreq)
+            
+            % input2 = fs; input3 = tau; input4 = ild; 
+            modelset = {'name','breebaart2001preprocbimono','input1',...
+                'expsignal','input2',32000,'input3',tau(freqcount),...
+                'input4',0,'outputs',[1 2 3]};
+            parout = amtafcexp('modelinit',parout,modelset);
+
+            %loop for all bandwidths
+            for bwcount = 1:length(bw)
+                
+                %input3 = signallevel; input4 = signalduration;
+                %input5 = signalphase; input7 = noiselevel;
+                %input8 = noiseduration; input9 = noisephase;
+                %input10 = hanning ramp duration; input11 = fs;
+                signalset = {'name','breebaart2001siggen','input1',...
+                    'inttyp', 'input2',centerfreq(freqcount),'input3',...
+                    'expvar','input4',0.3,'input5',pi,'input6',...
                     bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
                     'input10',0.05,'input11', 32000};
                 parout = amtafcexp('signalinit',parout,signalset);
@@ -167,20 +303,22 @@ elseif flags.do_bfig3
 
             end
 
-            N0Spi_temp =sprintf('N0Spi%i',centerfreq(freqcount));
-            output.(N0Spi_temp) = [resultvec, resultvecstd];
+            NpiS0_temp =sprintf('NpiS0%i',centerfreq(freqcount));
+            output.(NpiS0_temp) = [resultvec, resultvecstd];
 
             if freqcount <= length(bwadd)
                 bw(end+1) = bwadd(bwcount);
             end
 
         end
-    end
+        amtcache('set','bfig6',NpiS0125,NpiS0250,NpiS0500,NpiS01000);
+        
     
+    else
+    output = struct('NpiS0125',NpiS0125,'NpiS0250',NpiS0250,'NpiS0500',...
+        NpiS0500,'NpiS01000',NpiS01000); 
+    end 
     
-    
-
-
 elseif flags.do_fig1_N0S0_vandepar1999
     
     [N0S0125,N0S0250,N0S0500,N0S01000,N0S02000,N0S04000] = ...
@@ -199,7 +337,7 @@ if flags.do_plot
     if flags.do_afig2
         fax = 0:0.2/9599:0.2;
         hafig2 = figure;
-        set(hafig2, 'Position', [400 400 1200 450])
+        set(hafig2, 'Position', [400 400 1300 450])
         subplot(1,2,1)
         plot(fax,output(:,9,1))
         axis([0 0.2 -1000 8500])
@@ -213,6 +351,228 @@ if flags.do_plot
         ylabel('Output [MU]')
         text('Position',[0.1 7000],'string','4000 Hz tone')
         suptitle('Fig. 2 Output of the peripheral preprocessor')
+        
+    elseif flags.do_afig6
+        
+        [x1,y1] = meshgrid(-10:0.5:10, -2:0.1:2);
+        
+        hfig1=figure;
+        set(hfig1, 'Position', [100 100 1300 600])
+        subplot(1,2,1)
+        surf(x1,y1,ei_map_n_mean)
+        xlabel('\alpha [dB]')
+        ylabel('\tau [ms]')
+        zlabel('Activity [MU]')
+        axis([-10 10 -2 2 0 0.4])
+        set(gca,'XTick',[-10 0 10]);
+        set(gca,'YDir','reverse')
+        set(gca,'YTick',[-2 0 2]);
+        set(gca,'ZTick',[0 0.2 0.4]);
+        colorbar('Ticks',[0,0.1 0.2 0.3 0.4]);
+        caxis([0 0.4])
+        grid off
+        view(-53,28)
+        
+        subplot(1,2,2)
+        surf(x1,y1,ei_map_diff_mean)
+        xlabel('\alpha [dB]')
+        ylabel('\tau [ms]')
+        zlabel('Activity [MU]')
+        axis([-10 10 -2 2 -0.05 0.211])
+        set(gca,'XTick',[-10 0 10]);
+        set(gca,'YDir','reverse')
+        set(gca,'YTick',[-2 0 2]);
+        set(gca,'ZTick',[0 0.1 0.2]);
+        colorbar('Ticks',[0 0.05 0.1 0.15 0.2]);
+        grid off
+        view(-53,28)
+        
+        suptitle('Fig. 6')
+        set(gca,'LooseInset',get(gca,'TightInset'))
+
+        
+        
+    elseif flags.do_bfig3
+        
+        % get experimental data
+        N0Spiexpdata125 = data_vandepar1999('fig1_N0Spi','nfc125');
+        N0Spiexpdata250 = data_vandepar1999('fig1_N0Spi','nfc250');
+        N0Spiexpdata500 = data_vandepar1999('fig1_N0Spi','nfc500');
+        N0Spiexpdata1000 = data_vandepar1999('fig1_N0Spi','nfc1000');
+        N0Spiexpdata2000 = data_vandepar1999('fig1_N0Spi','nfc2000');
+        N0Spiexpdata4000 = data_vandepar1999('fig1_N0Spi','nfc4000');
+        
+        % get model data
+        N0Spimodeldata125 = data_breebaart2001('fig3','nfc125');
+        N0Spimodeldata250 = data_breebaart2001('fig3','nfc250');
+        N0Spimodeldata500 = data_breebaart2001('fig3','nfc500');
+        N0Spimodeldata1000 = data_breebaart2001('fig3','nfc1000');
+        N0Spimodeldata2000 = data_breebaart2001('fig3','nfc2000');
+        N0Spimodeldata4000 = data_breebaart2001('fig3','nfc4000');
+
+        hfig2=figure;
+        set(hfig2, 'Position', [100 100 1100 700])
+        
+        bw = [5 10 25 50 100 250];
+        subplot(3,2,1);
+        errorbar(bw,N0Spi125(:,1),N0Spi125(:,2),'-x','MarkerSize',10);
+        set(gca,'xscal','log')
+        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+        axis([4 5000 -35 -5])
+        hold on;
+        plot(bw,N0Spimodeldata125,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw,N0Spiexpdata125,'-sg','MarkerSize',10)
+        text('Position',[1000 -10],'string','125 Hz')
+        xlabel('Masker Bandwidth [Hz]');
+        ylabel('Threshold S/N [dB]');
+
+        bw = [5 10 25 50 100 250 500];
+        subplot(3,2,2);
+        errorbar(bw,N0Spi250(:,1),N0Spi250(:,2),'-x','MarkerSize',10);
+        set(gca,'xscal','log')
+        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+        axis([4 5000 -35 -5])
+        hold on;
+        plot(bw,N0Spimodeldata250,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw,N0Spiexpdata250,'-sg','MarkerSize',10)
+        text('Position',[1000 -10],'string','250 Hz')
+        xlabel('Masker Bandwidth [Hz]');
+        ylabel('Threshold S/N [dB]');
+
+        bw = [5 10 25 50 100 250 500 1000];
+        subplot(3,2,3);
+        errorbar(bw,N0Spi500(:,1),N0Spi500(:,2),'-x','MarkerSize',10);
+        set(gca,'xscal','log')
+        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+        axis([4 5000 -35 -5])
+        hold on;
+        plot(bw,N0Spimodeldata500,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw,N0Spiexpdata500,'-sg','MarkerSize',10)
+        text('Position',[1000 -10],'string','500 Hz')
+        xlabel('Masker Bandwidth [Hz]');
+        ylabel('Threshold S/N [dB]');
+
+        bw = [5 10 25 50 100 250 500 1000 2000];
+        subplot(3,2,4);
+        errorbar(bw,N0Spi1000(:,1),N0Spi1000(:,2),'-x','MarkerSize',10);
+        set(gca,'xscal','log')
+        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+        axis([4 5000 -35 -5])
+        hold on;
+        plot(bw,N0Spimodeldata1000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw,N0Spiexpdata1000,'-sg','MarkerSize',10)
+        text('Position',[1000 -10],'string','1000 Hz')
+        xlabel('Masker Bandwidth [Hz]');
+        ylabel('Threshold S/N [dB]');
+        
+        bw = [5 10 25 50 100 250 500 1000 2000 4000];
+        subplot(3,2,5);
+        errorbar(bw,N0Spi2000(:,1),N0Spi2000(:,2),'-x','MarkerSize',10);
+        set(gca,'xscal','log')
+        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+        axis([4 5000 -35 -5])
+        hold on;
+        plot(bw,N0Spimodeldata2000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw,N0Spiexpdata2000,'-sg','MarkerSize',10)
+        text('Position',[1000 -10],'string','2000 Hz')
+        xlabel('Masker Bandwidth [Hz]');
+        ylabel('Threshold S/N [dB]');
+        
+        subplot(3,2,6);
+        errorbar(bw,N0Spi4000(:,1),N0Spi4000(:,2),'-x','MarkerSize',10);
+        set(gca,'xscal','log')
+        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+        axis([4 5000 -35 5])
+        hold on;
+        plot(bw,N0Spimodeldata4000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw,N0Spiexpdata4000,'-sg','MarkerSize',10)
+        text('Position',[1000 0],'string','2000 Hz')
+        xlabel('Masker Bandwidth [Hz]');
+        ylabel('Threshold S/N [dB]');
+
+        suptitle('Fig. 3 N0Spi Thresholds')
+        legend({'modeled data SSL = 65 dB, NL 65 dB  - monaural factor = 0.0003',...
+            'model data from Breebaart (2001)',...
+            'experimental data from van de Paar and Kohlrausch (1999)'},...
+            'Position' ,[0.75,0.9,0.1,0.05]);
+        
+    elseif flags.do_bfig6
+        
+        % get experimental data
+        NpiS0expdata125 = data_vandepar1999('fig1_NpiS0','nfc125');
+        NpiS0expdata250 = data_vandepar1999('fig1_NpiS0','nfc250');
+        NpiS0expdata500 = data_vandepar1999('fig1_NpiS0','nfc500');
+        NpiS0expdata1000 = data_vandepar1999('fig1_NpiS0','nfc1000');
+
+        
+        % get model data
+        NpiS0modeldata125 = data_breebaart2001('fig6','nfc125');
+        NpiS0modeldata250 = data_breebaart2001('fig6','nfc250');
+        NpiS0modeldata500 = data_breebaart2001('fig6','nfc500');
+        NpiS0modeldata1000 = data_breebaart2001('fig6','nfc1000');
+
+        hfig3=figure;
+        set(hfig3, 'Position', [100 100 1100 700])
+        
+        bw = [5 10 25 50 100 250];
+        subplot(2,2,1);
+        errorbar(bw,NpiS0125(:,1),NpiS0125(:,2),'-x','MarkerSize',10);
+        set(gca,'xscal','log')
+        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+        axis([4 5000 -35 0])
+        hold on;
+        plot(bw,NpiS0modeldata125,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw,NpiS0expdata125,'-sg','MarkerSize',10)
+        text('Position',[5 -30],'string','125 Hz; 3.9 ms')
+        xlabel('Masker Bandwidth [Hz]');
+        ylabel('Threshold S/N [dB]');
+
+        bw = [5 10 25 50 100 250 500];
+        subplot(2,2,2);
+        errorbar(bw,NpiS0250(:,1),NpiS0250(:,2),'-x','MarkerSize',10);
+        set(gca,'xscal','log')
+        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+        axis([4 5000 -35 -5])
+        hold on;
+        plot(bw,NpiS0modeldata250,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw,NpiS0expdata250,'-sg','MarkerSize',10)
+        text('Position',[5 -30],'string','250 Hz; 2 ms')
+        xlabel('Masker Bandwidth [Hz]');
+        ylabel('Threshold S/N [dB]');
+
+        bw = [5 10 25 50 100 250 500 1000];
+        subplot(2,2,3);
+        errorbar(bw,NpiS0500(:,1),NpiS0500(:,2),'-x','MarkerSize',10);
+        set(gca,'xscal','log')
+        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+        axis([4 5000 -35 -5])
+        hold on;
+        plot(bw,NpiS0modeldata500,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw,NpiS0expdata500,'-sg','MarkerSize',10)
+        text('Position',[5 -30],'string','500 Hz; 1 ms')
+        xlabel('Masker Bandwidth [Hz]');
+        ylabel('Threshold S/N');
+
+        bw = [5 10 25 50 100 250 500 1000 2000];
+        subplot(2,2,4);
+        errorbar(bw,NpiS01000(:,1),NpiS01000(:,2),'-x','MarkerSize',10);
+        set(gca,'xscal','log')
+        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+        axis([4 5000 -35 -5])
+        hold on;
+        plot(bw,NpiS0modeldata1000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw,NpiS0expdata1000,'-sg','MarkerSize',10)
+        text('Position',[5 -30],'string','100 Hz; 0.5 ms')
+        xlabel('Masker Bandwidth [Hz]');
+        ylabel('Threshold S/N');
+
+        suptitle('Fig. 6 NpiS0 Thresholds')
+        legend({'modeled data SSL = 65 dB, NL 70 dB  - monaural factor = 0.0003',...
+            'model data from Breebaart (2001)',...
+            'experimental data from van de Paar and Kohlrausch (1999)'},...
+            'Position' ,[0.75,0.9,0.1,0.05]);
+        
+        
         
     elseif flags.do_fig1_N0S0_vandepar1999
         
@@ -320,110 +680,8 @@ if flags.do_plot
         
         suptitle('Fig. 1 N_0S_0 Thresholds')
         
-    elseif flags.do_bfig3
-        
-        % get experimental data
-        N0Spiexpdata125 = data_vandepar1999('fig1_N0Spi','nfc125');
-        N0Spiexpdata250 = data_vandepar1999('fig1_N0Spi','nfc250');
-        N0Spiexpdata500 = data_vandepar1999('fig1_N0Spi','nfc500');
-        N0Spiexpdata1000 = data_vandepar1999('fig1_N0Spi','nfc1000');
-        N0Spiexpdata2000 = data_vandepar1999('fig1_N0Spi','nfc2000');
-        N0Spiexpdata4000 = data_vandepar1999('fig1_N0Spi','nfc4000');
-        
-        % get model data
-        N0Spimodeldata125 = data_breebaart2001('fig3','nfc125');
-        N0Spimodeldata250 = data_breebaart2001('fig3','nfc250');
-        N0Spimodeldata500 = data_breebaart2001('fig3','nfc500');
-        N0Spimodeldata1000 = data_breebaart2001('fig3','nfc1000');
-        N0Spimodeldata2000 = data_breebaart2001('fig3','nfc2000');
-        N0Spimodeldata4000 = data_breebaart2001('fig3','nfc4000');
-
-        hfig2=figure;
-        set(hfig2, 'Position', [100 100 1100 700])
-        
-        bw = [5 10 25 50 100 250];
-        subplot(3,2,1);
-        errorbar(bw,N0Spi125(:,1),N0Spi125(:,2),'-x','MarkerSize',10);
-        set(gca,'xscal','log')
-        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
-        axis([4 5000 -35 -5])
-        hold on;
-        plot(bw,N0Spimodeldata125,'-sr','MarkerSize',10,'MarkerFaceColor','r');
-        stem(bw,N0Spiexpdata125,'sg','LineStyle','none','MarkerSize',10)
-        text('Position',[1000 -10],'string','125 Hz')
-        xlabel('Masker Bandwidth [Hz]');
-        ylabel('Threshold S/N [dB]');
-
-        bw = [5 10 25 50 100 250 500];
-        subplot(3,2,2);
-        errorbar(bw,N0Spi250(:,1),N0Spi250(:,2),'-x','MarkerSize',10);
-        set(gca,'xscal','log')
-        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
-        axis([4 5000 -35 -5])
-        hold on;
-        plot(bw,N0Spimodeldata250,'-sr','MarkerSize',10,'MarkerFaceColor','r');
-        stem(bw,N0Spiexpdata250,'sg','LineStyle','none')
-        text('Position',[1000 -10],'string','250 Hz')
-        xlabel('Masker Bandwidth [Hz]');
-        ylabel('Threshold S/N [dB]');
-
-        bw = [5 10 25 50 100 250 500 1000];
-        subplot(3,2,3);
-        errorbar(bw,N0Spi500(:,1),N0Spi500(:,2),'-x','MarkerSize',10);
-        set(gca,'xscal','log')
-        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
-        axis([4 5000 -35 -5])
-        hold on;
-        plot(bw,N0Spimodeldata500,'-sr','MarkerSize',10,'MarkerFaceColor','r');
-        stem(bw,N0Spiexpdata500,'sg','LineStyle','none','MarkerSize',10)
-        text('Position',[1000 -10],'string','500 Hz')
-        xlabel('Masker Bandwidth [Hz]');
-        ylabel('Threshold S/N [dB]');
-
-        bw = [5 10 25 50 100 250 500 1000 2000];
-        subplot(3,2,4);
-        errorbar(bw,N0Spi1000(:,1),N0Spi1000(:,2),'-x','MarkerSize',10);
-        set(gca,'xscal','log')
-        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
-        axis([4 5000 -35 -5])
-        hold on;
-        plot(bw,N0Spimodeldata1000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
-        stem(bw,N0Spiexpdata1000,'sg','LineStyle','none','MarkerSize',10)
-        text('Position',[1000 -10],'string','1000 Hz')
-        xlabel('Masker Bandwidth [Hz]');
-        ylabel('Threshold S/N [dB]');
-        
-        bw = [5 10 25 50 100 250 500 1000 2000 4000];
-        subplot(3,2,5);
-        errorbar(bw,N0Spi2000(:,1),N0Spi2000(:,2),'-x','MarkerSize',10);
-        set(gca,'xscal','log')
-        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
-        axis([4 5000 -35 -5])
-        hold on;
-        plot(bw,N0Spimodeldata2000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
-        stem(bw,N0Spiexpdata2000,'sg','LineStyle','none','MarkerSize',10)
-        text('Position',[1000 -10],'string','2000 Hz')
-        xlabel('Masker Bandwidth [Hz]');
-        ylabel('Threshold S/N [dB]');
-        
-        subplot(3,2,6);
-        errorbar(bw,N0Spi4000(:,1),N0Spi4000(:,2),'-x','MarkerSize',10);
-        set(gca,'xscal','log')
-        set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
-        axis([4 5000 -35 5])
-        hold on;
-        plot(bw,N0Spimodeldata4000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
-        plot(bw,N0Spiexpdata4000,'sg','LineStyle','none','MarkerSize',10)
-        text('Position',[1000 0],'string','2000 Hz')
-        xlabel('Masker Bandwidth [Hz]');
-        ylabel('Threshold S/N [dB]');
-
-        suptitle('Fig. 3 N0Spi Thresholds')
-        legend({'modeled data SSL = 65 dB, NL 65 dB  - monaural factor = 0.0003',...
-            'model data from Breebaart (2001)',...
-            'experimental data from van de Paar and Kohlrausch (1999)'},...
-            'Position' ,[0.75,0.9,0.1,0.05]);
-            end
+    end
+           
 end
     
     
