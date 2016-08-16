@@ -93,7 +93,7 @@ definput.importdefaults={'fhigh',8000,'ihc_breebaart','adt_breebaart'};
 
 %% Outer- and middle ear transfer function
 for earnumber = 1:2
-    outsig(:,earnumber) = outmiddleartransfunct(insig(:,earnumber),fs);
+    outsig(:,earnumber) = breebaart2001outmiddlefilter(insig(:,earnumber),fs);
 end
 
 %% Apply the auditory filterbank

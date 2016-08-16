@@ -21,10 +21,10 @@ switch flag
     case 'expinit'
         definput.keyvals.intnum = [];
         definput.keyvals.rule = [];
-        definput.keyvals.stepin = [];
-        definput.keyvals.stepr = [];
+        definput.keyvals.expvarstepstart = [];
+        definput.keyvals.expvarsteprule = [];
         definput.keyvals.stepmin = [];
-        definput.keyvals.expstart = [];
+        definput.keyvals.expvarstart = [];
         
         [~,kvexp]=ltfatarghelper({},definput,varargin{:});
              
@@ -48,8 +48,44 @@ switch flag
         
         [~,kvmodel]=ltfatarghelper({},definput,varargin{:});
         
+        % check what outputs of model are needed
+        outputnumber = nargout(kvmodel.name);
+        
+        callmodelstring = [];
+
+        for outputcounter = 1:outputnumber
+            if any(kvmodel.outputs==outputcounter)
+                modelstring = sprintf('modelout.par%i',outputcounter);
+                if isempty(callmodelstring)
+                    callmodelstring = ['[' modelstring '{interval_num}'];
+                else
+                    callmodelstring =  [callmodelstring ',' modelstring '{interval_num}'];
+                end
+            else
+                callmodelstring = [callmodelstring ',~'];           
+            end
+        end
+        
+        modelinputs = struct2cell(kvmodel);
+                
+        % delete name of model function & outputs
+        modelinputs = modelinputs(2:end-1);
+
+        % delete empty cells
+        modelinputs = modelinputs(~cellfun('isempty',modelinputs));
+        
+        callmodelstring = [callmodelstring ']=' kvmodel.name '('];
+        
+        for modelinputscounter = 1:length(modelinputs)
+            callmodelstring = [callmodelstring num2str(modelinputs{modelinputscounter}) ','];
+        end
+        callmodelstring(end) = ')';
+        
         out = par;
         out.model = kvmodel;
+        out.callstrings.model = callmodelstring;
+        
+        %TODO CALLMODELSTRING
         
     case 'signalinit'
         definput.keyvals.name= [];
@@ -112,9 +148,9 @@ switch flag
             end
         end
         
-        stepsize = par.exp.stepin;
+        stepsize = par.exp.expvarstepstart;
         truecounter = 0;
-        par.signal.(experimentvar) = par.exp.expstart;          
+        par.signal.(experimentvar) = par.exp.expvarstart;          
         expparvalue = [];
         downturn = 0;
         upturn = 1;
@@ -153,32 +189,12 @@ switch flag
                         break
                     end
                 end
-                par.model.(experimentsignal) = testsignal; 
-                          
-                modelinputs = struct2cell(par.model);
-                
-                % delete name of model function & outputs
-                modelinputs = modelinputs(2:end-1);
-                
-                % delete empty cells
-                modelinputs = modelinputs(~cellfun('isempty',modelinputs));
-                
-%                 % check what outputs of model are needed
-%                 outputnumber = nargout(par.model.name);
-%                 
-%                 for outputcounter = 1:outputnumber
-%                     if any(par.model.outputs==outputcounter)
-%                         modeloutput(outputcounter) = {};
-%                     else
-%                         modeloutput(outputcounter) = 'ignore';           
-%                     end
-%                 end
-                
+                par.model.(experimentsignal) = testsignal;                           
                 
                 % call model
-                [modelout.par1{interval_num},modelout.par2{interval_num},...
-                    modelout.par3{interval_num},~] = ...
-                    feval(par.model.name,modelinputs{:});
+                par.callstrings.model = strrep(par.callstrings.model,'expsignal', 'testsignal');
+                eval(par.callstrings.model);
+                
             end
                 
             % find model output variable, only at the first time
@@ -236,11 +252,11 @@ switch flag
                 end
             end
        
-            % change stepsize after par.exp.stepr(2) reversals, if stepsize
+            % change stepsize after par.exp.expvarsteprule(2) reversals, if stepsize
             % is not already par.exp.stepmin(1) dB
-            if turncounter == par.exp.stepr(2) && truecounter == 1 && ...
+            if turncounter == par.exp.expvarsteprule(2) && truecounter == 1 && ...
                 stepsize ~= par.exp.stepmin(1)
-                stepsize = stepsize * par.exp.stepr(1);
+                stepsize = stepsize * par.exp.expvarsteprule(1);
                 turncounter = 0;
             end
             

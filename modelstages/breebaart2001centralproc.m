@@ -83,7 +83,7 @@ end
 % binaural test
 [~,response_b] = max(U_b);
 if response_b ~= response && any(U_b) == 1
-    fprintf('binaural decision is not the same: signalnumber %i, response = %i, binaural response = %i \n',signalnumber,response,response_b);
+    amtdisp(sprintf('binaural decision is not the same: signalnumber %i, response = %i, binaural response = %i \n',signalnumber,response,response_b));
 end
 
 % update of templates
