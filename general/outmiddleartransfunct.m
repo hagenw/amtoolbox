@@ -14,7 +14,7 @@ function out = outmiddleartransfunct(in,fs)
 %
 %   References: breebaart2001a
 
-%   AUTHOR : Peter L. Soendergaard, Martina Kreuzbichler
+%   AUTHOR: Martina Kreuzbichler
 
 
 % coefficients
