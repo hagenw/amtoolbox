@@ -79,7 +79,7 @@ switch flag
         for modelinputscounter = 1:length(modelinputs)
             callmodelstring = [callmodelstring num2str(modelinputs{modelinputscounter}) ','];
         end
-        callmodelstring(end) = ')';
+        callmodelstring(end:end+1) = ');';
         
         out = par;
         out.model = kvmodel;
@@ -283,15 +283,15 @@ switch flag
             
             % amount of reversals is par.stepmin(2)
             if size(lastturn,2) == par.exp.stepmin(2)
-                threshold = median(lastturn);%-par.exp.nl);
-                threshstd = std(lastturn,1);%-par.nl),1);
+                threshold = median(lastturn);
+                threshstd = std(lastturn,1);
                 condition = 0;
-                out = [threshold threshstd expparvalue];%-par.nl];
+                out = [threshold threshstd expparvalue];
             end
    
         end
         %clear persistent variables
-        clear breebaart2001centralproc;
+        clear (par.decision.name);
         
         if flags.do_plot
             figure
