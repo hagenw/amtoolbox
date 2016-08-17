@@ -2,6 +2,8 @@ function data = data_vandepar1999(varargin)
 %DATA_VANDEPAR1999 Returns data points from the van de Paar and Kohlrausch (1999) paper
 %   Usage: data = data_vandepar1999(figure,nfc)
 %
+%   `data_vandepar1999(figure,nfc)` returns data from van de Paar and
+%   Kohlrausch (1999)
 %
 %   The flags for the figure may be one of:
 %   'fig1_N0S0'     Returns the N0S0 values for figure 1
@@ -19,7 +21,7 @@ function data = data_vandepar1999(varargin)
 %
 %     data_vandepar1999('fig1_N0S0','nfc125');
 %
-%   References: 
+%   References: van1999dependence
 
 
 %   AUTHOR: Martina Kreuzbichler
