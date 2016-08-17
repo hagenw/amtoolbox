@@ -3,6 +3,12 @@ function outsig = bandpassnoisefreq(fc,fs,dur,l,bw)
 %
 %   Usage:   outsig = bandpassnoisefreq(fs,fc,dur,l,bw)
 %
+%   `outsig = bandpassnoisefreq(fc,fs,dur,l,bw)` generates a bandpass-noise
+%   masker with duration `dur` (in sec), overall level `l` (in dB SPL) and
+%   with a sampling rate of `fs` Hz at the center frequency fc. The 
+%   bandpass has a bandwidth of `bw` in Hz. The generation is in the
+%   frequency domain.
+%
 %   Input parameters:
 %       fc:     center frequency of the bandpass
 %       fs:     sampling frequency
@@ -29,8 +35,6 @@ fh = fc+bw/2;
 resolution = fs/n;
 flpin = round(fl/resolution);
 fhpin = round(fh/resolution);
-
-No = l - 10*log10(bw);
 
 %special case when bandwidth is twice the centerfrequency
 if flpin == 0
