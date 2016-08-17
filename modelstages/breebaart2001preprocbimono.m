@@ -1,7 +1,7 @@
-function [ei_map,outsigl,outsigr,fc] = breebaart2001preprocbimono(insig,fs,tau,ild,varargin);
-%BREEBAART2001PREPROC   Auditory model from Breebaart et. al. 2001
-%   Usage: [ei_map, outsig, fc] = breebaart2001preproc(insig,fs);
-%          [ei_map, outsig, fc] = breebaart2001preproc(insig,fs,...);
+function [ei_map,outsigl,outsigr,fc] = breebaart2001preprocbimono(insig,fs,tau,ild,varargin)
+%BREEBAART2001PREPROCBIMONO   Binaural and monoaural auditory model from Breebaart et. al. 2001
+%   Usage: [ei_map, outsig, fc] = breebaart2001preprocbimono(insig,fs);
+%          [ei_map, outsig, fc] = breebaart2001preprocbimono(insig,fs,...);
 %
 %   Input parameters:
 %        insig  : input acoustic signal.
@@ -9,16 +9,16 @@ function [ei_map,outsigl,outsigr,fc] = breebaart2001preprocbimono(insig,fs,tau,i
 %        tau    : characteristic delay in seconds (positive: left is leading)
 %        ild    : characteristic ILD in dB (positive: left is louder)
 %  
-%   `breebaart2001preproc(insig,fs,tau,ild)` computes the EI-cell
-%   representation of the signal *insig* sampled with a frequency of *fs* Hz
-%   as described in Breebaart (2001). The parameters *tau* and *ild* define
-%   the sensitivity of the EI-cell.
+%   `breebaart2001preprocbimono(insig,fs,tau,ild)` computes the EI-cell
+%   representation of the signal *insig* sampled with a frequency of *fs*
+%   Hz as described in Breebaart (2001) as well as the internal monaural 
+%   representation of the signal *insig* sampled with a frequency of *fs* 
+%   Hz. The parameters *tau* and *ild* define the sensitivity of the EI-cell.
 %
 %   The input must have dimensions time $\times $ left/right channel
 %   $\times $ signal no.
-%
-%  
-%   `[ei_map,ml,mr,outsig,fc]=breebaart2001preproc(...)` additionally 
+% 
+%   `[ei_map,ml,mr,outsig,fc]=breebaart2001preprocbimono(...)` additionally 
 %   returns the center frequencies of the filter bank.
 %  
 %   The Breebaart 2001 model consists of the following stages:
@@ -41,7 +41,7 @@ function [ei_map,outsigl,outsigr,fc] = breebaart2001preprocbimono(insig,fs,tau,i
 %   Examples
 %   --------
 %
-%   The following code sets up a simple test example :::
+%   The following code sets up a simple test example for the binaural output:::
 %
 %     % Setup parameters
 %     fs      = 44100;            % Sampling rate
@@ -63,7 +63,7 @@ function [ei_map,outsigl,outsigr,fc] = breebaart2001preprocbimono(insig,fs,tau,i
 %     [ei_map,~,~,fc] = breebaart2001preprocbimono([x1,x2], fs, tau, ild);
 %     plotfilterbank(ei_map,1,fc,fs,'audtick','lin');
 %
-%   See also: eicell, auditoryfilterbank, ihcenvelope, adaptloop,auditoryfilterbank
+%   See also: eicell, auditoryfilterbank, ihcenvelope, adaptloop, auditoryfilterbank
 %
 %   References: breebaart2001a
 
@@ -86,7 +86,7 @@ end;
 definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','eicell'};
 definput.importdefaults={'fhigh',8000,'ihc_breebaart','adt_breebaart'};
 
-[flags,keyvals,flow,fhigh,basef]  = ltfatarghelper({'flow', 'fhigh', ...
+[flags,keyvals,~,~,~]  = ltfatarghelper({'flow', 'fhigh', ...
                     'basef'},definput,varargin);
 
 % ------ do the computation -------------------------
@@ -128,7 +128,7 @@ outsig = filter(mlp_b,mlp_a,outsignal);
 outsigl = outsig(:,:,1);
 outsigr = outsig(:,:,2);
 
-[siglen,nfreqchannels,naudiochannels,nsignals] = size(outsignal);
+[siglen,nfreqchannels,~,nsignals] = size(outsignal);
 
 ei_map = zeros(siglen, nfreqchannels, nsignals);
 for k=1:nsignals
