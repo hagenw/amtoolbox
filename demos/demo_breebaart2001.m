@@ -1,0 +1,376 @@
+function demo_breebaart2001(varargin)
+%DEMO_BREBBAART2001 Demo for binaural processingmodel from Breebaart et al. (2001)
+%
+%   `demo_breebaart2001(flag)` demonstrates how to compute N0S0, N0Spi and
+%   NpiS0 thresholds for different combinations of the monaural and
+%   binaural central processor for a center frequency of 1000 or 4000 Hz 
+%   using the model from Breebaart et al. (2014).
+%
+%
+%   The N0Spi condition is default. The following combinations for 4000 Hz 
+%   are calculated:
+%       lbr:    Compute decision from combination of left, binaural and
+%               right result. If the binaural result is zero, don't use it. 
+%               In this condition lbr is equal to lBr, because the binaural
+%               result is not zero.
+%       b:      Compute decision from binaural result only.
+%       lr:     Compute decision from left and right result.
+%
+%
+%   Set `flag` to the following flags to shows other conditions:
+%
+%   `N0S0`
+%      N0S0 thresholds for differnt combinations of the monaural and
+%      binaural processor for a center frequency of 4000 Hz.
+%      The following combinations are calculated:
+%           lbr:    Compute decision from combination of left, binaural and
+%                   right result. If the binaural result is zero, don't use
+%                   it. In this condition lbr is equal to lr.
+%           lBr:    Compute decision from combination of left, binaural and
+%                   right result even if the binaural result is zero. 
+%           
+%   `NpiS0`
+%      NpiS0 thresholds for differnt combinations of the monaural and
+%      binaural processor for a center frequency of 1000 Hz.
+%      The following combinations are calculated:
+%       lbr:    Compute decision from combination of left, binaural and
+%               right result. If the binaural result is zero, don't use it. 
+%               In this condition lbr is equal to lBr, because the binaural
+%               result is not zero.
+%       b:      Compute decision from binaural result only.
+%       lr:     Compute decision from left and right result.
+%
+%
+%   .. figure::
+%
+%      N0Spi thresholds  as a function of the masker bandwidth for a center
+%      frequency of 4000 Hz and lbr, b and lr conditions in comparison with
+%      the model results of Breebaart et al. (2001b).
+%
+%   .. figure::
+%
+%      N0S0 thresholds  as a function of the masker bandwidth for a center
+%      frequency of 4000 Hz and lbr and lBr conditions in comparison with
+%      experimental results of van de Par and Kohlrausch (1999).
+%
+%   .. figure::
+%
+%      NpiS0 thresholds  as a function of the masker bandwidth for a center
+%      frequency of 4000 Hz and lbr, b and lr conditions in comparison with
+%      the model results of Breebaart et al. (2001b).
+% 
+%
+%   See also: breebaart2001centralproc breebaart2001preprocbimono
+%   breebaart2001siggen
+%
+%   References: breebaart2001b van1999dependence
+
+% AUTHOR : Martina Kreuzbichler
+
+definput.import={'amtcache'};
+definput.flags.type = {'N0Spi','N0S0','NpiS0'};
+
+% Parse input options
+[flags,~]  = ltfatarghelper({},definput,varargin);
+
+if flags.do_N0Spi
+    [N0Spi4000lbr,N0Spi4000b,N0Spi4000lr] = amtcache('get','N0Spi',flags.cachemode);
+    if isempty(N0Spi4000lbr)
+        % do computation
+
+        % set experimental paramters
+        parout = [];
+        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+            'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65};
+        parout = amtafcexp('expinit',parout,expset);
+
+        % set model parameters
+        % input2 = fs; input3 = tau; input4 = ild; 
+        modelset = {'name','breebaart2001preprocbimono','input1',...
+            'expsignal', 'input2',32000,'input3',0,'input4',0,...
+            'outputs',[1 2 3]};
+        parout = amtafcexp('modelinit',parout,modelset);
+
+        % run model
+        centerfreq = 4000;
+        bw = [5];
+        %bw = [5 10 25 50 100 250 500 1000 2000 4000];
+        centralprocstring = {'b'};
+        %centralprocstring = {'lbr','b','lr'};
+        nl = 65;
+
+        % loop for all centralprocstring conditions.
+        for stringcount = 1:length(centralprocstring)
+
+            % set decision parameters
+            decisionset = {'name','breebaart2001centralproc',...
+                'input1','modelout','input2','modelout','input3',...
+                'modelout','input4',centralprocstring{stringcount}};
+            parout = amtafcexp('decisioninit',parout,decisionset);
+
+            %loop for all bandwidths
+            for bwcount = 1:length(bw)
+
+                % set signal parameters
+                %input3 = signallevel; input4 = signalduration;
+                %input5 = signalphase; input7 = noiselevel;
+                %input8 = noiseduration; input9 = noisephase;
+                %input10 = hanning ramp duration; input11 = fs;
+                signalset = {'name','breebaart2001siggen','input1',...
+                    'inttyp', 'input2',centerfreq,'input3',...
+                    'expvar','input4',0.3,'input5',pi,'input6',...
+                    bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
+                    'input10',0.05,'input11', 32000};
+                parout = amtafcexp('signalinit',parout,signalset);
+
+                % loop for experimental runs
+                for runcounter = 1:6
+                    result = amtafcexp('run',parout);
+                    resultbwvec(runcounter) = result(1)-nl;
+                end
+
+                resultvec(bwcount) = mean(resultbwvec);
+                resultvecstd(bwcount) = std(resultbwvec,1);
+                resultbwvec = zeros(6,1);
+                amtdisp(sprintf(['Progress for central processor condition ' ...
+                    centralprocstring{stringcount} ':' num2str(round(bwcount/length(bw)*100)) ...
+                    '%% calculated']),'progress');
+
+                result_temp =sprintf(['N0Spi4000' centralprocstring{stringcount}]);
+                output.(result_temp) = [resultvec; resultvecstd]';
+
+            end
+        end
+
+        N0Spi4000lbr = output.N0Spi4000lbr;
+        N0Spi4000b = output.N0Spi4000b;
+        N0Spi4000lr = output.N0Spi4000lr;
+
+        amtcache('set','N0Spi',N0Spi4000lbr,N0Spi4000b,N0Spi4000lr);
+    end
+
+    % plot
+
+    %get model data
+    N0Spimodeldata4000 = data_breebaart2001('fig3','nfc4000');
+
+    bw = [5 10 25 50 100 250 500 1000 2000 4000];
+
+    figure
+    errorbar(bw,N0Spi4000lbr(:,1),N0Spi4000lbr(:,2),'-x','MarkerSize',10);
+    set(gca,'xscal','log')
+    set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+    axis([4 5000 -35 20])
+    hold on;
+    errorbar(bw,N0Spi4000b(:,1),N0Spi4000b(:,2),'-og','MarkerSize',10);
+    errorbar(bw,N0Spi4000lr(:,1),N0Spi4000lr(:,2),'-dc','MarkerSize',10);
+    plot(bw,N0Spimodeldata4000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+    xlabel('Masker Bandwidth [Hz]');
+    ylabel('Threshold S/N [dB]');
+    legend('N0Spi condition lbr','N0Spi condition b',...
+        'N0Spi condition lr','model data from Breebaart (2001)')
+    title('N0Spi 4000 Hz thresholds: monaural factor = 0.0003')
+        
+elseif flags.do_N0S0
+    [N0S04000lbr,N0S04000lBr] = amtcache('get','N0S0',flags.cachemode);
+    if isempty(N0S04000lbr)
+        % do computation
+
+        % set experimental paramters
+        parout = [];
+        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+            'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',90};
+        parout = amtafcexp('expinit',parout,expset);
+
+        % set model parameters
+        % input2 = fs; input3 = tau; input4 = ild; 
+        modelset = {'name','breebaart2001preprocbimono','input1',...
+            'expsignal', 'input2',32000,'input3',0,'input4',0,...
+            'outputs',[1 2 3]};
+        parout = amtafcexp('modelinit',parout,modelset);
+
+        % run model
+        centerfreq = 2000;
+        bw = [5 10 25 50 100 250 500 1000 2000 4000];
+        centralprocstring = {'lbr', 'lBr'};
+        nl = 70;
+
+        % loop for all centralprocstring conditions.
+        for stringcount = 1:length(centralprocstring)
+
+            % set decision parameters
+            decisionset = {'name','breebaart2001centralproc',...
+                'input1','modelout','input2','modelout','input3',...
+                'modelout','input4',centralprocstring{stringcount}};
+            parout = amtafcexp('decisioninit',parout,decisionset);
+
+            %loop for all bandwidths
+            for bwcount = 1:length(bw)
+
+                % set signal parameters
+                %input3 = signallevel; input4 = signalduration;
+                %input5 = signalphase; input7 = noiselevel;
+                %input8 = noiseduration; input9 = noisephase;
+                %input10 = hanning ramp duration; input11 = fs;
+                signalset = {'name','breebaart2001siggen','input1',...
+                    'inttyp', 'input2',centerfreq,'input3',...
+                    'expvar','input4',0.3,'input5',0,'input6',...
+                    bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
+                    'input10',0.05,'input11', 32000};
+                parout = amtafcexp('signalinit',parout,signalset);
+
+                % loop for experimental runs
+                for runcounter = 1:6
+                    result = amtafcexp('run',parout);
+                    resultbwvec(runcounter) = result(1)-nl;
+                end
+
+                resultvec(bwcount) = mean(resultbwvec);
+                resultvecstd(bwcount) = std(resultbwvec,1);
+                resultbwvec = zeros(6,1);
+                amtdisp(sprintf(['Progress for central processor condition ' ...
+                    centralprocstring{stringcount} ': ' ...
+                    num2str(round(bwcount/length(bw)*100)) ...
+                    '%% calculated']),'progress');
+
+                result_temp =sprintf(['N0S04000' centralprocstring{stringcount}]);
+                output.(result_temp) = [resultvec; resultvecstd]';
+
+            end
+        end
+        N0S04000lbr = output.N0S04000lbr;
+        N0S04000lBr = output.N0S04000lBr;
+
+
+        amtcache('set','N0S0',N0S04000lbr,N0S04000lBr);
+    end
+        
+    % plot
+    
+    % get experimental data
+    N0S0expdata4000 = data_vandepar1999('fig1_N0S0','nfc4000');
+
+    bw = [5 10 25 50 100 250 500 1000 2000 4000];
+
+    figure
+    errorbar(bw,N0S04000lbr(:,1),N0S04000lbr(:,2),'-x','MarkerSize',10);
+    set(gca,'xscal','log')
+    set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+    axis([4 5000 -15 10])
+    hold on;
+    errorbar(bw,N0S04000lBr(:,1),N0S04000lBr(:,2),'-og','MarkerSize',10);
+    plot(bw,N0S0expdata4000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+    xlabel('Masker Bandwidth [Hz]');
+    ylabel('Threshold S/N [dB]');
+    legend('N0S0 condition lbr','N0S0 condition lBr','experimental data from van de Paar and Kohlrausch (1999)')
+    title('N0S0 4000 Hz thresholds: monaural factor = 0.0003')
+        
+
+elseif flags.doNpiS0
+    [NpiS01000lbr,NpiS01000b,NpiS01000lr] = amtcache('get','NpiS0',flags.cachemode);
+    if isempty(N0S01000lbr)
+        % do computation
+
+        % set experimental paramters
+        parout = [];
+        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+            'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',85};
+        parout = amtafcexp('expinit',parout,expset);
+
+        % set model parameters
+        % input2 = fs; input3 = tau; input4 = ild; 
+        modelset = {'name','breebaart2001preprocbimono','input1',...
+            'expsignal', 'input2',32000,'input3',0,'input4',0,...
+            'outputs',[1 2 3]};
+        parout = amtafcexp('modelinit',parout,modelset);
+
+        % run model
+        centerfreq = 1000;
+        bw = [5 10 25 50 100 250 500 1000 2000];
+        centralprocstring = {'lbr', 'b'};
+        nl = 70;
+
+        % loop for all centralprocstring conditions.
+        for stringcount = 1:length(centralprocsting)
+
+            % set decision parameters
+            decisionset = {'name','breebaart2001centralproc',...
+                'input1','modelout','input2','modelout','input3',...
+                'modelout','input4',centralprocstring{stringcount}};
+            parout = amtafcexp('decisioninit',parout,decisionset);
+
+            %loop for all bandwidths
+            for bwcount = 1:length(bw)
+
+                % set signal parameters
+                %input3 = signallevel; input4 = signalduration;
+                %input5 = signalphase; input7 = noiselevel;
+                %input8 = noiseduration; input9 = noisephase;
+                %input10 = hanning ramp duration; input11 = fs;
+                signalset = {'name','breebaart2001siggen','input1',...
+                    'inttyp', 'input2',centerfreq,'input3',...
+                    'expvar','input4',0.3,'input5',0,'input6',...
+                    bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
+                    'input10',0.05,'input11', 32000};
+                parout = amtafcexp('signalinit',parout,signalset);
+
+                % loop for experimental runs
+                for runcounter = 1:6
+                    result = amtafcexp('run',parout);
+                    resultbwvec(runcounter) = result(1)-nl;
+                end
+
+                resultvec(bwcount) = mean(resultbwvec);
+                resultvecstd(bwcount) = std(resultbwvec,1);
+                resultbwvec = zeros(6,1);
+                amtdisp(sprintf(['Progress for central processor condition ' ...
+                    centralprocstring{stringcount} ':' num2str(round(bwcount/length(bw)*100)) ...
+                    '%% calculated']),'progress');
+
+                result_temp =sprintf(['NpiS01000' centralprocstring{stringcount}]);
+                output.(result_temp) = [resultvec; resultvecstd]';
+
+            end
+        end
+
+        NpiS01000lbr = output.NpiS01000lbr;
+        NpiS01000b = output.NpiS01000b;
+        NpiS01000lr = output.NpiS01000lr;
+
+        amtcache('set','NpiS0',NpiS01000lbr,NpiS01000b,NpiS01000lr);
+    end
+
+    % plot
+
+    %get model data
+    NpiS0modeldata1000 = data_breebaart2001('fig6','nfc1000');
+
+    bw = [5 10 25 50 100 250 500 1000 2000];
+
+    figure
+    errorbar(bw,NpiS01000lbr(:,1),NpiS01000lbr(:,2),'-x','MarkerSize',10);
+    set(gca,'xscal','log')
+    set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
+    axis([4 5000 -35 -5])
+    hold on;
+    errorbar(bw,NpiS01000b(:,1),NpiS01000b(:,2),'-og','MarkerSize',10);
+    errorbar(bw,NpiS01000lr(:,1),NpiS01000lr(:,2),'-dc','MarkerSize',10);
+    plot(bw,N0Spimodeldata1000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+    text('Position',[1000 -10],'string','1000 Hz')
+    xlabel('Masker Bandwidth [Hz]');
+    ylabel('Threshold S/N [dB]');
+    legend('N0Spi condition lbr','N0Spi condition b',...
+        'N0Spi condition lr','model data from Breebaart (2001)')
+    title('N0Spi 1000 Hz thresholds: monaural factor = 0.0003')
+end
+
+
+
+
+
+
+
+
+
+
+
