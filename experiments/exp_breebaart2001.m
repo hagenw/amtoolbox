@@ -7,16 +7,68 @@ function output=exp_breebaart2001(varargin)
 %
 %   The following flags can be specified;
 %
+%       'afig2'     Reproduce Fig. 2 from Breebaart et al. (2001a):
+%                   Output of the peripheral preprocessor for a 500-Hz tone
+%                   (left panel) and a 4000-Hz tone(right panel) of 100-ms
+%                   duration. The output is caluculated for a filter which
+%                   is nearest to the frequency of the tone.
+%
+%       'afig6'     Reproduce Fig. 6 from Breebaart et al. (2001a):
+%                   Left panel: Idealized EI-activity for a wideband diotic
+%                   noise (0-4000 Hz) with an overall level of 70 dB SPL
+%                   (offset = default = 100 dB) for an auditory filter
+%                   which is nearest to the frequency of the tone.
+%                   Right panel: change in the activity pattern of the left
+%                   pannel if a 500-Hz interaurally ou-of-phase signal
+%                   (Spi) is added with a level of 50 dB (offset = default
+%                   = 100 dB). Both signal and master have a duration of 1
+%                   second and the figures show the mean output of the
+%                   first 100 ms.
+%
+%       'bfig3'     Reproduce Fig. 3 from Breebaart et al. (2001b):
+%                   N0Spi thresholds as a function of the masker bandwidth
+%                   for a constant overall level of the masker. The six
+%                   panels represent center frequencies of 125, 250, 500,
+%                   1000, 2000 and 4000 Hz, respectivly. The filled squares
+%                   are model predictions from Breebaart et al. (2001b).
+%                   The stars are model predictions calculated with our
+%                   implementation of the Breebaart model for a combination
+%                   of binaural and monaural decisions. The open squares
+%                   are data adapted from van de Par and Kohlrausch (1999).
+%
+%       'bfig6'     Reproduce Fig. 6 from Breebaart et al. (2001b):
+%                   NpiSo thresholds as a function of masker bandwidth for
+%                   125-Hz (upper-left panel), 250-Hz (upper-right-panel),
+%                   500-Hz (lower left panel), and 1000-Hz center frequency
+%                   (lower-right panel). The open sybols are data adapted
+%                   from van de Par and Kohlrausch (1999), the filled
+%                   symbols are model preictions from Breebaart et al.
+%                   (2001b) and the stars are model predicitons calculated
+%                   with out implementation of the Breebaart model for a
+%                   combination of binaural and monaural decisions.
+%
+%       'fig1_N0S0_vandepar1999'    Reproduce Fig.1 from van de Paar and
+%                                   Kohlrausch for the N0S0 condition:
+%                                   N0S0 thresholds as a fuction of the
+%                                   masker bandwidth expressed in
+%                                   signal-to-overall-noise power ratio.
+%                                   The six panels show data at various
+%                                   center frequencies. The circels are
+%                                   experimental data and the stars are
+%                                   model predicitions calculated with our
+%                                   implemntation ot the Breebaart model
+%                                   using the monaural decision.
+%
+%
+%   Further, cache flags (see amtcache) and plot flags can be specified:
+%
 %     'plot'    Plot the output of the experiment. This is the default.
 %
 %     'noplot'  Don't plot, only return data.
 %
-%     'afig2'    Reproduce Fig. 2 from Breebaart et al. (2001a)
-%
-%
 %   See also: data_breebaart2001 and data_vandepar1999
 %
-%   Examples:
+%   Example:
 %   ---------
 %
 %   To display Figure 2 of the 2001a paper use :::
@@ -25,7 +77,8 @@ function output=exp_breebaart2001(varargin)
 %
 
 %
-%   References: breebaart2001a, breebaart2001b
+%   References: breebaart2001a breebaart2001b van1999dependence
+%   breebaart2001centralproc breebaart2001preprocbimono breebaart2001siggen 
   
 %  AUTHOR: Martina Kreuzbichler
 
@@ -159,7 +212,7 @@ elseif flags.do_afig6
         end
         ei_map_n_mean = mean(ei_map{1}(:,:,1:3200,1),3); % mean of first 100 ms
         ei_map_sn_mean = mean(ei_map{2}(:,:,1:3200,1),3); % mean of first 100 ms
-        ei_map_diff_mean = ei_map_sn_mean/ei_map_n_mean;
+        ei_map_diff_mean = ei_map_sn_mean-ei_map_n_mean;
 
         amtcache('set','afig6',ei_map_n_mean,ei_map_diff_mean);
     end
@@ -189,7 +242,8 @@ elseif flags.do_bfig3
         parout = amtafcexp('modelinit',parout,modelset);
         
         decisionset = {'name','breebaart2001centralproc','input1',...
-            'modelout','input2','modelout', 'input3','modelout'};
+            'modelout','input2','modelout', 'input3','modelout',...
+            'input4','lbr'};
         parout = amtafcexp('decisioninit',parout,decisionset);
 
         centerfreq = [125 250 500 1000 2000 4000];
@@ -223,18 +277,27 @@ elseif flags.do_bfig3
                 resultvec(bwcount) = mean(resultbwvec);
                 resultvecstd(bwcount) = std(resultbwvec,1);
                 resultbwvec = zeros(6,1);
-                amtdisp(['Progress: ' num2str(round(bwcount/length(bw)*100)) '% calculated'],'progress') ;
+                amtdisp(sprintf(['Progress for %i Hz center frequency: ' ...
+                    num2str(round(bwcount/length(bw)*100)) ...
+                    '%% calculated'],centerfreq(freqcount)),'progress');
 
             end
 
             N0Spi_temp =sprintf('N0Spi%i',centerfreq(freqcount));
-            output.(N0Spi_temp) = [resultvec, resultvecstd];
+            output.(N0Spi_temp) = [resultvec; resultvecstd]';
 
             if freqcount <= length(bwadd)
-                bw(end+1) = bwadd(bwcount);
+                bw(end+1) = bwadd(freqcount);
             end
 
         end
+        
+        N0Spi125 = output.N0Spi125;
+        N0Spi250 = output.N0Spi250;
+        N0Spi500 = output.N0Spi500;
+        N0Spi1000 = output.N0Spi1000;
+        N0Spi2000 = output.N0Spi2000;
+        N0Spi4000 = output.N0Spi4000;
         amtcache('set','bfig3',N0Spi125,N0Spi250,N0Spi500,N0Spi1000,...
             N0Spi2000,N0Spi4000);
    
@@ -258,7 +321,8 @@ elseif flags.do_bfig6
         parout = amtafcexp('expinit',parout,expset);
 
         decisionset = {'name','breebaart2001centralproc','input1',...
-            'modelout','input2','modelout', 'input3','modelout'};
+            'modelout','input2','modelout', 'input3','modelout',...
+            'input4','lbr'};
         parout = amtafcexp('decisioninit',parout,decisionset);
 
         centerfreq = [125 250 500 1000];
@@ -299,18 +363,25 @@ elseif flags.do_bfig6
                 resultvec(bwcount) = mean(resultbwvec);
                 resultvecstd(bwcount) = std(resultbwvec,1);
                 resultbwvec = zeros(6,1);
-                waitbar(bwcount/length(bw)) 
+                amtdisp(sprintf(['Progress for %i Hz center frequency: ' ...
+                    num2str(round(bwcount/length(bw)*100)) ...
+                    '%% calculated'],centerfreq(freqcount)),'progress'); 
 
             end
 
             NpiS0_temp =sprintf('NpiS0%i',centerfreq(freqcount));
-            output.(NpiS0_temp) = [resultvec, resultvecstd];
+            output.(NpiS0_temp) = [resultvec; resultvecstd]';
 
             if freqcount <= length(bwadd)
-                bw(end+1) = bwadd(bwcount);
+                bw(end+1) = bwadd(freqcount);
             end
 
         end
+        
+        NpiS0125 = output.NpiS0125;
+        NpiS0250 = output.NpiS0250;
+        NpiS0500 = output.NpiS0500;
+        NpiS01000 = output.NpiS01000;
         amtcache('set','bfig6',NpiS0125,NpiS0250,NpiS0500,NpiS01000);
         
     
@@ -325,11 +396,84 @@ elseif flags.do_fig1_N0S0_vandepar1999
         amtcache('get','fig1_N0S0_vandepar1999',flags.cachemode);
     
     if isempty(N0S0125)
-%         RUN EXPERIMENT
+        parout = [];
+        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,'expvarsteprule',[0.5 2],...
+            'stepmin',[1 8],'expvarstart',90};
+        parout = amtafcexp('expinit',parout,expset);
+        
+        % input2 = fs; input3 = tau; input4 = ild; 
+        modelset = {'name','breebaart2001preprocbimono','input1',...
+            'expsignal', 'input2',32000,'input3',0,'input4',0,...
+            'outputs',[1 2 3]};
+        parout = amtafcexp('modelinit',parout,modelset);
+        
+        decisionset = {'name','breebaart2001centralproc','input1',...
+            'modelout','input2','modelout', 'input3','modelout',...
+            'input4','lbr'};
+        parout = amtafcexp('decisioninit',parout,decisionset);
+
+        centerfreq = [125 250 500 1000 2000 4000];
+        bw = [5 10 25 50 100 250];
+        bwadd = [500 1000 2000 4000];
+        nl = 70;
+
+        % loop for all center freq.
+        for freqcount = 1:length(centerfreq)
+
+            %loop for all bandwidths
+            for bwcount = 1:length(bw)
+
+                %input3 = signallevel; input4 = signalduration;
+                %input5 = signalphase; input7 = noiselevel;
+                %input8 = noiseduration; input9 = noisephase;
+                %input10 = hanning ramp duration; input11 = fs;
+                signalset = {'name','breebaart2001siggen','input1',...
+                    'inttyp', 'input2',centerfreq(freqcount),'input3',...
+                    'expvar','input4',0.3,'input5',0,'input6',...
+                    bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
+                    'input10',0.05,'input11', 32000};
+                parout = amtafcexp('signalinit',parout,signalset);
+
+                % loop for experimental runs
+                for runcounter = 1:6
+                    result = amtafcexp('run',parout);
+                    resultbwvec(runcounter) = result(1)-nl;
+                end
+
+                resultvec(bwcount) = mean(resultbwvec);
+                resultvecstd(bwcount) = std(resultbwvec,1);
+                resultbwvec = zeros(6,1);
+                amtdisp(sprintf(['Progress for %i Hz center frequency: ' ...
+                    num2str(round(bwcount/length(bw)*100)) ...
+                    '%% calculated'],centerfreq(freqcount)),'progress');
+
+            end
+
+            N0S0_temp =sprintf('N0S0%i',centerfreq(freqcount));
+            output.(N0S0_temp) = [resultvec; resultvecstd]';
+
+            if freqcount <= length(bwadd)
+                bw(end+1) = bwadd(freqcount);
+            end
+
+        end
+        
+        N0S0125 = output.N0S0125;
+        N0S0250 = output.N0S0250;
+        N0S0500 = output.N0S0500;
+        N0S01000 = output.N0S01000;
+        N0S02000 = output.N0S02000;
+        N0S04000 = output.N0S04000;
+        amtcache('set','fig1_N0S0_vandepar1999',N0S0125,N0S0250,N0S0500,...
+            N0S01000,N0S02000,N0S04000);
+   
+    else
+        output = struct('N0S0125',N0S0125,'N0S0250',N0S0250,...
+            'N0S0500',N0S0500,'N0S01000',N0S01000,'N0S02000',N0S02000,...
+            'N0S040000',N0S04000);  
     end
 
-    output = struct('N0S0125',N0S0125,'N0S0250',N0S0250,'N0S0500',N0S0500,...
-        'N0S01000',N0S01000,'N0S02000',N0S02000,'N0S040000',N0S04000);  
+    
 end
 
 
@@ -357,7 +501,7 @@ if flags.do_plot
         [x1,y1] = meshgrid(-10:0.5:10, -2:0.1:2);
         
         hfig1=figure;
-        set(hfig1, 'Position', [100 100 1300 600])
+        set(hfig1, 'Position', [100 100 1400 500])
         subplot(1,2,1)
         surf(x1,y1,ei_map_n_mean)
         xlabel('\alpha [dB]')
@@ -384,6 +528,7 @@ if flags.do_plot
         set(gca,'YTick',[-2 0 2]);
         set(gca,'ZTick',[0 0.1 0.2]);
         colorbar('Ticks',[0 0.05 0.1 0.15 0.2]);
+        caxis([0 0.2])
         grid off
         view(-53,28)
         
@@ -486,7 +631,7 @@ if flags.do_plot
         hold on;
         plot(bw,N0Spimodeldata4000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
         plot(bw,N0Spiexpdata4000,'-sg','MarkerSize',10)
-        text('Position',[1000 0],'string','2000 Hz')
+        text('Position',[1000 0],'string','4000 Hz')
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N [dB]');
 
@@ -585,7 +730,7 @@ if flags.do_plot
         N0S0expdata4000 = data_vandepar1999('fig1_N0S0','nfc4000');
         
         hfig1=figure;
-        set(hfig1, 'Position', [100 100 1100 700])
+        set(hfig1, 'Position', [100 100 700 700])
         
         bw = [5 10 25 50 100 250];
         s1 = subplot(3,2,1);
@@ -640,7 +785,7 @@ if flags.do_plot
         set(gca,'YTick',[]);
         hold on;
         plot(bw,N0S0expdata1000,'-og')
-        text('Position',[1000 5],'string','1000 Hz')
+        text('Position',[1000 5],'string','1 kHz')
         xlabel('Bandwidth [Hz]');
 
         bw = [5 10 25 50 100 250 500 1000 2000 4000];
@@ -655,7 +800,7 @@ if flags.do_plot
         set(gca,'YTick',[-30 -20 -10 0]);
         hold on;
         plot(bw,N0S0expdata2000,'-og')
-        text('Position',[1000 5],'string','2000 Hz')
+        text('Position',[1000 5],'string','2 kHz')
         xlabel('Bandwidth [Hz]');
         ylabel('Threshold S/N [dB]');
 
@@ -671,7 +816,7 @@ if flags.do_plot
         set(gca,'YTick',[]);
         hold on;
         plot(bw,N0S0expdata4000,'-og')
-        text('Position',[1000 5],'string','4000 Hz')
+        text('Position',[1000 5],'string','4 kHz')
         xlabel('Bandwidth [Hz]');
         
         legend({'modeled data SSL = 90 dB, NL 70 dB  - monaural factor = 0.0003',...
