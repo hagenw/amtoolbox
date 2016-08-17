@@ -2,6 +2,8 @@ function data = data_breebaart2001(varargin)
 %DATA_BREEBAART2001 Returns data points from the Breebaart et al. (2001b) paper
 %   Usage: data = data_breebaart(figure,nfc)
 %
+%   `data_breebaart(figure,nfc)` returns data from Breebaart et al. (2001b)
+%
 %   The flags fo the figure may be one of:
 %   'fig3'      Returns the N0Spi values for figure 3
 %   'fig6'      Returns the NpiS0 values for figure 6
@@ -25,7 +27,7 @@ function data = data_breebaart2001(varargin)
 %
 %     data_breebaart2001('fig3','nfc125');
 %
-%   References: 
+%   References: breebaart2001a breebaart2001b van1999dependence
 
 
 %   AUTHOR: Martina Kreuzbichler
