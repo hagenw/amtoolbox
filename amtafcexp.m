@@ -129,7 +129,8 @@ function out = amtafcexp(flag,par,varargin)
 
 % AUTHOR: Martina Kreuzbichler
 
-warning off;
+% turn warning off
+warning('off','MATLAB:nargchk:deprecated')
 
 switch flag
     case 'expinit'
