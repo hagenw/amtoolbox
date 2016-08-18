@@ -20,10 +20,11 @@ function out = amtafcexp(flag,par,varargin)
 %
 %   Output parameters:
 %       out:    for 'init flags'    struct containing all set parameters
-%               for 'run'           vector containing the threshold in 
-%                                   first place, the standard deviation in
-%                                   second place and all values of the 
-%                                   experimental variable afterwards
+%               for 'run'           vector containing the threshold of the 
+%                                   signal level in first place, the 
+%                                   standard deviation in second place and 
+%                                   all values of the experimental variable
+%                                   afterwards
 %
 %
 %   `amtafcexp('expinit',par)` accepts the following parameters:
@@ -62,7 +63,7 @@ function out = amtafcexp(flag,par,varargin)
 %       'input8',intput8    input parameter needed for model call
 %       'input9',intput9    input parameter needed for model call
 %       'input10',intput10  input parameter needed for model call
-%       'outputs',outputs   vector containing number of modeloutputs wanted
+%       'outputs',outputs   vector containing number of wanted modeloutputs 
 %                           e.g. [1 2 6]: output 1,2 and 6 wanted
 %       All key-value pairs can be defined in a cell beforehand.
 %
@@ -120,6 +121,7 @@ function out = amtafcexp(flag,par,varargin)
 %       'modelout' must be equal to number of 'outputs' defined in
 %       'modelinit'.
 %
+%   run the experiment with 'result = amtafcexp('run',par)'
 %   run 'result = amtafcexp('run',par,'plot')' to generate experimental plot
 %
 %   See also: exp_breebaart2001 demo_breebaart2001
@@ -127,6 +129,7 @@ function out = amtafcexp(flag,par,varargin)
 
 % AUTHOR: Martina Kreuzbichler
 
+warning off;
 
 switch flag
     case 'expinit'
@@ -162,9 +165,9 @@ switch flag
         definput.keyvals.outputs = [];
         
         if iscell(varargin{1}) && nargin == 3
-            [~,kvexp]=ltfatarghelper({},definput,varargin{:});
+            [~,kvmodel]=ltfatarghelper({},definput,varargin{:});
         else
-            [~,kvexp]=ltfatarghelper({},definput,varargin);
+            [~,kvmodel]=ltfatarghelper({},definput,varargin);
         end
         
         % check what outputs of model are needed
@@ -226,9 +229,9 @@ switch flag
 
         
         if iscell(varargin{1}) && nargin == 3
-            [~,kvexp]=ltfatarghelper({},definput,varargin{:});
+            [~,kvsignal]=ltfatarghelper({},definput,varargin{:});
         else
-            [~,kvexp]=ltfatarghelper({},definput,varargin);
+            [~,kvsignal]=ltfatarghelper({},definput,varargin);
         end
         
         out = par;
@@ -250,9 +253,9 @@ switch flag
         definput.flags.plot = {'noplot','plot'};
         
         if iscell(varargin{1}) && nargin == 3
-            [~,kvexp]=ltfatarghelper({},definput,varargin{:});
+            [~,kvdecision]=ltfatarghelper({},definput,varargin{:});
         else
-            [~,kvexp]=ltfatarghelper({},definput,varargin);
+            [~,kvdecision]=ltfatarghelper({},definput,varargin);
         end
         
         out = par;
