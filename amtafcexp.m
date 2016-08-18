@@ -1,11 +1,14 @@
 function out = amtafcexp(flag,par,varargin)
-%AMTAFTEXP Runs experimental trials for binaural singal detection with a model
+%AMTAFTEXP Runs experimental procedure for alternative forced choice
+%experimetns
 % 
-%   Usage:   out = amtafcexp(flag,varargin) 
+%   Usage:   out = amtafcexp(flag,par,varargin) 
 % 
 %   Input parameters:
 %       flag:       specifies the chosen execution 
-%       par:        already set experimental parameters
+%       par:        struct of already set experimental parameters
+%                   If no parameters are set, define par as []
+%
 %                   
 %       The following flags are possible:
 %           'expinit':      sets all parameters for the experimental run
@@ -14,7 +17,115 @@ function out = amtafcexp(flag,par,varargin)
 %           'decisioninit': sets all decision parameters
 %           'run':          runs the experiment and lets the model decide
 %
+%
+%   Output parameters:
+%       out:    for 'init flags'    struct containing all set parameters
+%               for 'run'           vector containing the threshold in 
+%                                   first place, the standard deviation in
+%                                   second place and all values of the 
+%                                   experimental variable afterwards
+%
+%
+%   `amtafcexp('expinit',par)` accepts the following parameters:
+%       'intnum',intnum                 number of intervals in intnum-afc
+%                                       e.g. 3: 3-afc
+%       'rule',[down up]                defines the down-up-rule
+%                                       e.g. [2 1]: 2 down, 1 up
+%       'expvarstart',expvarstart       stepsize at the beginning of the
+%                                       experiment
+%       'expvarsteprule',[change turns] change of stepsize after a number
+%                                       of turns
+%                                       e.g. [0.5 2]: half stepsize after
+%                                       two turns
+%       'stepmin',[min threshturn]      min = size of stepsize after which 
+%                                       another number of turns
+%                                       (= threshturn) are calculated. The
+%                                       median of these last turns is used
+%                                       as threshold.
+%                                       e.g. [1 8]: If stepsize is 1, 
+%                                       calculate another 8 reversals.
+%       'expvarstart',expvarstart       startvalue of the experimental
+%                                       variable
+%       All key-value pairs can be defined in a cell beforehand.
+%
+%
+%   `amtafcexp('modelinit',par)` accepts the following parameters:
+%       'name',name         string which defines the name of the model
+%                           function
+%       'input1',intput1    input parameter needed for model call
+%       'input2',intput2    input parameter needed for model call
+%       'input3',intput3    input parameter needed for model call
+%       'input4',intput4    input parameter needed for model call
+%       'input5',intput5    input parameter needed for model call
+%       'input6',intput6    input parameter needed for model call
+%       'input7',intput7    input parameter needed for model call
+%       'input8',intput8    input parameter needed for model call
+%       'input9',intput9    input parameter needed for model call
+%       'input10',intput10  input parameter needed for model call
+%       'outputs',outputs   vector containing number of modeloutputs wanted
+%                           e.g. [1 2 6]: output 1,2 and 6 wanted
+%       All key-value pairs can be defined in a cell beforehand.
+%
+%       One of the input1 to input10 must contain the keyword 'expsignal'.
+%       This keyword is replaced in the 'run' routine with the output of
+%       the signal generation function
+%
+%
+%   `amtafcexp('signalinit',par)` accepts the following parameters:
+%       'name',name         string which defines the name of the signal
+%                           generation
+%       'input1',intput1    input parameter needed for model call
+%       'input2',intput2    input parameter needed for model call
+%       'input3',intput3    input parameter needed for model call
+%       'input4',intput4    input parameter needed for model call
+%       'input5',intput5    input parameter needed for model call
+%       'input6',intput6    input parameter needed for model call
+%       'input7',intput7    input parameter needed for model call
+%       'input8',intput8    input parameter needed for model call
+%       'input9',intput9    input parameter needed for model call
+%       'input10',intput10  input parameter needed for model call
+%       'input11',intput11  input parameter needed for model call
+%       'input12',intput12  input parameter needed for model call
+%       'input13',intput13  input parameter needed for model call
+%       'input14',intput14  input parameter needed for model call
+%       'input15',intput15  input parameter needed for model call
+%       All key-value pairs can be defined in a cell beforehand.
+%
+%       One of the input1 to input15 must contain the keyword 'inttyp'.
+%       This keyword is replaced in the 'run' routine with 'target' or
+%       'reference'
+%       One of the input1 to input15 must contain the keyword 'expvar'.
+%       This keyword is replaced in the first place with the value of 
+%       expvarstart and is changed during the experimental trial.
+%
+%
+%   `amtafcexp('decisioninit',par)` accepts the following parameters:
+%       'name',name         string which defines the name of the decision
+%                           fuction
+%       'input1',intput1    input parameter needed for model call
+%       'input2',intput2    input parameter needed for model call
+%       'input3',intput3    input parameter needed for model call
+%       'input4',intput4    input parameter needed for model call
+%       'input5',intput5    input parameter needed for model call
+%       'input6',intput6    input parameter needed for model call
+%       'input7',intput7    input parameter needed for model call
+%       'input8',intput8    input parameter needed for model call
+%       'input9',intput9    input parameter needed for model call
+%       'input10',intput10  input parameter needed for model call
+%       All key-value pairs can be defined in a cell beforehand.
+%
+%       All input1 to input10 which conain the keyword 'modelout' are
+%       replaced with the outputs of the model function during an
+%       experimental run. Therfore the number of inputs with the keyword
+%       'modelout' must be equal to number of 'outputs' defined in
+%       'modelinit'.
+%
 %   run 'result = amtafcexp('run',par,'plot')' to generate experimental plot
+%
+%   See also: exp_breebaart2001 demo_breebaart2001
+
+
+% AUTHOR: Martina Kreuzbichler
 
 
 switch flag
@@ -26,7 +137,11 @@ switch flag
         definput.keyvals.stepmin = [];
         definput.keyvals.expvarstart = [];
         
-        [~,kvexp]=ltfatarghelper({},definput,varargin{:});
+        if iscell(varargin{1}) && nargin == 3
+            [~,kvexp]=ltfatarghelper({},definput,varargin{:});
+        else
+            [~,kvexp]=ltfatarghelper({},definput,varargin);
+        end
              
        % out = setstructfields(kvexp, par);
        out = par;
@@ -46,7 +161,11 @@ switch flag
         definput.keyvals.input10 = [];
         definput.keyvals.outputs = [];
         
-        [~,kvmodel]=ltfatarghelper({},definput,varargin{:});
+        if iscell(varargin{1}) && nargin == 3
+            [~,kvexp]=ltfatarghelper({},definput,varargin{:});
+        else
+            [~,kvexp]=ltfatarghelper({},definput,varargin);
+        end
         
         % check what outputs of model are needed
         outputnumber = nargout(kvmodel.name);
@@ -106,7 +225,11 @@ switch flag
         definput.keyvals.input15 = [];
 
         
-        [~,kvsignal]=ltfatarghelper({},definput,varargin{:});
+        if iscell(varargin{1}) && nargin == 3
+            [~,kvexp]=ltfatarghelper({},definput,varargin{:});
+        else
+            [~,kvexp]=ltfatarghelper({},definput,varargin);
+        end
         
         out = par;
         out.signal = kvsignal;
@@ -126,7 +249,11 @@ switch flag
         
         definput.flags.plot = {'noplot','plot'};
         
-        [~,kvdecision]=ltfatarghelper({},definput,varargin{:});
+        if iscell(varargin{1}) && nargin == 3
+            [~,kvexp]=ltfatarghelper({},definput,varargin{:});
+        else
+            [~,kvexp]=ltfatarghelper({},definput,varargin);
+        end
         
         out = par;
         out.decision = kvdecision;
