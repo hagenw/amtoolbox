@@ -1,4 +1,37 @@
 function decision = breebaart2001centralproc(EI_map,monol,monor,bimonostring,monofactor)
+%BREEBAART2001CENTRALPROC   Binaural and monoaural signal detector from Breebaart et. al. 2001
+%   Usage: decision = breebaart2001centralproc(EI_map,monol,monor,bimonostring);
+%          decision = breebaart2001centralproc(EI_map,monol,monor,bimonostring,monofactor);
+%
+%   Input parameters:
+%        EI_map         : ei_cell representation of the signal
+%        monol          : internal representation of the left ear signal
+%        monor          : internal representation of the right ear signal
+%        bimonostring   : defines which representations are used for the decision
+%        monofactor     : sets the parameter for monaural detection
+%                        (optional)
+%  
+%   `breebaart2001centralproc(EI_map,monol,monor,bimonostring,monofactor)`
+%   serves as a artificial observer for signal detection purposes. The
+%   central processor develops a template which consists of the average
+%   internal representation of all masker-alone intervals and its variance.
+%   Furthermore the average signal interval and the average distance 
+%   between masker template and signal template is computed. Then the
+%   weighted distance U between template and actual stimulus is calculated. 
+%   The higher U, the greater the likelihood that a signal is present. 
+%   Thus, in a 3-IFC procedure the model will choose the interval with the 
+%   highest value of U. After each trial the model recieves feedback and
+%   stores the avaluated intervals in the templates. 
+%
+%   'bimonostring' can contain the following characters:
+%       'l'     take left mono channel (monol) for decision
+%       'b'     take binaural channel (ei-cell) for decision
+%       'B'     take binaural channel even if it is zero (e.g. N0S0 condition)
+%       'r'     take right mono channel (monor) for decision
+%
+%   References: breebaart2001a
+
+%   AUTHOR : Martina Kreuzbichler
 
 if nargin == 4
     monofactor = 0.0003;
