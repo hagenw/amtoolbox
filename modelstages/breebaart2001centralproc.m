@@ -11,6 +11,9 @@ function decision = breebaart2001centralproc(EI_map,monol,monor,bimonostring,mon
 %        monofactor     : sets the parameter for monaural detection
 %                        (optional)
 %  
+%   Output parameters:
+%        decision       : index of the estimated target
+%
 %   `breebaart2001centralproc(EI_map,monol,monor,bimonostring,monofactor)`
 %   serves as a artificial observer for signal detection purposes. The
 %   central processor develops a template which consists of the average
@@ -176,9 +179,9 @@ if binauralset
     % binaural test
     [~,response_b] = max(U_b);
     if response_b ~= response && any(U_b) == 1
-        amtdisp(sprintf(['binaural decision is not the same: '...
-            'signalnumber %i, response = %i, binaural response = %i \n'],...
-            signalnumber,response,response_b));
+        amtdisp(sprintf(['Signal #%i: Monaural-based decision dominated the final decision: '...
+            ' final decision = %i, binaural-based decision = %i \n'],...
+            signalnumber,response,response_b),'progress');
     end
     adtemplate = zeros(tempsize);
     adtemplatesq = zeros(tempsize);
