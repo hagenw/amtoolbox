@@ -71,11 +71,26 @@ function output=exp_breebaart2001(varargin)
 %   Example:
 %   ---------
 %
-%   To display Figure 2 of the 2001a paper use :::
+%   To display Figure 2 of Breebaart et al. (2001a) use :::
 %
 %     out = exp_breebaart2001('afig2');
 %
-
+%   To display Figure 6 of Breebaart et al. (2001a) use :::
+%
+%     out = exp_breebaart2001('afig6');
+%
+%   To display Figure 3 of Breebaart et al. (2001b) use :::
+%
+%     out = exp_breebaart2001('bfig3');
+%
+%   To display Figure 6 of Breebaart et al. (2001b) use :::
+%
+%     out = exp_breebaart2001('bfig6');
+%
+%   To display Figure 1 of van de Par and Kohlrausch (1999) use :::
+%
+%     out = exp_breebaart2001('fig1_N0S0_vandepar1999');
+%
 %
 %   References: breebaart2001a breebaart2001b van1999dependence
 %   breebaart2001centralproc breebaart2001preprocbimono breebaart2001siggen 
@@ -121,13 +136,17 @@ if flags.do_afig2
 
         for counter = 1:2
 
-            testsigoutmiddle(:,counter) = breebaart2001outmiddlefilter(testsig(:,counter),48000);
+            testsigoutmiddle(:,counter) = ...
+                breebaart2001outmiddlefilter(testsig(:,counter),48000);
 
-            [testsigaudfilt(:,:,counter), ~] = auditoryfilterbank(testsigoutmiddle(:,counter),48000,'argimport',flags,keyvals);
+            [testsigaudfilt(:,:,counter), ~] = ...
+                auditoryfilterbank(testsigoutmiddle(:,counter),48000,'argimport',flags,keyvals);
 
-            testsigihc(:,:,counter) = ihcenvelope(testsigaudfilt(:,:,counter),48000,'argimport',flags,keyvals);
+            testsigihc(:,:,counter) = ihcenvelope(testsigaudfilt(:,:,counter),...
+                48000,'argimport',flags,keyvals);
 
-            testsigadlo(:,:,counter) = adaptloop(testsigihc(:,:,counter),48000,'argimport',flags,keyvals);
+            testsigadlo(:,:,counter) = adaptloop(testsigihc(:,:,counter),48000,...
+                'argimport',flags,keyvals);
         end
         
         amtcache('set','afig2',testsigadlo)
@@ -397,8 +416,8 @@ elseif flags.do_fig1_N0S0_vandepar1999
     
     if isempty(N0S0125)
         parout = [];
-        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,'expvarsteprule',[0.5 2],...
-            'stepmin',[1 8],'expvarstart',90};
+        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+            'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',90};
         parout = amtafcexp('expinit',parout,expset);
         
         % input2 = fs; input3 = tau; input4 = ild; 
