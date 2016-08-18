@@ -726,12 +726,12 @@ if flags.do_plot
         hold on;
         plot(bw,NpiS0modeldata1000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
         plot(bw,NpiS0expdata1000,'-sg','MarkerSize',10)
-        text('Position',[5 -30],'string','100 Hz; 0.5 ms')
+        text('Position',[5 -30],'string','1000 Hz; 0.5 ms')
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N');
 
         suptitle('Fig. 6 NpiS0 Thresholds')
-        legend({'modeled data SSL = 65 dB, NL 70 dB  - monaural factor = 0.0003',...
+        legend({'modeled data SSL = 85 dB, NL 70 dB  - monaural factor = 0.0003',...
             'model data from Breebaart (2001)',...
             'experimental data from van de Paar and Kohlrausch (1999)'},...
             'Position' ,[0.75,0.9,0.1,0.05]);
