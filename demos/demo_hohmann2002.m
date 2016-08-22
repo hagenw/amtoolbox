@@ -1,5 +1,4 @@
-%DEMO_HOHMANN2002  Shows how to use the gammatone filterbank from Hohmann
-%(2002)
+%DEMO_HOHMANN2002  Shows how to use the gammatone filterbank from Hohmann(2002)
 %
 %   Part I: This example creates a 4th order gammatone filter with a center
 %   frequency of 1000Hz and a 3dB-bandwidth of 100Hz, suitable for 

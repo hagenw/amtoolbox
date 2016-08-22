@@ -28,7 +28,7 @@ function varargout = exp_baumgartner2016(varargin)
 %     'fig3' or 'baseline'
 %               Correspondence between actual and predicted
 %               baseline performance for the 23 normal-hearing listeners after
-%               listener-specific calibration of the model?s sensitivity parameter (S).
+%               listener-specific calibration of the models sensitivity parameter (S).
 %
 %     'fig4' or 'tab1' or 'hearingthreshold'
 %               Hearing thresholds estimated for simulated OHC gains
@@ -2460,7 +2460,7 @@ if flags.do_dynrangecheck
       elseif flags.do_dprime
         text(splminplot+5,5,panels{cc},'FontSize',kv.FontSize)
         if cc==3
-          text(0,6,{'d´'},'FontSize',kv.FontSize,'FontWeight','bold')
+          text(0,6,{'d'''},'FontSize',kv.FontSize,'FontWeight','bold')
         end
       else
         text(splminplot+5,330,panels{cc},'FontSize',kv.FontSize)
@@ -2584,7 +2584,8 @@ if flags.do_localevel
   amtdisp([num2str(e_perr(mm),'%2.1f') '\deg  ' num2str(r_perr(mm),'%2.2f') '  ' num2str(e_qerr(mm),'%2.1f') '%  ' num2str(r_qerr(mm),'%2.2f')])
   
   varargout{1} = 0.5* (e_perr(mm)/90 + e_qerr(mm)/100);
-  
+
+
   %% Plots
   if flags.do_plot
     
@@ -2759,7 +2760,6 @@ if flags.do_localevel
 end
 
 end
-
 
 
 %% ------------------------------------------------------------------------
