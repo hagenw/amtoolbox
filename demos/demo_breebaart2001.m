@@ -1,5 +1,5 @@
 function demo_breebaart2001(varargin)
-%DEMO_BREBBAART2001 Demo for binaural processingmodel from Breebaart et al. (2001)
+%DEMO_BREEBAART2001 Demo for binaural processingmodel from Breebaart et al. (2001)
 %
 %   `demo_breebaart2001(flag)` demonstrates how to compute N0S0, N0Spi and
 %   NpiS0 thresholds for different combinations of the monaural and
@@ -52,25 +52,28 @@ function demo_breebaart2001(varargin)
 %
 %
 %
-%   .. figure::
+%   demo_breebaart2001('N0Spi') :::
 %
-%      demo_breebaart2001('N0Spi')
+%      demo_breebaart2001('N0Spi');
+%
 %      N0Spi thresholds  as a function of the masker bandwidth for a center
 %      frequency of 4000 Hz and lbr, b and lr conditions in comparison with
 %      the model results of Breebaart et al. (2001b).
 %
 %
-%   .. figure::
+%   demo_breebaart2001('N0S0') :::
 %
-%      demo_breebaart2001('N0S0')
+%      demo_breebaart2001('N0S0');
+%
 %      N0S0 thresholds  as a function of the masker bandwidth for a center
 %      frequency of 4000 Hz and lbr and lBr conditions in comparison with
 %      experimental results of van de Par and Kohlrausch (1999).
 %
 %
-%   .. figure::
+%   demo_breebaart2001('NpiS0') :::
 %
-%      demo_breebaart2001('NpiS0')
+%      demo_breebaart2001('NpiS0');
+%
 %      NpiS0 thresholds  as a function of the masker bandwidth for a center
 %      frequency of 4000 Hz and lbr, b and lr conditions in comparison with
 %      the model results of Breebaart et al. (2001b).

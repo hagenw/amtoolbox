@@ -16,6 +16,7 @@
 %
 %   Spatial models
 %       EXP_LINDEMANN1986    - Recreate plots from Lindemann (1986)
+%       EXP_BREEBAART2001    - Recreate plots from Breebaart et al. (2001)
 %       EXP_LANGENDIJK2002   - Recreate plots from Langedijk (2002)
 %       EXP_DIETZ2011        - Figures from Dietz et al. (2011)
 %       EXP_TAKANEN2013      - Figures from Takanen et al. (2013)

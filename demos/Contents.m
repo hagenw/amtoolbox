@@ -15,6 +15,7 @@
 %
 %   Demonstration of spatial models
 %     DEMO_LINDEMANN1986     - Lindemann binaural model.
+%     DEMO_BREEBAART2001     - Binaural masking level differences from Breebaart et al. (2001)
 %     DEMO_BAUMGARTNER2013   - Simple version of a sagittal-plane sound localization (Baumgartner et al., 2013)
 %     DEMO_BAUMGARTNER2014   - Comprehensive version of the sagittal-plane sound localization (Baumgartner et al., 2014)
 %     DEMO_TAKANEN2013       - Binaural activity map (Takanen et al., 2013)
