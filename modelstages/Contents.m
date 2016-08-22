@@ -52,6 +52,12 @@
 %     TAKANEN2013PERIPHERY  - Process input through the model of periphery
 %     TAKANEN2013WBMSO      - Wideband medial superior olive model
 %
+%  Binaural masking level differences from Breebaart et al. (2001)
+%     BREEBAART2001PREPROC  - Preprocessor of a binaural signal with EI-cell output
+%     BREEBAART2001CENTRALPROC - Central processor taking decision in an experiment
+%     BREEBAART2001SIGGEN - Generates signals required for an experiment
+% 
+%
 %  Sagittal-plane localization models
 %     BAUMGARTNER2013PMV2PPP - Calculate performance predictions from PMVs for baumgartner2013
 %     BAUMGARTNER2014SPECTRALANALYSIS - Approximation of spectral analysis by auditory periphery

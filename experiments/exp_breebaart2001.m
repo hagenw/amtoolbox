@@ -66,7 +66,7 @@ function output=exp_breebaart2001(varargin)
 %
 %     'noplot'  Don't plot, only return data.
 %
-%   See also: data_breebaart2001 and data_vandepar1999
+%   See also: data_breebaart2001 data_vandepar1999
 %
 %   Example:
 %   ---------
@@ -93,7 +93,7 @@ function output=exp_breebaart2001(varargin)
 %
 %
 %   References: breebaart2001a breebaart2001b van1999dependence
-%   breebaart2001centralproc breebaart2001preprocbimono breebaart2001siggen 
+%   breebaart2001centralproc breebaart2001preproc breebaart2001siggen 
   
 %  AUTHOR: Martina Kreuzbichler
 
@@ -513,7 +513,7 @@ if flags.do_plot
         xlabel('time [s]')
         ylabel('Output [MU]')
         text('Position',[0.1 7000],'string','4000 Hz tone')
-        suptitle('Fig. 2 Output of the peripheral preprocessor')
+%         suptitle('Fig. 2 Output of the peripheral preprocessor')
         
     elseif flags.do_afig6
         
@@ -531,7 +531,7 @@ if flags.do_plot
         set(gca,'YDir','reverse')
         set(gca,'YTick',[-2 0 2]);
         set(gca,'ZTick',[0 0.2 0.4]);
-        colorbar('Ticks',[0,0.1 0.2 0.3 0.4]);
+%         colorbar('Ticks',[0,0.1 0.2 0.3 0.4]);
         caxis([0 0.4])
         grid off
         view(-53,28)
@@ -546,12 +546,12 @@ if flags.do_plot
         set(gca,'YDir','reverse')
         set(gca,'YTick',[-2 0 2]);
         set(gca,'ZTick',[0 0.1 0.2]);
-        colorbar('Ticks',[0 0.05 0.1 0.15 0.2]);
+%         colorbar('Ticks',[0 0.05 0.1 0.15 0.2]);
         caxis([0 0.2])
         grid off
         view(-53,28)
         
-        suptitle('Fig. 6')
+%         suptitle('Fig. 6')
         set(gca,'LooseInset',get(gca,'TightInset'))
 
         
@@ -654,7 +654,7 @@ if flags.do_plot
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N [dB]');
 
-        suptitle('Fig. 3 N0Spi Thresholds')
+%         suptitle('Fig. 3 N0Spi Thresholds')
         legend({'modeled data SSL = 65 dB, NL 65 dB  - monaural factor = 0.0003',...
             'model data from Breebaart (2001)',...
             'experimental data from van de Paar and Kohlrausch (1999)'},...
@@ -730,7 +730,7 @@ if flags.do_plot
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N');
 
-        suptitle('Fig. 6 NpiS0 Thresholds')
+%         suptitle('Fig. 6 NpiS0 Thresholds')
         legend({'modeled data SSL = 85 dB, NL 70 dB  - monaural factor = 0.0003',...
             'model data from Breebaart (2001)',...
             'experimental data from van de Paar and Kohlrausch (1999)'},...
@@ -842,7 +842,7 @@ if flags.do_plot
             'experimental data from van de Paar and Kohlrausch (1999)'},...
             'Position' ,[p2(1)-p2(3)*0.2,0.15,0.1,0.05]);
         
-        suptitle('Fig. 1 N_0S_0 Thresholds')
+%         suptitle('Fig. 1 N_0S_0 Thresholds')
         
     end
            

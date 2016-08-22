@@ -6,80 +6,82 @@ function demo_breebaart2001(varargin)
 %   binaural central processor for a center frequency of 1000 or 4000 Hz 
 %   using the model from Breebaart et al. (2014).
 %
-%
+%   
 %   The N0Spi condition is default. The following combinations for 4000 Hz 
 %   are calculated:
-%       lbr:    Compute decision from combination of left, binaural and
-%               right result. If the binaural result is zero, don't use it. 
-%               In this condition lbr is equal to lBr, because the binaural
-%               result is not zero.
-%       b:      Compute decision from binaural result only.
-%       lr:     Compute decision from left and right result.
 %
+%     lbr:    Compute decision from combination of left, binaural and
+%             right result. If the binaural result is zero, don't use it. 
+%             In this condition lbr is equal to lBr, because the binaural
+%             result is not zero.
 %
+%     b:      Compute decision from binaural result only.
+%
+%     lr:     Compute decision from left and right result.
+%
+%   
 %   Set `flag` to the following flags to shows other conditions:
 %
-%   `N0S0`
-%      N0S0 thresholds for differnt combinations of the monaural and
-%      binaural processor for a center frequency of 4000 Hz.
-%      The following combinations are calculated:
-%           lbr:    Compute decision from combination of left, binaural and
-%                   right result. If the binaural result is zero, don't use
-%                   it. In this condition lbr is equal to lr.
-%           lBr:    Compute decision from combination of left, binaural and
-%                   right result even if the binaural result is zero. 
+%     'N0S0':  N0S0 thresholds for differnt combinations of the monaural and
+%              binaural processor for a center frequency of 4000 Hz.
+%              The following combinations are calculated:
+%
+%              lbr:  Compute decision from combination of left, binaural and
+%                    right result. If the binaural result is zero, don't use
+%                    it. In this condition lbr is equal to lr.
+%
+%              lBr:  Compute decision from combination of left, binaural and
+%                    right result even if the binaural result is zero. 
 %           
-%   `NpiS0`
-%      NpiS0 thresholds for differnt combinations of the monaural and
-%      binaural processor for a center frequency of 1000 Hz.
-%      The following combinations are calculated:
-%       lbr:    Compute decision from combination of left, binaural and
-%               right result. If the binaural result is zero, don't use it. 
-%               In this condition lbr is equal to lBr, because the binaural
-%               result is not zero.
-%       b:      Compute decision from binaural result only.
-%       lr:     Compute decision from left and right result.
+%     'NpiS0': NpiS0 thresholds for differnt combinations of the monaural and
+%              binaural processor for a center frequency of 1000 Hz.
+%              The following combinations are calculated:
 %
-%   'exact'
-%       The threshold is computed as a mean value of 6 repetitions per
-%       bandwidth. To get results faster the computational results are
-%       stored in cache and can be downloaded.
+%              lbr:  Compute decision from combination of left, binaural and
+%                    right result. If the binaural result is zero, don't use it. 
+%                    In this condition lbr is equal to lBr, because the binaural
+%                    result is not zero.
 %
-%   'fast'
-%       The threshold as the result of one experimental run per bandwidth.
-%       The number of bandwidth values is half the number of values at the
-%       'exact' computation.  The fast computation is default.
+%              b:    Compute decision from binaural result only.
 %
+%              lr:   Compute decision from left and right result.
 %
+%     'exact': The threshold is computed as a mean value of 6 repetitions per
+%              bandwidth. To get results faster the computational results are
+%              stored in cache and can be downloaded.
 %
-%   demo_breebaart2001('N0Spi') :::
+%     'fast': The threshold as the result of one experimental run per bandwidth.
+%             The number of bandwidth values is half the number of values at the
+%             'exact' computation.  The fast computation is default.
+%
+%   demo_breebaart2001('N0Spi') shows :::
 %
 %      demo_breebaart2001('N0Spi');
 %
-%      N0Spi thresholds  as a function of the masker bandwidth for a center
-%      frequency of 4000 Hz and lbr, b and lr conditions in comparison with
-%      the model results of Breebaart et al. (2001b).
+%   N0Spi thresholds  as a function of the masker bandwidth for a center
+%   frequency of 4000 Hz and lbr, b and lr conditions in comparison with
+%   the model results of Breebaart et al. (2001b).
 %
 %
-%   demo_breebaart2001('N0S0') :::
+%   demo_breebaart2001('N0S0') shows :::
 %
 %      demo_breebaart2001('N0S0');
 %
-%      N0S0 thresholds  as a function of the masker bandwidth for a center
-%      frequency of 4000 Hz and lbr and lBr conditions in comparison with
-%      experimental results of van de Par and Kohlrausch (1999).
+%   N0S0 thresholds  as a function of the masker bandwidth for a center
+%   frequency of 4000 Hz and lbr and lBr conditions in comparison with
+%   experimental results of van de Par and Kohlrausch (1999).
 %
 %
-%   demo_breebaart2001('NpiS0') :::
+%   demo_breebaart2001('NpiS0') shows :::
 %
 %      demo_breebaart2001('NpiS0');
 %
-%      NpiS0 thresholds  as a function of the masker bandwidth for a center
-%      frequency of 4000 Hz and lbr, b and lr conditions in comparison with
-%      the model results of Breebaart et al. (2001b).
+%   NpiS0 thresholds  as a function of the masker bandwidth for a center
+%   frequency of 4000 Hz and lbr, b and lr conditions in comparison with
+%   the model results of Breebaart et al. (2001b).
 % 
 %
-%   See also: breebaart2001centralproc breebaart2001preprocbimono
+%   See also: breebaart2001centralproc breebaart2001preproc
 %   breebaart2001siggen
 %
 %   References: breebaart2001b van1999dependence
@@ -116,47 +118,51 @@ if flags.do_fast
         centralprocstring = {'lbr','b','lr'};
         nl = 65;
 
-        % loop for all centralprocstring conditions.
-        for stringcount = 1:length(centralprocstring)
+		output = amtcache('get','N0Spi_fast',flags.cachemode);		
+		if isempty(output)
+			% loop for all centralprocstring conditions.
+			for stringcount = 1:length(centralprocstring)
 
-            % set decision parameters
-            decisionset = {'name','breebaart2001centralproc',...
-                'input1','modelout','input2','modelout','input3',...
-                'modelout','input4',centralprocstring{stringcount}};
-            parout = amtafcexp('decisioninit',parout,decisionset);
-            
-            resultbwvec = zeros(1,1);
-            resultvec = zeros(5,1);
-            
-            %loop for all bandwidths
-            for bwcount = 1:length(bw)
+				% set decision parameters
+				decisionset = {'name','breebaart2001centralproc',...
+					'input1','modelout','input2','modelout','input3',...
+					'modelout','input4',centralprocstring{stringcount}};
+				parout = amtafcexp('decisioninit',parout,decisionset);
+				
+				resultbwvec = zeros(1,1);
+				resultvec = zeros(5,1);
+				
+				%loop for all bandwidths
+				for bwcount = 1:length(bw)
 
-                % set signal parameters
-                %input3 = signallevel; input4 = signalduration;
-                %input5 = signalphase; input7 = noiselevel;
-                %input8 = noiseduration; input9 = noisephase;
-                %input10 = hanning ramp duration; input11 = fs;
-                signalset = {'name','breebaart2001siggen','input1',...
-                    'inttyp', 'input2',centerfreq,'input3',...
-                    'expvar','input4',0.15,'input5',pi,'input6',...
-                    bw(bwcount),'input7',nl,'input8',0.2,'input9',0,...
-                    'input10',0.025,'input11', 32000};
-                parout = amtafcexp('signalinit',parout,signalset);
+					% set signal parameters
+					%input3 = signallevel; input4 = signalduration;
+					%input5 = signalphase; input7 = noiselevel;
+					%input8 = noiseduration; input9 = noisephase;
+					%input10 = hanning ramp duration; input11 = fs;
+					signalset = {'name','breebaart2001siggen','input1',...
+						'inttyp', 'input2',centerfreq,'input3',...
+						'expvar','input4',0.15,'input5',pi,'input6',...
+						bw(bwcount),'input7',nl,'input8',0.2,'input9',0,...
+						'input10',0.025,'input11', 32000};
+					parout = amtafcexp('signalinit',parout,signalset);
 
-                result = amtafcexp('run',parout);
-                resultbwvec(1) = result(1)-nl;
+					result = amtafcexp('run',parout);
+					resultbwvec(1) = result(1)-nl;
 
-                resultvec(bwcount) = resultbwvec;
-                resultbwvec = zeros(1,1);
-                amtdisp(sprintf(['Progress for central processor condition ' ...
-                    centralprocstring{stringcount} ':' num2str(round(bwcount/length(bw)*100)) ...
-                    '%% calculated']),'progress');
+					resultvec(bwcount) = resultbwvec;
+					resultbwvec = zeros(1,1);
+					amtdisp(sprintf(['Progress for central processor condition ' ...
+						centralprocstring{stringcount} ':' num2str(round(bwcount/length(bw)*100)) ...
+						'%% calculated']),'progress');
 
-                result_temp =sprintf(['N0Spi4000' centralprocstring{stringcount}]);
-                output.(result_temp) = resultvec;
+					result_temp =sprintf(['N0Spi4000' centralprocstring{stringcount}]);
+					output.(result_temp) = resultvec;
 
-            end
-        end
+				end
+			end
+			amtcache('set','N0Spi_fast',output);
+		end
 
         N0Spi4000lbr = output.N0Spi4000lbr;
         N0Spi4000b = output.N0Spi4000b;
@@ -205,50 +211,54 @@ if flags.do_fast
         centralprocstring = {'lbr', 'lBr'};
         nl = 70;
 
-        % loop for all centralprocstring conditions.
-        for stringcount = 1:length(centralprocstring)
+		output = amtcache('get','N0S0_fast',flags.cachemode);		
+		if isempty(output)
+			% loop for all centralprocstring conditions.
+			for stringcount = 1:length(centralprocstring)
 
-            % set decision parameters
-            decisionset = {'name','breebaart2001centralproc',...
-                'input1','modelout','input2','modelout','input3',...
-                'modelout','input4',centralprocstring{stringcount}};
-            parout = amtafcexp('decisioninit',parout,decisionset);
-            
-            resultbwvec = zeros(1,1);
-            resultvec = zeros(5,1);
+				% set decision parameters
+				decisionset = {'name','breebaart2001centralproc',...
+					'input1','modelout','input2','modelout','input3',...
+					'modelout','input4',centralprocstring{stringcount}};
+				parout = amtafcexp('decisioninit',parout,decisionset);
+				
+				resultbwvec = zeros(1,1);
+				resultvec = zeros(5,1);
 
-            %loop for all bandwidths
-            for bwcount = 1:length(bw)
+				%loop for all bandwidths
+				for bwcount = 1:length(bw)
 
-                % set signal parameters
-                %input3 = signallevel; input4 = signalduration;
-                %input5 = signalphase; input7 = noiselevel;
-                %input8 = noiseduration; input9 = noisephase;
-                %input10 = hanning ramp duration; input11 = fs;
-                signalset = {'name','breebaart2001siggen','input1',...
-                    'inttyp', 'input2',centerfreq,'input3',...
-                    'expvar','input4',0.15,'input5',0,'input6',...
-                    bw(bwcount),'input7',nl,'input8',0.2,'input9',0,...
-                    'input10',0.025,'input11', 32000};
-                parout = amtafcexp('signalinit',parout,signalset);
+					% set signal parameters
+					%input3 = signallevel; input4 = signalduration;
+					%input5 = signalphase; input7 = noiselevel;
+					%input8 = noiseduration; input9 = noisephase;
+					%input10 = hanning ramp duration; input11 = fs;
+					signalset = {'name','breebaart2001siggen','input1',...
+						'inttyp', 'input2',centerfreq,'input3',...
+						'expvar','input4',0.15,'input5',0,'input6',...
+						bw(bwcount),'input7',nl,'input8',0.2,'input9',0,...
+						'input10',0.025,'input11', 32000};
+					parout = amtafcexp('signalinit',parout,signalset);
 
-                result = amtafcexp('run',parout);
-                resultbwvec(1) = result(1)-nl;
+					result = amtafcexp('run',parout);
+					resultbwvec(1) = result(1)-nl;
 
-                resultvec(bwcount) = resultbwvec;
-                resultbwvec = zeros(1,1);
+					resultvec(bwcount) = resultbwvec;
+					resultbwvec = zeros(1,1);
 
 
-                amtdisp(sprintf(['Progress for central processor condition ' ...
-                    centralprocstring{stringcount} ': ' ...
-                    num2str(round(bwcount/length(bw)*100)) ...
-                    '%% calculated']),'progress');
+					amtdisp(sprintf(['Progress for central processor condition ' ...
+						centralprocstring{stringcount} ': ' ...
+						num2str(round(bwcount/length(bw)*100)) ...
+						'%% calculated']),'progress');
 
-                result_temp =sprintf(['N0S04000' centralprocstring{stringcount}]);
-                output.(result_temp) = resultvec;
+					result_temp =sprintf(['N0S04000' centralprocstring{stringcount}]);
+					output.(result_temp) = resultvec;
 
-            end
-        end
+				end
+			end
+			amtcache('set','N0S0_fast',output);
+		end
         N0S04000lbr = output.N0S04000lbr;
         N0S04000lBr = output.N0S04000lBr;
         
@@ -292,50 +302,54 @@ if flags.do_fast
         centralprocstring = {'lbr','b','lr'};
         nl = 70;
 
-        % loop for all centralprocstring conditions.
-        for stringcount = 1:length(centralprocstring)
+		output = amtcache('get','NpiS0_fast',flags.cachemode);		
+		if isempty(output)
+			% loop for all centralprocstring conditions.
+			for stringcount = 1:length(centralprocstring)
 
-            % set decision parameters
-            decisionset = {'name','breebaart2001centralproc',...
-                'input1','modelout','input2','modelout','input3',...
-                'modelout','input4',centralprocstring{stringcount}};
-            parout = amtafcexp('decisioninit',parout,decisionset);
-            
-            resultbwvec = zeros(1,1);
-            resultvec = zeros(5,1);
+				% set decision parameters
+				decisionset = {'name','breebaart2001centralproc',...
+					'input1','modelout','input2','modelout','input3',...
+					'modelout','input4',centralprocstring{stringcount}};
+				parout = amtafcexp('decisioninit',parout,decisionset);
+				
+				resultbwvec = zeros(1,1);
+				resultvec = zeros(5,1);
 
-            %loop for all bandwidths
-            for bwcount = 1:length(bw)
+				%loop for all bandwidths
+				for bwcount = 1:length(bw)
 
-                % set signal parameters
-                %input3 = signallevel; input4 = signalduration;
-                %input5 = signalphase; input7 = noiselevel;
-                %input8 = noiseduration; input9 = noisephase;
-                %input10 = hanning ramp duration; input11 = fs;
-                signalset = {'name','breebaart2001siggen','input1',...
-                    'inttyp', 'input2',centerfreq,'input3',...
-                    'expvar','input4',0.15,'input5',0,'input6',...
-                    bw(bwcount),'input7',nl,'input8',0.2,'input9',pi,...
-                    'input10',0.025,'input11', 32000};
-                parout = amtafcexp('signalinit',parout,signalset);
-                
-                result = amtafcexp('run',parout);
-                resultbwvec(1) = result(1)-nl;
+					% set signal parameters
+					%input3 = signallevel; input4 = signalduration;
+					%input5 = signalphase; input7 = noiselevel;
+					%input8 = noiseduration; input9 = noisephase;
+					%input10 = hanning ramp duration; input11 = fs;
+					signalset = {'name','breebaart2001siggen','input1',...
+						'inttyp', 'input2',centerfreq,'input3',...
+						'expvar','input4',0.15,'input5',0,'input6',...
+						bw(bwcount),'input7',nl,'input8',0.2,'input9',pi,...
+						'input10',0.025,'input11', 32000};
+					parout = amtafcexp('signalinit',parout,signalset);
+					
+					result = amtafcexp('run',parout);
+					resultbwvec(1) = result(1)-nl;
 
-                resultvec(bwcount) = resultbwvec;
-                resultbwvec = zeros(1,1);
+					resultvec(bwcount) = resultbwvec;
+					resultbwvec = zeros(1,1);
 
 
-                amtdisp(sprintf(['Progress for central processor condition ' ...
-                    centralprocstring{stringcount} ': ' ...
-                    num2str(round(bwcount/length(bw)*100)) ...
-                    '%% calculated']),'progress');
+					amtdisp(sprintf(['Progress for central processor condition ' ...
+						centralprocstring{stringcount} ': ' ...
+						num2str(round(bwcount/length(bw)*100)) ...
+						'%% calculated']),'progress');
 
-                result_temp =sprintf(['NpiS01000' centralprocstring{stringcount}]);
-                output.(result_temp) = resultvec;
+					result_temp =sprintf(['NpiS01000' centralprocstring{stringcount}]);
+					output.(result_temp) = resultvec;
 
-            end
-        end
+				end
+			end
+			amtcache('set','NpiS0_fast',output);
+		end
 
         NpiS01000lbr = output.NpiS01000lbr;
         NpiS01000b = output.NpiS01000b;
