@@ -176,7 +176,7 @@ if flags.do_fast
         set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
         axis([4 5000 -35 20])
         hold on;
-        plot(bw_demo,N0Spi4000b,'-og','MarkerSize',10);
+        plot(bw_demo,N0Spi4000b,'-o','MarkerSize',10,'Color',[0,0.7,1]);
         plot(bw_demo,N0Spi4000lr,'-dc','MarkerSize',10);
         plot(bw_model,N0Spimodeldata4000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
         xlabel('Masker Bandwidth [Hz]');
@@ -264,8 +264,8 @@ if flags.do_fast
         set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
         axis([4 5000 -15 10])
         hold on;
-        plot(bw_demo,N0S04000lBr,'-og','MarkerSize',10);
-        plot(bw_model,N0S0expdata4000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw_demo,N0S04000lBr,'-o','MarkerSize',10,'Color',[0,0.7,1]);
+        plot(bw_model,N0S0expdata4000,'-sg','MarkerSize',10,'MarkerFaceColor','r');
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N [dB]');
         legend('N0S0 condition lbr','N0S0 condition lBr','experimental data from van de Paar and Kohlrausch (1999)')
@@ -355,9 +355,9 @@ if flags.do_fast
         set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
         axis([4 5000 -30 10])
         hold on;
-        plot(bw_demo,NpiS01000b,'-og','MarkerSize',10);
+        plot(bw_demo,NpiS01000b,'-o','MarkerSize',10,'Color',[0,0.7,1]);
         plot(bw_demo,NpiS01000lr,'-dc','MarkerSize',10);
-        plot(bw_model,NpiS0modeldata1000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw_model,NpiS0modeldata1000,'-sg','MarkerSize',10,'MarkerFaceColor','g');
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N [dB]');
         legend({'NpiS0 condition lbr','NpiS0 condition b',...
@@ -456,7 +456,7 @@ elseif flags.do_exact
         set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
         axis([4 5000 -35 20])
         hold on;
-        errorbar(bw,N0Spi4000b(:,1),N0Spi4000b(:,2),'-og','MarkerSize',10);
+        errorbar(bw,N0Spi4000b(:,1),N0Spi4000b(:,2),'-o','MarkerSize',10,'Color',[0,0.7,1]);
         errorbar(bw,N0Spi4000lr(:,1),N0Spi4000lr(:,2),'-dc','MarkerSize',10);
         plot(bw,N0Spimodeldata4000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
         xlabel('Masker Bandwidth [Hz]');
@@ -552,8 +552,8 @@ elseif flags.do_exact
         set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
         axis([4 5000 -15 10])
         hold on;
-        errorbar(bw,N0S04000lBr(:,1),N0S04000lBr(:,2),'-og','MarkerSize',10);
-        plot(bw,N0S0expdata4000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
+        errorbar(bw,N0S04000lBr(:,1),N0S04000lBr(:,2),'-o','MarkerSize',10,'Color',[0,0.7,1]);
+        plot(bw,N0S0expdata4000,'-sg','MarkerSize',10,'MarkerFaceColor','g');
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N [dB]');
         legend('N0S0 condition lbr','N0S0 condition lBr','experimental data from van de Paar and Kohlrausch (1999)')
@@ -647,7 +647,7 @@ elseif flags.do_exact
         set(gca,'XTick',[5 10 25 50 100 250 1000 4000]);
         axis([4 5000 -30 10])
         hold on;
-        errorbar(bw,NpiS01000b(:,1),NpiS01000b(:,2),'-og','MarkerSize',10);
+        errorbar(bw,NpiS01000b(:,1),NpiS01000b(:,2),'-o','MarkerSize',10,'Color',[0,0.7,1]);
         errorbar(bw,NpiS01000lr(:,1),NpiS01000lr(:,2),'-dc','MarkerSize',10);
         plot(bw,NpiS0modeldata1000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
         xlabel('Masker Bandwidth [Hz]');
