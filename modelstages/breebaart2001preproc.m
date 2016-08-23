@@ -19,15 +19,19 @@ function [ei_map,fc,outsigl,outsigr] = breebaart2001preproc(insig,fs,tau,ild,var
 %  
 %   `breebaart2001preproc(insig,fs,tau,ild)` computes the EI-cell
 %   representation of the signal *insig* sampled with a frequency of *fs*
-%   Hz as described in Breebaart (2001) as well as the internal monaural 
-%   representation of the signal *insig* sampled with a frequency of *fs* 
-%   Hz. The parameters *tau* and *ild* define the sensitivity of the EI-cell.
+%   Hz as described in Breebaart (2001) of the signal *insig* sampled with 
+%   a frequency of *fs* Hz. The parameters *tau* and *ild* define the 
+%   sensitivity of the EI-cell.
 %
 %   The input must have dimensions time $\times $ left/right channel
 %   $\times $ signal no.
 % 
-%   `[ei_map,fc,ml,mr,outsig]=breebaart2001preproc(...)` additionally 
+%   `[ei_map,fc]=breebaart2001preproc(...)` additionally 
 %   returns the center frequencies of the filter bank.
+%
+%   `[ei_map,fc,ml,mr]=breebaart2001preproc(...)` additionally 
+%   returns the center frequencies of the filter bank and the internal
+%   monaural representations.
 %  
 %   The Breebaart 2001 model consists of the following stages:
 %
