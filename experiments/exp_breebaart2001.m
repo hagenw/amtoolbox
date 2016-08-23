@@ -531,8 +531,9 @@ if flags.do_plot
         set(gca,'YDir','reverse')
         set(gca,'YTick',[-2 0 2]);
         set(gca,'ZTick',[0 0.2 0.4]);
-%         colorbar('Ticks',[0,0.1 0.2 0.3 0.4]);
-        caxis([0 0.4])
+        hcb1=colorbar;
+        caxis([0 0.4]);
+        set(hcb1,'YTick',[0:0.1:0.4]);
         grid off
         view(-53,28)
         
@@ -546,8 +547,9 @@ if flags.do_plot
         set(gca,'YDir','reverse')
         set(gca,'YTick',[-2 0 2]);
         set(gca,'ZTick',[0 0.1 0.2]);
-%         colorbar('Ticks',[0 0.05 0.1 0.15 0.2]);
-        caxis([0 0.2])
+        hcb2 = colorbar;
+        caxis([0 0.2]);
+        set(hcb2,'YTick',[0:0.05:0.2]);
         grid off
         view(-53,28)
         
