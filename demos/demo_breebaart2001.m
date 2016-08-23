@@ -278,7 +278,7 @@ if flags.do_fast
         plot(bw_model,N0S0expdata4000,'-sg','MarkerSize',10,'MarkerFaceColor','r');
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N [dB]');
-        legend('N0S0 condition lbr','N0S0 condition lBr','experimental data from van de Paar and Kohlrausch (1999)')
+        legend('N0S0 condition lbr','N0S0 condition lBr','experimental data from van de Par and Kohlrausch (1999)')
         title('N0S0 4000 Hz thresholds: monaural factor = 0.0003 - fast computation')
         
         
@@ -570,7 +570,7 @@ elseif flags.do_exact
         plot(bw,N0S0expdata4000,'-sg','MarkerSize',10,'MarkerFaceColor','g');
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N [dB]');
-        legend('N0S0 condition lbr','N0S0 condition lBr','experimental data from van de Paar and Kohlrausch (1999)')
+        legend('N0S0 condition lbr','N0S0 condition lBr','experimental data from van de Par and Kohlrausch (1999)')
         title('N0S0 4000 Hz thresholds: monaural factor = 0.0003')
 
 
