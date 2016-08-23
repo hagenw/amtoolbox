@@ -4,7 +4,7 @@ function decision = breebaart2001centralproc(EI_map,monol,monor,bimonostring,mon
 %          decision = breebaart2001centralproc(EI_map,monol,monor,bimonostring,monofactor);
 %
 %   Input parameters:
-%        EI_map         : ei_cell representation of the signal
+%        EI_map         : binaural representation of the signal (from eicell)
 %        monol          : internal representation of the left ear signal
 %        monor          : internal representation of the right ear signal
 %        bimonostring   : defines which representations are used for the decision
@@ -13,9 +13,9 @@ function decision = breebaart2001centralproc(EI_map,monol,monor,bimonostring,mon
 %  
 %   Output parameters:
 %        decision       : index of the estimated target
-%
-%   `breebaart2001centralproc(EI_map,monol,monor,bimonostring,monofactor)`
-%   serves as a artificial observer for signal detection purposes. The
+%   
+%   `breebaart2001centralproc(EI_map,monol,monor,bimonostring,monofactor)` serves
+%   as an artificial observer for signal detection purposes. The
 %   central processor develops a template which consists of the average
 %   internal representation of all masker-alone intervals and its variance.
 %   Furthermore the average signal interval and the average distance 
@@ -25,14 +25,24 @@ function decision = breebaart2001centralproc(EI_map,monol,monor,bimonostring,mon
 %   Thus, in a 3-IFC procedure the model will choose the interval with the 
 %   highest value of U. After each trial the model recieves feedback and
 %   stores the avaluated intervals in the templates. 
-%
-%   'bimonostring' can contain the following characters:
-%       'l'     take left mono channel (monol) for decision
-%       'b'     take binaural channel (ei-cell) for decision
-%       'B'     take binaural channel even if it is zero (e.g. N0S0 condition)
-%       'r'     take right mono channel (monor) for decision
+%   
+%   The parameter *bimonostring* must contain characters indicating which 
+%   channels are used for the decision:
+%   
+%       'l'     use left mono channel (from *monol*)
+%   
+%       'r'     use right mono channel (from *monor*)
+%   
+%       'b'     use binaural channel (from *EI_map* ) only if the binaural representation
+%               yield a non-zero decision distance
+%   
+%       'B'     use binaural channel in any case
+%   
+%   
+%   See also: exp_breebaart2001 demo_breebaart2001 breebaart2001preproc eicell
 %
 %   References: breebaart2001a
+%
 
 %   AUTHOR : Martina Kreuzbichler
 

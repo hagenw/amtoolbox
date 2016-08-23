@@ -17,6 +17,11 @@ function [outsig, obj] = hohmann2002process(obj, insig)
 %                rows correspond to the filter bands.
 %     obj      : The original object with updated filter states.
 %
+%   See also: exp_hohmann2002 demo_hohmann2002
+%
+%   References: hohmann2002
+
+%
 
 % author   : Universitaet Oldenburg, tp (Jan 2002, Jan, Sep 2003, Nov 2006, Jan 2007)
 % Adapted to AMT (PM, Jan 2016) from function gfb_*_process

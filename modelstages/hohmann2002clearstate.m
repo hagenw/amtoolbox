@@ -1,5 +1,5 @@
 function obj = hohmann2002clearstate(obj)
-%HOHMANN2002  Reset states of hohmann2002 filters
+%HOHMANN2002CLEARSTATE  Reset states of hohmann2002 filters
 %   Usage: filter = hohmann2002clearstate(filter)
 %          fb = hohmann2002clearstate(fb)
 %

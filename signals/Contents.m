@@ -18,6 +18,7 @@
 %
 %  Binaural test signals
 %    COMPETINGTALKERS - Several different competing talker signal
+%    BREEBAART2001SIGGEN - Generates a binaural signals with narrow-band noise 
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

@@ -20,6 +20,10 @@ function h = hohmann2002freqz(obj, z)
 %     h       : The complex frequency response at z. Each column represents
 %               a response of a filter.
 %
+%   See also: exp_hohmann2002 demo_hohmann2002
+%
+%   References: hohmann2002
+%
 
 % author   : Universitaet Oldenburg, tp (Jan & Nov 2006, Jan Feb 2007)
 % Adapted to AMT (PM, Jan 2016) from functions gfb_*_zresponse

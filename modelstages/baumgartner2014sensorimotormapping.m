@@ -1,6 +1,5 @@
 function [ri,rang] = baumgartner2014sensorimotormapping(si,varargin)
-%BAUMGARTNER2014SENSORIMOTORMAPPING - Response scatter induced by
-%localization task
+%BAUMGARTNER2014SENSORIMOTORMAPPING - Response scatter induced by localization task
 %   Usage:     [ri,rang] = baumgartner2014sensorimotormapping(si)
 %
 %   Input parameters:

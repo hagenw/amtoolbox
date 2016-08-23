@@ -54,7 +54,6 @@
 %  Binaural masking level differences from Breebaart et al. (2001)
 %     BREEBAART2001PREPROC  - Preprocessor of a binaural signal with EI-cell output
 %     BREEBAART2001CENTRALPROC - Central processor taking decision in an experiment
-%     BREEBAART2001SIGGEN - Generates signals required for an experiment
 % 
 %
 %  Sagittal-plane localization models

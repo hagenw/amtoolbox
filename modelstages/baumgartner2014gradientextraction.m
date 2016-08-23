@@ -1,6 +1,5 @@
 function [gp,gfc] = baumgartner2014gradientextraction(mp,fc,c2)
-%BAUMGARTNER2014GRADIENTEXTRACTION - Extraction of positive spectral
-%gradients
+%BAUMGARTNER2014GRADIENTEXTRACTION - Extraction of positive spectral gradients
 %   Usage:      [gp,gfc] = baumgartner2014gradientextraction(mp,fc)
 %
 %   Input parameters:
