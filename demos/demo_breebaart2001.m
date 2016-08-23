@@ -107,9 +107,9 @@ if flags.do_fast
 
         % set model parameters
         % input2 = fs; input3 = tau; input4 = ild; 
-        modelset = {'name','breebaart2001preprocbimono','input1',...
+        modelset = {'name','breebaart2001preproc','input1',...
             'expsignal', 'input2',32000,'input3',0,'input4',0,...
-            'outputs',[1 2 3]};
+            'outputs',[1 3 4]};
         parout = amtafcexp('modelinit',parout,modelset);
 
         % run model
@@ -200,9 +200,9 @@ if flags.do_fast
 
         % set model parameters
         % input2 = fs; input3 = tau; input4 = ild; 
-        modelset = {'name','breebaart2001preprocbimono','input1',...
+        modelset = {'name','breebaart2001preproc','input1',...
             'expsignal', 'input2',32000,'input3',0,'input4',0,...
-            'outputs',[1 2 3]};
+            'outputs',[1 3 4]};
         parout = amtafcexp('modelinit',parout,modelset);
 
         % run model
@@ -275,7 +275,7 @@ if flags.do_fast
         axis([4 5000 -15 10])
         hold on;
         plot(bw_demo,N0S04000lBr,'-o','MarkerSize',10,'Color',[0,0.7,1]);
-        plot(bw_model,N0S0expdata4000,'-sg','MarkerSize',10,'MarkerFaceColor','r');
+        plot(bw_model,N0S0expdata4000,'-sg','MarkerSize',10,'MarkerFaceColor','g');
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N [dB]');
         legend('N0S0 condition lbr','N0S0 condition lBr','experimental data from van de Par and Kohlrausch (1999)')
@@ -291,9 +291,9 @@ if flags.do_fast
 
         % set model parameters
         % input2 = fs; input3 = tau; input4 = ild; 
-        modelset = {'name','breebaart2001preprocbimono','input1',...
+        modelset = {'name','breebaart2001preproc','input1',...
             'expsignal', 'input2',32000,'input3',0.0005,'input4',0,...
-            'outputs',[1 2 3]};
+            'outputs',[1 3 4]};
         parout = amtafcexp('modelinit',parout,modelset);
 
         % run model
@@ -371,7 +371,7 @@ if flags.do_fast
         hold on;
         plot(bw_demo,NpiS01000b,'-o','MarkerSize',10,'Color',[0,0.7,1]);
         plot(bw_demo,NpiS01000lr,'-dc','MarkerSize',10);
-        plot(bw_model,NpiS0modeldata1000,'-sg','MarkerSize',10,'MarkerFaceColor','g');
+        plot(bw_model,NpiS0modeldata1000,'-sr','MarkerSize',10,'MarkerFaceColor','r');
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N [dB]');
         legend({'NpiS0 condition lbr','NpiS0 condition b',...
@@ -396,9 +396,9 @@ elseif flags.do_exact
 
             % set model parameters
             % input2 = fs; input3 = tau; input4 = ild; 
-            modelset = {'name','breebaart2001preprocbimono','input1',...
+            modelset = {'name','breebaart2001preproc','input1',...
                 'expsignal', 'input2',32000,'input3',0,'input4',0,...
-                'outputs',[1 2 3]};
+                'outputs',[1 3 4]};
             parout = amtafcexp('modelinit',parout,modelset);
 
             % run model
@@ -492,9 +492,9 @@ elseif flags.do_exact
 
             % set model parameters
             % input2 = fs; input3 = tau; input4 = ild; 
-            modelset = {'name','breebaart2001preprocbimono','input1',...
+            modelset = {'name','breebaart2001preproc','input1',...
                 'expsignal', 'input2',32000,'input3',0,'input4',0,...
-                'outputs',[1 2 3]};
+                'outputs',[1 3 4]};
             parout = amtafcexp('modelinit',parout,modelset);
 
             % run model
@@ -587,9 +587,9 @@ elseif flags.do_exact
 
             % set model parameters
             % input2 = fs; input3 = tau; input4 = ild; 
-            modelset = {'name','breebaart2001preprocbimono','input1',...
+            modelset = {'name','breebaart2001preproc','input1',...
                 'expsignal', 'input2',32000,'input3',0.0005,'input4',0,...
-                'outputs',[1 2 3]};
+                'outputs',[1 3 4]};
             parout = amtafcexp('modelinit',parout,modelset);
 
             % run model
