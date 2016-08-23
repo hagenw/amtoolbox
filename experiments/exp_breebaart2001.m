@@ -252,18 +252,18 @@ elseif flags.do_bfig3
         parout = [];
         expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,'expvarsteprule',[0.5 2],...
             'stepmin',[1 8],'expvarstart',65};
-        parout = amtafcexp('expinit',parout,expset);
+        parout = emuafcexp('expinit',parout,expset);
         
         % input2 = fs; input3 = tau; input4 = ild; 
         modelset = {'name','breebaart2001preproc','input1',...
             'expsignal', 'input2',32000,'input3',0,'input4',0,...
             'outputs',[1 3 4]};
-        parout = amtafcexp('modelinit',parout,modelset);
+        parout = emuafcexp('modelinit',parout,modelset);
         
         decisionset = {'name','breebaart2001centralproc','input1',...
             'modelout','input2','modelout', 'input3','modelout',...
             'input4','lbr'};
-        parout = amtafcexp('decisioninit',parout,decisionset);
+        parout = emuafcexp('decisioninit',parout,decisionset);
 
         centerfreq = [125 250 500 1000 2000 4000];
         bw = [5 10 25 50 100 250];
@@ -285,11 +285,11 @@ elseif flags.do_bfig3
                     'expvar','input4',0.3,'input5',pi,'input6',...
                     bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
                     'input10',0.05,'input11', 32000};
-                parout = amtafcexp('signalinit',parout,signalset);
+                parout = emuafcexp('signalinit',parout,signalset);
 
                 % loop for experimental runs
                 for runcounter = 1:6
-                    result = amtafcexp('run',parout);
+                    result = emuafcexp('run',parout);
                     resultbwvec(runcounter) = result(1)-nl;
                 end
 
@@ -337,12 +337,12 @@ elseif flags.do_bfig6
         parout = [];
         expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,'expvarsteprule',[0.5 2],...
             'stepmin',[1 8],'expvarstart',85};
-        parout = amtafcexp('expinit',parout,expset);
+        parout = emuafcexp('expinit',parout,expset);
 
         decisionset = {'name','breebaart2001centralproc','input1',...
             'modelout','input2','modelout', 'input3','modelout',...
             'input4','lbr'};
-        parout = amtafcexp('decisioninit',parout,decisionset);
+        parout = emuafcexp('decisioninit',parout,decisionset);
 
         centerfreq = [125 250 500 1000];
         bw = [5 10 25 50 100 250];
@@ -357,7 +357,7 @@ elseif flags.do_bfig6
             modelset = {'name','breebaart2001preproc','input1',...
                 'expsignal','input2',32000,'input3',tau(freqcount),...
                 'input4',0,'outputs',[1 3 4]};
-            parout = amtafcexp('modelinit',parout,modelset);
+            parout = emuafcexp('modelinit',parout,modelset);
 
             %loop for all bandwidths
             for bwcount = 1:length(bw)
@@ -371,11 +371,11 @@ elseif flags.do_bfig6
                     'expvar','input4',0.3,'input5',pi,'input6',...
                     bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
                     'input10',0.05,'input11', 32000};
-                parout = amtafcexp('signalinit',parout,signalset);
+                parout = emuafcexp('signalinit',parout,signalset);
 
                 % loop for experimental runs
                 for runcounter = 1:6
-                    result = amtafcexp('run',parout);
+                    result = emuafcexp('run',parout);
                     resultbwvec(runcounter) = result(1)-nl;
                 end
 
@@ -418,18 +418,18 @@ elseif flags.do_fig1_N0S0_vandepar1999
         parout = [];
         expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
             'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',90};
-        parout = amtafcexp('expinit',parout,expset);
+        parout = emuafcexp('expinit',parout,expset);
         
         % input2 = fs; input3 = tau; input4 = ild; 
         modelset = {'name','breebaart2001preproc','input1',...
             'expsignal', 'input2',32000,'input3',0,'input4',0,...
             'outputs',[1 3 4]};
-        parout = amtafcexp('modelinit',parout,modelset);
+        parout = emuafcexp('modelinit',parout,modelset);
         
         decisionset = {'name','breebaart2001centralproc','input1',...
             'modelout','input2','modelout', 'input3','modelout',...
             'input4','lbr'};
-        parout = amtafcexp('decisioninit',parout,decisionset);
+        parout = emuafcexp('decisioninit',parout,decisionset);
 
         centerfreq = [125 250 500 1000 2000 4000];
         bw = [5 10 25 50 100 250];
@@ -451,11 +451,11 @@ elseif flags.do_fig1_N0S0_vandepar1999
                     'expvar','input4',0.3,'input5',0,'input6',...
                     bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
                     'input10',0.05,'input11', 32000};
-                parout = amtafcexp('signalinit',parout,signalset);
+                parout = emuafcexp('signalinit',parout,signalset);
 
                 % loop for experimental runs
                 for runcounter = 1:6
-                    result = amtafcexp('run',parout);
+                    result = emuafcexp('run',parout);
                     resultbwvec(runcounter) = result(1)-nl;
                 end
 

@@ -1,139 +1,121 @@
-function [out, par] = amtafcexp(command,par,varargin)
-%AMTAFCEXP Runs experimental procedure for alternative forced choice experiments
-% 
-%   `par = amtafcexp(init_command,par)` initializes a psychoacoustic experiment
-%   emulated with a model. Currently various alternative forced-choice (AFC) experiments
-%   are supported. 
+function [out, par] = emuafcexp(command,par,varargin)
+%EMUAFCEXP Emulates alternative forced-choice (AFC) experiments
+%   Usage:   par = emuafcexp(command,par);
+%     [out,par] = emuafcexp('run',par);
+%     [out, par] = emuafcexp('run',par,'plot');
 %
-%   `out = amtafcexp('run',par)` runs the psychoacoustic experiment defined 
-%   in the structure *par* and outputs the experiment in *out*.
-%
-%   `[out, par] = amtafcexp('run',par)` runs the experiment and outputs 
-%   more details on the experiment parameters in *par*.
-%
-%
-%   Usage:   par = amtafcexp(command,par,varargin);
-%     [out,par] = amtafcexp('run',par,varargin);
-% 
 %   Input parameters:
-%       command:  One of the following commands:
-%           'expinit':      intialize general experiment parameters
-%           'signalinit':   intialize signal (=model input) parameters
-%           'modelinit':    intialize model parameters
-%           'decisioninit': intialize decision parameters
-%           'run':          runs the experiment and lets the model decide
-%
-%       par:        struct of already set experimental parameters
-%                   If no parameters are set, define par as []
+%     command  : One of the following commands. `'expinit'` intializes the
+%                general experiment parameters. `'signalinit'` intializes 
+%                the signal generator creating model inputs. `'modelinit'`
+%                intializes model parameters. `'decisioninit'` intializes
+%                the parameters of the decision stage in the experiment.
+%                Finally, `'run'` runs the experiment and lets the model decide.
+%     par      : Structure of the experimental parameters used by `emuafcexp`. 
+%                Set to `[]` on the first call (when `par` is not set up yet).
 %
 %   Output parameters:
-%       par:    structure containing all parameters
-%       out:    vector with the experiment output. 
-%           out(:,1):     average threshold of the experimental variable 
-%           out(:,2):     the standard deviation of the variable across all runs
-%           out(:,3:end): individual experimental variables used in each trial 
+%     par   : Structure containing all parameters
+%     out   : Vector with the experiment output. `out(:,1)` is the average threshold of the
+%             experimental variable. `out(:,2)` is the standard deviation of the variable
+%             across all runs. `out(:,3:end)` provides the individual experimental variables
+%             used in each trial.
 %
+%   `par = emuafcexp(init_command,par)` initializes the various parts of the 
+%   psychoacoustic experiment to be emulated depending on `init_command`. 
+%   
+%   `out = emuafcexp('run',par)` runs the experiment defined 
+%   by the structure `par` and outputs the experimental result in `out`.
+%   
+%   `[out, par] = emuafcexp('run',par)` runs the experiment and outputs 
+%   more details on the experiment parameters in `par`.
+%   
+%   `[out, par] = emuafcexp('run',par,'plot')` runs the experiment and
+%   plots the experiment progress.
 %
-%   `amtafcexp('expinit',par)` accepts the following parameters:
-%       'intnum',intnum                 number of intervals in intnum-afc
-%                                       e.g. 3: 3-afc
-%       'rule',[down up]                defines the down-up-rule
-%                                       e.g. [2 1]: 2 down, 1 up
-%       'expvarstart',expvarstart       stepsize at the beginning of the
-%                                       experiment
-%       'expvarsteprule',[change turns] change of stepsize after a number
-%                                       of turns
-%                                       e.g. [0.5 2]: half stepsize after
-%                                       two turns
-%       'stepmin',[min threshturn]      min = size of stepsize after which 
-%                                       another number of turns
-%                                       (= threshturn) are calculated. The
-%                                       median of these last turns is used
-%                                       as threshold.
-%                                       e.g. [1 8]: If stepsize is 1, 
-%                                       calculate another 8 reversals.
-%       'expvarstart',expvarstart       startvalue of the experimental
-%                                       variable
-%       All key-value pairs can be defined in a cell beforehand.
+%   Initialization
+%   --------------
 %
+%   Experiment
+%   **********
 %
-%   `amtafcexp('modelinit',par)` accepts the following parameters:
-%       'name',name         string which defines the name of the model
-%                           function
-%       'input1',intput1    input parameter needed for model call
-%       'input2',intput2    input parameter needed for model call
-%       'input3',intput3    input parameter needed for model call
-%       'input4',intput4    input parameter needed for model call
-%       'input5',intput5    input parameter needed for model call
-%       'input6',intput6    input parameter needed for model call
-%       'input7',intput7    input parameter needed for model call
-%       'input8',intput8    input parameter needed for model call
-%       'input9',intput9    input parameter needed for model call
-%       'input10',intput10  input parameter needed for model call
-%       'outputs',outputs   vector containing number of wanted modeloutputs 
-%                           e.g. [1 2 6]: output 1,2 and 6 wanted
-%       All key-value pairs can be defined in a cell beforehand.
+%   `par=emuafcexp('expinit',[],exp)` initilizes the experiment wiht key-value pairs provided
+%   in a cell array `exp`. The following pairs are required:
 %
-%       One of the input1 to input10 must contain the keyword 'expsignal'.
-%       This keyword is replaced in the 'run' routine with the output of
-%       the signal generation function
+%     'intnum',intnum                number of intervals in a trial,
+%                                    e.g. 3 sets up a 3-afc experiment.
 %
+%     'rule',down_up                 vector with down-up-rule
+%                                    e.g. [2 1] sets up a 2-down, 1-up experiment.
 %
-%   `amtafcexp('signalinit',par)` accepts the following parameters:
-%       'name',name         string which defines the name of the signal
-%                           generation
-%       'input1',intput1    input parameter needed for model call
-%       'input2',intput2    input parameter needed for model call
-%       'input3',intput3    input parameter needed for model call
-%       'input4',intput4    input parameter needed for model call
-%       'input5',intput5    input parameter needed for model call
-%       'input6',intput6    input parameter needed for model call
-%       'input7',intput7    input parameter needed for model call
-%       'input8',intput8    input parameter needed for model call
-%       'input9',intput9    input parameter needed for model call
-%       'input10',intput10  input parameter needed for model call
-%       'input11',intput11  input parameter needed for model call
-%       'input12',intput12  input parameter needed for model call
-%       'input13',intput13  input parameter needed for model call
-%       'input14',intput14  input parameter needed for model call
-%       'input15',intput15  input parameter needed for model call
-%       All key-value pairs can be defined in a cell beforehand.
+%     'expvarstart',expvarstart      step size of the experimental variable at the 
+%                                    beginning of the experiment
 %
-%       One of the input1 to input15 must contain the keyword 'inttyp'.
-%       This keyword is replaced in the 'run' routine with 'target' or
-%       'reference'
-%       One of the input1 to input15 must contain the keyword 'expvar'.
-%       This keyword is replaced in the first place with the value of 
-%       expvarstart and is changed during the experimental trial.
+%     'expvarsteprule',factor_turns  vector with a factor and number of turn arounds.
+%                                    The factor affects the step size of the experimental
+%                                    variable after the number of turn arounds, e.g. [0.5 2]
+%                                    multiplies the stepsize by 0.5 after two turn arounds.
 %
+%     'stepmin',min_threshturn       vector with minimal step size and number of turn arounds
+%                                    after reaching that minimal step size for the threshold
+%                                    calculation. E.g. [1 8] means that after reaching the
+%                                    step size 1, the experiment will continue for  %                                    another 8 reversals before terminating. 
 %
-%   `amtafcexp('decisioninit',par)` accepts the following parameters:
-%       'name',name         string which defines the name of the decision
-%                           fuction
-%       'input1',intput1    input parameter needed for model call
-%       'input2',intput2    input parameter needed for model call
-%       'input3',intput3    input parameter needed for model call
-%       'input4',intput4    input parameter needed for model call
-%       'input5',intput5    input parameter needed for model call
-%       'input6',intput6    input parameter needed for model call
-%       'input7',intput7    input parameter needed for model call
-%       'input8',intput8    input parameter needed for model call
-%       'input9',intput9    input parameter needed for model call
-%       'input10',intput10  input parameter needed for model call
-%       All key-value pairs can be defined in a cell beforehand.
+%   Signal generator
+%   ****************
 %
-%       All input1 to input10 which conain the keyword 'modelout' are
-%       replaced with the outputs of the model function during an
-%       experimental run. Therfore the number of inputs with the keyword
-%       'modelout' must be equal to number of 'outputs' defined in
-%       'modelinit'.
+%   `par=emuafcexp('signalinit',par,sig)` intializes the signal generator creating
+%   signals for the model with key-value pairs provided in the cell array `sig`. The signal
+%   generator is called with those parameters in each trial of the experiment.
+%   Up to 10 input parameters are supported. One of inputs must be 'inttyp': In each 
+%   experimental interval, this input will be replaced by 'target' or 'reference' 
+%   depending on the interval type. One of the inputs must be 'expvar': In each trial, 
+%   this input will be replaced by the value of the experimental variable. The 
+%   following pairs are required:
 %
-%   run the experiment with 'result = amtafcexp('run',par)'
-%   run 'result = amtafcexp('run',par,'plot')' to generate experimental plot
+%     'name',name         string which defines the name of the signal
+%                         generation
 %
-%   See also: exp_breebaart2001 demo_breebaart2001
+%     'inputX',inputX    input parameter X needed for the signal generator
 %
+%   Model called in each interval
+%   *****************************
 %
+%   `par=emuafcexp('modelinit',par,mod)` initializes the model called in each interval with 
+%   the key-value pairs provided in `mod`. 
+%   One of the input1 to input10 must contain the keyword 'expsignal'.
+%   This keyword is replaced in the 'run' routine with the output of
+%   the signal generation function:
+%
+%     'name',name         string which defines the name of the model
+%                         function
+%
+%     'inputX',intputX    input parameter X needed by the model
+%
+%     'outputs',outputs   indicies of used model outputs for the decision
+%                         e.g. [1 2 6]: output 1,2 and 6 used
+%
+%   Decision stage called in each trial
+%   ***********************************
+%
+%   `par=emuafcexp('decisioninit',par,dec)` initializes the decision stage of the experiment 
+%   with key-value pairs provided in `dec`. 
+%   All inputs containing the keyword 'modelout' are
+%   replaced with the outputs of the model function during an
+%   experimental run. Therefore the number of inputs with the keyword
+%   'modelout' must be equal to number of 'outputs' defined in
+%   'modelinit'. Following parameters are required:
+%
+%     'name',name         name of the decision fuction
+%     'inputX',intputX    input parameter X needed by the decision function
+%
+%   Running the experiment
+%   ----------------------
+%
+%   After the initialization, the experiment can be started by 
+%   `out = emuafcexp('run',par);`. The threshold will be in `out`. 
+%
+%   See also: exp_breebaart2001, demo_breebaart2001
 
 
 % AUTHOR: Martina Kreuzbichler
