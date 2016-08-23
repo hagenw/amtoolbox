@@ -1,8 +1,8 @@
 function data = data_vandepar1999(varargin)
-%DATA_VANDEPAR1999 Returns data points from the van de Paar and Kohlrausch (1999) paper
+%DATA_VANDEPAR1999 Returns data points from the van de Par and Kohlrausch (1999) paper
 %   Usage: data = data_vandepar1999(figure,nfc)
 %
-%   `data_vandepar1999(figure,nfc)` returns data from van de Paar and
+%   `data_vandepar1999(figure,nfc)` returns data from van de Par and
 %   Kohlrausch (1999)
 %
 %   The flags for the figure may be one of:
@@ -30,7 +30,7 @@ function data = data_vandepar1999(varargin)
 %   Examples:
 %   ---------
 % 
-%   To get data for the fig. 1 van de Paar and Kohlrausch (1999) for the 
+%   To get data for the fig. 1 van de Par and Kohlrausch (1999) for the 
 %   N0S0 condition with 125 Hz center frequency use :::
 %
 %     data_vandepar1999('fig1_N0S0','nfc125');
