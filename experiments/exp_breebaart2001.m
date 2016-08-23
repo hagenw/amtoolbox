@@ -513,7 +513,13 @@ if flags.do_plot
         xlabel('time [s]')
         ylabel('Output [MU]')
         text('Position',[0.1 7000],'string','4000 Hz tone')
-%         suptitle('Fig. 2 Output of the peripheral preprocessor')
+        
+        set(gcf,'NextPlot','add');
+        axes;
+        h = title('Fig. 2 Output of the peripheral preprocessor');
+        set(gca,'Visible','off');
+        set(h,'Visible','on'); 
+
         
     elseif flags.do_afig6
         
@@ -552,9 +558,14 @@ if flags.do_plot
         set(hcb2,'YTick',[0:0.05:0.2]);
         grid off
         view(-53,28)
-        
-%         suptitle('Fig. 6')
         set(gca,'LooseInset',get(gca,'TightInset'))
+        
+        set(gcf,'NextPlot','add');
+        axes;
+        h = title('Fig. 6');
+        set(gca,'Visible','off');
+        set(h,'Visible','on'); 
+
 
         
         
@@ -656,11 +667,16 @@ if flags.do_plot
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N [dB]');
 
-%         suptitle('Fig. 3 N0Spi Thresholds')
         legend({'modeled data SSL = 65 dB, NL 65 dB  - monaural factor = 0.0003',...
             'model data from Breebaart (2001)',...
             'experimental data from van de Paar and Kohlrausch (1999)'},...
-            'Position' ,[0.75,0.9,0.1,0.05]);
+            'Position' ,[0.75,0.943,0.1,0.04]);
+        set(gcf,'NextPlot','add');
+        axes;
+        h = title('Fig. 3 N0Spi Thresholds');
+        set(gca,'Visible','off');
+        set(h,'Visible','on'); 
+        
         
     elseif flags.do_bfig6
         
@@ -732,11 +748,15 @@ if flags.do_plot
         xlabel('Masker Bandwidth [Hz]');
         ylabel('Threshold S/N');
 
-%         suptitle('Fig. 6 NpiS0 Thresholds')
         legend({'modeled data SSL = 85 dB, NL 70 dB  - monaural factor = 0.0003',...
             'model data from Breebaart (2001)',...
             'experimental data from van de Paar and Kohlrausch (1999)'},...
-            'Position' ,[0.75,0.9,0.1,0.05]);
+            'Position' ,[0.75,0.943,0.1,0.04]);
+        set(gcf,'NextPlot','add');
+        axes;
+        h = title('Fig. 6 NpiS0 Thresholds');
+        set(gca,'Visible','off');
+        set(h,'Visible','on'); 
         
         
         
@@ -843,9 +863,12 @@ if flags.do_plot
         legend({'modeled data SSL = 90 dB, NL 70 dB  - monaural factor = 0.0003',...
             'experimental data from van de Paar and Kohlrausch (1999)'},...
             'Position' ,[p2(1)-p2(3)*0.2,0.15,0.1,0.05]);
-        
-%         suptitle('Fig. 1 N_0S_0 Thresholds')
-        
+        set(gcf,'NextPlot','add');
+        axes;
+        h = title('Fig. 1 N_0S_0 Thresholds');
+        set(gca,'Visible','off');
+        set(h,'Visible','on'); 
+           
     end
            
 end
