@@ -344,7 +344,7 @@ switch flag
 
             %set model outputs to decsion inputs
             for count = 1:modeloutvarcount-1
-                modeloutname = sprintf('par%i',count);
+                modeloutname = sprintf('par%i',par.model.outputs(count));
                 par.decision.(modeloutvar{count}) = modelout.(modeloutname);
             end
 
