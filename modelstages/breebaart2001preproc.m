@@ -1,38 +1,47 @@
-function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
-%BREEBAART2001PREPROC   Auditory model from Breebaart et. al. 2001
-%   Usage: [outsig, fc] = breebaart2001preproc(insig,fs);
-%          [outsig, fc] = breebaart2001preproc(insig,fs,...);
+function [ei_map,fc,outsigl,outsigr] = breebaart2001preproc(insig,fs,tau,ild,varargin)
+%BREEBAART2001PREPROC   Binaural and monoaural auditory model from Breebaart et. al. 2001
+%   Usage: [ei_map, fc, outsigl, outsigr] = breebaart2001preproc(insig,fs);
+%          [ei_map, fc, outsigl, outsigr] = breebaart2001preproc(insig,fs,...);
+%          [ei_map, fc] = breebaart2001preproc(insig,fs);
+%          [ei_map, fc] = breebaart2001preproc(insig,fs,...);
 %
 %   Input parameters:
 %        insig  : input acoustic signal.
 %        fs     : sampling rate.
 %        tau    : characteristic delay in seconds (positive: left is leading)
 %        ild    : characteristic ILD in dB (positive: left is louder)
+%
+%   Output parameters:
+%       ei_map  : EI-cell representation
+%       outsigl : internal monaural representation of the left ear
+%       outsigr : internal monarual respresnetaion of th right ear
+%       fc      : center frequencies of the filterbank
 %  
 %   `breebaart2001preproc(insig,fs,tau,ild)` computes the EI-cell
-%   representation of the signal *insig* sampled with a frequency of *fs* Hz
-%   as described in Breebaart (2001). The parameters *tau* and *ild* define
-%   the sensitivity of the EI-cell.
+%   representation of the signal *insig* sampled with a frequency of *fs*
+%   Hz as described in Breebaart (2001) as well as the internal monaural 
+%   representation of the signal *insig* sampled with a frequency of *fs* 
+%   Hz. The parameters *tau* and *ild* define the sensitivity of the EI-cell.
 %
 %   The input must have dimensions time $\times $ left/right channel
 %   $\times $ signal no.
-%
-%   The output has dimensions time $\times $ frequency $\times $ signal no. 
-%  
-%   `[outsig,fc]=breebaart2001preproc(...)` additionally returns the center
-%   frequencies of the filter bank.
+% 
+%   `[ei_map,fc,ml,mr,outsig]=breebaart2001preproc(...)` additionally 
+%   returns the center frequencies of the filter bank.
 %  
 %   The Breebaart 2001 model consists of the following stages:
-%   
-%   1) a gammatone filter bank with 1-erb spaced filters.
 %
-%   2) an envelope extraction stage done by half-wave rectification
+%   1) an outer and middle ear transfer function
+%   
+%   2) a gammatone filter bank with 1-erb spaced filters.
+%
+%   3) an envelope extraction stage done by half-wave rectification
 %      followed by low-pass filtering to 770 Hz.
 %
-%   3) an adaptation stage modelling nerve adaptation by a cascade of 5
+%   4) an adaptation stage modelling nerve adaptation by a cascade of 5
 %      loops.
 %
-%   4) an excitation-inhibition (EI) cell model.
+%   5) an excitation-inhibition (EI) cell model.
 %
 %   Parameters for |auditoryfilterbank|, |ihcenvelope|, |adaptloop| and
 %   |eicell| can be passed at the end of the line of input arguments.
@@ -40,7 +49,7 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %   Examples
 %   --------
 %
-%   The following code sets up a simple test example :::
+%   The following code sets up a simple test example for the binaural output:::
 %
 %     % Setup parameters
 %     fs      = 44100;            % Sampling rate
@@ -59,14 +68,14 @@ function [ei_map, fc] = breebaart2001preproc(insig, fs, tau, ild, varargin);
 %     x2 = n1*sqrt((1+rho)/2) - n2*sqrt((1-rho)/2);
 %
 %     % Run the model and plot it
-%     [ei_map, fc] = breebaart2001preproc([x1,x2], fs, tau, ild);
+%     [ei_map,fc] = breebaart2001preproc([x1,x2], fs, tau, ild);
 %     plotfilterbank(ei_map,1,fc,fs,'audtick','lin');
 %
-%   See also: eicell, auditoryfilterbank, ihcenvelope, adaptloop
+%   See also: eicell, auditoryfilterbank, ihcenvelope, adaptloop, auditoryfilterbank
 %
 %   References: breebaart2001a
 
-%   AUTHOR : Peter L. Soendergaard
+%   AUTHOR : Peter L. Soendergaard, Martina Kreuzbichler
   
 % ------ Checking of input parameters ------------
 
@@ -85,25 +94,62 @@ end;
 definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','eicell'};
 definput.importdefaults={'fhigh',8000,'ihc_breebaart','adt_breebaart'};
 
-[flags,keyvals,flow,fhigh,basef]  = ltfatarghelper({'flow', 'fhigh', ...
+[flags,keyvals,~,~,~]  = ltfatarghelper({'flow', 'fhigh', ...
                     'basef'},definput,varargin);
+
+% ------ Checking of output parameters ------------
+% to ensure backwards compatibility
+do_mono = 0;
+if nargout > 2
+    do_mono = 1;
+end
 
 % ------ do the computation -------------------------
 
+%% Outer- and middle ear transfer function
+for earnumber = 1:2
+    outsig(:,earnumber) = breebaart2001outmiddlefilter(insig(:,earnumber),fs);
+end
+
 %% Apply the auditory filterbank
-[outsig, fc] = auditoryfilterbank(insig,fs,'argimport',flags,keyvals);
+% only if spacing is 1 filter per ERB and order is 4
+[outsig, fc] = auditoryfilterbank(outsig,fs,'argimport',flags,keyvals);
+
+% % Spacing is two filters per ERB -> spacing in ERB is 0.5
+% order = 3; % filter order
+% spacing = 0.5;
+% flow = 20;
+% keyvals.basef = (exp(0.11)-1)/0.00437;
+% fc = audspacebw(flow,fhigh,spacing,keyvals.basef,'erb');
+% [bgt,agt] = gammatone(fc,fs,order,'complex');
+% outsig = 2*real(ufilterbankz(bgt,agt,outsig)); 
 
 %% 'haircell' envelope extraction
 outsig = ihcenvelope(outsig,fs,'argimport',flags,keyvals);
 
-%% non-linear adaptation loops
-outsig = adaptloop(outsig,fs,'argimport',flags,keyvals);
+%% non-linear adaptation loops, 
+% lowpass filter for monaural output and  eicell for binaural output
 
-[siglen,nfreqchannels,naudiochannels,nsignals] = size(outsig);
+outsignal = adaptloop(outsig,fs,'argimport',flags,keyvals);
+
+if do_mono == 1
+    % Calculate filter coefficients for the 10 ms lowpass filter.
+    % This filter places a pole /very/ close to the unit circle.
+    mlp_a = exp(-(1/0.01)/fs);
+    mlp_b = 1 - mlp_a;
+    mlp_a = [1, -mlp_a];
+
+    % Apply the low-pass modulation filter.
+    outsig = filter(mlp_b,mlp_a,outsignal);
+    outsigl = outsig(:,:,1);
+    outsigr = outsig(:,:,2);
+end
+
+[siglen,nfreqchannels,~,nsignals] = size(outsignal);
 
 ei_map = zeros(siglen, nfreqchannels, nsignals);
 for k=1:nsignals
   for g=1:nfreqchannels
-    ei_map(:,g,k) = eicell(squeeze(outsig(:,g,:,k)),fs,tau,ild);
+    ei_map(:,g,k) = eicell(squeeze(outsignal(:,g,:,k)),fs,tau,ild,'rc_a',keyvals.rc_a);
   end
 end
