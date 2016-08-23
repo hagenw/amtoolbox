@@ -504,12 +504,14 @@ if flags.do_plot
         subplot(1,2,1)
         plot(fax,output(:,9,1))
         axis([0 0.2 -1000 8500])
+        set(gca,'XTick',[0 0.05 0.1 0.15 0.2]);
         xlabel('time [s]')
         ylabel('Output [MU')
         text('Position',[0.1 7000],'string','500 Hz tone')
         subplot(1,2,2)
         plot(fax,output(:,25,2))
         axis([0 0.2 -1000 8500])
+        set(gca,'XTick',[0 0.05 0.1 0.15 0.2]);
         xlabel('time [s]')
         ylabel('Output [MU]')
         text('Position',[0.1 7000],'string','4000 Hz tone')
