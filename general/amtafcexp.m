@@ -1,30 +1,37 @@
-function out = amtafcexp(flag,par,varargin)
-%AMTAFTEXP Runs experimental procedure for alternative forced choice
-%experimetns
+function [out, par] = amtafcexp(command,par,varargin)
+%AMTAFCEXP Runs experimental procedure for alternative forced choice experiments
 % 
-%   Usage:   out = amtafcexp(flag,par,varargin) 
+%   `par = amtafcexp(init_command,par)` initializes a psychoacoustic experiment
+%   emulated with a model. Currently various alternative forced-choice (AFC) experiments
+%   are supported. 
+%
+%   `out = amtafcexp('run',par)` runs the psychoacoustic experiment defined 
+%   in the structure *par* and outputs the experiment in *out*.
+%
+%   `[out, par] = amtafcexp('run',par)` runs the experiment and outputs 
+%   more details on the experiment parameters in *par*.
+%
+%
+%   Usage:   par = amtafcexp(command,par,varargin);
+%     [out,par] = amtafcexp('run',par,varargin);
 % 
 %   Input parameters:
-%       flag:       specifies the chosen execution 
+%       command:  One of the following commands:
+%           'expinit':      intialize general experiment parameters
+%           'signalinit':   intialize signal (=model input) parameters
+%           'modelinit':    intialize model parameters
+%           'decisioninit': intialize decision parameters
+%           'run':          runs the experiment and lets the model decide
+%
 %       par:        struct of already set experimental parameters
 %                   If no parameters are set, define par as []
 %
-%                   
-%       The following flags are possible:
-%           'expinit':      sets all parameters for the experimental run
-%           'modelinit':    sets all model parameters
-%           'signalinit':   sets all signal parameters
-%           'decisioninit': sets all decision parameters
-%           'run':          runs the experiment and lets the model decide
-%
-%
 %   Output parameters:
-%       out:    for 'init flags'    struct containing all set parameters
-%               for 'run'           vector containing the threshold of the 
-%                                   signal level in first place, the 
-%                                   standard deviation in second place and 
-%                                   all values of the experimental variable
-%                                   afterwards
+%       par:    structure containing all parameters
+%       out:    vector with the experiment output. 
+%           out(:,1):     average threshold of the experimental variable 
+%           out(:,2):     the standard deviation of the variable across all runs
+%           out(:,3:end): individual experimental variables used in each trial 
 %
 %
 %   `amtafcexp('expinit',par)` accepts the following parameters:
@@ -125,6 +132,8 @@ function out = amtafcexp(flag,par,varargin)
 %   run 'result = amtafcexp('run',par,'plot')' to generate experimental plot
 %
 %   See also: exp_breebaart2001 demo_breebaart2001
+%
+%
 
 
 % AUTHOR: Martina Kreuzbichler
@@ -132,7 +141,7 @@ function out = amtafcexp(flag,par,varargin)
 % turn warning off
 warning('off','MATLAB:nargchk:deprecated')
 
-switch flag
+switch command
     case 'expinit'
         definput.keyvals.intnum = [];
         definput.keyvals.rule = [];
@@ -251,7 +260,7 @@ switch flag
         definput.keyvals.input9 = [];
         definput.keyvals.input10 = [];
         
-        definput.flags.plot = {'noplot','plot'};
+        definput.commands.plot = {'noplot','plot'};
         
         if iscell(varargin{1}) && nargin == 3
             [~,kvdecision]=ltfatarghelper({},definput,varargin{:});
@@ -264,9 +273,9 @@ switch flag
         
     case 'run'
         
-        definput.flags.plot = {'noplot','plot'};
+        definput.commands.plot = {'noplot','plot'};
         
-        [flags,~]=ltfatarghelper({},definput,varargin);
+        [commands,~]=ltfatarghelper({},definput,varargin);
         
         % find experimental variable and inttyp variable
         sigparnames = fieldnames(par.signal);
@@ -424,7 +433,7 @@ switch flag
         %clear persistent variables
         clear (par.decision.name);
         
-        if flags.do_plot
+        if commands.do_plot
             figure
             for plotcounter = 1:(size(expparvalue,2)-1)
                 if expparvalue(plotcounter) < expparvalue(plotcounter+1)
