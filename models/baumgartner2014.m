@@ -3,7 +3,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %   Usage:    [p,rang] = baumgartner2014( target,template )
 %             [p,rang,tang] = baumgartner2014( target,template )
 %             [p,rang,tang] = baumgartner2014( target,template,fs,S,lat,stim,fsstim )
-%             [err,pred] = baumgartner2015( target,template,errorflag )
+%             [err,pred] = baumgartner2014( target,template,errorflag )
 %
 %   Input parameters:
 %     target  : binaural impulse response(s) referring to the directional 

@@ -30,7 +30,7 @@
 %  Speech perception models
 %    TAAL2011               - Short-time objective intelligibility
 %    JOERGENSEN2011         - Speech-based envelope power spectrum based on Joergensen et al. (2011)
-%    JOERGENSEN2013         - Speech-based envelope power spectrum based on Joergensen et al. (2013)
+%    JOERGENSEN2013         - Speech-based envelope power spectrum with multi-resolution segmentation of the envelope based on Joergensen et al. (2013)
 %    JELFS2011              - Binaural speech advantage
 
 %

@@ -5,19 +5,24 @@ function data = data_breebaart2001(varargin)
 %   `data_breebaart(figure,nfc)` returns data from Breebaart et al. (2001b)
 %
 %   The flags fo the figure may be one of:
-%   'fig3'      Returns the N0Spi values for figure 3
-%   'fig6'      Returns the NpiS0 values for figure 6
+%
+%     'fig3'      Returns the N0Spi values for figure 3
+% 
+%     'fig6'      Returns the NpiS0 values for figure 6
 %
 %   The nfc (center frequency of noise) may be one of: 
-%   'nfc125','nfc250','nfc500','nfc1000'    -> fig3 and fig6
-%   'nfc2000','nfc4000' -> fig3 only
+%
+%     'nfc125','nfc250','nfc500','nfc1000': figure 3 and figure 6
+%
+%     'nfc2000','nfc4000':                  figure 3 only
 %
 %   For the data points one can choose between
+%
 %     'breebaartmodel'  Returns the data points derived from the model of
 %                       Breebaart et al. (2001b). This is the default.
 %                       
-%     'vandepaar'       Returns the data points just read from Fig. 1
-%                       of van de Paar and Kohlrausch (1999)
+%     'vandepaar'       Returns the data points Breebaart used in Fig. 1
+%                       from van de Paar and Kohlrausch (1999)
 %
 %   Examples:
 %   ---------

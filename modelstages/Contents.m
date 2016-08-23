@@ -11,7 +11,6 @@
 %  Binaural processing stages
 %     LANGENDIJK2002COMP     - Comparison process from Langendijk 20002.
 %     LINDEMANN1986BINCORR - Running cross-correlation between two signals.
-%     EICELL             - Excitation-inhibition cell model by Breebaart.
 %     CULLING2005BMLD    - BMLD calculation from Culling et al. (2005).
 %     DIETZ2011UNWRAPITD - IPD to ITD transformation for the Dietz model
 %     DIETZ2011FILTERBANK - filterbank of Dietz 2011 binaural model
@@ -34,7 +33,7 @@
 %     HOHMANN2002DELAY            - Create a delay object
 %     HOHMANN2002MIXER            - Create a mixer object
 %     HOHMANN2002SYNTH            - Create a synthesis object 
-%     HOHMANN2002FILT             - Create a single Gammatone filter object
+%     HOHMANN2002FILTER           - Create a single Gammatone filter object
 %     HOHMANN2002PROCESS          - Process the input signals by the corresponding filterbank object
 %     HOHMANN2002CLEARSTATE       - Clears the state of the filterbank object
 %     HOHMANN2002FREQZ            - Calculates frequency response of a filterbank object
