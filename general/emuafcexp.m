@@ -59,7 +59,8 @@ function [out, par] = emuafcexp(command,par,varargin)
 %     'stepmin',min_threshturn       vector with minimal step size and number of turn arounds
 %                                    after reaching that minimal step size for the threshold
 %                                    calculation. E.g. [1 8] means that after reaching the
-%                                    step size 1, the experiment will continue for  %                                    another 8 reversals before terminating. 
+%                                    step size 1, the experiment will continue for  
+%                                    another 8 reversals before terminating. 
 %
 %   Signal generator
 %   ****************
@@ -67,7 +68,7 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   `par=emuafcexp('signalinit',par,sig)` intializes the signal generator creating
 %   signals for the model with key-value pairs provided in the cell array `sig`. The signal
 %   generator is called with those parameters in each trial of the experiment.
-%   Up to 10 input parameters are supported. One of inputs must be 'inttyp': In each 
+%   Up to 15 input parameters are supported. One of inputs must be 'inttyp': In each 
 %   experimental interval, this input will be replaced by 'target' or 'reference' 
 %   depending on the interval type. One of the inputs must be 'expvar': In each trial, 
 %   this input will be replaced by the value of the experimental variable. The 
@@ -82,8 +83,8 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   *****************************
 %
 %   `par=emuafcexp('modelinit',par,mod)` initializes the model called in each interval with 
-%   the key-value pairs provided in `mod`. 
-%   One of the input1 to input10 must contain the keyword 'expsignal'.
+%   the key-value pairs provided in `mod`. Up to 10 input parameters are supported.
+%   One of the inputs must contain the keyword 'expsignal'.
 %   This keyword is replaced in the 'run' routine with the output of
 %   the signal generation function:
 %
@@ -99,12 +100,18 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   ***********************************
 %
 %   `par=emuafcexp('decisioninit',par,dec)` initializes the decision stage of the experiment 
-%   with key-value pairs provided in `dec`. 
+%   with key-value pairs provided in `dec`. Up to 10 input parameters are supported.
 %   All inputs containing the keyword 'modelout' are
 %   replaced with the outputs of the model function during an
 %   experimental run. Therefore the number of inputs with the keyword
 %   'modelout' must be equal to number of 'outputs' defined in
-%   'modelinit'. Following parameters are required:
+%   'modelinit'. An output of the modelfunction contains a cell with an
+%   entry for each interval. E.g. param1{1} contains the first output of 
+%   the model function of the first interval and param3{2} contains the 
+%   third output of the modelfunction of the second interval. Therefore the
+%   decision function must be implemented so that the inputs of the decsion
+%   function are cells with entries for each interval. 
+%   Following parameters are required:
 %
 %     'name',name         name of the decision fuction
 %     'inputX',intputX    input parameter X needed by the decision function
