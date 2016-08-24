@@ -109,7 +109,7 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   entry for each interval. E.g. param1{1} contains the first output of 
 %   the model function of the first interval and param3{2} contains the 
 %   third output of the modelfunction of the second interval. Therefore the
-%   decision function must be implemented so that the inputs of the decsion
+%   decision function must be implemented so that the inputs of the decision
 %   function are cells with entries for each interval. 
 %   Following parameters are required:
 %
