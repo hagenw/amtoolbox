@@ -75,7 +75,7 @@ function [ei_map,fc,outsigl,outsigr] = breebaart2001preproc(insig,fs,tau,ild,var
 %     [ei_map,fc] = breebaart2001preproc([x1,x2], fs, tau, ild);
 %     plotfilterbank(ei_map,1,fc,fs,'audtick','lin');
 %
-%   See also: eicell, auditoryfilterbank, ihcenvelope, adaptloop, auditoryfilterbank
+%   See also: eicell auditoryfilterbank ihcenvelope adaptloop breebaart2001outmiddlefilter
 %
 %   References: breebaart2001a
 

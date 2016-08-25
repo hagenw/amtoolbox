@@ -17,22 +17,22 @@ function signalout = breebaart2001siggen(inttype,fc,sl,sdur,sphase,nbw,nl,ndur,n
 %   sampling rate is defined with `fs` (in Hz).
 %
 %   Input parameters:
-%       inttyp:     'target' or 'reference' defines the interval type
-%       fc:         center frequency
-%       sl:         overall signal level
-%       sl:         duration of the signal
-%       sphase:     interaural phase difference of signal
-%       nbw:        bandwidth of the noise
-%       nl:         overall noise level
-%       ndur:       duration of the noise
-%       nphase:     interaural phase difference of noise
-%       hannramp:   duration of the hanning ramps
-%       fs:         sampling frequency
+%       inttyp     : 'target' or 'reference' defines the interval type
+%       fc         : center frequency
+%       sl         : overall signal level
+%       sl         : duration of the signal
+%       sphase     : interaural phase difference of signal
+%       nbw        : bandwidth of the noise
+%       nl         : overall noise level
+%       ndur       : duration of the noise
+%       nphase     : interaural phase difference of noise
+%       hannramp   : duration of the hanning ramps
+%       fs         : sampling frequency
 %
-%       The following parameters for 'nphase' are possible:
-%           'nphase' = 0      no phase difference, correlation = 1; 
-%           'nphase' = pi     masker interaurally phase reversed, correlation = -1;
-%           0 < 'nphase' < 1  defines interaural correlation                         
+%   The following parameters for 'nphase' are possible:
+%       'nphase' = 0      no phase difference, correlation = 1; 
+%       'nphase' = pi     masker interaurally phase reversed, correlation = -1;
+%       0 < 'nphase' < 1  defines interaural correlation 
 %
 %   Output parameters:
 %       signalout:  the generated experimental signal which can be feeded 

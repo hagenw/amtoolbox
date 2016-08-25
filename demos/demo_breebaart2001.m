@@ -1,7 +1,7 @@
 function demo_breebaart2001(varargin)
 %DEMO_BREEBAART2001 Demo for binaural processingmodel from Breebaart et al. (2001)
 %
-%   `demo_breebaart2001(flag)` demonstrates how to compute N0S0, N0Spi and
+%   `demo_breebaart2001(flags)` demonstrates how to compute N0S0, N0Spi and
 %   NpiS0 thresholds for different combinations of the monaural and
 %   binaural central processor for a center frequency of 1000 or 4000 Hz 
 %   using the model from Breebaart et al. (2014).
@@ -10,49 +10,49 @@ function demo_breebaart2001(varargin)
 %   The N0Spi condition is default. The following combinations for 4000 Hz 
 %   are calculated:
 %
-%     lbr:    Compute decision from combination of left, binaural and
-%             right result. If the binaural result is zero, don't use it. 
-%             In this condition lbr is equal to lBr, because the binaural
-%             result is not zero.
+%     lbr  Compute decision from combination of left, binaural and
+%          right result. If the binaural result is zero, don't use it. 
+%          In this condition lbr is equal to lBr, because the binaural
+%          result is not zero.
 %
-%     b:      Compute decision from binaural result only.
+%     b    Compute decision from binaural result only.
 %
-%     lr:     Compute decision from left and right result.
+%     lr   Compute decision from left and right result.
 %
 %   
 %   Set `flag` to the following flags to shows other conditions:
 %
-%     'N0S0':  N0S0 thresholds for differnt combinations of the monaural and
-%              binaural processor for a center frequency of 4000 Hz.
-%              The following combinations are calculated:
+%     'N0S0'  N0S0 thresholds for differnt combinations of the monaural and
+%             binaural processor for a center frequency of 4000 Hz.
+%             The following combinations are calculated:
 %
-%              lbr:  Compute decision from combination of left, binaural and
+%              lbr  Compute decision from combination of left, binaural and
 %                    right result. If the binaural result is zero, don't use
 %                    it. In this condition lbr is equal to lr.
 %
-%              lBr:  Compute decision from combination of left, binaural and
+%              lBr  Compute decision from combination of left, binaural and
 %                    right result even if the binaural result is zero. 
 %           
-%     'NpiS0': NpiS0 thresholds for differnt combinations of the monaural and
-%              binaural processor for a center frequency of 1000 Hz.
-%              The following combinations are calculated:
+%     'NpiS0' NpiS0 thresholds for differnt combinations of the monaural and
+%             binaural processor for a center frequency of 1000 Hz.
+%             The following combinations are calculated:
 %
-%              lbr:  Compute decision from combination of left, binaural and
+%             'lbr'  Compute decision from combination of left, binaural and
 %                    right result. If the binaural result is zero, don't use it. 
 %                    In this condition lbr is equal to lBr, because the binaural
 %                    result is not zero.
 %
-%              b:    Compute decision from binaural result only.
+%             'b'    Compute decision from binaural result only.
 %
-%              lr:   Compute decision from left and right result.
+%             'lr'   Compute decision from left and right result.
 %
-%     'exact': The threshold is computed as a mean value of 6 repetitions per
-%              bandwidth. To get results faster the computational results are
-%              stored in cache and can be downloaded.
+%     'exact' The threshold is computed as a mean value of 6 repetitions per
+%             bandwidth. To get results faster the computational results are
+%             stored in cache and can be downloaded.
 %
-%     'fast': The threshold as the result of one experimental run per bandwidth.
-%             The number of bandwidth values is half the number of values at the
-%             'exact' computation.  The fast computation is default.
+%     'fast' The threshold as the result of one experimental run per bandwidth.
+%            The number of bandwidth values is half the number of values at the
+%            'exact' computation.  The fast computation is default.
 %
 %   demo_breebaart2001('N0Spi') shows :::
 %
