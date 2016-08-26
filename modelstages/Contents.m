@@ -20,8 +20,10 @@
 %     ZIEGELWANGER2014ONAXIS  - synthesis of TOAs for the on-axis model
 %     LANGENDIJK2002LIKELIHOOD - Likelihood estimation
 %
-%  Preprocessing stages
-%     BREEBAART2001PREPROC  - EI-cell output
+%  
+%   Modulation detection and masking from Dau et al. (1996, 1997)
+%     DAU1996PREPROC - signal detection model from Dau et al. (1996)
+%     DAU1997PREPROC - modulation-detection and modulation-masking processing from Dau et al. (1997)
 %
 %     LINDEMANN1986CENTROID - Centroid of the cross-correlation activation
 %
@@ -54,6 +56,7 @@
 %  Binaural masking level differences from Breebaart et al. (2001)
 %     BREEBAART2001PREPROC  - Preprocessor of a binaural signal with EI-cell output
 %     BREEBAART2001CENTRALPROC - Central processor taking decision in an experiment
+%     BREEBAART2001OUTMIDDLEFILTER - Outer and middle-ear filter used by the model Breebaart et al. (2001)
 % 
 %
 %  Sagittal-plane localization models

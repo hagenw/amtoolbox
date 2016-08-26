@@ -10,11 +10,11 @@
 %       EXP_VERHULST2012     - Figures from Verhulst et al. (2012)
 % 
 %   HRTF models
-%		    EXP_ENZNER2008		   - Plots showing results from enzner2008
+%       EXP_ENZNER2008       - Plots showing results from enzner2008
 %       EXP_ZIEGELWANGER2013 - Figures from Ziegelwanger et al. (2013)
 %       EXP_ZIEGELWANGER2014 - Figures from Ziegelwanger and Majdak (2014)
 %
-%   Spatial models
+%   Binaural/spatial models
 %       EXP_LINDEMANN1986    - Recreate plots from Lindemann (1986)
 %       EXP_BREEBAART2001    - Recreate plots from Breebaart et al. (2001)
 %       EXP_LANGENDIJK2002   - Recreate plots from Langedijk (2002)

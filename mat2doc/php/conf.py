@@ -1,5 +1,5 @@
 fext='.php'
-urlbase='/doc'
+urlbase='/amt-0.9.8/doc'
 urlext='.php'
 widthstr=''
 imagetype='png'

@@ -9,7 +9,7 @@ function decision = breebaart2001centralproc(EI_map,monol,monor,bimonostring,mon
 %        monor          : internal representation of the right ear signal
 %        bimonostring   : defines which representations are used for the decision
 %        monofactor     : sets the parameter for monaural detection
-%                        (optional)
+%                         (optional)
 %  
 %   Output parameters:
 %        decision       : index of the estimated target
@@ -28,17 +28,17 @@ function decision = breebaart2001centralproc(EI_map,monol,monor,bimonostring,mon
 %   
 %   The parameter *bimonostring* must contain characters indicating which 
 %   channels are used for the decision:
-%   
-%       'l'     use left mono channel (from *monol*)
-%   
-%       'r'     use right mono channel (from *monor*)
-%   
-%       'b'     use binaural channel (from *EI_map* ) only if the binaural representation
-%               yield a non-zero decision distance
-%   
-%       'B'     use binaural channel in any case
-%   
-%   
+%
+%     'l'     use left mono channel (from *monol*)
+%
+%     'r'     use right mono channel (from *monor*)
+%
+%     'b'     use binaural channel (from *EI_map* ) only if the binaural representation
+%             yield a non-zero decision distance
+%
+%     'B'     use binaural channel in any case
+%
+%
 %   See also: exp_breebaart2001 demo_breebaart2001 breebaart2001preproc eicell
 %
 %   References: breebaart2001a

@@ -1,18 +1,18 @@
 function out = breebaart2001outmiddlefilter(in,fs)
-%breebaart2001outmiddlefilter simulates the outer- and middle ear transfer
-%function from Breebaart et. al. 2001
-% 
+%breebaart2001outmiddlefilter simulates the outer- and middle ear transfer function from Breebaart et. al. 2001
+%   
 %   Usage: out = breebaart2001outmiddlefilter(in,fs)
 %
 %   Input parameters:
 %        in  : input acoustic signal.
 %        fs     : sampling rate.
-% 
+%
 %   `breebaart2001outmiddlefilter(in,fs)` filters the input signal *in* with the
 %   transfer function of the outer and middle ear  sampled with a frequency
 %   of *fs* Hz as described in Breebaart (2001).
 %
 %   References: breebaart2001a
+%
 
 %   AUTHOR: Martina Kreuzbichler
 

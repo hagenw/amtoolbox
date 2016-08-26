@@ -3397,8 +3397,8 @@ if flags.do_fig6_baumgartner2015jaes
 
       boxplot(X,'symbol','k*','outliersize',3)
 
-      set(gca,'YLim',[-17,32],...
-        'XTickLabel',{'[2]','PM','CM','Mixed'},'XTickLabelRotation',45)
+      set(gca,'YLim',[-17,32], 'XTickLabel',{'[2]','PM','CM','Mixed'});
+	  if ~verLessThan('matlab','8.4'), set(gca,'XTickLabelRotation',45); end
       if ii==1; 
         ylabel('Panning angle (deg)')
         text(0.7,27.5,'0\circ')
@@ -3737,12 +3737,11 @@ if flags.do_fig9_baumgartner2015jaes
     end
     amtcache('set','locaVBAP',pe)
   end
-  
+ 
+  MRS = 0;
   pe_ref = amtcache('get','locaVBAP_ref',flags.cachemode);
   if isempty(pe_ref)
     
-    MRS = 0;
-
     s = data_baumgartner2014('pool');
 
     latall = -45:5:45;
@@ -3823,11 +3822,10 @@ if flags.do_fig9_baumgartner2015jaes
         idlat = abs(lat_lsp) <= max(abs(latall))+1;
         hold on
         h2 = plot(lat_lsp(idlat),pol_lsp(idlat),'wo');
-        h2.MarkerSize = 2*3.5;
+        set(h2,'MarkerSize',2*3.5);
         h1 = plot(lat_lsp(idlat),pol_lsp(idlat),'ko');
-        h1.MarkerSize = 2*3;
+        set(h1,'MarkerSize',2*3);
       end
-
     end
 
     subplot(1,N+2,N+2)
