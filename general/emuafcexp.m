@@ -262,7 +262,7 @@ switch command
         
     case 'run'
         
-        definput.commands.plot = {'noplot','plot'};
+        definput.flags.plot = {'noplot','plot'};
         
         [commands,~]=ltfatarghelper({},definput,varargin);
         
