@@ -150,7 +150,7 @@ function outsig = lowpass(sig, a)
     for ii=1:channels
       outsig(:,:,ii) = filter([1-a(ii)], [1, -a(ii)], sig(:,:,ii));
     end
-    sig = permute(outsig,[1 3 2]); % => [samples channels ears]
+    outsig = permute(outsig,[1 3 2]); % => [samples channels ears]
   else
     channels = size(sig,2);
     outsig = zeros(size(sig));
