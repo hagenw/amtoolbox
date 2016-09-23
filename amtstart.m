@@ -25,8 +25,8 @@ function amtstart(varargin)
 %      In the AMT, there is a prepared directory `thirdparty/sfs`. Alternatively, save 
 %      the SOFA API anywhere and add the path to the search path. 
 %
-%   3) install Python (version >= 2.6), and the packages `numpy` and `scipi`. 
-%      The AMT only works with Python 2. Do not use Python 3.  
+%   3) install Python (version >= 2.6 but < 3), and the packages `numpy` and `scipi`. 
+%      The AMT does not work with Python 3!  
 %      On Linux, `sudo apt-get install python-scipy python-numpy` can be applied.
 %      On Windows, intall python from <https://www.python.org/>, add python.exe to path,
 %      and install the packages separately.
