@@ -91,6 +91,7 @@ function demo_breebaart2001(varargin)
 definput.import={'amtcache'};
 definput.flags.type = {'N0Spi','N0S0','NpiS0'};
 definput.flags.speed = {'fast','exact'};
+definput.flags.interface = {'AMT', 'BInit'};
 
 % Parse input options
 [flags,~]  = ltfatarghelper({},definput,varargin);
@@ -101,8 +102,15 @@ if flags.do_fast
     if flags.do_N0Spi
         % set experimental paramters
         parout = [];
-        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
-            'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65};
+        switch flags.interface
+          case 'AMT'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+                'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65};
+          case 'BInit'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+                'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65, ...
+                'interface','BInit','directory',tempdir,'fs',32000};
+        end
         parout = emuafcexp('expinit',parout,expset);
 
         % set model parameters
