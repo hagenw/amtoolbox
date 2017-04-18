@@ -298,6 +298,7 @@ switch command
         checkmodelout = 0;
         condition = 1;
         wrongcounter = -1;
+        trialcounter = 1;
 
         while condition
 
@@ -374,6 +375,7 @@ switch command
                 % call decision
                 decision = feval(par.decision.name,decisioninputs{:});
               case 'BInit'
+                amtdisp(['Trial #' num2str(trialcounter) ': Waiting for decision']);
                 while ~exist(fullfile(par.exp.directory,'choice.dat'),'file');
                   pause(.1);
                 end
@@ -446,6 +448,8 @@ switch command
                 condition = 0;
                 out = [threshold threshstd expparvalue];
             end
+            
+            trialcounter = trialcounter+1;
 
         end
         %clear persistent variables
