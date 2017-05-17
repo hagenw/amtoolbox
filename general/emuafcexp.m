@@ -269,11 +269,12 @@ switch command
 
         [commands,~]=ltfatarghelper({},definput,varargin);
         if strcmp(par.exp.interface,'BInit'),
-          disp(['Starting BInit experiment on ' par.exp.directory]);
+          amtdisp(['Starting BInit experiment on ' par.exp.directory],'progress');
           csvwrite(fullfile(par.exp.directory,'a_priori.csv'),...
             [par.model.input2, par.model.input3, par.model.input4]);
           decision=par.decision;
           save(fullfile(par.exp.directory,'decision_parameters.mat'),'decision');
+          delete(fullfile(par.exp.directory,'detector_out.csv'));
         end
 
         % find experimental variable and inttyp variable
@@ -302,7 +303,7 @@ switch command
 
         while condition
 
-            for interval_num=par.exp.intnum:-1:1
+            for interval_num=1:par.exp.intnum
 
                 if interval_num == 1
                     par.signal.(inttypvar) = 'target';
@@ -375,17 +376,20 @@ switch command
                 % call decision
                 decision = feval(par.decision.name,decisioninputs{:});
               case 'BInit'
-                amtdisp(['Trial #' num2str(trialcounter) ': Waiting for decision']);
-                while ~exist(fullfile(par.exp.directory,'choice.dat'),'file');
+                msg=['Trial #' num2str(trialcounter) ': Waiting for decision'];
+                reversemsg = repmat(sprintf('\b'), 1, length(msg));
+                fprintf(msg);
+                while ~exist(fullfile(par.exp.directory,'detector_out.csv'),'file');
                   pause(.1);
                 end
                 fid=-1;
                 while fid==-1
-                  fid=fopen(fullfile(par.exp.directory,'choice.dat'),'r');
+                  fid=fopen(fullfile(par.exp.directory,'detector_out.csv'),'r');
                 end
                 fclose(fid);                
-                decision=csvread(fullfile(par.exp.directory,'choice.dat'));
-                delete(fullfile(par.exp.directory,'choice.dat'));
+                decision=csvread(fullfile(par.exp.directory,'detector_out.csv'));
+                delete(fullfile(par.exp.directory,'detector_out.csv'));
+                fprintf(reversemsg);
             end
 
             % store expparvalue
