@@ -292,9 +292,6 @@ elseif flags.do_bfig3
             for bwcount = 1:length(bw)
                   % calculate only for bandwidths max. twice as large as fc
                 if bw(bwcount) <= 2*fc(fccount)
-                  amtdisp(['Calculating: center frequency = ', num2str(fc(fccount)), ...
-                      ' Hz, bandwidth = ' num2str(bw(bwcount)) ' Hz'],'progress');
-
                   %input3 = signallevel; input4 = signalduration;
                   %input5 = signalphase; input7 = noiselevel;
                   %input8 = noiseduration; input9 = noisephase;
@@ -309,6 +306,9 @@ elseif flags.do_bfig3
                   % loop for six experimental runs
                   resultbwvec = zeros(6,1);
                   for runcounter = 1:6
+                      amtdisp(['Calculating: center frequency = ', num2str(fc(fccount)), ...
+                          ' Hz, bandwidth = ' num2str(bw(bwcount)) ' Hz, run #' num2str(runcounter)],'progress');
+
                       result = emuafcexp('run',parout);
                       resultbwvec(runcounter) = result(1)-nl;
                   end
@@ -354,8 +354,15 @@ elseif flags.do_bfig6
     % do computation
         
         parout = [];
-        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,'expvarsteprule',[0.5 2],...
-            'stepmin',[1 8],'expvarstart',85};
+        switch flags.interface
+          case 'AMT'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+              'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65};
+          case 'BInit'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+                'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65, ...
+                'interface','BInit','directory',kv.directory,'fs',32000};
+        end
         parout = emuafcexp('expinit',parout,expset);
 
         decisionset = {'name','breebaart2001centralproc','input1',...
@@ -420,8 +427,11 @@ elseif flags.do_bfig6
         NpiS0250 = output.NpiS0250;
         NpiS0500 = output.NpiS0500;
         NpiS01000 = output.NpiS01000;
-        amtcache('set','bfig6',NpiS0125,NpiS0250,NpiS0500,NpiS01000);
-        
+
+        switch flags.interface
+          case 'AMT'
+            amtcache('set','bfig6',NpiS0125,NpiS0250,NpiS0500,NpiS01000);
+        end    
     
     else
     output = struct('NpiS0125',NpiS0125,'NpiS0250',NpiS0250,'NpiS0500',...
@@ -435,8 +445,15 @@ elseif flags.do_fig1_N0S0_vandepar1999
     
     if isempty(N0S0125)
         parout = [];
-        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
-            'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',90};
+        switch flags.interface
+          case 'AMT'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+                'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',90};
+          case 'BInit'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+                'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',90, ...
+                'interface','BInit','directory',kv.directory,'fs',32000};
+        end
         parout = emuafcexp('expinit',parout,expset);
         
         % input2 = fs; input3 = tau; input4 = ild; 
@@ -502,9 +519,13 @@ elseif flags.do_fig1_N0S0_vandepar1999
         N0S01000 = output.N0S01000;
         N0S02000 = output.N0S02000;
         N0S04000 = output.N0S04000;
-        amtcache('set','fig1_N0S0_vandepar1999',N0S0125,N0S0250,N0S0500,...
-            N0S01000,N0S02000,N0S04000);
-   
+
+        switch flags.interface
+          case 'AMT'
+            amtcache('set','fig1_N0S0_vandepar1999',N0S0125,N0S0250,N0S0500,...
+                N0S01000,N0S02000,N0S04000);
+        end
+        
     else
         output = struct('N0S0125',N0S0125,'N0S0250',N0S0250,...
             'N0S0500',N0S0500,'N0S01000',N0S01000,'N0S02000',N0S02000,...

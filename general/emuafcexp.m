@@ -268,8 +268,7 @@ switch command
         definput.flags.plot = {'noplot','plot'};
 
         [commands,~]=ltfatarghelper({},definput,varargin);
-        if strcmp(par.exp.interface,'BInit'),
-          amtdisp(['Starting BInit experiment on ' par.exp.directory],'progress');
+        if strcmp(par.exp.interface,'BInit'),          
           csvwrite(fullfile(par.exp.directory,'a_priori.csv'),...
             [par.model.input2, par.model.input3, par.model.input4]);
           decision=par.decision;
@@ -376,9 +375,7 @@ switch command
                 % call decision
                 decision = feval(par.decision.name,decisioninputs{:});
               case 'BInit'
-                msg=['Trial #' num2str(trialcounter) ': Waiting for decision'];
-                reversemsg = repmat(sprintf('\b'), 1, length(msg));
-                fprintf(msg);
+                amtdisp(['Trial #' num2str(trialcounter) ', BInit on ' par.exp.directory],'volatile');
                 while ~exist(fullfile(par.exp.directory,'detector_out.csv'),'file');
                   pause(.1);
                 end
@@ -389,7 +386,6 @@ switch command
                 fclose(fid);                
                 decision=csvread(fullfile(par.exp.directory,'detector_out.csv'));
                 delete(fullfile(par.exp.directory,'detector_out.csv'));
-                fprintf(reversemsg);
             end
 
             % store expparvalue
