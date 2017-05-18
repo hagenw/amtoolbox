@@ -67,7 +67,7 @@ function output=exp_breebaart2001(varargin)
 %     'noplot'  Don't plot, only return data.
 %
 %   Figure 3 of Breebaart et al. (2001b) can also be calculated with the
-%   interface of the binaural initiative. Assuming a pathway-model server
+%   interface of the model initiative BInDT. Assuming a BInDT interface
 %   waiting for binaural signals in a directory DIR, use
 %   `exp_breebaart2001('bfig3','redo','BInit','directory',DIR);`. The AMT
 %   will start the experiment, collect the responses from the model server,
@@ -491,6 +491,8 @@ elseif flags.do_fig1_N0S0_vandepar1999
 
                 % loop for experimental runs
                 for runcounter = 1:6
+                    amtdisp(['Calculating: center frequency = ', num2str(fc(fccount)), ...
+                        ' Hz, bandwidth = ' num2str(bw(bwcount)) ' Hz, run #' num2str(runcounter)],'progress');                  
                     result = emuafcexp('run',parout);
                     resultbwvec(runcounter) = result(1)-nl;
                 end
@@ -498,10 +500,6 @@ elseif flags.do_fig1_N0S0_vandepar1999
                 resultvec(bwcount) = mean(resultbwvec);
                 resultvecstd(bwcount) = std(resultbwvec,1);
                 resultbwvec = zeros(6,1);
-                amtdisp(sprintf(['Progress for %i Hz center frequency: ' ...
-                    num2str(round(bwcount/length(bw)*100)) ...
-                    '%% calculated'],fc(fccount)),'progress');
-
             end
 
             N0S0_temp =sprintf('N0S0%i',fc(fccount));
