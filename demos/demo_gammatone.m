@@ -71,7 +71,7 @@
     % Figure 1 - classic real;
     figure('units','normalized','outerposition',[0 0.525 1 0.475]);
     set(gcf,'Name','gammatone, classic, real');
-    subplot(1,2,1)
+  %  subplot(1,2,1)
     hold on
     dy = 1;
     for ii = 1:nchannels
@@ -93,7 +93,8 @@
         ['#24: ' num2str(round(fc(24))) ' Hz']})
     box on
     hold off
-        
+    print(gcf,'-dpng','Gammatone')   
+       
     subplot(1,2,2)
     hold on
     dy = 1;
