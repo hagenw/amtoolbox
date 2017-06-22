@@ -87,7 +87,7 @@ definput.import={'baumgartner2014','baumgartner2014pmv2ppp','localizationerror',
 definput.keyvals.tempWin = 1; % temporal integration window in sec
 definput.flags.normalize = {'regular','normalize'};
 definput.flags.cueProcessing = {'intraaural','interaural'};
-definput.flags.middleEarFilter = {'middleEarFilter',''};
+definput.flags.middleEarFilter = {'','middleEarFilter'};
 definput.keyvals.JND = 1.5;
 definput.keyvals.c1 = 3.78;
 definput.keyvals.c2 = 1;
@@ -200,24 +200,28 @@ if flags.do_intraaural
 
   %% Comparison process, Eq.(4)
 %   sigma = baumgartner2017comparisonprocess(nrep.tar,nrep.tem); % based on vector product with 0s excluded (nan)
-  sigma = mean(repmat(nrep.tar,1,Nang).*nrep.tem)./mean(nrep.tem.^2);
+%   sigma = mean(repmat(nrep.tar,1,Nang).*nrep.tem)./mean(nrep.tem.^2);
+  dNrep = abs(repmat(nrep.tar,1,Nang)-nrep.tem);
+  dNrep(dNrep < kv.JND) = 0;
+  sigma = mean(dNrep);
 
   %% Similarity estimation, Eq.(5)
-  si = sigma.^kv.S;
+  si = exp(-kv.S*sigma);
+%   si = sigma.^kv.S;
   % si = baumgartner2014similarityestimation(sigma,'argimport',flags,kv);
 
   %% Binaural weighting, Eq.(6)
   bsi(iframe,:) = baumgartner2014binauralweighting(si,'argimport',flags,kv);
 
   %% Normalize
-  if flags.do_normalize
-%     if not(exist('bsiRef','var'))
-      sigmaRef = baumgartner2017comparisonprocess(nrep.tem,nrep.tem);
-      siRef = sigmaRef.^kv.S;
-      bsiRef = baumgartner2014binauralweighting(siRef,'argimport',flags,kv);
-%     end
-    bsi(iframe) = bsi(iframe)/bsiRef;
-  end
+%   if flags.do_normalize
+% %     if not(exist('bsiRef','var'))
+%       sigmaRef = baumgartner2017comparisonprocess(nrep.tem,nrep.tem);
+%       siRef = sigmaRef.^kv.S;
+%       bsiRef = baumgartner2014binauralweighting(siRef,'argimport',flags,kv);
+% %     end
+%     bsi(iframe) = bsi(iframe)/bsiRef;
+%   end
 
 else % interaural
   
@@ -234,7 +238,7 @@ else % interaural
   dILDnorm(iframe,:) = mean(dILD./abs(tem.ild));
   
   %% Externalization mapping
-  bsi(iframe,:) = exp(-kv.z1*dILDnorm(iframe,:));
+  bsi(iframe,:) = exp(-kv.S*dILDnorm(iframe,:));
 
 end
 
