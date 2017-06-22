@@ -6,12 +6,12 @@ function [out, par] = emuafcexp(command,par,varargin)
 %
 %   Input parameters:
 %     command  : One of the following commands. `'expinit'` intializes the
-%                general experiment parameters. `'signalinit'` intializes 
+%                general experiment parameters. `'signalinit'` intializes
 %                the signal generator creating model inputs. `'modelinit'`
 %                intializes model parameters. `'decisioninit'` intializes
 %                the parameters of the decision stage in the experiment.
 %                Finally, `'run'` runs the experiment and lets the model decide.
-%     par      : Structure of the experimental parameters used by `emuafcexp`. 
+%     par      : Structure of the experimental parameters used by `emuafcexp`.
 %                Set to `[]` on the first call (when `par` is not set up yet).
 %
 %   Output parameters:
@@ -21,15 +21,15 @@ function [out, par] = emuafcexp(command,par,varargin)
 %             across all runs. `out(:,3:end)` provides the individual experimental variables
 %             used in each trial.
 %
-%   `par = emuafcexp(init_command,par)` initializes the various parts of the 
-%   psychoacoustic experiment to be emulated depending on `init_command`. 
-%   
-%   `out = emuafcexp('run',par)` runs the experiment defined 
+%   `par = emuafcexp(init_command,par)` initializes the various parts of the
+%   psychoacoustic experiment to be emulated depending on `init_command`.
+%
+%   `out = emuafcexp('run',par)` runs the experiment defined
 %   by the structure `par` and outputs the experimental result in `out`.
-%   
-%   `[out, par] = emuafcexp('run',par)` runs the experiment and outputs 
+%
+%   `[out, par] = emuafcexp('run',par)` runs the experiment and outputs
 %   more details on the experiment parameters in `par`.
-%   
+%
 %   `[out, par] = emuafcexp('run',par,'plot')` runs the experiment and
 %   plots the experiment progress.
 %
@@ -48,7 +48,7 @@ function [out, par] = emuafcexp(command,par,varargin)
 %     'rule',down_up                 vector with down-up-rule
 %                                    e.g. [2 1] sets up a 2-down, 1-up experiment.
 %
-%     'expvarstart',expvarstart      step size of the experimental variable at the 
+%     'expvarstart',expvarstart      step size of the experimental variable at the
 %                                    beginning of the experiment
 %
 %     'expvarsteprule',factor_turns  vector with a factor and number of turn arounds.
@@ -59,8 +59,8 @@ function [out, par] = emuafcexp(command,par,varargin)
 %     'stepmin',min_threshturn       vector with minimal step size and number of turn arounds
 %                                    after reaching that minimal step size for the threshold
 %                                    calculation. E.g. [1 8] means that after reaching the
-%                                    step size 1, the experiment will continue for  
-%                                    another 8 reversals before terminating. 
+%                                    step size 1, the experiment will continue for
+%                                    another 8 reversals before terminating.
 %
 %   Signal generator
 %   ****************
@@ -68,10 +68,10 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   `par=emuafcexp('signalinit',par,sig)` intializes the signal generator creating
 %   signals for the model with key-value pairs provided in the cell array `sig`. The signal
 %   generator is called with those parameters in each trial of the experiment.
-%   Up to 15 input parameters are supported. One of inputs must be 'inttyp': In each 
-%   experimental interval, this input will be replaced by 'target' or 'reference' 
-%   depending on the interval type. One of the inputs must be 'expvar': In each trial, 
-%   this input will be replaced by the value of the experimental variable. The 
+%   Up to 15 input parameters are supported. One of inputs must be 'inttyp': In each
+%   experimental interval, this input will be replaced by 'target' or 'reference'
+%   depending on the interval type. One of the inputs must be 'expvar': In each trial,
+%   this input will be replaced by the value of the experimental variable. The
 %   following pairs are required:
 %
 %     'name',name         string which defines the name of the signal
@@ -82,7 +82,7 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   Model called in each interval
 %   *****************************
 %
-%   `par=emuafcexp('modelinit',par,mod)` initializes the model called in each interval with 
+%   `par=emuafcexp('modelinit',par,mod)` initializes the model called in each interval with
 %   the key-value pairs provided in `mod`. Up to 10 input parameters are supported.
 %   One of the inputs must contain the keyword 'expsignal'.
 %   This keyword is replaced in the 'run' routine with the output of
@@ -99,18 +99,18 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   Decision stage called in each trial
 %   ***********************************
 %
-%   `par=emuafcexp('decisioninit',par,dec)` initializes the decision stage of the experiment 
+%   `par=emuafcexp('decisioninit',par,dec)` initializes the decision stage of the experiment
 %   with key-value pairs provided in `dec`. Up to 10 input parameters are supported.
 %   All inputs containing the keyword 'modelout' are
 %   replaced with the outputs of the model function during an
 %   experimental run. Therefore the number of inputs with the keyword
 %   'modelout' must be equal to number of 'outputs' defined in
 %   'modelinit'. An output of the modelfunction contains a cell with an
-%   entry for each interval. E.g. param1{1} contains the first output of 
-%   the model function of the first interval and param3{2} contains the 
+%   entry for each interval. E.g. param1{1} contains the first output of
+%   the model function of the first interval and param3{2} contains the
 %   third output of the modelfunction of the second interval. Therefore the
 %   decision function must be implemented so that the inputs of the decision
-%   function are cells with entries for each interval. 
+%   function are cells with entries for each interval.
 %   Following parameters are required:
 %
 %     'name',name         name of the decision fuction
@@ -119,8 +119,8 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   Running the experiment
 %   ----------------------
 %
-%   After the initialization, the experiment can be started by 
-%   `out = emuafcexp('run',par);`. The threshold will be in `out`. 
+%   After the initialization, the experiment can be started by
+%   `out = emuafcexp('run',par);`. The threshold will be in `out`.
 %
 %   See also: exp_breebaart2001, demo_breebaart2001
 
@@ -138,17 +138,20 @@ switch command
         definput.keyvals.expvarsteprule = [];
         definput.keyvals.stepmin = [];
         definput.keyvals.expvarstart = [];
-        
+        definput.keyvals.interface = 'AMT';
+        definput.keyvals.fs = [];
+        definput.keyvals.directory = [];
+
         if iscell(varargin{1}) && nargin == 3
             [~,kvexp]=ltfatarghelper({},definput,varargin{:});
         else
             [~,kvexp]=ltfatarghelper({},definput,varargin);
         end
-             
+
        % out = setstructfields(kvexp, par);
        out = par;
        out.exp = kvexp;
-        
+
     case 'modelinit'
         definput.keyvals.name=[];
         definput.keyvals.input1 = [];
@@ -162,16 +165,16 @@ switch command
         definput.keyvals.input9 = [];
         definput.keyvals.input10 = [];
         definput.keyvals.outputs = [];
-        
+
         if iscell(varargin{1}) && nargin == 3
             [~,kvmodel]=ltfatarghelper({},definput,varargin{:});
         else
             [~,kvmodel]=ltfatarghelper({},definput,varargin);
         end
-        
+
         % check what outputs of model are needed
         outputnumber = nargout(kvmodel.name);
-        
+
         callmodelstring = [];
 
         for outputcounter = 1:outputnumber
@@ -183,31 +186,31 @@ switch command
                     callmodelstring =  [callmodelstring ',' modelstring '{interval_num}'];
                 end
             else
-                callmodelstring = [callmodelstring ',~'];           
+                callmodelstring = [callmodelstring ',~'];
             end
         end
-        
+
         modelinputs = struct2cell(kvmodel);
-                
+
         % delete name of model function & outputs
         modelinputs = modelinputs(2:end-1);
 
         % delete empty cells
         modelinputs = modelinputs(~cellfun('isempty',modelinputs));
-        
+
         callmodelstring = [callmodelstring ']=' kvmodel.name '('];
-        
+
         for modelinputscounter = 1:length(modelinputs)
             callmodelstring = [callmodelstring num2str(modelinputs{modelinputscounter}) ','];
         end
         callmodelstring(end:end+1) = ');';
-        
+
         out = par;
         out.model = kvmodel;
         out.callstrings.model = callmodelstring;
-        
+
         %TODO CALLMODELSTRING
-        
+
     case 'signalinit'
         definput.keyvals.name= [];
         definput.keyvals.input1 = [];
@@ -226,16 +229,16 @@ switch command
         definput.keyvals.input14 = [];
         definput.keyvals.input15 = [];
 
-        
+
         if iscell(varargin{1}) && nargin == 3
             [~,kvsignal]=ltfatarghelper({},definput,varargin{:});
         else
             [~,kvsignal]=ltfatarghelper({},definput,varargin);
         end
-        
+
         out = par;
         out.signal = kvsignal;
-    
+
     case 'decisioninit'
         definput.keyvals.name= [];
         definput.keyvals.input1 = [];
@@ -248,24 +251,31 @@ switch command
         definput.keyvals.input8 = [];
         definput.keyvals.input9 = [];
         definput.keyvals.input10 = [];
-        
+
         definput.commands.plot = {'noplot','plot'};
-        
+
         if iscell(varargin{1}) && nargin == 3
             [~,kvdecision]=ltfatarghelper({},definput,varargin{:});
         else
             [~,kvdecision]=ltfatarghelper({},definput,varargin);
         end
-        
+
         out = par;
         out.decision = kvdecision;
-        
+
     case 'run'
-        
+
         definput.flags.plot = {'noplot','plot'};
-        
+
         [commands,~]=ltfatarghelper({},definput,varargin);
-        
+        if strcmp(par.exp.interface,'BInit'),          
+          csvwrite(fullfile(par.exp.directory,'a_priori.csv'),...
+            [par.model.input2, par.model.input3, par.model.input4]);
+          decision=par.decision;
+          save(fullfile(par.exp.directory,'decision_parameters.mat'),'decision');
+          delete(fullfile(par.exp.directory,'detector_out.csv'));
+        end
+
         % find experimental variable and inttyp variable
         sigparnames = fieldnames(par.signal);
         for count = 1: length(sigparnames)
@@ -276,10 +286,10 @@ switch command
                 inttypvar = name{:};
             end
         end
-        
+
         stepsize = par.exp.expvarstepstart;
         truecounter = 0;
-        par.signal.(experimentvar) = par.exp.expvarstart;          
+        par.signal.(experimentvar) = par.exp.expvarstart;
         expparvalue = [];
         downturn = 0;
         upturn = 1;
@@ -287,90 +297,111 @@ switch command
         lastturn = [];
         checkmodelout = 0;
         condition = 1;
-        
+        wrongcounter = -1;
+        trialcounter = 1;
+
         while condition
-            
+
             for interval_num=1:par.exp.intnum
-                
+
                 if interval_num == 1
-                    par.signal.(inttypvar) = 'target'; 
+                    par.signal.(inttypvar) = 'target';
                 else
                     par.signal.(inttypvar) = 'reference';
                 end
-                          
+
                 signalinputs = struct2cell(par.signal);
-                
+
                 % delete name of signal function
                 signalinputs = signalinputs(2:end);
-                
+
                 % delete empty cells
                 signalinputs = signalinputs(~cellfun('isempty',signalinputs));
-                
+
                 % call signalfunction
                 testsignal = feval(par.signal.name,signalinputs{:});
-                
-                % find experimental signal variable
-                modelparnames = fieldnames(par.model);
-                for count = 1: length(modelparnames)
-                    name = modelparnames(count);
-                    if strcmp(getfield(par.model, name{:}),'expsignal')
-                        experimentsignal = name{:};
-                        break
+
+                % call model or transfer files to the model
+                switch par.exp.interface
+                  case 'AMT'
+                    % find experimental signal variable
+                    modelparnames = fieldnames(par.model);
+                    for count = 1: length(modelparnames)
+                        name = modelparnames(count);
+                        if strcmp(getfield(par.model, name{:}),'expsignal')
+                            experimentsignal = name{:};
+                            break
+                        end
                     end
+                    par.model.(experimentsignal) = testsignal;
+                    % call model
+                    par.callstrings.model = strrep(par.callstrings.model,'expsignal', 'testsignal');
+                    eval(par.callstrings.model);
+                  case 'BInit'
+                    audiowrite(fullfile(par.exp.directory,['interval_' num2str(interval_num) '.wav']), testsignal, par.exp.fs);
                 end
-                par.model.(experimentsignal) = testsignal;                           
-                
-                % call model
-                par.callstrings.model = strrep(par.callstrings.model,'expsignal', 'testsignal');
-                eval(par.callstrings.model);
-                
-            end
-                
-            % find model output variable, only at the first time
-            if checkmodelout == 0
-                modeloutvarcount = 1;
-                decisionparnames = fieldnames(par.decision);
-                for count = 1:length(decisionparnames)
-                    name = decisionparnames(count);
-                    if strcmp(getfield(par.decision, name{:}),'modelout')
-                        modeloutvar{modeloutvarcount} = name{:};
-                        modeloutvarcount = modeloutvarcount+1;
+            end % for each interval
+
+            switch par.exp.interface
+              case 'AMT'
+                % find model output variable, only at the first time
+                if checkmodelout == 0
+                    modeloutvarcount = 1;
+                    decisionparnames = fieldnames(par.decision);
+                    for count = 1:length(decisionparnames)
+                        name = decisionparnames(count);
+                        if strcmp(getfield(par.decision, name{:}),'modelout')
+                            modeloutvar{modeloutvarcount} = name{:};
+                            modeloutvarcount = modeloutvarcount+1;
+                        end
                     end
+                    checkmodelout = 1;
                 end
-                checkmodelout = 1;
+
+                %set model outputs to decsion inputs
+                for count = 1:modeloutvarcount-1
+                    modeloutname = sprintf('par%i',par.model.outputs(count));
+                    par.decision.(modeloutvar{count}) = modelout.(modeloutname);
+                end
+
+                decisioninputs = struct2cell(par.decision);
+
+                % delete name of model function & outputs
+                decisioninputs = decisioninputs(2:end);
+
+                % delete empty cells
+                decisioninputs = decisioninputs(~cellfun('isempty',decisioninputs));
+
+                % call decision
+                decision = feval(par.decision.name,decisioninputs{:});
+              case 'BInit'
+                amtdisp(['Trial #' num2str(trialcounter) ', BInit on ' par.exp.directory],'volatile');
+                while ~exist(fullfile(par.exp.directory,'detector_out.csv'),'file');
+                  pause(.1);
+                end
+                fid=-1;
+                while fid==-1
+                  fid=fopen(fullfile(par.exp.directory,'detector_out.csv'),'r');
+                end
+                fclose(fid);                
+                decision=csvread(fullfile(par.exp.directory,'detector_out.csv'));
+                delete(fullfile(par.exp.directory,'detector_out.csv'));
             end
 
-            %set model outputs to decsion inputs
-            for count = 1:modeloutvarcount-1
-                modeloutname = sprintf('par%i',par.model.outputs(count));
-                par.decision.(modeloutvar{count}) = modelout.(modeloutname);
-            end
-
-            decisioninputs = struct2cell(par.decision);
-
-            % delete name of model function & outputs
-            decisioninputs = decisioninputs(2:end);
-
-            % delete empty cells
-            decisioninputs = decisioninputs(~cellfun('isempty',decisioninputs));
-
-            % call decision
-            decision = feval(par.decision.name,decisioninputs{:});
-            
             % store expparvalue
             expparvalue = [expparvalue par.signal.(experimentvar)];
-            
+
             % count reversals
             % wrong answers are par.exp.rule(2)and no low point reversal
             if decision ~= 1 && wrongcounter == par.exp.rule(2)-1 && downturn == 0
                 turncounter = turncounter + 1;
                 downturn = 1;
                 upturn = 0;
-                if stepsize == par.exp.stepmin(1) 
+                if stepsize == par.exp.stepmin(1)
                     lastturn = [lastturn par.signal.(experimentvar)];
                 end
 
-             % right answers are par.exp.rule(1) 
+             % right answers are par.exp.rule(1)
              % and no high point reversal
             elseif decision == 1 && truecounter == par.exp.rule(1)-1 && upturn == 0
                 turncounter = turncounter + 1;
@@ -380,7 +411,7 @@ switch command
                     lastturn = [lastturn par.signal.(experimentvar)];
                 end
             end
-       
+
             % change stepsize after par.exp.expvarsteprule(2) reversals, if stepsize
             % is not already par.exp.stepmin(1) dB
             if turncounter == par.exp.expvarsteprule(2) && truecounter == 1 && ...
@@ -388,28 +419,28 @@ switch command
                 stepsize = stepsize * par.exp.expvarsteprule(1);
                 turncounter = 0;
             end
-            
-            
+
+
             if decision == 1
                 wrongcounter = 0;
-                truecounter = truecounter + 1;                
+                truecounter = truecounter + 1;
             else
                 truecounter = 0;
                 wrongcounter = wrongcounter +1;
             end
-            
+
             % amount of right answers is par.exp.rule(1)
             if truecounter == par.exp.rule(1)
                 par.signal.(experimentvar) = par.signal.(experimentvar) - stepsize;
                 truecounter = 0;
-            end 
-            
+            end
+
             % amount of wrong answers is par.exp.rule(2)
             if wrongcounter == par.exp.rule(2)
                 par.signal.(experimentvar) = par.signal.(experimentvar) + stepsize;
                 wrongcounter = 0;
-            end 
-            
+            end
+
             % amount of reversals is par.stepmin(2)
             if size(lastturn,2) == par.exp.stepmin(2)
                 threshold = median(lastturn);
@@ -417,11 +448,13 @@ switch command
                 condition = 0;
                 out = [threshold threshstd expparvalue];
             end
-   
+            
+            trialcounter = trialcounter+1;
+
         end
         %clear persistent variables
         clear (par.decision.name);
-        
+
         if commands.do_plot
             figure
             for plotcounter = 1:(size(expparvalue,2)-1)
@@ -437,18 +470,18 @@ switch command
                     hold on
                 end
             end
-            
-            % special case last entry 
+
+            % special case last entry
             if decision == 1
                 stem(plotcounter+1,(expparvalue(plotcounter+1)),'+g',...
                         'LineStyle','none')
             else
                 stem(plotcounter+1,(expparvalue(plotcounter+1)),'or',...
                         'LineStyle','none')
-            end 
+            end
             title(['Threshold (Median): ' num2str(threshold) ...
                 'dB, Std: ' num2str(threshstd) 'dB'])
-            
+
         end
-        
+
 end

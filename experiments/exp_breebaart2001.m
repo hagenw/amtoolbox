@@ -66,6 +66,13 @@ function output=exp_breebaart2001(varargin)
 %
 %     'noplot'  Don't plot, only return data.
 %
+%   Figure 3 of Breebaart et al. (2001b) can also be calculated with the
+%   interface of the model initiative BInDT. Assuming a BInDT interface
+%   waiting for binaural signals in a directory DIR, use
+%   `exp_breebaart2001('bfig3','redo','BInit','directory',DIR);`. The AMT
+%   will start the experiment, collect the responses from the model server,
+%   and plot the figure. 
+%
 %   See also: data_breebaart2001 data_vandepar1999 breebaart2001centralproc breebaart2001preproc breebaart2001siggen 
 %
 %   Example:
@@ -104,9 +111,11 @@ warning off;
   definput.flags.type = {'missingflag','afig2','afig6','bfig3','bfig6',...
       'fig1_N0S0_vandepar1999'};
   definput.flags.plot = {'plot','noplot'};
+  definput.flags.interface = {'AMT', 'BInit'};
+  definput.keyvals.directory=tempdir;
 
   % Parse input options
-  [flags,~]  = ltfatarghelper({},definput,varargin);
+  [flags,kv]  = ltfatarghelper({},definput,varargin);
         
 if flags.do_missingflag
   flagnames=[sprintf('%s, ',definput.flags.type{2:end-2}),...
@@ -249,8 +258,15 @@ elseif flags.do_bfig3
     % do computation
         
         parout = [];
-        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,'expvarsteprule',[0.5 2],...
-            'stepmin',[1 8],'expvarstart',65};
+        switch flags.interface
+          case 'AMT'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+              'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65};
+          case 'BInit'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+                'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65, ...
+                'interface','BInit','directory',kv.directory,'fs',32000};
+        end
         parout = emuafcexp('expinit',parout,expset);
         
         % input2 = fs; input3 = tau; input4 = ild; 
@@ -264,49 +280,49 @@ elseif flags.do_bfig3
             'input4','lbr'};
         parout = emuafcexp('decisioninit',parout,decisionset);
 
-        centerfreq = [125 250 500 1000 2000 4000];
-        bw = [5 10 25 50 100 250];
-        bwadd = [500 1000 2000 4000];
+        fc = [125 250 500 1000 2000 4000];
+        bw = [5 10 25 50 100 250 500 1000 2000 4000];
+        %bwadd = [500 1000 2000 4000];
         nl = 65;
 
         % loop for all center freq.
-        for freqcount = 1:length(centerfreq)
+        for fccount = 1:length(fc)
 
             %loop for all bandwidths
             for bwcount = 1:length(bw)
+                  % calculate only for bandwidths max. twice as large as fc
+                if bw(bwcount) <= 2*fc(fccount)
+                  %input3 = signallevel; input4 = signalduration;
+                  %input5 = signalphase; input7 = noiselevel;
+                  %input8 = noiseduration; input9 = noisephase;
+                  %input10 = hanning ramp duration; input11 = fs;
+                  signalset = {'name','breebaart2001siggen','input1',...
+                      'inttyp', 'input2',fc(fccount),'input3',...
+                      'expvar','input4',0.3,'input5',pi,'input6',...
+                      bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
+                      'input10',0.05,'input11', 32000};
+                  parout = emuafcexp('signalinit',parout,signalset);
 
-                %input3 = signallevel; input4 = signalduration;
-                %input5 = signalphase; input7 = noiselevel;
-                %input8 = noiseduration; input9 = noisephase;
-                %input10 = hanning ramp duration; input11 = fs;
-                signalset = {'name','breebaart2001siggen','input1',...
-                    'inttyp', 'input2',centerfreq(freqcount),'input3',...
-                    'expvar','input4',0.3,'input5',pi,'input6',...
-                    bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
-                    'input10',0.05,'input11', 32000};
-                parout = emuafcexp('signalinit',parout,signalset);
+                  % loop for six experimental runs
+                  resultbwvec = zeros(6,1);
+                  for runcounter = 1:6
+                      amtdisp(['Calculating: center frequency = ', num2str(fc(fccount)), ...
+                          ' Hz, bandwidth = ' num2str(bw(bwcount)) ' Hz, run #' num2str(runcounter)],'progress');
 
-                % loop for experimental runs
-                for runcounter = 1:6
-                    result = emuafcexp('run',parout);
-                    resultbwvec(runcounter) = result(1)-nl;
+                      result = emuafcexp('run',parout);
+                      resultbwvec(runcounter) = result(1)-nl;
+                  end
+                  resultvec(bwcount) = mean(resultbwvec);
+                  resultvecstd(bwcount) = std(resultbwvec,1);                  
                 end
-
-                resultvec(bwcount) = mean(resultbwvec);
-                resultvecstd(bwcount) = std(resultbwvec,1);
-                resultbwvec = zeros(6,1);
-                amtdisp(sprintf(['Progress for %i Hz center frequency: ' ...
-                    num2str(round(bwcount/length(bw)*100)) ...
-                    '%% calculated'],centerfreq(freqcount)),'progress');
-
             end
 
-            N0Spi_temp =sprintf('N0Spi%i',centerfreq(freqcount));
+            N0Spi_temp =sprintf('N0Spi%i',fc(fccount));
             output.(N0Spi_temp) = [resultvec; resultvecstd]';
 
-            if freqcount <= length(bwadd)
-                bw(end+1) = bwadd(freqcount);
-            end
+            %if fccount <= length(bwadd)
+            %    bw(end+1) = bwadd(fccount);
+            %end
 
         end
         
@@ -316,8 +332,12 @@ elseif flags.do_bfig3
         N0Spi1000 = output.N0Spi1000;
         N0Spi2000 = output.N0Spi2000;
         N0Spi4000 = output.N0Spi4000;
-        amtcache('set','bfig3',N0Spi125,N0Spi250,N0Spi500,N0Spi1000,...
-            N0Spi2000,N0Spi4000);
+        
+        switch flags.interface
+          case 'AMT'
+            amtcache('set','bfig3',N0Spi125,N0Spi250,N0Spi500,N0Spi1000,...
+                N0Spi2000,N0Spi4000);
+        end
    
     else
         output = struct('N0Spi125',N0Spi125,'N0Spi250',N0Spi250,...
@@ -334,8 +354,15 @@ elseif flags.do_bfig6
     % do computation
         
         parout = [];
-        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,'expvarsteprule',[0.5 2],...
-            'stepmin',[1 8],'expvarstart',85};
+        switch flags.interface
+          case 'AMT'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+              'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65};
+          case 'BInit'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+                'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65, ...
+                'interface','BInit','directory',kv.directory,'fs',32000};
+        end
         parout = emuafcexp('expinit',parout,expset);
 
         decisionset = {'name','breebaart2001centralproc','input1',...
@@ -343,18 +370,18 @@ elseif flags.do_bfig6
             'input4','lbr'};
         parout = emuafcexp('decisioninit',parout,decisionset);
 
-        centerfreq = [125 250 500 1000];
+        fc = [125 250 500 1000];
         bw = [5 10 25 50 100 250];
         bwadd = [500 1000 2000];
         tau = [0.0039 0.002 0.001 0.0005];
         nl = 70;
 
         % loop for all center freq.
-        for freqcount = 1:length(centerfreq)
+        for fccount = 1:length(fc)
             
             % input2 = fs; input3 = tau; input4 = ild; 
             modelset = {'name','breebaart2001preproc','input1',...
-                'expsignal','input2',32000,'input3',tau(freqcount),...
+                'expsignal','input2',32000,'input3',tau(fccount),...
                 'input4',0,'outputs',[1 3 4]};
             parout = emuafcexp('modelinit',parout,modelset);
 
@@ -366,7 +393,7 @@ elseif flags.do_bfig6
                 %input8 = noiseduration; input9 = noisephase;
                 %input10 = hanning ramp duration; input11 = fs;
                 signalset = {'name','breebaart2001siggen','input1',...
-                    'inttyp', 'input2',centerfreq(freqcount),'input3',...
+                    'inttyp', 'input2',fc(fccount),'input3',...
                     'expvar','input4',0.3,'input5',pi,'input6',...
                     bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
                     'input10',0.05,'input11', 32000};
@@ -383,15 +410,15 @@ elseif flags.do_bfig6
                 resultbwvec = zeros(6,1);
                 amtdisp(sprintf(['Progress for %i Hz center frequency: ' ...
                     num2str(round(bwcount/length(bw)*100)) ...
-                    '%% calculated'],centerfreq(freqcount)),'progress'); 
+                    '%% calculated'],fc(fccount)),'progress'); 
 
             end
 
-            NpiS0_temp =sprintf('NpiS0%i',centerfreq(freqcount));
+            NpiS0_temp =sprintf('NpiS0%i',fc(fccount));
             output.(NpiS0_temp) = [resultvec; resultvecstd]';
 
-            if freqcount <= length(bwadd)
-                bw(end+1) = bwadd(freqcount);
+            if fccount <= length(bwadd)
+                bw(end+1) = bwadd(fccount);
             end
 
         end
@@ -400,8 +427,11 @@ elseif flags.do_bfig6
         NpiS0250 = output.NpiS0250;
         NpiS0500 = output.NpiS0500;
         NpiS01000 = output.NpiS01000;
-        amtcache('set','bfig6',NpiS0125,NpiS0250,NpiS0500,NpiS01000);
-        
+
+        switch flags.interface
+          case 'AMT'
+            amtcache('set','bfig6',NpiS0125,NpiS0250,NpiS0500,NpiS01000);
+        end    
     
     else
     output = struct('NpiS0125',NpiS0125,'NpiS0250',NpiS0250,'NpiS0500',...
@@ -415,8 +445,15 @@ elseif flags.do_fig1_N0S0_vandepar1999
     
     if isempty(N0S0125)
         parout = [];
-        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
-            'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',90};
+        switch flags.interface
+          case 'AMT'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+                'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',90};
+          case 'BInit'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+                'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',90, ...
+                'interface','BInit','directory',kv.directory,'fs',32000};
+        end
         parout = emuafcexp('expinit',parout,expset);
         
         % input2 = fs; input3 = tau; input4 = ild; 
@@ -430,13 +467,13 @@ elseif flags.do_fig1_N0S0_vandepar1999
             'input4','lbr'};
         parout = emuafcexp('decisioninit',parout,decisionset);
 
-        centerfreq = [125 250 500 1000 2000 4000];
+        fc = [125 250 500 1000 2000 4000];
         bw = [5 10 25 50 100 250];
         bwadd = [500 1000 2000 4000];
         nl = 70;
 
         % loop for all center freq.
-        for freqcount = 1:length(centerfreq)
+        for fccount = 1:length(fc)
 
             %loop for all bandwidths
             for bwcount = 1:length(bw)
@@ -446,7 +483,7 @@ elseif flags.do_fig1_N0S0_vandepar1999
                 %input8 = noiseduration; input9 = noisephase;
                 %input10 = hanning ramp duration; input11 = fs;
                 signalset = {'name','breebaart2001siggen','input1',...
-                    'inttyp', 'input2',centerfreq(freqcount),'input3',...
+                    'inttyp', 'input2',fc(fccount),'input3',...
                     'expvar','input4',0.3,'input5',0,'input6',...
                     bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
                     'input10',0.05,'input11', 32000};
@@ -454,6 +491,8 @@ elseif flags.do_fig1_N0S0_vandepar1999
 
                 % loop for experimental runs
                 for runcounter = 1:6
+                    amtdisp(['Calculating: center frequency = ', num2str(fc(fccount)), ...
+                        ' Hz, bandwidth = ' num2str(bw(bwcount)) ' Hz, run #' num2str(runcounter)],'progress');                  
                     result = emuafcexp('run',parout);
                     resultbwvec(runcounter) = result(1)-nl;
                 end
@@ -461,17 +500,13 @@ elseif flags.do_fig1_N0S0_vandepar1999
                 resultvec(bwcount) = mean(resultbwvec);
                 resultvecstd(bwcount) = std(resultbwvec,1);
                 resultbwvec = zeros(6,1);
-                amtdisp(sprintf(['Progress for %i Hz center frequency: ' ...
-                    num2str(round(bwcount/length(bw)*100)) ...
-                    '%% calculated'],centerfreq(freqcount)),'progress');
-
             end
 
-            N0S0_temp =sprintf('N0S0%i',centerfreq(freqcount));
+            N0S0_temp =sprintf('N0S0%i',fc(fccount));
             output.(N0S0_temp) = [resultvec; resultvecstd]';
 
-            if freqcount <= length(bwadd)
-                bw(end+1) = bwadd(freqcount);
+            if fccount <= length(bwadd)
+                bw(end+1) = bwadd(fccount);
             end
 
         end
@@ -482,9 +517,13 @@ elseif flags.do_fig1_N0S0_vandepar1999
         N0S01000 = output.N0S01000;
         N0S02000 = output.N0S02000;
         N0S04000 = output.N0S04000;
-        amtcache('set','fig1_N0S0_vandepar1999',N0S0125,N0S0250,N0S0500,...
-            N0S01000,N0S02000,N0S04000);
-   
+
+        switch flags.interface
+          case 'AMT'
+            amtcache('set','fig1_N0S0_vandepar1999',N0S0125,N0S0250,N0S0500,...
+                N0S01000,N0S02000,N0S04000);
+        end
+        
     else
         output = struct('N0S0125',N0S0125,'N0S0250',N0S0250,...
             'N0S0500',N0S0500,'N0S01000',N0S01000,'N0S02000',N0S02000,...

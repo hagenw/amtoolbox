@@ -91,9 +91,11 @@ function demo_breebaart2001(varargin)
 definput.import={'amtcache'};
 definput.flags.type = {'N0Spi','N0S0','NpiS0'};
 definput.flags.speed = {'fast','exact'};
+definput.flags.interface = {'AMT', 'BInit'};
+definput.keyvals.directory=tempdir;
 
 % Parse input options
-[flags,~]  = ltfatarghelper({},definput,varargin);
+[flags,kv]  = ltfatarghelper({},definput,varargin);
 
 
 if flags.do_fast
@@ -101,8 +103,15 @@ if flags.do_fast
     if flags.do_N0Spi
         % set experimental paramters
         parout = [];
-        expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
-            'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65};
+        switch flags.interface
+          case 'AMT'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+                'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65};
+          case 'BInit'
+            expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
+                'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65, ...
+                'interface','BInit','directory',kv.directory,'fs',32000};
+        end
         parout = emuafcexp('expinit',parout,expset);
 
         % set model parameters
@@ -118,8 +127,10 @@ if flags.do_fast
         centralprocstring = {'lbr','b','lr'};
         nl = 65;
 
+    amtdisp('demo_breebaart2001 will calculate 15 thresholds','progress');
 		output = amtcache('get','N0Spi_fast',flags.cachemode);		
 		if isempty(output)
+      runcounter=1;
 			% loop for all centralprocstring conditions.
 			for stringcount = 1:length(centralprocstring)
 
@@ -147,6 +158,7 @@ if flags.do_fast
 						'input10',0.025,'input11', 32000};
 					parout = emuafcexp('signalinit',parout,signalset);
 
+          amtdisp(['Threshold #' num2str(runcounter) ': for bw=' num2str(bw(bwcount)) 'Hz and decision=' centralprocstring{stringcount} '.'],'progress');
 					result = emuafcexp('run',parout);
 					resultbwvec(1) = result(1)-nl;
 
@@ -155,7 +167,7 @@ if flags.do_fast
 					amtdisp(sprintf(['Progress for central processor condition ' ...
 						centralprocstring{stringcount} ':' num2str(round(bwcount/length(bw)*100)) ...
 						'%% calculated']),'progress');
-
+          runcounter=runcounter+1;
 					result_temp =sprintf(['N0Spi4000' centralprocstring{stringcount}]);
 					output.(result_temp) = resultvec;
 
