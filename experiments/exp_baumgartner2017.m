@@ -67,7 +67,7 @@ definput.import={'amtcache'};
 definput.flags.type = {'missingflag','boyd2012','hartmann1996','hassager2016'};
 definput.flags.quickCheck = {'','quickCheck'};
 definput.keyvals.Sintra = 2;
-definput.keyvals.Sinter = 1;
+definput.keyvals.Sinter = 2;
 
 [flags,kv]  = ltfatarghelper({},definput,varargin);
 
@@ -217,8 +217,8 @@ if flags.do_hartmann1996
     ylabel('Externalization score')
     title(exp{ee})
     axis([0,39,-0.1,3.1])
-    if ee == 1
-      leg = legend('Actual','Interaural cues','Monaural cues','Location','south');
+    if ee == 2
+      leg = legend('Actual','Interaural cues','Monaural cues','Location','southwest');
       set(leg,'Box','off')
     end
   end
@@ -229,13 +229,12 @@ if flags.do_boyd2012
   flp = 6500; % Low-pass cut-off frequency
   ele = 0; 
   azi = -30;
-
+  data = data_boyd2012;
   
   fncache = ['boyd2012_Sintra',num2str(kv.Sintra*100,'%i'),'_Sinter',num2str(kv.Sinter*100,'%i')];
   E = amtcache('get',fncache,flags.cachemode);
   if isempty(E)
     
-    data = data_boyd2012;
     Eboyd = cat(3,[data.ITE.BB(:),data.BTE.BB(:)],[data.ITE.LP(:),data.BTE.LP(:)]);
     mix = data.mix/100;
 
@@ -257,16 +256,32 @@ if flags.do_boyd2012
       stim{1,1} = SOFAspat(sig,ITE,azi,ele);
       stim{2,1} = SOFAspat(sig,BTE.Obj,azi,ele);
       
-      % Head-absent condition
-      itd = abs(round(3*0.08/343*sin(deg2rad(azi))*fs)); % |ITD| in samples
-      stim{3,1} = [ [zeros(itd,1);sig(:)] , [sig(:);zeros(itd,1)] ];
-      stim{3,1} = [stim{3,1};zeros(length(stim{1,1})-length(stim{3,1}),2)];
-      if azi > 0
-        stim{3,1} = filplr(stim{3,1});
+      % Time-aligned head-absent condition
+      for c = 1:2
+        [scor,lag] = xcorr(stim{c,1}(:,1),sig(:));
+        [~,iL] = max(abs(scor));
+        iL = lag(iL);
+        [~,iR] = max(abs(xcorr(stim{c,1}(:,2),sig(:))));
+        iR = lag(iR);
+        stim{c+2,1} = zeros(length(stim{c,1}),2);
+        stim{c+2,1}(iL+(1:length(sig)),1) = sig;
+        stim{c+2,1}(iR+(1:length(sig)),2) = sig;
+        if azi > 0
+          stim{c+2,1} = fliplr(stim{c+2,1});
+        end
+        SPL = mean(dbspl(stim{c,1}));
+        stim{c+2,1} = setdbspl(stim{c+2,1},SPL);
       end
-      SPL = mean(dbspl(stim{1,1}));
-      stim{3,1} = setdbspl(stim{3,1},SPL);
-      
+% Version 2
+%       itd = abs(round(3*0.08/343*sin(deg2rad(azi))*fs)); % |ITD| in samples
+%       stim{3,1} = [ [zeros(itd,1);sig(:)] , [sig(:);zeros(itd,1)] ];
+%       stim{3,1} = [stim{3,1};zeros(length(stim{1,1})-length(stim{3,1}),2)];
+%       if azi > 0
+%         stim{3,1} = filplr(stim{3,1});
+%       end
+%       SPL = mean(dbspl(stim{1,1}));
+%       stim{3,1} = setdbspl(stim{3,1},SPL);
+% Version 3     
 %       HA = baumgartner2017flattenhrtfmag(ITE,0,50,18e3);
 %       stim{3,1} = SOFAspat(sig,HA,azi,ele);
 %       % remove ILD in HA condition
@@ -294,10 +309,10 @@ if flags.do_boyd2012
       for c = 1:2
         for lp = 1:2
           for m = 1:length(mix)
-            target{m,c,lp} = mix(m)*stim{c,lp} + (1-mix(m))*stim{3,lp};
-            for ch = 1:2
-              target{m,c,lp}(:,ch) = setdbspl(target{m,c,lp}(:,ch),temSPL(ch));
-            end
+            target{m,c,lp} = mix(m)*stim{c,lp} + (1-mix(m))*stim{c+2,lp};
+%             for ch = 1:2
+%               target{m,c,lp}(:,ch) = setdbspl(target{m,c,lp}(:,ch),temSPL(ch));
+%             end
             Ebaum(m,c,lp,isub) =  baumgartner2017( target{m,c,lp},template,...
               'S',kv.Sintra,'flow',100,'c1',100,'c2',0,'fhigh',fhigh(1),'lat',azi);
             Ehass(m,c,lp,isub) =  baumgartner2017( target{m,c,lp},template,...
@@ -345,9 +360,9 @@ if flags.do_boyd2012
     end
     title(condLbl{cc})
     axis([-20,120,-5,105])
-    if cc == 1
+    if cc == 4
       leg = legend(dataLbl);
-      set(leg,'Box','off','Location','south')
+      set(leg,'Box','off','Location','north')
     end
   end
 %   set(leg,'Location','eastoutside','Position',get(leg,'Position')+[.1,.2,0,0])
