@@ -76,9 +76,7 @@ function [E,varargout] = baumgartner2017( target,template,varargin )
 %
 %   See also: baumgartner2014spectralanalysis,
 %   baumgartner2014gradientextraction, baumgartner2014binauralweighting
-%
-%   References: 
-  
+
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
 %% Check input

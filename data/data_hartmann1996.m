@@ -21,7 +21,7 @@ function data = data_hartmann1996(varargin)
 %   Output parameters:
 %     data    : structure with individual and average data
 %
-%   References: Hartman and Wittenberg (JASA 1996)
+%   References: hartmann1996
 
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 

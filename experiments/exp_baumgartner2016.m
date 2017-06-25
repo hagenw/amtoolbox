@@ -5,14 +5,14 @@ function varargout = exp_baumgartner2016(varargin)
 %   `exp_baumgartner2016(flag)` reproduces figures of the study from 
 %   Baumgartner et al. (2014).
 %
-%   Output parameter:
+%   Output parameters:
 %     d  :  Prediction residuum. Structure with fields: qe, pe, and total
 %     r  :  Correlation coefficient between actual and predicted results. 
 %           Structure with fields: qe, pe, and total.
 %     s  :  Structure containing listener-sepcific data and results. 
 %     N  :  Number of spectral channels (only for 'numchan'). 
 %
-%   The following flags can be specified;
+%   The following flags can be specified
 %
 %     'plot'    Plot the output of the experiment. This is the default.
 %
@@ -151,8 +151,7 @@ function varargout = exp_baumgartner2016(varargin)
 %
 %   See also: baumgartner2016 data_baumgartner2016
 %
-%   References: baumgartner2016 majdak2013spatstrat goupell2010numchan  
-%   
+%   References: baumgartner2016 majdak2013spatstrat goupell2010numchan
 
 
 % AUTHOR: Robert Baumgartner

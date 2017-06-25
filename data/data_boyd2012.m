@@ -12,7 +12,7 @@ function data = data_boyd2012
 %                 ITE with subfields BB and LP
 %                 BTE with subfields BB and LP
 %
-%   References: Boyd et al. (JASA-EL, 2012)
+%   References: boyd2012
 
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 

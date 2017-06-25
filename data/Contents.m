@@ -27,6 +27,8 @@
 %      DATA_ROENNE2012      - Unitary response.
 %      DATA_BAUMGARTNER2013 - Data from Baumgartner et al. (2013)
 %      DATA_BAUMGARTNER2014  - Data from Baumgartner et al. (2014)
+%      DATA_BAUMGARTNER2016  - Data from Baumgartner et al. (2016)
+%      DATA_BAUMGARTNER2017  - Data from Baumgartner et al. (2017)
 %      DATA_MAJDAK2013CTC   - Localization responses from Majdak et al. (2013), cross-talk cancellation study
 %      DATA_MAJDAK2013      - Localization responses from Majdak et al. (2013), spectral warping study
 %      DATA_TAKANEN2013     - Data from Takanen et al. (2013)

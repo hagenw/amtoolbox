@@ -1,14 +1,14 @@
 function data = exp_baumgartner2017(varargin)
-%EXP_BAUMGARTNER2017 - Experiments of Baumgartner et al. (2017).
+%EXP_BAUMGARTNER2017 - Experiments of Baumgartner et al. (2017)
 %   Usage: data = exp_baumgartner2017(flag) 
 %
 %   `exp_baumgartner2017(flag)` reproduces figures of the study from 
 %   Baumgartner et al. (2016).
 %
-% %   Optional fields of output *data* structure:
-% %
-% %   `data.contralateralGain`
-% %      contralateral gain of binaural weighting function
+%   Optional fields of output *data* structure:
+%
+%   `data.contralateralGain`
+%      contralateral gain of binaural weighting function
 %
 %
 %   The following flags can be specified
@@ -59,7 +59,7 @@ function data = exp_baumgartner2017(varargin)
 %
 %     exp_baumgartner2017('hassager2016');
 %
-%   References: Hassager et al. (JASA 2016)
+%   References: hassager2016
    
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
