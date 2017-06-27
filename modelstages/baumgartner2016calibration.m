@@ -1,6 +1,5 @@
 function scalib = baumgartner2016calibration(s,varargin)
-%baumgartner2016calibration  Calibration of listener-specific sensitivity 
-% thresholds to experimental performance
+%baumgartner2016calibration  Calibration of listener-specific sensitivity thresholds to experimental performance
 %   Usage: scalib = baumgartner2016calibration(s)
 %
 %   Input parameter:

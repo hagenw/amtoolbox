@@ -30,7 +30,7 @@ function varargout = baumgartner2016spectralanalysis(sig,spl,varargin)
 %
 %     'template'  Processing of a template sound (for caching).
 %
-%   References: 
+
 
 % AUTHOR: Robert Baumgartner
 

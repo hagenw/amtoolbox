@@ -5,4 +5,4 @@ versionfile="amtoolbox_version"
 
 # Optional global settings
 author=u'Piotr Majdak'
-year="2015"
+year="2017"

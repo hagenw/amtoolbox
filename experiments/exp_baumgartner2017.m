@@ -13,29 +13,26 @@ function data = exp_baumgartner2017(varargin)
 %
 %   The following flags can be specified
 %
-%     `boyd2012`    
-%         Model experiments from Boyd et al. (2012; Fig.1, top):
+%     `boyd2012` models experiments from Boyd et al. (2012; Fig.1, top).
 %         Average externalization ratings of 1 talker for NH participants 
 %         against mix point as a function of microphone position (ITE/BTE) 
 %         and frequency response (BB/LP). The reference condition (ref) is 
 %         the same as ITE/BB. Error bars show SEM. 
 %
-%     `hartmann1996`    
-%         Model experiments from Hartmann & Wittenberg (1996; Fig.7-8):
+%     `hartmann1996` models experiments from Hartmann & Wittenberg (1996; Fig.7-8)
 %         1st panel: Synthesis of zero-ILD signals. Only the harmonics 
-%             from 1 to nprime had zero interaural level difference; 
-%             harmonics above nprime retained the amplitudes of the baseline  
-%             synthesis. Externalization scores as a function of the boundary  
-%             harmonic number nprime. Fundamental frequency of 125 Hz.
+%         from 1 to nprime had zero interaural level difference; 
+%         harmonics above nprime retained the amplitudes of the baseline  
+%         synthesis. Externalization scores as a function of the boundary  
+%         harmonic number nprime. Fundamental frequency of 125 Hz.
 %         2nd panel: Synthesis of signals to test the ISLD hypothesis. 
-%             Harmonics at and below the boundary retained only the interaural 
-%             spectral level differences of the baseline synthesis. Higher 
-%             harmonics retained left and right baseline harmonic levels. 
-%             Externalization scores as a function of the boundary
-%             frequency.
+%         Harmonics at and below the boundary retained only the interaural 
+%         spectral level differences of the baseline synthesis. Higher 
+%         harmonics retained left and right baseline harmonic levels. 
+%         Externalization scores as a function of the boundary
+%         frequency.
 %
-%     `hassager2016`    
-%         Model experiments from Hassager et al. (2016; Fig.6):
+%     `hassager2016` models experiments from Hassager et al. (2016; Fig.6). 
 %         The mean of the seven listeners perceived sound source 
 %         location (black) as a function of the bandwidth factor 
 %         and the corresponding model predictions (colored). 
