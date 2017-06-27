@@ -137,7 +137,7 @@ function varargout = exp_baumgartner2016(varargin)
 %
 %     exp_baumgartner2016('fig6');
 %
-%   To display predicted effects of sensorineural hearing loss use :::
+%   To display predicted effects of sensorineural hearing loss use (requires Matlab 2013b or higher) :::
 %
 %     exp_baumgartner2016('fig7');
 %
@@ -323,14 +323,19 @@ if flags.do_hearingthreshold || flags.do_fig4
       end
     end
   end
-  HL = HL(:,2:end,:) - repmat(HL(:,1,:),1,length(cOHC)-1,1);
+  HL = HL(:,2:end,:) - repmat(HL(:,1,:),[1,length(cOHC)-1,1]);
   PTA = shiftdim(mean(HL));
   legendentries = cat(2,repmat('C_{OHC} = ',length(cOHC),1),num2str(cOHC(:),'%2.1f'));
   for cc = 1:length(cOHC)-1
     RowNames{cc} = legendentries(cc+1,:);
   end
   PTA = round(PTA);
-  table(PTA(:,1),PTA(:,2),PTA(:,3),'RowNames',RowNames,'VariableNames',{'PTAlow_Rakerd98','PTAhigh_Rakerd98','PTAhigh_Otte13'})
+  if verLessThan('matlab','8.2'),
+    disp('PTAlow_Rakerd98 PTAhigh_Rakerd98 PTAhigh_Otte13');
+    PTA
+  else
+    table(PTA(:,1),PTA(:,2),PTA(:,3),'RowNames',RowNames,'VariableNames',{'PTAlow_Rakerd98','PTAhigh_Rakerd98','PTAhigh_Otte13'})
+  end
 
   varargout{1} = HT;
   varargout{2} = cf;
@@ -471,9 +476,9 @@ if flags.do_baseline || flags.do_fig3
   if not(isempty(model.flags.errorflag))
     cachename = [cachename '_' model.flags.errorflag];
   end
-  [r,d,s] = amtcache('get',cachename,flags.cachemode);
+  [Pcorr,d,s] = amtcache('get',cachename,flags.cachemode);
   
-  if isempty(r)
+  if isempty(Pcorr)
 
     s = data_baumgartner2016('argimport',model.flags,model.kv);
     
@@ -1961,7 +1966,7 @@ if flags.do_impairment
     fig = [];
   end
   
-  if flags.do_stat
+  if flags.do_stat && ~verLessThan('matlab','8.2')
     s = rmfield(s,{'pe_exp','qe_exp','S','pe_exp_lat','qe_exp_lat','target','response','Ntar','mrs','fs'});
     
     t = array2table(mtx.err);
@@ -2049,10 +2054,10 @@ if flags.do_fig7
     
     axes(ha(ii));
     copyobj(allchild(ax(ii)),ha(ii))
-    set(ha(ii),'XTick',ax(ii).XTick)
-    set(ha(ii),'XTickLabel',ax(ii).XTickLabel)
-    set(ha(ii),'YTick',ax(ii).YTick)
-    set(ha(ii),'YTickLabel',ax(ii).YTickLabel)
+    set(ha(ii),'XTick',get(ax(ii),'XTick'))
+    set(ha(ii),'XTickLabel',get(ax(ii),'XTickLabel'))
+    set(ha(ii),'YTick',get(ax(ii),'YTick'))
+    set(ha(ii),'YTickLabel',get(ax(ii),'YTickLabel'))
     if ii <= length(SPLset) % add SPL and FT labels at top panels
       if length(SPLset) > 1
         title([num2str(SPLset(ii)) ' dB SPL'])
@@ -2230,7 +2235,7 @@ if flags.do_effectOnCues || flags.do_fig9
       
       c = colorbar;
       set(c,'Position',[.93,.2,.02,.6])
-      set(get(c,'Label'),'String','Spikes/s/ERB','FontSize',kv.FontSize)
+      set(get(c,'Title'),'String','Spikes/s/ERB','FontSize',kv.FontSize)
       
     end
   end
@@ -2315,8 +2320,8 @@ if flags.do_fig5
   axSpatStrat = get(gcf,'Children');
 
   % Adjust marker symbols
-  set([allchild(axNumChan(1)),allchild(axSpatStrat(1))],'Marker','d') % QE
-  set([allchild(axNumChan(3)),allchild(axSpatStrat(3))],'Marker','s') % PE
+%   RB: set([allchild(axNumChan(1)),allchild(axSpatStrat(1))],'Marker','d') % QE
+%   RB: set([allchild(axNumChan(3)),allchild(axSpatStrat(3))],'Marker','s') % PE
 
   % Combined plot
   fig = figure;
@@ -2340,21 +2345,21 @@ if flags.do_fig5
   legend(ha(3),{'Model','Actual'},'Position',[0.5 0.80 0.1147 0.0440]);
 
   % Limits
-  set(ha([1,3]),'XLim',axNumChan(1).XLim)
-  set(ha([2,4]),'XLim',axSpatStrat(1).XLim)
+  set(ha([1,3]),'XLim',get(axNumChan(1),'XLim'));
+  set(ha([2,4]),'XLim',get(axSpatStrat(1),'XLim'));
   set(ha([1,2]),'YLim',[1,45.9])
   set(ha([3,4]),'YLim',[26,54])
 
   % Ticks
   set(ha,'TickLength',[0.02,.01],'Box','on')
-  set(ha(1:2),'YTick',axNumChan(1).YTick)
-  set(ha(3:4),'YTick',axNumChan(3).YTick)
-  set(ha(1),'YTickLabel',axNumChan(1).YTickLabel)
-  set(ha(3),'YTickLabel',axNumChan(3).YTickLabel)
-  set(ha([1,3]),'XTick',axNumChan(1).XTick)
-  set(ha([2,4]),'XTick',axSpatStrat(1).XTick)
-  set(ha(3),'XTickLabel',axNumChan(1).XTickLabel)
-  set(ha(4),'XTickLabel',axSpatStrat(1).XTickLabel)
+  set(ha(1:2),'YTick',get(axNumChan(1),'YTick'))
+  set(ha(3:4),'YTick',get(axNumChan(3),'YTick'))
+  set(ha(1),'YTickLabel',get(axNumChan(1),'YTickLabel'))
+  set(ha(3),'YTickLabel',get(axNumChan(3),'YTickLabel'))
+  set(ha([1,3]),'XTick',get(axNumChan(1),'XTick'))
+  set(ha([2,4]),'XTick',get(axSpatStrat(1),'XTick'))
+  set(ha(3),'XTickLabel',get(axNumChan(1),'XTickLabel'))
+  set(ha(4),'XTickLabel',get(axSpatStrat(1),'XTickLabel'))
   
   close(singleFig)
 end
