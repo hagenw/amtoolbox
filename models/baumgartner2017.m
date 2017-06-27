@@ -97,14 +97,14 @@ definput.keyvals.z1 = 0.99;
 
 if not(isstruct(target)) && ismatrix(target)
   target = permute(target,[1,3,2]);
-  warning('Matrix dimensions of target should be: time x direction x channel/ear.')
-  warning('Since 3rd dimension was empty, 2nd dimension was used as channel dimension.')
+%   warning(['Matrix dimensions of target should be: time x direction x channel/ear.' ...
+%    'Since 3rd dimension was empty, 2nd dimension was used as channel dimension.'])
 end
 
 if not(isstruct(template)) && ismatrix(template)
   template = permute(template,[1,3,2]);
-  warning('Matrix dimensions of template should be: time x direction x channel/ear.')
-  warning('Since 3rd dimension was empty, 2nd dimension was used as channel dimension.')
+%   warning(['Matrix dimensions of template should be: time x direction x channel/ear.' ... 
+%     'Since 3rd dimension was empty, 2nd dimension was used as channel dimension.'])
 end
 
 %% Print Settings

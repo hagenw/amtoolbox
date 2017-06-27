@@ -107,7 +107,7 @@ if flags.do_hassager2016
         idazi = Obj.SourcePosition(:,1) == azi(iazi) & Obj.SourcePosition(:,2) == 0;
         template = squeeze(shiftdim(Obj.Data.IR(idazi,:,:),2));
         for iB = 1:length(B)
-          disp(iB)
+          amtdisp(num2str(iB),'volatile');
           if isnan(B(iB))
             target = template;
           else

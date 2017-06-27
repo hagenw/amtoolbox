@@ -268,7 +268,7 @@ switch command
         definput.flags.plot = {'noplot','plot'};
 
         [commands,~]=ltfatarghelper({},definput,varargin);
-        if strcmp(par.exp.interface,'BInit'),          
+        if strcmp(par.exp.interface,'ModelInitiative'),          
           csvwrite(fullfile(par.exp.directory,'a_priori.csv'),...
             [par.model.input2, par.model.input3, par.model.input4]);
           decision=par.decision;
@@ -337,7 +337,7 @@ switch command
                     % call model
                     par.callstrings.model = strrep(par.callstrings.model,'expsignal', 'testsignal');
                     eval(par.callstrings.model);
-                  case 'BInit'
+                  case 'ModelInitiative'
                     audiowrite(fullfile(par.exp.directory,['interval_' num2str(interval_num) '.wav']), testsignal, par.exp.fs);
                 end
             end % for each interval
@@ -374,8 +374,8 @@ switch command
 
                 % call decision
                 decision = feval(par.decision.name,decisioninputs{:});
-              case 'BInit'
-                amtdisp(['Trial #' num2str(trialcounter) ', BInit on ' par.exp.directory],'volatile');
+              case 'ModelInitiative'
+                amtdisp(['Trial #' num2str(trialcounter) ', ModelInitiative on ' par.exp.directory],'volatile');
                 while ~exist(fullfile(par.exp.directory,'detector_out.csv'),'file');
                   pause(.1);
                 end

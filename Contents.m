@@ -3,26 +3,30 @@
 %
 %  This is the most complete, and up-to-date description of the AMT. It consists of auto-generated documentation of all functions and models included in the AMT. This documentation is included in the M-files. 
 %
-%  The current status of the models can be found in http://amtoolbox.sourceforge.net/notes/amtnote006.pdf
+%  New to the AMT? Read the documentation of |amtstart| to learn how to install.
+% 
+%  The current status of the models can be found in the section "Models" at this website.
 %
-%  First steps on installation can be found in AMTSTART.
 %
+%  Files:
+%  ------
+% 
 %  Start and installation
-%    AMTSTART     -  Start the AMT
-%    AMTMEX       -  Compile Mex/Oct and other binary interfaces
-%    AMTFLAGS     -  The start-up flags of the AMT
+%    AMTSTART     -  Start the AMT. Read this documentation to learn how to intall and start the AMT.
+%    AMTMEX       -  Install binaries of the AMT (compile Mex, Oct, and other files).
 %
 %  General functions
-%    AMTCACHE     -  Store and access cached data
-%    AMTLOAD      -  Load auxiliary data (or download if required)
-%    AMTDISP      -  `disp` depending on the start-up flags
+%    AMTLOAD      -  Load auxiliary data (and download if required).
+%    AMTDISP      -  Display text in the command window. `disp` replacement in the AMT, the format depends on the start-up flags
+%    AMTCACHE     -  Store and access cached data.
+%    AMTFLAGS     -  Get the start-up flags of the AMT.
 %
 %  Paths and URLs
-%    AMTBASEPATH  -  The base path of the AMT
-%    AMTAUXDATAPATH - The path to the auxiliary data directory
-%    AMTAUXDATAURL - The URL to the auxiliary data on the web
+%    AMTBASEPATH  -  Get the base path of the AMT
+%    AMTAUXDATAPATH - Get the path to the auxiliary data directory
+%    AMTAUXDATAURL - Get the URL to the auxiliary data on the web
 %
-%  The AMT team, 2012 - 2014.
+%  The AMT team, 2012 - 2017.
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

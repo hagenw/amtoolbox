@@ -69,7 +69,7 @@ function output=exp_breebaart2001(varargin)
 %   Figure 3 of Breebaart et al. (2001b) can also be calculated with the
 %   interface of the model initiative BInDT. Assuming a BInDT interface
 %   waiting for binaural signals in a directory DIR, use
-%   `exp_breebaart2001('bfig3','redo','BInit','directory',DIR);`. The AMT
+%   `exp_breebaart2001('bfig3','redo','ModelInitiative','directory',DIR);`. The AMT
 %   will start the experiment, collect the responses from the model server,
 %   and plot the figure. 
 %
@@ -111,7 +111,7 @@ warning off;
   definput.flags.type = {'missingflag','afig2','afig6','bfig3','bfig6',...
       'fig1_N0S0_vandepar1999'};
   definput.flags.plot = {'plot','noplot'};
-  definput.flags.interface = {'AMT', 'BInit'};
+  definput.flags.interface = {'AMT', 'ModelInitiative'};
   definput.keyvals.directory=tempdir;
 
   % Parse input options
@@ -262,10 +262,10 @@ elseif flags.do_bfig3
           case 'AMT'
             expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
               'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65};
-          case 'BInit'
+          case 'ModelInitiative'
             expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
                 'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65, ...
-                'interface','BInit','directory',kv.directory,'fs',32000};
+                'interface','ModelInitiative','directory',kv.directory,'fs',32000};
         end
         parout = emuafcexp('expinit',parout,expset);
         
@@ -358,10 +358,10 @@ elseif flags.do_bfig6
           case 'AMT'
             expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
               'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65};
-          case 'BInit'
+          case 'ModelInitiative'
             expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
                 'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65, ...
-                'interface','BInit','directory',kv.directory,'fs',32000};
+                'interface','ModelInitiative','directory',kv.directory,'fs',32000};
         end
         parout = emuafcexp('expinit',parout,expset);
 
@@ -449,10 +449,10 @@ elseif flags.do_fig1_N0S0_vandepar1999
           case 'AMT'
             expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
                 'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',90};
-          case 'BInit'
+          case 'ModelInitiative'
             expset = {'intnum',3,'rule',[2 1],'expvarstepstart',8,...
                 'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',90, ...
-                'interface','BInit','directory',kv.directory,'fs',32000};
+                'interface','ModelInitiative','directory',kv.directory,'fs',32000};
         end
         parout = emuafcexp('expinit',parout,expset);
         
