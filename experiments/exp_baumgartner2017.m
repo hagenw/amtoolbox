@@ -5,12 +5,6 @@ function data = exp_baumgartner2017(varargin)
 %   `exp_baumgartner2017(flag)` reproduces figures of the study from 
 %   Baumgartner et al. (2016).
 %
-% %   Optional fields of output *data* structure:
-% %
-% %   `data.contralateralGain`
-% %      contralateral gain of binaural weighting function
-%
-%
 %   The following flags can be specified
 %
 %     `boyd2012`    
@@ -105,25 +99,26 @@ if flags.do_hassager2016
     for isubj = 1:length(data)
       Obj = data(isubj).Obj;
       for iazi = 1:length(azi)
-  % figure;
+% figure;
     %     templateSound = SOFAspat(in,Obj,azi(iazi),0);
         idazi = Obj.SourcePosition(:,1) == azi(iazi) & Obj.SourcePosition(:,2) == 0;
         template = squeeze(shiftdim(Obj.Data.IR(idazi,:,:),2));
         for iB = 1:length(B)
-          disp(iB)
+          amtdisp(iB,'volatile');
           if isnan(B(iB))
             target = template;
           else
             Obj_tar = hassager2016spectralsmoothing(Obj,B(iB));
             target = squeeze(shiftdim(Obj_tar.Data.IR(idazi,:,:),2));
           end
-  % [tarmp,fc] = baumgartner2014spectralanalysis(target);
-  % subplot(1,2,1); hold on
-  % semilogx(fc,tarmp(:,1))
-  % % plotfftreal(iB*db2mag(10)*fftreal(target(:,1)),fs,'flog'); 
-  % subplot(1,2,2); hold on
-  % semilogx(fc,tarmp(:,2))
-  % % plotfftreal(iB*db2mag(10)*fftreal(target(:,2)),fs,'flog'); 
+% [tarmp,fc] = baumgartner2014spectralanalysis(target,'flow',100,'fhigh',flp);
+% semilogx(fc,diff(tarmp,1,2)); hold on
+%   subplot(1,2,1); hold on
+%   semilogx(fc,tarmp(:,1))
+  % plotfftreal(iB*db2mag(10)*fftreal(target(:,1)),fs,'flog'); 
+%   subplot(1,2,2); hold on
+%   semilogx(fc,tarmp(:,2))
+  % plotfftreal(iB*db2mag(10)*fftreal(target(:,2)),fs,'flog'); 
           Pext{1}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sinter,'flow',100,'fhigh',flp,'interaural'); % Obj instead of single template
           Pext{2}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sintra,'flow',100,'fhigh',flp,'lat',azi(iazi));
         end
