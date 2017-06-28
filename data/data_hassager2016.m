@@ -12,7 +12,7 @@ function data = data_hassager2016
 %                 angle ... source angle (deg)
 %                 rating ... Externalization Rating (dim: B x angle)
 %
-%   References: Hassager et al. (JASA, 2016)
+%   References: hassager2016
 
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 

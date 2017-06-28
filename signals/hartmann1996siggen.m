@@ -22,7 +22,7 @@ function sig = hartmann1996siggen(varargin)
 %   Output parameters:
 %     sig    : signal wave form
 %
-%   References: Hartman and Wittenberg (JASA 1996)
+%   References: hartmann1996
 
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 

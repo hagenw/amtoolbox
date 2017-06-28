@@ -12,7 +12,7 @@
 %      This demo computes the baseline prediction (localizing broadband 
 %      sounds with own ears) for an exemplary listener with outer-hair-cell dysfunction.
 %
-%   See also: baumgartner2016 exp_baumgartner2015 baumgartner2014virtualexp
+%   See also: baumgartner2016 exp_baumgartner2016 baumgartner2014virtualexp
 %   localizationerror
 
 % AUTHOR : Robert Baumgartner

@@ -1,5 +1,4 @@
 function varargout = baumgartner2016( target,template,varargin )
-%varargout = baumgartner2016( target,template,label,varargin )
 %BAUMGARTNER2016 Level-dependent model for localization in sagittal planes
 %   Usage:    [p,rang,tang] = baumgartner2016( target,template )
 %             [err,pred,m] = baumgartner2016( target,template,errorflag )
@@ -36,7 +35,7 @@ function varargout = baumgartner2016( target,template,varargin )
 %
 %   `baumgartner2016` accepts the following optional parameters:
 %
-%     'ID'           Listener's ID (important for caching).
+%     'ID'           Listeners ID (important for caching).
 %
 %     'Condition'    Label of experimental condition (also for caching).
 %
@@ -61,7 +60,7 @@ function varargout = baumgartner2016( target,template,varargin )
 %     'temstim'      Define the dummy stimulus used to create the templates.
 %                    The default is Gaussian white noise with a duration of 170 ms.
 %
-%     'SPL',L        Set the SPL of the stimulus to *L*dB. 
+%     'SPL',L        Set the SPL of the stimulus to *L* dB.
 %                    Default value is 60dB.
 %
 %     'SPLtem',Lt    Set the SPL of the templates to a specific SPL of *Lt*dB
@@ -89,7 +88,7 @@ function varargout = baumgartner2016( target,template,varargin )
 %                    Default value is 13 degrees.
 %
 %     'polsamp',ps   Define the the polar angular sampling of the current
-%                    sagittal plane. As default the sampling of ARI's HRTF 
+%                    sagittal plane. As default the sampling of ARIs HRTF 
 %                    format at the median SP is used, i.e.,
 %                    ps = [-30:5:70,80,100,110:5:210] degrees.
 %
@@ -100,7 +99,7 @@ function varargout = baumgartner2016( target,template,varargin )
 %                    0 denotes complete OHC dysfunction.
 %
 %     'cihc',cihc    IHC scaling factor: 1 denotes normal IHC function (default); 
-%                    0 denotes complete IHC dysfunction.%
+%                    0 denotes complete IHC dysfunction.
 %
 %     'fiberTypes',fT Types of the fibers based on spontaneous rate (SR) in 
 %                     spikes/s: $fT=1$ for Low SR; $fT=2$ for Medium SR; 
@@ -143,7 +142,7 @@ function varargout = baumgartner2016( target,template,varargin )
 %   2) Data in hrtf/baumgartner2016
 %
 %
-%   See also: plotbaumgartner2014, data_baumgartner2016,
+%   See also: data_baumgartner2016,
 %   exp_baumgartner2016, baumgartner2016calibration,
 %   baumgartner2014pmv2ppp,
 %   baumgartner2014virtualexp, localizationerror,

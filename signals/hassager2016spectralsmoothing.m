@@ -15,7 +15,7 @@ function y = hassager2016spectralsmoothing(x,B,fs)
 %   `hassager2016spectralsmoothing(...)` is an algortihm for spectral
 %   smoothing based on gammatone filters with a variable bandwidth B.
 %
-%   References: Hassager et al. (JASA 2016)
+%   References: hassager2016
 
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 

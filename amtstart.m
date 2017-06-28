@@ -3,59 +3,10 @@ function amtstart(varargin)
 %   Usage:  amtstart;
 %           amtstart(flags);
 %
-%   `amtstart` starts the Auditory Modeling Toolbox. This command must be
+%   `amtstart` starts the AMT. This command must be
 %   run before using any of the function in the AMT.
 %
-%   Requirements
-%   ------------
-%
-%   The AMT depends on the Linear Time Frequency Analysis Toolbox (*LTFAT*). 
-%   Download LTFAT from <http://ltfat.sourceforge.net/> and unpack the downloaded file. 
-%   In the AMT, there is a prepared directory `thirdparty/ltfat`
-%   where the LTFAT can be stored and automatically recognized by the AMT. 
-%   Alternatively, save the LTFAT anywhere and add the main LTFAT path to the search path.
-%
-%   In order to run all the AMT functionality:
-%   
-%   1) install the SOFA API version >= 1.0 from <http://sourceforge.net/projects/sofacoustics>.
-%      In the AMT, there is a prepared directory `thirdparty/SOFA`. Alternatively, save 
-%      the SOFA API anywhere and add the path to the search path. 
-%
-%   2) install SFS Toolbox version >= 1.0 from <https://github.com/sfstoolbox/sfs>. 
-%      In the AMT, there is a prepared directory `thirdparty/sfs`. Alternatively, save 
-%      the SOFA API anywhere and add the path to the search path. 
-%
-%   3) install Python (version >= 2.6 but < 3), and the packages `numpy` and `scipi`. 
-%      The AMT does not work with Python 3!  
-%      On Linux, `sudo apt-get install python-scipy python-numpy` can be applied.
-%      On Windows, intall python from <https://www.python.org/>, add python.exe to path,
-%      and install the packages separately.
-%
-%   4) have the Optimization Toolbox for Matlab installed.
-%
-%
-%   Installation
-%   ------------
-% 
-%   Run `amtmex` to compile some models. This will compile AMT-related binaries on your
-%   system (see |amtmex|). You will need a compiler working in your 
-%   Matlab/Octave environment (see `help mex`) and the GCC installed on your OS.
-%
-%
-%   Supplementary files
-%   --------------------
-% 
-%   Most of the models require *auxiliary data*. The AMT will download these data on-demand. 
-%   The download URL for the auxiliary data is given by `amtauxdataurl`. 
-%   The target directory for the auxiliary data is given by `amtauxdatapath`. 
-%   If you want to run the AMT offline, download the auxiliary data first. 
-%
-%   Some of the models require *HRTFs*. The AMT will download the HRTFs on-demand.
-%   The download URL for the HRTFs is given by `SOFAdbURL`.
-%   The target directory for the HRTFs is given by `SOFAdbPath`. 
-%   If you want to run the AMT offline, download the HRTFs first. 
-%
-%   Global flags:
+%   Cache flags:
 %   -------------
 %
 %   AMT uses *cache* to store precalculated results because some of the AMT functions 
@@ -85,6 +36,22 @@ function amtstart(varargin)
 %   overwrite the global cache mode. See |amtcache| for more details.
 %
 %
+%   Auxiliary data
+%   --------------
+% 
+%   Most of the models require *auxiliary data*. The AMT will download these data on-demand. 
+%   The download URL for the auxiliary data is given by `amtauxdataurl`. 
+%   The target directory for the auxiliary data is given by `amtauxdatapath`. 
+%   If you want to run the AMT offline, download the auxiliary data first. 
+%
+%   Some of the auxiliary data are *HRTFs*. The AMT will download the HRTFs on-demand.
+%   The download URL for the HRTFs is given by `SOFAdbURL`.
+%   The target directory for the HRTFs is given by `SOFAdbPath`. 
+%   If you want to run the AMT offline, download the HRTFs first. 
+%
+%   Output flags
+%   ------------
+% 
 %   The *output of the messages* to the command line can be controlled by one
 %   of the following flags:
 %
@@ -94,10 +61,34 @@ function amtstart(varargin)
 %                      mode. The output of calculation progress will be suppressed.
 % 
 %     'silent'         All output will be suppressed.
-% 
 %
-%   See also:  amtmex amtflags amtload amtcache
+%   Requirements to run the AMT
+%   ---------------------------
 %
+%   1) Linear Time Frequency Analysis Toolbox (*LTFAT*): Download LTFAT from 
+%      <http://ltfat.sourceforge.net/> and unpack to the prepared 
+%      directory `thirdparty/ltfat`. Alternatively, save the LTFAT anywhere and add 
+%      the root LTFAT (just the root!) path to the search path.
+%
+%   2) The SOFA API (version >= 1.0): Download the SOFA API from <http://sourceforge.net/projects/sofacoustics>
+%      and unpack to the prepared directory `thirdparty/SOFA`. Alternatively, save 
+%      the SOFA API anywhere and add the root path of the SOFA API (just the root!) to the search path. 
+%
+%   3) The SFS Toolbox (version >= 1.0). Download from <https://github.com/sfstoolbox/sfs> and
+%      unpack to the prepared directory `thirdparty/sfs`. Alternatively, save 
+%      the SFS Toolbox anywhere and add the path to the search path. 
+%
+%   4) Python (version >= 2.6 but < 3) with the packages `numpy` and `scipi`. 
+%      On Linux, type `sudo apt-get install python-scipy python-numpy`.
+%      On Windows, intall python from <https://www.python.org/>, add python.exe to the Windows search path,
+%      and install the packages separately.
+%   5) |amtmex| executed without any errors. See |amtmex| for compiler requirements.
+%   
+%   Note that some models may further require other toolboxes. See the corresponding documentation for more details. 
+%
+%   See also:  amtmex amtload amtcache
+%
+
   
 %   AUTHOR : Piotr Majdak, Peter L. Soendergaard
 

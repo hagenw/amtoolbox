@@ -67,10 +67,12 @@
 %     BAUMGARTNER2014SIMILARITYESTIMATION - Similarity estimation with listener-specific sensitivity
 %     BAUMGARTNER2014BINAURALWEIGHTING - Binaural combination of monaural similarity estimates
 %     BAUMGARTNER2014SENSORIMOTORMAPPING - Response scatter induced by localization task
-%     BAUMGARTNER2014CALIBRATION - Calibration of the model
+%     BAUMGARTNER2014CALIBRATION - Calibration of the model (linear periphery)
 %     BAUMGARTNER2014VIRTUALEXP - Performs a virtual sound-localization experiment
 %     BAUMGARTNER2014PMV2PPP - Performance predictions from PMVs of baumgartner2014
 %     BAUMGARTNER2014LIKELISTAT - Likelihood statistics for evaluation of model performance
+%     BAUMGARTNER2016CALIBRATION - Calibration of the model (nonlinear periphery)
+%     BAUMGARTNER2016SPECTRALANALYSIS - Approximation of spectral analysis by auditory periphery
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net

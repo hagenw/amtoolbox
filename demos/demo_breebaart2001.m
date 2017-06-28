@@ -54,9 +54,10 @@ function demo_breebaart2001(varargin)
 %            The number of bandwidth values is half the number of values at the
 %            'exact' computation.  The fast computation is default.
 %
+% 
 %   demo_breebaart2001('N0Spi') shows :::
 %
-%      demo_breebaart2001('N0Spi');
+%     demo_breebaart2001('N0Spi');
 %
 %   N0Spi thresholds  as a function of the masker bandwidth for a center
 %   frequency of 4000 Hz and lbr, b and lr conditions in comparison with
@@ -65,7 +66,7 @@ function demo_breebaart2001(varargin)
 %
 %   demo_breebaart2001('N0S0') shows :::
 %
-%      demo_breebaart2001('N0S0');
+%     demo_breebaart2001('N0S0');
 %
 %   N0S0 thresholds  as a function of the masker bandwidth for a center
 %   frequency of 4000 Hz and lbr and lBr conditions in comparison with
@@ -74,12 +75,11 @@ function demo_breebaart2001(varargin)
 %
 %   demo_breebaart2001('NpiS0') shows :::
 %
-%      demo_breebaart2001('NpiS0');
+%     demo_breebaart2001('NpiS0');
 %
 %   NpiS0 thresholds  as a function of the masker bandwidth for a center
 %   frequency of 4000 Hz and lbr, b and lr conditions in comparison with
 %   the model results of Breebaart et al. (2001b).
-% 
 %
 %   See also: breebaart2001centralproc breebaart2001preproc
 %   breebaart2001siggen

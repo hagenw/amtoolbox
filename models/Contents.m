@@ -17,8 +17,9 @@
 %     KARJALAINEN1996       - Adaptation network
 %
 %  Spatial models
-%     BAUMGARTNER2013       - Localization in saggital planes
-%     BAUMGARTNER2014       - Localization in saggital planes
+%     BAUMGARTNER2013       - Localization in saggital planes (preliminary)
+%     BAUMGARTNER2014       - Localization in saggital planes (linear periphery)
+%     BAUMGARTNER2016       - Localization in sagittal planes (nonlinear periphery)
 %     LINDEMANN1986         - Calculate a binaural activity map
 %     DIETZ2011             - Binaural azimuth estimation 
 %     WIERSTORF2013         - Localization in a WFS or stereo setup
@@ -26,6 +27,7 @@
 %     MAY2011               - Azimuth of concurrent speakers
 %     GEORGANTI2013         - Distance estimation
 %     LANGENDIJK2002        - Median-plane localization probability
+%     BAUMGARTNER2017       - Sound externalization model based on monaural spectral cues
 %
 %  Speech perception models
 %    TAAL2011               - Short-time objective intelligibility

@@ -3,5 +3,5 @@ addpath ~/amtoolbox/code
 addpath ~/sofa-api-mo/API_MO
 
 
-amtstart('documentation','cached');
+amtstart('documentation');
 warning off;

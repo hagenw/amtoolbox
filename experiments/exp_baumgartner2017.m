@@ -1,35 +1,38 @@
 function data = exp_baumgartner2017(varargin)
-%EXP_BAUMGARTNER2017 - Experiments of Baumgartner et al. (2017).
+%EXP_BAUMGARTNER2017 - Experiments of Baumgartner et al. (2017)
 %   Usage: data = exp_baumgartner2017(flag) 
 %
 %   `exp_baumgartner2017(flag)` reproduces figures of the study from 
 %   Baumgartner et al. (2016).
 %
+%   Optional fields of output *data* structure:
+%
+%   `data.contralateralGain`
+%      contralateral gain of binaural weighting function
+%
+%
 %   The following flags can be specified
 %
-%     `boyd2012`    
-%         Model experiments from Boyd et al. (2012; Fig.1, top):
+%     `boyd2012` models experiments from Boyd et al. (2012; Fig.1, top).
 %         Average externalization ratings of 1 talker for NH participants 
 %         against mix point as a function of microphone position (ITE/BTE) 
 %         and frequency response (BB/LP). The reference condition (ref) is 
 %         the same as ITE/BB. Error bars show SEM. 
 %
-%     `hartmann1996`    
-%         Model experiments from Hartmann & Wittenberg (1996; Fig.7-8):
+%     `hartmann1996` models experiments from Hartmann & Wittenberg (1996; Fig.7-8)
 %         1st panel: Synthesis of zero-ILD signals. Only the harmonics 
-%             from 1 to nprime had zero interaural level difference; 
-%             harmonics above nprime retained the amplitudes of the baseline  
-%             synthesis. Externalization scores as a function of the boundary  
-%             harmonic number nprime. Fundamental frequency of 125 Hz.
+%         from 1 to nprime had zero interaural level difference; 
+%         harmonics above nprime retained the amplitudes of the baseline  
+%         synthesis. Externalization scores as a function of the boundary  
+%         harmonic number nprime. Fundamental frequency of 125 Hz.
 %         2nd panel: Synthesis of signals to test the ISLD hypothesis. 
-%             Harmonics at and below the boundary retained only the interaural 
-%             spectral level differences of the baseline synthesis. Higher 
-%             harmonics retained left and right baseline harmonic levels. 
-%             Externalization scores as a function of the boundary
-%             frequency.
+%         Harmonics at and below the boundary retained only the interaural 
+%         spectral level differences of the baseline synthesis. Higher 
+%         harmonics retained left and right baseline harmonic levels. 
+%         Externalization scores as a function of the boundary
+%         frequency.
 %
-%     `hassager2016`    
-%         Model experiments from Hassager et al. (2016; Fig.6):
+%     `hassager2016` models experiments from Hassager et al. (2016; Fig.6). 
 %         The mean of the seven listeners perceived sound source 
 %         location (black) as a function of the bandwidth factor 
 %         and the corresponding model predictions (colored). 
@@ -53,7 +56,7 @@ function data = exp_baumgartner2017(varargin)
 %
 %     exp_baumgartner2017('hassager2016');
 %
-%   References: Hassager et al. (JASA 2016)
+%   References: hassager2016
    
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
@@ -99,26 +102,25 @@ if flags.do_hassager2016
     for isubj = 1:length(data)
       Obj = data(isubj).Obj;
       for iazi = 1:length(azi)
-% figure;
+  % figure;
     %     templateSound = SOFAspat(in,Obj,azi(iazi),0);
         idazi = Obj.SourcePosition(:,1) == azi(iazi) & Obj.SourcePosition(:,2) == 0;
         template = squeeze(shiftdim(Obj.Data.IR(idazi,:,:),2));
         for iB = 1:length(B)
-          amtdisp(iB,'volatile');
+          amtdisp(num2str(iB),'volatile');
           if isnan(B(iB))
             target = template;
           else
             Obj_tar = hassager2016spectralsmoothing(Obj,B(iB));
             target = squeeze(shiftdim(Obj_tar.Data.IR(idazi,:,:),2));
           end
-% [tarmp,fc] = baumgartner2014spectralanalysis(target,'flow',100,'fhigh',flp);
-% semilogx(fc,diff(tarmp,1,2)); hold on
-%   subplot(1,2,1); hold on
-%   semilogx(fc,tarmp(:,1))
-  % plotfftreal(iB*db2mag(10)*fftreal(target(:,1)),fs,'flog'); 
-%   subplot(1,2,2); hold on
-%   semilogx(fc,tarmp(:,2))
-  % plotfftreal(iB*db2mag(10)*fftreal(target(:,2)),fs,'flog'); 
+  % [tarmp,fc] = baumgartner2014spectralanalysis(target);
+  % subplot(1,2,1); hold on
+  % semilogx(fc,tarmp(:,1))
+  % % plotfftreal(iB*db2mag(10)*fftreal(target(:,1)),fs,'flog'); 
+  % subplot(1,2,2); hold on
+  % semilogx(fc,tarmp(:,2))
+  % % plotfftreal(iB*db2mag(10)*fftreal(target(:,2)),fs,'flog'); 
           Pext{1}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sinter,'flow',100,'fhigh',flp,'interaural'); % Obj instead of single template
           Pext{2}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sintra,'flow',100,'fhigh',flp,'lat',azi(iazi));
         end
