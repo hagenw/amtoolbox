@@ -3,13 +3,7 @@ function data = exp_baumgartner2017(varargin)
 %   Usage: data = exp_baumgartner2017(flag) 
 %
 %   `exp_baumgartner2017(flag)` reproduces figures of the study from 
-%   Baumgartner et al. (2016).
-%
-%   Optional fields of output *data* structure:
-%
-%   `data.contralateralGain`
-%      contralateral gain of binaural weighting function
-%
+%   Baumgartner et al. (2017).
 %
 %   The following flags can be specified
 %
