@@ -1863,33 +1863,33 @@ if flags.do_impairment
   if flags.do_plot
     
     % interaction plots
-    merr = mean(err,4); % average across subjects; dims: [cohc,ft,SPL]
-    fig(1) = figure('Name','Interaction Plots');
-    if length(kv.SPLset) > 1
-      % OHC-SPL
-      subplot(1,3,1)
-      err_OHC_SPL = squeeze(mean(merr,2));
-      plot(cohc,err_OHC_SPL)
-      legend(num2str(SPL(:)))
-      xlabel('C_{OHC}')
-      ylabel(errorflag)
-      % OHC-FT
-      subplot(1,3,2)
-      err_OHC_FT = squeeze(mean(merr,3));
-      plot(cohc,err_OHC_FT)
-      legend('All','LSR','MSR','HSR')
-      xlabel('C_{OHC}')
-      % SPL-FT
-      subplot(1,3,3)
-      err_FT_SPL = squeeze(mean(merr,1));
-      plot(SPL,err_FT_SPL)
-      legend('All','LSR','MSR','HSR')
-      xlabel('SPL')
-    else % only OHC-FT
-      plot(cohc,merr)
-      legend('All','LSR','MSR','HSR')
-      xlabel('C_{OHC}')
-    end
+%     merr = mean(err,4); % average across subjects; dims: [cohc,ft,SPL]
+%     fig(1) = figure('Name','Interaction Plots');
+%     if length(kv.SPLset) > 1
+%       % OHC-SPL
+%       subplot(1,3,1)
+%       err_OHC_SPL = squeeze(mean(merr,2));
+%       plot(cohc,err_OHC_SPL)
+%       legend(num2str(SPL(:)))
+%       xlabel('C_{OHC}')
+%       ylabel(errorflag)
+%       % OHC-FT
+%       subplot(1,3,2)
+%       err_OHC_FT = squeeze(mean(merr,3));
+%       plot(cohc,err_OHC_FT)
+%       legend('All','LSR','MSR','HSR')
+%       xlabel('C_{OHC}')
+%       % SPL-FT
+%       subplot(1,3,3)
+%       err_FT_SPL = squeeze(mean(merr,1));
+%       plot(SPL,err_FT_SPL)
+%       legend('All','LSR','MSR','HSR')
+%       xlabel('SPL')
+%     else % only OHC-FT
+%       plot(cohc,merr)
+%       legend('All','LSR','MSR','HSR')
+%       xlabel('C_{OHC}')
+%     end
     
     emax = max(mtx.err(:))+0.5;
     emin = min(mtx.err(:))-0.5;
@@ -2370,12 +2370,14 @@ if flags.do_sensitivity || flags.do_fig8
     'FontSize',kv.FontSize,flags.cachemode,'marg_w',[.15,.01],'marg_h',[.05,.05]);
   dprime60dB = squeeze(data(meta(1).data == 60,[4,1:3],:))';
   
-  [~,~,qe,errmeta] = exp_baumgartner2016('impairment','QE','SPLset',60);
+  [~,~,qe,errmeta] = exp_baumgartner2016('impairment','QE','SPLset',60,'noplot','nostat');
   [correlation_QE.r,correlation_QE.p] = corrcoeff(mean(qe,1)',dprime60dB(:));
+  amtdsip('Correlation between dprime and quadrant errors:')
   amtdisp(correlation_QE)
   
-  [~,~,pe] = exp_baumgartner2016('impairment','PE','SPLset',60);
+  [~,~,pe] = exp_baumgartner2016('impairment','PE','SPLset',60,'noplot','nostat');
   [correlation_PE.r,correlation_PE.p] = corrcoeff(mean(pe,1)',dprime60dB(:));
+  amtdsip('Correlation between dprime and local RMS errors:')
   amtdisp(correlation_PE)
   
 end
