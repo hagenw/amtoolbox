@@ -1,7 +1,5 @@
 % AMT - Signals
 %
-%  The AMT team, 2012 - 2014.
-%
 %  Monaural signal generators
 %    TRANSPOSEDTONE -  Transposed tone stimuli
 %    NOTCHEDNOISE   -  Notched noise
@@ -20,8 +18,3 @@
 %    COMPETINGTALKERS - Several different competing talker signal
 %    BREEBAART2001SIGGEN - Generates a binaural signals with narrow-band noise 
 %
-%  For help, bug reports, suggestions etc. please send email to
-%  amtoolbox-help@lists.sourceforge.net
-%
-
-

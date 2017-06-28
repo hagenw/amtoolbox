@@ -1,13 +1,11 @@
-% AMT - General functions
-%
-%  The AMT team, 2012 - 2014.
+% AMT - General functions used within the AMT
 %
 %  Signal levels
 %     DBSPL            - SPL of signal measured in dB.
 %     SETDBSPL         - Specify SPL of signal.
 %
 %  Emulation of experiments
-%     EMUAFCEXP         - Emulate alternative forced-choice (AFC) experiments
+%     EMUEXP         - Emulate psychoacoustic experiments
 %
 %  Plotting
 %     AUDSPECGRAM      - Auditory spectrogram.
@@ -37,7 +35,3 @@
 %     ITD2ANGLE        - Convert ITD to an angle using a lookup table
 %     ITD2ANGLELOOKUPTABLE - Create the lookup table
 %
-
-%  For help, bug reports, suggestions etc. please send email to
-%  amtoolbox-help@lists.sourceforge.net
-

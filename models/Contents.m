@@ -1,7 +1,5 @@
 % AMT - Publication-specific models
 %
-%  The AMT team, 2012 - 2016.
-%
 %  HRTF models
 %     ENZNER2008            - Azimuth-continuous measurement of HRTFs 
 %     ZIEGELWANGER2014      - Direction-continuous model of time-of-arrival (TOA) in HRTFs
@@ -35,7 +33,4 @@
 %    JOERGENSEN2011         - Speech-based envelope power spectrum based on Joergensen et al. (2011)
 %    JOERGENSEN2013         - Speech-based envelope power spectrum with multi-resolution segmentation of the envelope based on Joergensen et al. (2013)
 %    JELFS2011              - Binaural speech advantage
-
 %
-%  For help, bug reports, suggestions etc. please send email to
-%  amtoolbox-help@lists.sourceforge.net

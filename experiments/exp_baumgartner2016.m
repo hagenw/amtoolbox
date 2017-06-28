@@ -2372,12 +2372,12 @@ if flags.do_sensitivity || flags.do_fig8
   
   [~,~,qe,errmeta] = exp_baumgartner2016('impairment','QE','SPLset',60,'noplot','nostat');
   [correlation_QE.r,correlation_QE.p] = corrcoeff(mean(qe,1)',dprime60dB(:));
-  amtdsip('Correlation between dprime and quadrant errors:')
+  amtdisp('Correlation between dprime and quadrant errors:')
   amtdisp(correlation_QE)
   
   [~,~,pe] = exp_baumgartner2016('impairment','PE','SPLset',60,'noplot','nostat');
   [correlation_PE.r,correlation_PE.p] = corrcoeff(mean(pe,1)',dprime60dB(:));
-  amtdsip('Correlation between dprime and local RMS errors:')
+  amtdisp('Correlation between dprime and local RMS errors:')
   amtdisp(correlation_PE)
   
 end

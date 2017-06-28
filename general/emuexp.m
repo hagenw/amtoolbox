@@ -1,8 +1,8 @@
-function [out, par] = emuafcexp(command,par,varargin)
-%EMUAFCEXP Emulates alternative forced-choice (AFC) experiments
-%   Usage:   par = emuafcexp(command,par);
-%     [out,par] = emuafcexp('run',par);
-%     [out, par] = emuafcexp('run',par,'plot');
+function [out, par] = emuexp(command,par,varargin)
+%emuexp Emulates psychoacoustic experiments
+%   Usage:   par = emuexp(command,par);
+%     [out,par] = emuexp('run',par);
+%     [out, par] = emuexp('run',par,'plot');
 %
 %   Input parameters:
 %     command  : One of the following commands. `'expinit'` intializes the
@@ -11,7 +11,7 @@ function [out, par] = emuafcexp(command,par,varargin)
 %                intializes model parameters. `'decisioninit'` intializes
 %                the parameters of the decision stage in the experiment.
 %                Finally, `'run'` runs the experiment and lets the model decide.
-%     par      : Structure of the experimental parameters used by `emuafcexp`.
+%     par      : Structure of the experimental parameters used by `emuexp`.
 %                Set to `[]` on the first call (when `par` is not set up yet).
 %
 %   Output parameters:
@@ -21,16 +21,16 @@ function [out, par] = emuafcexp(command,par,varargin)
 %             across all runs. `out(:,3:end)` provides the individual experimental variables
 %             used in each trial.
 %
-%   `par = emuafcexp(init_command,par)` initializes the various parts of the
+%   `par = emuexp(init_command,par)` initializes the various parts of the
 %   psychoacoustic experiment to be emulated depending on `init_command`.
 %
-%   `out = emuafcexp('run',par)` runs the experiment defined
+%   `out = emuexp('run',par)` runs the experiment defined
 %   by the structure `par` and outputs the experimental result in `out`.
 %
-%   `[out, par] = emuafcexp('run',par)` runs the experiment and outputs
+%   `[out, par] = emuexp('run',par)` runs the experiment and outputs
 %   more details on the experiment parameters in `par`.
 %
-%   `[out, par] = emuafcexp('run',par,'plot')` runs the experiment and
+%   `[out, par] = emuexp('run',par,'plot')` runs the experiment and
 %   plots the experiment progress.
 %
 %   Initialization
@@ -39,7 +39,7 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   Experiment
 %   **********
 %
-%   `par=emuafcexp('expinit',[],exp)` initilizes the experiment wiht key-value pairs provided
+%   `par=emuexp('expinit',[],exp)` initilizes the experiment wiht key-value pairs provided
 %   in a cell array `exp`. The following pairs are required:
 %
 %     'intnum',intnum                number of intervals in a trial,
@@ -65,7 +65,7 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   Signal generator
 %   ****************
 %
-%   `par=emuafcexp('signalinit',par,sig)` intializes the signal generator creating
+%   `par=emuexp('signalinit',par,sig)` intializes the signal generator creating
 %   signals for the model with key-value pairs provided in the cell array `sig`. The signal
 %   generator is called with those parameters in each trial of the experiment.
 %   Up to 15 input parameters are supported. One of inputs must be 'inttyp': In each
@@ -82,7 +82,7 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   Model called in each interval
 %   *****************************
 %
-%   `par=emuafcexp('modelinit',par,mod)` initializes the model called in each interval with
+%   `par=emuexp('modelinit',par,mod)` initializes the model called in each interval with
 %   the key-value pairs provided in `mod`. Up to 10 input parameters are supported.
 %   One of the inputs must contain the keyword 'expsignal'.
 %   This keyword is replaced in the 'run' routine with the output of
@@ -99,7 +99,7 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   Decision stage called in each trial
 %   ***********************************
 %
-%   `par=emuafcexp('decisioninit',par,dec)` initializes the decision stage of the experiment
+%   `par=emuexp('decisioninit',par,dec)` initializes the decision stage of the experiment
 %   with key-value pairs provided in `dec`. Up to 10 input parameters are supported.
 %   All inputs containing the keyword 'modelout' are
 %   replaced with the outputs of the model function during an
@@ -120,7 +120,7 @@ function [out, par] = emuafcexp(command,par,varargin)
 %   ----------------------
 %
 %   After the initialization, the experiment can be started by
-%   `out = emuafcexp('run',par);`. The threshold will be in `out`.
+%   `out = emuexp('run',par);`. The threshold will be in `out`.
 %
 %   See also: exp_breebaart2001, demo_breebaart2001
 

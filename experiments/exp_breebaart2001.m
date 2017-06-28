@@ -267,18 +267,18 @@ elseif flags.do_bfig3
                 'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65, ...
                 'interface','ModelInitiative','directory',kv.directory,'fs',32000};
         end
-        parout = emuafcexp('expinit',parout,expset);
+        parout = emuexp('expinit',parout,expset);
         
         % input2 = fs; input3 = tau; input4 = ild; 
         modelset = {'name','breebaart2001preproc','input1',...
             'expsignal', 'input2',32000,'input3',0,'input4',0,...
             'outputs',[1 3 4]};
-        parout = emuafcexp('modelinit',parout,modelset);
+        parout = emuexp('modelinit',parout,modelset);
         
         decisionset = {'name','breebaart2001centralproc','input1',...
             'modelout','input2','modelout', 'input3','modelout',...
             'input4','lbr'};
-        parout = emuafcexp('decisioninit',parout,decisionset);
+        parout = emuexp('decisioninit',parout,decisionset);
 
         fc = [125 250 500 1000 2000 4000];
         bw = [5 10 25 50 100 250 500 1000 2000 4000];
@@ -301,7 +301,7 @@ elseif flags.do_bfig3
                       'expvar','input4',0.3,'input5',pi,'input6',...
                       bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
                       'input10',0.05,'input11', 32000};
-                  parout = emuafcexp('signalinit',parout,signalset);
+                  parout = emuexp('signalinit',parout,signalset);
 
                   % loop for six experimental runs
                   resultbwvec = zeros(6,1);
@@ -309,7 +309,7 @@ elseif flags.do_bfig3
                       amtdisp(['Calculating: center frequency = ', num2str(fc(fccount)), ...
                           ' Hz, bandwidth = ' num2str(bw(bwcount)) ' Hz, run #' num2str(runcounter)],'progress');
 
-                      result = emuafcexp('run',parout);
+                      result = emuexp('run',parout);
                       resultbwvec(runcounter) = result(1)-nl;
                   end
                   resultvec(bwcount) = mean(resultbwvec);
@@ -363,12 +363,12 @@ elseif flags.do_bfig6
                 'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',65, ...
                 'interface','ModelInitiative','directory',kv.directory,'fs',32000};
         end
-        parout = emuafcexp('expinit',parout,expset);
+        parout = emuexp('expinit',parout,expset);
 
         decisionset = {'name','breebaart2001centralproc','input1',...
             'modelout','input2','modelout', 'input3','modelout',...
             'input4','lbr'};
-        parout = emuafcexp('decisioninit',parout,decisionset);
+        parout = emuexp('decisioninit',parout,decisionset);
 
         fc = [125 250 500 1000];
         bw = [5 10 25 50 100 250];
@@ -383,7 +383,7 @@ elseif flags.do_bfig6
             modelset = {'name','breebaart2001preproc','input1',...
                 'expsignal','input2',32000,'input3',tau(fccount),...
                 'input4',0,'outputs',[1 3 4]};
-            parout = emuafcexp('modelinit',parout,modelset);
+            parout = emuexp('modelinit',parout,modelset);
 
             %loop for all bandwidths
             for bwcount = 1:length(bw)
@@ -397,11 +397,11 @@ elseif flags.do_bfig6
                     'expvar','input4',0.3,'input5',pi,'input6',...
                     bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
                     'input10',0.05,'input11', 32000};
-                parout = emuafcexp('signalinit',parout,signalset);
+                parout = emuexp('signalinit',parout,signalset);
 
                 % loop for experimental runs
                 for runcounter = 1:6
-                    result = emuafcexp('run',parout);
+                    result = emuexp('run',parout);
                     resultbwvec(runcounter) = result(1)-nl;
                 end
 
@@ -454,18 +454,18 @@ elseif flags.do_fig1_N0S0_vandepar1999
                 'expvarsteprule',[0.5 2],'stepmin',[1 8],'expvarstart',90, ...
                 'interface','ModelInitiative','directory',kv.directory,'fs',32000};
         end
-        parout = emuafcexp('expinit',parout,expset);
+        parout = emuexp('expinit',parout,expset);
         
         % input2 = fs; input3 = tau; input4 = ild; 
         modelset = {'name','breebaart2001preproc','input1',...
             'expsignal', 'input2',32000,'input3',0,'input4',0,...
             'outputs',[1 3 4]};
-        parout = emuafcexp('modelinit',parout,modelset);
+        parout = emuexp('modelinit',parout,modelset);
         
         decisionset = {'name','breebaart2001centralproc','input1',...
             'modelout','input2','modelout', 'input3','modelout',...
             'input4','lbr'};
-        parout = emuafcexp('decisioninit',parout,decisionset);
+        parout = emuexp('decisioninit',parout,decisionset);
 
         fc = [125 250 500 1000 2000 4000];
         bw = [5 10 25 50 100 250];
@@ -487,13 +487,13 @@ elseif flags.do_fig1_N0S0_vandepar1999
                     'expvar','input4',0.3,'input5',0,'input6',...
                     bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
                     'input10',0.05,'input11', 32000};
-                parout = emuafcexp('signalinit',parout,signalset);
+                parout = emuexp('signalinit',parout,signalset);
 
                 % loop for experimental runs
                 for runcounter = 1:6
                     amtdisp(['Calculating: center frequency = ', num2str(fc(fccount)), ...
                         ' Hz, bandwidth = ' num2str(bw(bwcount)) ' Hz, run #' num2str(runcounter)],'progress');                  
-                    result = emuafcexp('run',parout);
+                    result = emuexp('run',parout);
                     resultbwvec(runcounter) = result(1)-nl;
                 end
 

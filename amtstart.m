@@ -86,11 +86,13 @@ function amtstart(varargin)
 %   
 %   Note that some models may further require other toolboxes. See the corresponding documentation for more details. 
 %
+%   Go to http://amtoolbox.sourceforge.net/doc.php for the full documentation.
+% 
 %   See also:  amtmex amtload amtcache
 %
 
   
-%   AUTHOR : Piotr Majdak, Peter L. Soendergaard
+%   AUTHOR : Peter L. Soendergaard (2013), Piotr Majdak (2013-)
 
 
 %% Start AMT
@@ -126,7 +128,8 @@ if exist('OCTAVE_VERSION','builtin'), args=argv; else args=varargin; end
 
 if ~silent
   disp('  ');
-  disp(['AMT version ',amt_version,'. (C) Piotr Majdak and Peter L. Soendergaard.']);
+  disp(['AMT version ',amt_version,'. (C) Piotr Majdak and the AMT team.']);
+  disp(['See http://amtoolbox.sourceforge.net for more information.']);
   disp('  ');
   disp('Starting toolboxes...');
 end;

@@ -1,6 +1,4 @@
-% AMT - Experimentally recorded human data
-%
-%   The AMT team, 2012 - 2014.
+% AMT - Data used to compare to model results
 %
 %   Data on specific topics
 %      ABSOLUTETHRESHOLD    - Absolute threshold of hearing
@@ -35,9 +33,3 @@
 %      DATA_WIERSTORF2013   - Data from Wierstorf et al. (2013)
 %      DATA_ZIEGELWANGER2013 - Time-of-arrival in HRTFs from Ziegelwanger et al. (2013)
 %      DATA_ZIEGELWANGER2014 - Time-of-arrival in HRTFs from Ziegelwanger and Majdak (2014)
-%
-%  For help, bug reports, suggestions etc. please send email to
-%  amtoolbox-help@lists.sourceforge.net
-
-
-

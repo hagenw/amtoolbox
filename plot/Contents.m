@@ -1,6 +1,4 @@
-% AMT - Plot functions
-%
-%  The AMT team, 2011 - 2015.
+% AMT - Model-specific plot functions
 %
 %
 %  Model-related plot functions
@@ -18,7 +16,4 @@
 %     PLOT_ZIEGELWANGER2013 - Plot the binaural activity map
 %     PLOT_ZIEGELWANGER2014 - Plot the output of the Ziegelwanger2014 model
 %     PLOT_KELVASA2015 - Plot the output of the Kelvasa2015 model
-
-%  For help, bug reports, suggestions etc. please send email to
-%  amtoolbox-help@lists.sourceforge.net
-
+%

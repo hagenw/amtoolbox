@@ -1,6 +1,4 @@
-% AMT - Single stages of auditory models
-%
-%  The AMT team, 2011 - 2014.
+% AMT - Various stages of auditory models
 %
 %  HRTF processing
 %     ZIEGELWANGER2014ONAXIS      - On-axis version of Ziegelwanger et al. (2014)
@@ -74,6 +72,3 @@
 %     BAUMGARTNER2016CALIBRATION - Calibration of the model (nonlinear periphery)
 %     BAUMGARTNER2016SPECTRALANALYSIS - Approximation of spectral analysis by auditory periphery
 %
-%  For help, bug reports, suggestions etc. please send email to
-%  amtoolbox-help@lists.sourceforge.net
-
