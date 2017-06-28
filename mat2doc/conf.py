@@ -1,8 +1,8 @@
 # Mandatory settings
-outputdir='~/publish'
+outputdir='~/amtoolbox/'
 plotengine='matlab'
 versionfile="amtoolbox_version"
 
 # Optional global settings
-author=u'Piotr Majdak'
+author=u'The AMT team'
 year="2017"
