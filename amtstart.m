@@ -7,7 +7,7 @@ function amtstart(varargin)
 %   run before using any of the function in the AMT.
 %
 %   Cache flags:
-%   -------------
+%   ------------
 %
 %   AMT uses *cache* to store precalculated results because some of the AMT functions 
 %   require large processing time. Depending on the machine and the model, it might take 
