@@ -128,8 +128,8 @@ definput.keyvals.IREF = ...                                                %Calc
                                      mean(definput.keyvals.TAUCHR/log(2)),...
                                      definput.keyvals.Tph);
                                  
-for ii = 1:length(definput.keyvals.Ith0)                                   % (???) hier empirische anpassung des CIs ans Hörnervenmodell, dabei soll die
-definput.keyvals.V(:,ii) = definput.keyvals.V(:,ii).*...                   % Höhe von V so variiert werden, dass SR, ca, den Wert von 30 annimmt.
+for ii = 1:length(definput.keyvals.Ith0)                                   % (???) hier empirische anpassung des CIs ans HÃ¶rnervenmodell, dabei soll die
+definput.keyvals.V(:,ii) = definput.keyvals.V(:,ii).*...                   % HÃ¶he von V so variiert werden, dass SR, ca, den Wert von 30 annimmt.
                     definput.keyvals.IREF/definput.keyvals.Ith0(ii,:);     % Entspricht in etwa 30 APs. 
 end                                
 
@@ -246,8 +246,8 @@ function [mT_ARP,mTau_RRP] = generateRefractoryConstants(N)
 % Date: 02-12-2008
 % Copyright (C) 2008 Stefan Fredelake, Oldenburg University
 
-mean_mT_ARP   = 0.7e-3; % mittlere absolute Refraktärphase
-mean_mtau_RRP = 1.6e-3; % mittlere relative Refraktätphase
+mean_mT_ARP   = 0.7e-3; % mittlere absolute RefraktÃ¤rphase
+mean_mtau_RRP = 1.6e-3; % mittlere relative RefraktÃ¤tphase
 
 std_mT_ARP   = 0.15 * mean_mT_ARP;      
 std_mtau_RRP = 0.15 * mean_mtau_RRP;
@@ -474,6 +474,7 @@ if sum(kv.binPosInd(:)<0) > 0 || sum(kv.binPosInd(:)> kv.N_nervecells) > 0
     error('Specified bin positions are wider than cochlea.');
 end
 end
+
 
 % Information about the filterbank. 
 % Chn.No. | num. f-Bins | fc, low bin | fc, upp bin  

@@ -1,23 +1,18 @@
 function plot_kelvasa2015(data,varargin)
 %PLOT_KELVASA2015 Plot figures from Kelvasa and Dietz (2015) 
+%   Usage: plot_kelvasa2015('fig8a')
 %
-%   PLOT_KELVASA2015(fig) Plots paper figures from Kelvasa and Dietz 2015.
-%
-%   Usage:
-%     plot_kelvasa2015('fig8a')
-%
-%     plot_kelvasa2015('fig8a','identifier','BTE',...
-%                                         'HRTFchannels',[3,4]);
-%          Plots paper figure 8a using the behind-the-ear
-%          microphone channel('BTE')
+%   `plot_kelvasa2015('fig8a','identifier','BTE','HRTFchannels',[3,4]);`
+%   plots paper figure 8a using the behind-the-ear
+%   microphone channel('BTE')
 %          
-%     plot_kelvasa2015('fig8a',varargin);
-%          Plots figure data for fig8a with updated model
-%          parameters specified as key/value pairs in 'varargin'.
-%          NOTE: When re-producing figures with new paramters,
-%          'identifier' must be set so previously computed data is not
-%  
-%           
+%   `plot_kelvasa2015('fig8a',varargin);`
+%   plots figure data for fig8a with updated model
+%   parameters specified as key/value pairs in 'varargin'.
+%   NOTE: When re-producing figures with new paramters,
+%   'identifier' must be set so previously computed data is not
+%   
+%        
 %   The following flags can be specified;
 %
 %     'redo'    Recomputes data for specified figure
@@ -40,6 +35,9 @@ function plot_kelvasa2015(data,varargin)
 %
 %     'fig12'    Reproduce Fig. 12.
 %
+
+
+
 %   References:
 %       Kelvasa, D., & Dietz, M. (2015). Auditory model-based sound 
 %       direction estimation with bilateral cochlear implants. Trends in

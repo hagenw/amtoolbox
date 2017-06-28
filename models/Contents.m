@@ -28,6 +28,7 @@
 %     GEORGANTI2013         - Distance estimation
 %     LANGENDIJK2002        - Median-plane localization probability
 %     BAUMGARTNER2017       - Sound externalization model based on monaural spectral cues
+%     KELVASA2015           - Localization in cochlear-implant listeners
 %
 %  Speech perception models
 %    TAAL2011               - Short-time objective intelligibility

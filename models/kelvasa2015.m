@@ -1,7 +1,6 @@
 function [results] = kelvasa2015(insig,fs,varargin)
-%Kelvasa and Dietz 2015 Bilateral CI localization model
-%   Usage: [results] = kelvasa2015(insig,fs); %To run model with default
-%                                             %parameters
+%KELVASA2015 Localization model in cochlear-implant listeners (Kelvasa and Dietz, 2015)
+%   Usage: [results] = kelvasa2015(insig,fs); 
 %
 %   KELVASA2015(insig,fs) implements the ACE signal processing strategy
 %   upon the two channel input signal to produce bilateral electrodograms.
@@ -9,40 +8,38 @@ function [results] = kelvasa2015(insig,fs,varargin)
 %   spike times of a population of AN neurons. A chosen localization model from Kelvasa
 %   and Dietz 2015 is then used to map the two channel (right and left) outputs
 %   to a predicted azimuthal position.
-%
+% 
 %   Input parameters:
 %       insig       : Can be either:  [N x 2] two channel audio signal
 %                            or        results structure of preProcessed data 
-%
+%   
 %       fs          : sampling rate (Hz)
-%
+%   
 %       varargin    : structure with all parameters required for model. If
 %                     this is not included, default paramters are loaded.
-%
+% 
 %   Output parameters:
 %       results     : A structure containing the processed electrodograms,
 %                     AN spike times, and model predicted azimuthal locations
 %                     
 %   The output structure "results" has the following fields:
-%
 %     electrodogramCHAN1  : [NxM] matrix of CI electrode current output
-%                                      in mA(???) with N = number of CI
-%                                      electrodes and M = time 
-%
+%                           in mA(???) with N = number of CI
+%                           electrodes and M = time 
 %     APvecCHAN1          : [Nx2] matrix of [Nx1] indices of spiking AN 
-%                                      fibers [Nx2] spike times in seconds
-%
+%                           fibers [Nx2] spike times in seconds
+% 
 %     electrodogramCHAN2  : same but for second channel
-%
+% 
 %     APvecCHAN2          : same but for second channel
-%
+% 
 %     SpkSumPerBin        : [NxM] matrix of Right and Left Spike Rate
 %                                   differences in spikes per second with
 %                                   N= number of AN frequency bands and 
 %                                   M = time bins
 %         
 %     SpkDiffPerBin       : same but for Right and Left spike rate differences
-%
+% 
 %     ANbinPredictions    : [NxM] matrix of azimuthal angle bin predictions in 
 %                                   degrees with N= number of AN frequency 
 %                                   bands and M = time bins
@@ -50,19 +47,19 @@ function [results] = kelvasa2015(insig,fs,varargin)
 %     weightedPredictions : [1xM] matrix of bin weighted azimuthal angle 
 %                                   bin predictions in degrees with 
 %                                   M = time bins
-%
+% 
 %     mappingData         : Structure containing data used to calibrate and
 %                                   implement the chosen localization 
 %                                   model as detailed in
 %                                   kelvasa2015calibratemodels.m
-%
+% 
 %   The steps of the binaural model to calculate the result are the
 %   following :
-%
+% 
 %   1) Process two channel input signal through a CI strategy as detailed
 %                      in (Hamacher, 2003) and (Fredelake and Hohmann, 2012) 
 %                      to produce bilateral electrodograms.
-%  
+%   
 %   2) Process electrodogram through an electrode nerve interface and
 %                      auditory nerve model as detailed in (Fredelake and
 %                      Hohmann, 2012)
@@ -70,23 +67,25 @@ function [results] = kelvasa2015(insig,fs,varargin)
 %   3) Compute bilateral spike rate differences over chosen AN frequency                                         
 %                      bands and time windows as detailed in (Kelvasa and
 %                      Dietz, 2015)
-%
+%   
 %   4) Calibrate the chosen localization model with a chosen calibration 
 %                      signal. This step can take several hours so
 %                      preProcessed calibration is loaded for "Speech
 %                      Shaped Noise" at 55dB as detailed in (Kelvasa and
 %                      Dietz, 2015)
-%
+%   
 %   5) Map the spike rate differences for each AN frequency band to a
 %                     predicted azimuthal angle using the chosen 
-%                     localization model  as detailed in (Kelvasa and
-%                      Dietz, 2015)
-%
+%                     localization model  as detailed in (Kelvasa and Dietz, 2015)
+%   
 %   Parameters implemented in the model processing stages are set through
 %   AMT using the following files: arg_kelvasa2015ciparams.m, 
 %   arg_kelvasa2015anparams.m, and arg_kelvasa2015locationmodelparams.m in
 %   which thorough descriptions of the input parameters are given. 
 %
+
+
+% 
 %   References:
 %   Kelvasa, D., & Dietz, M. (2015). Auditory model-based sound direction 
 %   estimation with bilateral cochlear implants. Trends in hearing, 19.
@@ -102,33 +101,17 @@ function [results] = kelvasa2015(insig,fs,varargin)
 %   1. http://www.sciencedirect.com/science/article/pii/S016763931000097X
 %
 %   Url: http://amtoolbox.sourceforge.net/doc/experiments/exp_kelvasa2015.php
-%
-% Copyright (C) 2009-2016 Piotr Majdak and Peter L. Søndergaard.
-% This file is part of AMToolbox version 0.9.7
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-%
-%   Authors: 
-%            Daryl Kelvasa (daryl.kelvasa@uni-oldenburg.de) 2016
-%            Mathias Dietz (mdietz@uwo.ca) 2016
-%
 %   See also: arg_kelvasa2015ciparams.m, arg_kelvasa2015anparams.m, 
 %             arg_kelvasa2015locationmodelparams.m, kelvasa2015anprocessing.m,
 %             kelvasa2015ciprocessing.m, kelvasa2015anbinning.m
 %             kelvasa2015calibratemodels.m, kelvasa2015localize.m
+%   Authors: 
+%            Daryl Kelvasa (daryl.kelvasa@uni-oldenburg.de) 2016
+%            Mathias Dietz (mdietz@uwo.ca) 2016
+%
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% Retrieve and compute model paramters
     % Set flags
       definput.flags.debugging = {'debug','no_debug'};
