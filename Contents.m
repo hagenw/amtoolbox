@@ -10,10 +10,12 @@
 % 
 %  The current status of the models can be found in the section "Models" at this website.
 %
+%  Changes from the previous AMT versions ca be found in |changes|. 
 %
 %  Start and installation
 %    AMTSTART     -  Start the AMT. Read this documentation to learn how to intall and start the AMT.
 %    AMTMEX       -  Install binaries of the AMT (compile Mex, Oct, and other files).
+%    
 %
 %  General functions
 %    AMTLOAD      -  Load auxiliary data (and download if required).
@@ -26,7 +28,7 @@
 %    AMTAUXDATAPATH - Get the path to the auxiliary data directory
 %    AMTAUXDATAURL - Get the URL to the auxiliary data on the web
 %
-%  The AMT team, 2012 - 2017.
+%    CHANGES - Changes throughout the release history of the AMT
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  amtoolbox-help@lists.sourceforge.net
