@@ -19,9 +19,10 @@
 %     LANGENDIJK2002LIKELIHOOD - Likelihood estimation
 %
 %  
-%   Modulation detection and masking from Dau et al. (1996, 1997)
+%   Modulation detection and masking stages
 %     DAU1996PREPROC - signal detection model from Dau et al. (1996)
 %     DAU1997PREPROC - modulation-detection and modulation-masking processing from Dau et al. (1997)
+%     JEPSEN2008PREPROC - intensity discrimination, tone-in-noise detection, spectral masking, forward masking, and amplitude-modulation detection from Jepsen et al. (2008)
 %
 %     LINDEMANN1986CENTROID - Centroid of the cross-correlation activation
 %

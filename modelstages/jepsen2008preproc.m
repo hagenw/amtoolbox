@@ -22,7 +22,7 @@ function [outsig, fc, mfc] = jepsen2008preproc(insig, fs, varargin);
 %   `[outsig,fc]=jepsen2008(...)` additionally returns the center frequencies of
 %   the filter bank.
 %
-%   The Jepsen 2008 model consists of the following stages:
+%   The full Jepsen et al. (2008) model consists of the following stages:
 % 
 %     1) a heaphone filter to simulate the effect of a standard set of
 %        headphones.
