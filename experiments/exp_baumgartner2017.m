@@ -46,11 +46,19 @@ function data = exp_baumgartner2017(varargin)
 %   Examples:
 %   ---------
 %
+%   To display results for Fig.1 from Boyd et al. (2012) use :::
+%
+%     exp_baumgartner2017('boyd2012');
+%
+%   To display results for Fig.7-8 from Hartmann & Wittenberg (1996) use :::
+%
+%     exp_baumgartner2017('hartmann1996');
+%
 %   To display results for Fig.6 from Hassager et al. (2016) use :::
 %
 %     exp_baumgartner2017('hassager2016');
 %
-%   References: hassager2016
+%   References: baumgartner2017externalization boyd2012 hartmann1996 hassager2016 
    
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
@@ -85,19 +93,11 @@ if flags.do_hassager2016
       data = data(1:5);
     end
 
-  %   fs = data(1).Obj.Data.SamplingRate;
-  %   in = noise(fs/2,1,'white');
-  %   [b,a]=butter(10,6000/fs,'low');
-  %   in = filter(b,a,in);
-
     Pext = nan(length(B),length(data),length(azi));
     Pext = {Pext,Pext};
-  %   Lat = Pext;
     for isubj = 1:length(data)
       Obj = data(isubj).Obj;
       for iazi = 1:length(azi)
-  % figure;
-    %     templateSound = SOFAspat(in,Obj,azi(iazi),0);
         idazi = Obj.SourcePosition(:,1) == azi(iazi) & Obj.SourcePosition(:,2) == 0;
         template = squeeze(shiftdim(Obj.Data.IR(idazi,:,:),2));
         for iB = 1:length(B)
@@ -108,13 +108,6 @@ if flags.do_hassager2016
             Obj_tar = hassager2016spectralsmoothing(Obj,B(iB));
             target = squeeze(shiftdim(Obj_tar.Data.IR(idazi,:,:),2));
           end
-  % [tarmp,fc] = baumgartner2014spectralanalysis(target);
-  % subplot(1,2,1); hold on
-  % semilogx(fc,tarmp(:,1))
-  % % plotfftreal(iB*db2mag(10)*fftreal(target(:,1)),fs,'flog'); 
-  % subplot(1,2,2); hold on
-  % semilogx(fc,tarmp(:,2))
-  % % plotfftreal(iB*db2mag(10)*fftreal(target(:,2)),fs,'flog'); 
           Pext{1}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sinter,'flow',100,'fhigh',flp,'interaural'); % Obj instead of single template
           Pext{2}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sintra,'flow',100,'fhigh',flp,'lat',azi(iazi));
         end
@@ -136,7 +129,7 @@ if flags.do_hassager2016
   Ns = size(Pext{1},2);
   
   figure 
-  symb = {'-s','-d'};
+  symb = {'-bs','-rd'};
   for iazi = 1:length(azi)
     subplot(1,2,iazi)
     h(3) = plot(B,Pext_A.rating(:,iazi),'-ko');
@@ -197,8 +190,8 @@ if flags.do_hartmann1996
     subplot(1,2,ee)
     h(1) = plot(act.avg.nprime,act.avg.Escore,'-ko');
     hold on
-    h(2) = errorbar(nprime,mean(Pext{1}(:,:,ee)),std(Pext{1}(:,:,ee))/sqrt(Ns),'-s');
-    h(3) = errorbar(nprime,mean(Pext{2}(:,:,ee)),std(Pext{2}(:,:,ee))/sqrt(Ns),'-d');
+    h(2) = errorbar(nprime,mean(Pext{1}(:,:,ee)),std(Pext{1}(:,:,ee))/sqrt(Ns),'-bs');
+    h(3) = errorbar(nprime,mean(Pext{2}(:,:,ee)),std(Pext{2}(:,:,ee))/sqrt(Ns),'-rd');
     set(h,'MarkerFaceColor','w')
     if ee == 1
       xlabel('n\prime (Highest harmonic with ILD = 0)')
@@ -217,7 +210,7 @@ end
 
 %% Boyd et al. (2012)
 if flags.do_boyd2012
-  flp = 6500; % Low-pass cut-off frequency
+  flp = [nan,6500]; % Low-pass cut-off frequency
   ele = 0; 
   azi = -30;
   data = data_boyd2012;
@@ -243,64 +236,21 @@ if flags.do_boyd2012
     for isub = 1:length(subjects)
       ITE = subjects(isub).Obj;
 
-      %%
-      stim{1,1} = SOFAspat(sig,ITE,azi,ele);
-      stim{2,1} = SOFAspat(sig,BTE.Obj,azi,ele);
-      
-      % Time-aligned head-absent condition
-      for c = 1:2
-        [scor,lag] = xcorr(stim{c,1}(:,1),sig(:));
-        [~,iL] = max(abs(scor));
-        iL = lag(iL);
-        [~,iR] = max(abs(xcorr(stim{c,1}(:,2),sig(:))));
-        iR = lag(iR);
-        stim{c+2,1} = zeros(length(stim{c,1}),2);
-        stim{c+2,1}(iL+(1:length(sig)),1) = sig;
-        stim{c+2,1}(iR+(1:length(sig)),2) = sig;
-        if azi > 0
-          stim{c+2,1} = fliplr(stim{c+2,1});
-        end
-        SPL = mean(dbspl(stim{c,1}));
-        stim{c+2,1} = setdbspl(stim{c+2,1},SPL);
-      end
-% Version 2
-%       itd = abs(round(3*0.08/343*sin(deg2rad(azi))*fs)); % |ITD| in samples
-%       stim{3,1} = [ [zeros(itd,1);sig(:)] , [sig(:);zeros(itd,1)] ];
-%       stim{3,1} = [stim{3,1};zeros(length(stim{1,1})-length(stim{3,1}),2)];
-%       if azi > 0
-%         stim{3,1} = filplr(stim{3,1});
-%       end
-%       SPL = mean(dbspl(stim{1,1}));
-%       stim{3,1} = setdbspl(stim{3,1},SPL);
-% Version 3     
-%       HA = baumgartner2017flattenhrtfmag(ITE,0,50,18e3);
-%       stim{3,1} = SOFAspat(sig,HA,azi,ele);
-%       % remove ILD in HA condition
-%       SPL = mean(dbspl(SOFAspat(sig,HA,0,0)));
-%       stim{3,1} = setdbspl(stim{3,1},SPL);
+      %% Unmixed stimuli
+      stim{1} = SOFAspat(sig,ITE,azi,ele);
+      stim{2} = SOFAspat(sig,BTE.Obj,azi,ele);
+      template = stim{1};
 
-      template = stim{1,1};
-
-      %%
-      % lookup = itd2anglelookuptable(ITE,ITE.Data.SamplingRate,'dietz2011');
-      % [phi,phi_std,itd,ild,cfreqs] = wierstorf2013estimateazimuth(...
-      %     stim{1,1},lookup,'fs',sig.fs,'dietz2011','rms_weighting');
-      % % ild = mean(ild);
-
-      %% Low pass
-      [b,a]=butter(10,2*flp/fs,'low');
-      for istim = 1:length(stim)
-        stim{istim,2} = filter(b,a,stim{istim,1});
-      end
-
-      %%
-      temSPL = dbspl(template);
+      %% Model simulations
       target = cell(length(mix),2,2);
-      fhigh = [16e3,flp];
+      fhigh = [16e3,flp(2)];
       for c = 1:2
         for lp = 1:2
           for m = 1:length(mix)
-            target{m,c,lp} = mix(m)*stim{c,lp} + (1-mix(m))*stim{c+2,lp};
+            target{m,c,lp} = boyd2012mix(stim{c},sig,mix(m),flp(lp),fs);
+% % Description in paper is ambiguous about whether broadband ILDs were
+% % adjusted to the template:
+%           temSPL = dbspl(template); 
 %             for ch = 1:2
 %               target{m,c,lp}(:,ch) = setdbspl(target{m,c,lp}(:,ch),temSPL(ch));
 %             end
@@ -332,7 +282,7 @@ if flags.do_boyd2012
   %% Plot
   figure
   dataLbl = {'Actual','Interaural','Monaural'};
-  symb = {'ko','s','d'};
+  symb = {'ko','bs','rd'};
   condLbl = {'ITE / BB','BTE / BB','ITE / LP','BTE / LP'};
   hax = tight_subplot(1,4,0,[.15,.1],[.1,.05]);
   for cc = 1:length(condLbl)

@@ -132,7 +132,8 @@ function varargout = baumgartner2016( target,template,varargin )
 %     'errorflag'    May be one of the error flags defined in
 %                    `baumgartner2014pmv2ppp` or `localizationerror`.
 %
-%     'redoSpectralAnalysis' FIX ME
+%     'redoSpectralAnalysis' Flag to redo also spectral analysis based on
+%                    `zilany2014` model.
 %
 %   Requirements: 
 %   -------------

@@ -1,16 +1,9 @@
 function varargout = exp_baumgartner2016(varargin)
 %EXP_BAUMGARTNER2016 evaluation of baumgartner2016 model
-%   Usage: [d,r,s,N] = exp_baumgartner2016(flag)
+%   Usage: data = exp_baumgartner2016(flag)
 %
 %   `exp_baumgartner2016(flag)` reproduces figures of the study from 
 %   Baumgartner et al. (2014).
-%
-%   Output parameters:
-%     d  :  Prediction residuum. Structure with fields: qe, pe, and total
-%     r  :  Correlation coefficient between actual and predicted results. 
-%           Structure with fields: qe, pe, and total.
-%     s  :  Structure containing listener-sepcific data and results. 
-%     N  :  Number of spectral channels (only for 'numchan'). 
 %
 %   The following flags can be specified
 %

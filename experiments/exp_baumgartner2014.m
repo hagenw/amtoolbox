@@ -5,11 +5,6 @@ function varargout = exp_baumgartner2014(varargin)
 %   `exp_baumgartner2014(flag)` reproduces figures of the study from 
 %   Baumgartner et al. (2014).
 %
-%   Optional fields of output *data* structure:
-%
-%   `data.contralateralGain`
-%      contralateral gain of binaural weighting function
-%
 %
 %   The following flags can be specified
 %
@@ -352,10 +347,10 @@ function varargout = exp_baumgartner2014(varargin)
 %
 %   See also: baumgartner2014 data_baumgartner2014
 %
-%   References: baumgartner2014modeling majdak2013spatstrat morimoto2001
-%   macpherson2007 goupell2010numchan middlebrooks1999nonindividualized 
-%   macpherson2003ripples baumgartner2015aro baumgartner2015vbap
-%   pulkki2001localization bremen2010pinna baumgartner2015vbap
+%   References: baumgartner2014modeling baumgartner2015aro baumgartner2015vbap  
+%     bremen2010pinna goupell2010numchan macpherson2007 macpherson2003ripples  
+%     majdak2013spatstrat middlebrooks1999nonindividualized morimoto2001
+%     pulkki2001localization 
 
 
 % AUTHOR: Robert Baumgartner
@@ -2291,8 +2286,8 @@ if flags.do_fig10
 %       z = corrdifftest(rDCN,rnoDCN,rInter,14,'steiger')
 
       amtdisp('Correlation between actual and predicted median values (15 conditions):')
-      amtdisp(['w/  DCN: r = ' num2str(rDCN,'%0.2f')])
-      amtdisp(['w/o DCN: r = ' num2str(rnoDCN,'%0.2f')])
+      amtdisp(['w/  PSGE: r = ' num2str(rDCN,'%0.2f')])
+      amtdisp(['w/o PSGE: r = ' num2str(rnoDCN,'%0.2f')])
     end
     
   end
@@ -2977,11 +2972,14 @@ if flags.do_fig5_baumgartner2015aro
       hold on
     end
     
+    color = [ 0.2081    0.1663    0.8292;...
+              0.8292    0.1663    0.2081;...
+              0.8081    0.6081    0.2081];
     for ii=1:length(latecc)
   
       subplot(2,2,1)
       abspecontra_int = interp1(r.snrFront,mean(perr(:,ii,3,:),4),snr_int,'spline');
-      h(ii) = plot(snr_int,abspecontra_int);  hold on
+      h(ii) = plot(snr_int,abspecontra_int,'Color',color(ii,:));  hold on
       xlabel('SNR (dB)','FontSize',kv.FontSize)
       ylabel('PE_{contra} (deg)','FontSize',kv.FontSize)
       axis([-20,40,31,54])
@@ -2989,7 +2987,7 @@ if flags.do_fig5_baumgartner2015aro
 
       subplot(2,2,2)
       absqecontra_int = interp1(r.snrFront,mean(qerr(:,ii,3,:),4),snr_int,'spline');
-      h(ii) = plot(snr_int,absqecontra_int);  hold on
+      h(ii) = plot(snr_int,absqecontra_int,'Color',color(ii,:));  hold on
       xlabel('SNR (dB)','FontSize',kv.FontSize)
       ylabel('QE_{contra} (deg)','FontSize',kv.FontSize)
       axis([-20,40,6,49])
@@ -2997,7 +2995,7 @@ if flags.do_fig5_baumgartner2015aro
 
       subplot(2,2,3)
       pe_int = interp1(r.snrFront,mean(perr_ipsipro(:,ii,:),3),snr_int,'spline');
-      h(ii) = plot(snr_int,pe_int);
+      h(ii) = plot(snr_int,pe_int,'Color',color(ii,:));
       xlabel('SNR (dB)','FontSize',kv.FontSize)
       ylabel('PE_{contra} - PE_{ipsi} (deg)','FontSize',kv.FontSize)
       axis([-20,40,-4,29])
@@ -3005,7 +3003,7 @@ if flags.do_fig5_baumgartner2015aro
 
       subplot(2,2,4)
       qe_int = interp1(r.snrFront,mean(qerr_ipsipro(:,ii,:),3),snr_int,'spline');
-      plot(snr_int,qe_int)
+      plot(snr_int,qe_int,'Color',color(ii,:))
       xlabel('SNR (dB)','FontSize',kv.FontSize)
       ylabel('QE_{contra} - QE_{ipsi} (deg)','FontSize',kv.FontSize)
       axis([-20,40,-4,29])
