@@ -78,8 +78,8 @@ function data = data_ziegelwanger2014(varargin)
 %
 %     data=data_ziegelwanger2014('ARI');
 %
-%   See also: ziegelwanger2014, ziegelwanger2014onaxis,
-%   ziegelwanger2014offaxis, exp_ziegelwanger2014
+%   See also: ziegelwanger2014, ziegelwanger2014_onaxis,
+%   ziegelwanger2014_offaxis, exp_ziegelwanger2014
 %
 %   References: ziegelwanger2014
 

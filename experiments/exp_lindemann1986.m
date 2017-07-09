@@ -244,7 +244,7 @@ if flags.do_fig6
   
   % Calculate crosscorrelations for 21 ITD points between 0~ms and 1~ms
   nitds = 21; % number of used ITDs
-  ndl = round(fs/1000)+1;   % length of the delay line (see lindemann1986bincorr.m)
+  ndl = round(fs/1000)+1;   % length of the delay line (see lindemann1986_bincorr.m)
   itd = linspace(0,1,nitds);
   
   output=amt_cache('get','fig6',flags.cachemode);
@@ -338,7 +338,7 @@ if flags.do_fig7
           % calculation starts with channel 5, so we have to subtract 4.
           cc = tmp(:,fc-4);
           % Calculate the position of the centroid
-          output(jj,ii) = lindemann1986centroid(cc);
+          output(jj,ii) = lindemann1986_centroid(cc);
         end
       end
       amt_cache('set','fig7',output);
@@ -552,7 +552,7 @@ if flags.do_fig11
           % Store the needed frequency channel
           cc = tmp(:,fc-4);
           % Calculate the position of the centroid
-          output(jj,ii) = lindemann1986centroid(cc);
+          output(jj,ii) = lindemann1986_centroid(cc);
         end
       end
       
@@ -630,7 +630,7 @@ if flags.do_fig12
           % Store the needed frequency channel
           cc = tmp(:,fc-4);
           % Calculate the position of the centroid
-          cen(ii,jj) = lindemann1986centroid(cc);
+          cen(ii,jj) = lindemann1986_centroid(cc);
         end
       end
       
@@ -715,7 +715,7 @@ if flags.do_fig13
         % Store the needed frequency channel
         cc = tmp(:,fc-4);
         % Calculate the position of the centroid
-        cen_p(ii) = lindemann1986centroid(cc);
+        cen_p(ii) = lindemann1986_centroid(cc);
       end
       
       % Calculate the centroids for the combined stimuli
@@ -727,7 +727,7 @@ if flags.do_fig13
           sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
           tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
           cc = tmp(:,fc-4);
-          cen_t(jj,ii) = lindemann1986centroid(cc);
+          cen_t(jj,ii) = lindemann1986_centroid(cc);
         end
       end
 
@@ -826,7 +826,7 @@ if flags.do_fig14a
           % calculation starts with channel 5, so we have to subtract 4.
             cc = tmp(:,fc-4);
             % Calculate the position of the centroid
-            output(jj,ii) = lindemann1986centroid(cc);
+            output(jj,ii) = lindemann1986_centroid(cc);
         end
       end
       
@@ -894,7 +894,7 @@ if flags.do_fig14b
         sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
         cc = tmp(:,fc-4);
-        cen(1,ii) = lindemann1986centroid(cc);
+        cen(1,ii) = lindemann1986_centroid(cc);
         % Generate results for std(ILD) ~= 0
         for nn = 1:length(ild_std)
           % Generate normal distributed ILDs with mean ~ 0 and std = 1
@@ -909,7 +909,7 @@ if flags.do_fig14b
             sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
             tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
             cc = tmp(:,fc-4);
-            centmp(jj,ii) = lindemann1986centroid(cc);
+            centmp(jj,ii) = lindemann1986_centroid(cc);
           end
           % Calculate the mean centroid above the ILD distribution
           output(nn+1,ii) = mean(centmp(:,ii));
@@ -1142,7 +1142,7 @@ if flags.do_fig17
         % Find the maximum position
         max_p(ii) = findmax(cc);
         % Calculate the position of the centroid
-        cen_p(ii) = lindemann1986centroid(cc);
+        cen_p(ii) = lindemann1986_centroid(cc);
       end
       
       % Calculate the centroids for the combined stimuli
@@ -1156,7 +1156,7 @@ if flags.do_fig17
           tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
           cc = tmp(:,fc-4);
           max_t(jj,ii) = findmax(cc);
-          cen_t(jj,ii) = lindemann1986centroid(cc);
+          cen_t(jj,ii) = lindemann1986_centroid(cc);
         end
       end
       

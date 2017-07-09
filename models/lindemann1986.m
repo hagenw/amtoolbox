@@ -34,7 +34,7 @@ function [crosscorr,t,ild,cfreq] = lindemann1986(insig,fs,varargin)
 %   dependend on time, by using a running cross-correlation function.
 %   This has been done here by starting a new running cross-correlation
 %   every time step *T_int*.  A detailed description of these cross-
-%   correlation steps is given in the |lindemann1986bincorr| function.
+%   correlation steps is given in the |lindemann1986_bincorr| function.
 %
 %   The steps of the binaural model to calculate the result are the
 %   following:
@@ -52,7 +52,7 @@ function [crosscorr,t,ild,cfreq] = lindemann1986(insig,fs,varargin)
 %      of Jeffres (1948).
 %
 %   You may supply any flags or key/value pairs of the |auditoryfilterbank|,
-%   |ihcenvelope| or |lindemann1986bincorr| at the end of the line of input
+%   |ihcenvelope| or |lindemann1986_bincorr| at the end of the line of input
 %   arguments.
 %
 %   Examples:
@@ -79,7 +79,7 @@ function [crosscorr,t,ild,cfreq] = lindemann1986(insig,fs,varargin)
 %     % Plot frequency channel 11, due to round(freqtoerb(500))==11
 %     plot_lindemann1986(cc,t,'fc',f);
 %
-%   See also: lindemann1986bincorr, plot_lindemann1986, gammatone, ufilterbankz
+%   See also: lindemann1986_bincorr, plot_lindemann1986, gammatone, ufilterbankz
 %
 %   Demos: demo_lindemann1986
 %
@@ -105,7 +105,7 @@ end
 % Parse the command line and load default parameters
 % For default values see lindemann1986a page 1613
 % NOTE: I modified the default value for T_int from 10 to 5.
-definput.import={'auditoryfilterbank','ihcenvelope','lindemann1986bincorr'};
+definput.import={'auditoryfilterbank','ihcenvelope','lindemann1986_bincorr'};
 % Highest and lowest frequency to use for the erbfilterbank (this gives us
 % 36 frequency channels, channel 5-40)
 definput.importdefaults = ...
@@ -135,4 +135,4 @@ ild = dbspl(inoutsig(:,:,2))-dbspl(inoutsig(:,:,1));
 inoutsig = ihcenvelope(inoutsig,fs,'argimport',flags,keyvals);
 % ------ Cross-correlation ------
 % Calculate the cross-correlation after Lindemann (1986a).
-[crosscorr,t] = lindemann1986bincorr(inoutsig,fs,c_s,w_f,M_f,T_int,N_1);
+[crosscorr,t] = lindemann1986_bincorr(inoutsig,fs,c_s,w_f,M_f,T_int,N_1);

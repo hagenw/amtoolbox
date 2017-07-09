@@ -146,7 +146,7 @@ function [fine,fc,ild,env] = dietz2011(insig,fs,varargin)
 %
 %   References: dietz2011auditory
 
-%   See also: dietz2011interauralfunctions, dietz2011filterbank,
+%   See also: dietz2011_interauralfunctions, dietz2011_filterbank,
 %     ihcenvelope, auditoryfilterbank
 
 % AUTHOR: Mathias Dietz, Martin Klein-Hennig (for AMT), Hagen Wierstorf (for AMT)
@@ -177,7 +177,7 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
 end
 
 % import default arguments from other functions
-definput.import={'auditoryfilterbank','ihcenvelope','dietz2011filterbank','dietz2011interauralfunctions'};
+definput.import={'auditoryfilterbank','ihcenvelope','dietz2011_filterbank','dietz2011_interauralfunctions'};
 % changing default parameters
 definput.importdefaults = { ...
     'flow',200, ...     % gammatone lowest frequency / Hz
@@ -238,17 +238,17 @@ end
 % and ILD low pass
 debug('apply second filterbank',flags)
 [inoutsig_fine,fc_fine,inoutsig_env,fc_env,inoutsig_ild] = ...
-  dietz2011filterbank(inoutsig,fs,fc,'argimport',flags,kv);
+  dietz2011_filterbank(inoutsig,fs,fc,'argimport',flags,kv);
 
 %% ---- binaural processor ------
 % calculate interaural parameters for fine structure and envelope and calculate
 % ILD
 % -- fine structure
 debug('calculating interaural functions from haircell fine structure',flags);
-fine = dietz2011interauralfunctions(inoutsig_fine,fs,fc_fine,'argimport',flags,kv);
+fine = dietz2011_interauralfunctions(inoutsig_fine,fs,fc_fine,'argimport',flags,kv);
 % --envelope
 debug('calculating interaural functions from haircell modulation',flags);
-env = dietz2011interauralfunctions(inoutsig_env,fs, ...
+env = dietz2011_interauralfunctions(inoutsig_env,fs, ...
   kv.mod_center_frequency_hz+0*fc_env,'argimport',flags,kv);
 % -- ILD
 % interaural level difference, eq. 5 in Dietz (2011)

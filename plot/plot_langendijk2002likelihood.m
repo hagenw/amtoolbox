@@ -1,8 +1,8 @@
-function plot_langendijk2002likelihood(la,le,ci,tit,horlin)
-%PLOT_LANGENDIJK2002LIKELIHOOD likelihood statistics according to Langendijk et al. (2002)
-%   Usage:  plot_langendijk2002likelihood(la,le,ci)
-%           plot_langendijk2002likelihood(la,le,ci,tit)
-%           plot_langendijk2002likelihood(la,le,ci,dynlin)
+function plot_langendijk2002_likelihood(la,le,ci,tit,horlin)
+%PLOT_langendijk2002_likelihood likelihood statistics according to Langendijk et al. (2002)
+%   Usage:  plot_langendijk2002_likelihood(la,le,ci)
+%           plot_langendijk2002_likelihood(la,le,ci,tit)
+%           plot_langendijk2002_likelihood(la,le,ci,dynlin)
 %
 %   Input parameters:
 %     la     : actual likelihood
@@ -11,10 +11,10 @@ function plot_langendijk2002likelihood(la,le,ci,tit,horlin)
 %     tit    : set to 'spatstrat' optionally
 %     horlin : vector with dynamic values for reference lines
 %
-%   `plot_langendijk2002likelihood(la,le,ci)` plots likelihood statistics according to
+%   `plot_langendijk2002_likelihood(la,le,ci)` plots likelihood statistics according to
 %   Langendijk et al. (2002). XXX DESCRIPTION OF PARAMETERS
 %
-%   See also: langendijk2002likelihood, langendijk2002
+%   See also: langendijk2002_likelihood, langendijk2002
 %
 %   References:langendijk2002contribution
  

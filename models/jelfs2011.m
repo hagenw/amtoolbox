@@ -40,7 +40,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
 %
 %     jelfs2011({0,'kemar'},{[330 90],'kemar'})
 %
-%   See also: culling2005bmld, exp_jelfs2011
+%   See also: culling2005_bmld, exp_jelfs2011
 % 
 %   References:  jelfs2011revision culling2010mapping lavandier2012binaural
   
@@ -103,7 +103,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
       [phase_t, coher_t] = do_xcorr(targ_f(:,n,1),targ_f(:,n,2),fs,fc(n)); 
       [phase_i, coher_i] = do_xcorr( int_f(:,n,1), int_f(:,n,2),fs,fc(n)); 
       
-      bmld_prediction(n) = culling2005bmld(coher_i,phase_t,phase_i,fc(n));
+      bmld_prediction(n) = culling2005_bmld(coher_i,phase_t,phase_i,fc(n));
     end
     
     % Calculate the effect of better-ear SNR

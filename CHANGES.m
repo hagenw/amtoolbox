@@ -4,8 +4,10 @@
 %   =========================
 % 
 %   Compatibility breaks:
-%     - amt* --> amt_* (legacy files provided). Use `amt_start` to start the AMT
-%     - amthelp --> amt_version
+%     - amt* --> amt_* 
+%       - Use `amt_start` to start the AMT
+%       - Legacy files provided but will be removed in the future. 
+%       - amthelp --> amt_version
 %     - gfb --> hohmann2002. See note #11 on that. 
 %     - HRTFs: only SOFA files allowed now.
 %     - Functions creating/modifying signals have the prefix sig_ now:
@@ -23,6 +25,11 @@
 %      	- breebaart2001siggen --> sig_breebaart2001
 %      	- bincorrnoise --> sig_bincorrnoise
 %      	- bandpassnoisefreq --> sig_bandpassnoise
+%     - Model stages in `modelstages` have the format `modelXX_stageYY` now:
+%       - modelXXstageYY --> modelXX_stageYY
+%       - ffGn --> zilany2014_ffGn
+%       - breebaart2001preproc --> breebaart2001_preproc
+%       - No legacy files provided. Adapt your code if directly calling model stages from your code. 
 %
 %   New
 %     - baumgartner2017: sound externalization model
@@ -30,7 +37,7 @@
 %     - hohmann2002: the gfb\_ framework of Gammatone filterbank integrated as hohmann2002 framework
 %     - kelvasa2015: sound localization in cochlear-implant listeners
 %     - emuexp: emulation of experiments using interative runs like 3-AFC
-%     - breebaart2001centralproc: decision stage from Breebaart et al. (2001). 
+%     - breebaart2001_centralproc: decision stage from Breebaart et al. (2001). 
 %     - exp_breebaart2001: reproduces results from Breebaart et al. (2001) based on emuexp
 %     - model initiative: interface to the model initiative (Dietz et al. 2016)
 % 
@@ -39,24 +46,25 @@
 %     - baumgartner2014 decomposed into model stages
 %     - exp_spille2013 merged into exp_dietz2011
 %     - directories re-structured:
-%         - main scripts of a model go to: "model". They are called "nameyear.m"
-%         - scripts with model stages (model scripts other than the main one) go to: "modelstages". They are called "nameyearpostfix.m"
-%         - scripts not being part of a specific model go to: "general". They do not (!) start with model name.
-%         - scripts generating audio signals go to: "signals"
-%         - scripts returning measured data go to: "data". They are called "data_nameyear.m"
-%         - scripts with default parameters of other scripts go to: "defaults". They are called "arg_myfunction.m"
-%         - files being compiled to mex files go to: "mex"
-%         - files being compiled to oct files go to: "oct"
-%         - other files requiring compilation/installation go to: "bin". Their compilation must be considered in make.bat (Windows) and Makefile (Linux/MacOS).
-%         - HRTFs go to "hrtfs". They must be in SOFA.
-%         - "binaural", "monaural", "speech", "filters" removed
+%         - main scripts of a model go to: `model`. They are called `nameyear`
+%         - scripts with model stages (model scripts other than the main one) go to: `modelstages`. They are called `nameyear_postfix`
+%         - scripts not being part of a specific model go to: `general`. They do not (!) start with model name.
+%         - scripts generating audio signals go to: `signals`. They are called `sig_nameyear` or `sig_functionality`
+%         - scripts returning measured data go to: `data`. They are called `data_nameyear`
+%         - scripts with default parameters of other scripts go to: `defaults`. They are called `arg_callingfunction`
+%         - files being compiled to mex files go to: `mex`. In order to be compiled, they must have the prefix `comp_`
+%         - files being compiled to oct files go to: `oct`
+%         - other files requiring compilation/installation go to: `bin`. Their compilation must be considered in `make.bat` (Windows) and `Makefile` (Linux/MacOS).
+%         - HRTFs go to `hrtfs`. They are in SOFA and will be downloaded on the fly. 
+%         - Lagecy files providing backwards compatibility fo to: `legacy`
+%         - `binaural`, `monaural`, `speech`, `filters` removed
 % 
 %   Other updates:
 %     - dietz2011: minor bug fixes
 %     - data_joergensen2011: completion of data
 %     - exp_baumgartner2014: new figures, compatibility improved
 %     - demo_hohmann2002: new figures
-%     - installation simplified (amt_mex does all the installation now)
+%     - installation simplified (`amt_mex` does all the installation now)
 % 
 %   Version 0.9.7 (10.6.2015)
 %   =========================

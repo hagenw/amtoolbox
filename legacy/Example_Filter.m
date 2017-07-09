@@ -22,7 +22,7 @@ attenuation_db        =     3;
 fs = 44100;
 filter_order          =     4;
 
-filter = hohmann2002filter(fs, center_frequency_hz, ...
+filter = hohmann2002_filter(fs, center_frequency_hz, ...
                         bandwidth_hz, attenuation_db, filter_order);
 
 %%% print the filter's parameters to the screen %%%
@@ -41,7 +41,7 @@ impulse_samples            = 8192;
 impulse_response_samples   =  800;
 impulse                    = [1, zeros(1,impulse_samples - 1)];
 
-[impulse_response, filter] = hohmann2002process(filter, impulse);
+[impulse_response, filter] = hohmann2002_process(filter, impulse);
 
 figure(1);
 plot([0:impulse_response_samples-1], ...

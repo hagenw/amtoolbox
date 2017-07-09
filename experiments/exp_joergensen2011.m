@@ -61,7 +61,7 @@ if flags.do_fig5;
   dSRT = amt_cache('get', ['fig5_' num2str(NSpeechsamples) 'sntcs'], flags.cachemode);
 
   if isempty(dSRT)
-    dSRT = joergensen2011sim(NSpeechsamples,'fig5');
+    dSRT = joergensen2011_sim(NSpeechsamples,'fig5');
     amt_cache('set',['fig5_' num2str(NSpeechsamples) 'sntcs'],dSRT);
   end;
         
@@ -76,7 +76,7 @@ if flags.do_fig6;
   dSRT = amt_cache('get', ['fig6_' num2str(NSpeechsamples) 'sntcs'], flags.cachemode);
   if isempty(dSRT)
 
-    dSRT = joergensen2011sim(NSpeechsamples,'fig6');
+    dSRT = joergensen2011_sim(NSpeechsamples,'fig6');
 		amt_cache('set',['fig6_' num2str(NSpeechsamples) 'sntcs'],dSRT);
   end;
         

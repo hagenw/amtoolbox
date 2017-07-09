@@ -28,7 +28,7 @@ analyzer = hohmann2002(sampling_rate_hz, flow, ...
 
 amt_disp(['Building synthesizer for an analysis-synthesis delay of ', ...
       num2str(desired_delay_in_seconds), ' seconds']);
-synthesizer = hohmann2002synth(analyzer, desired_delay_in_seconds);
+synthesizer = hohmann2002_synth(analyzer, desired_delay_in_seconds);
 
 %%% Extract the synthesizer's parameters %%%
 amt_disp(['The synthesizers parameters:';...
@@ -54,9 +54,9 @@ end
 %%%  analysis-synthesis system                                         %%%
 
 impulse = [1, zeros(1,8191)];                                          
-[analyzed_impulse, analyzer] = hohmann2002process(analyzer, impulse);
+[analyzed_impulse, analyzer] = hohmann2002_process(analyzer, impulse);
 [resynthesized_impulse, synthesizer] = ...
-    hohmann2002process(synthesizer, analyzed_impulse);
+    hohmann2002_process(synthesizer, analyzed_impulse);
 
 figure(1);
 plot([0:8191]/sampling_rate_hz*1e3, resynthesized_impulse);

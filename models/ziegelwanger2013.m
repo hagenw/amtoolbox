@@ -51,7 +51,7 @@ function [Obj,results]=ziegelwanger2013(Obj,method,model,p0_onaxis)
 %
 %       [Obj,results]=ziegelwanger2013(Obj,4,1);
 %
-%   See also: ziegelwanger2013onaxis, ziegelwanger2013offaxis,
+%   See also: ziegelwanger2013_onaxis, ziegelwanger2013_offaxis,
 %   data_ziegelwanger2013, exp_ziegelwanger2013
 %
 %   References: ziegelwanger2013 majdak2013toa
@@ -210,11 +210,11 @@ if model
         x=pos(idx,1:2)*pi/180;
         y=toaEst(idx,ch)/Obj.Data.SamplingRate;
         if isoctave
-            [~,p_onaxis(ch,:)]=leasqr(x,y,p0_onaxis(ch,:),@ziegelwanger2013onaxis);
+            [~,p_onaxis(ch,:)]=leasqr(x,y,p0_onaxis(ch,:),@ziegelwanger2013_onaxis);
         else
-            p_onaxis(ch,:)=lsqcurvefit(@ziegelwanger2013onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
+            p_onaxis(ch,:)=lsqcurvefit(@ziegelwanger2013_onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
         end
-        toa(:,ch)=ziegelwanger2013onaxis(p_onaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
+        toa(:,ch)=ziegelwanger2013_onaxis(p_onaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
     end
 
     % Fit off-axis model to outlier adjusted set of estimated TOAs
@@ -227,11 +227,11 @@ if model
             p0_offaxis(ch,:)=[p0_onaxis(ch,1) 0 0 0 p0_onaxis(ch,4) p0_onaxis(ch,2) p0_onaxis(ch,3)];
             p0offset_offaxis=[0.05 0.05 0.05 0.05 0.001 pi pi];
             if isoctave
-                [~,p_offaxis(ch,:)]=leasqr(x,y,p0_offaxis(ch,:),@ziegelwanger2013offaxis);
+                [~,p_offaxis(ch,:)]=leasqr(x,y,p0_offaxis(ch,:),@ziegelwanger2013_offaxis);
             else
-                p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
+                p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013_offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
             end
-            toa(:,ch)=ziegelwanger2013offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
+            toa(:,ch)=ziegelwanger2013_offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
         end
         if abs(diff(p_offaxis(:,1)))>0.003 || abs(diff(p_offaxis(:,3)))>0.003
             p_offaxis(:,[1 3])=p_offaxis([2 1],[1 3]);
@@ -242,11 +242,11 @@ if model
                 p0_offaxis(ch,:)=[p_offaxis(ch,1) mean(p_offaxis(:,2)) p_offaxis(ch,3) mean(p_offaxis(:,4)) mean(p_offaxis(:,5)) p_offaxis(ch,6) p_offaxis(ch,7)];
                 p0offset_offaxis=[0.05 0.05 0.05 0.05 0.001 pi/2 pi/2];
                 if isoctave
-                    [~,p_offaxis(ch,:)]=leasqr(x,y,p0_offaxis(ch,:),@ziegelwanger2013offaxis);
+                    [~,p_offaxis(ch,:)]=leasqr(x,y,p0_offaxis(ch,:),@ziegelwanger2013_offaxis);
                 else
-                    p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
+                    p_offaxis(ch,:)=lsqcurvefit(@ziegelwanger2013_offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',TolFun(ii,1)));
                 end
-                toa(:,ch)=ziegelwanger2013offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
+                toa(:,ch)=ziegelwanger2013_offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
             end
         end
         if abs(diff(p_offaxis(:,1)))<0.003 && abs(diff(p_offaxis(:,2)))<0.003 && abs(diff(p_offaxis(:,3)))<0.003 && abs(diff(p_offaxis(:,4)))<0.003

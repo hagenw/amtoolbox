@@ -18,7 +18,7 @@ function [output, mixer] = gfb_mixer_process(mixer, input)
 
 % filename : gfb_mixer_process.m
 
-warning('Warning: GFB_MIXER_PROCESS will be removed in a future release. Use HOHMANN2002PROCESS instead. ');
+warning('Warning: GFB_MIXER_PROCESS will be removed in a future release. Use hohmann2002_process instead. ');
 
 output = mixer.gains * input;
 

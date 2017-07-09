@@ -42,7 +42,7 @@ function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0
 %
 %       [Obj,results]=ziegelwanger2014(Obj,4,1);
 %
-%   See also: ziegelwanger2014onaxis, ziegelwanger2014offaxis,
+%   See also: ziegelwanger2014_onaxis, ziegelwanger2014_offaxis,
 %             data_ziegelwanger2014, exp_ziegelwanger2014
 %
 %   References: ziegelwanger2014
@@ -149,9 +149,9 @@ if outlierDetection>0
         if isoctave
             fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
         else
-            tmp=lsqcurvefit(@ziegelwanger2014onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
+            tmp=lsqcurvefit(@ziegelwanger2014_onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
         end
-        [~,idx]=deleteoutliers(toaEst(:,ch)-ziegelwanger2014onaxis(tmp,pos(:,1:2)*pi/180)*Obj.Data.SamplingRate,outlierDetection*Obj.API.M);
+        [~,idx]=deleteoutliers(toaEst(:,ch)-ziegelwanger2014_onaxis(tmp,pos(:,1:2)*pi/180)*Obj.Data.SamplingRate,outlierDetection*Obj.API.M);
         indicator(idx,ch)=ones(length(idx),1);
     end
 end
@@ -169,8 +169,8 @@ if model>0
             fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
         else
             [p_onaxis(ch,:),performance.on_axis{ch}.resnormS,performance.on_axis{ch}.residualS,performance.on_axis{ch}.exitflag,performance.on_axis{ch}.output]=...
-                lsqcurvefit(@ziegelwanger2014onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
-            toa(:,ch)=ziegelwanger2014onaxis(p_onaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
+                lsqcurvefit(@ziegelwanger2014_onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
+            toa(:,ch)=ziegelwanger2014_onaxis(p_onaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
         end
         performance.on_axis{ch}.resnormS=sqrt(performance.on_axis{ch}.resnormS/(Obj.API.M-sum(indicator(:,ch))));
         performance.on_axis{ch}.resnormP=norm((toaEst(:,ch)-toa(:,ch))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);
@@ -189,8 +189,8 @@ if model>0
                 fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
             else
                 [p_offaxis(ch,:),performance.off_axis{ch}.resnormS,performance.off_axis{ch}.residualS,performance.off_axis{ch}.exitflag,performance.off_axis{ch}.output]=...
-                    lsqcurvefit(@ziegelwanger2014offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',model));
-                toa(:,ch)=ziegelwanger2014offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
+                    lsqcurvefit(@ziegelwanger2014_offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',model));
+                toa(:,ch)=ziegelwanger2014_offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
             end
             performance.off_axis{ch}.resnormS=sqrt(performance.off_axis{ch}.resnormS/(Obj.API.M-sum(indicator(:,ch))));
             performance.off_axis{ch}.resnormP=norm((toaEst(:,ch)-toa(:,ch))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);

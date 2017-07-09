@@ -46,15 +46,15 @@ while 1
         % call the model 
       disp(['Model started with interval #' num2str(ii)]);
       [pathway_out_1{ii}, pathway_out_2{ii}, pathway_out_3{ii}, pathway_out_4{ii}] = ...
-         breebaart2001preproc(wave,par_path(1),par_path(2),par_path(3));
+         breebaart2001_preproc(wave,par_path(1),par_path(2),par_path(3));
     end
 
     % process detector model
     if exist(fullfile(directory,'decision_parameters.mat'),'file'), 
       par = load(fullfile(directory,'decision_parameters.mat')); 
-      response = breebaart2001centralproc(pathway_out_1, pathway_out_3, pathway_out_4 , par.decision.input4);
+      response = breebaart2001_centralproc(pathway_out_1, pathway_out_3, pathway_out_4 , par.decision.input4);
     else
-      response = breebaart2001centralproc(pathway_out_1, pathway_out_3, pathway_out_4 , 'lbr');
+      response = breebaart2001_centralproc(pathway_out_1, pathway_out_3, pathway_out_4 , 'lbr');
     end
     
     

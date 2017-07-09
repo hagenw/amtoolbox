@@ -19,8 +19,8 @@ function outsig = weightedaveragefilter(insig,weight,fs,timeconst)
 %   constant is specified by the *timeconst* argument. More details about
 %   the conputation can be found in Pulkki, Hirvonen 2009 (Sec. 3.2.3)
 %
-%   See also: takanen2013mso, takanen2013lso, takanen2013wbmso,
-%             takanen2013onsetenhancement, takanen2013contracomparison
+%   See also: takanen2013_mso, takanen2013_lso, takanen2013_wbmso,
+%             takanen2013_onsetenhancement, takanen2013_contracomparison
 %
 %   References: pulkki2009 takanen2013
 

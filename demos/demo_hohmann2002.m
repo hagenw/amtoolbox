@@ -10,7 +10,7 @@
 %   Part III: This Example demonstrates how to create and how to use the
 %   combined analysis-synthesis Filterbank system.
 %
-%   See also: exp_hohmann2002 hohmann2002 hohmann2002process
+%   See also: exp_hohmann2002 hohmann2002 hohmann2002_process
 
 % author   : tp
 % date     : Jan, Mar 2002, Nov 2006
@@ -26,7 +26,7 @@ attenuation_db        =     3;
 fs                    = 44100;
 filter_order          =     4;
 
-filter = hohmann2002filter(fs, center_frequency_hz, ...
+filter = hohmann2002_filter(fs, center_frequency_hz, ...
                         bandwidth_hz, attenuation_db, filter_order);
 
 %%% print the filter's parameters to the screen %%%
@@ -45,7 +45,7 @@ impulse_samples            = 8192;
 impulse_response_samples   =  800;
 impulse                    = [1, zeros(1,impulse_samples - 1)];
 
-[impulse_response, filter] = hohmann2002process(filter, impulse);
+[impulse_response, filter] = hohmann2002_process(filter, impulse);
 
 figure(1);
 plot([0:impulse_response_samples-1], ...
@@ -115,7 +115,7 @@ end
 %%% plot the frequency response of the individual filters     
 
 frequency = 0:2:fs/2;
-h=hohmann2002freqz(analyzer,exp(2*1i*pi*frequency/fs));
+h=hohmann2002_freqz(analyzer,exp(2*1i*pi*frequency/fs));
 
 figure(3);
 plot(frequency, 20 * log10(abs(h)));
@@ -151,7 +151,7 @@ analyzer = hohmann2002(sampling_rate_hz, flow, ...
 
 amt_disp(['Building synthesizer for an analysis-synthesis delay of ', ...
       num2str(desired_delay_in_seconds), ' seconds']);
-synthesizer = hohmann2002synth(analyzer, desired_delay_in_seconds);
+synthesizer = hohmann2002_synth(analyzer, desired_delay_in_seconds);
 
 %%% Extract the synthesizer's parameters %%%
 amt_disp(['The synthesizers parameters:';...
@@ -177,9 +177,9 @@ end
 %%%  analysis-synthesis system                                         %%%
 
 impulse = [1, zeros(1,8191)];                                          
-[analyzed_impulse, analyzer] = hohmann2002process(analyzer, impulse);
+[analyzed_impulse, analyzer] = hohmann2002_process(analyzer, impulse);
 [resynthesized_impulse, synthesizer] = ...
-    hohmann2002process(synthesizer, analyzed_impulse);
+    hohmann2002_process(synthesizer, analyzed_impulse);
 
 figure(4);
 plot([0:8191]/sampling_rate_hz*1e3, resynthesized_impulse);

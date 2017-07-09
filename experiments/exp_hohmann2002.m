@@ -94,7 +94,7 @@ function exp_hohmann2002(varargin)
 %
 %   References: hohmann2002
 %
-%   See also: demo_hohmann2002 hohmann2002 hohmann2002process hohmann2002delay hohmann2002synth hohmann2002mixer
+%   See also: demo_hohmann2002 hohmann2002 hohmann2002_process hohmann2002_delay hohmann2002_synth hohmann2002_mixer
 
 
 % AUTHOR: CK, 2014
@@ -126,11 +126,11 @@ function exp_hohmann2002(varargin)
         gamma_order= 4;       % Filter order;
 
         % Construct new analyzer object;
-        filter = hohmann2002filter (fs, fc, bw, attenuation_db, gamma_order);
+        filter = hohmann2002_filter (fs, fc, bw, attenuation_db, gamma_order);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];
         % Filter signal;
-        impulse_response = hohmann2002process(filter, impulse);
+        impulse_response = hohmann2002_process(filter, impulse);
 
         %Plot;
         figure;
@@ -159,11 +159,11 @@ function exp_hohmann2002(varargin)
         gamma_order= 4;       % Filter order;
 
         % Construct new analyzer object;
-        filter = hohmann2002filter (fs, fc, bw, attenuation_db, gamma_order);
+        filter = hohmann2002_filter (fs, fc, bw, attenuation_db, gamma_order);
         % Impulse signal;
         impulse = [1, zeros(1,8191)];
         % Filter signal;
-        impulse_response = hohmann2002process(filter, impulse);
+        impulse_response = hohmann2002_process(filter, impulse);
         % Frequency response;
         frequency_response = fft(real(impulse_response)');                     
         % Normalized frequency vector;
@@ -230,7 +230,7 @@ function exp_hohmann2002(varargin)
         % Impulse signal;
         impulse = [1, zeros(1,8191)];                                          
         % Filter signal;
-        impulse_response = hohmann2002process(analyzer, impulse);
+        impulse_response = hohmann2002_process(analyzer, impulse);
         % Frequency response;
         frequency_response = fft(real(impulse_response)');                     
         % Frequency vector;
@@ -263,12 +263,12 @@ function exp_hohmann2002(varargin)
         % Impulse signal;
         impulse = [1, zeros(1,8191)];                                          
         % Filter signal;
-        [impulse_response, analyzer] = hohmann2002process(analyzer, impulse);
+        [impulse_response, analyzer] = hohmann2002_process(analyzer, impulse);
         % Construct new delay object, which holds samples to delay and phase factors.
-        delay = hohmann2002delay(analyzer,delay_samples);
+        delay = hohmann2002_delay(analyzer,delay_samples);
         % Delay filtered signal;
         insig = impulse_response;   % Impulse response as input signal;
-        outsig = hohmann2002process(delay, insig);
+        outsig = hohmann2002_process(delay, insig);
         outsigdelayenv = hilbert(real(outsig),fs);
         
         % Plot;
@@ -321,12 +321,12 @@ function exp_hohmann2002(varargin)
         % Impulse signal;
         impulse = [1, zeros(1,8191)];                                          
         % Filter signal;
-        [impulse_response, analyzer] = hohmann2002process(analyzer, impulse);
+        [impulse_response, analyzer] = hohmann2002_process(analyzer, impulse);
         % Construct new delay object, which holds samples to delay and phase factors.
-        delay = hohmann2002delay(analyzer,delay_samples);
+        delay = hohmann2002_delay(analyzer,delay_samples);
         % Delay filtered signal;
         insig = impulse_response;   % Impulse response as input signal;
-        outsig = hohmann2002process(delay, insig);
+        outsig = hohmann2002_process(delay, insig);
         outsigdelayenv = hilbert(real(outsig),fs);
         
         % Plot;
@@ -371,13 +371,13 @@ function exp_hohmann2002(varargin)
         % Construct new analyzer object;
         analyzer = hohmann2002 (fs,flow,basef,fhigh,filters_per_ERBaud);
         % Build synthesizer for an analysis-synthesis delay of desired_delay in seconds.
-        synthesizer = hohmann2002synth(analyzer, desired_delay);
+        synthesizer = hohmann2002_synth(analyzer, desired_delay);
         % Impulse signal;
         impulse = [1, zeros(1,8191)]; 
         % Filter signal;
-        [analyzed_impulse, analyzer] = hohmann2002process(analyzer, impulse);
+        [analyzed_impulse, analyzer] = hohmann2002_process(analyzer, impulse);
         % Resynthesize filtered impulse response from above.
-        [resynthesized_impulse, synthesizer] = hohmann2002process(synthesizer, analyzed_impulse);
+        [resynthesized_impulse, synthesizer] = hohmann2002_process(synthesizer, analyzed_impulse);
     
         % Plot;
         figure('units','normalized','outerposition',[0.25 0.05 0.5 0.9])
@@ -424,13 +424,13 @@ function exp_hohmann2002(varargin)
         % Construct new analyzer object;
         analyzer = hohmann2002 (fs,flow,basef,fhigh,filters_per_ERBaud);
         % Build synthesizer for an analysis-synthesis delay of desired_delay in seconds.
-        synthesizer = hohmann2002synth(analyzer, desired_delay);
+        synthesizer = hohmann2002_synth(analyzer, desired_delay);
         % Impulse signal;
         impulse = [1, zeros(1,8191)]; 
         % Filter signal;
-        analyzed_impulse = hohmann2002process(analyzer, impulse);
+        analyzed_impulse = hohmann2002_process(analyzer, impulse);
         % Resynthesize filtered impulse response from above.
-        resynthesized_impulse = hohmann2002process(synthesizer, analyzed_impulse);
+        resynthesized_impulse = hohmann2002_process(synthesizer, analyzed_impulse);
         % Normalized frequency vector;
         frequency = (0:8191) * fs / 8192;
         % Transfer function;

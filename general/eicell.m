@@ -28,7 +28,7 @@ function z = eicell(insig,fs,tau,ild,varargin)
 %
 %     'ptau',ptau  Time constant for p(tau) function. Default value is 2.2e-3.
 %
-%   See also: breebaart2001preproc
+%   See also: breebaart2001_preproc
 
 % Author: Jeroen Breebaart and Peter L. Søndergaard
 

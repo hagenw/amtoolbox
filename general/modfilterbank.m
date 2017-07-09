@@ -23,7 +23,7 @@ function [outsig,mfc] = modfilterbank(insig,fs,fc,varargin)
 %  
 %   References: fassel1993modulation dau1997mapI
 %
-%   See also: breebaart2001preproc
+%   See also: breebaart2001_preproc
   
 % AUTHOR: Stephan Ewert
 %

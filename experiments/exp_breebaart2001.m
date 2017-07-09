@@ -73,7 +73,7 @@ function output=exp_breebaart2001(varargin)
 %   will start the experiment, collect the responses from the model server,
 %   and plot the figure. 
 %
-%   See also: data_breebaart2001 data_vandepar1999 breebaart2001centralproc breebaart2001preproc sig_breebaart2001 
+%   See also: data_breebaart2001 data_vandepar1999 breebaart2001_centralproc breebaart2001_preproc sig_breebaart2001 
 %
 %   Example:
 %   ---------
@@ -145,7 +145,7 @@ if flags.do_a_fig2
         for counter = 1:2
 
             testsigoutmiddle(:,counter) = ...
-                breebaart2001outmiddlefilter(testsig(:,counter),48000);
+                breebaart2001_outmiddlefilter(testsig(:,counter),48000);
 
             [testsigaudfilt(:,:,counter), ~] = ...
                 auditoryfilterbank(testsigoutmiddle(:,counter),48000,'argimport',flags,keyvals);
@@ -194,7 +194,7 @@ elseif flags.do_a_fig6
             sig = insig(:,signalcounter:signalcounter+1);
 
             for earnumber = 1:2
-                outsig(:,earnumber) = breebaart2001outmiddlefilter(sig(:,earnumber),fs);
+                outsig(:,earnumber) = breebaart2001_outmiddlefilter(sig(:,earnumber),fs);
             end
 
             [outsig, ~] = auditoryfilterbank(outsig,fs,'argimport',flags,keyvals);
@@ -270,12 +270,12 @@ elseif flags.do_b_fig3
         parout = emuexp('expinit',parout,expset);
         
         % input2 = fs; input3 = tau; input4 = ild; 
-        modelset = {'name','breebaart2001preproc','input1',...
+        modelset = {'name','breebaart2001_preproc','input1',...
             'expsignal', 'input2',32000,'input3',0,'input4',0,...
             'outputs',[1 3 4]};
         parout = emuexp('modelinit',parout,modelset);
         
-        decisionset = {'name','breebaart2001centralproc','input1',...
+        decisionset = {'name','breebaart2001_centralproc','input1',...
             'modelout','input2','modelout', 'input3','modelout',...
             'input4','lbr'};
         parout = emuexp('decisioninit',parout,decisionset);
@@ -365,7 +365,7 @@ elseif flags.do_b_fig6
         end
         parout = emuexp('expinit',parout,expset);
 
-        decisionset = {'name','breebaart2001centralproc','input1',...
+        decisionset = {'name','breebaart2001_centralproc','input1',...
             'modelout','input2','modelout', 'input3','modelout',...
             'input4','lbr'};
         parout = emuexp('decisioninit',parout,decisionset);
@@ -380,7 +380,7 @@ elseif flags.do_b_fig6
         for fccount = 1:length(fc)
             
             % input2 = fs; input3 = tau; input4 = ild; 
-            modelset = {'name','breebaart2001preproc','input1',...
+            modelset = {'name','breebaart2001_preproc','input1',...
                 'expsignal','input2',32000,'input3',tau(fccount),...
                 'input4',0,'outputs',[1 3 4]};
             parout = emuexp('modelinit',parout,modelset);
@@ -457,12 +457,12 @@ elseif flags.do_fig1_vandepar1999
         parout = emuexp('expinit',parout,expset);
         
         % input2 = fs; input3 = tau; input4 = ild; 
-        modelset = {'name','breebaart2001preproc','input1',...
+        modelset = {'name','breebaart2001_preproc','input1',...
             'expsignal', 'input2',32000,'input3',0,'input4',0,...
             'outputs',[1 3 4]};
         parout = emuexp('modelinit',parout,modelset);
         
-        decisionset = {'name','breebaart2001centralproc','input1',...
+        decisionset = {'name','breebaart2001_centralproc','input1',...
             'modelout','input2','modelout', 'input3','modelout',...
             'input4','lbr'};
         parout = emuexp('decisioninit',parout,decisionset);

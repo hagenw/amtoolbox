@@ -402,7 +402,7 @@ elseif flags.do_fig8
             % calculate binaural parameters
             [fine,cfreqs,ild_tmp] = dietz2011(sig,44100,'fhigh',1400);
             % unwrap ITD
-            itd_tmp = dietz2011unwrapitd(fine.itd,ild_tmp,fine.f_inst,2.5);
+            itd_tmp = dietz2011_unwrapitd(fine.itd,ild_tmp,fine.f_inst,2.5);
             % calculate the mean about time of the binaural parameters and store
             % them
             itd(ii,:) = median(itd_tmp,1);
@@ -450,7 +450,7 @@ if flags.do_fig9
             ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance], ...
                 'spherical',conf);
             sig = auralize_ir(ir,sig_noise,1,conf);
-            phi_auditory_event(ii) = wierstorf2013estimateazimuth(sig,lookup,'dietz2011');
+            phi_auditory_event(ii) = wierstorf2013_estimateazimuth(sig,lookup,'dietz2011');
             phi_sound_event(ii) = deg(irs.apparent_azimuth(ii));
         end
         amt_cache('set', 'fig9', phi_auditory_event,phi_sound_event);

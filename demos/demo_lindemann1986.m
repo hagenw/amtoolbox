@@ -20,7 +20,7 @@
 %      averaged over time for the desired frequency channel for a sinusoid
 %      with an ITD of 0.3 ms.
 %
-%   See also: lindemann1986, lindemann1986bincorr, plot_lindemann1986
+%   See also: lindemann1986, lindemann1986_bincorr, plot_lindemann1986
 
 
 % Sampling rate

@@ -104,8 +104,8 @@ if flags.do_dietz2011
         % calculate binaural parameters
         [fine, cfreqs, ild_tmp, env] = dietz2011(sig,fs);
         % unwrap ITD
-        itd_tmp = dietz2011unwrapitd(fine.itd,ild_tmp(:,1:12),fine.f_inst,2.5);
-        env_itd_tmp = dietz2011unwrapitd(env.itd,ild_tmp(:,13:23),env.f_inst,2.5);
+        itd_tmp = dietz2011_unwrapitd(fine.itd,ild_tmp(:,1:12),fine.f_inst,2.5);
+        env_itd_tmp = dietz2011_unwrapitd(env.itd,ild_tmp(:,13:23),env.f_inst,2.5);
         % calculate the mean about time of the binaural parameters and store
         % them
         itd(ii,1:12) = median(itd_tmp,1);

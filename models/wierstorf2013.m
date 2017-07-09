@@ -71,7 +71,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %   revision used to generate the figures in the corresponding paper is
 %   a8914700a4.
 %
-%   See also: wierstorf2013estimateazimuth, dietz2011, itd2angle
+%   See also: wierstorf2013_estimateazimuth, dietz2011, itd2angle
 %
 %   References: wierstorf2013 wierstorf2011hrtf dietz2011auditory
 
@@ -216,7 +216,7 @@ for ii=1:length(x)
             % estimate the perceived direction
             % this is done by calculating ITDs with the dietz2011 binaural model,
             % which are then mapped to azimuth values with a lookup table
-            perceived_direction(ii,jj) = wierstorf2013estimateazimuth(sig,lookup, ...
+            perceived_direction(ii,jj) = wierstorf2013_estimateazimuth(sig,lookup, ...
                 'dietz2011','no_spectral_weighting','remove_outlier');
             localization_error(ii,jj) = perceived_direction(ii,jj)-desired_direction(ii,jj);
         end

@@ -18,7 +18,7 @@ function synthesizer = gfb_synthesizer_new(analyzer, desired_delay_in_seconds)
 % author   : tp
 % date     : Jan 2002, Nov 2003, Nov 2006, Jan 2007
 
-warning('Warning: GFB_SYNHTESIZER_NEW will be removed in a future release. Use HOHMANN2002SYNTH instead. ');
+warning('Warning: GFB_SYNHTESIZER_NEW will be removed in a future release. Use hohmann2002_synth instead. ');
 
 synthesizer.type         = 'gfb_Synthesizer';
 desired_delay_in_samples = round(desired_delay_in_seconds * ...

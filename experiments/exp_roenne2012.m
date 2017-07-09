@@ -75,13 +75,13 @@ if flags.do_fig5
 
   [waveVlat, click_latency] = amt_cache('get','fig5',flags.cachemode);  
   if isempty(waveVlat);
-    [click_amplitude, click_latency]    = roenne2012click(stim_level);     
-    waveVlat = roenne2012tonebursts(stim_level);    
+    [click_amplitude, click_latency]    = roenne2012_click(stim_level);     
+    waveVlat = roenne2012_tonebursts(stim_level);    
     amt_cache('set','fig5',waveVlat,click_latency);
   end;
   
   if flags.do_plot;
-    plot_roenne2012tonebursts(waveVlat,click_latency);
+    plot_roenne2012_tonebursts(waveVlat,click_latency);
   end  ;  
 
 end;
@@ -96,12 +96,12 @@ if flags.do_fig6;
 
   [waveVamp, waveVlat] = amt_cache('get','fig6',flags.cachemode);
   if isempty(waveVamp)
-    [waveVamp, waveVlat] = roenne2012chirp(stim_level, chirp_number);
+    [waveVamp, waveVlat] = roenne2012_chirp(stim_level, chirp_number);
     amt_cache('set','fig6',waveVamp,waveVlat);
   end;
         
   if flags.do_plot
-    plot_roenne2012chirp(waveVamp, waveVlat,'amponly');
+    plot_roenne2012_chirp(waveVamp, waveVlat,'amponly');
   end
 end;
 
@@ -115,12 +115,12 @@ if flags.do_fig7;
 
   [waveVamp, waveVlat] = amt_cache('get','fig7',flags.cachemode);
   if isempty(waveVamp)
-    [waveVamp, waveVlat] = roenne2012chirp(stim_level, chirp_number);
+    [waveVamp, waveVlat] = roenne2012_chirp(stim_level, chirp_number);
     amt_cache('set','fig7',waveVamp,waveVlat);
   end;
         
   if flags.do_plot
-    plot_roenne2012chirp(waveVamp, waveVlat,'latonly');
+    plot_roenne2012_chirp(waveVamp, waveVlat,'latonly');
   end
 end;
 

@@ -21,7 +21,7 @@ function [output, analyzer] = gfb_analyzer_process(analyzer, input)
 % author   : tp
 % date     : Jan 2002, Sep 2003, Nov 2006, Jan 2007
 
-warning('Warning: GFB_ANALYZER_PROCESS will be removed in a future release. Use HOHMANN2002PROCESS instead. ');
+warning('Warning: GFB_ANALYZER_PROCESS will be removed in a future release. Use hohmann2002_process instead. ');
 
 
 if (analyzer.fast)

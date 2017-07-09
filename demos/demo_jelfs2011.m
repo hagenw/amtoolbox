@@ -7,7 +7,7 @@
 %   a polar plot. The KEMAR HRTF dataset is used.
 %
 %
-%   See also: jelfs2011, culling2005bmld
+%   See also: jelfs2011, culling2005_bmld
 
 target_azim=0;
 database='kemar';

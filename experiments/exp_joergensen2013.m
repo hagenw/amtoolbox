@@ -42,7 +42,7 @@ function exp_joergensen2013(NSpeechsamples, varargin)
 %
 %     exp_joergensen2013('fig2_simAll');
 %  
-%   See also: joergensen2013, joergensen2013sim, plot_joergensen2013
+%   See also: joergensen2013, joergensen2013_sim, plot_joergensen2013
 %
 %   ---------
 %
@@ -69,11 +69,11 @@ if flags.do_fig2_simAll;
     SRTs = amt_cache('get',['fig2_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
     if isempty(SRTs)
                        
-        [SRTs_specsub specsubConds] = joergensen2013sim(NSpeechsamples,'JandD2011specsub');
-        [SRTs_reverb reverbConds] = joergensen2013sim(NSpeechsamples,'JandD2011reverb');
-        [SRTs_simJetal2013 Jetal2013Conds] = joergensen2013sim(NSpeechsamples,'Jetal2013');
-        [SRTs_simFP1990 FP1990Conds] = joergensen2013sim(NSpeechsamples,'FP1990');
-        [SRTs_simKjems2009 Kjems2009Conds] = joergensen2013sim(NSpeechsamples,'Kjems2009');
+        [SRTs_specsub specsubConds] = joergensen2013_sim(NSpeechsamples,'JandD2011specsub');
+        [SRTs_reverb reverbConds] = joergensen2013_sim(NSpeechsamples,'JandD2011reverb');
+        [SRTs_simJetal2013 Jetal2013Conds] = joergensen2013_sim(NSpeechsamples,'Jetal2013');
+        [SRTs_simFP1990 FP1990Conds] = joergensen2013_sim(NSpeechsamples,'FP1990');
+        [SRTs_simKjems2009 Kjems2009Conds] = joergensen2013_sim(NSpeechsamples,'Kjems2009');
         
         SRTs.simSRTs_Jetal2013 = SRTs_simJetal2013;
         SRTs.simSRTs_reverb = SRTs_reverb;
@@ -94,7 +94,7 @@ if flags.do_fig2_specsub;
     SRTs = amt_cache('get',['fig2_specsub_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
     if isempty(SRTs)
                
-        [SRTs_specsub specsubConds] = joergensen2013sim(NSpeechsamples,'JandD2011specsub');
+        [SRTs_specsub specsubConds] = joergensen2013_sim(NSpeechsamples,'JandD2011specsub');
         SRTs.simSRTs_specsub = SRTs_specsub;
         SRTs.simSRTs_Kjems2009 = [ NaN NaN NaN NaN ] ;
         SRTs.simSRTs_FP1990 =[ NaN NaN NaN ];
@@ -114,7 +114,7 @@ if flags.do_fig2_reverb;
     SRTs = amt_cache('get',['fig2_reverb_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
     if isempty(SRTs)
                        
-        [SRTs_reverb reverbConds] = joergensen2013sim(NSpeechsamples,'JandD2011reverb');
+        [SRTs_reverb reverbConds] = joergensen2013_sim(NSpeechsamples,'JandD2011reverb');
         SRTs.simSRTs_specsub = [ NaN NaN NaN NaN NaN NaN ];
         SRTs.simSRTs_Kjems2009 = [ NaN NaN NaN NaN ];
         SRTs.simSRTs_FP1990 = [ NaN NaN NaN ];
@@ -134,7 +134,7 @@ if flags.do_fig2_kjems2009;
     SRTs = amt_cache('get',['fig2_Kjems2009_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
     if isempty(SRTs)
                        
-        [SRTs_Kjems2009 Kjems2009Conds] = joergensen2013sim(NSpeechsamples,'Kjems2009');
+        [SRTs_Kjems2009 Kjems2009Conds] = joergensen2013_sim(NSpeechsamples,'Kjems2009');
          SRTs.simSRTs_specsub = [ NaN NaN NaN NaN NaN NaN ];
          SRTs.simSRTs_Kjems2009 = SRTs_Kjems2009;
         SRTs.simSRTs_FP1990 = [ NaN NaN NaN  ];
@@ -154,7 +154,7 @@ if flags.do_fig2_FP1990;
     SRTs = amt_cache('get',['fig2_FP1990_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
     if isempty(SRTs)
                       
-        [SRTs_FP1990 FP1990Conds] = joergensen2013sim(NSpeechsamples,'FP1990');
+        [SRTs_FP1990 FP1990Conds] = joergensen2013_sim(NSpeechsamples,'FP1990');
         SRTs.simSRTs_specsub = [ NaN NaN NaN NaN NaN NaN ];
         SRTs.simSRTs_Kjems2009 = [ NaN NaN NaN NaN  ];
         SRTs.simSRTs_FP1990 = SRTs_FP1990;
@@ -174,7 +174,7 @@ if flags.do_fig2_Jetal2013;
     SRTs = amt_cache('get',['fig2_Jetal2013_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
     if isempty(SRTs)
                       
-        [SRTs_Jetal2013 Jetal2013Conds] = joergensen2013sim(NSpeechsamples,'Jetal2013');
+        [SRTs_Jetal2013 Jetal2013Conds] = joergensen2013_sim(NSpeechsamples,'Jetal2013');
         SRTs.simSRTs_specsub = [ NaN NaN NaN NaN NaN NaN ];
         SRTs.simSRTs_Kjems2009 = [ NaN NaN NaN NaN  ];
         SRTs.simSRTs_FP1990 = [ NaN NaN NaN  ];

@@ -79,7 +79,7 @@ if flags.do_fig3
 
     % convert interaural information into azimuth
     itd_unwrapped = ...
-        dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst,2.5);
+        dietz2011_unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst,2.5);
     angl=itd2angle(itd_unwrapped,lookup);
 
     h_ic=zeros(91,12);
@@ -143,7 +143,7 @@ if flags.do_fig4
     [~, ~, ~, hairc_mod135]=dietz2011(signal,fs,'mod_center_frequency_hz',135);
     % convert interaural information into azimuth
     itd_unwrapped = ...
-        dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+        dietz2011_unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
     angl=itd2angle(itd_unwrapped,lookup);
     angl_fmod216=hairc_mod216.itd_lp*140000; %linear approximation. paper version is better than this
     angl_fmod135=hairc_mod135.itd_lp*140000; %linear approximation. paper version is better than this
@@ -243,7 +243,7 @@ if flags.do_fig5
         [hairc_fine, fc, hairc_ild]=dietz2011(signal,fs,'fhigh',1400);
         % convert interaural information into azimuth
         itd_unwrapped = ...
-            dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst,2.5);
+            dietz2011_unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst,2.5);
         angl=itd2angle(itd_unwrapped,lookup);
 
         h_ic=zeros(38,12);
@@ -314,7 +314,7 @@ if flags.do_fig6
     [hairc_fine, fc, hairc_ild, hairc_mod]=dietz2011(signal,fs);
     % convert interaural information into azimuth
     itd_unwrapped = ...
-        dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+        dietz2011_unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
     angl=itd2angle(itd_unwrapped,lookup);
     angl_fmod=hairc_mod.itd_lp*140000; %linear approximation. paper version is better than this
 
@@ -393,7 +393,7 @@ if flags.do_fig6_spille2013
 
   % convert interaural information into azimuth
   itd_unwrapped = ...
-      dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst_lp,2.5);
+      dietz2011_unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst_lp,2.5);
   lookup = amt_load('dietz2011','itd2anglelookuptable.mat');
   angl=itd2angle(itd_unwrapped,lookup);
 

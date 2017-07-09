@@ -70,8 +70,8 @@ function data = data_ziegelwanger2013(varargin)
 %
 %     data=data_ziegelwanger2013('ARI');
 %
-%   See also: ziegelwanger2013, ziegelwanger2013onaxis,
-%   ziegelwanger2013offaxis, exp_ziegelwanger2013
+%   See also: ziegelwanger2013, ziegelwanger2013_onaxis,
+%   ziegelwanger2013_offaxis, exp_ziegelwanger2013
 %
 %   References: ziegelwanger2013 majdak2013toa
 

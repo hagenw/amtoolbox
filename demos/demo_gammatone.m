@@ -296,15 +296,15 @@
     % Impulse signal;
     impulse = [1, zeros(1,8191)];
     % Filter signal;
-    [impulse_response, analyzer] = hohmann2002process(analyzer, impulse);
+    [impulse_response, analyzer] = hohmann2002_process(analyzer, impulse);
        
     % Find peak at envelope maximum for lowest channel and add one sample;
     delay_samples = find(abs(impulse_response(1,:)) == max(abs(impulse_response(1,:)))) + 1;
     
     % 
-    delay = hohmann2002delay(analyzer, delay_samples);
+    delay = hohmann2002_delay(analyzer, delay_samples);
      
-    [outsig, delay] = hohmann2002process(delay, impulse_response);
+    [outsig, delay] = hohmann2002_process(delay, impulse_response);
     
     % Figure 4;
     type1   = 'plotted as they are';   % Type of implemantion for headline;

@@ -30,7 +30,7 @@ function [ir,fs]=sig_joergensen2011(duration)
 
 switch(duration)
  case {0.4,0.7,1.3,2.3}
-   [ir,fs]=amt_load('signals',['sig_joergensen2011_',num2str(duration),'s.wav']);
+   [ir,fs]=amt_load('sig_joergensen2011',['simulatedimpulseresponses_',num2str(duration),'s.wav']);
  otherwise
    error('%s: Unsupported duration.',upper(mfilename));  
 end;

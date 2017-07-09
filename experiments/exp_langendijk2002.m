@@ -53,8 +53,8 @@ function output = exp_langendijk2002(varargin)
 %
 %     exp_langendijk2002('fig9');
 %
-%   See also: langendijk2002, langendijk2002likelihood, plot_langendijk2002, 
-%             plot_langendijk2002likelihood, data_langendijk2002
+%   See also: langendijk2002, langendijk2002_likelihood, plot_langendijk2002, 
+%             plot_langendijk2002_likelihood, data_langendijk2002
 %
 %   References: langendijk2002contribution
 %
@@ -110,11 +110,11 @@ p1oh= langendijk2002( dtfdata.medir1oh,dtfdata.medir,fs); % 1-oct (high:8-16kHz)
 % likelihood estimations
 la=zeros(5,1);le=zeros(5,1);ci=zeros(5,2);
 idb=1:2:length(dtfdata.targetb); % in order to get comparable likelihoods
-[la(1),le(1),ci(1,:)] = langendijk2002likelihood( pb,dtfdata.pol,dtfdata.pol,dtfdata.targetb(idb),dtfdata.responseb(idb) );
-[la(2),le(2),ci(2,:)] = langendijk2002likelihood( p2o,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response2o );
-[la(3),le(3),ci(3,:)] = langendijk2002likelihood( p1ol,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1ol );
-[la(4),le(4),ci(4,:)] = langendijk2002likelihood( p1om,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1om );
-[la(5),le(5),ci(5,:)] = langendijk2002likelihood( p1oh,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1oh );
+[la(1),le(1),ci(1,:)] = langendijk2002_likelihood( pb,dtfdata.pol,dtfdata.pol,dtfdata.targetb(idb),dtfdata.responseb(idb) );
+[la(2),le(2),ci(2,:)] = langendijk2002_likelihood( p2o,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response2o );
+[la(3),le(3),ci(3,:)] = langendijk2002_likelihood( p1ol,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1ol );
+[la(4),le(4),ci(4,:)] = langendijk2002_likelihood( p1om,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1om );
+[la(5),le(5),ci(5,:)] = langendijk2002_likelihood( p1oh,dtfdata.pol,dtfdata.pol,dtfdata.targetc,dtfdata.response1oh );
 %close(h)
 
 output = pb;
@@ -160,7 +160,7 @@ if flags.do_plot
 
   % likelihood statistic
   subplot(2,3,6)
-  plot_langendijk2002likelihood(la,le,ci);
+  plot_langendijk2002_likelihood(la,le,ci);
   set(gca,'XLim',[0.5 5.5])
 end
 

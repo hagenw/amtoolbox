@@ -11,20 +11,20 @@ function output = data_takanen2013(varargin)
 %
 %     'cochleardelays'        Frequency-dependent delays of the cochlea 
 %                             model by Verhulst et al (2012) are 
-%                             compensated for in the |takanen2013periphery|
+%                             compensated for in the |takanen2013_periphery|
 %                             function. The delays were determined by 
 %                             analyzing the the cross-correlation- 
 %                             functions between different frequency bands.
 %
-%     'msolimits'             In |takanen2013mso| the 
+%     'msolimits'             In |takanen2013_mso| the 
 %                             ipsilateral input signals are divided by 
 %                             scaling values and thereafter limited between
 %                             0 and 1. The scaling values were obtained by
 %                             computing the average level of the
-%                             |takanen2013periphery| output for a pink noise
+%                             |takanen2013_periphery| output for a pink noise
 %                             signal reproduced at 30 dB SPL
 %
-%     'wbmsomultp'            In |takanen2013wbmso| the energy output is multiplied
+%     'wbmsomultp'            In |takanen2013_wbmso| the energy output is multiplied
 %                             so that the energy of the wide-band MSO model is
 %                             in a similar level as compared to the energies
 %                             of the narrowband MSO and LSO models. The
@@ -32,7 +32,7 @@ function output = data_takanen2013(varargin)
 %                             multiplied were obtained through an iterative
 %                             process.
 %
-%     'lookuptable'           In |takanen2013directionmapping|, the 
+%     'lookuptable'           In |takanen2013_directionmapping|, the 
 %                             outputs of the different MSO and LSO models
 %                             are mapped into directions ranging from -20
 %                             to 90. The mapping is implemented following
@@ -46,7 +46,7 @@ function output = data_takanen2013(varargin)
 %                             Butterworth lowpass filter with a cut-off 
 %                             frequency of 500 Hz
 %
-%     'onsetmultp'            In |takanen2013onsetenhancement|
+%     'onsetmultp'            In |takanen2013_onsetenhancement|
 %                             the energies of the short-term and of the 
 %                             long-term directional cues are scaled to a 
 %                             similar level with the help of a set of pre-
@@ -56,7 +56,7 @@ function output = data_takanen2013(varargin)
 %                             convolved with binaural room impulse response
 %                             of a concert hall
 %
-%     'periphenergyaverages'  In |takanen2013formbinauralactivitymap|
+%     'periphenergyaverages'  In |takanen2013_formbinauralactivitymap|
 %                             the levels of the what cues are 
 %                             scaled in order to visualize the evoked 
 %                             activations on the binaural activity map.
@@ -114,7 +114,7 @@ end;
 %% Data employed in the model of periphery
 if flags.do_cochleardelays
     %frequency-dependent delays of the cochlea model by Verhulst et al. (2012)
-    %are compensated for in the *takanen2013periphery.m*-function. The delays
+    %are compensated for in the *takanen2013_periphery.m*-function. The delays
     %were determined by analyzing the the cross-correlation-functions between
     %different frequency bands.
     x=amt_load('takanen2013','cochleardelays.mat');
@@ -126,7 +126,7 @@ if flags.do_cochleardelays
 end
 %% Data employed in the MSO model
 if flags.do_msolimits
-    %in *takanen2013mso.m*-function the ipsilateral input signals are
+    %in *takanen2013_mso.m*-function the ipsilateral input signals are
     %divided by scaling values and thereafter limited between 0 and 1. The
     %scaling values were obtained by computing the average level of the
     %*periphOutput.left* for a pink noise signal reproduced at 30 dB SPL
@@ -153,7 +153,7 @@ if flags.do_wbmsomultp
 end 
 %% Data employed in the direction mapping
 if flags.do_lookuptable
-    %in the *takanen2013directionmapping.m*, the outputs of the different MSO
+    %in the *takanen2013_directionmapping.m*, the outputs of the different MSO
     %and LSO models are mapped into directions ranging from -20 to 90. The
     %mapping is implemented following the idea of self-calibration, where 
     %theoutputs of the models are compared separately to sets of reference
@@ -173,7 +173,7 @@ if flags.do_lookuptable
 end 
 %% Data employed in the onset contrast enhancement
 if flags.do_onsetmultp
-    %in the *takanen2013onsetenhancement.m*-function, the energies of the
+    %in the *takanen2013_onsetenhancement.m*-function, the energies of the
     %short-term and of the long-term directional cues are scaled to a similar
     %level with the help of a set of pre-computed values, the values which were
     %obtained by the computing the average levels of the two energies for a
@@ -188,7 +188,7 @@ if flags.do_onsetmultp
 end
 %% Data employed both in onset contrast enhancement and in the forming of the binaural activity map
 if flags.do_periphenergyaverages
-    %in the *takanen2013formbinauralactivitymap.m*-function the levels of the
+    %in the *takanen2013_formbinauralactivitymap.m*-function the levels of the
     %what cues are scaled in order to visualize the evoked activations on the
     %binaural activity map. The values were obtained by computing the average
     %levels of the what cue for a pink noise burst reproduced at 60 dB SPL.

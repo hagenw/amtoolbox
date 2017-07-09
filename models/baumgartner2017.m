@@ -131,7 +131,7 @@ if isstruct(target) % Targets given in SOFA format
 %     amt_cache('set',fncache,latLookup)
 %   end
 %   tarSig = squeeze(target);
-%   kv.lat = wierstorf2013estimateazimuth(tarSig,latLookup,'fs',kv.fs,'dietz2011','rms_weighting');
+%   kv.lat = wierstorf2013_estimateazimuth(tarSig,latLookup,'fs',kv.fs,'dietz2011','rms_weighting');
 %   disp(kv.lat)
 end
 

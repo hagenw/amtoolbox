@@ -172,8 +172,8 @@ function exp_ziegelwanger2014(varargin)
 %
 %     exp_ziegelwanger2014('tab6');
 %
-%   See also: ziegelwanger2014, ziegelwanger2014onaxis,
-%   ziegelwanger2014offaxis, data_ziegelwanger2014
+%   See also: ziegelwanger2014, ziegelwanger2014_onaxis,
+%   ziegelwanger2014_offaxis, data_ziegelwanger2014
 %
 %   References: ziegelwanger2014
 

@@ -280,7 +280,7 @@ end
 %% Comparison process -> monaural similarity indices (SIs)
 si=zeros(size(template,2),size(target,2),size(template,3)); % initialisation
 for it = 1:size(target,2)
-	si(:,it,:) = langendijk2002comp(ireptar(:,it,:),ireptem,'s',kv.u, ...
+	si(:,it,:) = langendijk2002_comp(ireptar(:,it,:),ireptem,'s',kv.u, ...
     'argimport',flags,kv);
 end
 
