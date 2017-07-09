@@ -15,8 +15,6 @@ function outsig = sig_lindemann1986(fc,mf,fs)
 %   *mf*.
 %
 %   See also: lindemann1986 demo_lindemann1986
-%
-%   References: lindemann1986
 
 % AUTHOR: 13.04.2010 Hagen Wierstorf
 %         27.01.2012 Peter Soendergaard
