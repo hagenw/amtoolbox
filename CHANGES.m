@@ -1,26 +1,28 @@
 %Changes throughout the release history of the AMT
 %   
-%   Version 0.9.8 (29.6.2017)
+%   Version 0.9.8 (X.7.2017)
 %   =========================
 % 
 %   Compatibility breaks:
+%     - amt* --> amt_* (legacy files provided). Use `amt_start` to start the AMT
+%     - amthelp --> amt_version
 %     - gfb --> hohmann2002. See note #11 on that. 
 %     - HRTFs: only SOFA files allowed now.
-      - Functions creating/modifying signals have the prefix sig_ now:
-	    - irns --> sig_yost1996
-		- whitenoiseburst --> sig_whitenoiseburst
-		- transposedtone --> sig_transposedtone
-		- perfectsweep --> sig_linsweep (why perfect!!!!!)
-		- notchednoise --> sig_notchednoise
-		- bmsin --> sig_lindemann1986
-		- simulatedimpulseresponse --> sig_joergensen2011
-		- itdsin --> sig_itdsin
-		- ildsin --> sig_ildsin
-		- itdildsin --> sig_itdildsin
-		- competingtalkers -> sig_competingtalkers
-		- breebaart2001siggen --> sig_breebaart2001
-		- bincorrnoise --> sig_bincorrnoise
-		- bandpassnoisefreq --> sig_bandpassnoise
+%     - Functions creating/modifying signals have the prefix sig_ now:
+%     	- irns --> sig_yost1996
+%     	- whitenoiseburst --> sig_whitenoiseburst
+%      	- transposedtone --> sig_transposedtone
+%     	- perfectsweep --> sig_linsweep
+%      	- notchednoise --> sig_notchednoise
+%      	- bmsin --> sig_lindemann1986
+%      	- simulatedimpulseresponse --> sig_joergensen2011
+%      	- itdsin --> sig_itdsin
+%      	- ildsin --> sig_ildsin
+%      	- itdildsin --> sig_itdildsin
+%      	- competingtalkers -> sig_competingtalkers
+%      	- breebaart2001siggen --> sig_breebaart2001
+%      	- bincorrnoise --> sig_bincorrnoise
+%      	- bandpassnoisefreq --> sig_bandpassnoise
 %
 %   New
 %     - baumgartner2017: sound externalization model
