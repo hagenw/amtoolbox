@@ -6,6 +6,9 @@
 %     ZIEGELWANGER2013ONAXIS      - On-axis version of Ziegelwanger et al. (2013) (legacy only)
 %     ZIEGELWANGER2013OFFAXIS     - Off-axis version of Ziegelwanger et al. (2013) (legacy only)
 %
+%  Peripheral processing stages
+%     ZILANY2014_FFGN   - Fast (exact) fractional Gaussian noise and Brownian motion generator.
+%
 %  Binaural processing stages
 %     LANGENDIJK2002COMP     - Comparison process from Langendijk 20002.
 %     LINDEMANN1986BINCORR - Running cross-correlation between two signals.

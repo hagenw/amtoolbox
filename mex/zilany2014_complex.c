@@ -4,7 +4,7 @@ complex.cpp includes all of the COMPLEX math functions needed for model programs
 
 #include <stdlib.h>
 #include <math.h>
-#include "complex.hpp"
+#include "zilany2014_complex.hpp"
 
 /* divide */
 COMPLEX compdiv(COMPLEX ne,COMPLEX de)
