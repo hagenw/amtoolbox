@@ -109,7 +109,7 @@ if ~exist('ltfatstart','file')
 end
 
 % Load the version number
-[FID, MSG] = fopen ([bp,'amtoolbox_version'],'r');
+[FID, MSG] = fopen ([bp,'amt_version'],'r');
 if FID == -1
     error(MSG);
 else

@@ -1,7 +1,7 @@
 # Mandatory settings
 outputdir='~/amtoolbox/'
 plotengine='matlab'
-versionfile="amtoolbox_version"
+versionfile="amt_version"
 
 # Optional global settings
 author=u'The AMT team'
