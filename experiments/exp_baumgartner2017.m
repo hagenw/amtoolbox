@@ -105,7 +105,7 @@ if flags.do_hassager2016
           if isnan(B(iB))
             target = template;
           else
-            Obj_tar = hassager2016spectralsmoothing(Obj,B(iB));
+            Obj_tar = sig_hassager2016_spectralsmoothing(Obj,B(iB));
             target = squeeze(shiftdim(Obj_tar.Data.IR(idazi,:,:),2));
           end
           Pext{1}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sinter,'flow',100,'fhigh',flp,'interaural'); % Obj instead of single template
@@ -114,7 +114,7 @@ if flags.do_hassager2016
       end
       amtdisp([num2str(isubj),' of ',num2str(length(data)),' subjects completed.'],'progress')
     end
-    
+     
     if not(flags.do_quickCheck)
       amtcache('set',fncache,Pext);
     end
@@ -167,10 +167,10 @@ if flags.do_hartmann1996
     Pext{2} = nan(length(data),length(nprime),length(exp));
     for isub = 1:length(data)
       Obj = data(isub).Obj;
-      template = hartmann1996siggen(0,'Obj',Obj,'dur',0.1);
+      template = sig_hartmann1996(0,'Obj',Obj,'dur',0.1);
       for ee = 1:length(exp)
         for nn = 1:length(nprime)
-          target = hartmann1996siggen(nprime(nn),'Obj',Obj,'dur',0.1,exp{ee});
+          target = sig_hartmann1996(nprime(nn),'Obj',Obj,'dur',0.1,exp{ee});
           Pext{1}(isub,nn,ee) = baumgartner2017(target,template,'c1',3,'c2',0,'S',kv.Sinter,'flow',100,'fhigh',6000,'interaural');
           Pext{2}(isub,nn,ee) = baumgartner2017(target,template,'c1',3,'c2',0,'S',kv.Sintra,'flow',100,'fhigh',6000,'lat',azi);
         end
@@ -247,7 +247,7 @@ if flags.do_boyd2012
       for c = 1:2
         for lp = 1:2
           for m = 1:length(mix)
-            target{m,c,lp} = boyd2012mix(stim{c},sig,mix(m),flp(lp),fs);
+            target{m,c,lp} = sig_boyd2012_mix(stim{c},sig,mix(m),flp(lp),fs);
 % % Description in paper is ambiguous about whether broadband ILDs were
 % % adjusted to the template:
 %           temSPL = dbspl(template); 

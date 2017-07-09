@@ -136,7 +136,7 @@ function varargout=exp_baumgartner2013(varargin)
 %
 %   To display Fig. 12 use :::
 %
-%     exp_baumgartner2013('fig12');
+%     exp_baumgartner2013('fig12'); 
 %
 %   To display Fig. 13 use :::
 %

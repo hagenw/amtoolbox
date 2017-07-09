@@ -1,6 +1,6 @@
-function outsig = bmsin(fc,mf,fs)
-%BMSIN Generate a binaural modulated sinus
-%   Usage: outsig = bmsin(fc,mf,fs)
+function outsig = sig_lindemann1986(fc,mf,fs)
+%sig_lindemann1986 Generate a binaural modulated sinus for the Lindemann (1986) model
+%   Usage: outsig = sig_lindemann1986(fc,mf,fs)
 %
 %   Input parameters:
 %       fc  : carrier frequency of the sinus (Hz)
@@ -10,11 +10,17 @@ function outsig = bmsin(fc,mf,fs)
 %   Output parameters:
 %       outsig  : $fs \times 2$ sinusoid signal
 %
-%   `bmsin(fc,mf,fs)` generates an binaural modulated sinusoid with a
+%   `sig_lindemann1986(fc,mf,fs)` generates an binaural modulated sinusoid with a
 %   carrier frequency of *f* and a frequency moving around the two ears of
 %   *mf*.
+%
+%   See also: lindemann1986 demo_lindemann1986
+%
+%   References: lindemann1986
 
-% AUTHOR: Hagen Wierstorf
+% AUTHOR: 13.04.2010 Hagen Wierstorf
+%         27.01.2012 Peter Soendergaard
+%         09.07.2017: Piotr Majdak
 
 % ------ Checking of input parameters ---------
 

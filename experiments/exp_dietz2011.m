@@ -67,7 +67,7 @@ lookup = amtload('dietz2011','itd2anglelookuptable.mat');
 
 if flags.do_fig3
 
-    signal=repmat(competingtalkers('five_speakers'),2,[]);
+    signal=repmat(sig_competingtalkers('five_speakers'),2,[]);
     fs = 16000;
     signal=signal(1:5*fs,:);
     s_pos = [-80 -30 0 30 80];
@@ -131,7 +131,7 @@ if flags.do_fig4
     
     % This reproduces Figure 4 from Dietz et al Speech Comm. 2011
 
-    signal=repmat(competingtalkers('two_speakers'),2,[]);
+    signal=repmat(sig_competingtalkers('two_speakers'),2,[]);
     fs = 16000;
     s_pos = [-80 -30 0 30 80];
     ic_threshold=0.98;
@@ -211,10 +211,10 @@ end;
 
 if flags.do_fig5
     % mix signals
-    signal1=competingtalkers('one_of_three');
-    signal2=competingtalkers('two_of_three');
-    signal3=competingtalkers('three_of_three');
-    noise  =competingtalkers('bnoise');
+    signal1=sig_competingtalkers('one_of_three');
+    signal2=sig_competingtalkers('two_of_three');
+    signal3=sig_competingtalkers('three_of_three');
+    noise  =sig_competingtalkers('bnoise');
     noise = noise(1:40000,:);
     fs = 16000;
 
@@ -303,7 +303,7 @@ end;
 
 if flags.do_fig6
 
-    signal=competingtalkers('one_speaker_reverb');
+    signal=sig_competingtalkers('one_speaker_reverb');
     fs = 16000;
     s_pos = [-45 0 45];
     ic_threshold=0.98;

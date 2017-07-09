@@ -78,28 +78,28 @@ end
 switch lower(demo)
     case '1r'
         % Create input signal
-        [signal,fs] = competingtalkers('one_speaker_reverb');
+        [signal,fs] = sig_competingtalkers('one_speaker_reverb');
         
         % Find all active sources
         nSources = 1;
         
     case '2'
         % Create input signal
-        [signal,fs] = competingtalkers('two_of_three');
+        [signal,fs] = sig_competingtalkers('two_of_three');
         
         % Find all active sources
         nSources = 2;
         
     case '3'
         % Create input signal
-        [signal,fs] = competingtalkers('three_of_three');
+        [signal,fs] = sig_competingtalkers('three_of_three');
         
         % Find all active sources
         nSources = 3;
         
     case '5'
         % Create input signal
-        [signal,fs] = competingtalkers('five_speakers');
+        [signal,fs] = sig_competingtalkers('five_speakers');
         
         % Find all active sources
         nSources = 5;

@@ -189,7 +189,7 @@ conf.resolution = resolution;
 [~,~,~,x,y] = xyz_grid(X,Y,0,conf);
 
 % 700 ms white noise burst
-sig_noise = whitenoiseburst(fs);
+sig_noise = sig_whitenoiseburst(fs);
 for ii=1:length(x)
     if showprogress, amtdisp([num2str(ii) ' of ' num2str(length(x))],'progress'); end
     for jj=1:length(y)

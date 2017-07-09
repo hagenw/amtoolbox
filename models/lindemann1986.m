@@ -67,7 +67,7 @@ function [crosscorr,t,ild,cfreq] = lindemann1986(insig,fs,varargin)
 %     mf = 2;     % Binaural modulation frequency
 %
 %     % Generate 1~s binaural modulated sinusoid
-%     sig = bmsin(f,mf,fs);
+%     sig = sig_lindemann1986(f,mf,fs);
 %
 %     % Model paramter (Note: T_int (ms) should be a multiple of 1000/f == 2)
 %     % Begin of the storage of the cross-correlation is set to 1, because we have a

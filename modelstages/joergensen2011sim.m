@@ -84,7 +84,7 @@ if flags.do_fig5
                   %     ------------ applying reverberation
                   if n>1
 
-                    [tmp,Fs] = simulatedimpulseresponses(conditions(n));
+                    [tmp,Fs] = sig_joergensen2011(conditions(n));
 
                     tmp = resample(tmp,fs,Fs); % downsampling to 22.05 kHz
                     tmp_test = fconv(tmp',test); %

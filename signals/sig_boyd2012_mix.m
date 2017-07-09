@@ -1,6 +1,6 @@
-function out = boyd2012mix(in,source,varargin)
-%BOYD2012MIX - Stimulus from Boyd et al. (2012) 
-%   Usage: out = boyd2012mix(in,source,mix,azi)
+function out = sig_boyd2012_mix(in,source,varargin)
+%sig_boyd2012_mix - Stimulus from Boyd et al. (2012) 
+%   Usage: out = sig_boyd2012_mix(in,source,mix,azi)
 %
 %   Time-aligned mixture between individualized binaural stimulus and 
 %   head-absent simulation (ITD only).

@@ -1,20 +1,21 @@
 % AMT - Signals
 %
 %  Monaural signal generators
-%    TRANSPOSEDTONE -  Transposed tone stimuli
-%    NOTCHEDNOISE   -  Notched noise
+%    sig_transposedtone -  Transposed tone stimuli
+%    sig_notchednoise   -  Notched noise
+%    sig_linsweep       -  Linear (perfect) frequency sweep
 %
 %  Impulse responses
-%    SIMULATEDIMPULSERESPONSES - Simulated monaural room impulse responses
+%    sig_joergensen2011 - Simulated monaural room impulse responses
 %
 %  Binaural signal generators
-%    BMSIN          -  Binaural modulated sinusoid
-%    ITDSIN         -  Sinusoid with interaural time difference
-%    ILDSIN         -  Sinusoid with interaural level difference
-%    ITDILDSIN      -  Sinusoid with interaural time and level difference
-%    BINCORRNOISE   -  Interaurally correlated noise
+%    sig_lindemann1986  -  Binaural modulated sinusoid
+%    sig_itdsin         -  Sinusoid with interaural time difference
+%    sig_ildsin         -  Sinusoid with interaural level difference
+%    sig_itdildsin      -  Sinusoid with interaural time and level difference
+%    sig_bincorrnoise   -  Interaurally correlated noise
 %
 %  Binaural test signals
-%    COMPETINGTALKERS - Several different competing talker signal
-%    BREEBAART2001SIGGEN - Generates a binaural signals with narrow-band noise 
+%    sig_competingtalkers - Several different competing talker signal
+%    sig_breebaart2001 - Generates a binaural signals with narrow-band noise 
 %

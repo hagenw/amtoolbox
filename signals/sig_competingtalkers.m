@@ -1,9 +1,9 @@
-function [s,fs]=competingtalkers(varargin)
-%COMPETINGTALKERS  Load one of several test signals
-%   Usage:  s=competingtalkers(signame);
-%           [s,fs]=competingtalkers(signame);
+function [s,fs]=sig_competingtalkers(varargin)
+%sig_competingtalkers  Load one of several test signals
+%   Usage:  s=sig_competingtalkers(signame);
+%           [s,fs]=sig_competingtalkers(signame);
 %
-%   `competingtalkers(signame)` loads one of several test signals consisting
+%   `sig_competingtalkers(signame)` loads one of several test signals consisting
 %   of competing talkers. All the talkers are taken from the TIMIT speech
 %   corpus:
 %   `<http://www.ldc.upenn.edu/Catalog/CatalogEntry.jsp?catalogId=LDC93S1>`_.
@@ -11,7 +11,7 @@ function [s,fs]=competingtalkers(varargin)
 %   The signals have 2 channels and are all recorded with a sampling rate of
 %   16 kHz.
 %
-%   `[sig,fs]=competingtalkers(signame)` additionally returns the sampling
+%   `[sig,fs]=sig_competingtalkers(signame)` additionally returns the sampling
 %   frequency *fs*.
 %
 %   The value of `signame` may be one of:
@@ -37,7 +37,7 @@ function [s,fs]=competingtalkers(varargin)
 %   The following plot shows an estimate of the power spectral density of
 %   the first channels of the speech shaped noise:::
 %
-%      s=competingtalkers('bnoise');
+%      s=sig_competingtalkers('bnoise');
 %      pwelch(s(:,1),hamming(150));
 %
 %   See also: exp_dietz2011
@@ -59,4 +59,4 @@ end;
 
 
 % fs = 16000;
-[s,fs]=amtload('competingtalkers',[flags.sigtype '.wav']);
+[s,fs]=amtload('sig_competingtalkers',[flags.sigtype '.wav']);

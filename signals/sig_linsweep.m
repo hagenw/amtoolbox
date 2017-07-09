@@ -1,11 +1,11 @@
-function s = perfectsweep(fs, N, range)
-% PERFECTSWEEP Create a sweep with constant magnitude spectrum
-%    S = PERFECTSWEEP(FS, N) returns a sweep of length N with normalized 
+function s = sig_linsweep(fs, N, range)
+% sig_linsweep Create a sweep with constant magnitude spectrum
+%    S = sig_linsweep(FS, N) returns a sweep of length N with normalized 
 %    amplitude and sampling rate FS with a perfectly constant magnitude 
 %    spectrum. It covers all frequencies from 0 to FS/2 and runs from 
 %    the first to the last sample.
 %
-%    S = PERFECTSWEEP(FS, N, RANGE) returns a sweep of length N with 
+%    S = sig_linsweep(FS, N, RANGE) returns a sweep of length N with 
 %    normalized amplitude and a sampling rate of FS and a perfectly 
 %    constant magnitude spectrum. The signal covers all frequencies 
 %    from 0 to FS/2. The sweep starts at sample RANGE(1) 
@@ -15,13 +15,13 @@ function s = perfectsweep(fs, N, range)
 %
 %    EXAMPLE 1: Create a perfect sweep and display its spectromgram
 %      fs = 44100;                 % sampling rate of 44100 Hz
-%      s = perfectsweep(fs, 4*fs)  % 4 secs sweep
+%      s = sig_linsweep(fs, 4*fs)  % 4 secs sweep
 %      spectrogram(s, 256, 128, 256, fs, 'yaxis');
 %      sound(s,fs);
 %
 %    EXAMPLE 2: Create a perfect sweep in a range
 %      fs = 44100;                 % sampling rate of 44100 Hz
-%      s = perfectsweep(fs, 4*fs, [fs+1,2*fs]); % 4 secs with sweep 
+%      s = sig_linsweep(fs, 4*fs, [fs+1,2*fs]); % 4 secs with sweep 
 %                                               % from fs+1 to 2*fs
 %      spectrogram(s, 256, 128, 256, fs, 'yaxis');
 %      sound(s,fs);

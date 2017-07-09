@@ -1,6 +1,6 @@
-function outsig = ildsin(fc,ild,fs)
-%ILDSIN Sinusoid with a interaural level difference (ILD)
-%   Usage: outsig = itdsin(fc,ild,fs)
+function outsig = sig_ildsin(fc,ild,fs)
+%sig_ildsin Sinusoid with a interaural level difference (ILD)
+%   Usage: outsig = sig_itdsin(fc,ild,fs)
 %
 %   Input parameters:
 %       fc      : carrier frequency of the sinusoid (Hz)
@@ -10,7 +10,7 @@ function outsig = ildsin(fc,ild,fs)
 %   Output parameters:
 %       outsig  : two channel 1 s long sinusoid 
 %
-%   `ildsin(fc,ild,fs)` generates a sinusoid with a interaural level difference
+%   `sig_ildsin(fc,ild,fs)` generates a sinusoid with a interaural level difference
 %   of *ild* and a frequency of *fc*.
 %
 %   The output is scaled to have a maximum value of 1-eps.

@@ -1,6 +1,6 @@
-function outsig = bincorrnoise(siglen,coher,varargin)
-% BINCORRNOISE  Binaurally correlated noise
-%   Usage: outsig = bincorrnoise(siglen,coher)
+function outsig = sig_bincorrnoise(siglen,coher,varargin)
+% sig_bincorrnoise  Binaurally correlated noise
+%   Usage: outsig = sig_bincorrnoise(siglen,coher)
 %
 %   Input parameters:
 %       siglen    : Number of samples of outsig
@@ -9,10 +9,10 @@ function outsig = bincorrnoise(siglen,coher,varargin)
 %   Output parameters:
 %       outsig    : $nsig \times 2$ correlated noise signal
 %
-%   `bincorrnoise(siglen,coher)` will generate a interaurally correlated noise signal 
+%   `sig_bincorrnoise(siglen,coher)` will generate a interaurally correlated noise signal 
 %   with coherence *coher*. The output is a 2 column matrix of length *siglen*.
 %
-%   `bincorrnoise(siglen,coher,...)` will pass all additional parameters
+%   `sig_bincorrnoise(siglen,coher,...)` will pass all additional parameters
 %   onto the `noise` function to select between different types of stochastic
 %   noise.
 

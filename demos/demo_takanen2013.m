@@ -40,7 +40,7 @@ printMap = 1;
 %if the user wishes to use pre-computed cochlea model outputs to reduce the
 %required computation time
 if preComp ==1
-    filename='demo_cochleadata.mat';
+    filename='demo_cochlea.mat';
     data=amtload('takanen2013',filename);
     output= takanen2013(data.tests.cochlea,data.tests.fs,compType,printFigs,printMap);
     title(data.tests.scenario);
@@ -48,7 +48,7 @@ if preComp ==1
     ylabel(data.tests.ylab);
 %otherwise, binaural input signals are used
 else
-    filename='demo_binsignals.mat';
+    filename='demo_binsig.mat';
     data=amtload('takanen2013',filename);
     output= takanen2013(data.tests.insig,data.tests.fs,compType,printFigs,printMap);
     title(data.tests.scenario);

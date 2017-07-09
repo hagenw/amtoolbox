@@ -134,8 +134,8 @@ switch cmd
         tokenpath=fullfile(amtbasepath,'cache',token);
         tokenfn=fullfile(tokenpath,[name '.mat']);
         if ~exist(tokenfn,'file'),
-            amtdisp(['Cached data not found: ' tokenfn]);
-            amtdisp('Enforce recalculation...');
+            amtdisp(['Cached data not found: ' tokenfn],'progress');
+            amtdisp('Enforce recalculation...','progress');
             for ii=1:nargout, varargout{ii}=[]; end % enforce recalculation
         else
           load(tokenfn);
@@ -156,8 +156,8 @@ switch cmd
           if ~exist(tokenpath,'dir'); mkdir(tokenpath); end
           [~,stat]=urlwrite(webfn,tokenfn);
           if ~stat
-            amtdisp(['Cached data not found: ' webfn]);
-            amtdisp('Enforce recalculation...');
+            amtdisp(['Cached data not found: ' webfn],'progress');
+            amtdisp('Enforce recalculation...','progress');
             for ii=1:nargout, varargout{ii}=[]; end % enforce recalculation
           else         
             load(tokenfn);  % downloaded to local cache. Load...
@@ -180,7 +180,7 @@ switch cmd
   case 'clearAll'
     cachepath=fullfile(amtbasepath,'cache');
     if strcmp(input(['clearAll clears ' strrep(cachepath,'\','\\') '. Type YES for confirmation: '],'s'),'YES'), 
-      amtdisp(['Clearing ' cachepath ' ...']);
+      amtdisp(['Clearing ' cachepath ' ...'],'progress');
       rmdir(cachepath, 's');       
     end
   case 'setMode'

@@ -1,4 +1,4 @@
-function sig = whitenoiseburst(fs)
+function sig = sig_whitenoiseburst(fs)
 % Generate the noise signal used for the binaural model to predict the perceived
 % direction
 

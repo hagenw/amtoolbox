@@ -1,9 +1,9 @@
-function outsig = bandpassnoisefreq(fc,fs,dur,l,bw)
-%BANDPASSNOISEFREQ  Generates a bandpass-noise-type masker
+function outsig = sig_bandpassnoise(fc,fs,dur,l,bw)
+%sig_bandpassnoise  Generates a bandpass-noise-type masker
 %
-%   Usage:   outsig = bandpassnoisefreq(fs,fc,dur,l,bw)
+%   Usage:   outsig = sig_bandpassnoise(fs,fc,dur,l,bw)
 %
-%   `outsig = bandpassnoisefreq(fc,fs,dur,l,bw)` generates a bandpass-noise
+%   `outsig = sig_bandpassnoise(fc,fs,dur,l,bw)` generates a bandpass-noise
 %   masker with duration `dur` (in sec), overall level `l` (in dB SPL) and
 %   with a sampling rate of `fs` Hz at the center frequency fc. The 
 %   bandpass has a bandwidth of `bw` in Hz. The generation is in the

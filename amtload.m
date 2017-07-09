@@ -2,18 +2,20 @@ function varargout=amtload(model,data,variable)
 %AMTLOAD Load auxiliary data of a model
 %   Usage: amtload(MODEL, DATA);
 %
-%   `amtload` loads the auxiliary data from the file `data`. The data will loaded 
-%   from the directory `model` located in the auxdata directory given by
+%   `amtload(model, data)` loads the auxiliary data from the file `data`. The data will loaded 
+%   from the directory `model` located in the local `auxdata` directory given by
 %   `amtauxdatapath`. 
 %
-%   If the file is not in the auxdata directory, it will be downloaded from
-%   the web address given by `amtauxdataurl`
+%   If the file is not in the local `auxdata` directory, it will be downloaded from
+%   the web address given by `amtauxdataurl`.
 %
 %   The following file types are supported:
 %     `.wav`: output will be as that from `audioread`
 %     `.mat`: output as that as from `load`
 %     others: output is the absolute filename
 %
+%   `amtload(model, data, variable)` loads just a particular `variable`
+%   from the file. 
 %
 %   See also: amtauxdatapath amtauxdataurl
 %

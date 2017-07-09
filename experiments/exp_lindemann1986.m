@@ -253,7 +253,7 @@ if flags.do_fig6
     output = zeros(length(c_s),nitds,ndl);
     for ii = 1:nitds; 
         % Generate ITD shifted sinusoid
-        sig = itdsin(f,itd(ii),fs);
+        sig = sig_itdsin(f,itd(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply onset window
         sig = sig(1:siglen,:);
@@ -325,7 +325,7 @@ if flags.do_fig7
       output = zeros(length(c_s),nitds);
       for ii = 1:nitds 
         % Generate ITD shifted sinusoid
-        sig = itdsin(f,itd(ii),fs);
+        sig = sig_itdsin(f,itd(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply an onset window
         sig = sig(1:siglen,:);
@@ -394,7 +394,7 @@ if flags.do_fig8
     output = zeros(2,nilds,ndl);
     for ii = 1:nilds 
       % Generate sinusoid with given ILD
-      sig = ildsin(f,ild(ii),fs);
+      sig = sig_ildsin(f,ild(ii),fs);
       % Use only the beginning of the signal to generate only one time instance of
       % the cross-correlation and apply onset window
       sig = sig(1:siglen,:);
@@ -467,7 +467,7 @@ if flags.do_fig10
     output = zeros(length(c_s),nilds,ndl);
     for ii = 1:nilds 
       % Generate sinusoid with given ILD
-      sig = ildsin(f,ild(ii),fs);
+      sig = sig_ildsin(f,ild(ii),fs);
       % Use only the beginning of the signal to generate only one time instance of
       % the cross-correlation and apply onset window
       sig = sig(1:siglen,:);
@@ -540,7 +540,7 @@ if flags.do_fig11
       output = zeros(length(c_s),nilds);
       for ii = 1:nilds 
         % Generate sinusoid with given ILD
-        sig = ildsin(f,ild(ii),fs);
+        sig = sig_ildsin(f,ild(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply onset window
         sig = sig(1:siglen,:);
@@ -620,7 +620,7 @@ if flags.do_fig12
       for ii = 1:nitds
         for jj = 1:nilds
           % Generate sinusoid with given ILD
-          sig = itdildsin(f,itd(ii),ild(jj),fs);
+          sig = sig_itdildsin(f,itd(ii),ild(jj),fs);
           % Use only the beginning of the signal to generate only one time 
           % instance of the cross-correlation and apply a linear onset window
           sig = sig(1:siglen,:);
@@ -705,7 +705,7 @@ if flags.do_fig13
       cen_p = zeros(1,nilds_p);
       for ii = 1:nilds_p
         % Generate sinusoid with given ILD
-        sig = ildsin(f,ild_p(ii),fs);
+        sig = sig_ildsin(f,ild_p(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply a linear onset window
         sig = sig(1:siglen,:);
@@ -722,7 +722,7 @@ if flags.do_fig13
       cen_t = zeros(nilds_t,nitds_t);
       for ii = 1:nitds_t
         for jj = 1:nilds_t
-          sig = itdildsin(f,itd_t(ii),ild_t(jj),fs);
+          sig = sig_itdildsin(f,itd_t(ii),ild_t(jj),fs);
           sig = sig(1:siglen,:);
           sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
           tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
@@ -811,7 +811,7 @@ if flags.do_fig14a
       output = zeros(length(c_s),nilds);
       for ii = 1:nilds 
         % Generate ITD shifted sinusoid
-        sig = itdildsin(f,itd,ild(ii),fs);
+        sig = sig_itdildsin(f,itd,ild(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation
         sig = sig(1:siglen,:);
@@ -889,7 +889,7 @@ if flags.do_fig14b
         % Show progress
         amtdisp([num2str(ii) ' of ' num2str(nitds)],'progress');
         % First generate the result for std(ILD) == 0
-        sig = itdsin(f,itd(ii),fs);
+        sig = sig_itdsin(f,itd(ii),fs);
         sig = sig(1:siglen,:);
         sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
@@ -904,7 +904,7 @@ if flags.do_fig14b
           ild = tmp * ild_std(nn);
           % For all distributed ILD values calculate the centroid
           for jj = 1:nilds
-            sig = itdildsin(f,itd(ii),ild(jj),fs);
+            sig = sig_itdildsin(f,itd(ii),ild(jj),fs);
             sig = sig(1:siglen,:);
             sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
             tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
@@ -969,7 +969,7 @@ if flags.do_fig15
       output = zeros(length(c_s),nilds,ndl);
       for ii = 1:nilds 
         % Generate sinusoid with given ILD
-        sig = itdildsin(f,itd,ild(ii),fs);
+        sig = sig_itdildsin(f,itd,ild(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply onset window
         sig = sig(1:siglen,:);
@@ -1049,7 +1049,7 @@ if flags.do_fig16
       for ii = 1:nitds
         for jj = 1:nilds
           % Generate sinusoid with given ILD
-          sig = itdildsin(f,itd(ii),ild(jj),fs);
+          sig = sig_itdildsin(f,itd(ii),ild(jj),fs);
           % Use only the beginning of the signal to generate only one time 
           % instance of the cross-correlation and apply a linear onset window
           sig = sig(1:siglen,:);
@@ -1130,7 +1130,7 @@ if flags.do_fig17
       max_p = zeros(1,nitds_p);
       for ii = 1:nitds_p
         % Generate sinusoid with given ILD
-        sig = itdsin(f,itd_p(ii),fs);
+        sig = sig_itdsin(f,itd_p(ii),fs);
         % Use only the beginning of the signal to generate only one time instance of
         % the cross-correlation and apply a linear onset window
         sig = sig(1:siglen,:);
@@ -1150,7 +1150,7 @@ if flags.do_fig17
       max_t = zeros(nitds_t,nilds_t);
       for ii = 1:nilds_t
         for jj = 1:nitds_t
-          sig = itdildsin(f,itd_t(jj),ild_t(ii),fs);
+          sig = sig_itdildsin(f,itd_t(jj),ild_t(ii),fs);
           sig = sig(1:siglen,:);
           sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
           tmp = squeeze(lindemann1986(sig,fs,c_s,w_f,M_f,T_int,N_1));
@@ -1252,7 +1252,7 @@ if flags.do_fig18
       output = zeros(niacs,ndl);
       for ii = 1:niacs; 
         % Generate ITD shifted sinusoid
-        sig = bincorrnoise(fs,iac(ii),'pink');
+        sig = sig_bincorrnoise(fs,iac(ii),'pink');
         % Aplly onset window
         sig = rampsignal(sig,[round(N_1/2)-1 0],'tria');
         % Calculate cross-correlation (and squeeze due to T_int==inf)

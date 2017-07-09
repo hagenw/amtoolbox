@@ -1,6 +1,6 @@
-function sig = hartmann1996siggen(varargin)
-%HARTMANN1996SIGGEN - Stimulus from Hartmann and Wittenberg (1996) 
-%   Usage: sig = hartmann1996siggen(nprime,f0,Obj,azi,dur,condition)
+function sig = sig_hartmann1996(varargin)
+%sig_hartmann1996 - Stimulus from Hartmann and Wittenberg (1996) 
+%   Usage: sig = sig_hartmann1996(nprime,f0,Obj,azi,dur,condition)
 %
 %   Complex tone (vowel /a/) with 38 harmonics from Hartmann and Wittenberg  
 %   (1996) with interaural cue alterations up to a certain harmonic nprime.

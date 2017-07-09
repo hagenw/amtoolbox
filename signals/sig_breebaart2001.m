@@ -1,9 +1,9 @@
-function signalout = breebaart2001siggen(inttype,fc,sl,sdur,sphase,nbw,nl,ndur,nphase,hannramp,fs)
-%BREEBAART2001SIGGEN computes the signals for the breebaart2001 experiment
+function signalout = sig_breebaart2001(inttype,fc,sl,sdur,sphase,nbw,nl,ndur,nphase,hannramp,fs)
+%sig_breebaart2001 computes the signals for the breebaart2001 experiment
 %
-%   Usage:   signalout = breebaart2001siggen(inttype,fc,sl,sdur,sphase,nbw,nl,ndur,nphase,hannramp,fs)
+%   Usage:   signalout = sig_breebaart2001(inttype,fc,sl,sdur,sphase,nbw,nl,ndur,nphase,hannramp,fs)
 %
-%   `signalout = breebaart2001siggen(inttype,fc,sl,sdur,sphase,nbw,nl,ndur,nphase,hannramp,fs)`
+%   `signalout = sig_breebaart2001(inttype,fc,sl,sdur,sphase,nbw,nl,ndur,nphase,hannramp,fs)`
 %   generates the signals for the breebaart2001 experiment  where
 %   sinusoidal signals are masked by noise. 'inttyp' determines if it is a 
 %   target interval (signal + noise) or just a reference interval (noise 
@@ -43,7 +43,7 @@ function signalout = breebaart2001siggen(inttype,fc,sl,sdur,sphase,nbw,nl,ndur,n
 %   Author:     Martina Kreuzbichler
 
 % generate noise
-noise(:,1) = bandpassnoisefreq(fc,fs,ndur,nl,nbw);
+noise(:,1) = sig_bandpassnoise(fc,fs,ndur,nl,nbw);
 
 % set diotic phase difference for noise masker
 if nphase == 0
@@ -51,7 +51,7 @@ if nphase == 0
 elseif nphase == pi;
     noise(:,2) = -noise(:,1);
 else % set correlation
-    noise(:,2) = bandpassnoisefreq(fc,fs,ndur,nl,nbw);
+    noise(:,2) = sig_bandpassnoise(fc,fs,ndur,nl,nbw);
     noiseL = 0.5*sqrt(2)*sqrt(1+nphase)*noise(:,1) + 0.5*sqrt(2)*...
         sqrt(1-nphase)*noise(:,2);
     noiseR = 0.5*sqrt(2)*sqrt(1+nphase)*noise(:,1) - 0.5*sqrt(2)*...

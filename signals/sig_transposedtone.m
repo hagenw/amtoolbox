@@ -1,6 +1,6 @@
-function outsig = transposedtone(siglen,fc,fm,fs,varargin)
-%TRANSPOSEDTONE  Transposed tone test stimuli
-%   Usage:  ts = transposedtone(fc,fm,dur,fs);
+function outsig = sig_transposedtone(siglen,fc,fm,fs,varargin)
+%sig_transposedtone  Transposed tone test stimuli
+%   Usage:  ts = sig_transposedtone(fc,fm,dur,fs);
 %
 %   Input parameters:
 %     siglen  : Length of signal
@@ -11,7 +11,7 @@ function outsig = transposedtone(siglen,fc,fm,fs,varargin)
 %   Output parameters:
 %     outsig  : transposed tone (column vector)
 %
-%   `transposedtone(siglen,fc,fm,dur,fs)` generates a transposed tone test
+%   `sig_transposedtone(siglen,fc,fm,dur,fs)` generates a transposed tone test
 %   stimuli as defined in Kolrausch et. al (1997).
 %
 %   By default, the output is normalized to have an RMS value of 1, but this
@@ -23,7 +23,7 @@ function outsig = transposedtone(siglen,fc,fm,fs,varargin)
 %     fc     = 5000;
 %     fm     = 435;
 %     fs     = 44100;
-%     outsig = transposedtone(fc,fm,dur,fs);
+%     outsig = sig_transposedtone(fc,fm,dur,fs);
 %
 %   References:kohlrausch1997detection oxenham2004correct
 

@@ -4,8 +4,23 @@
 %   =========================
 % 
 %   Compatibility breaks:
-%     - gfb is hohmann2002. See the note on that. 
+%     - gfb --> hohmann2002. See note #11 on that. 
 %     - HRTFs: only SOFA files allowed now.
+      - Functions creating/modifying signals have the prefix sig_ now:
+	    - irns --> sig_yost1996
+		- whitenoiseburst --> sig_whitenoiseburst
+		- transposedtone --> sig_transposedtone
+		- perfectsweep --> sig_linsweep (why perfect!!!!!)
+		- notchednoise --> sig_notchednoise
+		- bmsin --> sig_lindemann1986
+		- simulatedimpulseresponse --> sig_joergensen2011
+		- itdsin --> sig_itdsin
+		- ildsin --> sig_ildsin
+		- itdildsin --> sig_itdildsin
+		- competingtalkers -> sig_competingtalkers
+		- breebaart2001siggen --> sig_breebaart2001
+		- bincorrnoise --> sig_bincorrnoise
+		- bandpassnoisefreq --> sig_bandpassnoise
 %
 %   New
 %     - baumgartner2017: sound externalization model
@@ -14,7 +29,7 @@
 %     - kelvasa2015: sound localization in cochlear-implant listeners
 %     - emuexp: emulation of experiments using interative runs like 3-AFC
 %     - breebaart2001centralproc: decision stage from Breebaart et al. (2001). 
-%     - exp_breebaart2001: reproduces reults from Breebaart et al. (2001) based on emuexp
+%     - exp_breebaart2001: reproduces results from Breebaart et al. (2001) based on emuexp
 %     - model initiative: interface to the model initiative (Dietz et al. 2016)
 % 
 % 
@@ -23,8 +38,8 @@
 %     - exp_spille2013 merged into exp_dietz2011
 %     - directories re-structured:
 %         - main scripts of a model go to: "model". They are called "nameyear.m"
-%         - scripts with model stages (other model scripts than the main one) go to: "modelstages". They are called "nameyearpostfix.m"
-%         - scripts being not a part of a specific model go to: "general". They do not (!) start with model name.
+%         - scripts with model stages (model scripts other than the main one) go to: "modelstages". They are called "nameyearpostfix.m"
+%         - scripts not being part of a specific model go to: "general". They do not (!) start with model name.
 %         - scripts generating audio signals go to: "signals"
 %         - scripts returning measured data go to: "data". They are called "data_nameyear.m"
 %         - scripts with default parameters of other scripts go to: "defaults". They are called "arg_myfunction.m"
@@ -50,7 +65,7 @@
 %     - Control for messages output in the command line. See amtdisp.
 %     - SOFA files for HRTFs: requires SOFA API, see SOFAload.
 %     - Models: zilany2014, joergensen2011, joergensen2013, georganti2013
-%     - Signals: simulatedimpulseresponses
+%     - Signals: sig_joergensen2011
 %     - Clean documentation (no errors, no warnings).
 %     - makefile for Linux, compiling of cpp files
 % 

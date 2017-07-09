@@ -7,13 +7,13 @@ function output=exp_breebaart2001(varargin)
 %
 %   The following flags can be specified;
 %
-%     'afig2'    Reproduce Fig. 2 from Breebaart et al. (2001a):
+%     'a_fig2'   Reproduce Fig. 2 from Breebaart et al. (2001a):
 %                Output of the peripheral preprocessor for a 500-Hz tone
 %                (left panel) and a 4000-Hz tone(right panel) of 100-ms
 %                duration. The output is caluculated for a filter which
 %                is nearest to the frequency of the tone.
 %
-%     'afig6'    Reproduce Fig. 6 from Breebaart et al. (2001a):
+%     'a_fig6'   Reproduce Fig. 6 from Breebaart et al. (2001a):
 %                Left panel: Idealized EI-activity for a wideband diotic
 %                noise (0-4000 Hz) with an overall level of 70 dB SPL
 %                (offset = default = 100 dB) for an auditory filter
@@ -25,7 +25,7 @@ function output=exp_breebaart2001(varargin)
 %                second and the figures show the mean output of the
 %                first 100 ms.
 %
-%     'bfig3'    Reproduce Fig. 3 from Breebaart et al. (2001b):
+%     'b_fig3'   Reproduce Fig. 3 from Breebaart et al. (2001b):
 %                N0Spi thresholds as a function of the masker bandwidth
 %                for a constant overall level of the masker. The six
 %                panels represent center frequencies of 125, 250, 500,
@@ -36,7 +36,7 @@ function output=exp_breebaart2001(varargin)
 %                of binaural and monaural decisions. The open squares
 %                are data adapted from van de Par and Kohlrausch (1999).
 %
-%     'bfig6'    Reproduce Fig. 6 from Breebaart et al. (2001b):
+%     'b_fig6'   Reproduce Fig. 6 from Breebaart et al. (2001b):
 %                NpiSo thresholds as a function of masker bandwidth for
 %                125-Hz (upper-left panel), 250-Hz (upper-right-panel),
 %                500-Hz (lower left panel), and 1000-Hz center frequency
@@ -47,7 +47,7 @@ function output=exp_breebaart2001(varargin)
 %                with out implementation of the Breebaart model for a
 %                combination of binaural and monaural decisions.
 %
-%     'fig1_N0S0_vandepar1999'    Reproduce Fig.1 from van de Par and
+%     'fig1_vandepar1999'         Reproduce Fig.1 from van de Par and
 %                                 Kohlrausch for the N0S0 condition:
 %                                 N0S0 thresholds as a fuction of the
 %                                 masker bandwidth expressed in
@@ -66,37 +66,37 @@ function output=exp_breebaart2001(varargin)
 %
 %     'noplot'  Don't plot, only return data.
 %
-%   Figure 3 of Breebaart et al. (2001b) can also be calculated with the
-%   interface of the model initiative BInDT. Assuming a BInDT interface
+%   Figure 3 of Breebaart et al. (2001b) can also be calculated using the
+%   interface of the model initiative. Assuming a model interface
 %   waiting for binaural signals in a directory DIR, use
-%   `exp_breebaart2001('bfig3','redo','ModelInitiative','directory',DIR);`. The AMT
+%   `exp_breebaart2001('b_fig3','redo','ModelInitiative','directory',DIR);`. The AMT
 %   will start the experiment, collect the responses from the model server,
 %   and plot the figure. 
 %
-%   See also: data_breebaart2001 data_vandepar1999 breebaart2001centralproc breebaart2001preproc breebaart2001siggen 
+%   See also: data_breebaart2001 data_vandepar1999 breebaart2001centralproc breebaart2001preproc sig_breebaart2001 
 %
 %   Example:
 %   ---------
 %
 %   To display Figure 2 of Breebaart et al. (2001a) use :::
 %
-%     out = exp_breebaart2001('afig2');
+%     out = exp_breebaart2001('a_fig2');
 %
 %   To display Figure 6 of Breebaart et al. (2001a) use :::
 %
-%     out = exp_breebaart2001('afig6');
+%     out = exp_breebaart2001('a_fig6');
 %
 %   To display Figure 3 of Breebaart et al. (2001b) use :::
 %
-%     out = exp_breebaart2001('bfig3');
+%     out = exp_breebaart2001('b_fig3');
 %
 %   To display Figure 6 of Breebaart et al. (2001b) use :::
 %
-%     out = exp_breebaart2001('bfig6');
+%     out = exp_breebaart2001('b_fig6');
 %
 %   To display Figure 1 of van de Par and Kohlrausch (1999) use :::
 %
-%     out = exp_breebaart2001('fig1_N0S0_vandepar1999');
+%     out = exp_breebaart2001('fig1_vandepar1999');
 %
 %
 %   References: breebaart2001a breebaart2001b van1999dependence
@@ -108,8 +108,8 @@ warning off;
 %% ------ Check input options --------------------------------------------
 
   definput.import={'amtcache'};
-  definput.flags.type = {'missingflag','afig2','afig6','bfig3','bfig6',...
-      'fig1_N0S0_vandepar1999'};
+  definput.flags.type = {'missingflag','a_fig2','a_fig6','b_fig3','b_fig6',...
+      'fig1_vandepar1999'};
   definput.flags.plot = {'plot','noplot'};
   definput.flags.interface = {'AMT', 'ModelInitiative'};
   definput.keyvals.directory=tempdir;
@@ -124,9 +124,9 @@ if flags.do_missingflag
 end;
 
 % Breebaart et al. (2001a) fig. 2
-if flags.do_afig2
+if flags.do_a_fig2
     
-    testsigadlo = amtcache('get','afig2',flags.cachemode);
+    testsigadlo = amtcache('get','a_fig2',flags.cachemode);
     
     if isempty(testsigadlo)
         definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','eicell'};
@@ -157,17 +157,17 @@ if flags.do_afig2
                 'argimport',flags,keyvals);
         end
         
-        amtcache('set','afig2',testsigadlo)
+        amtcache('set','a_fig2',testsigadlo)
         
     end
     
     output = testsigadlo;
     
 % Breebaart et al. (2001a) fig. 6   
-elseif flags.do_afig6
+elseif flags.do_a_fig6
     
     [ei_map_n_mean,ei_map_diff_mean] = ...
-        amtcache('get','afig6',flags.cachemode);
+        amtcache('get','a_fig6',flags.cachemode);
     
     if isempty(ei_map_n_mean)
     % do computation
@@ -180,7 +180,7 @@ elseif flags.do_afig6
 
         fs = 32000;
 
-        insig(:,1) = bandpassnoisefreq(2000,fs,1,70,4000);
+        insig(:,1) = sig_bandpassnoise(2000,fs,1,70,4000);
         insig(:,2) = insig(:,1);
         insig = setdbspl(insig,70);
         insig(:,3) = sin(2*pi*(0:(1*fs)-1)'*500/fs);
@@ -241,7 +241,7 @@ elseif flags.do_afig6
         ei_map_sn_mean = mean(ei_map{2}(:,:,1:3200,1),3); % mean of first 100 ms
         ei_map_diff_mean = ei_map_sn_mean-ei_map_n_mean;
 
-        amtcache('set','afig6',ei_map_n_mean,ei_map_diff_mean);
+        amtcache('set','a_fig6',ei_map_n_mean,ei_map_diff_mean);
     end
     
     output = struct('ei_map_noise',ei_map_n_mean,'ei_map_diff',ei_map_diff_mean);
@@ -249,10 +249,10 @@ elseif flags.do_afig6
 
 
 % Breebaart et al. (2001b) fig. 3
-elseif flags.do_bfig3
+elseif flags.do_b_fig3
     
     [N0Spi125,N0Spi250,N0Spi500,N0Spi1000,N0Spi2000,N0Spi4000] = ...
-        amtcache('get','bfig3',flags.cachemode);
+        amtcache('get','b_fig3',flags.cachemode);
     
     if isempty(N0Spi125)
     % do computation
@@ -296,7 +296,7 @@ elseif flags.do_bfig3
                   %input5 = signalphase; input7 = noiselevel;
                   %input8 = noiseduration; input9 = noisephase;
                   %input10 = hanning ramp duration; input11 = fs;
-                  signalset = {'name','breebaart2001siggen','input1',...
+                  signalset = {'name','sig_breebaart2001','input1',...
                       'inttyp', 'input2',fc(fccount),'input3',...
                       'expvar','input4',0.3,'input5',pi,'input6',...
                       bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
@@ -335,7 +335,7 @@ elseif flags.do_bfig3
         
         switch flags.interface
           case 'AMT'
-            amtcache('set','bfig3',N0Spi125,N0Spi250,N0Spi500,N0Spi1000,...
+            amtcache('set','b_fig3',N0Spi125,N0Spi250,N0Spi500,N0Spi1000,...
                 N0Spi2000,N0Spi4000);
         end
    
@@ -345,10 +345,10 @@ elseif flags.do_bfig3
             N0Spi2000,'N0Spi40000',N0Spi4000); 
     end
 
-elseif flags.do_bfig6
+elseif flags.do_b_fig6
     
     [NpiS0125,NpiS0250,NpiS0500,NpiS01000] = ...
-        amtcache('get','bfig6',flags.cachemode);
+        amtcache('get','b_fig6',flags.cachemode);
     
     if isempty(NpiS0125)
     % do computation
@@ -392,7 +392,7 @@ elseif flags.do_bfig6
                 %input5 = signalphase; input7 = noiselevel;
                 %input8 = noiseduration; input9 = noisephase;
                 %input10 = hanning ramp duration; input11 = fs;
-                signalset = {'name','breebaart2001siggen','input1',...
+                signalset = {'name','sig_breebaart2001','input1',...
                     'inttyp', 'input2',fc(fccount),'input3',...
                     'expvar','input4',0.3,'input5',pi,'input6',...
                     bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
@@ -430,7 +430,7 @@ elseif flags.do_bfig6
 
         switch flags.interface
           case 'AMT'
-            amtcache('set','bfig6',NpiS0125,NpiS0250,NpiS0500,NpiS01000);
+            amtcache('set','b_fig6',NpiS0125,NpiS0250,NpiS0500,NpiS01000);
         end    
     
     else
@@ -438,10 +438,10 @@ elseif flags.do_bfig6
         NpiS0500,'NpiS01000',NpiS01000); 
     end 
     
-elseif flags.do_fig1_N0S0_vandepar1999
+elseif flags.do_fig1_vandepar1999
     
     [N0S0125,N0S0250,N0S0500,N0S01000,N0S02000,N0S04000] = ...
-        amtcache('get','fig1_N0S0_vandepar1999',flags.cachemode);
+        amtcache('get','fig1_vandepar1999',flags.cachemode);
     
     if isempty(N0S0125)
         parout = [];
@@ -482,7 +482,7 @@ elseif flags.do_fig1_N0S0_vandepar1999
                 %input5 = signalphase; input7 = noiselevel;
                 %input8 = noiseduration; input9 = noisephase;
                 %input10 = hanning ramp duration; input11 = fs;
-                signalset = {'name','breebaart2001siggen','input1',...
+                signalset = {'name','sig_breebaart2001','input1',...
                     'inttyp', 'input2',fc(fccount),'input3',...
                     'expvar','input4',0.3,'input5',0,'input6',...
                     bw(bwcount),'input7',nl,'input8',0.4,'input9',0,...
@@ -520,7 +520,7 @@ elseif flags.do_fig1_N0S0_vandepar1999
 
         switch flags.interface
           case 'AMT'
-            amtcache('set','fig1_N0S0_vandepar1999',N0S0125,N0S0250,N0S0500,...
+            amtcache('set','fig1_vandepar1999',N0S0125,N0S0250,N0S0500,...
                 N0S01000,N0S02000,N0S04000);
         end
         
@@ -535,7 +535,7 @@ end
 
 
 if flags.do_plot
-    if flags.do_afig2
+    if flags.do_a_fig2
         fax = 0:0.2/9599:0.2;
         hafig2 = figure;
         set(hafig2, 'Position', [400 400 1300 450])
@@ -561,7 +561,7 @@ if flags.do_plot
         set(h,'Visible','on'); 
 
         
-    elseif flags.do_afig6
+    elseif flags.do_a_fig6
         
         [x1,y1] = meshgrid(-10:0.5:10, -2:0.1:2);
         
@@ -609,7 +609,7 @@ if flags.do_plot
 
         
         
-    elseif flags.do_bfig3
+    elseif flags.do_b_fig3
         
         % get experimental data
         N0Spiexpdata125 = data_vandepar1999('fig1_N0Spi','nfc125');
@@ -718,7 +718,7 @@ if flags.do_plot
         set(h,'Visible','on'); 
         
         
-    elseif flags.do_bfig6
+    elseif flags.do_b_fig6
         
         % get experimental data
         NpiS0expdata125 = data_vandepar1999('fig1_NpiS0','nfc125');
@@ -800,7 +800,7 @@ if flags.do_plot
         
         
         
-    elseif flags.do_fig1_N0S0_vandepar1999
+    elseif flags.do_fig1_vandepar1999
         
         %get experimental data
         N0S0expdata125 = data_vandepar1999('fig1_N0S0','nfc125');

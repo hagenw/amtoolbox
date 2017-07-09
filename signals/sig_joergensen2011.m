@@ -1,14 +1,14 @@
-function [ir,fs]=simulatedimpulseresponses(duration)
-%SIMULATEDIMPULSERESPONSES  Return a simulated impulse response
-%   Usage: ir=simulatedimpulseresponses(duration);
-%          [ir,fs]=simulatedimpulseresponses(duration);
+function [ir,fs]=sig_joergensen2011(duration)
+%sig_joergensen2011  Return a simulated room impulse response for Joergensen models
+%   Usage: ir=sig_joergensen2011(duration);
+%          [ir,fs]=sig_joergensen2011(duration);
 %
-%   `simulatedimpulseresponses(duration)` returns a simulated impulse
+%   `sig_joergensen2011(duration)` returns a simulated impulse
 %   response of length *duration*, where the duration is measured in
 %   seconds. Only four durations (T30) are possible to select: 0.4, 0.7,
 %   1.3, and 2.3 seconds.
 %
-%   `[ir,fs]=simulatedimpulseresponses(duration)` also returns the
+%   `[ir,fs]=sig_joergensen2011(duration)` also returns the
 %   sampling frequency, *fs* = 44100 Hz.
 %
 %   The impulse responses were created using the ODEON room acoustic
@@ -30,7 +30,7 @@ function [ir,fs]=simulatedimpulseresponses(duration)
 
 switch(duration)
  case {0.4,0.7,1.3,2.3}
-   [ir,fs]=amtload('signals',['simulatedimpulseresponses_',num2str(duration),'s.wav']);
+   [ir,fs]=amtload('signals',['sig_joergensen2011_',num2str(duration),'s.wav']);
  otherwise
    error('%s: Unsupported duration.',upper(mfilename));  
 end;

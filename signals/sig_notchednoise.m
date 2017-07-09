@@ -1,9 +1,9 @@
-function outsig = notchednoise(fc,fs,dur,L,bw,delta)
-%NOTCHEDNOISE  Generates a notched-noise-type masker
-%   Usage: outsig = notchednoise(fs,fc,dur,L,bw,delta);
-%          outsig = notchednoise(fs,fc,dur,L,bw,[deltaL deltaR]);
+function outsig = sig_notchednoise(fc,fs,dur,L,bw,delta)
+%sig_notchednoise  Generates a notched-noise-type masker
+%   Usage: outsig = sig_notchednoise(fs,fc,dur,L,bw,delta);
+%          outsig = sig_notchednoise(fs,fc,dur,L,bw,[deltaL deltaR]);
 % 
-%   `outsig = notchednoise(fs,fc,dur,L,bw,delta)` generates a notched-noise
+%   `outsig = sig_notchednoise(fs,fc,dur,L,bw,delta)` generates a notched-noise
 %   masker with duration `dur` (in sec) and overall level `L` (in dB SPL)
 %   with a sampling rate of `fs` Hz. The deviation from center frequency
 %   `fc` is symmetric and is given by `delta` such that the stopband is
@@ -11,7 +11,7 @@ function outsig = notchednoise(fc,fs,dur,L,bw,delta)
 %   bandwidth of `bw*fc` in Hz. If `delta=0` then a broadband noise is
 %   returned.
 %
-%   `outsig = notchednoise(fs,fc,dur,L,bw,[deltaL deltaR])` generates a
+%   `outsig = sig_notchednoise(fs,fc,dur,L,bw,[deltaL deltaR])` generates a
 %   notched-noise masker with an asymmetric configuration. `deltaL` and
 %   `deltaR` denote the left and right deviations from `fc`, respectively.
 %   In this case the stopband is `[fc-deltaL*fc fc+deltaR*fc]`.
@@ -34,7 +34,7 @@ function outsig = notchednoise(fc,fs,dur,L,bw,delta)
 %     L     =   100;  
 %     bw    =    .5;
 %     delta =    .2;
-%     outsig = notchednoise(fc,fs,dur,L,bw,delta);
+%     outsig = sig_notchednoise(fc,fs,dur,L,bw,delta);
 %
 %     figure(1);
 %     plotfftreal(fftreal(outsig),fs,100);

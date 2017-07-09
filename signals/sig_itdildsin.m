@@ -1,27 +1,30 @@
-function outsig = itdsin(fc,itd,fs)
-%ITDSIN Generate a sinusoid with a interaural time difference
-%   Usage: outsig = itdsin(fc,itd,fs)
+function outsig = sig_itdildsin(fc,itd,ild,fs)
+%sig_itdildsin Generate a sinusoid with a interaural time difference
+%   Usage: outsig = sig_itdildsin(fc,itd,ild,fs)
 %
 %   Input parameters:
 %       fc      : carrier frequency of the sinusoid (Hz)
-%       itd     : ITD of the left signal, positive or negative (ms)
+%       itd     : ITD of the left signal, this can be positive or negative (ms)
+%       ild     : ILD of the right signal, this can be positive or negative (dB)
 %       fs      : sampling rate (Hz)
 %
 %   Output parameters:
 %       outsig  : two channel 1 s long sinusoid
 %
-%   `itdsin(fc,itd,fs)` generates a sinusoid with a interaural time difference
-%   of *itd* and a frequency of *fc*.
+%   `sig_itdildsin(fc,itd,ild,fs)` generates a sinusoid with a interaural time 
+%   difference of *itd*, a interaural level difference of *ild* and a frequency of 
+%   *fc*.
 %
-%   The output is scaled to have a maximum value of 1-eps.
+%   The output is scaled to have a maximum value of 1-eps.  
 %
 %   References: moore2003introduction
 
 % AUTHOR: Hagen Wierstorf
 
+
 % ------ Checking of input parameters ---------
 
-error(nargchk(3,3,nargin));
+error(nargchk(4,4,nargin));
 
 if ~isnumeric(fc) || ~isscalar(fc) || fc<0
     error('%s: f must be a positive scalar.',upper(mfilename));
@@ -29,6 +32,10 @@ end
 
 if ~isnumeric(itd) || ~isscalar(itd)
     error('%s: itd must be a scalar.',upper(mfilename));
+end
+
+if ~isnumeric(ild) || ~isscalar(ild)
+    error('%s: ild must be a scalar.',upper(mfilename));
 end
 
 if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
@@ -50,10 +57,13 @@ sigl = [zeros(1,itdsamples) sin(2*pi*fc.*t(1:end-itdsamples))];
 % Check if we have a positive or negative ITD and switch left and right signal
 % for negative ITD
 if itd<0
+    % Apply ILD
+    sigl = gaindb(sigl,ild);
     outsig = [sigr' sigl'];
 else
+    % Apply ILD
+    sigr = gaindb(sigr,ild);
     outsig = [sigl' sigr'];
 end
 % Scale outsig
 outsig = outsig / (max(abs(outsig(:)))+eps);
-
