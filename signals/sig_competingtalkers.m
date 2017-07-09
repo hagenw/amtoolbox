@@ -59,4 +59,4 @@ end;
 
 
 % fs = 16000;
-[s,fs]=amtload('sig_competingtalkers',[flags.sigtype '.wav']);
+[s,fs]=amt_load('sig_competingtalkers',[flags.sigtype '.wav']);

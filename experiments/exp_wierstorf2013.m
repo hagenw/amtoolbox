@@ -130,7 +130,7 @@ function output = exp_wierstorf2013(varargin)
 
 %   AUTHOR: Hagen Wierstorf
 
-definput.import={'amtcache'};
+definput.import={'amt_cache'};
 definput.flags.type={'missingflag','fig1','fig3','fig6','fig7','fig8', ...
                     'fig9','fig10','fig11a','fig11b','fig12a','fig12b'};
 
@@ -169,7 +169,7 @@ if flags.do_fig1
     % intra-loudspeaker distance on the stereo setup
     L = 2;
   
-	  output = amtcache('get','fig1',flags.cachemode);
+	  output = amt_cache('get','fig1',flags.cachemode);
     if isempty(output),
         [loc_error,aud_event,~,xaxis,yaxis,x0] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'stereo');
@@ -178,7 +178,7 @@ if flags.do_fig1
 				output.xaxis = xaxis;
 				output.yaxis = yaxis;
 				output.x0 = x0;
-				amtcache('set','fig1',output);
+				amt_cache('set','fig1',output);
     end;
 
     if flags.do_plot
@@ -247,7 +247,7 @@ elseif flags.do_fig3
     conf.plot.file = '';
 
   
-    output = amtcache('get','fig3',flags.cachemode); 
+    output = amt_cache('get','fig3',flags.cachemode); 
     if isempty(output)
         % get secondary sources and tapering window for plotting
         x0 = secondary_source_positions(conf);
@@ -275,7 +275,7 @@ elseif flags.do_fig3
 				output.zaxis = zaxis;
 				output.x0 = x0;
 
-        amtcache('set','fig3',output);
+        amt_cache('set','fig3',output);
     end;
 
     if flags.do_plot
@@ -380,14 +380,14 @@ elseif flags.do_fig7
 %% ------ F I G U R E  8 -------------------------------------------------
 elseif flags.do_fig8
 
-    [phi,itd] = amtcache('get','fig8', flags.cachemode);
+    [phi,itd] = amt_cache('get','fig8', flags.cachemode);
     if isempty(phi)
         % Sound Field Synthesis Toolbox settings
         conf.ir.useinterpolation = true;
         conf.fs = 44100;
         % load HRTFs, see:
         % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
-        irs=amtload('wierstorf2013','QU_KEMAR_anechoic_3m.mat');
+        irs=amt_load('wierstorf2013','QU_KEMAR_anechoic_3m.mat');
         irs=irs.irs;
         % generate noise signal
         sig_noise = noise(44100/5,1,'white');
@@ -408,7 +408,7 @@ elseif flags.do_fig8
             itd(ii,:) = median(itd_tmp,1);
             phi(ii) = deg(irs.apparent_azimuth(ii));
         end
-        amtcache('set', 'fig8', phi,itd);
+        amt_cache('set', 'fig8', phi,itd);
     end;
 
     output.phi = phi;
@@ -429,7 +429,7 @@ end;
 %% ------ F I G U R E  9 -------------------------------------------------
 if flags.do_fig9
 
-    [phi_auditory_event,phi_sound_event] = amtcache('get', 'fig9', flags.cachemode);      
+    [phi_auditory_event,phi_sound_event] = amt_cache('get', 'fig9', flags.cachemode);      
     if isempty(phi_auditory_event)
         % Sound Field Synthesis Toolbox settings
         conf.ir.useinterpolation = true;
@@ -437,7 +437,7 @@ if flags.do_fig9
         % load lookup table
         lookup = data_wierstorf2013('itd2anglelookuptable');
         % load HRTFs, see:
-        irs=amtload('wierstorf2013','QU_KEMAR_anechoic_3m.mat');
+        irs=amt_load('wierstorf2013','QU_KEMAR_anechoic_3m.mat');
         irs=irs.irs;
         % generate noise signal
         sig_noise = noise(44100/5,1,'white');
@@ -453,7 +453,7 @@ if flags.do_fig9
             phi_auditory_event(ii) = wierstorf2013estimateazimuth(sig,lookup,'dietz2011');
             phi_sound_event(ii) = deg(irs.apparent_azimuth(ii));
         end
-        amtcache('set', 'fig9', phi_auditory_event,phi_sound_event);
+        amt_cache('set', 'fig9', phi_auditory_event,phi_sound_event);
     end;
 
     output.phi_auditory_event = phi_auditory_event;
@@ -486,10 +486,10 @@ if flags.do_fig10
     Y1 = -1.5;
     Y2 = -2.0;
 
-    output = amtcache('get', 'fig10', flags.cachemode);
+    output = amt_cache('get', 'fig10', flags.cachemode);
     if isempty(output)
         for ii=1:length(X)
-            amtdisp([num2str(ii) ' of ' num2str(length(X))],'progress');
+            amt_disp([num2str(ii) ' of ' num2str(length(X))],'progress');
             for jj=1:5
                 model_3_Y1(ii,jj) = wierstorf2013(X(ii),Y1,phi,xs,src,L,'wfs', ...
                                                   'resolution',1, ...
@@ -529,7 +529,7 @@ if flags.do_fig10
 				output.model_8_Y2 = model_8_Y2;
 				output.model_15_Y1 = model_15_Y1;
 				output.model_15_Y2 = model_15_Y2;
-        amtcache('set', 'fig10', output);
+        amt_cache('set', 'fig10', output);
     end
 
     % get the human data
@@ -590,43 +590,43 @@ if flags.do_fig11a
     % array size
     L = 2.85;
   
-    output = amtcache('get', 'fig11a', flags.cachemode);      
+    output = amt_cache('get', 'fig11a', flags.cachemode);      
     if isempty(output)
-        amtdisp('Warning: this will take a long time!','progress');
+        amt_disp('Warning: this will take a long time!','progress');
         % 3 speakers
-        amtdisp('Calculating figure 1/6','progress');
+        amt_disp('Calculating figure 1/6','progress');
         [~,aud_event_3,~,xaxis_31,yaxis_31,x0_3] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                           'resolution',31, ...
                           'nls',3, ...
                           'array','linear');
-        amtdisp('Calculating figure 2/6','progress');
+        amt_disp('Calculating figure 2/6','progress');
         [loc_error_3,~,~,xaxis_135,yaxis_135] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',135, ...
                 'nls',3, ...
                 'array','linear');
         % 8 speakers
-        amtdisp('Calculating figure 3/6','progress');
+        amt_disp('Calculating figure 3/6','progress');
         [~,aud_event_8,~,~,~,x0_8] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',31, ...
                 'nls',8, ...
                 'array','linear');
-        amtdisp('Calculating figure 4/6','progress');
+        amt_disp('Calculating figure 4/6','progress');
         loc_error_8 = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',135, ...
                 'nls',8, ...
                 'array','linear');
         % 15 speakers
-        amtdisp('Calculating figure 5/6','progress');
+        amt_disp('Calculating figure 5/6','progress');
         [~,aud_event_15,~,~,~,x0_15] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',31, ...
                 'nls',15, ...
                 'array','linear');
-        amtdisp('Calculating figure 6/6','progress');
+        amt_disp('Calculating figure 6/6','progress');
         loc_error_15 = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',135, ...
@@ -647,7 +647,7 @@ if flags.do_fig11a
 				output.xaxis_135 = xaxis_135;
 				output.yaxis_135 = yaxis_135;
 
-        amtcache('set', 'fig11a', output);
+        amt_cache('set', 'fig11a', output);
     end;
 
     if flags.do_plot
@@ -717,43 +717,43 @@ if flags.do_fig11b
     % array size
     L = 2.85;
   
-    output = amtcache('get', 'fig11b', flags.cachemode);
+    output = amt_cache('get', 'fig11b', flags.cachemode);
     if isempty(output)
-        amtdisp('Warning: this will take a long time!','progress');
+        amt_disp('Warning: this will take a long time!','progress');
         % 3 speakers
-        amtdisp('Calculating figure 1/6','progress');
+        amt_disp('Calculating figure 1/6','progress');
         [~,aud_event_3,~,xaxis_31,yaxis_31,x0_3] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                           'resolution',31, ...
                           'nls',3, ...
                           'array','linear');
-        amtdisp('Calculating figure 2/6','progress');
+        amt_disp('Calculating figure 2/6','progress');
         [loc_error_3,~,~,xaxis_135,yaxis_135] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',135, ...
                 'nls',3, ...
                 'array','linear');
         % 8 speakers
-        amtdisp('Calculating figure 3/6','progress');
+        amt_disp('Calculating figure 3/6','progress');
         [~,aud_event_8,~,~,~,x0_8] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',31, ...
                 'nls',8, ...
                 'array','linear');
-        amtdisp('Calculating figure 4/6','progress');
+        amt_disp('Calculating figure 4/6','progress');
         loc_error_8 = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',135, ...
                 'nls',8, ...
                 'array','linear');
         % 15 speakers
-        amtdisp('Calculating figure 5/6','progress');
+        amt_disp('Calculating figure 5/6','progress');
         [~,aud_event_15,~,~,~,x0_15] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',31, ...
                 'nls',15, ...
                 'array','linear');
-        amtdisp('Calculating figure 6/6','progress');
+        amt_disp('Calculating figure 6/6','progress');
         loc_error_15 = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',135, ...
@@ -774,7 +774,7 @@ if flags.do_fig11b
 				output.xaxis_135 = xaxis_135;
 				output.yaxis_135 = yaxis_135;
 				
-				amtcache('set', 'fig11b', output);
+				amt_cache('set', 'fig11b', output);
     end;
 
     if flags.do_plot
@@ -844,43 +844,43 @@ if flags.do_fig12a
     % array size
     L = 3;
   
-    output = amtcache('get', 'fig12a', flags.cachemode);      
+    output = amt_cache('get', 'fig12a', flags.cachemode);      
     if isempty(output)
-        amtdisp('Warning: this will take a long time!','progress');
+        amt_disp('Warning: this will take a long time!','progress');
         % 14 speakers
-        amtdisp('Calculating figure 1/6','progress');
+        amt_disp('Calculating figure 1/6','progress');
         [~,aud_event_14,~,xaxis_21,yaxis_21,x0_14] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',21, ...
                 'nls',14, ...
                 'array','circle');
-        amtdisp('Calculating figure 2/6','progress');
+        amt_disp('Calculating figure 2/6','progress');
         [loc_error_14,~,~,xaxis_135,yaxis_135] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',135, ...
                 'nls',14, ...
                 'array','circle');
         % 28 speakers
-        amtdisp('Calculating figure 3/6','progress');
+        amt_disp('Calculating figure 3/6','progress');
         [~,aud_event_28,~,~,~,x0_28] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',21, ...
                 'nls',28, ...
                 'array','circle');
-        amtdisp('Calculating figure 4/6','progress');
+        amt_disp('Calculating figure 4/6','progress');
         loc_error_28 = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',135, ...
                 'nls',28, ...
                 'array','circle');
         % 56 speakers
-        amtdisp('Calculating figure 5/6','progress');
+        amt_disp('Calculating figure 5/6','progress');
         [~,aud_event_56,~,~,~,x0_56] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',21, ...
                 'nls',56, ...
                 'array','circle');
-        amtdisp('Calculating figure 6/6','progress');
+        amt_disp('Calculating figure 6/6','progress');
         loc_error_56 = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',135, ...
@@ -901,7 +901,7 @@ if flags.do_fig12a
 				output.xaxis_135 = xaxis_135;
 				output.yaxis_135 = yaxis_135;
 
-				amtcache('set', 'fig12a', output);
+				amt_cache('set', 'fig12a', output);
     end;
 
     if flags.do_plot
@@ -971,43 +971,43 @@ if flags.do_fig12b
     % array size
     L = 3;
   
-    output = amtcache('get', 'fig12b', flags.cachemode);      
+    output = amt_cache('get', 'fig12b', flags.cachemode);      
     if isempty(output)
-        amtdisp('Warning: this will take a long time!','progress');
+        amt_disp('Warning: this will take a long time!','progress');
         % 14 speakers
-        amtdisp('Calculating figure 1/6','progress');
+        amt_disp('Calculating figure 1/6','progress');
         [~,aud_event_14,~,xaxis_21,yaxis_21,x0_14] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',21, ...
                 'nls',14, ...
                 'array','circle');
-        amtdisp('Calculating figure 2/6','progress');
+        amt_disp('Calculating figure 2/6','progress');
         [loc_error_14,~,~,xaxis_135,yaxis_135] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',135, ...
                 'nls',14, ...
                 'array','circle');
         % 28 speakers
-        amtdisp('Calculating figure 3/6','progress');
+        amt_disp('Calculating figure 3/6','progress');
         [~,aud_event_28,~,~,~,x0_28] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',21, ...
                 'nls',28, ...
                 'array','circle');
-        amtdisp('Calculating figure 4/6','progress');
+        amt_disp('Calculating figure 4/6','progress');
         loc_error_28 = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',135, ...
                 'nls',28, ...
                 'array','circle');
         % 56 speakers
-        amtdisp('Calculating figure 5/6','progress');
+        amt_disp('Calculating figure 5/6','progress');
         [~,aud_event_56,~,~,~,x0_56] = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',21, ...
                 'nls',56, ...
                 'array','circle');
-        amtdisp('Calculating figure 6/6','progress');
+        amt_disp('Calculating figure 6/6','progress');
         loc_error_56 = ...
             wierstorf2013(X,Y,phi,xs,src,L,'wfs', ...
                 'resolution',135, ...
@@ -1028,7 +1028,7 @@ if flags.do_fig12b
 				output.xaxis_135 = xaxis_135;
 				output.yaxis_135 = yaxis_135;
 
-				amtcache('set', 'fig12b', output);
+				amt_cache('set', 'fig12b', output);
     end;
 
     if flags.do_plot

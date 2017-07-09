@@ -60,7 +60,7 @@ function output=exp_breebaart2001(varargin)
 %                                 using the monaural decision.
 %
 %
-%   Further, cache flags (see amtcache) and plot flags can be specified:
+%   Further, cache flags (see amt_cache) and plot flags can be specified:
 %
 %     'plot'    Plot the output of the experiment. This is the default.
 %
@@ -107,7 +107,7 @@ function output=exp_breebaart2001(varargin)
 warning off;
 %% ------ Check input options --------------------------------------------
 
-  definput.import={'amtcache'};
+  definput.import={'amt_cache'};
   definput.flags.type = {'missingflag','a_fig2','a_fig6','b_fig3','b_fig6',...
       'fig1_vandepar1999'};
   definput.flags.plot = {'plot','noplot'};
@@ -126,7 +126,7 @@ end;
 % Breebaart et al. (2001a) fig. 2
 if flags.do_a_fig2
     
-    testsigadlo = amtcache('get','a_fig2',flags.cachemode);
+    testsigadlo = amt_cache('get','a_fig2',flags.cachemode);
     
     if isempty(testsigadlo)
         definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','eicell'};
@@ -157,7 +157,7 @@ if flags.do_a_fig2
                 'argimport',flags,keyvals);
         end
         
-        amtcache('set','a_fig2',testsigadlo)
+        amt_cache('set','a_fig2',testsigadlo)
         
     end
     
@@ -167,7 +167,7 @@ if flags.do_a_fig2
 elseif flags.do_a_fig6
     
     [ei_map_n_mean,ei_map_diff_mean] = ...
-        amtcache('get','a_fig6',flags.cachemode);
+        amt_cache('get','a_fig6',flags.cachemode);
     
     if isempty(ei_map_n_mean)
     % do computation
@@ -241,7 +241,7 @@ elseif flags.do_a_fig6
         ei_map_sn_mean = mean(ei_map{2}(:,:,1:3200,1),3); % mean of first 100 ms
         ei_map_diff_mean = ei_map_sn_mean-ei_map_n_mean;
 
-        amtcache('set','a_fig6',ei_map_n_mean,ei_map_diff_mean);
+        amt_cache('set','a_fig6',ei_map_n_mean,ei_map_diff_mean);
     end
     
     output = struct('ei_map_noise',ei_map_n_mean,'ei_map_diff',ei_map_diff_mean);
@@ -252,7 +252,7 @@ elseif flags.do_a_fig6
 elseif flags.do_b_fig3
     
     [N0Spi125,N0Spi250,N0Spi500,N0Spi1000,N0Spi2000,N0Spi4000] = ...
-        amtcache('get','b_fig3',flags.cachemode);
+        amt_cache('get','b_fig3',flags.cachemode);
     
     if isempty(N0Spi125)
     % do computation
@@ -306,7 +306,7 @@ elseif flags.do_b_fig3
                   % loop for six experimental runs
                   resultbwvec = zeros(6,1);
                   for runcounter = 1:6
-                      amtdisp(['Calculating: center frequency = ', num2str(fc(fccount)), ...
+                      amt_disp(['Calculating: center frequency = ', num2str(fc(fccount)), ...
                           ' Hz, bandwidth = ' num2str(bw(bwcount)) ' Hz, run #' num2str(runcounter)],'progress');
 
                       result = emuexp('run',parout);
@@ -335,7 +335,7 @@ elseif flags.do_b_fig3
         
         switch flags.interface
           case 'AMT'
-            amtcache('set','b_fig3',N0Spi125,N0Spi250,N0Spi500,N0Spi1000,...
+            amt_cache('set','b_fig3',N0Spi125,N0Spi250,N0Spi500,N0Spi1000,...
                 N0Spi2000,N0Spi4000);
         end
    
@@ -348,7 +348,7 @@ elseif flags.do_b_fig3
 elseif flags.do_b_fig6
     
     [NpiS0125,NpiS0250,NpiS0500,NpiS01000] = ...
-        amtcache('get','b_fig6',flags.cachemode);
+        amt_cache('get','b_fig6',flags.cachemode);
     
     if isempty(NpiS0125)
     % do computation
@@ -408,7 +408,7 @@ elseif flags.do_b_fig6
                 resultvec(bwcount) = mean(resultbwvec);
                 resultvecstd(bwcount) = std(resultbwvec,1);
                 resultbwvec = zeros(6,1);
-                amtdisp(sprintf(['Progress for %i Hz center frequency: ' ...
+                amt_disp(sprintf(['Progress for %i Hz center frequency: ' ...
                     num2str(round(bwcount/length(bw)*100)) ...
                     '%% calculated'],fc(fccount)),'progress'); 
 
@@ -430,7 +430,7 @@ elseif flags.do_b_fig6
 
         switch flags.interface
           case 'AMT'
-            amtcache('set','b_fig6',NpiS0125,NpiS0250,NpiS0500,NpiS01000);
+            amt_cache('set','b_fig6',NpiS0125,NpiS0250,NpiS0500,NpiS01000);
         end    
     
     else
@@ -441,7 +441,7 @@ elseif flags.do_b_fig6
 elseif flags.do_fig1_vandepar1999
     
     [N0S0125,N0S0250,N0S0500,N0S01000,N0S02000,N0S04000] = ...
-        amtcache('get','fig1_vandepar1999',flags.cachemode);
+        amt_cache('get','fig1_vandepar1999',flags.cachemode);
     
     if isempty(N0S0125)
         parout = [];
@@ -491,7 +491,7 @@ elseif flags.do_fig1_vandepar1999
 
                 % loop for experimental runs
                 for runcounter = 1:6
-                    amtdisp(['Calculating: center frequency = ', num2str(fc(fccount)), ...
+                    amt_disp(['Calculating: center frequency = ', num2str(fc(fccount)), ...
                         ' Hz, bandwidth = ' num2str(bw(bwcount)) ' Hz, run #' num2str(runcounter)],'progress');                  
                     result = emuexp('run',parout);
                     resultbwvec(runcounter) = result(1)-nl;
@@ -520,7 +520,7 @@ elseif flags.do_fig1_vandepar1999
 
         switch flags.interface
           case 'AMT'
-            amtcache('set','fig1_vandepar1999',N0S0125,N0S0250,N0S0500,...
+            amt_cache('set','fig1_vandepar1999',N0S0125,N0S0250,N0S0500,...
                 N0S01000,N0S02000,N0S04000);
         end
         

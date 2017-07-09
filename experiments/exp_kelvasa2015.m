@@ -83,7 +83,7 @@ function [dataOut] = exp_kelvasa2015(varargin)
       definput.flags.plot_stage_fig = {'no_plot_stage_fig','plot_stage_fig'};
    
     % import default arguments from other functions
-    definput.import={'kelvasa2015','amtcache'};
+    definput.import={'kelvasa2015','amt_cache'};
                         
     [flags,kv]  = ltfatarghelper({},definput,varargin);
        
@@ -123,7 +123,7 @@ if flags.do_fig5
     savename = ['Figure_5_data_',kv.identifier];
     
     %Check for preprocessed calibration data  
-    [dataOut] = amtcache('get', savename, flags.cachemode);
+    [dataOut] = amt_cache('get', savename, flags.cachemode);
     if isempty(dataOut) 
         
     signals = {'SSN.wav','FrozenSpeech.wav','PinkNoise.wav','WhiteNoise.wav'}; 
@@ -189,7 +189,7 @@ if flags.do_fig5
     end
     
     delete(H)
-    amtcache('set',savename,dataOut);
+    amt_cache('set',savename,dataOut);
     end
     if flags.do_plot; plot_kelvasa2015(dataOut,'argimport',flags,kv); end
 end
@@ -205,7 +205,7 @@ if flags.do_fig6
         savename = ['Figure_6_data_',kv.identifier];
         
         %Check for preprocessed calibration data  
-        [dataOut] = amtcache('get', savename, flags.cachemode);
+        [dataOut] = amt_cache('get', savename, flags.cachemode);
         if isempty(dataOut)
             
         signalName = 'SSN.wav'; [signal fs] = audioread(signalName);
@@ -270,7 +270,7 @@ if flags.do_fig6
             dataOut(level).SpkSumPerBin = SpkSumPerBin;
         end
          delete(H)
-         amtcache('set',savename,dataOut);
+         amt_cache('set',savename,dataOut);
         end
         if flags.do_plot; plot_kelvasa2015(dataOut,'argimport',flags,kv); end
 end
@@ -287,7 +287,7 @@ if flags.do_fig7
         savename = ['Figure_7_data_',kv.identifier];
         
         %Check for preprocessed calibration data  
-        [dataOut] = amtcache('get', savename, flags.cachemode);
+        [dataOut] = amt_cache('get', savename, flags.cachemode);
         if isempty(dataOut)
             
         signalName = {'SSN.wav','PinkNoise.wav'};
@@ -355,7 +355,7 @@ if flags.do_fig7
         end
         %Save data
          delete(H)
-         amtcache('set',savename,dataOut);
+         amt_cache('set',savename,dataOut);
         end
         if flags.do_plot; plot_kelvasa2015(dataOut,'argimport',flags,kv); end
 end
@@ -368,7 +368,7 @@ if flags.do_fig8a
     %Parameters
        savename = ['Figure_8a_data_',kv.identifier];
        %Check for preprocessed calibration data  
-        [dataOut] = amtcache('get', savename, flags.cachemode);
+        [dataOut] = amt_cache('get', savename, flags.cachemode);
         if isempty(dataOut); clear dataOut
             
        levels = [45,55,65];
@@ -393,7 +393,7 @@ if flags.do_fig8a
        
        %Save data
        delete(H)
-       amtcache('set',savename,dataOut);
+       amt_cache('set',savename,dataOut);
        end
        if flags.do_plot; plot_kelvasa2015(dataOut,'argimport',flags,kv); end
 
@@ -407,7 +407,7 @@ if flags.do_fig8b
        savename = ['Figure_8b_data_',kv.identifier];
        
        %Check for preprocessed calibration data  
-        [dataOut] = amtcache('get', savename, flags.cachemode);
+        [dataOut] = amt_cache('get', savename, flags.cachemode);
         if isempty(dataOut); clear dataOut
             
        levels = [45,55,65];
@@ -434,7 +434,7 @@ if flags.do_fig8b
        delete(H)
        
        %Save data
-       amtcache('set',savename,dataOut);
+       amt_cache('set',savename,dataOut);
        end
        if flags.do_plot; plot_kelvasa2015(dataOut,'argimport',flags,kv); end
 
@@ -447,7 +447,7 @@ if flags.do_fig9a
        savename = ['Figure_9a_data_',kv.identifier];
        
        %Check for preprocessed calibration data  
-        [dataOut] = amtcache('get', savename, flags.cachemode);
+        [dataOut] = amt_cache('get', savename, flags.cachemode);
         if isempty(dataOut); clear dataOut
             
        levels = [45,55,65];
@@ -475,7 +475,7 @@ if flags.do_fig9a
        
        %Save data
        delete(H)
-       amtcache('set',savename,dataOut);
+       amt_cache('set',savename,dataOut);
        end
        if flags.do_plot; plot_kelvasa2015(dataOut,'argimport',flags,kv); end 
 end
@@ -489,7 +489,7 @@ if flags.do_fig10
        savename = ['Figure_10_data_',kv.identifier];
        
        %Check for preprocessed calibration data  
-        [dataOut] = amtcache('get', savename, flags.cachemode);
+        [dataOut] = amt_cache('get', savename, flags.cachemode);
         if isempty(dataOut); clear dataOut
             
        level = 55;
@@ -518,7 +518,7 @@ if flags.do_fig10
        end
        
        delete(H)
-       amtcache('set',savename,dataOut);
+       amt_cache('set',savename,dataOut);
        end
        if flags.do_plot; plot_kelvasa2015(dataOut,'argimport',flags,kv); end
 end
@@ -531,7 +531,7 @@ if flags.do_fig12
        %Parameters
        savename = ['Figure_12_data_',kv.identifier];
        %Check for preprocessed calibration data  
-        [dataOut] = amtcache('get', savename, flags.cachemode);
+        [dataOut] = amt_cache('get', savename, flags.cachemode);
         if isempty(dataOut); clear dataOut
             
        level = 55;
@@ -585,7 +585,7 @@ if flags.do_fig12
         delete(H)
         
        %Save data
-       amtcache('set',savename,dataOut);
+       amt_cache('set',savename,dataOut);
        end
        if flags.do_plot; plot_kelvasa2015(dataOut,'argimport',flags,kv); end 
 end

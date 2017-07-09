@@ -88,7 +88,7 @@ function demo_breebaart2001(varargin)
 
 % AUTHOR : Martina Kreuzbichler
 
-definput.import={'amtcache'};
+definput.import={'amt_cache'};
 definput.flags.type = {'N0Spi','N0S0','NpiS0'};
 definput.flags.speed = {'fast','exact'};
 definput.flags.interface = {'AMT', 'BInit'};
@@ -127,8 +127,8 @@ if flags.do_fast
         centralprocstring = {'lbr','b','lr'};
         nl = 65;
 
-    amtdisp('demo_breebaart2001 will calculate 15 thresholds','progress');
-		output = amtcache('get','N0Spi_fast',flags.cachemode);		
+    amt_disp('demo_breebaart2001 will calculate 15 thresholds','progress');
+		output = amt_cache('get','N0Spi_fast',flags.cachemode);		
 		if isempty(output)
       runcounter=1;
 			% loop for all centralprocstring conditions.
@@ -158,13 +158,13 @@ if flags.do_fast
 						'input10',0.025,'input11', 32000};
 					parout = emuexp('signalinit',parout,signalset);
 
-          amtdisp(['Threshold #' num2str(runcounter) ': for bw=' num2str(bw(bwcount)) 'Hz and decision=' centralprocstring{stringcount} '.'],'progress');
+          amt_disp(['Threshold #' num2str(runcounter) ': for bw=' num2str(bw(bwcount)) 'Hz and decision=' centralprocstring{stringcount} '.'],'progress');
 					result = emuexp('run',parout);
 					resultbwvec(1) = result(1)-nl;
 
 					resultvec(bwcount) = resultbwvec;
 					resultbwvec = zeros(1,1);
-					amtdisp(sprintf(['Progress for central processor condition ' ...
+					amt_disp(sprintf(['Progress for central processor condition ' ...
 						centralprocstring{stringcount} ':' num2str(round(bwcount/length(bw)*100)) ...
 						'%% calculated']),'progress');
           runcounter=runcounter+1;
@@ -173,7 +173,7 @@ if flags.do_fast
 
 				end
 			end
-			amtcache('set','N0Spi_fast',output);
+			amt_cache('set','N0Spi_fast',output);
 		end
 
         N0Spi4000lbr = output.N0Spi4000lbr;
@@ -223,7 +223,7 @@ if flags.do_fast
         centralprocstring = {'lbr', 'lBr'};
         nl = 70;
 
-		output = amtcache('get','N0S0_fast',flags.cachemode);		
+		output = amt_cache('get','N0S0_fast',flags.cachemode);		
 		if isempty(output)
 			% loop for all centralprocstring conditions.
 			for stringcount = 1:length(centralprocstring)
@@ -259,7 +259,7 @@ if flags.do_fast
 					resultbwvec = zeros(1,1);
 
 
-					amtdisp(sprintf(['Progress for central processor condition ' ...
+					amt_disp(sprintf(['Progress for central processor condition ' ...
 						centralprocstring{stringcount} ': ' ...
 						num2str(round(bwcount/length(bw)*100)) ...
 						'%% calculated']),'progress');
@@ -269,7 +269,7 @@ if flags.do_fast
 
 				end
 			end
-			amtcache('set','N0S0_fast',output);
+			amt_cache('set','N0S0_fast',output);
 		end
         N0S04000lbr = output.N0S04000lbr;
         N0S04000lBr = output.N0S04000lBr;
@@ -314,7 +314,7 @@ if flags.do_fast
         centralprocstring = {'lbr','b','lr'};
         nl = 70;
 
-		output = amtcache('get','NpiS0_fast',flags.cachemode);		
+		output = amt_cache('get','NpiS0_fast',flags.cachemode);		
 		if isempty(output)
 			% loop for all centralprocstring conditions.
 			for stringcount = 1:length(centralprocstring)
@@ -350,7 +350,7 @@ if flags.do_fast
 					resultbwvec = zeros(1,1);
 
 
-					amtdisp(sprintf(['Progress for central processor condition ' ...
+					amt_disp(sprintf(['Progress for central processor condition ' ...
 						centralprocstring{stringcount} ': ' ...
 						num2str(round(bwcount/length(bw)*100)) ...
 						'%% calculated']),'progress');
@@ -360,7 +360,7 @@ if flags.do_fast
 
 				end
 			end
-			amtcache('set','NpiS0_fast',output);
+			amt_cache('set','NpiS0_fast',output);
 		end
 
         NpiS01000lbr = output.NpiS01000lbr;
@@ -396,7 +396,7 @@ if flags.do_fast
 elseif flags.do_exact
 
     if flags.do_N0Spi
-        [N0Spi4000lbr,N0Spi4000b,N0Spi4000lr] = amtcache('get','N0Spi',flags.cachemode);
+        [N0Spi4000lbr,N0Spi4000b,N0Spi4000lr] = amt_cache('get','N0Spi',flags.cachemode);
         if isempty(N0Spi4000lbr)
             % do computation
 
@@ -452,7 +452,7 @@ elseif flags.do_exact
                     resultvec(bwcount) = mean(resultbwvec);
                     resultvecstd(bwcount) = std(resultbwvec,1);
                     resultbwvec = zeros(6,1);
-                    amtdisp(sprintf(['Progress for central processor condition ' ...
+                    amt_disp(sprintf(['Progress for central processor condition ' ...
                         centralprocstring{stringcount} ':' num2str(round(bwcount/length(bw)*100)) ...
                         '%% calculated']),'progress');
 
@@ -466,7 +466,7 @@ elseif flags.do_exact
             N0Spi4000b = output.N0Spi4000b;
             N0Spi4000lr = output.N0Spi4000lr;
 
-            amtcache('set','N0Spi',N0Spi4000lbr,N0Spi4000b,N0Spi4000lr);
+            amt_cache('set','N0Spi',N0Spi4000lbr,N0Spi4000b,N0Spi4000lr);
         end
 
         % plot
@@ -492,7 +492,7 @@ elseif flags.do_exact
         title('N0Spi 4000 Hz thresholds: monaural factor = 0.0003')
 
     elseif flags.do_N0S0
-        [N0S04000lbr,N0S04000lBr] = amtcache('get','N0S0',flags.cachemode);
+        [N0S04000lbr,N0S04000lBr] = amt_cache('get','N0S0',flags.cachemode);
         if isempty(N0S04000lbr)
             % do computation
 
@@ -548,7 +548,7 @@ elseif flags.do_exact
                     resultvec(bwcount) = mean(resultbwvec);
                     resultvecstd(bwcount) = std(resultbwvec,1);
                     resultbwvec = zeros(6,1);
-                    amtdisp(sprintf(['Progress for central processor condition ' ...
+                    amt_disp(sprintf(['Progress for central processor condition ' ...
                         centralprocstring{stringcount} ': ' ...
                         num2str(round(bwcount/length(bw)*100)) ...
                         '%% calculated']),'progress');
@@ -562,7 +562,7 @@ elseif flags.do_exact
             N0S04000lBr = output.N0S04000lBr;
 
 
-            amtcache('set','N0S0',N0S04000lbr,N0S04000lBr);
+            amt_cache('set','N0S0',N0S04000lbr,N0S04000lBr);
         end
 
         % plot
@@ -587,7 +587,7 @@ elseif flags.do_exact
 
 
     elseif flags.do_NpiS0
-        [NpiS01000lbr,NpiS01000b,NpiS01000lr] = amtcache('get','NpiS0',flags.cachemode);
+        [NpiS01000lbr,NpiS01000b,NpiS01000lr] = amt_cache('get','NpiS0',flags.cachemode);
         if isempty(NpiS01000lbr)
             % do computation
 
@@ -643,7 +643,7 @@ elseif flags.do_exact
                     resultvec(bwcount) = mean(resultbwvec);
                     resultvecstd(bwcount) = std(resultbwvec,1);
                     resultbwvec = zeros(6,1);
-                    amtdisp(sprintf(['Progress for central processor condition ' ...
+                    amt_disp(sprintf(['Progress for central processor condition ' ...
                         centralprocstring{stringcount} ':' num2str(round(bwcount/length(bw)*100)) ...
                         '%% calculated']),'progress');
 
@@ -657,7 +657,7 @@ elseif flags.do_exact
             NpiS01000b = output.NpiS01000b;
             NpiS01000lr = output.NpiS01000lr;
 
-            amtcache('set','NpiS0',NpiS01000lbr,NpiS01000b,NpiS01000lr);
+            amt_cache('set','NpiS0',NpiS01000lbr,NpiS01000b,NpiS01000lr);
         end
 
         % plot

@@ -92,7 +92,7 @@ function data = data_ziegelwanger2014(varargin)
 
 % Define input flags
 definput.flags.type = {'missingflag','ARI','CIPIC','LISTEN','SPHERE_DIS','SPHERE_ROT','NH89','Sphere','SAT','STP'};
-definput.import={'amtcache'}; % get the flags of amtcache
+definput.import={'amt_cache'}; % get the flags of amt_cache
 
 % Parse input options
 [flags,~]  = ltfatarghelper({},definput,varargin);
@@ -106,19 +106,19 @@ end
 %% ARI database
 if flags.do_ARI
     
-    tmp=amtload('ziegelwanger2014','info.mat');
+    tmp=amt_load('ziegelwanger2014','info.mat');
     data=tmp.info.ARI;
-    results=amtcache('get','ARI',flags.cachemode);
+    results=amt_cache('get','ARI',flags.cachemode);
     if isempty(results)
         for ii=1:length(data.subjects)
-            amtdisp(['Recalculate data for subject ' num2str(ii) '/' num2str(length(data.subjects)) ' (' data.subjects{ii} ') of ARI database'],'progress');
+            amt_disp(['Recalculate data for subject ' num2str(ii) '/' num2str(length(data.subjects)) ' (' data.subjects{ii} ') of ARI database'],'progress');
             Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', [ 'ARI_' data.subjects{ii} '.sofa']));
             [~,tmp]=ziegelwanger2014(Obj,4,0,0);
             toaEst=tmp.toa;
             [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
             [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
-        amtcache('set','ARI',results);
+        amt_cache('set','ARI',results);
     end
     data.results=results;
     
@@ -127,19 +127,19 @@ end
 %% CIPIC database
 if flags.do_CIPIC
     
-    tmp=amtload('ziegelwanger2014','info.mat');
+    tmp=amt_load('ziegelwanger2014','info.mat');
     data=tmp.info.CIPIC;
-    results=amtcache('get','CIPIC',flags.cachemode);
+    results=amt_cache('get','CIPIC',flags.cachemode);
     if isempty(results)
         for ii=1:length(data.subjects)
-            amtdisp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of CIPIC database'],'progress');
+            amt_disp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of CIPIC database'],'progress');
             Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', [ 'CIPIC_' data.subjects{ii} '.sofa']));
             [~,tmp]=ziegelwanger2014(Obj,4,0,0);
             toaEst=tmp.toa;
             [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
             [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
-        amtcache('set','CIPIC',results);
+        amt_cache('set','CIPIC',results);
     end
     data.results=results;
     
@@ -148,13 +148,13 @@ end
 %% LISTEN database
 if flags.do_LISTEN
     
-    tmp=amtload('ziegelwanger2014','info.mat');
+    tmp=amt_load('ziegelwanger2014','info.mat');
     data=tmp.info.LISTEN;
-    results=amtcache('get','LISTEN',flags.cachemode);
+    results=amt_cache('get','LISTEN',flags.cachemode);
     if isempty(results)
         for ii=1:length(data.subjects)
             if ~strcmp(data.subjects{ii},'34')
-                amtdisp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of LISTEN database'],'progress');
+                amt_disp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of LISTEN database'],'progress');
                 Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', [ 'LISTEN_' data.subjects{ii} '.sofa']));
                 [~,tmp]=ziegelwanger2014(Obj,4,0,0);
                 toaEst=tmp.toa;
@@ -162,7 +162,7 @@ if flags.do_LISTEN
                 [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
             end
         end
-        amtcache('set','LISTEN',results);
+        amt_cache('set','LISTEN',results);
     end
     data.results=results;    
 end
@@ -170,21 +170,21 @@ end
 %% SPHERE (Displacement) database
 if flags.do_SPHERE_DIS
     
-    tmp=amtload('ziegelwanger2014','info.mat');
+    tmp=amt_load('ziegelwanger2014','info.mat');
     data=tmp.info.Displacement;
-    results=amtcache('get','SPHERE_DIS',flags.cachemode);
+    results=amt_cache('get','SPHERE_DIS',flags.cachemode);
     if isempty(results)
         results.p_onaxis=zeros(4,2,length(data.subjects));
         results.p_offaxis=zeros(7,2,length(data.subjects));
         for ii=1:length(data.subjects)
-            amtdisp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of SPHERE_DIS database'],'progress');
+            amt_disp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of SPHERE_DIS database'],'progress');
             Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', [ 'Sphere_Displacement_' data.subjects{ii} '.sofa']));
             [~,tmp]=ziegelwanger2014(Obj,4,0,0);
             toaEst=tmp.toa;
             [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
             [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
-        amtcache('set','SPHERE_DIS',results);
+        amt_cache('set','SPHERE_DIS',results);
     end
     data.results=results;    
 end
@@ -192,13 +192,13 @@ end
 %% SPHERE (Rotation) database
 if flags.do_SPHERE_ROT
     
-    tmp=amtload('ziegelwanger2014','info.mat');
+    tmp=amt_load('ziegelwanger2014','info.mat');
     data=tmp.info.Rotation;
-    results=amtcache('get','SPHERE_ROT',flags.cachemode);
+    results=amt_cache('get','SPHERE_ROT',flags.cachemode);
     if isempty(results)
         results.p=zeros(4,2,length(data.phi));
         for ii=1:length(data.subjects)
-            amtdisp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of SPHERE_ROT database'],'progress');
+            amt_disp(['Recalculate data for subject ' num2str(ii) filesep num2str(length(data.subjects)) ' of SPHERE_ROT database'],'progress');
             Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', [ 'Sphere_Rotation_' data.subjects{ii} '.sofa']));
             [~,tmp]=ziegelwanger2014(Obj,1,0,0);
             toaEst=tmp.toa;
@@ -217,7 +217,7 @@ if flags.do_SPHERE_ROT
             [~,results(ii).MCM{1}]=ziegelwanger2014(Obj,toaEst,0,1e-8);
             [~,results(ii).MCM{2}]=ziegelwanger2014(Obj,toaEst,[0.05 0.01],1e-8);
         end
-        amtcache('set','SPHERE_ROT',results);
+        amt_cache('set','SPHERE_ROT',results);
     end
     data.results=results;    
 end
@@ -227,7 +227,7 @@ if flags.do_NH89
 
     data=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', 'ARI_NH89.sofa'));
     
-    toaEst=amtcache('get','NH89',flags.cachemode);
+    toaEst=amt_cache('get','NH89',flags.cachemode);
     if isempty(toaEst)
         [~,tmp]=ziegelwanger2014(data,1,0,0);
         toaEst{1}=tmp.toa;
@@ -237,7 +237,7 @@ if flags.do_NH89
         toaEst{3}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,4,0,0);
         toaEst{4}=tmp.toa;
-        amtcache('set','NH89',toaEst);
+        amt_cache('set','NH89',toaEst);
     end
     data.Data.toaEst=toaEst;
     
@@ -248,7 +248,7 @@ if flags.do_Sphere
 
     data=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', 'Sphere.sofa'));
     
-    toaEst=amtcache('get','Sphere',flags.cachemode);
+    toaEst=amt_cache('get','Sphere',flags.cachemode);
     if isempty(toaEst)
         [~,tmp]=ziegelwanger2014(data,1,0,0);
         toaEst{1}=tmp.toa;
@@ -258,7 +258,7 @@ if flags.do_Sphere
         toaEst{3}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,4,0,0);
         toaEst{4}=tmp.toa;
-        amtcache('set','Sphere',toaEst);
+        amt_cache('set','Sphere',toaEst);
     end
     data.Data.toaEst=toaEst;
     
@@ -269,7 +269,7 @@ if flags.do_SAT
 
     data=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', 'SAT.sofa'));
     
-    toaEst=amtcache('get','SAT',flags.cachemode);
+    toaEst=amt_cache('get','SAT',flags.cachemode);
     if isempty(toaEst)
         [~,tmp]=ziegelwanger2014(data,1,0,0);
         toaEst{1}=tmp.toa;
@@ -279,7 +279,7 @@ if flags.do_SAT
         toaEst{3}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,4,0,0);
         toaEst{4}=tmp.toa;
-        amtcache('set','SAT',toaEst);
+        amt_cache('set','SAT',toaEst);
     end
     data.Data.toaEst=toaEst;
     
@@ -290,7 +290,7 @@ if flags.do_STP
 
     data=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2014', 'STP.sofa'));
     
-    toaEst=amtcache('get','STP',flags.cachemode);
+    toaEst=amt_cache('get','STP',flags.cachemode);
     if isempty(toaEst)
         [~,tmp]=ziegelwanger2014(data,1,0,0);
         toaEst{1}=tmp.toa;
@@ -300,7 +300,7 @@ if flags.do_STP
         toaEst{3}=tmp.toa;
         [~,tmp]=ziegelwanger2014(data,4,0,0);
         toaEst{4}=tmp.toa;
-        amtcache('set','STP',toaEst);
+        amt_cache('set','STP',toaEst);
     end
     data.Data.toaEst=toaEst;
     

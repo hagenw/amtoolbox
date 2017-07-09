@@ -152,7 +152,7 @@ function varargout = exp_baumgartner2016(varargin)
 
 %% ------ Check input options --------------------------------------------
 
-definput.import={'amtcache','localizationerror','baumgartner2014pmv2ppp'};
+definput.import={'amt_cache','localizationerror','baumgartner2014pmv2ppp'};
 
 definput.flags.experiment = {'missingflag',...
   'fig2','fig3','fig4','fig5','fig6','fig7','fig8','fig9','tab1',...
@@ -255,7 +255,7 @@ if flags.do_hearingthreshold || flags.do_fig4
   cachename = [cachename '_cohc' num2str(cOHC)];
   cachename = strrep(cachename,' ','');cachename = strrep(cachename,'.','p');
   cachename = ['hearingthreshold_' cachename];
-  afr = amtcache('get',cachename,flags.cachemode);
+  afr = amt_cache('get',cachename,flags.cachemode);
   if isempty(afr)
     afr = nan(length(cf),length(cOHC),length(spl),3);
     for ff = 1:length(cf)
@@ -271,9 +271,9 @@ if flags.do_hearingthreshold || flags.do_fig4
           end
         end
       end
-      amtdisp([num2str(ff) ' of ' num2str(length(cf)) '  done.'],'progress')
+      amt_disp([num2str(ff) ' of ' num2str(length(cf)) '  done.'],'progress')
     end
-  amtcache('set',cachename,afr)
+  amt_cache('set',cachename,afr)
   end
 
 
@@ -420,18 +420,18 @@ if flags.do_parametrization
   
   if flags.do_mrsandgamma
   
-    [gamma,mrs] = amtcache('get','parametrization', flags.cachemode);
+    [gamma,mrs] = amt_cache('get','parametrization', flags.cachemode);
     if isempty(gamma)
-      amtdisp('Note that this procedure lasts at least 2 hours!','progress')
+      amt_disp('Note that this procedure lasts at least 2 hours!','progress')
 
-      tempfn = fullfile(amtbasepath,'experiments','exp_baumgartner2014_parametrization'); % temporary folder
+      tempfn = fullfile(amt_basepath,'experiments','exp_baumgartner2014_parametrization'); % temporary folder
       mkdir(tempfn)
 
       s = data_baumgartner2016('argimport',model.flags,model.kv);
       [gamma,mrs] = baumgartner2016parametrization(s,'SPLtem',kv.SPLtem,...
         flags.fbank,flags.fibertypeseparation,'mgs',kv.mgs);
 
-      amtcache('set','parametrization',gamma,mrs);
+      amt_cache('set','parametrization',gamma,mrs);
     end
     varargout{1} = {gamma,mrs};
   
@@ -469,7 +469,7 @@ if flags.do_baseline || flags.do_fig3
   if not(isempty(model.flags.errorflag))
     cachename = [cachename '_' model.flags.errorflag];
   end
-  [Pcorr,d,s] = amtcache('get',cachename,flags.cachemode);
+  [Pcorr,d,s] = amt_cache('get',cachename,flags.cachemode);
   
   if isempty(Pcorr)
 
@@ -524,12 +524,12 @@ if flags.do_baseline || flags.do_fig3
 
     s = rmfield(s,{'Obj'});
     
-    amtcache('set',cachename,Pcorr,d,s)
+    amt_cache('set',cachename,Pcorr,d,s)
   end
   
   if isempty(model.flags.errorflag)
     d.total = (d.pe/90 + d.qe/100) /2;
-    amtdisp(['Corr. QE: ' num2str(Pcorr.qe.r,'%2.2f') ' (p = ',num2str(Pcorr.qe.p,'%0.3f'),'), PE: ' num2str(Pcorr.pe.r,'%2.2f') ' (p = ',num2str(Pcorr.pe.p,'%0.3f'),'), QE+PE: ' num2str((Pcorr.qe.r+Pcorr.pe.r)/2,'%2.2f')])
+    amt_disp(['Corr. QE: ' num2str(Pcorr.qe.r,'%2.2f') ' (p = ',num2str(Pcorr.qe.p,'%0.3f'),'), PE: ' num2str(Pcorr.pe.r,'%2.2f') ' (p = ',num2str(Pcorr.pe.p,'%0.3f'),'), QE+PE: ' num2str((Pcorr.qe.r+Pcorr.pe.r)/2,'%2.2f')])
   end
   
   if nargout >0; varargout{1} = d;	end
@@ -612,7 +612,7 @@ if flags.do_spatstrat_ex
   %% Computations
   s = data_baumgartner2016('argimport',model.flags,model.kv);  
   s = s(ismember({s.id},'NH58'));
-  amtdisp(['Listener: ' s.id])
+  amt_disp(['Listener: ' s.id])
   chance = [];
   for C = 1:length(Conditions)
 
@@ -647,7 +647,7 @@ if flags.do_spatstrat_ex
             if C == 1       % Learn 
                 s(ll).spdtfs_c{ii} = s(ll).spdtfs{ii};
             elseif C == 2   % Dummy
-                temp=amtload('baumgartner2014','spatstrat_lpfilter.mat');
+                temp=amt_load('baumgartner2014','spatstrat_lpfilter.mat');
                 s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
             elseif C == 3   % Warped
                 s(ll).spdtfs_c{ii} = warp_hrtf(s(ll).spdtfs{ii},s(ll).fs);
@@ -763,7 +763,7 @@ if flags.do_spatstrat
   model.kv.SPL = SL + kv.SL2SPL;
   
   cachename = ['spatstrat_tar' num2str(model.kv.SPL,'%u') 'dB_' cachename];
-  [r,d,s,act,pred] = amtcache('get',cachename,flags.cachemode);
+  [r,d,s,act,pred] = amt_cache('get',cachename,flags.cachemode);
   
   if isempty(r)
     
@@ -807,7 +807,7 @@ if flags.do_spatstrat
               if C == 1       % Learn 
                   s(ll).spdtfs_c{ii} = s(ll).spdtfs{ii};
               elseif C == 2   % Dummy
-                temp=amtload('baumgartner2014','spatstrat_lpfilter.mat');
+                temp=amt_load('baumgartner2014','spatstrat_lpfilter.mat');
                 s(ll).spdtfs_c{ii} = filter(temp.blp,temp.alp,s(ll).spdtfs{ii});
               elseif C == 3   % Warped
                   s(ll).spdtfs_c{ii} = warp_hrtf(s(ll).spdtfs{ii},s(ll).fs);
@@ -898,7 +898,7 @@ if flags.do_spatstrat
     sd_qe = (pred.qe-act.qe).^2;
     d.qe = sqrt(relfreq(:)' * sd_qe(:));
   
-    amtcache('set',cachename,r,d,s,act,pred);
+    amt_cache('set',cachename,r,d,s,act,pred);
   else
     
     data = data_majdak2013;
@@ -1189,7 +1189,7 @@ if flags.do_numchan
   model.kv.SPL = SL + kv.SL2SPL;
   
   cachename = ['numchan_tar' num2str(model.kv.SPL,'%u') 'dB_' cachename];
-  [N,r,d,s] = amtcache('get',cachename,flags.cachemode);
+  [N,r,d,s] = amt_cache('get',cachename,flags.cachemode);
   if isempty(N)
     
     % Model Settings
@@ -1252,7 +1252,7 @@ if flags.do_numchan
           else
             n = N(C);
             cachenameGET = ['numchan_GET_N' num2str(n) '_' s(ll).id];
-            cond = amtcache('get',cachenameGET);
+            cond = amt_cache('get',cachenameGET);
             if isempty(cond)
               
               [syncrnfreq, GETtrain] = GETVocoder('',imp,n,flow,fhigh,0,100,stimPar);
@@ -1269,7 +1269,7 @@ if flags.do_numchan
                 end
               end
               
-              amtcache('set',cachenameGET,cond);
+              amt_cache('set',cachenameGET,cond);
             end
             s(ll).spdtfs_c{ii} = cond;
 
@@ -1351,7 +1351,7 @@ if flags.do_numchan
     
     s = rmfield(s,{'spdtfs','spdtfs_c','Obj','itemlist'});
     
-    amtcache('set',cachename,N,r,d,s)
+    amt_cache('set',cachename,N,r,d,s)
   end
   
   data = data_goupell2010;
@@ -1506,7 +1506,7 @@ if flags.do_evalSPLtem  || flags.do_fig6
 %   xlabel('Template SPL (dB)')
   ylabel('Prediction residuum')
 
-  amtdisp('Predictive power for SpatStrat and NumChan.')
+  amt_disp('Predictive power for SpatStrat and NumChan.')
 
   xlabel('Template SPL (dB)')
   
@@ -1546,7 +1546,7 @@ if flags.do_sabin2005
   if flags.do_nomrs
     cachename = [cachename '_nomrs'];
   end
-  pred = amtcache('get',cachename,flags.cachemode);
+  pred = amt_cache('get',cachename,flags.cachemode);
   if isempty(pred)
   
     s = data_baumgartner2016('argimport',model.flags,model.kv);
@@ -1595,11 +1595,11 @@ if flags.do_sabin2005
           pred.pe(ll,ii) = localizationerror(m,'rmsPmedianlocal');
         end
       end
-      amtdisp([num2str(ii,'%u') ' of ' num2str(length(s),'%u') ' done'],'progress')
+      amt_disp([num2str(ii,'%u') ' of ' num2str(length(s),'%u') ' done'],'progress')
     end
 
     pred.SPL = SPL;
-    amtcache('set',cachename,pred)
+    amt_cache('set',cachename,pred)
   end
   
   data = data_sabin2005;
@@ -1665,7 +1665,7 @@ if flags.do_sabin2005
     end
   end
   d = mean(d(:));
-  amtdisp(['Prediction deviation score: ' num2str(d)])
+  amt_disp(['Prediction deviation score: ' num2str(d)])
   
   %% Correlation coefficient
   
@@ -1677,7 +1677,7 @@ if flags.do_sabin2005
     end
   end
   r = mean(r(:));
-  amtdisp(['Correlation coefficient: ' num2str(r)])
+  amt_disp(['Correlation coefficient: ' num2str(r)])
   
   %% Output
   varargout{1}=d;
@@ -1756,7 +1756,7 @@ if flags.do_impairment
   
   if isempty(errorflag)
     errorflag = 'QE';
-    amtdisp('Localization performance measure not chosen -> QE used.')
+    amt_disp('Localization performance measure not chosen -> QE used.')
   end
   
   cohc = sort(kv.cOHCset,'descend'); % default: [1,0.4,0.1,0];
@@ -1776,7 +1776,7 @@ if flags.do_impairment
     cachename = [cachename '_NHtem'];
   end
   cachename = strrep([cachename '_cohc' num2str(cohc)],' ','');cachename = strrep(cachename,'.','p');
-  s = amtcache('get',cachename,flags.cachemode);
+  s = amt_cache('get',cachename,flags.cachemode);
   if isempty(s)
     
     s = data_baumgartner2016('argimport',model.flags,model.kv);
@@ -1799,11 +1799,11 @@ if flags.do_impairment
           end
         end
       end
-      amtdisp([num2str(ii,'%u') ' of ' num2str(length(s),'%u') ' done'],'progress')
+      amt_disp([num2str(ii,'%u') ' of ' num2str(length(s),'%u') ' done'],'progress')
     end
     
     s = rmfield(s,{'Obj','itemlist'});
-    amtcache('set',cachename,s);
+    amt_cache('set',cachename,s);
   end
   varargout{1} = s;
   
@@ -1998,15 +1998,15 @@ if flags.do_impairment
     tbl.posthoc.FT = multcompare(rm,'FT');
     
     % Display results
-    amtdisp(['Repeated-measures ANOVA for ' errorflag])
-    amtdisp(tbl.ranova)
-    amtdisp('Mauchly test and sphericity corrections')
-    amtdisp([tbl.mauchly,tbl.eps])
-    amtdisp('Posthoc analysis')
-    amtdisp(tbl.posthoc.Cohc)
-    amtdisp(tbl.posthoc.FT)
-    amtdisp('Reported in publication:')
-    amtdisp(tbl.ranova(3:end,[9,4,6,10]))
+    amt_disp(['Repeated-measures ANOVA for ' errorflag])
+    amt_disp(tbl.ranova)
+    amt_disp('Mauchly test and sphericity corrections')
+    amt_disp([tbl.mauchly,tbl.eps])
+    amt_disp('Posthoc analysis')
+    amt_disp(tbl.posthoc.Cohc)
+    amt_disp(tbl.posthoc.FT)
+    amt_disp('Reported in publication:')
+    amt_disp(tbl.ranova(3:end,[9,4,6,10]))
     
   else
     tbl = [];
@@ -2111,9 +2111,9 @@ if flags.do_cOHCvsSens
       r = r(2);
     end
     
-    amtdisp(['Correlation between average ',errorlabel{ee},...
+    amt_disp(['Correlation between average ',errorlabel{ee},...
       ' and intensity discriminability:'])
-    amtdisp(['  r = ',num2str(r),' ( p = ',num2str(p),' )']);
+    amt_disp(['  r = ',num2str(r),' ( p = ',num2str(p),' )']);
     
   end
   
@@ -2128,7 +2128,7 @@ if flags.do_effectOnCues || flags.do_fig9
   tmp = lconv(noise(8e3,1,'white'),dtf);
   sig = reshape(tmp,[size(tmp,1),size(dtf,2),size(dtf,3)]);
       
-  amtdisp(['Exemplary listener: ' s(sid).id])
+  amt_disp(['Exemplary listener: ' s(sid).id])
   
   ymin = 0;
   ymax = model.kv.mgs*pi;
@@ -2244,7 +2244,7 @@ if flags.do_evalSpectralContrast
   tmp = lconv(noise(8e3,1,'white'),dtf);
   sig = reshape(tmp,[size(tmp,1),size(dtf,2),size(dtf,3)]);
       
-  amtdisp(['Exemplary listener: ' s(sid).id])
+  amt_disp(['Exemplary listener: ' s(sid).id])
   
   spl = kv.SPLset;
   
@@ -2260,7 +2260,7 @@ if flags.do_evalSpectralContrast
   end
   FTlabels = {'low-SR','med-SR','high-SR'};
   tab = table(spectralContrast,'RowNames',FTlabels);
-  amtdisp(tab)
+  amt_disp(tab)
   varargout{1} = tab;
 end
 
@@ -2365,13 +2365,13 @@ if flags.do_sensitivity || flags.do_fig8
   
   [~,~,qe,errmeta] = exp_baumgartner2016('impairment','QE','SPLset',60,'noplot','nostat');
   [correlation_QE.r,correlation_QE.p] = corrcoeff(mean(qe,1)',dprime60dB(:));
-  amtdisp('Correlation between dprime and quadrant errors:')
-  amtdisp(correlation_QE)
+  amt_disp('Correlation between dprime and quadrant errors:')
+  amt_disp(correlation_QE)
   
   [~,~,pe] = exp_baumgartner2016('impairment','PE','SPLset',60,'noplot','nostat');
   [correlation_PE.r,correlation_PE.p] = corrcoeff(mean(pe,1)',dprime60dB(:));
-  amtdisp('Correlation between dprime and local RMS errors:')
-  amtdisp(correlation_PE)
+  amt_disp('Correlation between dprime and local RMS errors:')
+  amt_disp(correlation_PE)
   
 end
 
@@ -2523,7 +2523,7 @@ if flags.do_localevel
   if model.flags.do_gammatone
     cachename = [cachename '_minSPL' num2str(model.kv.GT_minSPL) '_maxSPL' num2str(model.kv.GT_maxSPL)];
   end
-  [pred,ref] = amtcache('get', cachename, flags.cachemode);
+  [pred,ref] = amt_cache('get', cachename, flags.cachemode);
   if isempty(pred)
     pred.qe = nan(7,length(condition));
     pred.pe = pred.qe;
@@ -2559,7 +2559,7 @@ if flags.do_localevel
 
       end
     end
-    amtcache('set',cachename,pred,ref);
+    amt_cache('set',cachename,pred,ref);
   else
     data = data_baumgartner2016('all');
   end
@@ -2579,8 +2579,8 @@ if flags.do_localevel
   r_qerr(mm) = corrcoeff([pred.qe],[ref.qe]);
   e_qerr(mm) = mean(rms([pred.qe]-[ref.qe]));
     
-  amtdisp(' e_PE  r_PE  e_QE   r_QE')
-  amtdisp([num2str(e_perr(mm),'%2.1f') '\deg  ' num2str(r_perr(mm),'%2.2f') '  ' num2str(e_qerr(mm),'%2.1f') '%  ' num2str(r_qerr(mm),'%2.2f')])
+  amt_disp(' e_PE  r_PE  e_QE   r_QE')
+  amt_disp([num2str(e_perr(mm),'%2.1f') '\deg  ' num2str(r_perr(mm),'%2.2f') '  ' num2str(e_qerr(mm),'%2.1f') '%  ' num2str(r_qerr(mm),'%2.2f')])
   
   varargout{1} = 0.5* (e_perr(mm)/90 + e_qerr(mm)/100);
 

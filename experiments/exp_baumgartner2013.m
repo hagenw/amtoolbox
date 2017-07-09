@@ -181,7 +181,7 @@ function varargout=exp_baumgartner2013(varargin)
     'fig12','fig13','fig14','fig15',... % Ch. 4.1 (binaural rec.)
     'fig18','fig19','fig20','fig22','fig23'}; % Ch. 4
   definput.flags.plot = {'plot','noplot'};
-  definput.import={'amtcache'};
+  definput.import={'amt_cache'};
 
   % Parse input options
   [flags,kv]  = ltfatarghelper({},definput,varargin);
@@ -261,7 +261,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
   
   latdivision = [-20,0,20];  % lateral center angles of SPs
 
-  [s,qe,pe]=amtcache('get','fig13to15',flags.cachemode);
+  [s,qe,pe]=amt_cache('get','fig13to15',flags.cachemode);
   if isempty(s)
 
     s = data_baumgartner2013('pool', flags.cachemode);
@@ -299,7 +299,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
 
             end
         end
-        amtdisp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress');
+        amt_disp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress');
     end
 
     qe = mean(qe,3);
@@ -308,7 +308,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
       s(ll).pe = pe(ll,:);
       s(ll).qe = qe(ll,:);
     end 
-    amtcache('set','fig13to15',s,qe,pe);
+    amt_cache('set','fig13to15',s,qe,pe);
   end  
   ns = length(s);
   
@@ -528,7 +528,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
   
   dpol = 5;    % step size in deg
 
-  [s, D]=amtcache('get',package,flags.cachemode);
+  [s, D]=amt_cache('get',package,flags.cachemode);
   if isempty(s),
     s = data_baumgartner2013('pool', flags.cachemode);
     ns = length(s);
@@ -603,7 +603,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
 
         end
 
-        amtdisp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress')
+        amt_disp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress')
 
       end
 
@@ -617,7 +617,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
       s(ns+1).id = 'Pool';
 
     end
-    amtcache('set',package,s,D);
+    amt_cache('set',package,s,D);
   end
   % Output
   if nargout == 1
@@ -716,7 +716,7 @@ if flags.do_fig19 || flags.do_fig20
     end
     pol2{ii} = (polang(id1)+polang(id2)) /2;
     
-    amtdisp([' Span: ' num2str(dPol(ii)) ' deg.'],'progress');
+    amt_disp([' Span: ' num2str(dPol(ii)) ' deg.'],'progress');
     for ll = 1:length(s)
 
         s(ll).spdtfs = extractsp(lat,s(ll).Obj);

@@ -1,9 +1,9 @@
-function amtmex(varargin)
-%AMTMEX   Compile Mex/Oct interfaces
-%   Usage:  amtmex;
-%           amtmex(flags);
+function amt_mex(varargin)
+%amt_mex   Compile Mex/Oct interfaces
+%   Usage:  amt_mex;
+%           amt_mex(flags);
 %
-%   `amtmex` compiles AMT-related binaries on your system. 
+%   `amt_mex` compiles AMT-related binaries on your system. 
 %   
 %   Requirements
 %   ------------
@@ -18,7 +18,7 @@ function amtmex(varargin)
 %   Details
 %   -------
 %
-%   The action of `amtmex` is determined by one of the following flags:
+%   The action of `amt_mex` is determined by one of the following flags:
 %
 %     'compile'  Compile stuff. This is the default.
 %                In Matlab, all `comp_*.c` and `comp_*.cpp` files from theare
@@ -39,14 +39,14 @@ function amtmex(varargin)
 %                `clean` and `make clean` on Windows and other systems, respectively, 
 %                in the `bin` directory. 
 %
-%   See also: amtstart
+%   See also: amt_start
 
 %   AUTHOR : Peter Søndergaard.
 %   TESTING: NA
 %   REFERENCE: NA
 
 bp=mfilename('fullpath');
-bp=bp(1:end-6);
+bp=bp(1:end-7);
 
 defnopos.flags.command={'compile','clean'};
 [flags,kv]=ltfatarghelper({},defnopos,varargin);
@@ -71,7 +71,7 @@ if flags.do_clean
   end;
   
   s=sprintf('========= Cleaning %s interfaces ==========', extname);
-  amtdisp(s);
+  amt_disp(s);
   if isoctave
     deletefiles([bp,'oct'],'*.oct');
     deletefiles([bp,'oct'],'*.o');
@@ -80,14 +80,14 @@ if flags.do_clean
     deletefiles([bp,'mex'],['*.',mexext]);
   end;
 
-  amtdisp('========= Cleaning binary interfaces ==========');
+  amt_disp('========= Cleaning binary interfaces ==========');
   cd([bp,'bin']); 
   if ispc, 
     [~, output]=system('clean'); 
   else
     [~, output]=system('make clean');
   end
-  amtdisp(output);
+  amt_disp(output);
   
   if ~isoctave
     recycle(oldstate);
@@ -100,7 +100,7 @@ end;
 if flags.do_compile
 
   s=sprintf('========= Compiling %s interfaces ==========', extname);
-  amtdisp(s);
+  amt_disp(s);
       % Get the list of files.
   if isoctave
     ext='oct';
@@ -114,9 +114,9 @@ if flags.do_compile
   
   if compile_amt(bp,ext,filenames)>1;                
     s=sprintf('Error: The %s interfaces was not built.', extname);
-    amtdisp(s);
+    amt_disp(s);
   else
-    amtdisp('Done.');
+    amt_disp('Done.');
   end;
   
   if isoctave
@@ -129,14 +129,14 @@ if flags.do_compile
     
     mexdiff = cellfun(@(lEl) [lEl,'.c'],mexdiffstrip,'UniformOutput',0);
     if ~isempty(mexdiff)
-        amtdisp('========= Compiling MEX interfaces ==========')
+        amt_disp('========= Compiling MEX interfaces ==========')
         if compile_amt(bp,'mex',mexdiff)>1;                
             s=sprintf('Error: The %s interfaces was not built.', extname);
-            amtdisp(s);
+            amt_disp(s);
         else
             if movefile([bp,filesep,'mex',filesep,'*.mex'],...
                         [bp,filesep,'oct'],'f');
-               amtdisp('Done.');
+               amt_disp('Done.');
             else
                error(['Error: Compilation sucessful, but MEX files were not '...
                'moved from mex to oct directory. Check your write permissions.\n']); 
@@ -145,11 +145,11 @@ if flags.do_compile
     end
  end;
 
-  amtdisp('========= Compiling binary interfaces ==========');
+  amt_disp('========= Compiling binary interfaces ==========');
   cd([bp,'bin']); 
   [~, output]=system('make');  
-  amtdisp(output);
-  amtdisp('Done.');
+  amt_disp(output);
+  amt_disp('Done.');
  
 % Jump back to the original directory.
 cd(curdir);
@@ -189,7 +189,7 @@ for ii=1:numel(filenames)
     if isempty(objdirinfo) || (objdirinfo.datenum<L(1).datenum)
         
         s=sprintf('Compiling %s',filename);
-        amtdisp(s);
+        amt_disp(s);
         if isoctave
           if ~strcmpi(ext(1:3),'oct')
               mkoctfile('-mex','-I.','-I../src',filename);

@@ -375,7 +375,7 @@ switch command
                 % call decision
                 decision = feval(par.decision.name,decisioninputs{:});
               case 'ModelInitiative'
-                amtdisp(['Trial #' num2str(trialcounter) ', ModelInitiative on ' par.exp.directory],'volatile');
+                amt_disp(['Trial #' num2str(trialcounter) ', ModelInitiative on ' par.exp.directory],'volatile');
                 while ~exist(fullfile(par.exp.directory,'detector_out.csv'),'file');
                   pause(.1);
                 end

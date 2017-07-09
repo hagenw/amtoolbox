@@ -18,7 +18,7 @@ desired_delay_in_seconds  =     0.004;
 filter_order              =     4;
 bandwidth_factor          =     1.0;
 
-amtdisp(['Building analysis filterbank']);
+amt_disp(['Building analysis filterbank']);
 analyzer = hohmann2002(sampling_rate_hz, flow, ...
                             base_frequency_hz, fhigh,...
 			    filters_per_ERB, filter_order, bandwidth_factor);
@@ -26,12 +26,12 @@ analyzer = hohmann2002(sampling_rate_hz, flow, ...
 
 %%% Now create a synthesizer that can resynthesize the analyzer's output %%%
 
-amtdisp(['Building synthesizer for an analysis-synthesis delay of ', ...
+amt_disp(['Building synthesizer for an analysis-synthesis delay of ', ...
       num2str(desired_delay_in_seconds), ' seconds']);
 synthesizer = hohmann2002synth(analyzer, desired_delay_in_seconds);
 
 %%% Extract the synthesizer's parameters %%%
-amtdisp(['The synthesizers parameters:';...
+amt_disp(['The synthesizers parameters:';...
       '----------------------------']);
 delay = synthesizer.delay;
 mixer = synthesizer.mixer;
@@ -73,7 +73,7 @@ title('frequency response of the analysis-synthesis-system');
 xlabel('frequency / Hz');
 ylabel('system response level / dB');
 
-amtdisp('Figure 1 shows the impulse response of the analysis-synthesis system');
-amtdisp('in the time domain; figure 2 shows its frequency response.');
+amt_disp('Figure 1 shows the impulse response of the analysis-synthesis system');
+amt_disp('in the time domain; figure 2 shows its frequency response.');
 
 %OLDFORMAT

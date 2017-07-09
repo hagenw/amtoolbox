@@ -1,17 +1,17 @@
-function op1=amthelp(varargin)
-%AMTHELP Help on the AMToolbox
-%   Usage:  amthelp;
-%           v=amthelp('version');
-%           mlist=amthelp('modules');
+function op1=amt_help(varargin)
+%amt_help Help on the AMToolbox
+%   Usage:  amt_help;
+%           v=amt_help('version');
+%           mlist=amt_help('modules');
 %
-%   `amthelp` displays some general help on the AMToolbox.
+%   `amt_help` displays some general help on the AMToolbox.
 %
-%   `amthelp('version')` returns the version number.
+%   `amt_help('version')` returns the version number.
 %
-%   `amthelp('modules')` returns a cell array of installed modules and
+%   `amt_help('modules')` returns a cell array of installed modules and
 %   corresponding version numbers.
 %
-%   See also:  amtstart
+%   See also:  amt_start
 
 %   AUTHOR : Peter Søndergaard.  
 %   TESTING: NA
@@ -19,15 +19,15 @@ function op1=amthelp(varargin)
 
 % Verify that LTFAT has been installed
 if ~exist('ltfatarghelper','file')  
-    amtdisp('');
-    amtdisp('--- AMTOOLBOX - The Auditory Modeling toolbox. ---');
-    amtdisp('')
+    amt_disp('');
+    amt_disp('--- AMTOOLBOX - The Auditory Modeling toolbox. ---');
+    amt_disp('')
     error(['The toolbox require the LTFAT toolbox to properly function. ' ...
          'Please download and install it from http://ltfat.sourceforge.net,' ...
          'and then call the LTFATSTART command BEFORE you use the AMT.'])
 end;
 
-bp=amtbasepath;
+bp=amt_basepath;
 
 definput.keyvals.versiondata=[];
 definput.keyvals.modulesdata=[];
@@ -36,34 +36,34 @@ definput.flags.mode={'general','version','modules','authors'};
 [flags,kv]=ltfatarghelper({},definput,varargin);
 
 if flags.do_general
-  amtdisp(' ');
-  amtdisp('--- AMT - The Auditory Modeling Toolbox. ---');
-  amtdisp(' ')
+  amt_disp(' ');
+  amt_disp('--- AMT - The Auditory Modeling Toolbox. ---');
+  amt_disp(' ')
 
-  amtdisp(['Version ',kv.versiondata]);
-  amtdisp(' ');
-  amtdisp('Installed modules:');
-  amtdisp(' ');
-  amtdisp('Name:            Version:  Description');
-  modinfo=amthelp('modules');
+  amt_disp(['Version ',kv.versiondata]);
+  amt_disp(' ');
+  amt_disp('Installed modules:');
+  amt_disp(' ');
+  amt_disp('Name:            Version:  Description');
+  modinfo=amt_help('modules');
   for ii=1:length(modinfo);
     s=sprintf(' %-15s %7s  %s',modinfo{ii}.name,modinfo{ii}.version, ...
 	      modinfo{ii}.description);
-    amtdisp(s);
+    amt_disp(s);
   end;
 
-  amtdisp(' ')
+  amt_disp(' ')
   if isoctave
-    amtdisp('Type amthelp("modulename") where "modulename" is the name of one');
-    amtdisp('of the modules to see help on that module.');
+    amt_disp('Type amt_help("modulename") where "modulename" is the name of one');
+    amt_disp('of the modules to see help on that module.');
     
   else
-    amtdisp('Type "help modulename" where "modulename" is the name of one')
-    amtdisp('of the modules to see help on that module.') 
+    amt_disp('Type "help modulename" where "modulename" is the name of one')
+    amt_disp('of the modules to see help on that module.') 
 
   end; 
-  amtdisp(' ');
-  amtdisp('For other questions, please don''t hesitate to send an email to amtoolbox-help@lists.sourceforge.net.'); 
+  amt_disp(' ');
+  amt_disp('For other questions, please don''t hesitate to send an email to amtoolbox-help@lists.sourceforge.net.'); 
     
 end;
   

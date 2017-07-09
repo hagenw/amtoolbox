@@ -41,7 +41,7 @@ printMap = 1;
 %required computation time
 if preComp ==1
     filename='demo_cochlea.mat';
-    data=amtload('takanen2013',filename);
+    data=amt_load('takanen2013',filename);
     output= takanen2013(data.tests.cochlea,data.tests.fs,compType,printFigs,printMap);
     title(data.tests.scenario);
     set(gca,'Ytick',data.tests.ytickPos);set(gca,'YtickLabel',data.tests.ytickLab(end:-1:1));
@@ -49,7 +49,7 @@ if preComp ==1
 %otherwise, binaural input signals are used
 else
     filename='demo_binsig.mat';
-    data=amtload('takanen2013',filename);
+    data=amt_load('takanen2013',filename);
     output= takanen2013(data.tests.insig,data.tests.fs,compType,printFigs,printMap);
     title(data.tests.scenario);
     set(gca,'Ytick',data.tests.ytickPos);set(gca,'YtickLabel',data.tests.ytickLab(end:-1:1));

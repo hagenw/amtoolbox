@@ -81,7 +81,7 @@ function [E,varargout] = baumgartner2017( target,template,varargin )
 
 %% Check input
 
-definput.import={'baumgartner2014','baumgartner2014pmv2ppp','localizationerror','amtcache'};
+definput.import={'baumgartner2014','baumgartner2014pmv2ppp','localizationerror','amt_cache'};
 definput.keyvals.tempWin = 1; % temporal integration window in sec
 definput.flags.normalize = {'regular','normalize'};
 definput.flags.cueProcessing = {'intraaural','interaural'};
@@ -113,7 +113,7 @@ if flags.do_print
   if flags.do_nomrs
     kv.mrsmsp = 0;
   end
-  amtdisp(['Settings: PSGE = ' num2str(kv.do,'%1.0f') '; Gamma = ' ...
+  amt_disp(['Settings: PSGE = ' num2str(kv.do,'%1.0f') '; Gamma = ' ...
     num2str(kv.gamma,'%1.0u') '; Epsilon = ' num2str(kv.mrsmsp,'%1.0f') ' deg'])
 end
 
@@ -125,10 +125,10 @@ if isstruct(target) % Targets given in SOFA format
   [target,tang] = extractsp( kv.lat,target );
 % else
 %   fncache = ['latLookup_',template.GLOBAL_ListenerShortName];
-%   latLookup = amtcache('get',fncache,flags.cachemode);
+%   latLookup = amt_cache('get',fncache,flags.cachemode);
 %   if isempty(latLookup)
 %     latLookup = itd2anglelookuptable(template,template.Data.SamplingRate,'dietz2011');
-%     amtcache('set',fncache,latLookup)
+%     amt_cache('set',fncache,latLookup)
 %   end
 %   tarSig = squeeze(target);
 %   kv.lat = wierstorf2013estimateazimuth(tarSig,latLookup,'fs',kv.fs,'dietz2011','rms_weighting');

@@ -25,7 +25,7 @@ function [ur,fs]  = data_roenne2012(varargin)
 
 % TODO: explain "unitary response"
   
-s=amtload('roenne2012','ur.mat');
+s=amt_load('roenne2012','ur.mat');
 ur=s.ur;
 
 fs=30000;

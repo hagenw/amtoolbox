@@ -1,41 +1,41 @@
-function varargout=amtload(model,data,variable)
-%AMTLOAD Load auxiliary data of a model
-%   Usage: amtload(MODEL, DATA);
+function varargout=amt_load(model,data,variable)
+%amt_load Load auxiliary data of a model
+%   Usage: amt_load(MODEL, DATA);
 %
-%   `amtload(model, data)` loads the auxiliary data from the file `data`. The data will loaded 
+%   `amt_load(model, data)` loads the auxiliary data from the file `data`. The data will loaded 
 %   from the directory `model` located in the local `auxdata` directory given by
-%   `amtauxdatapath`. 
+%   `amt_auxdatapath`. 
 %
 %   If the file is not in the local `auxdata` directory, it will be downloaded from
-%   the web address given by `amtauxdataurl`.
+%   the web address given by `amt_auxdataurl`.
 %
 %   The following file types are supported:
 %     `.wav`: output will be as that from `audioread`
 %     `.mat`: output as that as from `load`
 %     others: output is the absolute filename
 %
-%   `amtload(model, data, variable)` loads just a particular `variable`
+%   `amt_load(model, data, variable)` loads just a particular `variable`
 %   from the file. 
 %
-%   See also: amtauxdatapath amtauxdataurl
+%   See also: amt_auxdatapath amt_auxdataurl
 %
 
   
 %   Author: Piotr Majdak, 2015
 
-localfn=fullfile(amtauxdatapath,model,data);
+localfn=fullfile(amt_auxdatapath,model,data);
   % file not found? create directories, and download!
 if ~exist(localfn,'file')
     % create dir if not existing
-  if ~exist(fullfile(amtauxdatapath,model),'dir'), 
-    [success,msg]=mkdir(fullfile(amtauxdatapath,model));
+  if ~exist(fullfile(amt_auxdatapath,model),'dir'), 
+    [success,msg]=mkdir(fullfile(amt_auxdatapath,model));
     if success~=1
       error(msg);
     end
   end
     % download
-  amtdisp(['Model: ' model '. Downloading auxiliary data: ' data],'progress');
-  webfn=[amtauxdataurl '/' model '/' data];
+  amt_disp(['Model: ' model '. Downloading auxiliary data: ' data],'progress');
+  webfn=[amt_auxdataurl '/' model '/' data];
   webfn(strfind(webfn,'\'))='/';
   webfn=regexprep(webfn,' ','%20');        
   [~,stat]=urlwrite(webfn,localfn);

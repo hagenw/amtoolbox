@@ -149,7 +149,7 @@ if isempty(hrtf)
     % load HRTFs, see:
     % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
 %     [~,path] = download_hrtf('wierstorf2011_3m');
-    irs=amtload('wierstorf2013', 'QU_KEMAR_anechoic_3m.mat');
+    irs=amt_load('wierstorf2013', 'QU_KEMAR_anechoic_3m.mat');
     check_irs(irs.irs);
     hrtf = fix_irs_length(irs.irs,conf);
 end
@@ -159,7 +159,7 @@ fs = hrtf.fs;
 if isempty(lookup)
     % load lookup table to map ITD values of the model to azimuth angles.
     % the lookup table was created using the same HRTF database
-    lookup = amtload('wierstorf2013','itd2anglelookuptable.mat');
+    lookup = amt_load('wierstorf2013','itd2anglelookuptable.mat');
 end
 
 
@@ -191,7 +191,7 @@ conf.resolution = resolution;
 % 700 ms white noise burst
 sig_noise = sig_whitenoiseburst(fs);
 for ii=1:length(x)
-    if showprogress, amtdisp([num2str(ii) ' of ' num2str(length(x))],'progress'); end
+    if showprogress, amt_disp([num2str(ii) ' of ' num2str(length(x))],'progress'); end
     for jj=1:length(y)
         X = [x(ii) y(jj) 0];
         if strcmpi('circle',array) && norm(X)>L/2

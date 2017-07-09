@@ -26,7 +26,7 @@ definput.keyvals.c2 = 1;
 [flags,kv]=ltfatarghelper({'c2'},definput,varargin);
 
 % if isempty(varargin) || not(isempty(varargin)) && not(isstruct(varargin{1}))
-%   definput.import={'baumgartner2016','amtcache'};
+%   definput.import={'baumgartner2016','amt_cache'};
 %   definput.keyvals.c2 = 1;
 %   [flags,kv]=ltfatarghelper({'c2'},definput,varargin);
 % else % kv and flags directly transfered

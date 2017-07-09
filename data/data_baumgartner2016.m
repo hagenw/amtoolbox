@@ -171,7 +171,7 @@ if flags.do_baumgartner2014
   end
   cachename = [cachename '_mgs' num2str(kv.mgs)]; 
 
-  c = amtcache('get',cachename,flags.cachemode);
+  c = amt_cache('get',cachename,flags.cachemode);
   if isempty(c) %|| not(isequal(c.kv,kv))
 
     % reset listener-specific MRS to default
@@ -179,12 +179,12 @@ if flags.do_baumgartner2014
       data(ii).mrs = kv.mrsmsp;
     end
 
-    amtdisp('Calibration procedure started. Please wait!','progress')
+    amt_disp('Calibration procedure started. Please wait!','progress')
     data = baumgartner2016calibration(data,'argimport',flags,kv);
 
     c.data = rmfield(data,{'Obj','fs','itemlist','target','response'}); % reduce filesize
     c.kv = kv;
-    amtcache('set',cachename,c)
+    amt_cache('set',cachename,c)
 
   else
 
@@ -208,7 +208,7 @@ else % Loca Level
   
   %% Extract localization data
 
-  d = amtload('baumgartner2016','data.mat');
+  d = amt_load('baumgartner2016','data.mat');
 
   if flags.do_all
 
@@ -302,7 +302,7 @@ else % Loca Level
         cachename = [cachename '_tiwin' num2str(kv.tiwin*1e3) 'ms']; 
       end
 
-      c = amtcache('get',cachename,flags.cachemode);
+      c = amt_cache('get',cachename,flags.cachemode);
       if isempty(c) %|| not(isequal(c.kv,kv))
 
         c.SL = 50; % dB SL of targets
@@ -340,12 +340,12 @@ else % Loca Level
           data(ii).mrs = kv.mrsmsp;
         end
 
-        amtdisp('Calibration procedure started. Please wait!','progress')
+        amt_disp('Calibration procedure started. Please wait!','progress')
         data = baumgartner2016calibration(data,'argimport',flags,kv,'c',c);
 
         c.data = rmfield(data,{'Obj','fs','itemlist','target','response'}); % reduce filesize
         c.kv = kv;
-        amtcache('set',cachename,c)
+        amt_cache('set',cachename,c)
 
       else
 

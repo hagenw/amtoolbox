@@ -38,7 +38,7 @@ definput.flags.condition = {'BB','LP','W'};
 
 
 %% Extract data
-x=amtload('majdak2013','data.mat');
+x=amt_load('majdak2013','data.mat');
 
 C = find(ismember(x.condition,flags.condition));
 

@@ -81,7 +81,7 @@ end;
 %% Load ITD-to-angle look-up
 
 if flags.do_itd2anglelookuptable
-  data=amtload('wierstorf2013','itd2anglelookuptable.mat');
+  data=amt_load('wierstorf2013','itd2anglelookuptable.mat');
 end
 
 %% ------ Data points from the paper ------------------------------------

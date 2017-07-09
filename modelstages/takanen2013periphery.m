@@ -82,7 +82,7 @@ end
 
 %load a vector of frequency specific delays computed for the Verhulst model
 %outputs at fc
-x=amtload('takanen2013','cochleardelays.mat');
+x=amt_load('takanen2013','cochleardelays.mat');
 cochlear.delaysV = x.velocitydelays;
 
 %use the velocity of the basilar membrane movement as input to CN model

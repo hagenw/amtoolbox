@@ -54,15 +54,15 @@
 %     - data_joergensen2011: completion of data
 %     - exp_baumgartner2014: new figures, compatibility improved
 %     - demo_hohmann2002: new figures
-%     - installation simplified (amtmex does all the installation now)
+%     - installation simplified (amt_mex does all the installation now)
 % 
 %   Version 0.9.7 (10.6.2015)
 %   =========================
 % 
 %   New:
-%     - Caching of data: see amtcache and the cache directory.
-%     - Automatic download of auxiliary data. See amtload and the auxdata directory.
-%     - Control for messages output in the command line. See amtdisp.
+%     - Caching of data: see amt_cache and the cache directory.
+%     - Automatic download of auxiliary data. See amt_load and the auxdata directory.
+%     - Control for messages output in the command line. See amt_disp.
 %     - SOFA files for HRTFs: requires SOFA API, see SOFAload.
 %     - Models: zilany2014, joergensen2011, joergensen2013, georganti2013
 %     - Signals: sig_joergensen2011
@@ -72,7 +72,7 @@
 %   Structure changes:
 %     - arg\_ functions moved to arg directory, comp\_ functions moved to mex, directory comp removed
 %     - plot* functions renamed to plot_* and moved to plot directory
-%     - amtstart and amtmex improved
+%     - amt_start and amt_mex improved
 %     - readme file for sourceforge added
 %     - reference directory removed (it was a directory with original contributions to the AMT)
 % 
@@ -86,11 +86,11 @@
 %     - wierstorf2013: additional files for HRTF handling removed, load the itd-to-angle look-up table with data_wierstorf2013.m now. 
 %     - hrtf/enzner2008 removed (enzner2008 data are in auxdata now)
 %     - langendijk2002: data and HRTFs removed from repository (are required data)
-%     - changed the order of announcements on amtstart
+%     - changed the order of announcements on amt_start
 %     - jelfs2011: removed dependency on read_hrir
 %     - plotjelfs2011 moved to demo_jelfs2011.m (plotjelfs2011 was actually a demo).
 %     - progress output supressed in the documentation
-%     - amtdisp introduced for displaying information depending on the start-up condition of the AMT.
+%     - amt_disp introduced for displaying information depending on the start-up condition of the AMT.
 %     - enzner2008 and exp_enzner2008 split in the model and experiment part.
 %     - exp_georganti2013 works for me. Documentation is missing yet.
 %     - may2011 documentation integrated

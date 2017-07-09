@@ -51,7 +51,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
   
   % If target or interferer are cell arrays, load HRTFs.
   if iscell(target)
-    X=SOFAload(fullfile(amtbasepath,'hrtf',mfilename,[target{2} '.sofa']));
+    X=SOFAload(fullfile(amt_basepath,'hrtf',mfilename,[target{2} '.sofa']));
     idx=find(X.SourcePosition(:,1)==target{1} & X.SourcePosition(:,2)==0);
     target=squeeze(X.Data.IR(idx,:,:))';
     target=postpad(target,size(target,1)+kv.pad);
@@ -60,7 +60,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
   
   if iscell(interferer)
     azims=numel(interferer{1});
-    X=SOFAload(fullfile(amtbasepath,'hrtf',mfilename,[interferer{2} '.sofa']));
+    X=SOFAload(fullfile(amt_basepath,'hrtf',mfilename,[interferer{2} '.sofa']));
     for ii=1:azims
       idx(ii)=find(X.SourcePosition(:,1)==mod(interferer{1}(ii),360) & X.SourcePosition(:,2)==0);
     end

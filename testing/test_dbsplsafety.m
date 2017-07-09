@@ -6,7 +6,7 @@ function test_failed=test_dbsplsafety
 %
 %  Any function using DBSPL or SETDBSPL should be tested by this tester.
 
-amtdisp(' ===============  TEST_DBSPLSAFETY ================');
+amt_disp(' ===============  TEST_DBSPLSAFETY ================');
 
 test_failed=0;
 
@@ -34,7 +34,7 @@ for ii=1:length(refl)
   res=norm(y-x);
   [test_failed,fail]=ltfatdiditfail(res,test_failed);  
   s=sprintf('BASIC     %0.5g %0.5g %s',dboffset,res,fail);
-  amtdisp(s);   
+  amt_disp(s);   
   
 end;
 
@@ -58,7 +58,7 @@ for ii=1:length(refl)
   res=norm(res(:));
   [test_failed,fail]=ltfatdiditfail(res,test_failed);
   s=sprintf('ADAPTLOOP %0.5g %0.5g %s',dboffset,res,fail);
-  amtdisp(s);
+  amt_disp(s);
 
 end;
 
@@ -83,7 +83,7 @@ for ii=1:length(refl)
   res=norm(res(:));
   [test_failed,fail]=ltfatdiditfail(res,test_failed,1e-6);
   s=sprintf('DRNL      %0.5g %0.5g %s',dboffset,res,fail);
-  amtdisp(s);
+  amt_disp(s);
 
 end;
 

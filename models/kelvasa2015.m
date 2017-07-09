@@ -119,7 +119,7 @@ function [results] = kelvasa2015(insig,fs,varargin)
       definput.flags.plot_stage_fig = {'plot_stage_fig','no_plot_stage_fig',};
    
     % Import default arguments from other functions
-    definput.import={'kelvasa2015','amtcache'};
+    definput.import={'kelvasa2015','amt_cache'};
                         
     [flags,kv]  = ltfatarghelper({},definput,varargin);   
 
@@ -213,12 +213,12 @@ end
                    num2str(kv.localizationModelCalibStimulusLevelDB),...
                    'dB_calibration_', kv.identifier];
            %Check for preprocessed calibration data  
-           [mappingData] = amtcache('get', calibDataFilename, flags.cachemode);
+           [mappingData] = amt_cache('get', calibDataFilename, flags.cachemode);
            if isempty(mappingData)          
                 debug('Recomputing localization model calibration', flags);       
                 [mappingData] =    kelvasa2015calibratemapping('argimport',...
                                                             flags,kv);
-                amtcache('set',calibDataFilename,mappingData);
+                amt_cache('set',calibDataFilename,mappingData);
            end
 
        
@@ -249,7 +249,7 @@ end
 %%
 function debug(text_str,flags)
   if flags.do_debug 
-    amtdisp(text_str); end
+    amt_disp(text_str); end
 end
 
 

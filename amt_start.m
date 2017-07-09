@@ -1,9 +1,9 @@
-function amtstart(varargin)
-%AMTSTART   Start the Auditory Modeling Toolbox
-%   Usage:  amtstart;
-%           amtstart(flags);
+function amt_start(varargin)
+%amt_start   Start the Auditory Modeling Toolbox
+%   Usage:  amt_start;
+%           amt_start(flags);
 %
-%   `amtstart` starts the AMT. This command must be
+%   `amt_start` starts the AMT. This command must be
 %   run before using any of the function in the AMT.
 %
 %   Requirements to run the AMT
@@ -26,7 +26,7 @@ function amtstart(varargin)
 %      On Linux, type `sudo apt-get install python-scipy python-numpy`.
 %      On Windows, intall python from <https://www.python.org/>, add python.exe to the Windows search path,
 %      and install the packages separately.
-%   5) |amtmex| executed without any errors. See |amtmex| for compiler requirements.
+%   5) |amt_mex| executed without any errors. See |amt_mex| for compiler requirements.
 %   
 %   Note that some models may further require other toolboxes. See the corresponding documentation for more details. 
 %
@@ -58,15 +58,15 @@ function amtstart(varargin)
 %                   not available. Do not connect to the internet. 
 % 
 %   Many AMT functions support the cache mode as input flag in order to 
-%   overwrite the global cache mode. See |amtcache| for more details.
+%   overwrite the global cache mode. See |amt_cache| for more details.
 %
 %
 %   Auxiliary data
 %   --------------
 % 
 %   Most of the models require *auxiliary data*. The AMT will download these data on-demand. 
-%   The download URL for the auxiliary data is given by `amtauxdataurl`. 
-%   The target directory for the auxiliary data is given by `amtauxdatapath`. 
+%   The download URL for the auxiliary data is given by `amt_auxdataurl`. 
+%   The target directory for the auxiliary data is given by `amt_auxdatapath`. 
 %   If you want to run the AMT offline, download the auxiliary data first. 
 %
 %   Some of the auxiliary data are *HRTFs*. The AMT will download the HRTFs on-demand.
@@ -90,7 +90,7 @@ function amtstart(varargin)
 %
 %   Go to http://amtoolbox.sourceforge.net/doc.php for the full documentation.
 % 
-%   See also:  amtmex amtload amtcache
+%   See also:  amt_mex amt_load amt_cache
 %
 
   
@@ -98,7 +98,7 @@ function amtstart(varargin)
 
 
 %% Start AMT
-bp=amtbasepath;
+bp=amt_basepath;
 
 % Search for LTAFT package
 if ~exist('ltfatstart','file')
@@ -163,7 +163,7 @@ end
 %% SOFA package
 
 % Search for SOFA package
-basepath=which('amtstart');
+basepath=which('amt_start');
 basepath=basepath(1:end-11);
 if ~exist('SOFAstart','file')
   sofapath=fullfile(basepath,'thirdparty','SOFA','API_MO');
@@ -191,7 +191,7 @@ end
 %% SFS package
 
 % Search for the package
-basepath=which('amtstart');
+basepath=which('amt_start');
 basepath=basepath(1:end-11);
 if ~exist('SFS_start','file')
   sfspath=fullfile(basepath,'thirdparty','sfs');
@@ -270,39 +270,39 @@ for ii=1:length(d)
 end;
 
 %% define default start-up behaviour
-flags=amtflags(varargin); % amtdisp and other amt-related functions work now!
+flags=amt_flags(varargin); % amt_disp and other amt-related functions work now!
 
 %% ---------- load information into ltfathelp ------------
 
 % As comp is now in the path, we can call ltfatarghelper
-ltfatsetdefaults('amthelp','versiondata',amt_version,...
+ltfatsetdefaults('amt_help','versiondata',amt_version,...
                  'modulesdata',modules);
 
 %% Set the correct path to remote HRTFs
 if exist('SOFAdbURL','file'),
-    SOFAdbURL(['http://www.sofacoustics.org/data/amt-' amthelp('version') '/hrtf']);
+    SOFAdbURL(['http://www.sofacoustics.org/data/amt-' amt_help('version') '/hrtf']);
 end
 
 %% Initialize aux data, cache, and display starting information
-amtdisp('  ');
-% amtdisp('  ');
-amtdisp('AMT configuration:'); 
-amtdisp(['  Auxiliary data (local): ' amtauxdatapath]);
-amtdisp(['  Auxiliary data (web): ' amtauxdataurl]);
+amt_disp('  ');
+% amt_disp('  ');
+amt_disp('AMT configuration:'); 
+amt_disp(['  Auxiliary data (local): ' amt_auxdatapath]);
+amt_disp(['  Auxiliary data (web): ' amt_auxdataurl]);
 if strcmp(flags.cachemode,'global'), flags.cachemode='normal'; end
-amtcache('setMode',flags.cachemode);
+amt_cache('setMode',flags.cachemode);
 switch flags.cachemode
   case 'normal'
-    amtdisp('  Cache mode: Download precalculated results. Examples:');
-    amtdisp('              exp_model(...)        shows precalculated results');
-    amtdisp('              exp_model(...,''redo'') enforces recalculation');
+    amt_disp('  Cache mode: Download precalculated results. Examples:');
+    amt_disp('              exp_model(...)        shows precalculated results');
+    amt_disp('              exp_model(...,''redo'') enforces recalculation');
   case 'localonly'
-    amtdisp('  Cache mode: Use local cache or recalculate. Do not connect to remote cache.');
+    amt_disp('  Cache mode: Use local cache or recalculate. Do not connect to remote cache.');
   case 'cached'
-    amtdisp('  Cache mode: Use cache or throw error. Do not recalcalculate.');
+    amt_disp('  Cache mode: Use cache or throw error. Do not recalcalculate.');
   case 'redo'
-    amtdisp('  Cache mode: Recalculate always (be patient!).');
+    amt_disp('  Cache mode: Recalculate always (be patient!).');
 end
-amtdisp(' ');
-amtdisp('Type "help amtstart" for more details...');
+amt_disp(' ');
+amt_disp('Type "help amt_start" for more details...');
 

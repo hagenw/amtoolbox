@@ -105,10 +105,10 @@ elseif flags.do_fig1_NpiS0
     elseif flags.do_nfc1000
         data = [-16 -17.5 -16.5 -18 -18 -17 -16 -19.5 -22.5];
     elseif flags.do_nfc2000
-        amtdisp('Not available');
+        amt_disp('Not available');
         data = [];
     elseif flags.do_nfc4000
-        amtdisp('Not available');
+        amt_disp('Not available');
         data = [];
     end
         

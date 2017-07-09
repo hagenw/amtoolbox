@@ -90,7 +90,7 @@ fs = 48000;     % sampling frequency
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-dtfdata=amtload('langendijk2002',[listener '_data.mat']);
+dtfdata=amt_load('langendijk2002',[listener '_data.mat']);
 % loads hM data for all conditions 
 % data can be recalculated by calling data_langendijk2002('expdata')
 

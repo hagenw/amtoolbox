@@ -28,7 +28,7 @@ for ss = 1:length(s)
   scalib(ss).u = fminsearch(@(u) evaldist(s(ss),u,kv),s(ss).u,...
     optimset('MaxIter',50,'TolX',0.001)...
     );
-  amtdisp([num2str(ss,'%2.0u') ' of ' num2str(length(s),'%2.0u') ' calibrated.'],'progress')
+  amt_disp([num2str(ss,'%2.0u') ' of ' num2str(length(s),'%2.0u') ' calibrated.'],'progress')
 
 end
 

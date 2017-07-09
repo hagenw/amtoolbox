@@ -21,7 +21,7 @@ function [dSRT] = joergensen2011sim(NSpeechsamples,varargin)
 %   References: joergensen2011predicting
 
 definput.flags.type = {'missingflag','fig5','fig6'};
-definput.import={'amtcache'};
+definput.import={'amt_cache'};
 
 [flags,~]  = ltfatarghelper({},definput,varargin);
 
@@ -34,14 +34,14 @@ end;
 %% ------- simulate experiment with reverberation
 if flags.do_fig5
   
-    x=amtload('joergensen2011','Danish_CLUE_10sentence_samples_22kHz.mat');
+    x=amt_load('joergensen2011','Danish_CLUE_10sentence_samples_22kHz.mat');
     sentenceArray=x.sentenceArray;
     
-    result=amtcache('get',['fig5 NSpeechsamples=' num2str(NSpeechsamples)],flags.cachemode);
+    result=amt_cache('get',['fig5 NSpeechsamples=' num2str(NSpeechsamples)],flags.cachemode);
     
     if isempty(result)
 
-      amtdisp(['joergensen2011 started: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress')
+      amt_disp(['joergensen2011 started: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress')
       for q = 1:NSpeechsamples
 
           x = sentenceArray{q}';
@@ -61,7 +61,7 @@ if flags.do_fig5
           N = length(t);
 
           % load the noise file
-          noise_glob = amtload('joergensen2011','SSN_CLUE_22kHz.wav');
+          noise_glob = amt_load('joergensen2011','SSN_CLUE_22kHz.wav');
 
           Nsegments = floor(length(noise_glob)/N);
           % pick a random segment from the noise file
@@ -117,7 +117,7 @@ if flags.do_fig5
               end
 
           end
-          amtdisp(['sentence nr: ' num2str(q) '/' num2str(NSpeechsamples)],'progress');
+          amt_disp(['sentence nr: ' num2str(q) '/' num2str(NSpeechsamples)],'progress');
 
       end
 
@@ -125,7 +125,7 @@ if flags.do_fig5
       result.SNRenvs = SNRenvs;
       result.conditions =conditions;
       result.SNRs =SNRs;
-      amtcache('set',['fig5 NSpeechsamples=' num2str(NSpeechsamples)],result);
+      amt_cache('set',['fig5 NSpeechsamples=' num2str(NSpeechsamples)],result);
     end
     
     %% Average across speech samples
@@ -140,10 +140,10 @@ end
 
 if flags.do_fig6
     % Loads a cell array with 10 sentences from the CLUE material
-    x=amtload('joergensen2011','Danish_CLUE_10sentence_samples_22kHz.mat');
+    x=amt_load('joergensen2011','Danish_CLUE_10sentence_samples_22kHz.mat');
     sentenceArray=x.sentenceArray;
     
-    amtdisp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress')    
+    amt_disp(['start: ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress')    
     
     for q = 1:NSpeechsamples
         
@@ -164,7 +164,7 @@ if flags.do_fig6
         N = length(t);
         
         % load the noise file
-        noise_glob = amtload('joergensen2011','SSN_CLUE_22kHz.wav');
+        noise_glob = amt_load('joergensen2011','SSN_CLUE_22kHz.wav');
         
         Nsegments = floor(length(noise_glob)/N);
         % pick a random segment from the noise file
@@ -224,7 +224,7 @@ if flags.do_fig6
             end
             
         end
-        amtdisp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress');
+        amt_disp(['sentence nr: ' num2str(q) ' ' datestr(now, 'dd-mm-yyyy HH:MM:SS')],'progress');
         
     end
     
@@ -268,6 +268,6 @@ H=fft(h, Ly2);		    % Fast Fourier transform
 Y=X.*H;        	           
 y=real(ifft(Y, Ly2));       % Inverse fast Fourier transform
 y=y(1:1:Ly);                % Take just the first N elements
-% amtdisp(['rms before scaling: ', num2str(20*log10(rms(y)))]);
+% amt_disp(['rms before scaling: ', num2str(20*log10(rms(y)))]);
 m=m/max(abs(y));
 y=m*y;

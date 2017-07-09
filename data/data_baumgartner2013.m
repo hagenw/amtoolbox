@@ -78,7 +78,7 @@ function data = data_baumgartner2013(varargin)
 % Define input flags
 definput.flags.type = {'missingflag','tab1','pool'};
 definput.flags.HRTFformat = {'sofa','ari'};
-definput.import={'amtcache'};
+definput.import={'amt_cache'};
 
 
 % Parse input options
@@ -118,7 +118,7 @@ if flags.do_tab1 || flags.do_pool
     data=cell2struct(listeners,f,2);
 
     if flags.do_tab1
-      amtdisp('Note that NH68 and NH69 are the same.')
+      amt_disp('Note that NH68 and NH69 are the same.')
     end
     
 end

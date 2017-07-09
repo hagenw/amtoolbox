@@ -65,7 +65,7 @@ energyIn(:,limit1:limit2) =0;
 rmsOrig = (sqrt((ones(1,size(energyIn,1))*(energyIn.^2))./size(energyIn,1)));
 %scale the "what" cues based on average values obtained with a pink noise
 %signal reproduced at 60 dB SPL
-x=amtload('takanen2013','periphenergyaverages.mat');
+x=amt_load('takanen2013','periphenergyaverages.mat');
 averageEnerg=x.averageEnerg;
 scaledEnergy = energyIn./(ones(dims(1),1)*averageEnerg);
 
@@ -105,7 +105,7 @@ grad = grad.*(grad>0);
 %the average energy over long time window and the short time derivative
 %need to be adjusted to the same range. This is done using the rms values
 %of those energies for a pink noise burst in a concert hall
-x=amtload('takanen2013','onsetmultp.mat');
+x=amt_load('takanen2013','onsetmultp.mat');
 coeff=x.coeff;
 %compute the average cue across frequencies from the gradient by weighting
 %the lowest frequencies more

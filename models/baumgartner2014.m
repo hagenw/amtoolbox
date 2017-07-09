@@ -146,7 +146,7 @@ if flags.do_print
   if flags.do_nomrs
     kv.mrsmsp = 0;
   end
-  amtdisp(['Settings: PSGE = ' num2str(kv.do,'%1.0f') '; Gamma = ' ...
+  amt_disp(['Settings: PSGE = ' num2str(kv.do,'%1.0f') '; Gamma = ' ...
     num2str(kv.gamma,'%1.0u') '; Epsilon = ' num2str(kv.mrsmsp,'%1.0f') ' deg'])
 end
 

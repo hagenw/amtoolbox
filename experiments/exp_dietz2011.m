@@ -63,7 +63,7 @@ if flags.do_missingflag
 end;
 
 % Load polynomial lookup data for converting ITD to azimuth
-lookup = amtload('dietz2011','itd2anglelookuptable.mat');
+lookup = amt_load('dietz2011','itd2anglelookuptable.mat');
 
 if flags.do_fig3
 
@@ -380,7 +380,7 @@ end;
 
 if flags.do_fig6_spille2013
   
-  signal=amtload('dietz2011','s123456.wav');
+  signal=amt_load('dietz2011','s123456.wav');
   fs=44100;
   s_pos =[-75 -40 -10 10 40 75];
 
@@ -394,7 +394,7 @@ if flags.do_fig6_spille2013
   % convert interaural information into azimuth
   itd_unwrapped = ...
       dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst_lp,2.5);
-  lookup = amtload('dietz2011','itd2anglelookuptable.mat');
+  lookup = amt_load('dietz2011','itd2anglelookuptable.mat');
   angl=itd2angle(itd_unwrapped,lookup);
 
   h_ic=zeros(91,12);

@@ -40,7 +40,7 @@ if not(isfield(kv,'latseg'))
 end
 
 if not(isfield(s,'target'))
-  amtdisp('Calibration accuracy could be enhanced by providing the target polar-angles.')
+  amt_disp('Calibration accuracy could be enhanced by providing the target polar-angles.')
 end
 
 if not(exist('TolX','var'))
@@ -54,7 +54,7 @@ for ss = 1:length(s)
     optimset('MaxIter',50,'TolX',TolX)...
     );
 %   [~,scalib(ss).qe_pred,scalib(ss).pe_pred] = evaldist(s(ss),S,kv);
-  amtdisp([num2str(ss,'%2.0u') ' of ' num2str(length(s),'%2.0u') ' calibrated.'],'progress')
+  amt_disp([num2str(ss,'%2.0u') ' of ' num2str(length(s),'%2.0u') ' calibrated.'],'progress')
 
 end
 

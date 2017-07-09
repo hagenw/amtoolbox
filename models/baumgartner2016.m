@@ -202,7 +202,7 @@ end
 
 %% DTF filtering
 if ~isequal(kv.fs,kv.fsstim)
-    amtdisp('Sorry, sampling rate of stimulus and HRIRs must be the same!')
+    amt_disp('Sorry, sampling rate of stimulus and HRIRs must be the same!')
     return
 end
 
@@ -269,7 +269,7 @@ if kv.do == 1 && flags.do_psge
     
 else
 
-  amtdisp('Cue extraction different to baumgartner2014','progress')
+  amt_disp('Cue extraction different to baumgartner2014','progress')
    
   if kv.do == 1 && flags.do_dcn% DCN inspired feature extraction
     for ch = 1:size(mreptar,3)
@@ -297,7 +297,7 @@ if flags.do_isd && not(flags.do_intensityweighting) && not(flags.do_diff)
 
 else
   
-  amtdisp('Comparison process different to baumgartner2014','progress')
+  amt_disp('Comparison process different to baumgartner2014','progress')
   
   if flags.do_diff
     greptar = diff(greptar);
@@ -375,8 +375,8 @@ if length(kv.fiberTypes) == 3
   N(:,2) = max(N(:,2) - N(:,3),0);
   N(:,1) = N(:,1) - (N(:,2)+N(:,3));
   N = sum(N);
-%   amtdisp(['Selected fiber type: ' num2str(N(1),'%i') 'low, ' num2str(N(2),'%i') ' mid, ' num2str(N(3),'%i') ' high'],'progress')
-  fileID = fopen(fullfile(amtbasepath,'modelstages','baumgartner2016fiberTypeCounter'),'a');
+%   amt_disp(['Selected fiber type: ' num2str(N(1),'%i') 'low, ' num2str(N(2),'%i') ' mid, ' num2str(N(3),'%i') ' high'],'progress')
+  fileID = fopen(fullfile(amt_basepath,'modelstages','baumgartner2016fiberTypeCounter'),'a');
   fprintf(fileID,'%i, %i, %i\n',N(1),N(2),N(3));
   fclose(fileID);
 
@@ -426,7 +426,7 @@ if flags.do_isd && flags.do_sigmoid
 
 else
   
-  amtdisp('Similarity estimation different to baumgartner2014','progress')
+  amt_disp('Similarity estimation different to baumgartner2014','progress')
   
   if flags.do_zilany2014 && not(flags.do_sigmoid || flags.do_dcn)
     sigma = sigma/10;
@@ -476,7 +476,7 @@ if kv.prior==0
   
 else
   
-%   amtdisp('Sensorimotor mapping different to baumgartner2014','progress')
+%   amt_disp('Sensorimotor mapping different to baumgartner2014','progress')
   
   if flags.do_regular
       rang0 = ceil(min(kv.polsamp)*0.2)*5;    % ceil to 5 deg
@@ -557,7 +557,7 @@ if isempty([flags.errorflag,flags.ppp])
         try
           varargout{3} = tang;
         catch
-          amtdisp('SOFA Object of target DTFs is required to output target angles.')
+          amt_disp('SOFA Object of target DTFs is required to output target angles.')
         end
       end
   end

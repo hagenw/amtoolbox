@@ -35,7 +35,7 @@ function [ANdata,vFreq] = zilany2007humanized(stim_level,stim,fsstim,fsmod,varar
 %   Requirements and installation:
 %   ------------------------------
 %
-%   1) Compiled mex files (run `amtmex`)
+%   1) Compiled mex files (run `amt_mex`)
 %   
 %   References: roenne2012modeling zilany2007representation
 

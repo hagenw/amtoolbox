@@ -42,7 +42,7 @@ definput.flags.condition = {'Learn_M','Learn_H','HMD_M','HMD_H','Dark_M','Dark_H
 
 
 %% Extract data
-x=amtload('majdak2010','data.mat');
+x=amt_load('majdak2010','data.mat');
 
 C = find(ismember(x.condition,flags.condition));
 

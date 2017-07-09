@@ -41,7 +41,7 @@ function exp_joergensen2011(varargin)
 %
 %   References: joergensen2011predicting
 
-definput.import={'amtcache'};
+definput.import={'amt_cache'};
 definput.flags.type={'missingflag','fig5','fig6'};
 definput.flags.plot={'plot','noplot'};
 
@@ -58,11 +58,11 @@ NSpeechsamples = 10; % specify the number of speech samples to be used fro the s
 %% ------ FIG 5 -----------------------------------------------------------
 if flags.do_fig5;
 
-  dSRT = amtcache('get', ['fig5_' num2str(NSpeechsamples) 'sntcs'], flags.cachemode);
+  dSRT = amt_cache('get', ['fig5_' num2str(NSpeechsamples) 'sntcs'], flags.cachemode);
 
   if isempty(dSRT)
     dSRT = joergensen2011sim(NSpeechsamples,'fig5');
-    amtcache('set',['fig5_' num2str(NSpeechsamples) 'sntcs'],dSRT);
+    amt_cache('set',['fig5_' num2str(NSpeechsamples) 'sntcs'],dSRT);
   end;
         
   if flags.do_plot
@@ -73,11 +73,11 @@ end;
 %% ------ FIG 6 -----------------------------------------------------------
 if flags.do_fig6;
 
-  dSRT = amtcache('get', ['fig6_' num2str(NSpeechsamples) 'sntcs'], flags.cachemode);
+  dSRT = amt_cache('get', ['fig6_' num2str(NSpeechsamples) 'sntcs'], flags.cachemode);
   if isempty(dSRT)
 
     dSRT = joergensen2011sim(NSpeechsamples,'fig6');
-		amtcache('set',['fig6_' num2str(NSpeechsamples) 'sntcs'],dSRT);
+		amt_cache('set',['fig6_' num2str(NSpeechsamples) 'sntcs'],dSRT);
   end;
         
   if flags.do_plot

@@ -80,7 +80,7 @@ function plot_kelvasa2015(data,varargin)
       definput.flags.plot_stage_fig = {'no_plot_stage_fig','plot_stage_fig'};
    
     % import default arguments from other functions
-    definput.import={'kelvasa2015','amtcache'};
+    definput.import={'kelvasa2015','amt_cache'};
                         
     [flags,kv]  = ltfatarghelper({},definput,varargin);
     

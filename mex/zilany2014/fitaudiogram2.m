@@ -41,10 +41,10 @@ function [Cohc,Cihc,OHC_Loss]=fitaudiogram2(FREQUENCIES,dBLoss,species,Dsd_OHC_L
 
 switch species
     case 1
-        amtdisp('Calculating audiogram for cat version of AN model')
+        amt_disp('Calculating audiogram for cat version of AN model')
         load THRESHOLD_ALL_CAT;
     case 2
-        amtdisp('Calculating audiogram for human version of AN model')
+        amt_disp('Calculating audiogram for human version of AN model')
         load THRESHOLD_ALL_HUMAN;
     otherwise
         error(['Species # ' int2str(species) ' not known'])

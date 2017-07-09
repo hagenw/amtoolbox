@@ -66,7 +66,7 @@ function data = data_baumgartner2014(varargin)
 definput.flags.type = {'pool','baseline'};
 definput.flags.HRTFformat = {'sofa','ari'};
 
-definput.import={'baumgartner2014','amtcache'};
+definput.import={'baumgartner2014','amt_cache'};
 
 % Parse input options
 [flags,kv]  = ltfatarghelper({'mrsmsp','gamma'},definput,varargin);
@@ -97,16 +97,16 @@ if flags.do_pool || flags.do_baseline
   fncalib = ['calibration_g' num2str(kv.gamma,'%u') ...
     '_mrs' num2str(kv.mrsmsp,'%u') ...
     '_do' num2str(kv.do,'%u')];
-  c = amtcache('get',fncalib,flags.cachemode);
+  c = amt_cache('get',fncalib,flags.cachemode);
   if isempty(c) || not(isequal(c.kv,kv))
     
     data = loadBaselineData(data);
-    amtdisp('Calibration procedure started. Please wait!','progress')
+    amt_disp('Calibration procedure started. Please wait!','progress')
     data = baumgartner2014calibration(data,kv);
     
     c.data = rmfield(data,{'Obj','itemlist','fs','target','response'}); % reduce filesize
     c.kv = kv;
-    amtcache('set',fncalib,c)
+    amt_cache('set',fncalib,c)
   end
     
     if flags.do_baseline

@@ -81,7 +81,7 @@ if ~isempty(AMT_may2011PERC) && ~isempty(AMT_may2011PERmethod) && isequal(method
     C = AMT_may2011PERC;
 else
     % Load localization module
-    x=amtload('may2011',A.gmmModel);
+    x=amt_load('may2011',A.gmmModel);
     C=x.C;
     
     % Store classifier to persistent memory

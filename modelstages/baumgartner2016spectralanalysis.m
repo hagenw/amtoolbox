@@ -83,7 +83,7 @@ if flags.do_gammatone
   cachename = [cachenameprefix '_gammatone_' num2str(1/kv.space,'%u') 'bpERB'];
   if flags.do_middleear; cachename = [cachename '_middleear']; end
   if flags.do_ihc; cachename = [cachename '_ihc']; end
-  [mp,fc] = amtcache('get',cachename,flags.cachemode);
+  [mp,fc] = amt_cache('get',cachename,flags.cachemode);
   if isempty(mp)
     
     % Set level
@@ -134,7 +134,7 @@ if flags.do_gammatone
     % Logarithmic transformation (dB) 
     mp = 100 + 20*log10(mp);
     
-    amtcache('set',cachename,mp,fc);
+    amt_cache('set',cachename,mp,fc);
   end
   
   % Limit dynamic range
@@ -159,9 +159,9 @@ if flags.do_zilany2007humanized || flags.do_zilany2014
     if kv.cohc < 1; cachename = [cachename '_cohc' num2str(kv.cohc)]; end
     
     try
-      [mp,fc,time] = amtcache('get',cachename,flags.cachemode);
+      [mp,fc,time] = amt_cache('get',cachename,flags.cachemode);
     catch
-      [mp,fc] = amtcache('get',cachename,flags.cachemode);
+      [mp,fc] = amt_cache('get',cachename,flags.cachemode);
     	time = 0:kv.tiwin:(size(mp,5)-1)*kv.tiwin; 
     end
     
@@ -172,7 +172,7 @@ if flags.do_zilany2007humanized || flags.do_zilany2014
           sig = postpad(sig,ceil(Nmin*kv.fs/kv.fsmod),0,1);
       end
         
-      amtdisp(['Compute: ' cachename]);
+      amt_disp(['Compute: ' cachename]);
       Ntar = size(sig,2); % # target angles
       len = ceil(length(sig)/kv.fs*kv.fsmod);
       ANresp = zeros(len,kv.nf,Ntar,2);
@@ -201,7 +201,7 @@ if flags.do_zilany2007humanized || flags.do_zilany2014
 
           ANresp(:,:,ii,ch) = ANout(:,(1:len)+ionset-1)';
           
-          amtdisp([num2str(ii+(ch-1)*Ntar) ' of ' num2str(Ntar*Nch) ' done'],'progress');
+          amt_disp([num2str(ii+(ch-1)*Ntar) ' of ' num2str(Ntar*Nch) ' done'],'progress');
         end
         
       end
@@ -220,7 +220,7 @@ if flags.do_zilany2007humanized || flags.do_zilany2014
       end
       mp = shiftdim(mean(ANresp),1);
 
-      amtcache('set',cachename,mp,fc,time);
+      amt_cache('set',cachename,mp,fc,time);
     end
     
 %     if size(mp,2) ~= size(sig,2) % retreive polar dimension if squeezed out

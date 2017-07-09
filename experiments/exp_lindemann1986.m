@@ -203,7 +203,7 @@ function output = exp_lindemann1986(varargin)
 
 %   AUTHOR: Hagen Wierstorf
 
-definput.import={'amtcache'};
+definput.import={'amt_cache'};
 definput.flags.type={'missingflag','fig6','fig7','fig8','fig10','fig11',...
                     'fig12','fig13','fig14a','fig14b','fig15',...
                     'fig16','fig17','fig18'};
@@ -247,7 +247,7 @@ if flags.do_fig6
   ndl = round(fs/1000)+1;   % length of the delay line (see lindemann1986bincorr.m)
   itd = linspace(0,1,nitds);
   
-  output=amtcache('get','fig6',flags.cachemode);
+  output=amt_cache('get','fig6',flags.cachemode);
   
   if isempty(output)
     output = zeros(length(c_s),nitds,ndl);
@@ -268,7 +268,7 @@ if flags.do_fig6
         end
     end
 
-    amtcache('set','fig6',output);
+    amt_cache('set','fig6',output);
   end;
     
   if flags.do_plot
@@ -319,7 +319,7 @@ if flags.do_fig7
     nitds = 21; % number of used ITDs
     itd = linspace(0,1,nitds);
     
-    output=amtcache('get','fig7',flags.cachemode);
+    output=amt_cache('get','fig7',flags.cachemode);
     if isempty(output)
       
       output = zeros(length(c_s),nitds);
@@ -341,7 +341,7 @@ if flags.do_fig7
           output(jj,ii) = lindemann1986centroid(cc);
         end
       end
-      amtcache('set','fig7',output);
+      amt_cache('set','fig7',output);
     end;
     
     if flags.do_plot
@@ -388,7 +388,7 @@ if flags.do_fig8
   ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
   ild = linspace(0,25,nilds);
   
-  output=amtcache('get','fig8',flags.cachemode);
+  output=amt_cache('get','fig8',flags.cachemode);
   if isempty(output)
     
     output = zeros(2,nilds,ndl);
@@ -409,7 +409,7 @@ if flags.do_fig8
       end
     end
     
-    amtcache('set','fig8',output);
+    amt_cache('set','fig8',output);
   end;
   
   if flags.do_plot
@@ -461,7 +461,7 @@ if flags.do_fig10
   ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
   ild = linspace(0,25,nilds);
   
-  output=amtcache('get','fig10',flags.cachemode);
+  output=amt_cache('get','fig10',flags.cachemode);
   if isempty(output)
 
     output = zeros(length(c_s),nilds,ndl);
@@ -482,7 +482,7 @@ if flags.do_fig10
       end
     end
     
-    amtcache('set','fig10',output);
+    amt_cache('set','fig10',output);
   end;
   
   
@@ -534,7 +534,7 @@ if flags.do_fig11
     nilds = 26; % number of used ILDs
     ild = linspace(0,25,nilds);
           
-    output=amtcache('get','fig11',flags.cachemode);
+    output=amt_cache('get','fig11',flags.cachemode);
     if isempty(output)
       
       output = zeros(length(c_s),nilds);
@@ -556,7 +556,7 @@ if flags.do_fig11
         end
       end
       
-      amtcache('set','fig11',output);
+      amt_cache('set','fig11',output);
     end;
 
 
@@ -611,7 +611,7 @@ if flags.do_fig12
     ild = linspace(0,10,nilds);
     itd = linspace(-1,0,nitds);
 
-    output=amtcache('get','fig12',flags.cachemode);
+    output=amt_cache('get','fig12',flags.cachemode);
     if isempty(output)
 
     
@@ -644,7 +644,7 @@ if flags.do_fig12
         output(ii) = ild(idx);
       end
       
-      amtcache('set','fig12',output);
+      amt_cache('set','fig12',output);
     end;
 
     if flags.do_plot
@@ -698,7 +698,7 @@ if flags.do_fig13
     itd_t = linspace(-1,1,nitds_t);
     ild_t = [-3,0,3,9,15,25];
 
-    output=amtcache('get','fig13',flags.cachemode);
+    output=amt_cache('get','fig13',flags.cachemode);
     if isempty(output)
       
       % Calculate the centroids for the ILD only stimuli
@@ -742,7 +742,7 @@ if flags.do_fig13
         end
       end
       
-      amtcache('set','fig13',output);
+      amt_cache('set','fig13',output);
     end;
     
     if flags.do_plot
@@ -805,7 +805,7 @@ if flags.do_fig14a
     ild = linspace(-3,3,nilds);
     itd = 2000/f;
     
-    output=amtcache('get','fig14a',flags.cachemode);
+    output=amt_cache('get','fig14a',flags.cachemode);
     if isempty(output)
      
       output = zeros(length(c_s),nilds);
@@ -830,7 +830,7 @@ if flags.do_fig14a
         end
       end
       
-      amtcache('set','fig14a',output);
+      amt_cache('set','fig14a',output);
     end;
     
     if flags.do_plot
@@ -878,16 +878,16 @@ if flags.do_fig14b
     itd = linspace(0,1,nitds);
     ild_std = [1,2,3,4,5];
     
-    output=amtcache('get','fig14b',flags.cachemode);
+    output=amt_cache('get','fig14b',flags.cachemode);
     if isempty(output)
 
-      amtdisp('NOTE: this test function will need a lot of time!','progress');
+      amt_disp('NOTE: this test function will need a lot of time!','progress');
 
       output = zeros(length(ild_std)+1,nitds);
       centmp = zeros(nilds,nitds);
       for ii = 1:nitds
         % Show progress
-        amtdisp([num2str(ii) ' of ' num2str(nitds)],'progress');
+        amt_disp([num2str(ii) ' of ' num2str(nitds)],'progress');
         % First generate the result for std(ILD) == 0
         sig = sig_itdsin(f,itd(ii),fs);
         sig = sig(1:siglen,:);
@@ -916,7 +916,7 @@ if flags.do_fig14b
         end
       end
       
-      amtcache('set','fig14b',output);
+      amt_cache('set','fig14b',output);
     end;
 
     if flags.do_plot
@@ -963,7 +963,7 @@ if flags.do_fig15
     ild = linspace(0,25,nilds);
     itd = -0.5;
     
-    output=amtcache('get','fig15',flags.cachemode);
+    output=amt_cache('get','fig15',flags.cachemode);
     if isempty(output)
         
       output = zeros(length(c_s),nilds,ndl);
@@ -984,7 +984,7 @@ if flags.do_fig15
         end
       end
 
-      amtcache('set','fig15',output);
+      amt_cache('set','fig15',output);
     end;
 
     if flags.do_plot
@@ -1041,7 +1041,7 @@ if flags.do_fig16
     ild = linspace(0,10,nilds);
     itd = linspace(-1,0,nitds);
 
-    output=amtcache('get','fig16',flags.cachemode);
+    output=amt_cache('get','fig16',flags.cachemode);
     if isempty(output)
       
       % Calculate the centroids for ILD+ITD stimuli
@@ -1071,7 +1071,7 @@ if flags.do_fig16
         output(ii) = ild(idx);
       end
 
-      amtcache('set','fig16',output);
+      amt_cache('set','fig16',output);
     end;
     
       
@@ -1122,7 +1122,7 @@ if flags.do_fig17
     ild_t = linspace(-9,9,nilds_t);
     itd_t = [0,0.09,0.18,0.27];
 
-    output=amtcache('get','fig17',flags.cachemode);
+    output=amt_cache('get','fig17',flags.cachemode);
     if isempty(output)
       
       % Calculate the centroids for the ITD only stimuli
@@ -1174,7 +1174,7 @@ if flags.do_fig17
         end
       end
       
-      amtcache('set','fig17',output);
+      amt_cache('set','fig17',output);
     end;
     
       
@@ -1246,7 +1246,7 @@ if flags.do_fig18
     ndl = 2*round(fs/2000)+1;   % length of the delay line (see bincorr.m)
     iac = linspace(0,1,niacs);
     
-    output=amtcache('get','fig18',flags.cachemode);
+    output=amt_cache('get','fig18',flags.cachemode);
     if isempty(output)
 
       output = zeros(niacs,ndl);
@@ -1261,7 +1261,7 @@ if flags.do_fig18
         % calculation starts with channel 5, so we have to subtract 4.
         output(ii,:) =  tmp(:,fc-4);
       end
-      amtcache('set','fig18',output);
+      amt_cache('set','fig18',output);
     end;
 
     if flags.do_plot

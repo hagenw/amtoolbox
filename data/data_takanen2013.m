@@ -117,7 +117,7 @@ if flags.do_cochleardelays
     %are compensated for in the *takanen2013periphery.m*-function. The delays
     %were determined by analyzing the the cross-correlation-functions between
     %different frequency bands.
-    x=amtload('takanen2013','cochleardelays.mat');
+    x=amt_load('takanen2013','cochleardelays.mat');
     output = x.velocitydelays;
     if flags.do_plot
         figure;plot(output);xlabel('Frequency band');ylabel('Delay in samples');
@@ -130,7 +130,7 @@ if flags.do_msolimits
     %divided by scaling values and thereafter limited between 0 and 1. The
     %scaling values were obtained by computing the average level of the
     %*periphOutput.left* for a pink noise signal reproduced at 30 dB SPL
-    x=amtload('takanen2013','msolimits.mat');
+    x=amt_load('takanen2013','msolimits.mat');
     output = x.limits;
     if flags.do_plot
         figure;plot(output);xlabel('Frequency band');ylabel('Limit value');
@@ -144,7 +144,7 @@ if flags.do_wbmsomultp
     %compared to the energies of the narrowband MSO and LSO models. The values
     %with which the energy output is multiplied were obtained through an
     %iterative process.
-    x=amtload('takanen2013','wbmsomultp.mat');
+    x=amt_load('takanen2013','wbmsomultp.mat');
     output = x.multp;
     if flags.do_plot
         figure;plot(output);xlabel('Frequency band');ylabel('Multiplying coefficient');
@@ -162,7 +162,7 @@ if flags.do_lookuptable
     %whereas the sample for the wide-band MSO model was a impulse response 
     %of a first-order Butterworth lowpass filter with a cut-off frequency 
     %of 500 Hz
-    x=amtload('takanen2013','lookuptable.mat');
+    x=amt_load('takanen2013','lookuptable.mat');
     output = x.referencevalues;
     if flags.do_plot
         figure;plot(output.angles,output.mso(:,8),output.angles,output.lso(:,8),'r',...
@@ -179,7 +179,7 @@ if flags.do_onsetmultp
     %obtained by the computing the average levels of the two energies for a
     %pink noise burst convolved with binaural room impulse response of a
     %concert hall.
-    x=amtload('takanen2013','onsetmultp.mat');
+    x=amt_load('takanen2013','onsetmultp.mat');
     output = x.coeff;
     if flags.do_plot
         figure;plot(output);xlabel('Frequency band');ylabel('Multiplying coefficient');
@@ -192,7 +192,7 @@ if flags.do_periphenergyaverages
     %what cues are scaled in order to visualize the evoked activations on the
     %binaural activity map. The values were obtained by computing the average
     %levels of the what cue for a pink noise burst reproduced at 60 dB SPL.
-    x=amtload('takanen2013','periphenergyaverages.mat');
+    x=amt_load('takanen2013','periphenergyaverages.mat');
     output = x.averageEnerg;
     if flags.do_plot
         figure;plot(output);xlabel('Frequency band');ylabel('Average output');

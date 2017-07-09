@@ -1,18 +1,18 @@
-function varargout=amtcache(cmd,name,varargin)
-%AMTCACHE  Cache variables for later or retrieves variables from cache
-%   Usage: var = amtcache('get',package,flags);
-%          amtcache('set',package,variables);
+function varargout=amt_cache(cmd,name,varargin)
+%amt_cache  Cache variables for later or retrieves variables from cache
+%   Usage: var = amt_cache('get',package,flags);
+%          amt_cache('set',package,variables);
 %   
-%   `amtcache` supports the following commands:
+%   `amt_cache` supports the following commands:
 %
 %     'get'      gets the content of a package from the cache. 
-%                `variables = amtcache('get',package)` reads a `package` from the cache
+%                `variables = amt_cache('get',package)` reads a `package` from the cache
 %                and outputs its content in `var`. `package` must a be a string
 %                identifying the package of variables. If the package contains multiple
 %                variables, `variables` can be a list of variables like 
 %                `[var1, var2, ... , varN] = ...`. The order of returned variables is the
 %                same as that used for saving in cache.
-%                `... = amtcache('get',package,flags)` allows to control the 
+%                `... = amt_cache('get',package,flags)` allows to control the 
 %                behaviour of accessing the cache. `flags` can be:
 %
 %                  'normal':    Use cached package. If the cached package is 
@@ -29,13 +29,13 @@ function varargout=amtcache(cmd,name,varargin)
 %                               If it is remotely not available, an error will be thrown.
 %
 %                  'redo':      Enforce the recalculation of the package. 
-%                               [..] = amtcache('get', [..]) outputs empty variables always. 
+%                               [..] = amt_cache('get', [..]) outputs empty variables always. 
 %
 %                  'localonly': Package will be recalculated when locally
 %                               not available. Do not connect to the internet. 
 %
 %     'set'      stores variables as a package in the cache. 
-%                `amtcache('set',package, variables)` saves variables in the cache using
+%                `amt_cache('set',package, variables)` saves variables in the cache using
 %                the name `package`. `variables` can be a list of variables separated by
 %                comma.
 %                
@@ -51,19 +51,19 @@ function varargout=amtcache(cmd,name,varargin)
 %   In this example, we store the variables `x`, `y`, and `z` in the package
 %   *xyz*::
 %
-%     definput.import={'amtcache'};
+%     definput.import={'amt_cache'};
 %     [flags,~]  = ltfatarghelper({},definput,varargin);
-%     [x,y,z] = amtcache('get', 'xyz', flags.cachemode);
+%     [x,y,z] = amt_cache('get', 'xyz', flags.cachemode);
 %     if isempty(x)
 %         % calculate your variables x,y,z here
-%         amtcache('set','xyz',x,y,z);
+%         amt_cache('set','xyz',x,y,z);
 %     end
 %     %  use your variables x,y,z here
 %
 %   Note that in this example, the flags indicating the mode of caching are
 %   stored in `flags.cachemode` which can be achieved by::
 % 
-%     definput.import={'amtcache'};
+%     definput.import={'amt_cache'};
 %     [flags,keyvals] = ltfatarghelper({},definput,varargin); 
 %
 %   at the begin of the function. This way, the cache mode can be provided by the 
@@ -77,7 +77,7 @@ function varargout=amtcache(cmd,name,varargin)
 
 persistent CacheURL CacheMode;
 if isempty(CacheURL)
-  CacheURL=['http://www.sofacoustics.org/data/amt-' amthelp('version') '/cache'];
+  CacheURL=['http://www.sofacoustics.org/data/amt-' amt_help('version') '/cache'];
 end
 if isempty(CacheMode)
   CacheMode='normal';
@@ -87,8 +87,8 @@ switch cmd
   case 'set'
     f=dbstack('-completenames');
     fn=f(2).file;
-    token=urlencode(strrep(fn(length(amtbasepath)+1:end),'\','/'));
-    tokenpath=fullfile(amtbasepath,'cache',token);
+    token=urlencode(strrep(fn(length(amt_basepath)+1:end),'\','/'));
+    tokenpath=fullfile(amt_basepath,'cache',token);
     tokenfn=fullfile(tokenpath,[name '.mat']);
     
     if ~exist(tokenpath,'dir'); mkdir(tokenpath); end
@@ -110,12 +110,12 @@ switch cmd
       case 'cached' % use local cache. If not available download from the internet. If not available throw an error.
         f=dbstack('-completenames');
         fn=f(2).file;
-        token=urlencode(strrep(fn(length(amtbasepath)+1:end),'\','/'));
-        tokenpath=fullfile(amtbasepath,'cache',token);
+        token=urlencode(strrep(fn(length(amt_basepath)+1:end),'\','/'));
+        tokenpath=fullfile(amt_basepath,'cache',token);
         tokenfn=fullfile(tokenpath,[name '.mat']);
         if ~exist(tokenfn,'file'),
           webfn=[CacheURL '/' urlencode(token) '/' name '.mat'];
-          amtdisp(['Cache: Downloading ' name '.mat for ' token],'progress');
+          amt_disp(['Cache: Downloading ' name '.mat for ' token],'progress');
           if ~exist(tokenpath,'dir'); mkdir(tokenpath); end
           [~,stat]=urlwrite(webfn,tokenfn);
           if ~stat
@@ -130,12 +130,12 @@ switch cmd
       case 'localonly' % use local cache only. If not available, enforce recalculation
         f=dbstack('-completenames');
         fn=f(2).file;
-        token=urlencode(strrep(fn(length(amtbasepath)+1:end),'\','/'));
-        tokenpath=fullfile(amtbasepath,'cache',token);
+        token=urlencode(strrep(fn(length(amt_basepath)+1:end),'\','/'));
+        tokenpath=fullfile(amt_basepath,'cache',token);
         tokenfn=fullfile(tokenpath,[name '.mat']);
         if ~exist(tokenfn,'file'),
-            amtdisp(['Cached data not found: ' tokenfn],'progress');
-            amtdisp('Enforce recalculation...','progress');
+            amt_disp(['Cached data not found: ' tokenfn],'progress');
+            amt_disp('Enforce recalculation...','progress');
             for ii=1:nargout, varargout{ii}=[]; end % enforce recalculation
         else
           load(tokenfn);
@@ -147,17 +147,17 @@ switch cmd
       case 'normal' % use local cache. If not available download from the internet. If not available recalculate.
         f=dbstack('-completenames');
         fn=f(2).file;
-        token=urlencode(strrep(fn(length(amtbasepath)+1:end),'\','/'));
-        tokenpath=fullfile(amtbasepath,'cache',token);
+        token=urlencode(strrep(fn(length(amt_basepath)+1:end),'\','/'));
+        tokenpath=fullfile(amt_basepath,'cache',token);
         tokenfn=fullfile(tokenpath,[name '.mat']);
         if ~exist(tokenfn,'file'),
           webfn=[CacheURL '/' urlencode(token) '/' name '.mat'];
-          amtdisp(['Cache: Downloading ' name '.mat for ' token],'progress');
+          amt_disp(['Cache: Downloading ' name '.mat for ' token],'progress');
           if ~exist(tokenpath,'dir'); mkdir(tokenpath); end
           [~,stat]=urlwrite(webfn,tokenfn);
           if ~stat
-            amtdisp(['Cached data not found: ' webfn],'progress');
-            amtdisp('Enforce recalculation...','progress');
+            amt_disp(['Cached data not found: ' webfn],'progress');
+            amt_disp('Enforce recalculation...','progress');
             for ii=1:nargout, varargout{ii}=[]; end % enforce recalculation
           else         
             load(tokenfn);  % downloaded to local cache. Load...
@@ -178,9 +178,9 @@ switch cmd
   case 'getURL'
     varargout{1}=CacheURL;
   case 'clearAll'
-    cachepath=fullfile(amtbasepath,'cache');
+    cachepath=fullfile(amt_basepath,'cache');
     if strcmp(input(['clearAll clears ' strrep(cachepath,'\','\\') '. Type YES for confirmation: '],'s'),'YES'), 
-      amtdisp(['Clearing ' cachepath ' ...'],'progress');
+      amt_disp(['Clearing ' cachepath ' ...'],'progress');
       rmdir(cachepath, 's');       
     end
   case 'setMode'

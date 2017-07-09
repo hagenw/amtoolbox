@@ -139,12 +139,12 @@ end;
 
 if flags.do_stim
   % delay is the first output parameter, use it to return the stimulus.  
-  delay=amtload('elberling2010','stim.mat');
+  delay=amt_load('elberling2010','stim.mat');
   
   % fs is stored in data_mean
   data_mean=fs;
   
   if flags.do_plot
-    amtdisp('XXX Plot is missing.');
+    amt_disp('XXX Plot is missing.');
   end;
 end;

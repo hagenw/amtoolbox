@@ -62,7 +62,7 @@ function data = exp_baumgartner2017(varargin)
    
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
-definput.import={'amtcache'};
+definput.import={'amt_cache'};
 definput.flags.type = {'missingflag','boyd2012','hartmann1996','hassager2016'};
 definput.flags.quickCheck = {'','quickCheck'};
 definput.keyvals.Sintra = 2;
@@ -85,7 +85,7 @@ if flags.do_hassager2016
   B = Pext_A.B;
   
   fncache = ['hassager2016_Sintra',num2str(kv.Sintra*100,'%i'),'_Sinter',num2str(kv.Sinter*100,'%i')];
-  Pext = amtcache('get',fncache,flags.cachemode);
+  Pext = amt_cache('get',fncache,flags.cachemode);
   if isempty(Pext)
     
     data = data_baumgartner2017;
@@ -101,7 +101,7 @@ if flags.do_hassager2016
         idazi = Obj.SourcePosition(:,1) == azi(iazi) & Obj.SourcePosition(:,2) == 0;
         template = squeeze(shiftdim(Obj.Data.IR(idazi,:,:),2));
         for iB = 1:length(B)
-          amtdisp(num2str(iB),'volatile');
+          amt_disp(num2str(iB),'volatile');
           if isnan(B(iB))
             target = template;
           else
@@ -112,11 +112,11 @@ if flags.do_hassager2016
           Pext{2}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sintra,'flow',100,'fhigh',flp,'lat',azi(iazi));
         end
       end
-      amtdisp([num2str(isubj),' of ',num2str(length(data)),' subjects completed.'],'progress')
+      amt_disp([num2str(isubj),' of ',num2str(length(data)),' subjects completed.'],'progress')
     end
      
     if not(flags.do_quickCheck)
-      amtcache('set',fncache,Pext);
+      amt_cache('set',fncache,Pext);
     end
   end
   
@@ -156,7 +156,7 @@ if flags.do_hartmann1996
   nprime = [0,1,8,14,19,22,25,38];
   
   fncache = ['hartmann1996_Sintra',num2str(kv.Sintra*100,'%i'),'_Sinter',num2str(kv.Sinter*100,'%i')];
-  Pext = amtcache('get',fncache,flags.cachemode);
+  Pext = amt_cache('get',fncache,flags.cachemode);
   if isempty(Pext)
     azi = -37;
     data = data_baumgartner2017;
@@ -175,10 +175,10 @@ if flags.do_hartmann1996
           Pext{2}(isub,nn,ee) = baumgartner2017(target,template,'c1',3,'c2',0,'S',kv.Sintra,'flow',100,'fhigh',6000,'lat',azi);
         end
       end
-      amtdisp([num2str(isub),' of ',num2str(length(data)),' subjects completed.'],'progress')
+      amt_disp([num2str(isub),' of ',num2str(length(data)),' subjects completed.'],'progress')
     end
     if not(flags.do_quickCheck)
-      amtcache('set',fncache,Pext);
+      amt_cache('set',fncache,Pext);
     end
   end
   
@@ -216,7 +216,7 @@ if flags.do_boyd2012
   data = data_boyd2012;
   
   fncache = ['boyd2012_Sintra',num2str(kv.Sintra*100,'%i'),'_Sinter',num2str(kv.Sinter*100,'%i')];
-  E = amtcache('get',fncache,flags.cachemode);
+  E = amt_cache('get',fncache,flags.cachemode);
   if isempty(E)
     
     Eboyd = cat(3,[data.ITE.BB(:),data.BTE.BB(:)],[data.ITE.LP(:),data.BTE.LP(:)]);
@@ -261,7 +261,7 @@ if flags.do_boyd2012
           end
         end
       end
-      amtdisp([num2str(isub),' of ',num2str(length(subjects)),' subjects completed.'],'progress')
+      amt_disp([num2str(isub),' of ',num2str(length(subjects)),' subjects completed.'],'progress')
 
     end
 
@@ -275,7 +275,7 @@ if flags.do_boyd2012
     E.se = {seEboyd,seEhass,seEbaum};
     
     if not(flags.do_quickCheck)
-      amtcache('set',fncache,E);
+      amt_cache('set',fncache,E);
     end
   end
 

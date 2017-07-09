@@ -27,7 +27,7 @@ function exp_enzner2008(varargin)
 %  Authors: Michael Weinert (Michael.Weinert@rub.de), Gerald Enzner (Gerald.Enzner@rub.de)
 %  Date: 21-01-2013
 
-%addpath(fullfile(amtbasepath,'hrtf','continuous-azimuth HRIR'))
+%addpath(fullfile(amt_basepath,'hrtf','continuous-azimuth HRIR'))
 
 % enzner2008(1,1,varargin); % enzner2008(mu, delta_phi, varargin)
 
@@ -52,37 +52,37 @@ P.h_length = 256;
 
 %   % option 1.2 using loudspeaker driving signals, measurement stimulus: white noise
 % h_length = 256;
-% rec_filename = fullfile(amtbasepath,'signals','exp_enzner2008_example_1ch_white_noise_earsignals.wav');
-% ref_filename = fullfile(amtbasepath,'signals','exp_enzner2008_example_1ch_white_noise_playback.wav');
+% rec_filename = fullfile(amt_basepath,'signals','exp_enzner2008_example_1ch_white_noise_earsignals.wav');
+% ref_filename = fullfile(amt_basepath,'signals','exp_enzner2008_example_1ch_white_noise_playback.wav');
 % adapt = 20000; % depends on the recording (overhead at the end and the beginnig)
 % sys_latency = -290;
 
 % %   % option 1.3 using reference signals, measurement stimulus: perfect sweeps
 % h_length = 308;
-% rec_filename = fullfile(amtbasepath,'signals','exp_enzner2008_example_1ch_PSWEEP308_earsignals.wav');
-% ref_filename = fullfile(amtbasepath,'signals','exp_enzner2008_example_1ch_PSWEEP308_reference.wav');
+% rec_filename = fullfile(amt_basepath,'signals','exp_enzner2008_example_1ch_PSWEEP308_earsignals.wav');
+% ref_filename = fullfile(amt_basepath,'signals','exp_enzner2008_example_1ch_PSWEEP308_reference.wav');
 % adapt = 20000; % depends on the recording (overhead at the end and the beginnig)
 % sys_latency = 30;
 
 %   % option 1.4 using loudspeaker driving signals, measurement stimulus: perfect sweeps
 % h_length = 308;
-% rec_filename = fullfile(amtbasepath,'signals','exp_enzner2008_example_1ch_PSWEEP308_earsignals.wav');
-% ref_filename = fullfile(amtbasepath,'signals','exp_enzner2008_example_1ch_PSWEEP308_playback.wav');
+% rec_filename = fullfile(amt_basepath,'signals','exp_enzner2008_example_1ch_PSWEEP308_earsignals.wav');
+% ref_filename = fullfile(amt_basepath,'signals','exp_enzner2008_example_1ch_PSWEEP308_playback.wav');
 % adapt = 20000; % depends on the recording (overhead at the end and the beginnig)
 % sys_latency = -290;
 
 
 % check if signals exist
 % if(exist(ref_filename,'file') ~= 2 || exist(rec_filename,'file') ~= 2)
-%     amtdisp('*')
-%     amtdisp(strcat('Missing file: ',ref_filename))
-%     amtdisp('Please download the required wav-files from Sourceforge.')
+%     amt_disp('*')
+%     amt_disp(strcat('Missing file: ',ref_filename))
+%     amt_disp('Please download the required wav-files from Sourceforge.')
 %     error('Missing file');
 % end
 
 %% read signals
-x = amtload('enzner2008',ref_filename);
-[y, fs] = amtload('enzner2008',rec_filename);
+x = amt_load('enzner2008',ref_filename);
+[y, fs] = amt_load('enzner2008',rec_filename);
 
 %% Fig. 2 from Enzner (2008)
 if flags.do_fig2

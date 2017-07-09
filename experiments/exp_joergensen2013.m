@@ -51,7 +51,7 @@ function exp_joergensen2013(NSpeechsamples, varargin)
 % 
 %   References: joergensen2013 joergensen2011predicting kjems2009role festen1990effects
 
-definput.import={'amtcache'};
+definput.import={'amt_cache'};
 definput.flags.type={'missingflag','fig2_simAll','fig2_specsub','fig2_reverb','fig2_kjems2009','fig2_FP1990','fig2_OrgSim','fig2_Jetal2013'};
 definput.flags.plot={'plot','noplot'};
 
@@ -66,7 +66,7 @@ end
 %% ------ FIG 2 -----------------------------------------------------------
 if flags.do_fig2_simAll;
         
-    SRTs = amtcache('get',['fig2_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
+    SRTs = amt_cache('get',['fig2_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
     if isempty(SRTs)
                        
         [SRTs_specsub specsubConds] = joergensen2013sim(NSpeechsamples,'JandD2011specsub');
@@ -81,7 +81,7 @@ if flags.do_fig2_simAll;
         SRTs.simSRTs_Kjems2009 = SRTs_simKjems2009;
         SRTs.simSRTs_FP1990 = SRTs_simFP1990;
         
-        amtcache('set',['fig2_' num2str(NSpeechsamples)  'sntcs'],SRTs);
+        amt_cache('set',['fig2_' num2str(NSpeechsamples)  'sntcs'],SRTs);
     end;
     
     if flags.do_plot
@@ -91,7 +91,7 @@ end;
 
 if flags.do_fig2_specsub;
     
-    SRTs = amtcache('get',['fig2_specsub_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
+    SRTs = amt_cache('get',['fig2_specsub_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
     if isempty(SRTs)
                
         [SRTs_specsub specsubConds] = joergensen2013sim(NSpeechsamples,'JandD2011specsub');
@@ -101,7 +101,7 @@ if flags.do_fig2_specsub;
         SRTs.simSRTs_Jetal2013 = [ NaN NaN NaN  ];
         SRTs.simSRTs_reverb =[ NaN NaN NaN NaN NaN  ];
 
-        amtcache('set', ['fig2_specsub_' num2str(NSpeechsamples)  'sntcs'], SRTs);
+        amt_cache('set', ['fig2_specsub_' num2str(NSpeechsamples)  'sntcs'], SRTs);
     end;
     
     if flags.do_plot
@@ -111,7 +111,7 @@ end;
 
 if flags.do_fig2_reverb;
  
-    SRTs = amtcache('get',['fig2_reverb_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
+    SRTs = amt_cache('get',['fig2_reverb_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
     if isempty(SRTs)
                        
         [SRTs_reverb reverbConds] = joergensen2013sim(NSpeechsamples,'JandD2011reverb');
@@ -121,7 +121,7 @@ if flags.do_fig2_reverb;
         SRTs.simSRTs_Jetal2013 = [ NaN NaN NaN ];
         SRTs.simSRTs_reverb = SRTs_reverb;
 
-        amtcache('set', ['fig2_reverb_' num2str(NSpeechsamples)  'sntcs'], SRTs);
+        amt_cache('set', ['fig2_reverb_' num2str(NSpeechsamples)  'sntcs'], SRTs);
     end;
     
     if flags.do_plot
@@ -131,7 +131,7 @@ end;
 
 if flags.do_fig2_kjems2009;
    
-    SRTs = amtcache('get',['fig2_Kjems2009_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
+    SRTs = amt_cache('get',['fig2_Kjems2009_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
     if isempty(SRTs)
                        
         [SRTs_Kjems2009 Kjems2009Conds] = joergensen2013sim(NSpeechsamples,'Kjems2009');
@@ -141,7 +141,7 @@ if flags.do_fig2_kjems2009;
         SRTs.simSRTs_Jetal2013 = [ NaN NaN NaN  ];
         SRTs.simSRTs_reverb = [ NaN NaN NaN NaN NaN  ];
 
-        amtcache('set', ['fig2_Kjems2009_' num2str(NSpeechsamples)  'sntcs'], SRTs);
+        amt_cache('set', ['fig2_Kjems2009_' num2str(NSpeechsamples)  'sntcs'], SRTs);
     end;
     
     if flags.do_plot
@@ -151,7 +151,7 @@ end;
 
 if flags.do_fig2_FP1990;
    
-    SRTs = amtcache('get',['fig2_FP1990_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
+    SRTs = amt_cache('get',['fig2_FP1990_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
     if isempty(SRTs)
                       
         [SRTs_FP1990 FP1990Conds] = joergensen2013sim(NSpeechsamples,'FP1990');
@@ -161,7 +161,7 @@ if flags.do_fig2_FP1990;
         SRTs.simSRTs_Jetal2013 = [ NaN NaN NaN  ];
         SRTs.simSRTs_reverb = [ NaN NaN NaN NaN NaN  ];
 
-        amtcache('set', ['fig2_FP1990_' num2str(NSpeechsamples)  'sntcs'], SRTs);
+        amt_cache('set', ['fig2_FP1990_' num2str(NSpeechsamples)  'sntcs'], SRTs);
     end;
     
     if flags.do_plot
@@ -171,7 +171,7 @@ end;
 
 if flags.do_fig2_Jetal2013;
    
-    SRTs = amtcache('get',['fig2_Jetal2013_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
+    SRTs = amt_cache('get',['fig2_Jetal2013_' num2str(NSpeechsamples)  'sntcs'], flags.cachemode);
     if isempty(SRTs)
                       
         [SRTs_Jetal2013 Jetal2013Conds] = joergensen2013sim(NSpeechsamples,'Jetal2013');
@@ -181,7 +181,7 @@ if flags.do_fig2_Jetal2013;
         SRTs.simSRTs_Jetal2013 = SRTs_Jetal2013;
         SRTs.simSRTs_reverb = [ NaN NaN NaN NaN NaN  ];
 
-        amtcache('set', ['fig2_Jetal2013_' num2str(NSpeechsamples)  'sntcs'], SRTs);
+        amt_cache('set', ['fig2_Jetal2013_' num2str(NSpeechsamples)  'sntcs'], SRTs);
     end;
     
     if flags.do_plot

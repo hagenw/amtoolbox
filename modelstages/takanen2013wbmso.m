@@ -162,7 +162,7 @@ if(printfigs)
 end
 
 %% ------ Computing of the energy output of the wideband MSO  -------------
-x=amtload('takanen2013','wbmsomultp.mat');
+x=amt_load('takanen2013','wbmsomultp.mat');
 multp=x.multp;
 energy = contralateral.*(ones(nrows,1)*multp);
 temp = weightedaveragefilter(energy,energy,fs,0.01);

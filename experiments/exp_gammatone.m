@@ -484,7 +484,7 @@ function exp_gammatone(varargin)
 
    if flags.do_fig3_patterson1987
         % Input parameters
-        x=amtload('gammatone','a_from_past_uk.mat'); % Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
+        x=amt_load('gammatone','a_from_past_uk.mat'); % Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
         fs=x.fs;
         ts = 1/fs;                  % Time between sampling points in s;
         insig = x.data(:,1).';        % Extract one channel from signal;
@@ -532,7 +532,7 @@ function exp_gammatone(varargin)
 
    if flags.do_fig4_patterson1987
         % Input parameters
-        x=amtload('gammatone','a_from_past_uk.mat'); % Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
+        x=amt_load('gammatone','a_from_past_uk.mat'); % Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
         fs=x.fs;
         ts = 1/fs;                  % Time between sampling points in s;
         insig = x.data(:,1).';        % Extract one channel from signal;

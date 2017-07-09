@@ -3,12 +3,12 @@ function definput=arg_baumgartner2016(definput)
 definput = arg_baumgartner2016calibration(definput);
 definput = arg_localizationerror(definput);
 definput = arg_baumgartner2014pmv2ppp(definput);
-definput = arg_amtcache(definput);
+definput = arg_amt_cache(definput);
 
 definput.keyvals.ID = 'NHx';
 definput.keyvals.Condition = 'baseline';%'Long';
 
-tmp = amtload('baumgartner2016','temstim.mat'); % frozen version of noise(8e3,1,'white'); potential alternative: mls(13)
+tmp = amt_load('baumgartner2016','temstim.mat'); % frozen version of noise(8e3,1,'white'); potential alternative: mls(13)
 definput.keyvals.temstim = tmp.temstim;
 
 definput.flags.fbank = {'zilany2014','zilany2007humanized','gammatone'};   % ,'drnl'

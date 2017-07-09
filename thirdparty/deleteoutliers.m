@@ -79,7 +79,7 @@ while outlier
 	sdval = std(tmp);
 	tn = abs((maxval-meanval)/sdval);
 	critval = zcritical(alpha,length(tmp));
-%   amtdisp(critval)
+%   amt_disp(critval)
 	outlier = tn > critval;
 	if outlier
 		tmp = a == maxval;
