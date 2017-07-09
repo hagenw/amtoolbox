@@ -113,7 +113,7 @@ end
 if FID == -1
     error(MSG);
 else
-    amt_version = fgetl (FID);
+    version = fgetl (FID);
     fclose(FID);
 end
 
@@ -130,7 +130,7 @@ if exist('OCTAVE_VERSION','builtin'), args=argv; else args=varargin; end
 
 if ~silent
   disp('  ');
-  disp(['AMT version ',amt_version,'. (C) Piotr Majdak and the AMT team.']);
+  disp(['AMT version ',version,'. (C) Piotr Majdak and the AMT team.']);
   disp(['See http://amtoolbox.sourceforge.net for more information.']);
   disp('  ');
   disp('Starting toolboxes...');
@@ -250,7 +250,7 @@ for ii=1:length(d)
       if exist([bp,name,filesep,name,'init.m'],'file')
           % Set 'status' to zero if the module forgets to define it.
         status=0;
-        module_version=amt_version;
+        module_version=version;
         addpath([bp,name]);
 
         eval([name,'init']);
@@ -275,12 +275,12 @@ flags=amt_flags(varargin); % amt_disp and other amt-related functions work now!
 %% ---------- load information into ltfathelp ------------
 
 % As comp is now in the path, we can call ltfatarghelper
-ltfatsetdefaults('amt_help','versiondata',amt_version,...
+ltfatsetdefaults('amt_version','versiondata',version,...
                  'modulesdata',modules);
 
 %% Set the correct path to remote HRTFs
 if exist('SOFAdbURL','file'),
-    SOFAdbURL(['http://www.sofacoustics.org/data/amt-' amt_help('version') '/hrtf']);
+    SOFAdbURL(['http://www.sofacoustics.org/data/amt-' amt_version('version') '/hrtf']);
 end
 
 %% Initialize aux data, cache, and display starting information

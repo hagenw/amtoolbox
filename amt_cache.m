@@ -77,7 +77,7 @@ function varargout=amt_cache(cmd,name,varargin)
 
 persistent CacheURL CacheMode;
 if isempty(CacheURL)
-  CacheURL=['http://www.sofacoustics.org/data/amt-' amt_help('version') '/cache'];
+  CacheURL=['http://www.sofacoustics.org/data/amt-' amt_version('version') '/cache'];
 end
 if isempty(CacheMode)
   CacheMode='normal';

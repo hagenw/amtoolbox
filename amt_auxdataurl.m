@@ -16,6 +16,6 @@ persistent AuxDataURL;
 if exist('newURL','var')
   AuxDataURL=newURL;
 elseif isempty(AuxDataURL)
-  AuxDataURL=['http://www.sofacoustics.org/data/amt-' amt_help('version') '/auxdata'];
+  AuxDataURL=['http://www.sofacoustics.org/data/amt-' amt_version('version') '/auxdata'];
 end
 auxURL=AuxDataURL;
