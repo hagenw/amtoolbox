@@ -80,8 +80,8 @@ if flags.do_missingflag
 end;
 %% Load ITD-to-angle look-up
 
-if flags.do_itd2anglelookuptable
-  data=amt_load('wierstorf2013','itd2angle_lookuptable.mat');
+if flags.do_itd2angle_lookuptable
+  data=amt_load('wierstorf2013','itd2anglelookuptable.mat');
 end
 
 %% ------ Data points from the paper ------------------------------------
