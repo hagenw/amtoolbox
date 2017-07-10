@@ -127,7 +127,7 @@ if isstruct(target) % Targets given in SOFA format
 %   fncache = ['latLookup_',template.GLOBAL_ListenerShortName];
 %   latLookup = amt_cache('get',fncache,flags.cachemode);
 %   if isempty(latLookup)
-%     latLookup = itd2anglelookuptable(template,template.Data.SamplingRate,'dietz2011');
+%     latLookup = itd2angle_lookuptable(template,template.Data.SamplingRate,'dietz2011');
 %     amt_cache('set',fncache,latLookup)
 %   end
 %   tarSig = squeeze(target);

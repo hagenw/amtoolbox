@@ -54,14 +54,16 @@
 %     takanen2013_onsetenhancement - Emphasize onsets on direction analysis
 %     takanen2013_periphery  - Process input through the model of periphery
 %     takanen2013_wbmso      - Wideband medial superior olive model
+%     takanen2013_weightedaveragefilter - Part of the takanen2013 model
 %
 %  Binaural masking level differences from Breebaart et al. (2001)
 %     breebaart2001_preproc  - Preprocessor of a binaural signal with EI-cell output
+%     breebaart2001_eicell - Excitation-inhibition cell from Breebaart et al. (2001).
 %     breebaart2001_centralproc - Central processor taking decision in an experiment
 %     breebaart2001_outmiddlefilter - Outer and middle-ear filter used by the model Breebaart et al. (2001)
 % 
-%
 %  Sagittal-plane localization models
+%     langendijk2002_spectralanalysis - FFT-based filter bank with constant relative bandwidth
 %     baumgartner2013_pmv2ppp - Calculate performance predictions from PMVs for baumgartner2013
 %     baumgartner2014_spectralanalysis - Approximation of spectral analysis by auditory periphery
 %     baumgartner2014_gradientextraction - Extraction of positive spectral gradients

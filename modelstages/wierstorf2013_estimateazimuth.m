@@ -17,7 +17,7 @@ function [phi,phi_std,itd,ild,cfreqs] = wierstorf2013_estimateazimuth(insig,look
 %   `wierstorf2013_estimateazimuth(sig,lookup)` uses a binaural model to
 %   estimate the perceived direction for a given binaural signal.  Therefore,
 %   it needs the struct lookup, which maps ITD values to the corresponding
-%   angles. This can be created with the |itd2anglelookuptable| function.
+%   angles. This can be created with the |itd2angle_lookuptable| function.
 %   The azimuth values are first calculated for every frequency channel and
 %   after that their median is calculated. In this process the different
 %   frequency channels could be weighted and outlier could be removed, see the
@@ -54,7 +54,7 @@ function [phi,phi_std,itd,ild,cfreqs] = wierstorf2013_estimateazimuth(insig,look
 %                              Note, this can lead to NaN if one of the
 %                              frequency channels has a NaN as direction.
 %
-%   See also: wierstorf2013, dietz2011, lindemann1986, itd2anglelookuptable
+%   See also: wierstorf2013, dietz2011, lindemann1986, itd2angle_lookuptable
 %
 %   References: raatgever1980 stern1988 dietz2011auditory lindemann1986a wierstorf2013
 

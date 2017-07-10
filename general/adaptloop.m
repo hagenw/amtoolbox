@@ -39,7 +39,7 @@ function inoutsig = adaptloop(inoutsig,fs,varargin);
 %
 %     'dim',d          Do the computation along dimension *d* of the input. 
 %
-%   See also: auditoryfilterbank, drnl
+%   See also: auditoryfilterbank, lopezpoveda2001
 %
 %   Demos: demo_adaptloop
 %

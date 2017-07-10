@@ -29,7 +29,7 @@ function [activMap gainMtrx]= takanen2013_contracomparison(thetaL,thetaR,levels,
 %   2000).    
 %
 %   See also: takanen2013, takanen2013_formbinauralactivitymap, 
-%             weightedaveragefilter
+%             takanen2013_weightedaveragefilter
 %
 %   References: takanen2014 mcalpine2000
 
@@ -61,8 +61,8 @@ gL = gains;
 gR = gains;
 gL((thetaL+thetaR)<0)=0;
 gR((thetaL+thetaR)>0)=0;
-multipL = weightedaveragefilter(gL,energyR,fs,0.01);
-multipR = weightedaveragefilter(gR,energyL,fs,0.01);
+multipL = takanen2013_weightedaveragefilter(gL,energyR,fs,0.01);
+multipR = takanen2013_weightedaveragefilter(gR,energyL,fs,0.01);
 multipL = 1-multipL;
 multipR=1-multipR;
 delay = round(0.0005*fs);

@@ -72,7 +72,7 @@ function varargout = baumgartner2013( target,template,varargin )
 %     'gammatone'    Use the Gammatone filterbank for peripheral processing. 
 %                    This is the default.
 %
-%     'cqdft'        Use a filterbank approximation based on DFT with 
+%     'langendijk2002_spectralanalysis'        Use a filterbank approximation based on DFT with 
 %                    constant relative bandwidth for peripheral processing. 
 %                    This was used by Langendijk and Bronkhorst (2002).
 %
@@ -106,7 +106,7 @@ function varargout = baumgartner2013( target,template,varargin )
 
 %% Check input options 
 
-definput.flags.fbank = {'gammatone','cqdft','drnl','zilany2007humanized'};
+definput.flags.fbank = {'gammatone','langendijk2002_spectralanalysis','lopezpoveda2001','zilany2007humanized'};
 definput.flags.headphonefilter = {'','headphone'};
 definput.flags.middleearfilter = {'','middleear'};
 definput.flags.ihc = {'ihc','noihc'};
@@ -181,8 +181,8 @@ target = reshape(tmp,[size(tmp,1),size(target,2),size(target,3)]);
 if flags.do_cqdft
     
     bpo = kv.space*6; % bands per octave (1 oct. approx. as 6 ERBs)
-    ireptem = cqdft(template,kv.fs,kv.flow,kv.fhigh,bpo);
-    ireptar = cqdft(target,kv.fs,kv.flow,kv.fhigh,bpo);
+    ireptem = langendijk2002_spectralanalysis(template,kv.fs,kv.flow,kv.fhigh,bpo);
+    ireptar = langendijk2002_spectralanalysis(target,kv.fs,kv.flow,kv.fhigh,bpo);
 
 elseif flags.do_gammatone
 
@@ -223,8 +223,8 @@ elseif flags.do_drnl
     end
     
     % Filtering
-    [ireptar,fc] = drnl(target(:,:),kv.fs,'flow',kv.flow,'fhigh',kv.fhigh);  % includes middle ear
-    ireptem = drnl(template(:,:),kv.fs,'flow',kv.flow,'fhigh',kv.fhigh);
+    [ireptar,fc] = lopezpoveda2001(target(:,:),kv.fs,'flow',kv.flow,'fhigh',kv.fhigh);  % includes middle ear
+    ireptem = lopezpoveda2001(template(:,:),kv.fs,'flow',kv.flow,'fhigh',kv.fhigh);
        
     % IHC transduction
     if flags.do_ihc 

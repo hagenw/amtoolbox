@@ -129,7 +129,7 @@ if flags.do_a_fig2
     testsigadlo = amt_cache('get','a_fig2',flags.cachemode);
     
     if isempty(testsigadlo)
-        definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','eicell'};
+        definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','breebaart2001_eicell'};
         definput.importdefaults={'fhigh',8000,'ihc_breebaart','adt_breebaart'};
 
         [flags,keyvals,~,~,~]  = ltfatarghelper({'flow', 'fhigh', ...
@@ -172,7 +172,7 @@ elseif flags.do_a_fig6
     if isempty(ei_map_n_mean)
     % do computation
     
-        definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','eicell'};
+        definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','breebaart2001_eicell'};
         definput.importdefaults={'fhigh',8000,'ihc_breebaart','adt_breebaart'};
 
         [flags,keyvals,flow,fhigh,basef]  = ltfatarghelper({'flow', 'fhigh', ...

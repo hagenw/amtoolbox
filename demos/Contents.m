@@ -4,7 +4,7 @@
 %     DEMO_ABSOLUTETHRESHOLD - Absolute thresholds of hearing
 %     DEMO_GAMMATONE         - Gammatone filterbank
 %     DEMO_ADAPTLOOP         - Adaptation loops
-%     DEMO_DRNL              - Widening of filters in the DRNL
+%     demo_lopezpoveda2011              - Widening of filters in the lopezpoveda2001
 %     DEMO_HOHMANN2002       - Gammatone filterbank (Hohmann, 2002)
 %     DEMO_ZILANY2014        - Non-linear model of the auditory filtering (Zilany et al., 2014)
 %     DEMO_VERHULST2012      - Transmission line model of the cochlea (Verhulst et al., 2012)

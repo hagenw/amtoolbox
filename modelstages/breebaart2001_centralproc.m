@@ -4,7 +4,7 @@ function decision = breebaart2001_centralproc(EI_map,monol,monor,bimonostring,mo
 %          decision = breebaart2001_centralproc(EI_map,monol,monor,bimonostring,monofactor);
 %
 %   Input parameters:
-%        EI_map         : binaural representation of the signal (from eicell)
+%        EI_map         : binaural representation of the signal (from breebaart2001_eicell)
 %        monol          : internal representation of the left ear signal
 %        monor          : internal representation of the right ear signal
 %        bimonostring   : defines which representations are used for the decision
@@ -39,7 +39,7 @@ function decision = breebaart2001_centralproc(EI_map,monol,monor,bimonostring,mo
 %     'B'     use binaural channel in any case
 %
 %
-%   See also: exp_breebaart2001 demo_breebaart2001 breebaart2001_preproc eicell
+%   See also: exp_breebaart2001 demo_breebaart2001 breebaart2001_preproc breebaart2001_eicell
 %
 %   References: breebaart2001a
 %

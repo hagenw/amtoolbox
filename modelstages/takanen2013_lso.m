@@ -26,7 +26,7 @@ function output = takanen2013_lso(ipsilateral, contralateral, fs, fc)
 %      constant are applied, the latter only below 1 kHz in order to slow
 %      the response
 %
-%   See also: takanen2013, takanen2013_periphery, weightedaveragefilter
+%   See also: takanen2013, takanen2013_periphery, takanen2013_weightedaveragefilter
 %
 %   References: takanen2014 pulkki2009
 
@@ -64,7 +64,7 @@ for i=1:size(contralateral,2)
 end
 
 %% ------ Weighted-moving average with a time constant of 4 ms ----------------
-output = weightedaveragefilter(output,ipsilateral,fs,0.004);
+output = takanen2013_weightedaveragefilter(output,ipsilateral,fs,0.004);
 % tau = 0.004; 
 % B = 1-exp(-1/(tau*fs));A = [1 -exp(-1/(tau*fs))];
 % output = (filter(B,A,(ipsilateral.^2).*output))./(filter(B,A,ipsilateral.^2)+1e-20);
@@ -72,4 +72,4 @@ output = weightedaveragefilter(output,ipsilateral,fs,0.004);
 %% ------ Self-weighted moving average ----------------
 % Slow down the response above 1 kHz with a time constant of 50 ms
 limit = find(fc<1000,1,'last');
-output(:,1:limit) = weightedaveragefilter(output(:,1:limit),output(:,1:limit),fs,0.05);
+output(:,1:limit) = takanen2013_weightedaveragefilter(output(:,1:limit),output(:,1:limit),fs,0.05);

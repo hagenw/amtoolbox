@@ -29,7 +29,7 @@ function output = takanen2013_mso(ipsilateral, contralateral, fs, fc, printfigs)
 %      the outputs of the coincidence detection and contralateral signal,
 %      respectively, and the output is limited.
 %
-%   See also: takanen2013, takanen2013_periphery, weightedaveragefilter
+%   See also: takanen2013, takanen2013_periphery, takanen2013_weightedaveragefilter
 %
 %   References: takanen2014 pulkki2009
 
@@ -95,7 +95,7 @@ if(printfigs)
 end
 
 %% ------ Weighted and self-weighted moving averages of 4 ms --------------
-output = weightedaveragefilter(output,contralateral,fs,0.004) ./ (weightedaveragefilter(contralateral,contralateral,fs,0.004)+1e-30);
+output = takanen2013_weightedaveragefilter(output,contralateral,fs,0.004) ./ (takanen2013_weightedaveragefilter(contralateral,contralateral,fs,0.004)+1e-30);
 % tau = 0.004; 
 % B = 1-exp(-1/(tau*fs));
 % A = [1 -exp(-1/(tau*fs))];

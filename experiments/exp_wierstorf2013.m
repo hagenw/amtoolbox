@@ -435,7 +435,7 @@ if flags.do_fig9
         conf.ir.useinterpolation = true;
         conf.fs = 44100;
         % load lookup table
-        lookup = data_wierstorf2013('itd2anglelookuptable');
+        lookup = data_wierstorf2013('itd2angle_lookuptable');
         % load HRTFs, see:
         irs=amt_load('wierstorf2013','QU_KEMAR_anechoic_3m.mat');
         irs=irs.irs;

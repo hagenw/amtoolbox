@@ -3,7 +3,7 @@
 %   Peripheral models
 %       EXP_GAMMATONE        - Figures from Gammatone-related publications
 %       EXP_HOHMANN2002      - Figures from Hohmann (2002)
-%       EXP_LOPEZPOVEDA2001  - Iso-itensity curves of the DRNL
+%       EXP_LOPEZPOVEDA2001  - Iso-itensity curves of the lopezpoveda2001
 %       EXP_ROENNE2012       - Auditory nerve latency
 %       EXP_VERHULST2012     - Figures from Verhulst et al. (2012)
 % 

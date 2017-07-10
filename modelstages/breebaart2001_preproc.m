@@ -48,7 +48,7 @@ function [ei_map,fc,outsigl,outsigr] = breebaart2001_preproc(insig,fs,tau,ild,va
 %   5) an excitation-inhibition (EI) cell model.
 %
 %   Parameters for |auditoryfilterbank|, |ihcenvelope|, |adaptloop| and
-%   |eicell| can be passed at the end of the line of input arguments.
+%   |breebaart2001_eicell| can be passed at the end of the line of input arguments.
 %
 %   Examples
 %   --------
@@ -75,7 +75,7 @@ function [ei_map,fc,outsigl,outsigr] = breebaart2001_preproc(insig,fs,tau,ild,va
 %     [ei_map,fc] = breebaart2001_preproc([x1,x2], fs, tau, ild);
 %     plotfilterbank(ei_map,1,fc,fs,'audtick','lin');
 %
-%   See also: eicell auditoryfilterbank ihcenvelope adaptloop breebaart2001_outmiddlefilter
+%   See also: breebaart2001_eicell auditoryfilterbank ihcenvelope adaptloop breebaart2001_outmiddlefilter
 %
 %   References: breebaart2001a
 
@@ -95,7 +95,7 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','eicell'};
+definput.import = {'auditoryfilterbank','ihcenvelope','adaptloop','breebaart2001_eicell'};
 definput.importdefaults={'fhigh',8000,'ihc_breebaart','adt_breebaart'};
 
 [flags,keyvals,~,~,~]  = ltfatarghelper({'flow', 'fhigh', ...
@@ -132,7 +132,7 @@ end
 outsig = ihcenvelope(outsig,fs,'argimport',flags,keyvals);
 
 %% non-linear adaptation loops, 
-% lowpass filter for monaural output and  eicell for binaural output
+% lowpass filter for monaural output and  breebaart2001_eicell for binaural output
 
 outsignal = adaptloop(outsig,fs,'argimport',flags,keyvals);
 
@@ -154,6 +154,6 @@ end
 ei_map = zeros(siglen, nfreqchannels, nsignals);
 for k=1:nsignals
   for g=1:nfreqchannels
-    ei_map(:,g,k) = eicell(squeeze(outsignal(:,g,:,k)),fs,tau,ild,'rc_a',keyvals.rc_a);
+    ei_map(:,g,k) = breebaart2001_eicell(squeeze(outsignal(:,g,:,k)),fs,tau,ild,'rc_a',keyvals.rc_a);
   end
 end

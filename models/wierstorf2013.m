@@ -61,7 +61,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %                      with the KEMAR.
 %
 %     'lookup',lookup  Lookup table to map ITD values to angles. This can be
-%                      created by the `itd2anglelookuptable` function. Default
+%                      created by the `itd2angle_lookuptable` function. Default
 %                      value is the lookup table itd2anglelookuptable.mat that comes with AMT.
 %
 %

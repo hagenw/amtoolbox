@@ -49,7 +49,7 @@ function [output energy] = takanen2013_wbmso(ipsilateral, contralateral, fs, wid
 %      the outputs of the coincidence detection and contralateral signal,
 %      respectively, and the output is limited.
 %
-%   See also: takanen2013, takanen2013_periphery, weightedaveragefilter
+%   See also: takanen2013, takanen2013_periphery, takanen2013_weightedaveragefilter
 %
 %   References: takanen2014 pulkki2009
 
@@ -84,8 +84,8 @@ tempm = contralateral;
 
 %% ------ Post-processing of periphery output -----------------------------
 mcoeff=2;
-tempL = mcoeff*weightedaveragefilter(ipsilateral,ipsilateral,fs,0.01);
-tempR = mcoeff*weightedaveragefilter(contralateral,contralateral,fs,0.01);
+tempL = mcoeff*takanen2013_weightedaveragefilter(ipsilateral,ipsilateral,fs,0.01);
+tempR = mcoeff*takanen2013_weightedaveragefilter(contralateral,contralateral,fs,0.01);
 
 ipsilateral = ipsilateral-[zeros(floor(0.0005*fs),nBands);tempL(1:end-floor(0.0005*fs),:)];
 contralateral = contralateral-[zeros(floor(0.0005*fs),nBands);tempR(1:end-floor(0.0005*fs),:)];
@@ -165,7 +165,7 @@ end
 x=amt_load('takanen2013','wbmsomultp.mat');
 multp=x.multp;
 energy = contralateral.*(ones(nrows,1)*multp);
-temp = weightedaveragefilter(energy,energy,fs,0.01);
+temp = takanen2013_weightedaveragefilter(energy,energy,fs,0.01);
 energy = temp.*(ones(nrows,1)*(max(energy)./max(temp)));
 
 %% ------ Convolution with the contra response ----------------------------
@@ -199,7 +199,7 @@ if(printfigs)
 end
 
 %% ------ Weighted and self-weighted moving averages of 1 ms --------------
-output = weightedaveragefilter(output,contralateral,fs,0.001) ./ (weightedaveragefilter(contralateral,contralateral,fs,0.001)+1e-30);
+output = takanen2013_weightedaveragefilter(output,contralateral,fs,0.001) ./ (takanen2013_weightedaveragefilter(contralateral,contralateral,fs,0.001)+1e-30);
 % tau = 0.001; 
 % B = 1-exp(-1/(tau*fs));A = [1 -exp(-1/(tau*fs))];
 % selfweighted = filter(B,A,(contralateral.^3));

@@ -13,6 +13,7 @@
 %     ZILANY2014            - Auditory cochlear processing 
 %     ROENNE2012            - Simulate ABR to given stimulus
 %     KARJALAINEN1996       - Adaptation network
+%     lopezpoveda2001       - Dual resonance non-linear filterbank.
 %
 %  Spatial models
 %     BAUMGARTNER2013       - Localization in saggital planes (preliminary)

@@ -67,8 +67,8 @@ function pmv = langendijk2002(targets,template,varargin)
   end
   
   % Filter bank
-  x = cqdft(targets,kv.fs,kv.flow,kv.fhigh,kv.bw);
-  y = cqdft(template,kv.fs,kv.flow,kv.fhigh,kv.bw);
+  x = langendijk2002_spectralanalysis(targets,kv.fs,kv.flow,kv.fhigh,kv.bw);
+  y = langendijk2002_spectralanalysis(template,kv.fs,kv.flow,kv.fhigh,kv.bw);
   
   % Comparison process
   si=zeros(size(template,2),size(targets,2),size(template,3)); % initialisation

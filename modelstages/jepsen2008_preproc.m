@@ -30,7 +30,7 @@ function [outsig, fc, mfc] = jepsen2008_preproc(insig, fs, varargin);
 %     2) a middle ear filter to simulate the effect of the middle ear, and
 %        to convert to stapes movement.
 %
-%     3) DRNL - Dual resonance non-linear filterbank.
+%     3) lopezpoveda2001 - Dual resonance non-linear filterbank.
 %
 %     4) an envelope extraction stage done by half-wave rectification
 %        followed by low-pass filtering to 1000 Hz.
@@ -42,11 +42,11 @@ function [outsig, fc, mfc] = jepsen2008_preproc(insig, fs, varargin);
 %
 %     7) a modulation filterbank.
 %
-%   Any of the optinal parameters for |drnl|, |ihcenvelope| and
+%   Any of the optinal parameters for |lopezpoveda2001|, |ihcenvelope| and
 %   |adaptloop| may be optionally specified for this function. They will be
 %   passed to the corresponding functions.
 %
-%   See also: drnl, ihcenvelope, adaptloop, modfilterbank, dau1997_preproc
+%   See also: lopezpoveda2001, ihcenvelope, adaptloop, modfilterbank, dau1997_preproc
 %
 %   References: jepsen2008cmh
 
@@ -69,7 +69,7 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
   error('%s: fs must be a positive scalar.',upper(mfilename));
 end;
 
-definput.import={'drnl','ihcenvelope','adaptloop'};
+definput.import={'lopezpoveda2001','ihcenvelope','adaptloop'};
 definput.importdefaults={'jepsen2008'};
 definput.keyvals.subfs=[];
 
@@ -81,8 +81,8 @@ definput.keyvals.subfs=[];
 hp_fir = headphonefilter(fs);
 outsig = filter(hp_fir,1,insig);
 
-%% DRNL and compensation for middle-ear
-[outsig, fc] = drnl(outsig, fs, 'argimport',flags,keyvals);
+%% lopezpoveda2001 and compensation for middle-ear
+[outsig, fc] = lopezpoveda2001(outsig, fs, 'argimport',flags,keyvals);
 outsig = gaindb(outsig,50);
 
 %% 'haircell' envelope extraction
