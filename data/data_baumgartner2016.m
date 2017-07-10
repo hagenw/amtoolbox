@@ -180,7 +180,7 @@ if flags.do_baumgartner2014
     end
 
     amt_disp('Calibration procedure started. Please wait!','progress')
-    data = baumgartner2016calibration(data,'argimport',flags,kv);
+    data = baumgartner2016_calibration(data,'argimport',flags,kv);
 
     c.data = rmfield(data,{'Obj','fs','itemlist','target','response'}); % reduce filesize
     c.kv = kv;
@@ -341,7 +341,7 @@ else % Loca Level
         end
 
         amt_disp('Calibration procedure started. Please wait!','progress')
-        data = baumgartner2016calibration(data,'argimport',flags,kv,'c',c);
+        data = baumgartner2016_calibration(data,'argimport',flags,kv,'c',c);
 
         c.data = rmfield(data,{'Obj','fs','itemlist','target','response'}); % reduce filesize
         c.kv = kv;

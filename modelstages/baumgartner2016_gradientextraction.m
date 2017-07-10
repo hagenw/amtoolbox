@@ -1,6 +1,6 @@
-function [gp,gfc] = baumgartner2016gradientextraction(mp,fc,varargin)
-%BAUMGARTNER2016GRADIENTEXTRACTION - Extraction of positive spectral gradients
-%   Usage:      [gp,gfc] = baumgartner2016gradientextraction(mp,fc)
+function [gp,gfc] = baumgartner2016_gradientextraction(mp,fc,varargin)
+%baumgartner2016_gradientextraction - Extraction of positive spectral gradients
+%   Usage:      [gp,gfc] = baumgartner2016_gradientextraction(mp,fc)
 %
 %   Input parameters:
 %     mp      : discharge rate profile
@@ -14,7 +14,7 @@ function [gp,gfc] = baumgartner2016gradientextraction(mp,fc,varargin)
 %               4) fiber type, 5) time frame.
 %     gfc     : center frequencies of gradient profile
 %
-%   `baumgartner2016gradientextraction(...)` is a spectral cue extractor
+%   `baumgartner2016_gradientextraction(...)` is a spectral cue extractor
 %    inspired by functionality of dorsal cochlear nucleus in cats.
 %
 %   References: baumgartner2014modeling

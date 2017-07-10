@@ -102,7 +102,7 @@ if flags.do_pool || flags.do_baseline
     
     data = loadBaselineData(data);
     amt_disp('Calibration procedure started. Please wait!','progress')
-    data = baumgartner2014calibration(data,kv);
+    data = baumgartner2014_calibration(data,kv);
     
     c.data = rmfield(data,{'Obj','itemlist','fs','target','response'}); % reduce filesize
     c.kv = kv;

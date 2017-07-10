@@ -152,7 +152,7 @@ function varargout = exp_baumgartner2016(varargin)
 
 %% ------ Check input options --------------------------------------------
 
-definput.import={'amt_cache','localizationerror','baumgartner2014pmv2ppp'};
+definput.import={'amt_cache','localizationerror','baumgartner2014_pmv2ppp'};
 
 definput.flags.experiment = {'missingflag',...
   'fig2','fig3','fig4','fig5','fig6','fig7','fig8','fig9','tab1',...
@@ -385,7 +385,7 @@ if flags.do_baseline_ex
           'mrsmsp',s(ll).mrs,'S',s(ll).S,'lat',latseg(ii),'polsamp',polang,...
           'priordist',s(ll).priordist); 
 
-      [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014pmv2ppp( ...
+      [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014_pmv2ppp( ...
           s(ll).p{ii} , polang , respangs , s(ll).target{ii});
 
       if flags.do_plot
@@ -428,7 +428,7 @@ if flags.do_parametrization
       mkdir(tempfn)
 
       s = data_baumgartner2016('argimport',model.flags,model.kv);
-      [gamma,mrs] = baumgartner2016parametrization(s,'SPLtem',kv.SPLtem,...
+      [gamma,mrs] = baumgartner2016_parametrization(s,'SPLtem',kv.SPLtem,...
         flags.fbank,flags.fibertypeseparation,'mgs',kv.mgs);
 
       amt_cache('set','parametrization',gamma,mrs);
@@ -489,7 +489,7 @@ if flags.do_baseline || flags.do_fig3
       [s(ii).err,pred,m] = baumgartner2016(s(ii).Obj,s(ii).Obj,...
         'argimport',model.flags,model.kv,'ID',s(ii).id,'Condition','baseline',...
         'mrsmsp',s(ii).mrs,'S',s(ii).S,'priordist',s(ii).priordist,errorflag);
-      [s(ii).qe_pred,s(ii).pe_pred] = baumgartner2014pmv2ppp(pred,'exptang',s(ii).itemlist(:,6));
+      [s(ii).qe_pred,s(ii).pe_pred] = baumgartner2014_pmv2ppp(pred,'exptang',s(ii).itemlist(:,6));
     end
     
     if isempty(model.flags.errorflag) % QE and PE
@@ -682,10 +682,10 @@ if flags.do_spatstrat_ex
               'polsamp',s(ll).polang{ii},'priordist',s(ll).priordist);
         respangs{ii} = rang;
 
-        [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp(s(ll).p{ii} , s(ll).polang{ii} , rang);
+        [ qe(ii),pe(ii) ] = baumgartner2014_pmv2ppp(s(ll).p{ii} , s(ll).polang{ii} , rang);
 
         if sum(ismember({data.id},s(ll).id)) % if participant then actual targets
-          [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
+          [ qe_t(ii),pe_t(ii) ] = baumgartner2014_pmv2ppp( ...
               s(ll).p{ii} , s(ll).polang{ii} , rang , s(ll).target{ii} );
 
         end
@@ -843,7 +843,7 @@ if flags.do_spatstrat
               'mrsmsp',s(ll).mrs,'S',s(ll).S,'lat',latdivision(ii),...
               'polsamp',s(ll).polang{ii},'priordist',s(ll).priordist);
             
-            [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
+            [ qe_t(ii),pe_t(ii) ] = baumgartner2014_pmv2ppp( ...
                 s(ll).p{ii} , s(ll).polang{ii} , rang , s(ll).target{ii} );
 
           end
@@ -926,7 +926,7 @@ if flags.do_spatstrat
     quart_qe_exp = quantile(act.qe,[.25 .50 .75]);
 
     % Chance performance
-    [qe0,pe0] = baumgartner2014pmv2ppp('chance',...
+    [qe0,pe0] = baumgartner2014_pmv2ppp('chance',...
       'rang',-30-model.kv.mrsmsp:1:210+model.kv.mrsmsp);
     
     
@@ -1093,7 +1093,7 @@ if flags.do_numchan_ex
         stim = noise(8e3,1,'white');
       end
       sig = lconv(stim,s(ll).spdtfs_c{ii});
-     [mp,fc] = baumgartner2016spectralanalysis(sig,kv.SPL,...
+     [mp,fc] = baumgartner2016_spectralanalysis(sig,kv.SPL,...
        'argimport',model.flags,model.kv,'target','ID',s(ll).id,'Condition',Cond);
      pcolor(fc,s(ll).polang{ii},mp(:,:,1)')
      shading flat
@@ -1120,10 +1120,10 @@ if flags.do_numchan_ex
               'mrsmsp',s(ll).mrs,'S',s(ll).S,'lat',latdivision(ii),...
               'polsamp',s(ll).polang{ii},'priordist',s(ll).priordist);
 
-        [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp(p , s(ll).polang{ii} , rang);
+        [ qe(ii),pe(ii) ] = baumgartner2014_pmv2ppp(p , s(ll).polang{ii} , rang);
 
         if sum(ismember({data.id},s(ll).id)) % if participant then actual targets
-          [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
+          [ qe_t(ii),pe_t(ii) ] = baumgartner2014_pmv2ppp( ...
               p , s(ll).polang{ii} , rang , s(ll).target{ii} );
         end
 
@@ -1299,7 +1299,7 @@ if flags.do_numchan
                 'mrsmsp',s(ll).mrs,'S',s(ll).S,'lat',latdivision(ii),...
                 'polsamp',s(ll).polang{ii},'priordist',s(ll).priordist);
               
-            [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
+            [ qe_t(ii),pe_t(ii) ] = baumgartner2014_pmv2ppp( ...
                 p , s(ll).polang{ii} , rang , s(ll).target{ii} );
           end
           
@@ -1375,7 +1375,7 @@ if flags.do_numchan
     quart_pe_exp = fliplr(quantile([s(idpart).pe_exp]',[.25 .50 .75]));
     quart_qe_exp = fliplr(quantile([s(idpart).qe_exp]',[.25 .50 .75]));
 
-    [qe0,pe0] = baumgartner2014pmv2ppp('chance',...
+    [qe0,pe0] = baumgartner2014_pmv2ppp('chance',...
       'rang',-30-model.kv.mrsmsp:1:210+model.kv.mrsmsp);
     
     
@@ -1888,7 +1888,7 @@ if flags.do_impairment
     emin = min(mtx.err(:))-0.5;
     De = emax-emin;
     
-    [qe0,pe0] = baumgartner2014pmv2ppp('chance',...
+    [qe0,pe0] = baumgartner2014_pmv2ppp('chance',...
       'rang', -30-model.kv.mrsmsp : 1 : 210+model.kv.mrsmsp );
     
     if flags.do_splitSPL
@@ -2141,9 +2141,9 @@ if flags.do_effectOnCues || flags.do_fig9
     gp_ft = cell(length(FT),length(spl));
     for ll = 1:length(spl)
       for ft = 1:length(FT)
-        [mp_ft{ft,ll},fc] = baumgartner2016spectralanalysis(sig,spl(ll),...
+        [mp_ft{ft,ll},fc] = baumgartner2016_spectralanalysis(sig,spl(ll),...
           'target','ID',s(sid).id ,'Condition','baseline','fiberTypes',FT{ft},flags.cachemode);
-        [gp_ft{ft,ll},gfc] = baumgartner2016gradientextraction(mp_ft{ft,ll},fc,'mgs',kv.mgs);
+        [gp_ft{ft,ll},gfc] = baumgartner2016_gradientextraction(mp_ft{ft,ll},fc,'mgs',kv.mgs);
       end
     end
 
@@ -2178,9 +2178,9 @@ if flags.do_effectOnCues || flags.do_fig9
     gp_cohc = cell(length(cohc),length(spl));
     for ll = 1:length(spl)
       for cc = 1:length(cohc)
-        [mp,fc] = baumgartner2016spectralanalysis(sig,spl(ll),'target',...
+        [mp,fc] = baumgartner2016_spectralanalysis(sig,spl(ll),'target',...
           'argimport',flags,kv,'ID',s(sid).id,'Condition','baseline','cohc',cohc(cc));
-        [gp_cohc{cc,ll},gfc] = baumgartner2016gradientextraction(mp,fc,'mgs',model.kv.mgs);
+        [gp_cohc{cc,ll},gfc] = baumgartner2016_gradientextraction(mp,fc,'mgs',model.kv.mgs);
       end
     end
 
@@ -2252,7 +2252,7 @@ if flags.do_evalSpectralContrast
   mp_ft = cell(length(FT),length(spl));
   for ll = 1:length(spl)
     for ft = 1:length(FT)
-      [mp_ft{ft,ll},fc] = baumgartner2016spectralanalysis(sig,spl(ll),...
+      [mp_ft{ft,ll},fc] = baumgartner2016_spectralanalysis(sig,spl(ll),...
         'target','ID',s(sid).id ,'Condition','baseline','fiberTypes',FT{ft},flags.cachemode);
       spectRange(ft,ll) = range(mp_ft{ft,ll}(:));
     end
@@ -2275,7 +2275,7 @@ if flags.do_ratelevelcurves || flags.do_fig2
   
   mp = zeros(1,length(spl),2,3);
   for ii = 1:length(spl)
-    mp(:,ii,:,:) = baumgartner2016spectralanalysis(cat(3,sig,sig),spl(ii),...
+    mp(:,ii,:,:) = baumgartner2016_spectralanalysis(cat(3,sig,sig),spl(ii),...
         'target','ID','','Condition','ratelevelcurves','fiberTypes',1:3,...
         'ftopt','cohc',1,'flow',fc,'fhigh',fc,'nf',1);
   end
@@ -2403,14 +2403,14 @@ if flags.do_dynrangecheck
     mp = zeros(model.kv.nf,length(spl),2,3);
     if flags.do_separate
       for ii = 1:length(spl)
-        [mp(:,ii,:,:),fc] = baumgartner2016spectralanalysis(cat(3,sig,sig),spl(ii),...
+        [mp(:,ii,:,:),fc] = baumgartner2016_spectralanalysis(cat(3,sig,sig),spl(ii),...
             'target','ID','','Condition','dynrangecheck','fiberTypes',1:3,'ftopt','cohc',cohc(cc));
       end
     else
       fiberTypes = {1:3,2:3,3};
       for ft = 1:length(fiberTypes)
         for ii = 1:length(spl)
-          [mp(:,ii,:,ft),fc] = baumgartner2016spectralanalysis(cat(3,sig,sig),spl(ii),...
+          [mp(:,ii,:,ft),fc] = baumgartner2016_spectralanalysis(cat(3,sig,sig),spl(ii),...
               'target','dynrangecheck','fiberTypes',fiberTypes{ft},'cohc',cohc(cc));
         end
       end

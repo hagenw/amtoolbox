@@ -1,6 +1,6 @@
-function [prior,mrs,s] = baumgartner2016parametrization(s)
-% BAUMGARTNER2016PARAMETRIZATION - Joint optimization of model parameters
-%   Usage: [gamma,prior] = baumgartner2016parametrization(s,kv)
+function [prior,mrs,s] = baumgartner2016_parametrization(s)
+% baumgartner2016_parametrization - Joint optimization of model parameters
+%   Usage: [gamma,prior] = baumgartner2016_parametrization(s,kv)
 %
 %   Input parameter:
 %     s       : strucure containing subject's data. It must include the 
@@ -14,7 +14,7 @@ function [prior,mrs,s] = baumgartner2016parametrization(s)
 %
 %     prior   : prior expectation paramter
 %
-%   `baumgartner2016parametrization(...)` jointly optimizes the degree of 
+%   `baumgartner2016_parametrization(...)` jointly optimizes the degree of 
 %   selectivity $\Gamma$, the response scatter $\epsilon$ induced by
 %   sensorimotor mapping, and the listener-specific sensitivity $S_l$.
 %
@@ -25,7 +25,7 @@ function [prior,mrs,s] = baumgartner2016parametrization(s)
 %   from baumgartner2016 ::
 %     
 %     s = data_baumgartner2016('Long','model'); % Load the experimental data
-%     [gamma,prior] = baumgartner2016parametrization(s);
+%     [gamma,prior] = baumgartner2016_parametrization(s);
 %
 %   See also: baumgartner2016, data_baumgartner2016
 %
@@ -100,8 +100,8 @@ c.latseg = 0;%[-20,0,20];
 % for ii = 1:length(s)
 %   c.stim{ii} = s(ii).stim;
 % end
-% s = baumgartner2016calibration(s,kv,c,0.5);
-s = baumgartner2016calibration(s,kv);
+% s = baumgartner2016_calibration(s,kv,c,0.5);
+s = baumgartner2016_calibration(s,kv);
 
 %% Total number of targets
 Nt = zeros(length(s),1); %init
@@ -136,7 +136,7 @@ for ll = 1:length(s)
           'S',s(ll).S,...
           'mrsmsp',epsilon,'gamma',gamma,'prior',prior);
 
-      [ qe,pe ] = baumgartner2014pmv2ppp( ...
+      [ qe,pe ] = baumgartner2014_pmv2ppp( ...
           s(ll).p{ii} , polang , respangs , s(ll).target{ii});
 
       dQE_lat = qe - s(ll).qe_exp_lat(ii);

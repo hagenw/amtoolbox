@@ -472,7 +472,7 @@ if flags.do_fig3 || flags.do_fig13
           s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
           'S',s(ll).S,'lat',latseg(ii),'polsamp',polang); 
 
-      [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014pmv2ppp( ...
+      [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014_pmv2ppp( ...
           s(ll).p{ii} , polang , respangs , s(ll).target{ii});
 
       if flags.do_plot
@@ -569,7 +569,7 @@ if flags.do_fig4
                 'gamma',gamma(g),'mrsmsp',mrs(g)); 
 
             if s(ll).Nt{ii} > 0
-              [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014pmv2ppp( ...
+              [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014_pmv2ppp( ...
                   s(ll).p{ii} , polang , respangs , s(ll).target{ii});
             else
               qe(ll,ii) = NaN; 
@@ -602,7 +602,7 @@ if flags.do_fig4
    
   end
   
-  [qerr0,perr0] = baumgartner2014pmv2ppp(ones(72,44)); % chance performances
+  [qerr0,perr0] = baumgartner2014_pmv2ppp(ones(72,44)); % chance performances
 
   % extract all different gammas
   g = gamma;
@@ -765,7 +765,7 @@ if flags.do_fig12 || flags.do_tab1
             'S',s(ll).S,'lat',latseg(ii),'polsamp',polang{ii}); 
 
         if s(ll).Nt{ii} > 0
-          [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014pmv2ppp( ...
+          [ qe(ll,ii),pe(ll,ii) ] = baumgartner2014_pmv2ppp( ...
               s(ll).p{ii} , polang{ii} , respangs{ii} , s(ll).target{ii});
         else
           qe(ll,ii) = NaN; 
@@ -774,7 +774,7 @@ if flags.do_fig12 || flags.do_tab1
 
       end
       
-      [s(ll).la,s(ll).le,s(ll).ci,s(ll).lr] = baumgartner2014likelistat(s(ll).p,polang,respangs,s(ll).target,s(ll).response);
+      [s(ll).la,s(ll).le,s(ll).ci,s(ll).lr] = baumgartner2014_likelistat(s(ll).p,polang,respangs,s(ll).target,s(ll).response);
       
       
     end
@@ -1089,10 +1089,10 @@ if flags.do_fig5
               'polsamp',s(ll).polang{ii});
         respangs{ii} = rang;
 
-        [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp(s(ll).p{ii} , s(ll).polang{ii} , rang);
+        [ qe(ii),pe(ii) ] = baumgartner2014_pmv2ppp(s(ll).p{ii} , s(ll).polang{ii} , rang);
 
         if sum(ismember({data.id},s(ll).id)) % if participant then actual targets
-          [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
+          [ qe_t(ii),pe_t(ii) ] = baumgartner2014_pmv2ppp( ...
               s(ll).p{ii} , s(ll).polang{ii} , rang , s(ll).target{ii} );
 
         end
@@ -1152,7 +1152,7 @@ if flags.do_fig5
 
         end
         
-%         [la(C,ll),le(C,ll),ci(C,ll,:)] = baumgartner2014likelistat(s(ll).p,s(ll).polang,respangs,s(ll).target,s(ll).response);
+%         [la(C,ll),le(C,ll),ci(C,ll,:)] = baumgartner2014_likelistat(s(ll).p,s(ll).polang,respangs,s(ll).target,s(ll).response);
         
       end
 
@@ -1238,10 +1238,10 @@ if flags.do_fig6
                 'polsamp',s(ll).polang{ii});
           respangs{ii} = rang;
 
-          [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp(s(ll).p{ii} , s(ll).polang{ii} , rang);
+          [ qe(ii),pe(ii) ] = baumgartner2014_pmv2ppp(s(ll).p{ii} , s(ll).polang{ii} , rang);
 
           if sum(ismember({data.id},s(ll).id)) % if actual participant actual targets
-            [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
+            [ qe_t(ii),pe_t(ii) ] = baumgartner2014_pmv2ppp( ...
                 s(ll).p{ii} , s(ll).polang{ii} , rang , s(ll).target{ii} );
 
           end
@@ -1274,7 +1274,7 @@ if flags.do_fig6
             s(ll).pe_part(C,1) = mean(pe_t);
           end
 
-          [la(C,ll),le(C,ll),ci(C,ll,:)] = baumgartner2014likelistat(s(ll).p,s(ll).polang,respangs,s(ll).target,s(ll).response);
+          [la(C,ll),le(C,ll),ci(C,ll,:)] = baumgartner2014_likelistat(s(ll).p,s(ll).polang,respangs,s(ll).target,s(ll).response);
         end
 
       end
@@ -1327,7 +1327,7 @@ if flags.do_fig6
   % Chance performance
 %   qe0 = qe_chance;
 %   pe0 = pe_chance;
-  [qe0,pe0] = baumgartner2014pmv2ppp('chance');
+  [qe0,pe0] = baumgartner2014_pmv2ppp('chance');
 
   if flags.do_plot
     
@@ -1504,10 +1504,10 @@ if flags.do_fig7
               'S',s(ll).S,'lat',latdivision(ii),...
               'polsamp',s(ll).polang{ii});
 
-        [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp(p , s(ll).polang{ii} , rang);
+        [ qe(ii),pe(ii) ] = baumgartner2014_pmv2ppp(p , s(ll).polang{ii} , rang);
 
         if sum(ismember({data.id},s(ll).id)) % if participant then actual targets
-          [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
+          [ qe_t(ii),pe_t(ii) ] = baumgartner2014_pmv2ppp( ...
               p , s(ll).polang{ii} , rang , s(ll).target{ii} );
         end
 
@@ -1666,10 +1666,10 @@ if flags.do_fig8
           s(ll).p{ii} = p;    
           respangs{ii} = rang;
 
-          [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp(p , s(ll).polang{ii} , rang);
+          [ qe(ii),pe(ii) ] = baumgartner2014_pmv2ppp(p , s(ll).polang{ii} , rang);
 
           if sum(ismember({data.id},s(ll).id)) % if actual participant actual targets
-            [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
+            [ qe_t(ii),pe_t(ii) ] = baumgartner2014_pmv2ppp( ...
                 p , s(ll).polang{ii} , rang , s(ll).target{ii} );
           end
 
@@ -1699,7 +1699,7 @@ if flags.do_fig8
             s(ll).pe_part(C,1) = mean(pe_t);
           end
 
-          [la(C,ll),le(C,ll),ci(C,ll,:)] = baumgartner2014likelistat(s(ll).p,s(ll).polang,respangs,s(ll).target,s(ll).response);
+          [la(C,ll),le(C,ll),ci(C,ll,:)] = baumgartner2014_likelistat(s(ll).p,s(ll).polang,respangs,s(ll).target,s(ll).response);
           
         end
 
@@ -1755,7 +1755,7 @@ if flags.do_fig8
   % Chance performance
 %   qe0 = qe_chance;
 %   pe0 = pe_chance;
-  [qe0,pe0] = baumgartner2014pmv2ppp('chance');
+  [qe0,pe0] = baumgartner2014_pmv2ppp('chance');
 
   
   if flags.do_plot
@@ -1875,7 +1875,7 @@ if flags.do_fig9
                   'S',s(ll).S,'lat',s(ll).latang{ii},...
                   'polsamp',s(ll).polangs{ii},'flow',flow);
 
-              [ qe(ll,jj,ii),pe(ll,jj,ii),pb(ll,jj,ii) ] = baumgartner2014pmv2ppp( ...
+              [ qe(ll,jj,ii),pe(ll,jj,ii),pb(ll,jj,ii) ] = baumgartner2014_pmv2ppp( ...
                   s(ll).p{jj,ii} , s(jj).polangs{ii} , s(ll).respangs{ii});
 
             end
@@ -2063,7 +2063,7 @@ if flags.do_fig10
         [pflat,rang] = baumgartner2014(targets,spdtfs,...
             'S',s(ss).S,'polsamp',polang,...
             'lat',latseg(ll),'stim',[1;0],'do',psge); % Impulse
-        mflat = baumgartner2014virtualexp(pflat,tang,rang,'runs',runs);
+        mflat = baumgartner2014_virtualexp(pflat,tang,rang,'runs',runs);
         [f,r] = localizationerror(mflat,'sirpMacpherson2000');
         pe_flat(ll,ss) = localizationerror(mflat,f,r,'perMacpherson2003');
 
@@ -2078,7 +2078,7 @@ if flags.do_fig10
           [p,rang] = baumgartner2014(targets,spdtfs,...
             'S',s(ss).S,'polsamp',polang,...
             'lat',latseg(ll),'stim',sexp1(:,ii),'do',psge);
-          m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
+          m = baumgartner2014_virtualexp(p,tang,rang,'runs',runs);
           pe_exp1(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
           if plotpmv; figure; plot_baumgartner2014(p,tang,rang,m(:,6),m(:,8));title([num2str(density(mod(ii-1,10)+1)) 'ripples/oct; PE:' num2str(pe_exp1(ll,ss,ii),2) '%']);pause(0.5); end
@@ -2092,7 +2092,7 @@ if flags.do_fig10
           [p,rang] = baumgartner2014(targets,spdtfs,...
             'S',s(ss).S,'polsamp',polang,...
             'lat',latseg(ll),'stim',sexp2(:,ii),'do',psge);
-          m = baumgartner2014virtualexp(p,tang,rang,'runs',runs);
+          m = baumgartner2014_virtualexp(p,tang,rang,'runs',runs);
           pe_exp2(ll,ss,ii) = localizationerror(m,f,r,'perMacpherson2003');% - pe_flat(ll,ss);
 
           if plotpmv; plot_baumgartner2014(p,tang,rang,m(:,6),m(:,8));title([num2str(depth(mod(ii-1,4)+1)) 'dB; PE:' num2str(pe_exp2(ll,ss,ii),2) '%']);pause(0.5); end
@@ -2382,8 +2382,8 @@ if flags.do_fig11
             [spdtfs,polang] = extractsp(latseg(ll),s(ss).Obj);
             [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',psge,...
                   'S',s(ss).S,'polsamp',polang,'lat',latseg(ll),'notprint');
-            ape_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
-            qe_BBnoise(1,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang);
+            ape_BBnoise(1,ss,ll) = baumgartner2014_pmv2ppp(p,polang,rang,'absPE');
+            qe_BBnoise(1,ss,ll) = baumgartner2014_pmv2ppp(p,polang,rang);
 
             if plotpmv; figure; plot_baumgartner2014(p,polang,rang); title(num2str(ape_BBnoise(1,ss,ll),2)); end
 
@@ -2422,8 +2422,8 @@ if flags.do_fig11
                 [p,rang] = baumgartner2014(spdtfs,spdtfs,'do',psge,...
                   'S',s(ss).S,'polsamp',polang,...
                   'lat',latseg(ll),'stim',stim,'notprint');
-                ape_lat(ilp,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang,'absPE');
-                qe_lat(ilp,ss,ll) = baumgartner2014pmv2ppp(p,polang,rang);
+                ape_lat(ilp,ss,ll) = baumgartner2014_pmv2ppp(p,polang,rang,'absPE');
+                qe_lat(ilp,ss,ll) = baumgartner2014_pmv2ppp(p,polang,rang);
 
                 if plotpmv; figure; plot_baumgartner2014(p,polang,rang); title(num2str(ape_lat(ilp,ss,ll),2)); end
 
@@ -2498,7 +2498,7 @@ if flags.do_fig11
     FontSize = kv.FontSize;
     
     xticks = 0:size(ape_all,1);
-    ape0 = baumgartner2014pmv2ppp('absPE','chance');
+    ape0 = baumgartner2014_pmv2ppp('absPE','chance');
     
     figure;
     subplot(211)
@@ -2525,7 +2525,7 @@ if flags.do_fig11
 %     pos(2) = pos(2)+0.14;
 %     set(leg,'Position',pos)
 
-    qe0 = baumgartner2014pmv2ppp('QE','chance');
+    qe0 = baumgartner2014_pmv2ppp('QE','chance');
     
     subplot(212)
     h(1) = plot(xticks-dx,qe,'ks');
@@ -2641,7 +2641,7 @@ if flags.do_tab2
                     'polsamp',s(ll).polang{ii},'do',ido,'fhigh',fhigh);
               respangs{ii} = rang;
 
-              [ qe_t(ii),pe_t(ii) ] = baumgartner2014pmv2ppp( ...
+              [ qe_t(ii),pe_t(ii) ] = baumgartner2014_pmv2ppp( ...
                   s(ll).p{ii} , s(ll).polang{ii} , rang , s(ll).target{ii} );
 
             end
@@ -2682,7 +2682,7 @@ if flags.do_tab2
           'DCN yes, BWA no ';...
           };
   
-  [qe0,pe0] = baumgartner2014pmv2ppp('chance');
+  [qe0,pe0] = baumgartner2014_pmv2ppp('chance');
 
   qe_exp = permute(result.qe_exp,[2,1]);
   pe_exp = permute(result.pe_exp,[2,1]);
@@ -2817,7 +2817,7 @@ if flags.do_tab3
               'bwcoef',bwcoef(b)); 
 
           if s(ll).Nt{ii} > 0
-            [ qe(ll,ii,b),pe(ll,ii,b) ] = baumgartner2014pmv2ppp( ...
+            [ qe(ll,ii,b),pe(ll,ii,b) ] = baumgartner2014_pmv2ppp( ...
                 s(ll).p{ii} , polang{ii} , respangs{ii} , s(ll).target{ii});
           else
             qe(ll,ii,b) = NaN; 
@@ -2937,7 +2937,7 @@ if flags.do_fig5_baumgartner2015aro
               'S',s(isub).S,'mrsmsp',mrs,...
               'lat',lat(ilat),'bwcoef',bwcoef(ibwc));
             [ qerr(isnr,ibwc,ilat,isub) , perr(isnr,ibwc,ilat,isub) ] = ...
-              baumgartner2014pmv2ppp(p,tang,rang);
+              baumgartner2014_pmv2ppp(p,tang,rang);
           end
         end
       end
@@ -3133,9 +3133,9 @@ if flags.do_fig4_baumgartner2015jaes
             s(ll).dtfs2{ii},s(ll).spdtfs,s(ll).fs,'S',s(ll).S,...
             'mrsmsp',MRS,'polsamp',polang);
 
-          [s(ll).qe1(ii),s(ll).pe1(ii)] = baumgartner2014pmv2ppp(...
+          [s(ll).qe1(ii),s(ll).pe1(ii)] = baumgartner2014_pmv2ppp(...
             s(ll).p1(:,ii),polang(id0),respang);
-          [s(ll).qe2(ii),s(ll).pe2(ii)] = baumgartner2014pmv2ppp(...
+          [s(ll).qe2(ii),s(ll).pe2(ii)] = baumgartner2014_pmv2ppp(...
             s(ll).p2(:,ii),polang(id0),respang);
 
           % Increse of error
@@ -3471,9 +3471,9 @@ if flags.do_fig7_baumgartner2015jaes
             'mrsmsp',MRS,'polsamp',polang);
 
           % RMS Error
-          [s(ll).qe1{ii},s(ll).pe1{ii}] = baumgartner2014pmv2ppp(...
+          [s(ll).qe1{ii},s(ll).pe1{ii}] = baumgartner2014_pmv2ppp(...
             s(ll).p1{ii},polang(id0),respang);
-          [s(ll).qe2{ii},s(ll).pe2{ii}] = baumgartner2014pmv2ppp(...
+          [s(ll).qe2{ii},s(ll).pe2{ii}] = baumgartner2014_pmv2ppp(...
             s(ll).p2{ii},pol2{ii},respang);
 
           % Increse of error
@@ -3576,7 +3576,7 @@ if flags.do_fig8_baumgartner2015jaes
             'mrsmsp',MRS,'polsamp',polang,'rangsamp',1); % phantom
 
           % total polar range 
-          m2 = baumgartner2014virtualexp(s(ll).p2{ii},pol0,rang,'runs',runs);
+          m2 = baumgartner2014_virtualexp(s(ll).p2{ii},pol0,rang,'runs',runs);
 
           % R2 via correlation coefficient
           r = corrcoef(m2(:,8),m2(:,6));
@@ -3589,7 +3589,7 @@ if flags.do_fig8_baumgartner2015jaes
           pol0front = pol0(idpol0front);
           p = s(ll).p2{ii}(idfront,idpol0front);
 
-          m2front = baumgartner2014virtualexp(p,pol0front,respangfront,'runs',runs);
+          m2front = baumgartner2014_virtualexp(p,pol0front,respangfront,'runs',runs);
 
           r = corrcoef(m2front(:,8),m2front(:,6));
           r2front(ll,idl) = r(2);
@@ -3601,7 +3601,7 @@ if flags.do_fig8_baumgartner2015jaes
           pol0rear = pol0(idpol0rear);
           p = s(ll).p2{ii}(idrear,idpol0rear);
 
-          m2rear = baumgartner2014virtualexp(p,pol0rear,respangrear,'runs',runs);
+          m2rear = baumgartner2014_virtualexp(p,pol0rear,respangrear,'runs',runs);
 
           r = corrcoef(m2rear(:,8),m2rear(:,6));
           r2rear(ll,idl) = r(2);
@@ -3724,9 +3724,9 @@ if flags.do_fig9_baumgartner2015jaes
                     target,spdtfs,s(jj).fs,'S',s(jj).S,...
                     'lat',lat,'polsamp',polang,'mrsmsp',MRS);
 
-            m = baumgartner2014virtualexp(p,pol,rang,'runs',1000);
+            m = baumgartner2014_virtualexp(p,pol,rang,'runs',1000);
             pe(aa,pp,jj,ll,1) = localizationerror(m,'precPnoquerr');
-            [~,pe(aa,pp,jj,ll,2)] = baumgartner2014pmv2ppp(p,pol,rang);
+            [~,pe(aa,pp,jj,ll,2)] = baumgartner2014_pmv2ppp(p,pol,rang);
 
           end
         end
@@ -3767,9 +3767,9 @@ if flags.do_fig9_baumgartner2015jaes
                   target,spdtfs,s(jj).fs,'S',s(jj).S,...
                   'mrsmsp',MRS,'lat',lat,'polsamp',polang);
 
-          m = baumgartner2014virtualexp(p,pol,rang,'runs',1000);
+          m = baumgartner2014_virtualexp(p,pol,rang,'runs',1000);
           pe_ref(aa,pp,jj,1,1) = localizationerror(m,'precPnoquerr');
-          [~,pe_ref(aa,pp,jj,1,2)] = baumgartner2014pmv2ppp(p,pol,rang);
+          [~,pe_ref(aa,pp,jj,1,2)] = baumgartner2014_pmv2ppp(p,pol,rang);
 
         end
       end

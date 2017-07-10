@@ -1,6 +1,6 @@
-function [gamma,epsilon,s] = baumgartner2014parametrization(s)
-% BAUMGARTNER2014PARAMETRIZATION - Joint optimization of model parameters
-%   Usage: [gamma,epsilon] = baumgartner2014parametrization(s)
+function [gamma,epsilon,s] = baumgartner2014_parametrization(s)
+% baumgartner2014_parametrization - Joint optimization of model parameters
+%   Usage: [gamma,epsilon] = baumgartner2014_parametrization(s)
 %
 %   Input parameter:
 %     s       : strucure containing subject's data. It must include the 
@@ -14,7 +14,7 @@ function [gamma,epsilon,s] = baumgartner2014parametrization(s)
 %
 %     epsilon : response scatter in degrees induced by sensorimotor mapping
 %
-%   `baumgartner2014parametrization(...)` jointly optimizes the degree of 
+%   `baumgartner2014_parametrization(...)` jointly optimizes the degree of 
 %   selectivity $\Gamma$, the response scatter $\epsilon$ induced by
 %   sensorimotor mapping, and the listener-specific sensitivity $S_l$.
 %
@@ -25,7 +25,7 @@ function [gamma,epsilon,s] = baumgartner2014parametrization(s)
 %   from baumgartner2014 ::
 %     
 %     s = data_baumgartner2014('baseline'); % Load the experimental data
-%     [gamma,epsilon] = baumgartner2014parametrization(s);
+%     [gamma,epsilon] = baumgartner2014_parametrization(s);
 %
 %   See also: baumgartner2014, data_baumgartner2014
 %
@@ -84,7 +84,7 @@ latseg = -60:20:60; % centers of lateral segments
 kv.mrsmsp = epsilon;
 kv.gamma = gamma;
 kv.do = 1;
-s = baumgartner2014calibration(s,kv);
+s = baumgartner2014_calibration(s,kv);
 
 %% Total number of targets
 Nt = zeros(length(s),1); %init
@@ -112,7 +112,7 @@ for ll = 1:length(s)
           'S',s(ll).S,'lat',latseg(ii),'polsamp',polang,...
           'mrsmsp',epsilon,'gamma',gamma);
 
-      [ qe,pe ] = baumgartner2014pmv2ppp( ...
+      [ qe,pe ] = baumgartner2014_pmv2ppp( ...
           s(ll).p{ii} , polang , respangs , s(ll).target{ii});
 
       dQE_lat = qe - s(ll).qe_exp_lat(ii);
@@ -127,7 +127,7 @@ for ll = 1:length(s)
 
 end
 
-[qe_chance,pe_chance] = baumgartner2014pmv2ppp(ones(49,44));
+[qe_chance,pe_chance] = baumgartner2014_pmv2ppp(ones(49,44));
 distmetric =  (dQEsq/qe_chance^2) + (dPEsq/pe_chance^2); % Joint distance metric of QE and PE (normalized by chance performance)
 
 end

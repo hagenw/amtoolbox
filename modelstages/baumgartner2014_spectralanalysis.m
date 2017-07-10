@@ -1,6 +1,6 @@
-function varargout = baumgartner2014spectralanalysis(sig,varargin)
-%BAUMGARTNER2014SPECTRALANALYSIS - Approximation of spectral analysis by auditory periphery
-%   Usage:     mp = baumgartner2014spectralanalysis(sig)
+function varargout = baumgartner2014_spectralanalysis(sig,varargin)
+%baumgartner2014_spectralanalysis - Approximation of spectral analysis by auditory periphery
+%   Usage:     mp = baumgartner2014_spectralanalysis(sig)
 %
 %   Input parameters:
 %     sig     : incoming time-domain signal
@@ -9,10 +9,10 @@ function varargout = baumgartner2014spectralanalysis(sig,varargin)
 %     mp      : spectral magintude profile
 %     fc      : center frequencies of auditory filters
 %
-%   `baumgartner2014spectralanalysis(...)` computes temporally integrated
+%   `baumgartner2014_spectralanalysis(...)` computes temporally integrated
 %   spectral magnitude profiles.
 %
-%   `baumgartner2014spectralanalysis` accepts the following optional parameters:
+%   `baumgartner2014_spectralanalysis` accepts the following optional parameters:
 %
 %     'flow',flow    Set the lowest frequency in the filterbank to
 %                    *flow*. Default value is 700 Hz.

@@ -1,8 +1,8 @@
 function definput=arg_baumgartner2016(definput)
 
-definput = arg_baumgartner2016calibration(definput);
+definput = arg_baumgartner2016_calibration(definput);
 definput = arg_localizationerror(definput);
-definput = arg_baumgartner2014pmv2ppp(definput);
+definput = arg_baumgartner2014_pmv2ppp(definput);
 definput = arg_amt_cache(definput);
 
 definput.keyvals.ID = 'NHx';

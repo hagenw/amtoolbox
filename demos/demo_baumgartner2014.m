@@ -16,7 +16,7 @@
 %      function of the polar target angle with probabilities encoded by
 %      brigthness.
 %
-%   See also: baumgartner2014 exp_baumgartner2014 baumgartner2014virtualexp
+%   See also: baumgartner2014 exp_baumgartner2014 baumgartner2014_virtualexp
 %   localizationerror
 
 % AUTHOR : Robert Baumgartner
@@ -41,7 +41,7 @@ ids = find(ismember({s.id},subID));  % index of exemplary listener
 
 %% Run virtual experiment
 
-m = baumgartner2014virtualexp(p,tang,rang,'runs',2);
+m = baumgartner2014_virtualexp(p,tang,rang,'runs',2);
 
 
 %% Calcualte performance measures 
@@ -50,7 +50,7 @@ amt_disp('Performance Predictions:')
 amt_disp('------------------------')
 
 % via expectancy values:
-[qe,pe] = baumgartner2014pmv2ppp(p,tang,rang,'print'); 
+[qe,pe] = baumgartner2014_pmv2ppp(p,tang,rang,'print'); 
 
 % and/or via responses drawn from virtual experiments
 [f,r] = localizationerror(m,'sirpMacpherson2000');

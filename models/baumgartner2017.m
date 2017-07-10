@@ -74,14 +74,14 @@ function [E,varargout] = baumgartner2017( target,template,varargin )
 %   3) Circular Statistics Toolbox from http://www.mathworks.com/matlabcentral/fileexchange/10676-circular-statistics-toolbox--directional-statistics-
 %
 %
-%   See also: baumgartner2014spectralanalysis,
-%   baumgartner2014gradientextraction, baumgartner2014binauralweighting
+%   See also: baumgartner2014_spectralanalysis,
+%   baumgartner2014_gradientextraction, baumgartner2014_binauralweighting
 
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
 %% Check input
 
-definput.import={'baumgartner2014','baumgartner2014pmv2ppp','localizationerror','amt_cache'};
+definput.import={'baumgartner2014','baumgartner2014_pmv2ppp','localizationerror','amt_cache'};
 definput.keyvals.tempWin = 1; % temporal integration window in sec
 definput.flags.normalize = {'regular','normalize'};
 definput.flags.cueProcessing = {'intraaural','interaural'};
@@ -180,17 +180,17 @@ for iframe = 1:Nframes
   
 %% Spectral Analysis, Eq.(2)
 
-[tar.mp,fc] = baumgartner2014spectralanalysis(target(idt,:,:),'argimport',flags,kv);
+[tar.mp,fc] = baumgartner2014_spectralanalysis(target(idt,:,:),'argimport',flags,kv);
 if isempty(tem.mp) % integration across whole time range
-  tem.mp = baumgartner2014spectralanalysis(template,'argimport',flags,kv);
+  tem.mp = baumgartner2014_spectralanalysis(template,'argimport',flags,kv);
 end
 
 
 if flags.do_intraaural
   %% Positive spectral gradient extraction, Eq.(3)
   if kv.do == 1 % DCN inspired feature extraction
-    nrep.tem = baumgartner2014gradientextraction(tem.mp,fc);
-    nrep.tar = baumgartner2014gradientextraction(tar.mp,fc);
+    nrep.tem = baumgartner2014_gradientextraction(tem.mp,fc);
+    nrep.tar = baumgartner2014_gradientextraction(tar.mp,fc);
   else
     nrep.tem = tem.mp;
     nrep.tar = tar.mp;
@@ -206,17 +206,17 @@ if flags.do_intraaural
   %% Similarity estimation, Eq.(5)
   si = exp(-kv.S*sigma);
 %   si = sigma.^kv.S;
-  % si = baumgartner2014similarityestimation(sigma,'argimport',flags,kv);
+  % si = baumgartner2014_similarityestimation(sigma,'argimport',flags,kv);
 
   %% Binaural weighting, Eq.(6)
-  bsi(iframe,:) = baumgartner2014binauralweighting(si,'argimport',flags,kv);
+  bsi(iframe,:) = baumgartner2014_binauralweighting(si,'argimport',flags,kv);
 
   %% Normalize
 %   if flags.do_normalize
 % %     if not(exist('bsiRef','var'))
 %       sigmaRef = baumgartner2017comparisonprocess(nrep.tem,nrep.tem);
 %       siRef = sigmaRef.^kv.S;
-%       bsiRef = baumgartner2014binauralweighting(siRef,'argimport',flags,kv);
+%       bsiRef = baumgartner2014_binauralweighting(siRef,'argimport',flags,kv);
 % %     end
 %     bsi(iframe) = bsi(iframe)/bsiRef;
 %   end

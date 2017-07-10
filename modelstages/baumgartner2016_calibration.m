@@ -1,6 +1,6 @@
-function scalib = baumgartner2016calibration(s,varargin)
-%baumgartner2016calibration  Calibration of listener-specific sensitivity thresholds to experimental performance
-%   Usage: scalib = baumgartner2016calibration(s)
+function scalib = baumgartner2016_calibration(s,varargin)
+%baumgartner2016_calibration  Calibration of listener-specific sensitivity thresholds to experimental performance
+%   Usage: scalib = baumgartner2016_calibration(s)
 %
 %   Input parameter:
 %     s       : strucure containing subject's data. It must include the 
@@ -12,12 +12,12 @@ function scalib = baumgartner2016calibration(s,varargin)
 %   Output parameter:
 %     scalib  : strucure containing subject's data with calibrated u
 %
-%   `baumgartner2016calibration` returns listener data with
+%   `baumgartner2016_calibration` returns listener data with
 %   listener-specific sensitivity thresholds calibrated by joint
 %   optimization of PE and QE to minimize mismatch between experimental
 %   and predicted results.
 %
-%   `baumgartner2016calibration` accepts the following optional parameters:
+%   `baumgartner2016_calibration` accepts the following optional parameters:
 %
 %     'Srange',Sr     Define the sensitivity range. Default is [eps,10].
 %
@@ -35,7 +35,7 @@ function scalib = baumgartner2016calibration(s,varargin)
 %     'MaxIter',mi    Maximum number of optimization iterations (see help
 %                     optimset for details).
 %
-%   `baumgartner2016calibration` accepts the following flags:
+%   `baumgartner2016_calibration` accepts the following flags:
 %
 %     'calibprior'    Calibrate also expectation prior.
 %
@@ -154,7 +154,7 @@ for ll = 1:length(s)
         'ID',s(ll).id,'fs',s(ll).fs,'mrsmsp',s(ll).mrs,'S',S,'SPL',SPL,...
         'stim',stim,'fsstim',s(ll).fsstim,'priordist',s(ll).priordist);
 
-    [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp( ...
+    [ qe(ii),pe(ii) ] = baumgartner2014_pmv2ppp( ...
         s(ll).p{ii} , polang , respangs , s(ll).target{ii});
 
     latweight = length(s(ll).target{ii})/length(cat(1,s(ll).target{:}));
@@ -168,7 +168,7 @@ for ll = 1:length(s)
 
 end
 
-% [qe_chance,pe_chance] = baumgartner2014pmv2ppp('chance');
+% [qe_chance,pe_chance] = baumgartner2014_pmv2ppp('chance');
 % distmetric =  (dQE/qe_chance).^2 + (dPE/pe_chance).^2; % Joint distance metric of QE and PE (standardized scatter)
 
 QEmax = 100;

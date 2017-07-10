@@ -1,7 +1,7 @@
-function scalib = baumgartner2013calibration(s)
-%baumgartner2013calibration  Calibration of listener-specific sensitivity 
+function scalib = baumgartner2013_calibration(s)
+%baumgartner2013_calibration  Calibration of listener-specific sensitivity 
 % thresholds to experimental performance
-%   Usage: scalib = baumgartner2013calibration(s)
+%   Usage: scalib = baumgartner2013_calibration(s)
 %
 %   Input parameter:
 %     s       : strucure containing subject's data. It must include the 
@@ -13,7 +13,7 @@ function scalib = baumgartner2013calibration(s)
 %   Output parameter:
 %     scalib  : strucure containing subject's data with calibrated u
 %
-%   `baumgartner2013calibration` returns listener data with
+%   `baumgartner2013_calibration` returns listener data with
 %   listener-specific sensitivity thresholds calibrated by joint
 %   optimization of PE and QE to minimize mismatch between experimental
 %   and predicted results.
@@ -58,7 +58,7 @@ for ll = 1:length(s)
         s(ll).sphrtfs{ii},s(ll).sphrtfs{ii},s(ll).fs,...
         'u',u,'lat',kv.latseg(ii),'polsamp',polang);
 
-    [ qe(ii),pe(ii) ] = baumgartner2013pmv2ppp( ...
+    [ qe(ii),pe(ii) ] = baumgartner2013_pmv2ppp( ...
         s(ll).p{ii} , polang , respangs , s(ll).target{ii});
 
     qeM(ll) = qeM(ll) + qe(ii)*s(ll).Ntargets{ii}/sum([s(ll).Ntargets{:}]);
@@ -71,7 +71,7 @@ for ll = 1:length(s)
 
 end
 
-[qe_chance,pe_chance] = baumgartner2013pmv2ppp(ones(49,44));
+[qe_chance,pe_chance] = baumgartner2013_pmv2ppp(ones(49,44));
 distmetric =  (dQE/qe_chance).^2 + (dPE/pe_chance).^2; % Joint distance metric of QE and PE (standardized scatter)
 
 end

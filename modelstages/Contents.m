@@ -62,17 +62,19 @@
 % 
 %
 %  Sagittal-plane localization models
-%     BAUMGARTNER2013PMV2PPP - Calculate performance predictions from PMVs for baumgartner2013
-%     BAUMGARTNER2014SPECTRALANALYSIS - Approximation of spectral analysis by auditory periphery
-%     BAUMGARTNER2014GRADIENTEXTRACTION - Extraction of positive spectral gradients
-%     BAUMGARTNER2014COMPARISONPROCESS - Comparison with direction-specific templates
-%     BAUMGARTNER2014SIMILARITYESTIMATION - Similarity estimation with listener-specific sensitivity
-%     BAUMGARTNER2014BINAURALWEIGHTING - Binaural combination of monaural similarity estimates
-%     BAUMGARTNER2014SENSORIMOTORMAPPING - Response scatter induced by localization task
-%     BAUMGARTNER2014CALIBRATION - Calibration of the model (linear periphery)
-%     BAUMGARTNER2014VIRTUALEXP - Performs a virtual sound-localization experiment
-%     BAUMGARTNER2014PMV2PPP - Performance predictions from PMVs of baumgartner2014
-%     BAUMGARTNER2014LIKELISTAT - Likelihood statistics for evaluation of model performance
-%     BAUMGARTNER2016CALIBRATION - Calibration of the model (nonlinear periphery)
-%     BAUMGARTNER2016SPECTRALANALYSIS - Approximation of spectral analysis by auditory periphery
+%     baumgartner2013_pmv2ppp - Calculate performance predictions from PMVs for baumgartner2013
+%     baumgartner2014_spectralanalysis - Approximation of spectral analysis by auditory periphery
+%     baumgartner2014_gradientextraction - Extraction of positive spectral gradients
+%     baumgartner2014_comparisonprocess - Comparison with direction-specific templates
+%     baumgartner2014_similarityestimation - Similarity estimation with listener-specific sensitivity
+%     baumgartner2014_binauralweighting - Binaural combination of monaural similarity estimates
+%     baumgartner2014_sensorimotormapping - Response scatter induced by localization task
+%     baumgartner2014_calibration - Calibration of the model (linear periphery)
+%     baumgartner2014_virtualexp - Performs a virtual sound-localization experiment
+%     baumgartner2014_pmv2ppp - Performance predictions from PMVs of baumgartner2014
+%     baumgartner2014_likelistat - Likelihood statistics for evaluation of model performance
+%     baumgartner2016_calibration - Calibration of the model (nonlinear periphery)
+%     baumgartner2016_spectralanalysis - Approximation of spectral analysis by auditory periphery
+%     baumgartner2016_gradientextraction - Extraction of positive spectral gradients
+%     baumgartner2016_comparisonprocess - Comparison with direction-specific templates
 %
