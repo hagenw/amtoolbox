@@ -18,4 +18,7 @@
 %  Binaural test signals
 %    sig_competingtalkers - Several different competing talker signal
 %    sig_breebaart2001 - Generates a binaural signals with narrow-band noise 
-%
+%    sig_hartmann1996 - Complex tone from Hartmann and Wittenberg (1996)
+%    sig_boyd2012 - HRTF mix from Boyd et al. (2012)
+%    sig_hassager2016 - spectral smoothing algorithm from Hassager et al. (2016)
+% 

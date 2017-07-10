@@ -1,7 +1,7 @@
-function Obj = sig_baumgartner2017_flattenhrtfmag(Obj,M,flow,fhigh)
-% sig_baumgartner2017_flattenhrtfmag - flattens magnitude spectra of HRTFs.
+function Obj = sig_baumgartner2017(Obj,M,flow,fhigh)
+% sig_baumgartner2017 - flattens magnitude spectra of HRTFs.
 %
-%   Usage:  Obj = sig_baumgartner2017_flattenhrtfmag(Obj,M,flow,fhigh)
+%   Usage:  Obj = sig_baumgartner2017(Obj,M,flow,fhigh)
 %
 %   Input parameters:
 %     Obj   : reference SOFA object

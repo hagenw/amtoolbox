@@ -105,7 +105,7 @@ if flags.do_hassager2016
           if isnan(B(iB))
             target = template;
           else
-            Obj_tar = sig_hassager2016_spectralsmoothing(Obj,B(iB));
+            Obj_tar = sig_hassager2016(Obj,B(iB));
             target = squeeze(shiftdim(Obj_tar.Data.IR(idazi,:,:),2));
           end
           Pext{1}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sinter,'flow',100,'fhigh',flp,'interaural'); % Obj instead of single template
@@ -247,7 +247,7 @@ if flags.do_boyd2012
       for c = 1:2
         for lp = 1:2
           for m = 1:length(mix)
-            target{m,c,lp} = sig_boyd2012_mix(stim{c},sig,mix(m),flp(lp),fs);
+            target{m,c,lp} = sig_boyd2012(stim{c},sig,mix(m),flp(lp),fs);
 % % Description in paper is ambiguous about whether broadband ILDs were
 % % adjusted to the template:
 %           temSPL = dbspl(template); 

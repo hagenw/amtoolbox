@@ -1,7 +1,7 @@
-function y = sig_hassager2016_spectralsmoothing(x,B,fs)
-% sig_hassager2016_spectralsmoothing - spectral smoothing algorithm from
+function y = sig_hassager2016(x,B,fs)
+% sig_hassager2016 - spectral smoothing algorithm from
 % Hassager et al. (2016)
-%   Usage:    y = sig_hassager2016_spectralsmoothing(x,B,fs)
+%   Usage:    y = sig_hassager2016(x,B,fs)
 %
 %   Input parameters:
 %     x   : binaural impulse response(s); SOFA object or matrix with time 
@@ -12,7 +12,7 @@ function y = sig_hassager2016_spectralsmoothing(x,B,fs)
 %   Output parameters:
 %     y   : smoothed version of x.
 %
-%   `sig_hassager2016_spectralsmoothing(...)` is an algortihm for spectral
+%   `sig_hassager2016(...)` is an algortihm for spectral
 %   smoothing based on gammatone filters with a variable bandwidth B.
 %
 %   References: hassager2016
