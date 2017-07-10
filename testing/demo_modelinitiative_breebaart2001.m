@@ -1,11 +1,11 @@
-%DEMO_BINIT Demo for the interface to the binaural initiative (BInit)
+%demo_modelinitiative Demo for the interface to the model initiative using the Breebaart et al. (2001) model
 %
-%   `demo_binit` starts a server waiting for requests to process binaural
+%   `demo_modelinitiative` starts a server waiting for requests to process binaural
 %   signals with the breebaart2001 model. See the BInit interface for more
 %   details. 
 %
-%   demo_binit processes request placed in the temporary system directory.
-%   Define the variable 'directory' in order to use an other directory. 
+%   demo_modelinitiative processes request placed in the temporary system directory.
+%   Define the variable `directory` in order to use an other directory. 
 
 % PM 15.4.2017
 
