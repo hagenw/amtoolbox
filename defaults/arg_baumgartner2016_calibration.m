@@ -1,4 +1,4 @@
-function definput = arg_baumgartner2016calibration( definput )
+function definput = arg_baumgartner2016_calibration( definput )
 
 definput.keyvals.TolX = 0.005;
 definput.keyvals.MaxIter = 100;

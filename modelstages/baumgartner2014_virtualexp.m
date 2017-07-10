@@ -1,6 +1,6 @@
-function m = baumgartner2014virtualexp(p,tang,rang,varargin)
-%BAUMGARTNER2014VIRTUALEXP - Performs a virtual sound-localization experiment
-%   Usage:    m = baumgartner2014virtualexp(p,tang,rang)
+function m = baumgartner2014_virtualexp(p,tang,rang,varargin)
+%baumgartner2014_virtualexp - Performs a virtual sound-localization experiment
+%   Usage:    m = baumgartner2014_virtualexp(p,tang,rang)
 %
 %   Input parameters:
 %     p       : prediction matrix containing probability mass vectors (PMVs) 
@@ -17,10 +17,10 @@ function m = baumgartner2014virtualexp(p,tang,rang,varargin)
 %                5:8 ...   lat_target,pol_target,lat_response,pol_response
 %                9   ...   F/B-C resolved pol_response
 %
-%   `baumgartner2014virtualexp(...)` runs virtual localization experiments where the
+%   `baumgartner2014_virtualexp(...)` runs virtual localization experiments where the
 %   response behavior is based on (predicted) polar response PMVs.
 %
-%   `baumgartner2014virtualexp` accepts the following optional parameters:
+%   `baumgartner2014_virtualexp` accepts the following optional parameters:
 %
 %     'runs',runs    	Define the number of runs. 
 %                    	Default value is 10.

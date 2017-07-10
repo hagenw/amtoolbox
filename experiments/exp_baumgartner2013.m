@@ -294,7 +294,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
                   'u',s(ll).u,'lat',s(ll).latang{ii},...
                   'polsamp',s(ll).polangs{ii});
 
-              [ qe(ll,jj,ii),pe(ll,jj,ii) ] = baumgartner2013pmv2ppp( ...
+              [ qe(ll,jj,ii),pe(ll,jj,ii) ] = baumgartner2013_pmv2ppp( ...
                   s(ll).pmv{jj,ii} , s(jj).polangs{ii} , s(ll).respangs{ii});
 
             end
@@ -322,7 +322,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
 
       markersize = 4;
 
-      [qechance,pechance] = baumgartner2013pmv2ppp(ones(49,44));
+      [qechance,pechance] = baumgartner2013_pmv2ppp(ones(49,44));
       
       % IDs for XTick of plots
       for ll = 1:ns
@@ -395,7 +395,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
     
     if flags.do_plot
       
-      [qechance,pechance] = baumgartner2013pmv2ppp(ones(49,44));
+      [qechance,pechance] = baumgartner2013_pmv2ppp(ones(49,44));
       
       % IDs for XTick of plots
       for ll = 1:ns
@@ -458,7 +458,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
       
       markersize = 4;
 
-      [qechance,pechance] = baumgartner2013pmv2ppp(ones(49,44));
+      [qechance,pechance] = baumgartner2013_pmv2ppp(ones(49,44));
       
       % IDs for XTick of plots
       for ll = 1:ns
@@ -731,9 +731,9 @@ if flags.do_fig19 || flags.do_fig20
           s(ll).dtfs2{ii},s(ll).spdtfs,s(ll).fs,'u',s(ll).u,...
           'polsamp',polang);
 
-        [s(ll).qe1{ii},s(ll).pe1{ii}] = baumgartner2013pmv2ppp(...
+        [s(ll).qe1{ii},s(ll).pe1{ii}] = baumgartner2013_pmv2ppp(...
           s(ll).pmv1{ii},polang(id0),respang);
-        [s(ll).qe2{ii},s(ll).pe2{ii}] = baumgartner2013pmv2ppp(...
+        [s(ll).qe2{ii},s(ll).pe2{ii}] = baumgartner2013_pmv2ppp(...
           s(ll).pmv2{ii},pol2{ii},respang);
         
         % Increse of error

@@ -102,7 +102,7 @@ function varargout = baumgartner2014( target,template,varargin )
 %     'noregular'    Disable regularization of angular sampling.
 %
 %     'errorflag'    May be one of the error flags defined in
-%                    `baumgartner2014pmv2ppp` or `localizationerror`.
+%                    `baumgartner2014_pmv2ppp` or `localizationerror`.
 %
 %   Requirements: 
 %   -------------
@@ -115,12 +115,12 @@ function varargout = baumgartner2014( target,template,varargin )
 %
 %
 %   See also: plot_baumgartner2014, data_baumgartner2014,
-%   exp_baumgartner2014, demo_baumgartner2014, baumgartner2014calibration,
-%   baumgartner2014likelistat, baumgartner2014pmv2ppp,
-%   baumgartner2014virtualexp, baumgartner2014spectralanalysis,
-%   baumgartner2014gradientextraction, baumgartner2014comparisonprocess,
-%   baumgartner2014similarityestimation, baumgartner2014binauralweighting,
-%   baumgartner2014sensorimotormapping
+%   exp_baumgartner2014, demo_baumgartner2014, baumgartner2014_calibration,
+%   baumgartner2014_likelistat, baumgartner2014_pmv2ppp,
+%   baumgartner2014_virtualexp, baumgartner2014_spectralanalysis,
+%   baumgartner2014_gradientextraction, baumgartner2014_comparisonprocess,
+%   baumgartner2014_similarityestimation, baumgartner2014_binauralweighting,
+%   baumgartner2014_sensorimotormapping
 %
 %   References: baumgartner2014modeling lyon1997
   
@@ -128,7 +128,7 @@ function varargout = baumgartner2014( target,template,varargin )
 
 %% Check input
 
-definput.import={'baumgartner2014','baumgartner2014pmv2ppp','localizationerror'};
+definput.import={'baumgartner2014','baumgartner2014_pmv2ppp','localizationerror'};
 
 [flags,kv]=ltfatarghelper(...
   {'fs','S','lat','stim','space','do','flow','fhigh',... %'fsstim'
@@ -184,15 +184,15 @@ end
 
 %% Spectral Analysis, Eq.(2)
 
-[ireptar,fc] = baumgartner2014spectralanalysis(target,'argimport',flags,kv);
-ireptem = baumgartner2014spectralanalysis(template,'argimport',flags,kv);
+[ireptar,fc] = baumgartner2014_spectralanalysis(target,'argimport',flags,kv);
+ireptem = baumgartner2014_spectralanalysis(template,'argimport',flags,kv);
 
 
 %% Positive spectral gradient extraction, Eq.(3)
 
 if kv.do == 1 % DCN inspired feature extraction
-  nrep.tem = baumgartner2014gradientextraction(ireptem,fc);
-  nrep.tar = baumgartner2014gradientextraction(ireptar,fc);
+  nrep.tem = baumgartner2014_gradientextraction(ireptem,fc);
+  nrep.tar = baumgartner2014_gradientextraction(ireptar,fc);
 else
   nrep.tem = ireptem;
   nrep.tar = ireptar;
@@ -201,22 +201,22 @@ end
 
 %% Comparison process, Eq.(4)
 
-sigma = baumgartner2014comparisonprocess(nrep.tar,nrep.tem);
+sigma = baumgartner2014_comparisonprocess(nrep.tar,nrep.tem);
 
 
 %% Similarity estimation, Eq.(5)
 
-si = baumgartner2014similarityestimation(sigma,'argimport',flags,kv);
+si = baumgartner2014_similarityestimation(sigma,'argimport',flags,kv);
 
 
 %% Binaural weighting, Eq.(6)
 
-si = baumgartner2014binauralweighting(si,'argimport',flags,kv);
+si = baumgartner2014_binauralweighting(si,'argimport',flags,kv);
 
 
 %% Sensorimotor mapping, Eq.(7)
 
-[si,rang] = baumgartner2014sensorimotormapping(si,'argimport',flags,kv);
+[si,rang] = baumgartner2014_sensorimotormapping(si,'argimport',flags,kv);
 
 
 %% Normalization to PMV, Eq.(8)
@@ -226,15 +226,15 @@ p = si ./ repmat(sum(si)+eps,size(si,1),1);
 %% Performance measures
 if not(isempty(flags.errorflag)) % Simulate virtual experiments
   
-  m = baumgartner2014virtualexp(p,tang,rang,'targetset',kv.exptang);
+  m = baumgartner2014_virtualexp(p,tang,rang,'targetset',kv.exptang);
   err = localizationerror(m,flags.errorflag);
   
 elseif not(isempty(flags.ppp)) % Calculate directly via probabilities
 
   if flags.do_QE_PE_EB
-    [err.qe,err.pe,err.pb] = baumgartner2014pmv2ppp(p,tang,rang,'exptang',kv.exptang);
+    [err.qe,err.pe,err.pb] = baumgartner2014_pmv2ppp(p,tang,rang,'exptang',kv.exptang);
   else
-    err = baumgartner2014pmv2ppp(p,tang,rang,flags.ppp,'exptang',kv.exptang);
+    err = baumgartner2014_pmv2ppp(p,tang,rang,flags.ppp,'exptang',kv.exptang);
   end
     
 end

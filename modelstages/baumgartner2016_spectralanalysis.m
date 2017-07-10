@@ -1,6 +1,6 @@
-function varargout = baumgartner2016spectralanalysis(sig,spl,varargin)
-%baumgartner2016spectralanalysis Spectral analysis
-%   Usage:     [mp,fc] = baumgartner2016spectralanalysis(sig,spl)
+function varargout = baumgartner2016_spectralanalysis(sig,spl,varargin)
+%baumgartner2016_spectralanalysis Spectral analysis
+%   Usage:     [mp,fc] = baumgartner2016_spectralanalysis(sig,spl)
 %
 %   Input parameters:
 %     sig     : incoming time-domain signal
@@ -14,16 +14,16 @@ function varargout = baumgartner2016spectralanalysis(sig,spl,varargin)
 %               fiber type, 5) time frame.
 %     fc      : center frequencies of auditory filters
 %
-%   `baumgartner2016spectralanalysis(...)` computes temporally integrated
+%   `baumgartner2016_spectralanalysis(...)` computes temporally integrated
 %   spectral magnitude profiles.
 %
-%   `baumgartner2016spectralanalysis` accepts the following optional parameters:
+%   `baumgartner2016_spectralanalysis` accepts the following optional parameters:
 %
 %     'ID'        Listener's ID (important for caching).
 %
 %     'Condition' Label of experimental condition (also for caching).
 %
-%   `baumgartner2016spectralanalysis` accepts these optional flags:
+%   `baumgartner2016_spectralanalysis` accepts these optional flags:
 %
 %     'target'    Processing of a target sound (for caching). This is the
 %                 default.

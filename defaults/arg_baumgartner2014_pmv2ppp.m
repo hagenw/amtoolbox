@@ -1,4 +1,4 @@
-function definput=arg_baumgartner2014pmv2ppp(definput)
+function definput=arg_baumgartner2014_pmv2ppp(definput)
 
 definput.keyvals.p=ones(72,44);
 definput.keyvals.rang=-90:5:269;

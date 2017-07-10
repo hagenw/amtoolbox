@@ -1,8 +1,8 @@
-function [ varargout ] = baumgartner2014pmv2ppp( varargin )
-%BAUMGARTNER2014PMV2PPP - Performance predictions from PMVs of baumgartner2014
-%   Usage:  [ qe,pe,eb ] = baumgartner2014pmv2ppp( p,tang,rang );
-%           [ qe,pe,eb ] = baumgartner2014pmv2ppp( p,tang,rang,exptang );
-%           [ qe,pe,eb ] = baumgartner2014pmv2ppp( pred );
+function [ varargout ] = baumgartner2014_pmv2ppp( varargin )
+%baumgartner2014_pmv2ppp - Performance predictions from PMVs of baumgartner2014
+%   Usage:  [ qe,pe,eb ] = baumgartner2014_pmv2ppp( p,tang,rang );
+%           [ qe,pe,eb ] = baumgartner2014_pmv2ppp( p,tang,rang,exptang );
+%           [ qe,pe,eb ] = baumgartner2014_pmv2ppp( pred );
 %
 %   Input parameters:
 %     p          : prediction matrix (response PMVs)
@@ -17,7 +17,7 @@ function [ varargout ] = baumgartner2014pmv2ppp( varargin )
 %     pe         : local polar RMS error in degrees
 %     eb         : elevation bias in degrees; QEs and up-rear quadrant excluded
 %
-%   `baumgartner2014pmv2ppp(...)` retrieves commonly used PPPs (Psychoacoustic 
+%   `baumgartner2014_pmv2ppp(...)` retrieves commonly used PPPs (Psychoacoustic 
 %   performance parameters) for sagittal-plane (SP) localization like quadrant 
 %   error (QE), local polar RMS error (PE), and elevation bias (EB) from
 %   response PMVs (probability mass vectors) predicted by a localization
@@ -25,12 +25,12 @@ function [ varargout ] = baumgartner2014pmv2ppp( varargin )
 %   an average across all available target angles. The latter is the
 %   default.
 %
-%   `baumgartner2014pmv2ppp` needs the following optional parameter in order 
+%   `baumgartner2014_pmv2ppp` needs the following optional parameter in order 
 %   to retrieve the PPPs for a specific (set of) target angles:
 %
 %     'exptang', exptang   experimental polar target angles
 %
-%   `baumgartner2014pmv2ppp` accepts the following flag:
+%   `baumgartner2014_pmv2ppp` accepts the following flag:
 %
 %     'print'      Display the outcomes.
 %     'QE_PE_EB'   Compute QE, PE, and EB. This is the default.
@@ -45,13 +45,13 @@ function [ varargout ] = baumgartner2014pmv2ppp( varargin )
 %
 %   To evaluate chance performance of QE and PE use :::
 %
-%     [qe,pe] = baumgartner2014pmv2ppp('chance');
+%     [qe,pe] = baumgartner2014_pmv2ppp('chance');
 %
 %   References: baumgartner2014modeling
 
 % AUTHOR : Robert Baumgartner
 
-definput.import={'baumgartner2014pmv2ppp'};
+definput.import={'baumgartner2014_pmv2ppp'};
 
 [flags,kv]=ltfatarghelper({'p','tang','rang','exptang'},definput,varargin);
 

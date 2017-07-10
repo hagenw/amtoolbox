@@ -1,6 +1,6 @@
-function [ri,rang] = baumgartner2014sensorimotormapping(si,varargin)
-%BAUMGARTNER2014SENSORIMOTORMAPPING - Response scatter induced by localization task
-%   Usage:     [ri,rang] = baumgartner2014sensorimotormapping(si)
+function [ri,rang] = baumgartner2014_sensorimotormapping(si,varargin)
+%baumgartner2014_sensorimotormapping - Response scatter induced by localization task
+%   Usage:     [ri,rang] = baumgartner2014_sensorimotormapping(si)
 %
 %   Input parameters:
 %     ri      : response index
@@ -9,10 +9,10 @@ function [ri,rang] = baumgartner2014sensorimotormapping(si,varargin)
 %     si      : similarity index
 %     rang    : response polar angles
 %
-%   `baumgartner2014sensorimotormapping(...)` performs polar-angle
+%   `baumgartner2014_sensorimotormapping(...)` performs polar-angle
 %   interpolation and emulates task-induced response scatter.
 %
-%   `baumgartner2014sensorimotormapping` accepts the following optional parameters:
+%   `baumgartner2014_sensorimotormapping` accepts the following optional parameters:
 %
 %     'polsamp',ps   Define the polar-angle sampling of the acoustic data
 %                    provided for the current sagittal plane. As default the 

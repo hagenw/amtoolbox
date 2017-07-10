@@ -1,6 +1,6 @@
-function sigma = baumgartner2014comparisonprocess(tar,tem)
-%BAUMGARTNER2014COMPARISONPROCESS - Comparison with direction-specific templates
-%   Usage:     sigma = baumgartner2014comparisonprocess(tar,tem)
+function sigma = baumgartner2014_comparisonprocess(tar,tem)
+%baumgartner2014_comparisonprocess - Comparison with direction-specific templates
+%   Usage:     sigma = baumgartner2014_comparisonprocess(tar,tem)
 %
 %   Input parameters:
 %     tar     : internal representation(s) of target profile(s)
@@ -9,7 +9,7 @@ function sigma = baumgartner2014comparisonprocess(tar,tem)
 %   Output parameters:
 %     sigma   : internal distance metric
 %
-%   `baumgartner2014comparisonprocess(...)` performs spectro-spatial
+%   `baumgartner2014_comparisonprocess(...)` performs spectro-spatial
 %   comparison process between internal representation of incoming sound
 %   (target) and the templates of the sagittal plane
 %

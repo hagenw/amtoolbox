@@ -1,6 +1,6 @@
-function [ la,le,ci,lr,pvalue ] = baumgartner2014likelistat( p,tang,rang,target,response,varargin )
-%BAUMGARTNER2014LIKELISTAT - Likelihood statistics for evaluation of model performance
-%   Usage: [la,le,ci,lr,pvalue] = baumgartner2014likelistat(p,tang,rang,target,response,varargin)
+function [ la,le,ci,lr,pvalue ] = baumgartner2014_likelistat( p,tang,rang,target,response,varargin )
+%baumgartner2014_likelistat - Likelihood statistics for evaluation of model performance
+%   Usage: [la,le,ci,lr,pvalue] = baumgartner2014_likelistat(p,tang,rang,target,response,varargin)
 %   
 %   Input arguments:
 %     'p'              pdf matrix

@@ -1,6 +1,6 @@
-function [gp,gfc] = baumgartner2014gradientextraction(mp,fc,c2)
-%BAUMGARTNER2014GRADIENTEXTRACTION - Extraction of positive spectral gradients
-%   Usage:      [gp,gfc] = baumgartner2014gradientextraction(mp,fc)
+function [gp,gfc] = baumgartner2014_gradientextraction(mp,fc,c2)
+%baumgartner2014_gradientextraction - Extraction of positive spectral gradients
+%   Usage:      [gp,gfc] = baumgartner2014_gradientextraction(mp,fc)
 %
 %   Input parameters:
 %     mp      : spectral magnitude profile in dB
@@ -10,7 +10,7 @@ function [gp,gfc] = baumgartner2014gradientextraction(mp,fc,c2)
 %     gp      : positive spectral gradient profile
 %     gfc     : center frequencies of gradient profile
 %
-%   `baumgartner2014gradientextraction(...)` is a spectral cue extractor
+%   `baumgartner2014_gradientextraction(...)` is a spectral cue extractor
 %    inspired by functionality of dorsal cochlear nucleus in cats.
 %
 %   References: baumgartner2014modeling

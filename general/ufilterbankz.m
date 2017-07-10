@@ -24,7 +24,7 @@ function outsig=ufilterbankz(b,a,insig,hopsize)
 
 %% ------ Checking of input parameters ---------  
 
-error(nargchk(3,4,nargin));
+narginchk(3,4);
 
 if nargin==3
   hopsize=1;

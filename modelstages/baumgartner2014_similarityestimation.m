@@ -1,6 +1,6 @@
-function si = baumgartner2014similarityestimation(sigma,varargin)
-%BAUMGARTNER2014SIMILARITYESTIMATION - Similarity estimation with listener-specific sensitivity
-%   Usage:     si = baumgartner2014similarityestimation(sigma)
+function si = baumgartner2014_similarityestimation(sigma,varargin)
+%baumgartner2014_similarityestimation - Similarity estimation with listener-specific sensitivity
+%   Usage:     si = baumgartner2014_similarityestimation(sigma)
 %
 %   Input parameters:
 %     sigma   : internal distance metrics
@@ -8,11 +8,11 @@ function si = baumgartner2014similarityestimation(sigma,varargin)
 %   Output parameters:
 %     si      : similarity indices
 %
-%   `baumgartner2014similarityestimation(...)` maps internal distance
+%   `baumgartner2014_similarityestimation(...)` maps internal distance
 %   metrics to similarity indices according to listener-specific
 %   sensitivity
 %
-%   `baumgartner2014similarityestimation` accepts the following optional parameters:
+%   `baumgartner2014_similarityestimation` accepts the following optional parameters:
 %
 %     'S',S          Set the listener-specific sensitivity threshold 
 %                    (threshold of the sigmoid link function representing 

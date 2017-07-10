@@ -1,6 +1,6 @@
-function sibin = baumgartner2014binauralweighting(simon,varargin)
-%BAUMGARTNER2014BINAURALWEIGHTING - Binaural combination of monaural similarity estimates
-%   Usage:     sibin = baumgartner2014binauralweighting(simon)
+function sibin = baumgartner2014_binauralweighting(simon,varargin)
+%baumgartner2014_binauralweighting - Binaural combination of monaural similarity estimates
+%   Usage:     sibin = baumgartner2014_binauralweighting(simon)
 %
 %   Input parameters:
 %     simon   : monaural similarity indices
@@ -8,11 +8,11 @@ function sibin = baumgartner2014binauralweighting(simon,varargin)
 %   Output parameters:
 %     sibin   : monaural similarity indices
 %
-%   `baumgartner2014binauralweighting(...)` combines the monaural
+%   `baumgartner2014_binauralweighting(...)` combines the monaural
 %   similarity indices to binaural similartiy indices while accounting for
 %   ipsilateral predominance.
 %
-%   `baumgartner2014binauralweighting` accepts the following optional parameters:
+%   `baumgartner2014_binauralweighting` accepts the following optional parameters:
 %
 %     'bwcoef',bwc   Set the binaural weighting coefficient *bwc*.
 %                    Default value is 13 degrees.

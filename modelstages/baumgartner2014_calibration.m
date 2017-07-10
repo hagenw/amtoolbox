@@ -1,6 +1,6 @@
-function scalib = baumgartner2014calibration(s,kv,TolX)
-%BAUMGARTNER2014CALIBRATION - Calibration of the model
-%   Usage: scalib = baumgartner2014calibration(s)
+function scalib = baumgartner2014_calibration(s,kv,TolX)
+%baumgartner2014_calibration - Calibration of the model
+%   Usage: scalib = baumgartner2014_calibration(s)
 %
 %   Input parameter:
 %     s       : strucure containing subject's data. It must include the 
@@ -14,12 +14,12 @@ function scalib = baumgartner2014calibration(s,kv,TolX)
 %   Output parameter:
 %     scalib  : strucure containing subject's data with calibrated S
 %
-%   `baumgartner2014calibration` returns listener data with
+%   `baumgartner2014_calibration` returns listener data with
 %   listener-specific sensitivity thresholds calibrated by joint
 %   optimization of PE and QE to minimize mismatch between experimental
 %   and predicted results.
 %
-%   `baumgartner2014calibration` accepts the following optional parameters:
+%   `baumgartner2014_calibration` accepts the following optional parameters:
 %
 %     kv        Key-value pairs according to `baumgartner2014`
 %
@@ -87,7 +87,7 @@ for ll = 1:length(s)
 
     if isfield(s,'target')
       
-      [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp( ...
+      [ qe(ii),pe(ii) ] = baumgartner2014_pmv2ppp( ...
           s(ll).p{ii} , polang , respangs , s(ll).target{ii});
       latweight = length(s(ll).target{ii})/length(cat(1,s(ll).target{:}));
       qeM(ll) = qeM(ll) + qe(ii)*latweight;
@@ -95,7 +95,7 @@ for ll = 1:length(s)
       
     else
       
-      [ qe(ii),pe(ii) ] = baumgartner2014pmv2ppp( ...
+      [ qe(ii),pe(ii) ] = baumgartner2014_pmv2ppp( ...
           s(ll).p{ii} , polang , respangs);
       qeM(ll) = qeM(ll) + qe(ii)*1/length(kv.latseg);
       peM(ll) = peM(ll) + pe(ii)*1/length(kv.latseg);
@@ -109,7 +109,7 @@ for ll = 1:length(s)
 
 end
 
-[qe_chance,pe_chance] = baumgartner2014pmv2ppp(ones(49,44));
+[qe_chance,pe_chance] = baumgartner2014_pmv2ppp(ones(49,44));
 distmetric =  (dQE/qe_chance).^2 + (dPE/pe_chance).^2; % Joint distance metric of QE and PE (standardized scatter)
 
 end

@@ -1,6 +1,6 @@
-function sigma = baumgartner2016comparisonprocess(tar,tem)
-%BAUMGARTNER2016COMPARISONPROCESS - Comparison with direction-specific templates
-%   Usage:     sigma = baumgartner2016comparisonprocess(tar,tem)
+function sigma = baumgartner2016_comparisonprocess(tar,tem)
+%baumgartner2016_comparisonprocess - Comparison with direction-specific templates
+%   Usage:     sigma = baumgartner2016_comparisonprocess(tar,tem)
 %
 %   Input parameters:
 %     tar     : discharge rate profiles of target sounds (fields: tar.m for
@@ -10,7 +10,7 @@ function sigma = baumgartner2016comparisonprocess(tar,tem)
 %   Output parameters:
 %     sigma   : internal distance metric
 %
-%   `baumgartner2016comparisonprocess(...)` compares discharge rate profiles
+%   `baumgartner2016_comparisonprocess(...)` compares discharge rate profiles
 %   on the basis of the quotient between rate difference and auditory nerve
 %   variance (May and Huang, 1997; Reiss et al., 2011)
 %
