@@ -1,27 +1,27 @@
 function y = zilany2014_ffGn(N, tdres, Hinput, noiseType, mu, sigma)
-%ZILANY2014_FFGN  Fast (exact) fractional Gaussian noise and Brownian motion generator.
+%ZILANY2014_FFGN  Fast (exact) fractional Gaussian noise and Brownian motion generator
 %   Usage: Y = zilany2014_ffGn(N, tdres, Hinput) 
 %          Y = zilany2014_ffGn(N, tdres, Hinput, noiseType, mu, sigma) 
 %
 %   Input parameters:
-%		  N       : is the length of the output sequence.
+%     N       : is the length of the output sequence.
 %     tdres   : is the time resolution (1/sampling rate)
-%		  Hinput  : is the "Hurst" index of the resultant noise (0 < H <= 2).  For 0 < H <= 1, 
+%     Hinput  : is the "Hurst" index of the resultant noise (0 < H <= 2).  For 0 < H <= 1, 
 %               the output will be fractional Gaussian noise with Hurst index H.  For 
 %               1 < H <= 2, the output will be fractional Brownian motion with Hurst
 %               index H-1.  Either way, the power spectral density of the output will
 %               be nominally proportional to 1/f^(2H-1).
 %
 %  `zilany2014_ffGn(...)` returns a vector containing a sequence of fractional Gaussian 
-%	 noise or fractional Brownian motion.  The generation process uses an FFT 
-%	 which makes it very fast. This method is based on an embedding of the 
-%  covariance matrix in a circulant matrix.
+%   noise or fractional Brownian motion.  The generation process uses an FFT 
+%   which makes it very fast. This method is based on an embedding of the 
+%   covariance matrix in a circulant matrix.
 %
 %   `zilany2014_ffGn` accepts the following optional parameters:
 %
-%		  noiseType : is 0 for fixed fGn noise and 1 for variable fGn. [default = 1] 
-%		  mu      : is the mean of the noise. [default = 0]
-%		  sigma   : is the standard deviation of the noise. [default = 1]
+%    noiseType : is 0 for fixed fGn noise and 1 for variable fGn. [default = 1] 
+%    mu        : is the mean of the noise. [default = 0]
+%    sigma     : is the standard deviation of the noise. [default = 1]
 %
 %   References: davies1987 beran1994 bardet2002
 
