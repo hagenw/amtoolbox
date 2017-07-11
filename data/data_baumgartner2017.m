@@ -32,17 +32,25 @@ flags = ltfatarghelper({},definput,varargin);
    
 dataPath = fullfile(SOFAdbPath,'baumgartner2017');
 if flags.do_ITE
-  fn = dir(fullfile(dataPath,'hrtf b_nh*.sofa'));
+  %fn = dir(fullfile(dataPath,'hrtf b_nh*.sofa'));
+  ids=[12 14 15 16 17 18 21 22 33 39 41 43 46 53 55 57 58 62 68 71 72];  
+  for ii=1:length(ids)
+    fn(ii).name=fullfile(dataPath,['hrtf b_nh' num2str(ids(ii)) '.sofa']);
+  end
 elseif flags.do_BTE
-  fn = dir(fullfile(dataPath,'hrtf b_bte_nh*.sofa'));
+%   fn = dir(fullfile(dataPath,'hrtf b_bte_nh*.sofa'));
+  ids=[10];  
+  for ii=1:length(ids)
+    fn(ii).name=fullfile(dataPath,['hrtf b_bte_nh' num2str(ids(ii)) '.sofa']);
+  end
 end
 if isempty(fn)
   error('RB: No files found. Check directories and AMT setup!')
 end
 data = struct('id',{},'Obj',{});
 for ii = 1:length(fn)
-  data(ii).id = fn(ii).name(end-6:end-5);
-  data(ii).Obj = SOFAload(fullfile(dataPath,fn(ii).name));
+  data(ii).id = ids(ii);
+  data(ii).Obj = SOFAload(fn(ii).name);
 end
 
 end
