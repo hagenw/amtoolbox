@@ -9,7 +9,7 @@
 %     HOHMANN2002           - Invertible Gammatone filterbank 
 %     VIEMEISTER1979        - Modulation detection model
 %     VERHULST2012          - Cochlear transmition-line model 
-%     ZILANY2007HUMANIZED   - Humanized auditory nerve model
+%     zilany2007   - Humanized auditory nerve model
 %     ZILANY2014            - Auditory cochlear processing 
 %     ROENNE2012            - Simulate ABR to given stimulus
 %     KARJALAINEN1996       - Adaptation network

@@ -75,7 +75,7 @@ end
 
 %% ABR model
 % call AN model, note that lots of extra outputs are possible
-[ANout,vFreq] = zilany2007humanized(stim_level, stim, fsstim, kv.fsmod, 'flow',kv.flow, 'fhigh',kv.fhigh);   
+[ANout,vFreq] = zilany2007(stim_level, stim, fsstim, kv.fsmod, 'flow',kv.flow, 'fhigh',kv.fhigh);   
 
 % subtract 50 due to spontaneous rate
 ANout = ANout'-50;                                            

@@ -5,32 +5,36 @@
 % 
 %   Compatibility breaks:
 %     - amt* --> amt_* 
-%       - Use `amt_start` to start the AMT
-%       - Legacy files provided but will be removed in the future. 
-%       - amthelp --> amt_version
-%     - gfb --> hohmann2002. See note #11 on that. 
+%         - Use `amt_start` to start the AMT
+%         - Legacy files provided but will be removed in the future. 
+%         - amthelp --> amt_version
+%     - gfb --> hohmann2002. Legacy files provided. See note #11 for more details.
+%     - zilany2007humanized --> zilany2007. Legacy file provided.
+%     - drnl --> lopezpoveda2001. Legacy file provided.
+%     - modfilterbankepsm --> ewert2000. No legacy file. 
 %     - HRTFs: only SOFA files allowed now.
-%     - Functions creating/modifying signals have the prefix sig_ now:
-%     	- irns --> sig_yost1996
-%     	- whitenoiseburst --> sig_whitenoiseburst
-%      	- transposedtone --> sig_transposedtone
-%     	- perfectsweep --> sig_linsweep
-%      	- notchednoise --> sig_notchednoise
-%      	- bmsin --> sig_lindemann1986
-%      	- simulatedimpulseresponse --> sig_joergensen2011
-%      	- itdsin --> sig_itdsin
-%      	- ildsin --> sig_ildsin
-%      	- itdildsin --> sig_itdildsin
-%      	- competingtalkers -> sig_competingtalkers
-%      	- breebaart2001siggen --> sig_breebaart2001
-%      	- bincorrnoise --> sig_bincorrnoise
-%      	- bandpassnoisefreq --> sig_bandpassnoise
+%     - Functions creating/modifying signals have the prefix `sig_` now:
+%         - Legacy files provided but will be removed in the future.
+%        	- irns --> sig_yost1996
+%        	- whitenoiseburst --> sig_whitenoiseburst
+%        	- transposedtone --> sig_transposedtone
+%       	- perfectsweep --> sig_linsweep
+%        	- notchednoise --> sig_notchednoise
+%        	- bmsin --> sig_lindemann1986
+%        	- simulatedimpulseresponse --> sig_joergensen2011
+%       	- itdsin --> sig_itdsin
+%       	- ildsin --> sig_ildsin
+%       	- itdildsin --> sig_itdildsin
+%       	- competingtalkers -> sig_competingtalkers
+%       	- breebaart2001siggen --> sig_breebaart2001
+%       	- bincorrnoise --> sig_bincorrnoise
+%       	- bandpassnoisefreq --> sig_bandpassnoise
 %     - Model stages in `modelstages` have the format `modelXX_stageYY` now:
-%       - modelXXstageYY --> modelXX_stageYY
-%       - ffGn --> zilany2014_ffGn
-%       - breebaart2001preproc --> breebaart2001_preproc
-%       - No legacy files provided. Adapt your code if directly calling model stages from your code. 
-%
+%         - modelXXstageYY --> modelXX_stageYY
+%         - ffGn --> zilany2014_ffGn
+%         - breebaart2001preproc --> breebaart2001_preproc
+%         - No legacy files provided. Adapt your code if directly calling model stages from your code. 
+% 
 %   New
 %     - baumgartner2017: sound externalization model
 %     - baumgartner2016: level-dependent sagittal-plane sound localization model for NH and HI listeners

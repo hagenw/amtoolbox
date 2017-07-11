@@ -1,6 +1,5 @@
 function y = sig_hassager2016(x,B,fs)
-% sig_hassager2016 - spectral smoothing algorithm from
-% Hassager et al. (2016)
+%sig_hassager2016 - spectral smoothing algorithm from Hassager et al. (2016)
 %   Usage:    y = sig_hassager2016(x,B,fs)
 %
 %   Input parameters:

@@ -106,7 +106,7 @@ function varargout = baumgartner2013( target,template,varargin )
 
 %% Check input options 
 
-definput.flags.fbank = {'gammatone','langendijk2002_spectralanalysis','lopezpoveda2001','zilany2007humanized'};
+definput.flags.fbank = {'gammatone','langendijk2002_spectralanalysis','lopezpoveda2001','zilany2007'};
 definput.flags.headphonefilter = {'','headphone'};
 definput.flags.middleearfilter = {'','middleear'};
 definput.flags.ihc = {'ihc','noihc'};
@@ -241,17 +241,17 @@ elseif flags.do_drnl
     ireptar = 20*log10(squeeze(rms(ireptar)));
     ireptem = 20*log10(squeeze(rms(ireptem)));
 
-elseif flags.do_zilany2007humanized
+elseif flags.do_zilany2007
     
     fsmod = 100e3;  % Model sampling frequency in Hz
     nf = 200;       % # of AN fibers
   
     fprintf('\n compute internal representation of target set: \n');
-    target = [target ; zeros(1e3,size(target,2),size(target,3))]; % concatenate zeros, otherwise comp_zilany2007humanized complaines about: "reptime should be equal to or longer than the stimulus duration." 
+    target = [target ; zeros(1e3,size(target,2),size(target,3))]; % concatenate zeros, otherwise comp_zilany2007 complaines about: "reptime should be equal to or longer than the stimulus duration." 
     ireptar = zeros(nf,size(target,2),size(target,3));
     nt = size(target(:,:),2);
     for ii = 1:nt
-      [ANout,vfreq] = zilany2007humanized(kv.lvlstim,target(:,ii),kv.fs,...
+      [ANout,vfreq] = zilany2007(kv.lvlstim,target(:,ii),kv.fs,...
         fsmod,'flow',kv.flow,'fhigh',kv.fhigh,'nfibers',nf);
       ANout = ANout'-50; % subtract 50 due to spontaneous rate
       ireptar(:,ii) = 20*log10(rms(ANout)); % integrate over time & in db
@@ -259,11 +259,11 @@ elseif flags.do_zilany2007humanized
     end
   
     fprintf('\n Compute internal representation of template: \n');
-    template = [template ; zeros(1e3+1,size(template,2),size(template,3))]; % concatenate zeros, otherwise comp_zilany2007humanized complaines about: "reptime should be equal to or longer than the stimulus duration." 
+    template = [template ; zeros(1e3+1,size(template,2),size(template,3))]; % concatenate zeros, otherwise comp_zilany2007 complaines about: "reptime should be equal to or longer than the stimulus duration." 
     ireptem = zeros(nf,size(template,2),size(template,3));
     nt = size(template(:,:),2);
     for ii = 1:nt
-      ANout = zilany2007humanized(kv.lvltem,template(:,ii),kv.fs,...
+      ANout = zilany2007(kv.lvltem,template(:,ii),kv.fs,...
         fsmod,'flow',kv.flow,'fhigh',kv.fhigh,'nfibers',nf);
       ANout = ANout'-50; % subtract 50 due to spontaneous rate
       ireptem(:,ii) = 20*log10(rms(ANout)); % integrate over time & in dB

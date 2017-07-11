@@ -54,7 +54,7 @@ for L = 1:length(stim_level)
   lvl = stim_level(L);
   
   % call AN model
-  ANdata = zilany2007humanized(lvl, refstim, fsstim,fsmod);         
+  ANdata = zilany2007(lvl, refstim, fsstim,fsmod);         
   
   % subtract 50 due to spontaneous rate. 
   ANout = ANdata'-50;                                       

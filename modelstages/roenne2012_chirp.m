@@ -76,7 +76,7 @@ for L = 1:length(levels)
     stim(1:length(stimCE)) = stimCE;            
     
     % call AN model, note that lots of extra outputs are possible
-    [ANout,vFreq] = zilany2007humanized(lvl, stim', fsstim, fsmod);
+    [ANout,vFreq] = zilany2007(lvl, stim', fsstim, fsmod);
     
     % Subtract 50 due to spontaneous rate
     ANout = ANout'-50;                                    

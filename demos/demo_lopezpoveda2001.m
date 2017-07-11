@@ -1,4 +1,4 @@
-%demo_lopezpoveda2011  Widening of filters in the lopezpoveda2001
+%demo_lopezpoveda2001  Widening of filters in the lopezpoveda2001
 %
 %   This script displays three auditory spectrograms generated using the
 %   lopezpoveda2001. The input signal is the same, just presented at three different

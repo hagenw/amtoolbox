@@ -146,7 +146,7 @@ end
 
 %% Zilany Model
 
-if flags.do_zilany2007humanized || flags.do_zilany2014
+if flags.do_zilany2007 || flags.do_zilany2014
   
   ftd = [0.16,0.23,0.61]; % Liberman (1978)
   ftweights = ftd(kv.fiberTypes)/sum(ftd(kv.fiberTypes));
@@ -185,8 +185,8 @@ if flags.do_zilany2007humanized || flags.do_zilany2014
             spl_mod = spl;
           end
           
-          if flags.do_zilany2007humanized
-            [ANout,fc] = zilany2007humanized(spl_mod,sig(:,ii,ch),kv.fs,...
+          if flags.do_zilany2007
+            [ANout,fc] = zilany2007(spl_mod,sig(:,ii,ch),kv.fs,...
               kv.fsmod,'flow',kv.flow,'fhigh',kv.fhigh,'nfibers',kv.nf);
           else % zilany2014
             [ANout,fc] = zilany2014(spl_mod,sig(:,ii,ch),kv.fs,...

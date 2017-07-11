@@ -1,7 +1,6 @@
 function y = zilany2014_ffGn(N, tdres, Hinput, noiseType, mu, sigma)
 %ZILANY2014_FFGN  Fast (exact) fractional Gaussian noise and Brownian motion generator
-%   Usage: Y = zilany2014_ffGn(N, tdres, Hinput) 
-%          Y = zilany2014_ffGn(N, tdres, Hinput, noiseType, mu, sigma) 
+%   Usage: Y = zilany2014_ffGn(N, tdres, Hinput)
 %
 %   Input parameters:
 %     N       : is the length of the output sequence.
@@ -12,7 +11,7 @@ function y = zilany2014_ffGn(N, tdres, Hinput, noiseType, mu, sigma)
 %               index H-1.  Either way, the power spectral density of the output will
 %               be nominally proportional to 1/f^(2H-1).
 %
-%  `zilany2014_ffGn(...)` returns a vector containing a sequence of fractional Gaussian 
+%   `zilany2014_ffGn(...)` returns a vector containing a sequence of fractional Gaussian 
 %   noise or fractional Brownian motion.  The generation process uses an FFT 
 %   which makes it very fast. This method is based on an embedding of the 
 %   covariance matrix in a circulant matrix.
@@ -27,6 +26,7 @@ function y = zilany2014_ffGn(N, tdres, Hinput, noiseType, mu, sigma)
 
 %   Copyright © 2003-2005 by B. Scott Jackson 
 %   History:
+%   Adapted to the AMT: Robert Baumgartner, Piotr Majdak
 %   Revision: 1.4    Date: November 27, 2012 by M. S. A. Zilany : noiseType
 %                       has been added
 %   Revision: 1.3    Date: Aug 28, 2008 by M. S. A. Zilany

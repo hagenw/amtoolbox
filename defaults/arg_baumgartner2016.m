@@ -11,7 +11,7 @@ definput.keyvals.Condition = 'baseline';%'Long';
 tmp = amt_load('baumgartner2016','temstim.mat'); % frozen version of noise(8e3,1,'white'); potential alternative: mls(13)
 definput.keyvals.temstim = tmp.temstim;
 
-definput.flags.fbank = {'zilany2014','zilany2007humanized','gammatone'};   % ,'lopezpoveda2001'
+definput.flags.fbank = {'zilany2014','zilany2007','gammatone'};   % ,'lopezpoveda2001'
 definput.keyvals.fiberTypes=1:3;  % IHC scaling factor: 1 denotes normal IHC function; 0 denotes complete IHC dysfunction.
 definput.flags.redoSpectralAnalysis= {'','redoSpectralAnalysis'};
 definput.flags.SPLtemAdapt = {'','SPLtemAdapt'};
