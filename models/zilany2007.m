@@ -1,6 +1,6 @@
-function [ANdata,vFreq] = zilany2007humanized(stim_level,stim,fsstim,fsmod,varargin)
-% ZILANY2007HUMANIZED  Humanized auditory nerve model
-%   Usage: [ANdata,vFreq] = zilany2007humanized(lvl,stim,fsstim,fsmod);
+function [ANdata,vFreq] = zilany2007(stim_level,stim,fsstim,fsmod,varargin)
+% zilany2007  Humanized auditory nerve model
+%   Usage: [ANdata,vFreq] = zilany2007(lvl,stim,fsstim,fsmod);
 %
 %   Input parameters:
 %     stim_level  : Level of stimulus in peSPL
@@ -13,7 +13,7 @@ function [ANdata,vFreq] = zilany2007humanized(stim_level,stim,fsstim,fsmod,varar
 %                   on the BM
 %     vFreq      : Frequency vector containing the 500 center frequencies
 %
-%   `zilany2007humanized(stim_lvl, stim, fsstim, fsmod)` returns simulations
+%   `zilany2007(stim_lvl, stim, fsstim, fsmod)` returns simulations
 %   from Rønne et al. (2012). It calls the mex'ed C code containing the
 %   humanized version of Zilany et al. (2007)'s AN model. The humanization
 %   is described in Rønne et al. (2012). The AN model is called 500 times to
@@ -91,7 +91,7 @@ cihc    = 1;
 for jj = 1:kv.nfibers
   % Call AN model (mex'ed C model)
   [timeout,meout,c1filterout,c2filterout,c1vihc,c2vihc,vihc,synout,psth500k] ...
-      = comp_zilany2007humanized(stim,...
+      = comp_zilany2007(stim,...
                                  vFreq(jj),...
                                  1,...
                                  tdres,...
