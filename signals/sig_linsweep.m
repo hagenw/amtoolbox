@@ -1,37 +1,42 @@
 function s = sig_linsweep(fs, N, range)
-% sig_linsweep Create a sweep with constant magnitude spectrum
-%    S = sig_linsweep(FS, N) returns a sweep of length N with normalized 
-%    amplitude and sampling rate FS with a perfectly constant magnitude 
-%    spectrum. It covers all frequencies from 0 to FS/2 and runs from 
-%    the first to the last sample.
+%sig_linsweep Create a linear frequency sweep with constant magnitude spectrum
+%   Usage: s = sig_linsweep(fs, N, range)
 %
-%    S = sig_linsweep(FS, N, RANGE) returns a sweep of length N with 
-%    normalized amplitude and a sampling rate of FS and a perfectly 
-%    constant magnitude spectrum. The signal covers all frequencies 
-%    from 0 to FS/2. The sweep starts at sample RANGE(1) 
-%    and ends at sample RANGE(2), i.e., RANGE must be an array
-%    with two positive elements with 0 < RANGE(1) < RANGE(2) <= N.
-%    A tail is encountered before and after the actual sweep range. 
-%
-%    EXAMPLE 1: Create a perfect sweep and display its spectromgram
-%      fs = 44100;                 % sampling rate of 44100 Hz
-%      s = sig_linsweep(fs, 4*fs)  % 4 secs sweep
-%      spectrogram(s, 256, 128, 256, fs, 'yaxis');
-%      sound(s,fs);
-%
-%    EXAMPLE 2: Create a perfect sweep in a range
-%      fs = 44100;                 % sampling rate of 44100 Hz
-%      s = sig_linsweep(fs, 4*fs, [fs+1,2*fs]); % 4 secs with sweep 
-%                                               % from fs+1 to 2*fs
-%      spectrogram(s, 256, 128, 256, fs, 'yaxis');
-%      sound(s,fs);
-%
+%   S = sig_linsweep(FS, N) returns a sweep of length N with normalized 
+%   amplitude and sampling rate FS with a perfectly constant magnitude 
+%   spectrum. It covers all frequencies from 0 to FS/2 and runs from 
+%   the first to the last sample.
+% 
+%   S = sig_linsweep(FS, N, RANGE) returns a sweep of length N with 
+%   normalized amplitude and a sampling rate of FS and a perfectly 
+%   constant magnitude spectrum. The signal covers all frequencies 
+%   from 0 to FS/2. The sweep starts at sample RANGE(1) 
+%   and ends at sample RANGE(2), i.e., RANGE must be an array
+%   with two positive elements with 0 < RANGE(1) < RANGE(2) <= N.
+%   A tail is encountered before and after the actual sweep range. 
+% 
+%   EXAMPLE 1: Create a perfect sweep and display its spectrogram::
+% 
+%     fs = 44100;                 % sampling rate of 44100 Hz
+%     s = sig_linsweep(fs, 4*fs)  % 4 secs sweep
+%     spectrogram(s, 256, 128, 256, fs, 'yaxis');
+%     sound(s,fs);
+% 
+%   EXAMPLE 2: Create a perfect sweep in a range::
+% 
+%     fs = 44100;                 % sampling rate of 44100 Hz
+%     s = sig_linsweep(fs, 4*fs, [fs+1,2*fs]); % 4 secs with sweep 
+%                                              % from fs+1 to 2*fs
+%     spectrogram(s, 256, 128, 256, fs, 'yaxis');
+%     sound(s,fs);
+% 
 %   To create a continuous measurement stimulus, you have to stack as 
 %   many length N periods together as you need. Considering the sampling
 %   rate fs, you have to repeat the sweep period t*fs/N times to get a 
 %   signal length of t seconds. Make sure t*fs/N is an integer.
 
 % Author: Aulis Telle, IND, 2008
+% Modifications: 11.07.2017, Piotr Majdak, documentation fix
 
 
 if exist('range','var')
