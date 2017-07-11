@@ -178,7 +178,7 @@ target = reshape(tmp,[size(tmp,1),size(target,2),size(target,3)]);
 
 
 %% Cochlear filter bank -> internal representations
-if flags.do_cqdft
+if flags.do_langendijk2002_spectralanalysis
     
     bpo = kv.space*6; % bands per octave (1 oct. approx. as 6 ERBs)
     ireptem = langendijk2002_spectralanalysis(template,kv.fs,kv.flow,kv.fhigh,bpo);

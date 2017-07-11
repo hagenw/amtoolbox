@@ -4,7 +4,7 @@
 %   =========================
 % 
 %   Compatibility breaks:
-%     - amt* --> amt_* 
+%     - ``amt*`` --> ``amt_*``
 %         - Use `amt_start` to start the AMT
 %         - Legacy files provided but will be removed in the future. 
 %         - amthelp --> amt_version
