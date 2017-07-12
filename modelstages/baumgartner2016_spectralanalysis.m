@@ -172,7 +172,7 @@ if flags.do_zilany2007 || flags.do_zilany2014
           sig = postpad(sig,ceil(Nmin*kv.fs/kv.fsmod),0,1);
       end
         
-      amt_disp(['Compute: ' cachename]);
+      amt_disp(['Compute: ' cachename],'progress');
       Ntar = size(sig,2); % # target angles
       len = ceil(length(sig)/kv.fs*kv.fsmod);
       ANresp = zeros(len,kv.nf,Ntar,2);
