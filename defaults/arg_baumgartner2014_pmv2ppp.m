@@ -8,5 +8,3 @@ definput.keyvals.exptang=[];
 definput.flags.print = {'noprint','print'};
 definput.flags.chance = {'','chance'};
 definput.flags.ppp = {'','QE_PE_EB','QE','PE','EB','absPE'};
-
-end

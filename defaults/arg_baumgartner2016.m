@@ -71,5 +71,3 @@ definput.keyvals.GT_maxSPL = 110; % maximum representable SPL
 definput.keyvals.tiwin = inf; % temporal integration window in seconds
 
 definput.keyvals.mgs = 6; % maximum gradient sensitivity
-
-end

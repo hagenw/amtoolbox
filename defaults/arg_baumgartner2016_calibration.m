@@ -11,6 +11,3 @@ definput.keyvals.c = {};
 definput.flags.recalib={'','recalib'};
 definput.flags.prior = {'','calibprior'};
 definput.flags.optimization = {'fminbnd','fminsearch','search'};
-
-end
-

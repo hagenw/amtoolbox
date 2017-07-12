@@ -15,5 +15,3 @@ definput.flags.errorflag = {'','accL','precL','precLcentral',...
   'precPregressFront','precPregressRear','precPregress'};
 definput.keyvals.f=[];       % regress structure of frontal hemisphere
 definput.keyvals.r=[];       % regress structure of rear hemisphere
-
-end
