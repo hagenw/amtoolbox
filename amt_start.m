@@ -232,6 +232,7 @@ end
 % DIRNAMEinit.m must set the variable 'status' with the following value:
 %  0: disabled module, don't add to the search path
 %  >0: add to the search path.
+%  2: add th amt_version as a module.
 
 % add root of the AMT to the path
 addpath(basepath);
@@ -272,9 +273,7 @@ end;
 %% define default start-up behaviour
 flags=amt_flags(varargin); % amt_disp and other amt-related functions work now!
 
-%% ---------- load information into ltfathelp ------------
-
-% As comp is now in the path, we can call ltfatarghelper
+% As comp is now in the path, we can set defaults for ltfatarghelper
 ltfatsetdefaults('amt_version','versiondata',version,...
                  'modulesdata',modules);
 
@@ -285,7 +284,6 @@ end
 
 %% Initialize aux data, cache, and display starting information
 amt_disp('  ');
-% amt_disp('  ');
 amt_disp('AMT configuration:'); 
 amt_disp(['  Auxiliary data (local): ' amt_auxdatapath]);
 amt_disp(['  Auxiliary data (web): ' amt_auxdataurl]);
