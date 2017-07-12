@@ -1,6 +1,6 @@
 %Changes throughout the release history of the AMT
 %   
-%   Version 0.9.8 (X.7.2017)
+%   Version 0.9.8 (12.7.2017)
 %   =========================
 % 
 %   Compatibility breaks:
