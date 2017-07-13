@@ -262,7 +262,7 @@ elseif flags.do_fig3
         f = 5000;
         P_c = sound_field_mono_wfs(X,Y,Z,xs,src,f,conf);
         % (d)
-        t = 212;
+        t = 212 / conf.c;
         P_d = sound_field_imp_wfs(X,Y,Z,xs,src,t,conf);
 				
 				output.P_a = P_a;
