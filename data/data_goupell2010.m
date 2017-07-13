@@ -43,7 +43,7 @@ definput.flags.condition = {'BB','CL','N24','N18','N12','N9','N6','N3'};
 [flags,kv]  = ltfatarghelper({},definput,varargin);
 
 %% Extract data
-x=amtload('goupell2010','data.mat');
+x=amt_load('goupell2010','data.mat');
 
 C = find(ismember(x.condition,flags.condition));
 

@@ -38,11 +38,11 @@ function output=exp_lopezpoveda2001(varargin)
 %
 %     'fig3bc'  Reproduce Fig. 3b and c from Lopez & Poveda
 %               (2001). Isointensity response of the linear, nonlinear and
-%               summed response of the DRNL filter for an input level of
+%               summed response of the lopezpoveda2001 filter for an input level of
 %               30dB (fig 3b) and 85dB (fig 3c) SPL The output is the output
-%               of the DRNL filter for the different input levels. The
+%               of the lopezpoveda2001 filter for the different input levels. The
 %               dimensions of the output are: input frequency x [frequency
-%               values, linear output, nonlinear output, summed DRNL output]
+%               values, linear output, nonlinear output, summed lopezpoveda2001 output]
 %               x input level.
 %
 %     'fig3b'   Reproduce just Fig. 3b.
@@ -63,7 +63,7 @@ function output=exp_lopezpoveda2001(varargin)
 % 
 %               4) Results for regression lines, table III
 %
-%   See also: drnl, data_lopezpoveda2001, data_pralong1996, data_goode1994
+%   See also: lopezpoveda2001, data_lopezpoveda2001, data_pralong1996, data_goode1994
 %
 %   Examples:
 %   ---------
@@ -104,7 +104,7 @@ end;
 % The data is specified in this way, because the data for figure 4 is
 % not specified as the two parameter fit, but instead specified
 % directly. The parameters below accomplish this by removing all
-% frequency dependence in the DRNL. The parameters can then be
+% frequency dependence in the lopezpoveda2001. The parameters can then be
 % specified exactly for a single frequency, but only for one frequency
 % at a time.
 
@@ -421,8 +421,8 @@ if flags.do_fig3b || flags.do_fig3bc
     hp_fir = headphonefilter(fs);
     insig = filter(hp_fir,1,insig);
     
-    [y_lin, ~] = drnl(insig, fs, kv.predrnl{:}, f1000{:},'linonly', kv.postdrnl{:});    
-    [y_nlin, ~] = drnl(insig, fs, kv.predrnl{:},f1000{:},'nlinonly', kv.postdrnl{:});
+    [y_lin, ~] = lopezpoveda2001(insig, fs, kv.predrnl{:}, f1000{:},'linonly', kv.postdrnl{:});    
+    [y_nlin, ~] = lopezpoveda2001(insig, fs, kv.predrnl{:},f1000{:},'nlinonly', kv.postdrnl{:});
     
     outsig = y_lin + y_nlin;
     
@@ -454,8 +454,8 @@ if flags.do_fig3c || flags.do_fig3bc
     hp_fir = headphonefilter(fs);
     insig = filter(hp_fir,1,insig);
     
-    [y_lin, ~] = drnl(insig, fs, kv.predrnl{:}, f1000{:},'linonly', kv.postdrnl{:});    
-    [y_nlin, ~] = drnl(insig, fs, kv.predrnl{:}, f1000{:},'nlinonly', kv.postdrnl{:});
+    [y_lin, ~] = lopezpoveda2001(insig, fs, kv.predrnl{:}, f1000{:},'linonly', kv.postdrnl{:});    
+    [y_nlin, ~] = lopezpoveda2001(insig, fs, kv.predrnl{:}, f1000{:},'nlinonly', kv.postdrnl{:});
 
     outsig = y_lin + y_nlin;
         
@@ -490,7 +490,7 @@ if flags.do_plot
         set(gca,'Position',[0.285,0.5838,0.62,0.3412]);
         title('30 dB SPL')
         xlabel('Frequency (Hz)')
-        ylabel('DRNL filter output (m/s)')
+        ylabel('lopezpoveda2001 filter output (m/s)')
 
         subplot(2,1,2)
         plot(fsig,result3c)
@@ -504,8 +504,8 @@ if flags.do_plot
         set(gca,'Position',[0.285,0.11,0.62,0.3412]);
         title('85 dB SPL')
         xlabel('Frequency (Hz)')
-        ylabel('DRNL filter output (m/s)')
-        leg=legend('DRNL output', 'Linear path output', 'Nonlinear path output');
+        ylabel('lopezpoveda2001 filter output (m/s)')
+        leg=legend('lopezpoveda2001 output', 'Linear path output', 'Nonlinear path output');
         set(leg,'Position',[0.0133, 0.4759, 0.4525, 0.0798]);
         
     elseif flags.do_fig3b
@@ -518,8 +518,8 @@ if flags.do_plot
         set(gca,'YLim',[1e-07 1e-03],'Layer','top')
         title('30 dB SPL')
         xlabel('Frequency (Hz)')
-        ylabel('DRNL filter output (m/s)')
-        leg=legend('DRNL output', 'Linear path output', 'Nonlinear path output');
+        ylabel('lopezpoveda2001 filter output (m/s)')
+        leg=legend('lopezpoveda2001 output', 'Linear path output', 'Nonlinear path output');
         set(gcf,'Position',[150,150,400,400])
         set(leg,'Position',[0.2333, 0.1467, 0.4525, 0.1517]);
         hold off
@@ -534,8 +534,8 @@ if flags.do_plot
         set(gca,'YLim',[1e-05 1e-01],'Layer','top')
         title('85 dB SPL')
         xlabel('Frequency (Hz)')
-        ylabel('DRNL filter output (m/s)')
-        leg=legend('DRNL output', 'Linear path output', 'Nonlinear path output');
+        ylabel('lopezpoveda2001 filter output (m/s)')
+        leg=legend('lopezpoveda2001 output', 'Linear path output', 'Nonlinear path output');
         set(gcf,'Position',[150,150,400,400])
         set(leg,'Position',[0.2333, 0.1467, 0.4525, 0.1517]);
         hold off
@@ -595,12 +595,12 @@ if flags.do_fig4
       outsig = filter(hp_fir,1,insig);
 
       % average parameter set, table II
-      outsigavg = drnl(outsig, fs, kv.predrnl{:}, expparsavg{ii,:}, kv.postdrnl{:});         
+      outsigavg = lopezpoveda2001(outsig, fs, kv.predrnl{:}, expparsavg{ii,:}, kv.postdrnl{:});         
 
       OMavg(kk,ii) = max(outsigavg(floor(length(insig)/2):end));    
       
       % parameter set of YO, table I
-      outsig = drnl(outsig, fs, kv.predrnl{:}, expparsYO{ii,:}, kv.postdrnl{:});             
+      outsig = lopezpoveda2001(outsig, fs, kv.predrnl{:}, expparsYO{ii,:}, kv.postdrnl{:});             
       OM(kk,ii) = max(outsig(floor(length(insig)/2):end));            
     end
     
@@ -613,12 +613,12 @@ if flags.do_fig4
       outsig = filter(hp_fir,1,insig);
 
       % average parameter set, table II
-      outsigavg = drnl(outsig, fs, kv.predrnl{:}, expparsavg{ii,:}, kv.postdrnl{:});         
+      outsigavg = lopezpoveda2001(outsig, fs, kv.predrnl{:}, expparsavg{ii,:}, kv.postdrnl{:});         
 
       OSavg(mm,ii) = max(outsigavg(floor(length(insig)/2):end)); 
 
       % parameter set of YO, table I
-      outsig = drnl(outsig, fs, kv.predrnl{:}, expparsYO{ii,:}, kv.postdrnl{:});
+      outsig = lopezpoveda2001(outsig, fs, kv.predrnl{:}, expparsYO{ii,:}, kv.postdrnl{:});
 
       OS(mm,ii) = max(outsig(floor(length(insig)/2):end)); 
       
@@ -637,7 +637,7 @@ if flags.do_fig4
   output(:,3,ii) = LMDB(indxavg(:,ii));   
   end
   
-  % same procedure for DRNL parameters calculated with regression lines, table III
+  % same procedure for lopezpoveda2001 parameters calculated with regression lines, table III
   OMrl = zeros(length(levelM),length(fsig));
   OSrl = zeros(length(levelS),length(fsig));
   ratiorl = zeros(length(levelM),length(levelS),length(fsig));
@@ -647,14 +647,14 @@ if flags.do_fig4
     for kk = 1:length(levelM)
       insig = mask(:,ii) * levelM(kk);
       outsig = filter(hp_fir,1,insig);
-      outsigrl = drnl(outsig, fs, kv.predrnl{:}, 'flow', fsig(ii), 'fhigh', fsig(ii), 'lin_ngt', 3, kv.postdrnl{:});
+      outsigrl = lopezpoveda2001(outsig, fs, kv.predrnl{:}, 'flow', fsig(ii), 'fhigh', fsig(ii), 'lin_ngt', 3, kv.postdrnl{:});
       OMrl(kk,ii) = max(outsigrl(floor(length(insig)/2):end));                       
     end
     
     for mm = 1:length(levelS)
       insig = sig(:,ii) * levelS(mm);
       outsig = filter(hp_fir,1,insig);
-      outsigrl = drnl(outsig, fs, kv.predrnl{:}, 'flow', fsig(ii), 'fhigh', fsig(ii), 'lin_ngt', 3, kv.postdrnl{:});
+      outsigrl = lopezpoveda2001(outsig, fs, kv.predrnl{:}, 'flow', fsig(ii), 'fhigh', fsig(ii), 'lin_ngt', 3, kv.postdrnl{:});
       OSrl(mm,ii) = max(outsigrl(floor(length(insig)/2):end)); 
       
       ratiorl(:,mm,ii) = OSrl(mm,ii) ./ OMrl(:,ii);           

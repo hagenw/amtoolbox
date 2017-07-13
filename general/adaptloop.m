@@ -35,11 +35,11 @@ function inoutsig = adaptloop(inoutsig,fs,varargin);
 %                      model. This consists of 5 adaptation loops without
 %                      overshoot limiting. The adapation loops have a linear spacing.
 %
-%     'adt_breebaart'  As `'puschel'`, but with overshoot limiting.
+%     'adt_breebaart'  As 'puschel'
 %
 %     'dim',d          Do the computation along dimension *d* of the input. 
 %
-%   See also: auditoryfilterbank, drnl
+%   See also: auditoryfilterbank, lopezpoveda2001
 %
 %   Demos: demo_adaptloop
 %

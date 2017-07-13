@@ -99,8 +99,8 @@ function varargout=exp_ziegelwanger2013(varargin)
 %
 %     exp_ziegelwanger2013('fig3b');
 %
-%   See also: ziegelwanger2013, ziegelwanger2013onaxis,
-%   ziegelwanger2013offaxis, data_ziegelwanger2013
+%   See also: ziegelwanger2013, ziegelwanger2013_onaxis,
+%   ziegelwanger2013_offaxis, data_ziegelwanger2013
 %
 %   References: ziegelwanger2013 majdak2013toa
 
@@ -112,7 +112,7 @@ function varargout=exp_ziegelwanger2013(varargin)
     definput.flags.type = {'missingflag',...
     'fig1a','fig1b','fig2b','fig3b'};
     definput.flags.plot = {'plot','noplot'};
-    definput.import={'amtcache'}; % get the flags of amtcache
+    definput.import={'amt_cache'}; % get the flags of amt_cache
     
     % Parse input options
     [flags,kv]  = ltfatarghelper({},definput,varargin);

@@ -1,7 +1,6 @@
 function varargout = baumgartner2016( target,template,varargin )
-%varargout = baumgartner2016( target,template,label,varargin )
 %BAUMGARTNER2016 Level-dependent model for localization in sagittal planes
-%   Usage:    [p,rang] = baumgartner2016( target,template )
+%   Usage:    [p,rang,tang] = baumgartner2016( target,template )
 %             [err,pred,m] = baumgartner2016( target,template,errorflag )
 %
 %   Input parameters:
@@ -36,7 +35,7 @@ function varargout = baumgartner2016( target,template,varargin )
 %
 %   `baumgartner2016` accepts the following optional parameters:
 %
-%     'ID'           Listener's ID (important for caching).
+%     'ID'           Listeners ID (important for caching).
 %
 %     'Condition'    Label of experimental condition (also for caching).
 %
@@ -61,11 +60,13 @@ function varargout = baumgartner2016( target,template,varargin )
 %     'temstim'      Define the dummy stimulus used to create the templates.
 %                    The default is Gaussian white noise with a duration of 170 ms.
 %
-%     'SPL',L        Set the SPL of the stimulus to *L*dB. 
-%                    Default value is 80dB.
+%     'SPL',L        Set the SPL of the stimulus to *L* dB.
+%                    Default value is 60dB.
 %
-%     'SPLtem',Lt    Set the SPL of the templates to *Lt*dB. 
-%                    Default value is 80dB.
+%     'SPLtem',Lt    Set the SPL of the templates to a specific SPL of *Lt*dB
+%                    if *Lt* is a scalar or define a SPL range between
+%                    *Lt(1)* and *Lt(2)*dB if *Lt* is a two-element vector.
+%                    Default range is 40 to 70dB.
 %
 %     'flow',flow    Set the lowest frequency in the filterbank to
 %                    *flow*. Default value is 700 Hz.
@@ -87,7 +88,7 @@ function varargout = baumgartner2016( target,template,varargin )
 %                    Default value is 13 degrees.
 %
 %     'polsamp',ps   Define the the polar angular sampling of the current
-%                    sagittal plane. As default the sampling of ARI's HRTF 
+%                    sagittal plane. As default the sampling of ARIs HRTF 
 %                    format at the median SP is used, i.e.,
 %                    ps = [-30:5:70,80,100,110:5:210] degrees.
 %
@@ -98,7 +99,7 @@ function varargout = baumgartner2016( target,template,varargin )
 %                    0 denotes complete OHC dysfunction.
 %
 %     'cihc',cihc    IHC scaling factor: 1 denotes normal IHC function (default); 
-%                    0 denotes complete IHC dysfunction.%
+%                    0 denotes complete IHC dysfunction.
 %
 %     'fiberTypes',fT Types of the fibers based on spontaneous rate (SR) in 
 %                     spikes/s: $fT=1$ for Low SR; $fT=2$ for Medium SR; 
@@ -110,6 +111,12 @@ function varargout = baumgartner2016( target,template,varargin )
 %                    analysis. This is the default.
 %
 %     'gammatone'    Use the Gammatone filterbank for spectral analysis. 
+%
+%     'SPLtemAdapt'  Set SPL of templates acc. to target (*Lt*=*L*). 
+%
+%     'NHtem'        No adaptation of templates to hearing impairment,
+%                    i.e., templates are processed with *cohc=cihc=1* and
+%                    *fT = 1:3*.
 %
 %     'ihc'          Incorporate the transduction model of inner hair 
 %                    cells used by Dau et al. (1996).
@@ -123,9 +130,10 @@ function varargout = baumgartner2016( target,template,varargin )
 %     'noregular'    Disable regularization of angular sampling.
 %
 %     'errorflag'    May be one of the error flags defined in
-%                    `baumgartner2014pmv2ppp` or `localizationerror`.
+%                    `baumgartner2014_pmv2ppp` or `localizationerror`.
 %
-%     'redoSpectralAnalysis' FIX ME
+%     'redoSpectralAnalysis' Flag to redo also spectral analysis based on
+%                    `zilany2014` model.
 %
 %   Requirements: 
 %   -------------
@@ -135,11 +143,11 @@ function varargout = baumgartner2016( target,template,varargin )
 %   2) Data in hrtf/baumgartner2016
 %
 %
-%   See also: plotbaumgartner2014, data_baumgartner2016,
-%   exp_baumgartner2016, baumgartner2016calibration,
-%   baumgartner2014pmv2ppp,
-%   baumgartner2014virtualexp, localizationerror,
-%   baumgartner2016spectralanalysis
+%   See also: data_baumgartner2016,
+%   exp_baumgartner2016, baumgartner2016_calibration,
+%   baumgartner2014_pmv2ppp,
+%   baumgartner2014_virtualexp, localizationerror,
+%   baumgartner2016_spectralanalysis
 %
 %   References: baumgartner2016 zilany2014
 
@@ -194,7 +202,7 @@ end
 
 %% DTF filtering
 if ~isequal(kv.fs,kv.fsstim)
-    amtdisp('Sorry, sampling rate of stimulus and HRIRs must be the same!')
+    amt_disp('Sorry, sampling rate of stimulus and HRIRs must be the same!')
     return
 end
 
@@ -211,8 +219,34 @@ if flags.do_redoSpectralAnalysis
 else
   redoSAflag = 'normal';
 end
-[mreptar,fc] = baumgartner2016spectralanalysis(target,kv.SPL,'target','argimport',flags,kv,redoSAflag);
-mreptem = baumgartner2016spectralanalysis(template,kv.SPLtem,'template','argimport',flags,kv,redoSAflag);
+
+% Target profile
+[mreptar,fc] = baumgartner2016_spectralanalysis(target,kv.SPL,'target',...
+  'argimport',flags,kv,redoSAflag);
+
+% Template profile
+if flags.do_NHtem
+  kv.cohc = 1;
+  kv.cihc = 1;
+  kv.fiberTypes = 1:3;
+end
+if flags.do_SPLtemAdapt
+  kv.SPLtem = kv.SPL;
+end
+if isscalar(kv.SPLtem) % all templates represented at a fixed SPL
+  mreptem = baumgartner2016_spectralanalysis(template,kv.SPLtem,'template',...
+    'argimport',flags,kv,redoSAflag);
+else % average across SPL range
+  mreptem = baumgartner2016_spectralanalysis(template,kv.SPLtem(1),'template',...
+    'argimport',flags,kv,redoSAflag);
+  SPLtemRange = kv.SPLtem(1):10:kv.SPLtem(2);
+  for ii = 2:length(SPLtemRange)
+    mreptem = mreptem + ...
+      baumgartner2016_spectralanalysis(template,SPLtemRange(ii),'template',...
+        'argimport',flags,kv,redoSAflag);
+  end
+  mreptem = mreptem/length(SPLtemRange);
+end
 
 %% Positive spectral gradient extraction
 
@@ -226,16 +260,16 @@ if kv.do == 1 && flags.do_psge
   end
   
   if flags.do_gammatone
-    greptar = baumgartner2014gradientextraction(mreptar,fc,c2);
-    greptem = baumgartner2014gradientextraction(mreptem,fc);
+    greptar = baumgartner2014_gradientextraction(mreptar,fc,c2);
+    greptem = baumgartner2014_gradientextraction(mreptem,fc);
   else % zilany
-    greptar = baumgartner2016gradientextraction(mreptar,fc,'argimport',flags,kv);
-    greptem = baumgartner2016gradientextraction(mreptem,fc,'argimport',flags,kv);
+    greptar = baumgartner2016_gradientextraction(mreptar,fc,'argimport',flags,kv);
+    greptem = baumgartner2016_gradientextraction(mreptem,fc,'argimport',flags,kv);
   end
     
 else
 
-  amtdisp('Cue extraction different to baumgartner2014','progress')
+  amt_disp('Cue extraction different to baumgartner2014','progress')
    
   if kv.do == 1 && flags.do_dcn% DCN inspired feature extraction
     for ch = 1:size(mreptar,3)
@@ -256,14 +290,14 @@ end
 if flags.do_isd && not(flags.do_intensityweighting) && not(flags.do_diff)
   
   if flags.do_gammatone
-    sigma = baumgartner2014comparisonprocess(greptar,greptem);
+    sigma = baumgartner2014_comparisonprocess(greptar,greptem);
   else % zilany
-    sigma = baumgartner2016comparisonprocess(greptar,greptem);
+    sigma = baumgartner2016_comparisonprocess(greptar,greptem);
   end
 
 else
   
-  amtdisp('Comparison process different to baumgartner2014','progress')
+  amt_disp('Comparison process different to baumgartner2014','progress')
   
   if flags.do_diff
     greptar = diff(greptar);
@@ -275,7 +309,6 @@ else
     for it = 1:size(mreptar,2)
       if flags.do_isd
         isd = repmat(greptar(:,it,ch),[1,size(greptem(:,:,ch),2),1]) - greptem(:,:,ch); 
-  %       isd = zscore(repmat(greptar(:,it,ch),[1,size(greptem(:,:,ch),2),1])) - zscore(greptem(:,:,ch));
         if kv.do == 0
           sigma(:,it,ch) = sqrt(squeeze(var(isd))); % standard dev. across frequencies (Middlebrooks, 1999)
         else
@@ -286,13 +319,7 @@ else
               Ifw = mreptar(:,it,ch)/max(mreptar(:,it,ch));
               isd = isd.*repmat(Ifw,1,size(isd,2));
             end
-  %           if flags.do_dcn
-  %             isd(isd>kv.SimThresh) = nan;
-  %           end
             sigma(:,it,ch) = nanmean(abs(isd)); % L1-norm across frequencies
-  %           sigma(:,it,ch) = sigma(:,it,ch)/max(sigma(:,it,ch));
-  %           sigma(:,it,ch) = sigma(:,it,ch)/std(sigma(:,it,ch))/4;
-  %           sigma(:,it,ch) = sqrt(sigma(:,it,ch));
           end
         end
       elseif flags.do_corr
@@ -306,8 +333,6 @@ else
     end
   end
 
-  % sigma = (sigma+eps)./repmat(sum(sigma+eps)/size(sigma,1),[size(sigma,1),1,1]); % scale to simplify calibration
-  % sigma = (sigma+eps)./repmat(std(sigma+eps),[size(sigma,1),1,1]); % scale to simplify calibration
 end
 
 
@@ -341,8 +366,7 @@ if length(kv.fiberTypes) == 3
   N(:,2) = max(N(:,2) - N(:,3),0);
   N(:,1) = N(:,1) - (N(:,2)+N(:,3));
   N = sum(N);
-%   amtdisp(['Selected fiber type: ' num2str(N(1),'%i') 'low, ' num2str(N(2),'%i') ' mid, ' num2str(N(3),'%i') ' high'],'progress')
-  fileID = fopen(fullfile(amtbasepath,'modelstages','baumgartner2016fiberTypeCounter'),'a');
+  fileID = fopen(fullfile(amt_basepath,'modelstages','baumgartner2016_fiberTypeCounter'),'a');
   fprintf(fileID,'%i, %i, %i\n',N(1),N(2),N(3));
   fclose(fileID);
 
@@ -354,23 +378,6 @@ end
 if size(sigma,5) > 1
   sigma = mean(sigma,5);
 end
-% Histogram approach
-%   Nframes = size(sigma,5);
-%   sigma_ml = sigma;
-%   sigma = zeros(size(sigma_ml,1),Ntang,size(mreptar,3));
-%   for ch = 1:size(mreptar,3)
-%     for itang = 1:Ntang
-%       for itime = 1:Nframes
-%         [tmp,Imin] = min(sigma_ml(:,itang,ch,1,itime));
-%         sigma(Imin,itang,ch) = sigma(Imin,itang,ch) + 1;
-%       end
-%     end
-%   end
-%   si = sigma.^kv.S;
-% else
-
-%% Normalization of sigma
-% sigma = 225 * sigma./repmat(sum(sigma,1),[size(sigma,1),1,1]); % factor 225 in order to maintain previous range of S
 
 %% Similarity estimation
 
@@ -388,11 +395,11 @@ if flags.do_isd && flags.do_sigmoid
   if not(flags.do_gammatone)
     sigma = 10*sigma;
   end
-  si = baumgartner2014similarityestimation(sigma,'S',kv.S,'gamma',kv.gamma);
+  si = baumgartner2014_similarityestimation(sigma,'S',kv.S,'gamma',kv.gamma);
 
 else
   
-  amtdisp('Similarity estimation different to baumgartner2014','progress')
+  amt_disp('Similarity estimation different to baumgartner2014','progress')
   
   if flags.do_zilany2014 && not(flags.do_sigmoid || flags.do_dcn)
     sigma = sigma/10;
@@ -425,24 +432,20 @@ else
     end
   end
 end
-
-% end
   
 %% Binaural weighting
 
-si = baumgartner2014binauralweighting(si,'lat',kv.lat,'bwcoef',kv.bwcoef);
+si = baumgartner2014_binauralweighting(si,'lat',kv.lat,'bwcoef',kv.bwcoef);
 
 
 %% Interpolation, prior, sensorimotor mapping
 if kv.prior==0
   
-  [si,rang] = baumgartner2014sensorimotormapping(si,...
+  [si,rang] = baumgartner2014_sensorimotormapping(si,...
     'rangsamp',kv.rangsamp,'polsamp',kv.polsamp,'lat',kv.lat,'mrsmsp',kv.mrsmsp,...
     flags.regularization,flags.motoricresponsescatter);
   
 else
-  
-%   amtdisp('Sensorimotor mapping different to baumgartner2014','progress')
   
   if flags.do_regular
       rang0 = ceil(min(kv.polsamp)*0.2)*5;    % ceil to 5 deg
@@ -468,11 +471,6 @@ else
   end
   priordist = interp1(kv.priordist.x,kv.priordist.y,rang,'linear') .^ kv.prior;
   si = si.*repmat(priordist(:),1,size(si,2));
-  
-%   % Prior expectation (Pratt effect)
-%   poltrans = (mod(rang,180)-90)/180;
-%   prior = exp(kv.prior*abs(poltrans));
-%   si = si.*repmat(prior(:),1,size(si,2));
 
   % Sensorimotor mapping
   if flags.do_mrs && flags.do_regular && kv.mrsmsp > 0
@@ -501,15 +499,15 @@ p = si ./ repmat(sum(si)+eps,size(si,1),1);
 %% Performance measures
 if not(isempty(flags.errorflag)) % Simulate virtual experiments
   
-  m = baumgartner2014virtualexp(p,tang,rang,'targetset',kv.exptang);
+  m = baumgartner2014_virtualexp(p,tang,rang,'targetset',kv.exptang);
   err = localizationerror(m,flags.errorflag);
   
 elseif not(isempty(flags.ppp)) % Calculate directly via probabilities
 
   if flags.do_QE_PE_EB
-    [err.qe,err.pe,err.pb] = baumgartner2014pmv2ppp(p,tang,rang,'exptang',kv.exptang);
+    [err.qe,err.pe,err.pb] = baumgartner2014_pmv2ppp(p,tang,rang,'exptang',kv.exptang);
   else
-    err = baumgartner2014pmv2ppp(p,tang,rang,flags.ppp,'exptang',kv.exptang);
+    err = baumgartner2014_pmv2ppp(p,tang,rang,flags.ppp,'exptang',kv.exptang);
   end
     
 end
@@ -523,7 +521,7 @@ if isempty([flags.errorflag,flags.ppp])
         try
           varargout{3} = tang;
         catch
-          amtdisp('SOFA Object of target DTFs is required to output target angles.')
+          amt_disp('SOFA Object of target DTFs is required to output target angles.')
         end
       end
   end
@@ -533,7 +531,7 @@ else
     varargout{2} = struct('p',p,'rang',rang,'tang',tang);
     if nargout > 2
       if not(exist('m','var'))
-        m = baumgartner2014virtualexp(p,tang,rang);
+        m = baumgartner2014_virtualexp(p,tang,rang);
       end
       varargout{3} = m;
     end

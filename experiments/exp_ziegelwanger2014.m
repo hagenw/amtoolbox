@@ -172,8 +172,8 @@ function exp_ziegelwanger2014(varargin)
 %
 %     exp_ziegelwanger2014('tab6');
 %
-%   See also: ziegelwanger2014, ziegelwanger2014onaxis,
-%   ziegelwanger2014offaxis, data_ziegelwanger2014
+%   See also: ziegelwanger2014, ziegelwanger2014_onaxis,
+%   ziegelwanger2014_offaxis, data_ziegelwanger2014
 %
 %   References: ziegelwanger2014
 
@@ -186,7 +186,7 @@ definput.flags.type = {'missingflag',...
 'fig3','fig5','fig6','fig7','fig8','fig9',...
 'fig10','fig12','tab1','tab2','tab3','tab5',...
 'tab6'};
-definput.import={'amtcache'}; % get the flags of amtcache
+definput.import={'amt_cache'}; % get the flags of amt_cache
 
 % Parse input options
 [flags,~]  = ltfatarghelper({},definput,varargin);

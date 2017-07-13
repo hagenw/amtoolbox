@@ -20,7 +20,7 @@
 %      averaged over time for the desired frequency channel for a sinusoid
 %      with an ITD of 0.3 ms.
 %
-%   See also: lindemann1986, lindemann1986bincorr, plot_lindemann1986
+%   See also: lindemann1986, lindemann1986_bincorr, plot_lindemann1986
 
 
 % Sampling rate
@@ -36,7 +36,7 @@ figure(1);
 % Binaural modulation frequency
 mf = 2;
 % Generate 1~s binaural modulated sinusoid
-sig = bmsin(f,mf,fs);
+sig = sig_lindemann1986(f,mf,fs);
 
 % Model paramter (Note: T_int (ms) should be a multiple of 1000/f == 2)
 % Begin of the storage of the cross-correlation is set to 1, because we have a
@@ -58,7 +58,7 @@ figure(2);
 
 % Generate an sinusoid with a ITD
 itd = 0.3; % (ms)
-sig = itdsin(f,itd,fs);
+sig = sig_itdsin(f,itd,fs);
 sig = sig(1:fs/2,:);
 
 % Calculate binaural cross-correlation using the 'stationary' mode and

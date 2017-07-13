@@ -90,8 +90,8 @@ function output = takanen2013(insig,fs,computationType,printFigs,printMap)
 %   2) Much RAM (depending on the signal length)
 %
 %
-%   See also: takanen2013periphery, takanen2013mso, takanen2013lso,
-%             takanen2013wbmso
+%   See also: takanen2013_periphery, takanen2013_mso, takanen2013_lso,
+%             takanen2013_wbmso
 %
 %
 %   References: takanen2013 takanen2014 pulkki2009 bekesy1930 verhulst2012 
@@ -121,8 +121,8 @@ widthInErbs = 9; % the number of adjacent ERB bands the information is gathered 
 contraDelay = floor(0.0002*fs); %the what cues are delayed by 0.2 ms
 
 %% ------ Modeling the first stages of the human auditory pathway ---------
-amtdisp('Model of periphery','progress');
-periph = takanen2013periphery(insig,fs,printFigs);
+amt_disp('Model of periphery','progress');
+periph = takanen2013_periphery(insig,fs,printFigs);
 
 dims = size(periph.left);
 
@@ -140,17 +140,17 @@ limit = find(periph.fc>=1500,1,'first');
 cueEnergies.leftMso = [cueEnergies.leftLso(:,1:(limit-1)) zeros(dims(1),dims(2)-limit+1)];
 cueEnergies.rightMso = [cueEnergies.rightLso(:,1:(limit-1)) zeros(dims(1),dims(2)-limit+1)];
 
-amtdisp('Models of MSO','progress');
-leftMso = takanen2013mso(periph.left,periph.right,fs,periph.fc,printFigs);
-rightMso = takanen2013mso(periph.right,periph.left,fs,periph.fc,printFigs);
+amt_disp('Models of MSO','progress');
+leftMso = takanen2013_mso(periph.left,periph.right,fs,periph.fc,printFigs);
+rightMso = takanen2013_mso(periph.right,periph.left,fs,periph.fc,printFigs);
 
-amtdisp('Models of wideband MSO','progress');
-[leftWbMso cueEnergies.leftWbMso]= takanen2013wbmso(periph.left,periph.right,fs,widthInErbs,periph.fc,printFigs);
-[rightWbMso cueEnergies.rightWbMso] = takanen2013wbmso(periph.right,periph.left,fs,widthInErbs,periph.fc,printFigs);
+amt_disp('Models of wideband MSO','progress');
+[leftWbMso cueEnergies.leftWbMso]= takanen2013_wbmso(periph.left,periph.right,fs,widthInErbs,periph.fc,printFigs);
+[rightWbMso cueEnergies.rightWbMso] = takanen2013_wbmso(periph.right,periph.left,fs,widthInErbs,periph.fc,printFigs);
 
-amtdisp('Models of LSO','progress');
-leftLso = takanen2013lso(periph.right,periph.left,fs,periph.fc);
-rightLso = takanen2013lso(periph.left,periph.right,fs,periph.fc);
+amt_disp('Models of LSO','progress');
+leftLso = takanen2013_lso(periph.right,periph.left,fs,periph.fc);
+rightLso = takanen2013_lso(periph.left,periph.right,fs,periph.fc);
 
 %% ------ From directional cues to a binaural activity map ----------------
 if(computationType==0)
@@ -162,12 +162,12 @@ else
     
     %1) Mapping the MSO and LSO model outputs into azimuthal angles ranging
     %from -90 to 90
-    amtdisp('Direction mapping','progress');
-    [directionCues.leftMso,directionCues.leftLso,directionCues.leftWbMso] = takanen2013directionmapping(leftMso,leftLso,rightMso,leftWbMso);
-    [directionCues.rightMso,directionCues.rightLso,directionCues.rightWbMso] = takanen2013directionmapping(rightMso,rightLso,leftMso,rightWbMso);
+    amt_disp('Direction mapping','progress');
+    [directionCues.leftMso,directionCues.leftLso,directionCues.leftWbMso] = takanen2013_directionmapping(leftMso,leftLso,rightMso,leftWbMso);
+    [directionCues.rightMso,directionCues.rightLso,directionCues.rightWbMso] = takanen2013_directionmapping(rightMso,rightLso,leftMso,rightWbMso);
     
     %2) Check cue consistency
-    [directionCues, cueEnergies] = takanen2013cueconsistency(directionCues, cueEnergies,periph.fc);
+    [directionCues, cueEnergies] = takanen2013_cueconsistency(directionCues, cueEnergies,periph.fc);
     
     %3) Derive two sets of where cues, one for each hemisphere, from the six
     %directional cues
@@ -199,10 +199,10 @@ else
     whatRight = [zeros(contraDelay,dims(2));whatRight(1:(end-contraDelay),:)];
     
     %% Onset contrast enhancement
-    [whereLeft, whatLeft] = takanen2013onsetenhancement(whereLeft,whatLeft,fs,periph.fc);
-    [whereRight, whatRight] = takanen2013onsetenhancement(whereRight,whatRight,fs,periph.fc);
+    [whereLeft, whatLeft] = takanen2013_onsetenhancement(whereLeft,whatLeft,fs,periph.fc);
+    [whereRight, whatRight] = takanen2013_onsetenhancement(whereRight,whatRight,fs,periph.fc);
     
     %% Forming of the binaural activity map
     [output.activityMap, output.colorGains, output.colorMtrx, output.levels] = ...
-        takanen2013formbinauralactivitymap(whereLeft,whereRight,whatLeft,whatRight,fs,periph.fc,printFigs,printMap);
+        takanen2013_formbinauralactivitymap(whereLeft,whereRight,whatLeft,whatRight,fs,periph.fc,printFigs,printMap);
 end

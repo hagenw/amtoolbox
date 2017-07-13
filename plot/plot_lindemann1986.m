@@ -32,7 +32,7 @@ function plot_lindemann1986(crosscorr,t,varargin)
 %   You may also supply the parameters in the input arguments in the
 %   following order: `plot_lindemann1986(crosscorr,t,fc)`
 %  
-%   See also: lindemann1986, lindemann1986bincorr
+%   See also: lindemann1986, lindemann1986_bincorr
 
 %   AUTHOR: Hagen Wierstorf
 

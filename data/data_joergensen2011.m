@@ -24,6 +24,8 @@ function [acrossSubdSRTs,std_acrossSubSRTs]  = data_joergensen2011(varargin)
 %
 %   References: joergensen2011predicting
 
+% TODO: explain Data in description;
+
 % Last modified: 2016/01/15 by Robert Baumgartner
 
 % Define input flags

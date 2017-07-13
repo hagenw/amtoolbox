@@ -44,7 +44,7 @@
 /* #include <iostream.h>  This file may be needed for some C compilers - Not needed for lcc */
 
 /* #include "zilany2013_complex.hpp" */
-#include "zilany2014/complex.c"
+#include "zilany2014_complex.c"
 
 #define MAXSPIKES 1000000
 #ifndef TWOPI

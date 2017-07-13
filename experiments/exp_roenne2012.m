@@ -53,7 +53,7 @@ function [waveVamp, waveVlat] = exp_roenne2012(varargin)
 %   Please cite Rønne et al. (2012) and Zilany and Bruce (2007) if you use
 %   this model.
 %
-definput.import={'amtcache'};
+definput.import={'amt_cache'};
 definput.flags.type={'missingflag','fig5','fig6','fig7'};
 definput.flags.plot={'plot','noplot'};
 
@@ -73,15 +73,15 @@ if flags.do_fig5
 
   stim_level = 40:10:100; % Default stimulus levels
 
-  [waveVlat, click_latency] = amtcache('get','fig5',flags.cachemode);  
+  [waveVlat, click_latency] = amt_cache('get','fig5',flags.cachemode);  
   if isempty(waveVlat);
-    [click_amplitude, click_latency]    = roenne2012click(stim_level);     
-    waveVlat = roenne2012tonebursts(stim_level);    
-    amtcache('set','fig5',waveVlat,click_latency);
+    [click_amplitude, click_latency]    = roenne2012_click(stim_level);     
+    waveVlat = roenne2012_tonebursts(stim_level);    
+    amt_cache('set','fig5',waveVlat,click_latency);
   end;
   
   if flags.do_plot;
-    plot_roenne2012tonebursts(waveVlat,click_latency);
+    plot_roenne2012_tonebursts(waveVlat,click_latency);
   end  ;  
 
 end;
@@ -94,14 +94,14 @@ if flags.do_fig6;
   % Default chirp numbers. 1 = click, 2 to 6 = chirp 1 to 5.
   chirp_number  = 1:6;              
 
-  [waveVamp, waveVlat] = amtcache('get','fig6',flags.cachemode);
+  [waveVamp, waveVlat] = amt_cache('get','fig6',flags.cachemode);
   if isempty(waveVamp)
-    [waveVamp, waveVlat] = roenne2012chirp(stim_level, chirp_number);
-    amtcache('set','fig6',waveVamp,waveVlat);
+    [waveVamp, waveVlat] = roenne2012_chirp(stim_level, chirp_number);
+    amt_cache('set','fig6',waveVamp,waveVlat);
   end;
         
   if flags.do_plot
-    plot_roenne2012chirp(waveVamp, waveVlat,'amponly');
+    plot_roenne2012_chirp(waveVamp, waveVlat,'amponly');
   end
 end;
 
@@ -113,14 +113,14 @@ if flags.do_fig7;
   % Default chirp numbers. 1 = click, 2 to 6 = chirp 1 to 5.
   chirp_number  = 1:6;              
 
-  [waveVamp, waveVlat] = amtcache('get','fig7',flags.cachemode);
+  [waveVamp, waveVlat] = amt_cache('get','fig7',flags.cachemode);
   if isempty(waveVamp)
-    [waveVamp, waveVlat] = roenne2012chirp(stim_level, chirp_number);
-    amtcache('set','fig7',waveVamp,waveVlat);
+    [waveVamp, waveVlat] = roenne2012_chirp(stim_level, chirp_number);
+    amt_cache('set','fig7',waveVamp,waveVlat);
   end;
         
   if flags.do_plot
-    plot_roenne2012chirp(waveVamp, waveVlat,'latonly');
+    plot_roenne2012_chirp(waveVamp, waveVlat,'latonly');
   end
 end;
 

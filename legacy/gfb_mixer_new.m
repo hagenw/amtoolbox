@@ -24,7 +24,7 @@ function mixer = gfb_mixer_new(analyzer, delay, iterations)
 % author   : tp 
 % date     : Jan 2002, Nov 2003, Mar & Nov 2006, Jan Feb 2007
 
-warning('Warning: GFB_MIXER_NEW will be removed in a future release. Use HOHMANN2002MIXER instead. ');
+warning('Warning: GFB_MIXER_NEW will be removed in a future release. Use hohmann2002_mixer instead. ');
 
 if (nargin < 4)
   iterations = analyzer.gaincalc_iterations;
@@ -42,8 +42,8 @@ mixer.gains = ones(number_of_bands, 1);
 
 % compute the frequency response of each filter (col) at the center
 % frequencies of all filters (row)
-  pos_f_response = hohmann2002freqz(analyzer, z_c);
-  neg_f_response = hohmann2002freqz(analyzer, conj(z_c));
+  pos_f_response = hohmann2002_freqz(analyzer, z_c);
+  neg_f_response = hohmann2002_freqz(analyzer, conj(z_c));
 
 % apply delay and phase correction
 for band = [1:number_of_bands]

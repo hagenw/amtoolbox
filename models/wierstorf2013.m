@@ -59,8 +59,8 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %                      with the KEMAR.
 %
 %     'lookup',lookup  Lookup table to map ITD values to angles. This can be
-%                      created by the `itd2anglelookuptable` function. Default
-%                      value is the lookup table itd2anglelookuptable.mat that comes with AMT.
+%                      created by the `itd2angle_lookuptable` function. Default
+%                      value is the lookup table `itd2angle_lookuptable.mat` that comes with AMT.
 %
 %
 %   For the simulation of the wave field synthesis or stereophony setup this
@@ -69,7 +69,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %   revision used to generate the figures in the corresponding paper is
 %   a8914700a4.
 %
-%   See also: wierstorf2013estimateazimuth, dietz2011, itd2angle
+%   See also: wierstorf2013_estimateazimuth, dietz2011, itd2angle
 %
 %   References: wierstorf2013 wierstorf2011hrtf dietz2011auditory
 
@@ -156,7 +156,7 @@ fs = hrtf.Data.SamplingRate;
 if isempty(lookup)
     % load lookup table to map ITD values of the model to azimuth angles.
     % the lookup table was created using the same HRTF database
-    lookup = amtload('wierstorf2013','itd2anglelookuptable.mat');
+    lookup = amt_load('wierstorf2013','itd2angle_lookuptable.mat');
 end
 
 
@@ -186,9 +186,9 @@ conf.resolution = resolution;
 [~,~,~,x,y] = xyz_grid(X,Y,0,conf);
 
 % 700 ms white noise burst
-sig_noise = whitenoiseburst(fs);
+sig_noise = sig_whitenoiseburst(fs);
 for ii=1:length(x)
-    if showprogress, amtdisp([num2str(ii) ' of ' num2str(length(x))],'progress'); end
+    if showprogress, amt_disp([num2str(ii) ' of ' num2str(length(x))],'progress'); end
     for jj=1:length(y)
         X = [x(ii) y(jj) 0];
         if strcmpi('circle',array) && norm(X)>L/2
@@ -213,7 +213,7 @@ for ii=1:length(x)
             % estimate the perceived direction
             % this is done by calculating ITDs with the dietz2011 binaural model,
             % which are then mapped to azimuth values with a lookup table
-            perceived_direction(ii,jj) = wierstorf2013estimateazimuth(sig,lookup, ...
+            perceived_direction(ii,jj) = wierstorf2013_estimateazimuth(sig,lookup, ...
                 'dietz2011','no_spectral_weighting','remove_outlier');
             localization_error(ii,jj) = perceived_direction(ii,jj)-desired_direction(ii,jj);
         end

@@ -81,7 +81,7 @@ if ~isempty(AMT_may2011PERC) && ~isempty(AMT_may2011PERmethod) && isequal(method
     C = AMT_may2011PERC;
 else
     % Load localization module
-    x=amtload('may2011',A.gmmModel);
+    x=amt_load('may2011',A.gmmModel);
     C=x.C;
     
     % Store classifier to persistent memory
@@ -159,7 +159,7 @@ ic     = zeros(GFB.nFilter,nFrames);
 %
 % 
 % Perform gammatone filtering
-bm = may2011gammatone(input,GFB);
+bm = may2011_gammatone(input,GFB);
 
 
 %% ********************  BINAURAL FEATURE EXTRACTION  *********************
@@ -169,12 +169,12 @@ bm = may2011gammatone(input,GFB);
 for ii = 1 : GFB.nFilter
     
     % Neural transduction
-    left  = may2011neuraltransduction(bm(:,ii,1), fs, A.haircellModel);
-    right = may2011neuraltransduction(bm(:,ii,2), fs, A.haircellModel);
+    left  = may2011_neuraltransduction(bm(:,ii,1), fs, A.haircellModel);
+    right = may2011_neuraltransduction(bm(:,ii,2), fs, A.haircellModel);
     
     % Framing
-    frameL = may2011frameData(left, blockSamples, hopSamples, winType);
-    frameR = may2011frameData(right,blockSamples, hopSamples, winType);
+    frameL = may2011_frameData(left, blockSamples, hopSamples, winType);
+    frameR = may2011_frameData(right,blockSamples, hopSamples, winType);
     
     % =====================================================================
     % ITD ESTIMATE
@@ -184,7 +184,7 @@ for ii = 1 : GFB.nFilter
     switch lower(A.xcorrMethod)
         case 'power'
             % Time-based
-            xcorr = may2011xcorrNorm(frameL,frameR,A.maxDelay,A.bXcorrDetrend,...
+            xcorr = may2011_xcorrNorm(frameL,frameR,A.maxDelay,A.bXcorrDetrend,...
                               A.bXcorrNorm);
     end
     
@@ -192,7 +192,7 @@ for ii = 1 : GFB.nFilter
     bM = transpose(argmax(xcorr,1)); 
     
     % Refine lag position by applying parabolic interpolation
-    [delta,currIC] = may2011interpolateParabolic(xcorr,bM);
+    [delta,currIC] = may2011_interpolateParabolic(xcorr,bM);
     
     % Calculate ITD with fractional part
     feat(:,1) = A.lags(bM)/fs + delta * (1/fs);
@@ -219,7 +219,7 @@ for ii = 1 : GFB.nFilter
     % =====================================================================
     %     
     % Classify azimuth
-    prob(ii,:,:) = may2011classifyGMM(feat,gmmFinal{ii}(azIdx));
+    prob(ii,:,:) = may2011_classifyGMM(feat,gmmFinal{ii}(azIdx));
     
     % Normalize
     prob(ii,:,:) = prob(ii,:,:) ./ repmat(sum(prob(ii,:,:),3),[1 1 nAz]);
@@ -267,7 +267,7 @@ intChanGMM = squeeze(nanmean(loglik,1));
 azFrames = azGrid(maxIdx);
 
 % Apply interpolation to increase azimuth resolution
-delta = may2011interpolateParabolic(exp(intChanGMM).',maxIdx);
+delta = may2011_interpolateParabolic(exp(intChanGMM).',maxIdx);
 
 % Find overall azimuth estimate
 azFrames(:) = azFrames(:) + (azStep*delta(:));

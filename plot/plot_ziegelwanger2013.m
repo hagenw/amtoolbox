@@ -30,7 +30,7 @@ function [h]=plot_ziegelwanger2013(Obj,data,type,color,ele,ch,time,style,width)
 %
 %       plot_ziegelwanger2013(Obj,Obj.Data.Delay,1,'b',0,1,1);
 %
-%   See also: ziegelwanger2013onaxis, ziegelwanger2013offaxis,
+%   See also: ziegelwanger2013_onaxis, ziegelwanger2013_offaxis,
 %             data_ziegelwanger2013, exp_ziegelwanger2013
 %
 %   References: ziegelwanger2013 majdak2013toa

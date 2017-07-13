@@ -39,6 +39,8 @@ function data = data_lopezpoveda2001(varargin)
 %   AUTHOR: Peter L. Søndergaard, Katharina Egger
 
 
+% TODO: explain Data in description;
+
 %% ------ Check input options --------------------------------------------
 
 % Define input flags

@@ -110,6 +110,12 @@ function [varargout] = localizationerror(m,varargin)
 %
 %     gainP              polar gain averaged between front and back
 %
+%     slopePfront        slope in degrees of regression line (frontal only)
+%
+%     slopePrear         slope in degrees of regression line (rear only)
+%
+%     slopeP             slope in degrees of regression line (front and back)
+%
 %     pVeridicalPfront   Proportion of quasi-verdical polar responses in
 %                        the front
 %
@@ -120,10 +126,11 @@ function [varargout] = localizationerror(m,varargin)
 %                        total
 %
 %     precPregressFront  polar scatter around linear regression line for
-%                        the front (only quasi-veridical responses included).
+%                        the front (only quasi-veridical responses included)
 %
-%     precPregressRear   polar scatter around linear regression line for
-%                        the back (only quasi-veridical responses included).
+%     precPregressRear   same as *precPregressFront* but for the back
+%
+%     precPregress       average between *precPregressFront* and *precPregressRear*
 %
 %     perMacpherson2003  polar error rate used in Macpherson & Middlebrooks
 %                        (2003). They measured the deviation of responses from the
@@ -434,7 +441,7 @@ else
       
     case 'gainPrear'
       
-      [~,r] = localizationerror(m,'sirpMacpherson2000');
+      [tmp,r] = localizationerror(m,'sirpMacpherson2000');
       varargout{1}=r.b(2);
       meta.ylabel='Rear polar gain';
       
@@ -443,6 +450,24 @@ else
       [f,r] = localizationerror(m,'sirpMacpherson2000');
       varargout{1}=(f.b(2)+r.b(2))/2;
       meta.ylabel='Polar gain';
+      
+    case 'slopePfront'
+      
+      g = localizationerror(m,'gainPfront');
+      varargout{1} = rad2deg(acos(1./sqrt(g.^2+1)));
+      meta.ylabel='Frontal polar regression slope';
+      
+    case 'slopePrear'
+      
+      g = localizationerror(m,'gainPrear');
+      varargout{1} = rad2deg(acos(1./sqrt(g.^2+1)));
+      meta.ylabel='Rear polar regression slope';
+      
+    case 'slopeP'
+      
+      g = localizationerror(m,'gainP');
+      varargout{1} = rad2deg(acos(1./sqrt(g.^2+1)));
+      meta.ylabel='Polar regression slope';
       
     case 'pVeridicalPfront'
       
@@ -538,13 +563,21 @@ else
       prec = rms(dev);
       varargout{1} = prec;
       meta.ylabel = 'Rear polar scatter (deg)';
+      
+    case 'precPregress'
+      
+      precF = localizationerror(m,'precPregressFront');
+      precR = localizationerror(m,'precPregressRear');
+      prec = (precF+precR)/2;
+      varargout{1} = prec;
+      meta.ylabel = 'Polar scatter (deg)';
      
     case 'perMacpherson2003'
       
       if isempty(kv.f) || isempty(kv.r)
-        amtdisp('Regression coefficients missing! Input is interpreted as baseline data!')
-        amtdisp('For this analysis the results from `sirpMacpherson2000()` for baseline data')
-        amtdisp('are required and must be handled as `localizationerror(m,f,r,...)`.')
+        amt_disp('Regression coefficients missing! Input is interpreted as baseline data!')
+        amt_disp('For this analysis the results from `sirpMacpherson2000()` for baseline data')
+        amt_disp('are required and must be handled as `localizationerror(m,f,r,...)`.')
         [kv.f,kv.r] = localizationerror(m,'sirpMacpherson2000');
       end
       

@@ -91,7 +91,7 @@ function output = exp_takanen2013(varargin)
 %                      Department of Signal Processing and Acoustics
 %                      Espoo, Finland
 
-definput.import={'amtcache'};
+definput.import={'amt_cache'};
 definput.flags.type={'missingflag','fig8','fig9','fig7_takanen2014','fig8_takanen2014'};
 
 definput.flags.dataType={'cochlea','binsig'};
@@ -116,11 +116,11 @@ if flags.do_fig8
     % if the user wishes to compute the cochlear model outputs, binaural
     % input signals are used
     if flags.do_binsig
-        data=amtload('takanen2013','fig8binsignals.mat','testsize');
+        data=amt_load('takanen2013','fig8_binsig.mat','testsize');
         for ind=1:data.testsize
-            [output,outputMtrx,tit]=amtcache('get', ['fig8bin_' num2str(ind)], flags.cachemode);
+            [output,outputMtrx,tit]=amt_cache('get', ['fig8_binsig_' num2str(ind)], flags.cachemode);
             if isempty(output)
-                data=amtload('takanen2013','fig8binsignals.mat',['test' num2str(ind)]);
+                data=amt_load('takanen2013','fig8_binsig.mat',['test' num2str(ind)]);
                 tit=data.(['test' num2str(ind)]).case;
                 insig=data.(['test' num2str(ind)]).insig;
                 clear data
@@ -136,7 +136,7 @@ if flags.do_fig8
                     outputMtrx(temp+dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,2);
                     outputMtrx(temp+2*dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,3);
                 end
-                amtcache('set', ['fig8bin_' num2str(ind)], output, outputMtrx, tit);
+                amt_cache('set', ['fig8_binsig_' num2str(ind)], output, outputMtrx, tit);
             end
             g(ind)= subplot(3,2,ind);
             imagesc(output.levels./90,((dim(1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
@@ -152,11 +152,11 @@ if flags.do_fig8
     end
     %otherwise pre-computed cochlea model outputs are used
     if flags.do_cochlea
-        testsize=amtload('takanen2013','fig8cochleadata.mat','testsize');
+        testsize=amt_load('takanen2013','fig8_cochlea.mat','testsize');
         for ind=1:testsize.testsize
-            [output,outputMtrx,tit]=amtcache('get', ['fig8cochlea_' num2str(ind)], flags.cachemode);
+            [output,outputMtrx,tit]=amt_cache('get', ['fig8_cochlea_' num2str(ind)], flags.cachemode);
             if isempty(output)
-                data=amtload('takanen2013','fig8cochleadata.mat',['test' num2str(ind)]);
+                data=amt_load('takanen2013','fig8_cochlea.mat',['test' num2str(ind)]);
                 tit=data.(['test' num2str(ind)]).case;
                 insig=data.(['test' num2str(ind)]).cochlear;
                 clear data
@@ -172,7 +172,7 @@ if flags.do_fig8
                     outputMtrx(temp+dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,2);
                     outputMtrx(temp+2*dim(1)*nXBins) = output.colorGains(temp)*output.colorMtrx(colorInd,3);
                 end
-                amtcache('set', ['fig8cochlea_' num2str(ind)], output, outputMtrx, tit);
+                amt_cache('set', ['fig8_cochlea_' num2str(ind)], output, outputMtrx, tit);
             end
             g(ind)=subplot(3,2,ind);
             imagesc(output.levels./90,((size(output.activityMap,1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
@@ -192,11 +192,11 @@ if flags.do_fig9
     % if the user wishes to compute the cochlear model outputs, binaural
     % input signals are used
     if flags.do_binsig
-        data=amtload('takanen2013','fig9binsignals.mat', 'testsize');
+        data=amt_load('takanen2013','fig9_binsig.mat', 'testsize');
         for ind=1:data.testsize
-            [output,outputMtrx,tit]=amtcache('get', ['fig9bin_' num2str(ind)], flags.cachemode);
+            [output,outputMtrx,tit]=amt_cache('get', ['fig9_binsig_' num2str(ind)], flags.cachemode);
             if isempty(output)
-                data=amtload('takanen2013','fig9binsignals.mat',['test' num2str(ind)]);
+                data=amt_load('takanen2013','fig9_binsig.mat',['test' num2str(ind)]);
                 tit=data.(['test' num2str(ind)]).case;
                 insig=data.(['test' num2str(ind)]).insig;
                 clear data
@@ -212,7 +212,7 @@ if flags.do_fig9
                     outputMtrx(colorInd-1,:,2) = temp(colorInd-1,:)*output.colorMtrx(colorInd,2);
                     outputMtrx(colorInd-1,:,3) = temp(colorInd-1,:)*output.colorMtrx(colorInd,3);
                 end
-                amtcache('set', ['fig9bin_' num2str(ind)], output, outputMtrx, tit);
+                amt_cache('set', ['fig9_binsig_' num2str(ind)], output, outputMtrx, tit);
             end
             g(ind)= subplot(3,2,ind);
             imagesc(output.levels./90,6:-1:1,outputMtrx);
@@ -227,11 +227,11 @@ if flags.do_fig9
     end
     %otherwise pre-computed cochlea model outputs are used
     if flags.do_cochlea
-        data=amtload('takanen2013','fig9cochleadata.mat','testsize');
+        data=amt_load('takanen2013','fig9_cochlea.mat','testsize');
         for ind=1:data.testsize
-            [output,outputMtrx,tit]=amtcache('get', ['fig9cochlea_' num2str(ind)], flags.cachemode);
+            [output,outputMtrx,tit]=amt_cache('get', ['fig9_cochlea_' num2str(ind)], flags.cachemode);
             if isempty(output)
-                data=amtload('takanen2013','fig9cochleadata.mat',['test' num2str(ind)]);
+                data=amt_load('takanen2013','fig9_cochlea.mat',['test' num2str(ind)]);
                 tit=data.(['test' num2str(ind)]).case;
                 insig=data.(['test' num2str(ind)]).cochlear;
                 clear data
@@ -247,7 +247,7 @@ if flags.do_fig9
                     outputMtrx(colorInd-1,:,2) = temp(colorInd-1,:)*output.colorMtrx(colorInd,2);
                     outputMtrx(colorInd-1,:,3) = temp(colorInd-1,:)*output.colorMtrx(colorInd,3);
                 end
-                amtcache('set', ['fig9cochlea_' num2str(ind)], output, outputMtrx, tit);
+                amt_cache('set', ['fig9_cochlea_' num2str(ind)], output, outputMtrx, tit);
             end
             g(ind)= subplot(3,2,ind);
             imagesc(output.levels./90,6:-1:1,outputMtrx);
@@ -264,11 +264,11 @@ end
 %% Figure 7 from takanen2014
 if flags.do_fig7_takanen2014
     % compute the cochlear model outputs, load the binaural input signals
-    if flags.do_binsig, s='fig6_takanen2014binsignals.mat'; end
+    if flags.do_binsig, s='fig7_takanen2014_binsig'; end
     % otherwise pre-computed cochlea model outputs are used
-    if flags.do_cochlea, s='fig6_takanen2014cochleadata.mat'; end
+    if flags.do_cochlea, s='fig7_takanen2014_cochlea'; end
 
-    data=amtload('takanen2013',s);
+    data=amt_load('takanen2013',[s '.mat']);
     data_tests=data.testsize;
     siglen=zeros(data_tests,1);
     data_tests_Data=zeros(data_tests,1);
@@ -291,12 +291,12 @@ if flags.do_fig7_takanen2014
         idx=1;
         %some scenarios consist of multiple test cases that are
         %processed separately
-        [levels,activityMap,outputMtrx,scenario,ytickPos,ytickLab,ylab]=amtcache('get', [s '_' num2str(ind)], flags.cachemode);
+        [levels,activityMap,outputMtrx,scenario,ytickPos,ytickLab,ylab]=amt_cache('get', [s '_' num2str(ind)], flags.cachemode);
         if isempty(levels)
             activityMap=zeros(siglen(ind),114);
             gains=zeros(siglen(ind),114);
             for caseInd=1:data_tests_Data(ind)
-                data=amtload('takanen2013',s,['test' num2str(ind)]);
+                data=amt_load('takanen2013',[s '.mat'],['test' num2str(ind)]);
                 if flags.do_cochlea
                   insig=data.(['test' num2str(ind)]).cochlearData(caseInd).cochlear;
                   len=size(insig.velocityLeft,1);
@@ -337,7 +337,7 @@ if flags.do_fig7_takanen2014
                 outputMtrx(temp+dim(1)*nXBins) = gains(temp)*colorMtrx(colorInd,2);
                 outputMtrx(temp+2*dim(1)*nXBins) = gains(temp)*colorMtrx(colorInd,3);
             end
-            amtcache('set', [s '_' num2str(ind)], levels, activityMap, outputMtrx, scenario, ytickPos, ytickLab, ylab);
+            amt_cache('set', [s '_' num2str(ind)], levels, activityMap, outputMtrx, scenario, ytickPos, ytickLab, ylab);
         end
         g(ind)= subplot(2,2,ind);
         imagesc(levels./90,((size(activityMap,1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));
@@ -353,11 +353,11 @@ end
 %% Figure 8 from takanen2014
 if flags.do_fig8_takanen2014
     % compute the cochlear model outputs, load the binaural input signals
-    if flags.do_binsig, s='fig7_takanen2014binsignals.mat'; end
+    if flags.do_binsig, s='fig8_takanen2014_binsig'; end
     % otherwise pre-computed cochlea model outputs are used
-    if flags.do_cochlea, s='fig7_takanen2014cochleadata.mat'; end
+    if flags.do_cochlea, s='fig8_takanen2014_cochlea'; end
 
-    data=amtload('takanen2013',s);
+    data=amt_load('takanen2013',[s '.mat']);
     data_tests=data.testsize;
     siglen=zeros(data_tests,1);
     data_tests_Data=zeros(data_tests,1);
@@ -380,12 +380,12 @@ if flags.do_fig8_takanen2014
         idx=1;
         %some scenarios consist of multiple test cases that are
         %processed separately
-        [levels,activityMap,outputMtrx,scenario,ytickPos,ytickLab,ylab]=amtcache('get', [s '_' num2str(ind)], flags.cachemode);
+        [levels,activityMap,outputMtrx,scenario,ytickPos,ytickLab,ylab]=amt_cache('get', [s '_' num2str(ind)], flags.cachemode);
         if isempty(levels)
             activityMap=zeros(siglen(ind),114);
             gains=zeros(siglen(ind),114);
             for caseInd=1:data_tests_Data(ind)
-                data=amtload('takanen2013', s, ['test' num2str(ind)]);
+                data=amt_load('takanen2013', [s '.mat'], ['test' num2str(ind)]);
                 if flags.do_cochlea
                   insig=data.(['test' num2str(ind)]).cochlearData(caseInd).cochlear;
                   len=size(insig.velocityLeft,1);
@@ -427,7 +427,7 @@ if flags.do_fig8_takanen2014
                 outputMtrx(temp+dim(1)*nXBins) = gains(temp)*colorMtrx(colorInd,2);
                 outputMtrx(temp+2*dim(1)*nXBins) = gains(temp)*colorMtrx(colorInd,3);
             end
-            amtcache('set', [s '_' num2str(ind)], levels,activityMap,outputMtrx,scenario,ytickPos,ytickLab,ylab);
+            amt_cache('set', [s '_' num2str(ind)], levels,activityMap,outputMtrx,scenario,ytickPos,ytickLab,ylab);
         end
         g(ind)= subplot(2,2,ind);
         imagesc(levels./90,((size(activityMap,1)-1):-20:0)/fs,outputMtrx(1:20:end,:,:));

@@ -70,10 +70,12 @@ function data = data_ziegelwanger2013(varargin)
 %
 %     data=data_ziegelwanger2013('ARI');
 %
-%   See also: ziegelwanger2013, ziegelwanger2013onaxis,
-%   ziegelwanger2013offaxis, exp_ziegelwanger2013
+%   See also: ziegelwanger2013, ziegelwanger2013_onaxis,
+%   ziegelwanger2013_offaxis, exp_ziegelwanger2013
 %
 %   References: ziegelwanger2013 majdak2013toa
+
+% Explain Data in description
 
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
 % Austria
@@ -81,7 +83,7 @@ function data = data_ziegelwanger2013(varargin)
 %% ------ Check input options --------------------------------------------
 
 % Define input flags
-definput.import={'amtcache'}; % get the flags of amtcache
+definput.import={'amt_cache'}; % get the flags of amt_cache
 definput.flags.type = {'missingflag','ARI','CIPIC','LISTEN','SPHERE_DIS','SPHERE_ROT','NH89'};
 
 % Parse input options
@@ -97,9 +99,9 @@ end
 %% ARI database
 if flags.do_ARI
     
-    tmp=amtload('ziegelwanger2013','info.mat');
+    tmp=amt_load('ziegelwanger2013','info.mat');
     data=tmp.info.ARI;
-    results=amtcache('get','ARI',flags.cachemode);
+    results=amt_cache('get','ARI',flags.cachemode);
     if isempty(results)
         for ii=1:length(data.subjects)
             Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2013', ['ARI_' data.subjects{ii} '.sofa']));
@@ -109,7 +111,7 @@ if flags.do_ARI
             Obj.MeasurementSourceAudioChannel=Obj.MeasurementSourceAudioChannel(idx,:);
             Obj.MeasurementAudioLatency=Obj.MeasurementAudioLatency(idx,:);
             Obj.API.M=length(idx);
-            amtdisp(['Calculating TOA models from the ARI database, ' data.subjects{ii} ' (' num2str(ii) '/' num2str(length(data.subjects)) ')'],'progress');
+            amt_disp(['Calculating TOA models from the ARI database, ' data.subjects{ii} ' (' num2str(ii) '/' num2str(length(data.subjects)) ')'],'progress');
             [Obj,tmp]=ziegelwanger2013(Obj,4,1);
             results(ii).meta=tmp;
             results(ii).meta.performance(4)=tmp.performance;
@@ -121,7 +123,7 @@ if flags.do_ARI
             results(ii).meta.performance(3)=tmp.performance;
             clear hM; clear meta; clear stimPar;
         end
-        amtcache('set','ARI',results);
+        amt_cache('set','ARI',results);
     end
     data.results=results;
     
@@ -130,13 +132,13 @@ end
 %% CIPIC database
 if flags.do_CIPIC
     
-    tmp=amtload('ziegelwanger2013','info.mat');
+    tmp=amt_load('ziegelwanger2013','info.mat');
     data=tmp.info.CIPIC;
-    results=amtcache('get','CIPIC',flags.cachemode);
+    results=amt_cache('get','CIPIC',flags.cachemode);
     if isempty(results)
         for ii=1:length(data.subjects)
             Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2013', ['CIPIC_' data.subjects{ii} '.sofa']));
-            amtdisp(['Calculating TOA models from the CIPIC database, ' data.subjects{ii} ' (' num2str(ii) '/' num2str(length(data.subjects)) ')'],'progress');            
+            amt_disp(['Calculating TOA models from the CIPIC database, ' data.subjects{ii} ' (' num2str(ii) '/' num2str(length(data.subjects)) ')'],'progress');            
             [Obj,tmp]=ziegelwanger2013(Obj,4,1);
             results(ii).meta=tmp;
             results(ii).meta.performance(4)=tmp.performance;
@@ -148,7 +150,7 @@ if flags.do_CIPIC
             results(ii).meta.performance(3)=tmp.performance;
             clear hM; clear meta; clear stimPar;
         end
-        amtcache('set','CIPIC',results);      
+        amt_cache('set','CIPIC',results);      
     end
     data.results=results;    
 end
@@ -156,15 +158,15 @@ end
 %% LISTEN database
 if flags.do_LISTEN
     
-    tmp=amtload('ziegelwanger2013','info.mat');
+    tmp=amt_load('ziegelwanger2013','info.mat');
     data=tmp.info.LISTEN;
-    results=amtcache('get','LISTEN',flags.cachemode);
+    results=amt_cache('get','LISTEN',flags.cachemode);
     if isempty(results)
         for ii=1:length(data.subjects)
             if ~strcmp(data.subjects{ii},'34')
                 Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2013', ['LISTEN_' data.subjects{ii} '.sofa']));
                 Obj.Data.SamplingRate=48000;
-                amtdisp(['Calculating TOA models from the LISTEN database, ' data.subjects{ii} ' (' num2str(ii) '/' num2str(length(data.subjects)) ')'],'progress');                            
+                amt_disp(['Calculating TOA models from the LISTEN database, ' data.subjects{ii} ' (' num2str(ii) '/' num2str(length(data.subjects)) ')'],'progress');                            
                 [Obj,tmp]=ziegelwanger2013(Obj,4,1);
                 results(ii).meta=tmp;
                 results(ii).meta.performance(4)=tmp.performance;
@@ -177,7 +179,7 @@ if flags.do_LISTEN
                 clear hM; clear meta; clear stimPar;
             end
         end
-        amtcache('set','LISTEN',results);      
+        amt_cache('set','LISTEN',results);      
     end
     data.results=results;    
 end
@@ -185,20 +187,20 @@ end
 %% SPHERE (Displacement) database
 if flags.do_SPHERE_DIS
     
-    tmp=amtload('ziegelwanger2013','info.mat');
+    tmp=amt_load('ziegelwanger2013','info.mat');
     data=tmp.info.Displacement;
-    results=amtcache('get','SPHERE_DIS',flags.cachemode);
+    results=amt_cache('get','SPHERE_DIS',flags.cachemode);
     if isempty(results)
         results.p_onaxis=zeros(4,2,length(data.subjects));
         results.p_offaxis=zeros(7,2,length(data.subjects));
         for ii=1:length(data.subjects)
             Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2013', ['Sphere_Displacement_' data.subjects{ii} '.sofa']));
-            amtdisp(['Calculating TOA models for displaced SPHERE, ' data.subjects{ii} ' (' num2str(ii) '/' num2str(length(data.subjects)) ')'],'progress');                        
+            amt_disp(['Calculating TOA models for displaced SPHERE, ' data.subjects{ii} ' (' num2str(ii) '/' num2str(length(data.subjects)) ')'],'progress');                        
             [~,tmp]=ziegelwanger2013(Obj,4,1);
             results.p_onaxis(:,:,ii)=tmp.p_onaxis;
             results.p_offaxis(:,:,ii)=tmp.p_offaxis;
         end
-        amtcache('set','SPHERE_DIS',results);      
+        amt_cache('set','SPHERE_DIS',results);      
     end
     data.results=results;        
 end
@@ -206,18 +208,18 @@ end
 %% SPHERE (Rotation) database
 if flags.do_SPHERE_ROT
     
-    tmp=amtload('ziegelwanger2013','info.mat');
+    tmp=amt_load('ziegelwanger2013','info.mat');
     data=tmp.info.Rotation;
-    results=amtcache('get','SPHERE_ROT',flags.cachemode);
+    results=amt_cache('get','SPHERE_ROT',flags.cachemode);
     if isempty(results)
         results.p=zeros(4,2,length(data.phi));
         for ii=1:length(data.subjects)
             Obj=SOFAload(fullfile(SOFAdbPath, 'ziegelwanger2013', ['Sphere_Rotation_' data.subjects{ii} '.sofa']));
-            amtdisp(['Calculating TOA models for rotated SPHERE, ' data.subjects{ii} ' (' num2str(ii) '/' num2str(length(data.subjects)) ')'],'progress');                        
+            amt_disp(['Calculating TOA models for rotated SPHERE, ' data.subjects{ii} ' (' num2str(ii) '/' num2str(length(data.subjects)) ')'],'progress');                        
             [~,tmp]=ziegelwanger2013(Obj,4,1);
             results.p_onaxis(:,:,ii)=tmp.p_onaxis;
         end
-        amtcache('set','SPHERE_ROT',results);      
+        amt_cache('set','SPHERE_ROT',results);      
     end
     data.results=results;    
 end

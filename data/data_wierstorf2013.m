@@ -18,7 +18,7 @@ function [data,description] = data_wierstorf2013(varargin)
 %
 %     'plot'          Plot the data.
 %
-%     'itd2anglelookuptable' Return the data for the ITD-to-angle look-up.
+%     'itd2angle_lookuptable' Return the data for the ITD-to-angle look-up.
 %
 %     'fig6'          Return data from Fig. 6. The data describes the difference
 %                     between the azimuth angle of the auditory event and the
@@ -66,7 +66,7 @@ function [data,description] = data_wierstorf2013(varargin)
 %% ------ Check input options --------------------------------------------
 
 % Define input flags
-definput.flags.type={'missingflag','fig6','fig7','fig10','itd2anglelookuptable'};
+definput.flags.type={'missingflag','fig6','fig7','fig10','itd2angle_lookuptable'};
 definput.flags.plot = {'noplot','plot'};
 
 % Parse input options
@@ -80,8 +80,8 @@ if flags.do_missingflag
 end;
 %% Load ITD-to-angle look-up
 
-if flags.do_itd2anglelookuptable
-  data=amtload('wierstorf2013','itd2anglelookuptable.mat');
+if flags.do_itd2angle_lookuptable
+  data=amt_load('wierstorf2013','itd2angle_lookuptable.mat');
 end
 
 %% ------ Data points from the paper ------------------------------------

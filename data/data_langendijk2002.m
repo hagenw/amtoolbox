@@ -51,6 +51,8 @@ function data = data_langendijk2002(varargin)
 %   If no flag is given, the function will print the list of valid flags.
 %
 %   References: langendijk2002contribution
+
+% TODO: explain Data in description;
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
@@ -249,82 +251,82 @@ function data = data_langendijk2002(varargin)
   end;
 
   if flags.do_P3_dtf
-      data=amtload('langendijk2002','P3_dtf.mat');
+      data=amt_load('langendijk2002','P3_dtf.mat');
   end
 
   if flags.do_P3_dtf_bmp
-      [med,pol]=bmp2gr(amtload('langendijk2002','P3_dtf.bmp'));
+      [med,pol]=bmp2gr(amt_load('langendijk2002','P3_dtf.bmp'));
       data=[pol;med];
   end  
   
   if flags.do_P6_dtf
-      data=amtload('langendijk2002','P6_dtf.mat');
+      data=amt_load('langendijk2002','P6_dtf.mat');
   end
 
   if flags.do_P6_dtf_bmp
-      [med,pol]=bmp2gr(amtload('langendijk2002','P6_dtf.bmp'));
+      [med,pol]=bmp2gr(amt_load('langendijk2002','P6_dtf.bmp'));
       data=[pol;med];
   end  
   
   if flags.do_expdata
     listener='P3';
-    amtdisp('Calculation for P3','progress');
+    amt_disp('Calculation for P3','progress');
     temp=data_langendijk2002([listener '_dtf']);
     fs=temp.stimPar.SamplingRate;           
     pol=temp.posLIN(:,5)';
     temp=temp.ampMdB;
     med=temp(1:end,:);
-    amtdisp('  Condition: b','progress');
+    amt_disp('  Condition: b','progress');
     temp=data_langendijk2002([listener '_b']);
     targetb=temp(1,:); responseb=temp(2,:);
     medir=gr2ir(med,'b',fs);
-    amtdisp('  Condition: 2o','progress');
+    amt_disp('  Condition: 2o','progress');
     temp=data_langendijk2002([listener '_2o']);
     targetc=temp(1,:); response2o=temp(2,:);
     medir2o=gr2ir(med,'2o',fs);
-    amtdisp('  Condition: 1ol','progress');
+    amt_disp('  Condition: 1ol','progress');
     temp=data_langendijk2002([listener '_1ol']);
     response1ol=temp(2,:);
     medir1ol=gr2ir(med,'1ol',fs);
-    amtdisp('  Condition: 1om','progress');
+    amt_disp('  Condition: 1om','progress');
     temp=data_langendijk2002([listener '_1om']);
     response1om=temp(2,:);
     medir1om=gr2ir(med,'1om',fs);
-    amtdisp('  Condition: 1oh','progress');
+    amt_disp('  Condition: 1oh','progress');
     temp=data_langendijk2002([listener '_1oh']);
     response1oh=temp(2,:);
     medir1oh=gr2ir(med,'1oh',fs);
-    save(fullfile(amtauxdatapath, 'langendijk2002', [listener '_data.mat']),'-regexp','^med|^pol|^response|^target');
+    save(fullfile(amt_auxdatapath, 'langendijk2002', [listener '_data.mat']),'-regexp','^med|^pol|^response|^target');
     
     clear
-    amtdisp('Calculation for P6','progress');
+    amt_disp('Calculation for P6','progress');
     listener='P6';
     temp=data_langendijk2002([listener '_dtf']);
     fs=temp.stimPar.SamplingRate;
     pol=temp.posLIN(:,5)';
     temp=temp.ampMdB;
     med=temp(1:end,:);
-    amtdisp('  Condition: b','progress');
+    amt_disp('  Condition: b','progress');
     temp=data_langendijk2002([listener '_b']);
     targetb=temp(1,:); responseb=temp(2,:);
     medir=gr2ir(med,'b',fs);
-    amtdisp('  Condition: 2o','progress');
+    amt_disp('  Condition: 2o','progress');
     temp=data_langendijk2002([listener '_2o']);
     targetc=temp(1,:); response2o=temp(2,:);
     medir2o=gr2ir(med,'2o',fs);
-    amtdisp('  Condition: 1ol','progress');
+    amt_disp('  Condition: 1ol','progress');
     temp=data_langendijk2002([listener '_1ol']);
     response1ol=temp(2,:);
     medir1ol=gr2ir(med,'1ol',fs);
-    amtdisp('  Condition: 1om','progress');
+    amt_disp('  Condition: 1om','progress');
     temp=data_langendijk2002([listener '_1om']);
     response1om=temp(2,:);
     medir1om=gr2ir(med,'1om',fs);
-    amtdisp('  Condition: 1oh','progress');
+    amt_disp('  Condition: 1oh','progress');
     temp=data_langendijk2002([listener '_1oh']);
     response1oh=temp(2,:);
     medir1oh=gr2ir(med,'1oh',fs);
-    save(fullfile(amtauxdatapath, 'langendijk2002', [listener '_data.mat']),'-regexp','^med|^pol|^response|^target');
+    save(fullfile(amt_auxdatapath, 'langendijk2002', [listener '_data.mat']),'-regexp','^med|^pol|^response|^target');
   end
 
 end

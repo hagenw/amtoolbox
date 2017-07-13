@@ -40,7 +40,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
 %
 %     jelfs2011({0,'kemar'},{[330 90],'kemar'})
 %
-%   See also: culling2005bmld, exp_jelfs2011
+%   See also: culling2005_bmld, exp_jelfs2011
 % 
 %   References:  jelfs2011revision culling2010mapping lavandier2012binaural
   
@@ -51,7 +51,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
   
   % If target or interferer are cell arrays, load HRTFs.
   if iscell(target)
-    X=SOFAload(fullfile(amtbasepath,'hrtf',mfilename,[target{2} '.sofa']));
+    X=SOFAload(fullfile(amt_basepath,'hrtf',mfilename,[target{2} '.sofa']));
     idx=find(X.SourcePosition(:,1)==target{1} & X.SourcePosition(:,2)==0);
     target=squeeze(X.Data.IR(idx,:,:))';
     target=postpad(target,size(target,1)+kv.pad);
@@ -60,7 +60,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
   
   if iscell(interferer)
     azims=numel(interferer{1});
-    X=SOFAload(fullfile(amtbasepath,'hrtf',mfilename,[interferer{2} '.sofa']));
+    X=SOFAload(fullfile(amt_basepath,'hrtf',mfilename,[interferer{2} '.sofa']));
     for ii=1:azims
       idx(ii)=find(X.SourcePosition(:,1)==mod(interferer{1}(ii),360) & X.SourcePosition(:,2)==0);
     end
@@ -103,7 +103,7 @@ function [benefit, weighted_SNR, weighted_bmld] = jelfs2011(target,interferer,va
       [phase_t, coher_t] = do_xcorr(targ_f(:,n,1),targ_f(:,n,2),fs,fc(n)); 
       [phase_i, coher_i] = do_xcorr( int_f(:,n,1), int_f(:,n,2),fs,fc(n)); 
       
-      bmld_prediction(n) = culling2005bmld(coher_i,phase_t,phase_i,fc(n));
+      bmld_prediction(n) = culling2005_bmld(coher_i,phase_t,phase_i,fc(n));
     end
     
     % Calculate the effect of better-ear SNR

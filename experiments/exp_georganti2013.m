@@ -85,7 +85,7 @@ if flags.do_fig9 % Small Room -  RT = 0.15 sec
     nDist(3).name='smallRoomSpeech_1_5m.mat';
       % calculate 
     for ww = 1:length(nDist)   
-        signalPre = amtload('georganti2013',nDist(ww).name);    
+        signalPre = amt_load('georganti2013',nDist(ww).name);    
         BSMDSTD(ww,:) = georganti2013(signalPre.signal,P);
     end
       % plot BSMD-STDs
@@ -131,7 +131,7 @@ if flags.do_fig10 % Large Room -  RT = 0.9 sec
     nDist(3).name='largeRoomSpeech_3m.mat';
       % calculate 
     for ww = 1:length(nDist)   
-        signalPre = amtload('georganti2013',nDist(ww).name);    
+        signalPre = amt_load('georganti2013',nDist(ww).name);    
         BSMDSTD(ww,:) = georganti2013(signalPre.signal,P);
     end
       % plot BSMD-STDs

@@ -14,7 +14,7 @@
 % AUTHOR : Piotr Majdak
 
   % Load speech (from the CLUE corpus)
-x=amtload('joergensen2011','Danish_CLUE_10sentence_samples_22kHz.mat');
+x=amt_load('joergensen2011','Danish_CLUE_10sentence_samples_22kHz.mat');
 
 speech  = x.sentenceArray{1};
 sentenceFileLevel = -26.00; % The RMS level of all CLUE sentence files corresponds to ...
@@ -25,7 +25,7 @@ speech = speech*10^((SPL-sentenceFileLevel)/20);
 N = length(speech);
 
   % Load speech-shaped noise from the CLUE corpus
-noise = amtload('joergensen2011','SSN_CLUE_22kHz.wav');
+noise = amt_load('joergensen2011','SSN_CLUE_22kHz.wav');
 
 % pick a random segment from the noise file
 Nsegments = floor(length(noise)/N);

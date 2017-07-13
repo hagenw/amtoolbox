@@ -63,11 +63,11 @@ if flags.do_missingflag
 end;
 
 % Load polynomial lookup data for converting ITD to azimuth
-lookup = amtload('dietz2011','itd2anglelookuptable.mat');
+lookup = amt_load('dietz2011','itd2angle_lookuptable.mat');
 
 if flags.do_fig3
 
-    signal=repmat(competingtalkers('five_speakers'),2,[]);
+    signal=repmat(sig_competingtalkers('five_speakers'),2,[]);
     fs = 16000;
     signal=signal(1:5*fs,:);
     s_pos = [-80 -30 0 30 80];
@@ -79,7 +79,7 @@ if flags.do_fig3
 
     % convert interaural information into azimuth
     itd_unwrapped = ...
-        dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst,2.5);
+        dietz2011_unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst,2.5);
     angl=itd2angle(itd_unwrapped,lookup);
 
     h_ic=zeros(91,12);
@@ -131,7 +131,7 @@ if flags.do_fig4
     
     % This reproduces Figure 4 from Dietz et al Speech Comm. 2011
 
-    signal=repmat(competingtalkers('two_speakers'),2,[]);
+    signal=repmat(sig_competingtalkers('two_speakers'),2,[]);
     fs = 16000;
     s_pos = [-80 -30 0 30 80];
     ic_threshold=0.98;
@@ -143,7 +143,7 @@ if flags.do_fig4
     [~, ~, ~, hairc_mod135]=dietz2011(signal,fs,'mod_center_frequency_hz',135);
     % convert interaural information into azimuth
     itd_unwrapped = ...
-        dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+        dietz2011_unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
     angl=itd2angle(itd_unwrapped,lookup);
     angl_fmod216=hairc_mod216.itd_lp*140000; %linear approximation. paper version is better than this
     angl_fmod135=hairc_mod135.itd_lp*140000; %linear approximation. paper version is better than this
@@ -211,10 +211,10 @@ end;
 
 if flags.do_fig5
     % mix signals
-    signal1=competingtalkers('one_of_three');
-    signal2=competingtalkers('two_of_three');
-    signal3=competingtalkers('three_of_three');
-    noise  =competingtalkers('bnoise');
+    signal1=sig_competingtalkers('one_of_three');
+    signal2=sig_competingtalkers('two_of_three');
+    signal3=sig_competingtalkers('three_of_three');
+    noise  =sig_competingtalkers('bnoise');
     noise = noise(1:40000,:);
     fs = 16000;
 
@@ -243,7 +243,7 @@ if flags.do_fig5
         [hairc_fine, fc, hairc_ild]=dietz2011(signal,fs,'fhigh',1400);
         % convert interaural information into azimuth
         itd_unwrapped = ...
-            dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst,2.5);
+            dietz2011_unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst,2.5);
         angl=itd2angle(itd_unwrapped,lookup);
 
         h_ic=zeros(38,12);
@@ -303,7 +303,7 @@ end;
 
 if flags.do_fig6
 
-    signal=competingtalkers('one_speaker_reverb');
+    signal=sig_competingtalkers('one_speaker_reverb');
     fs = 16000;
     s_pos = [-45 0 45];
     ic_threshold=0.98;
@@ -314,7 +314,7 @@ if flags.do_fig6
     [hairc_fine, fc, hairc_ild, hairc_mod]=dietz2011(signal,fs);
     % convert interaural information into azimuth
     itd_unwrapped = ...
-        dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
+        dietz2011_unwrapitd(hairc_fine.itd_lp,hairc_ild(:,1:12),hairc_fine.f_inst,2.5);
     angl=itd2angle(itd_unwrapped,lookup);
     angl_fmod=hairc_mod.itd_lp*140000; %linear approximation. paper version is better than this
 
@@ -380,7 +380,7 @@ end;
 
 if flags.do_fig6_spille2013
   
-  signal=amtload('dietz2011','s123456.wav');
+  signal=amt_load('dietz2011','s123456.wav');
   fs=44100;
   s_pos =[-75 -40 -10 10 40 75];
 
@@ -393,8 +393,8 @@ if flags.do_fig6_spille2013
 
   % convert interaural information into azimuth
   itd_unwrapped = ...
-      dietz2011unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst_lp,2.5);
-  lookup = amtload('dietz2011','itd2anglelookuptable.mat');
+      dietz2011_unwrapitd(hairc_fine.itd_lp,hairc_ild,hairc_fine.f_inst_lp,2.5);
+  lookup = amt_load('dietz2011','itd2angle_lookuptable.mat');
   angl=itd2angle(itd_unwrapped,lookup);
 
   h_ic=zeros(91,12);

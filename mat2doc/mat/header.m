@@ -1,5 +1,5 @@
-% Copyright (C) 2009-2015 Piotr Majdak and Peter L. Søndergaard.
-% This file is part of AMToolbox version {VERSION}
+% Copyright (C) 2009-2015 Piotr Majdak and the AMT team.
+% This file is part of Auditory Modeling Toolbox (AMT) version {VERSION}
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

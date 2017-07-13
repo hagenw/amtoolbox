@@ -78,28 +78,28 @@ end
 switch lower(demo)
     case '1r'
         % Create input signal
-        [signal,fs] = competingtalkers('one_speaker_reverb');
+        [signal,fs] = sig_competingtalkers('one_speaker_reverb');
         
         % Find all active sources
         nSources = 1;
         
     case '2'
         % Create input signal
-        [signal,fs] = competingtalkers('two_of_three');
+        [signal,fs] = sig_competingtalkers('two_of_three');
         
         % Find all active sources
         nSources = 2;
         
     case '3'
         % Create input signal
-        [signal,fs] = competingtalkers('three_of_three');
+        [signal,fs] = sig_competingtalkers('three_of_three');
         
         % Find all active sources
         nSources = 3;
         
     case '5'
         % Create input signal
-        [signal,fs] = competingtalkers('five_speakers');
+        [signal,fs] = sig_competingtalkers('five_speakers');
         
         % Find all active sources
         nSources = 5;
@@ -123,7 +123,7 @@ xlabel('Number of frames')
 ylabel('Number of gammatone channels')
 title('Time-frequency-based azimuth estimates')
 colorbar;
-may2011cbarlabel('Azimuth (deg)')
+may2011_cbarlabel('Azimuth (deg)')
 axis xy;
 
 % Plot binaural cues
@@ -133,7 +133,7 @@ xlabel('Number of frames')
 ylabel('Number of gammatone channels')
 title('Interaural time difference (ITD)')
 colorbar;
-may2011cbarlabel('ITD (ms)')
+may2011_cbarlabel('ITD (ms)')
 axis xy;
 
 figure;
@@ -142,7 +142,7 @@ xlabel('Number of frames')
 ylabel('Number of gammatone channels')
 title('Interaural level difference (ILD)')
 colorbar;
-may2011cbarlabel('ILD (dB)')
+may2011_cbarlabel('ILD (dB)')
 axis xy;
 
 figure;
@@ -151,7 +151,7 @@ xlabel('Number of frames')
 ylabel('Number of gammatone channels')
 title('Interaural coherence (IC)')
 colorbar;
-may2011cbarlabel('IC')
+may2011_cbarlabel('IC')
 axis xy;
 
 % Plot frame-based azimuth estimates
@@ -166,4 +166,4 @@ grid on;
 axis xy;
 
 % Histogram analysis of frame-based localization estimates
-azEst=may2011estAzimuth_GMM(out,'HIST',nSources,1)
+azEst=may2011_estAzimuthGMM(out,'HIST',nSources,1)

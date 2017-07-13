@@ -1,5 +1,4 @@
-%DEMO_HOHMANN2002  Shows how to use the gammatone filterbank from Hohmann
-%(2002)
+%DEMO_HOHMANN2002  Shows how to use the gammatone filterbank from Hohmann(2002)
 %
 %   Part I: This example creates a 4th order gammatone filter with a center
 %   frequency of 1000Hz and a 3dB-bandwidth of 100Hz, suitable for 
@@ -11,7 +10,7 @@
 %   Part III: This Example demonstrates how to create and how to use the
 %   combined analysis-synthesis Filterbank system.
 %
-%   See also: exp_hohmann2002 hohmann2002 hohmann2002process
+%   See also: exp_hohmann2002 hohmann2002 hohmann2002_process
 
 % author   : tp
 % date     : Jan, Mar 2002, Nov 2006
@@ -27,17 +26,17 @@ attenuation_db        =     3;
 fs                    = 44100;
 filter_order          =     4;
 
-filter = hohmann2002filter(fs, center_frequency_hz, ...
+filter = hohmann2002_filter(fs, center_frequency_hz, ...
                         bandwidth_hz, attenuation_db, filter_order);
 
 %%% print the filter's parameters to the screen %%%
 
-amtdisp(' ');
-amtdisp(['The filter coefficient of this filter is: ', ...
+amt_disp(' ');
+amt_disp(['The filter coefficient of this filter is: ', ...
       num2str(real(filter.coefficient)),            ...
       ' + ',                                        ...
       num2str(imag(filter.coefficient))]);
-amtdisp(['Its normalization factor is             : ', ...
+amt_disp(['Its normalization factor is             : ', ...
       num2str(filter.normalization_factor)]);
 
 
@@ -46,7 +45,7 @@ impulse_samples            = 8192;
 impulse_response_samples   =  800;
 impulse                    = [1, zeros(1,impulse_samples - 1)];
 
-[impulse_response, filter] = hohmann2002process(filter, impulse);
+[impulse_response, filter] = hohmann2002_process(filter, impulse);
 
 figure(1);
 plot([0:impulse_response_samples-1], ...
@@ -58,12 +57,12 @@ title('impulse response of example gammatone filter');
 xlabel('sample number');
 ylabel('filter output');
 
-amtdisp(' ');
-amtdisp(['Figure 1 shows the first ',num2str(impulse_response_samples),' samples of']);
-amtdisp('the impulse response of a 4th order gammatone filter with a center'); 
-amtdisp(['frequency of ',center_frequency_hz,'Hz and a 3dB-bandwidth of ',bandwidth_hz,'Hz.']);
-amtdisp('Real part, imaginary part, and absolute value of the impulse ');
-amtdisp('response are plotted as lines 1, 2, and 3, respectively.     ');
+amt_disp(' ');
+amt_disp(['Figure 1 shows the first ',num2str(impulse_response_samples),' samples of']);
+amt_disp('the impulse response of a 4th order gammatone filter with a center'); 
+amt_disp(['frequency of ',center_frequency_hz,'Hz and a 3dB-bandwidth of ',bandwidth_hz,'Hz.']);
+amt_disp('Real part, imaginary part, and absolute value of the impulse ');
+amt_disp('response are plotted as lines 1, 2, and 3, respectively.     ');
 
 %%% plot the frequency response of this filter: %%%
 
@@ -77,9 +76,9 @@ title('frequency response of example gammatone filter');
 xlabel('frequency / Hz');
 ylabel('filter response / dB');
 
-amtdisp(' ');
-amtdisp('Figure 2 shows the frequency response function of this filter');
-amtdisp('in dB over frequency in Hz.');
+amt_disp(' ');
+amt_disp('Figure 2 shows the frequency response function of this filter');
+amt_disp('in dB over frequency in Hz.');
 
 %% Part II: Filterbank example
 
@@ -89,16 +88,16 @@ base_frequency_hz = 1000;
 fs = 16276;
 filters_per_ERB = 1.0;
 
-amtdisp(['Building a filterbank for ', num2str(fs), ...
+amt_disp(['Building a filterbank for ', num2str(fs), ...
       'Hz sampling frequency.']);
-amtdisp(['Lower cutoff frequency: ', num2str(flow), 'Hz']);
-amtdisp(['Upper cutoff frequency: ', num2str(fhigh), 'Hz']);
-amtdisp(['Base frequency        : ', num2str(base_frequency_hz), 'Hz']);
-amtdisp(['filters per ERB       : ', num2str(filters_per_ERB)]);
-amtdisp(' ')
+amt_disp(['Lower cutoff frequency: ', num2str(flow), 'Hz']);
+amt_disp(['Upper cutoff frequency: ', num2str(fhigh), 'Hz']);
+amt_disp(['Base frequency        : ', num2str(base_frequency_hz), 'Hz']);
+amt_disp(['filters per ERB       : ', num2str(filters_per_ERB)]);
+amt_disp(' ')
 analyzer = hohmann2002(fs, flow, base_frequency_hz, fhigh, filters_per_ERB);
 bands = length(analyzer.center_frequencies_hz);
-amtdisp(['filterbank contains ', num2str(bands), ' filters:']);
+amt_disp(['filterbank contains ', num2str(bands), ' filters:']);
 
 fprintf(1,'%3s|%12s |%15s |%16s\n\n', ...
         '# ', 'f / Hz ', 'normalization', 'coefficient');
@@ -116,7 +115,7 @@ end
 %%% plot the frequency response of the individual filters     
 
 frequency = 0:2:fs/2;
-h=hohmann2002freqz(analyzer,exp(2*1i*pi*frequency/fs));
+h=hohmann2002_freqz(analyzer,exp(2*1i*pi*frequency/fs));
 
 figure(3);
 plot(frequency, 20 * log10(abs(h)));
@@ -125,8 +124,8 @@ title('frequency response of the individual filters in this filterbank');
 xlabel('frequency / Hz');
 ylabel('filter response / dB');
 
-amtdisp(' ');
-amtdisp('Figure 3 shows the frequency response of the individual filters.');
+amt_disp(' ');
+amt_disp('Figure 3 shows the frequency response of the individual filters.');
 
 
 %% Part III: Example for combined analysis-synthesis filterbank system
@@ -142,7 +141,7 @@ desired_delay_in_seconds  =     0.004;
 filter_order              =     4;
 bandwidth_factor          =     1.0;
 
-amtdisp('Building analysis filterbank');
+amt_disp('Building analysis filterbank');
 analyzer = hohmann2002(sampling_rate_hz, flow, ...
                             base_frequency_hz, fhigh,...
 			    filters_per_ERB, filter_order, bandwidth_factor);
@@ -150,12 +149,12 @@ analyzer = hohmann2002(sampling_rate_hz, flow, ...
 
 %%% Now create a synthesizer that can resynthesize the analyzer's output %%%
 
-amtdisp(['Building synthesizer for an analysis-synthesis delay of ', ...
+amt_disp(['Building synthesizer for an analysis-synthesis delay of ', ...
       num2str(desired_delay_in_seconds), ' seconds']);
-synthesizer = hohmann2002synth(analyzer, desired_delay_in_seconds);
+synthesizer = hohmann2002_synth(analyzer, desired_delay_in_seconds);
 
 %%% Extract the synthesizer's parameters %%%
-amtdisp(['The synthesizers parameters:';...
+amt_disp(['The synthesizers parameters:';...
       '----------------------------']);
 delay = synthesizer.delay;
 mixer = synthesizer.mixer;
@@ -178,9 +177,9 @@ end
 %%%  analysis-synthesis system                                         %%%
 
 impulse = [1, zeros(1,8191)];                                          
-[analyzed_impulse, analyzer] = hohmann2002process(analyzer, impulse);
+[analyzed_impulse, analyzer] = hohmann2002_process(analyzer, impulse);
 [resynthesized_impulse, synthesizer] = ...
-    hohmann2002process(synthesizer, analyzed_impulse);
+    hohmann2002_process(synthesizer, analyzed_impulse);
 
 figure(4);
 plot([0:8191]/sampling_rate_hz*1e3, resynthesized_impulse);
@@ -189,9 +188,9 @@ title('impulse response of the analysis-synthesis system');
 xlabel('time / ms');
 ylabel('system output');
 
-amtdisp(' ');
-amtdisp('Figure 4 shows the impulse response of the analysis-synthesis');
-amtdisp('system in the time domain.');
+amt_disp(' ');
+amt_disp('Figure 4 shows the impulse response of the analysis-synthesis');
+amt_disp('system in the time domain.');
 
 frequency = [0:8191] * sampling_rate_hz / 8192;
 figure(5)
@@ -201,5 +200,5 @@ title('frequency response of the analysis-synthesis-system');
 xlabel('frequency / Hz');
 ylabel('system response level / dB'); 
 
-amtdisp(' ');
-amtdisp('Figure 5 shows its frequency response.');
+amt_disp(' ');
+amt_disp('Figure 5 shows its frequency response.');

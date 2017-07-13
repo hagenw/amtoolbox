@@ -32,9 +32,9 @@ function b = middleearfilter(fs,varargin)
 %   (stapes peak velocity in m/s at 0dB SPL) of the frequency like in figure
 %   2b) of Lopez-Poveda and Meddis (2001).
 %
-%   `middleearfilter` is meant to be used in conjunction with the |drnl|
-%   function, as the output is scaled to make DRNL work. If you are not
-%   using the DRNl, you probably do not want to call this function. The
+%   `middleearfilter` is meant to be used in conjunction with the |lopezpoveda2001|
+%   function, as the output is scaled to make lopezpoveda2001 work. If you are not
+%   using the lopezpoveda2001, you probably do not want to call this function. The
 %   following code displays the magnitude response of the filter:::
 %
 %     fs=16000;
@@ -45,7 +45,7 @@ function b = middleearfilter(fs,varargin)
 %     xlabel('Frequency (Hz)');
 %     ylabel('Magnitude (dB)');
 %
-%   See also:  data_lopezpoveda2001, drnl
+%   See also:  data_lopezpoveda2001, lopezpoveda2001
 % 
 %   References: goode1994nkf lopezpoveda2001hnc
 

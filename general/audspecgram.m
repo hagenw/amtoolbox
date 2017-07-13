@@ -94,7 +94,7 @@ function varargout=audspecgram(insig,fs,varargin)
 %
 %     audspecgram(greasy,16000);
 %
-%   See also:   dau1997preproc
+%   See also:   dau1997_preproc
   
 %   AUTHOR : Peter Søndergaard.
   

@@ -41,7 +41,7 @@ definput.flags.condition = {'A','B','Learn'};
 
 
 %% Extract data
-x=amtload('majdak2013ctc','data.mat');
+x=amt_load('majdak2013ctc','data.mat');
 
 C = find(ismember(x.condition,flags.condition));
 

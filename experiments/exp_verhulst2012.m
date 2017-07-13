@@ -64,7 +64,7 @@ if flags.do_fig2c
   norm_Rms=ones(levels_n0,1);
   irr=ones(levels_n0,1)';
   [v,y,e,cf]=verhulst2012(sig,fs,fc,spl,norm_Rms,1,irr);
-  Y_rms=mag2db(rms(y(:,:,:)./0.01));
+  Y_rms=20.*log10(rms(y(:,:,:)./0.01));
   output=Y_rms;
   
   if flags.do_plot  

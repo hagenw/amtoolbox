@@ -35,6 +35,8 @@ function [delay,data_mean,data_std]  = data_elberling2010(varargin)
 %     data_elberling2010('fig5','plot');
 %
 %   References: elberling2010evaluating
+
+% TODO: explain Data in description;
     
 % Define input flags
 definput.flags.type={'missingflag','fig4','fig5','stim'};
@@ -137,12 +139,12 @@ end;
 
 if flags.do_stim
   % delay is the first output parameter, use it to return the stimulus.  
-  delay=amtload('elberling2010','stim.mat');
+  delay=amt_load('elberling2010','stim.mat');
   
   % fs is stored in data_mean
   data_mean=fs;
   
   if flags.do_plot
-    amtdisp('XXX Plot is missing.');
+    amt_disp('XXX Plot is missing.');
   end;
 end;

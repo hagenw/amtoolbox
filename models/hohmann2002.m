@@ -84,6 +84,6 @@ for band = 1:length(fb.center_frequencies_hz)
 
   % Construct gammatone filter:
   fb.filters(1,band) = ...
-      hohmann2002filter(fs, center_frequency_hz, kv.gamma_order, kv.bandwidth_factor);
+      hohmann2002_filter(fs, center_frequency_hz, kv.gamma_order, kv.bandwidth_factor);
 end
 

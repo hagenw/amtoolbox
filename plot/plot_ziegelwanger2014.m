@@ -39,7 +39,7 @@ function [h]=plot_ziegelwanger2014(Obj,data,type,color,ele,ch,time,style,width)
 %
 %       plot_ziegelwanger2014((Obj,Obj.Data.Delay,1,'b',0,1,1);
 %
-%   See also: ziegelwanger2014onaxis, ziegelwanger2014offaxis,
+%   See also: ziegelwanger2014_onaxis, ziegelwanger2014_offaxis,
 %   data_ziegelwanger2014, exp_ziegelwanger2014
 %
 %   References: ziegelwanger2014

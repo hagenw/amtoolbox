@@ -136,7 +136,7 @@ function varargout=exp_baumgartner2013(varargin)
 %
 %   To display Fig. 12 use :::
 %
-%     exp_baumgartner2013('fig12');
+%     exp_baumgartner2013('fig12'); 
 %
 %   To display Fig. 13 use :::
 %
@@ -181,7 +181,7 @@ function varargout=exp_baumgartner2013(varargin)
     'fig12','fig13','fig14','fig15',... % Ch. 4.1 (binaural rec.)
     'fig18','fig19','fig20','fig22','fig23'}; % Ch. 4
   definput.flags.plot = {'plot','noplot'};
-  definput.import={'amtcache'};
+  definput.import={'amt_cache'};
 
   % Parse input options
   [flags,kv]  = ltfatarghelper({},definput,varargin);
@@ -261,7 +261,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
   
   latdivision = [-20,0,20];  % lateral center angles of SPs
 
-  [s,qe,pe]=amtcache('get','fig13to15',flags.cachemode);
+  [s,qe,pe]=amt_cache('get','fig13to15',flags.cachemode);
   if isempty(s)
 
     s = data_baumgartner2013('pool', flags.cachemode);
@@ -294,12 +294,12 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
                   'u',s(ll).u,'lat',s(ll).latang{ii},...
                   'polsamp',s(ll).polangs{ii});
 
-              [ qe(ll,jj,ii),pe(ll,jj,ii) ] = baumgartner2013pmv2ppp( ...
+              [ qe(ll,jj,ii),pe(ll,jj,ii) ] = baumgartner2013_pmv2ppp( ...
                   s(ll).pmv{jj,ii} , s(jj).polangs{ii} , s(ll).respangs{ii});
 
             end
         end
-        amtdisp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress');
+        amt_disp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress');
     end
 
     qe = mean(qe,3);
@@ -308,7 +308,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
       s(ll).pe = pe(ll,:);
       s(ll).qe = qe(ll,:);
     end 
-    amtcache('set','fig13to15',s,qe,pe);
+    amt_cache('set','fig13to15',s,qe,pe);
   end  
   ns = length(s);
   
@@ -322,7 +322,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
 
       markersize = 4;
 
-      [qechance,pechance] = baumgartner2013pmv2ppp(ones(49,44));
+      [qechance,pechance] = baumgartner2013_pmv2ppp(ones(49,44));
       
       % IDs for XTick of plots
       for ll = 1:ns
@@ -395,7 +395,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
     
     if flags.do_plot
       
-      [qechance,pechance] = baumgartner2013pmv2ppp(ones(49,44));
+      [qechance,pechance] = baumgartner2013_pmv2ppp(ones(49,44));
       
       % IDs for XTick of plots
       for ll = 1:ns
@@ -458,7 +458,7 @@ if flags.do_fig13 || flags.do_fig14 || flags.do_fig15
       
       markersize = 4;
 
-      [qechance,pechance] = baumgartner2013pmv2ppp(ones(49,44));
+      [qechance,pechance] = baumgartner2013_pmv2ppp(ones(49,44));
       
       % IDs for XTick of plots
       for ll = 1:ns
@@ -528,7 +528,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
   
   dpol = 5;    % step size in deg
 
-  [s, D]=amtcache('get',package,flags.cachemode);
+  [s, D]=amt_cache('get',package,flags.cachemode);
   if isempty(s),
     s = data_baumgartner2013('pool', flags.cachemode);
     ns = length(s);
@@ -603,7 +603,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
 
         end
 
-        amtdisp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress')
+        amt_disp([num2str(ll,'%2u') ' of ' num2str(ns,'%2u') ' completed'],'progress')
 
       end
 
@@ -617,7 +617,7 @@ if flags.do_fig18 || flags.do_fig22 || flags.do_fig23
       s(ns+1).id = 'Pool';
 
     end
-    amtcache('set',package,s,D);
+    amt_cache('set',package,s,D);
   end
   % Output
   if nargout == 1
@@ -716,7 +716,7 @@ if flags.do_fig19 || flags.do_fig20
     end
     pol2{ii} = (polang(id1)+polang(id2)) /2;
     
-    amtdisp([' Span: ' num2str(dPol(ii)) ' deg.'],'progress');
+    amt_disp([' Span: ' num2str(dPol(ii)) ' deg.'],'progress');
     for ll = 1:length(s)
 
         s(ll).spdtfs = extractsp(lat,s(ll).Obj);
@@ -731,9 +731,9 @@ if flags.do_fig19 || flags.do_fig20
           s(ll).dtfs2{ii},s(ll).spdtfs,s(ll).fs,'u',s(ll).u,...
           'polsamp',polang);
 
-        [s(ll).qe1{ii},s(ll).pe1{ii}] = baumgartner2013pmv2ppp(...
+        [s(ll).qe1{ii},s(ll).pe1{ii}] = baumgartner2013_pmv2ppp(...
           s(ll).pmv1{ii},polang(id0),respang);
-        [s(ll).qe2{ii},s(ll).pe2{ii}] = baumgartner2013pmv2ppp(...
+        [s(ll).qe2{ii},s(ll).pe2{ii}] = baumgartner2013_pmv2ppp(...
           s(ll).pmv2{ii},pol2{ii},respang);
         
         % Increse of error

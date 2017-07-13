@@ -20,7 +20,7 @@ function output = exp_jelfs2011(varargin)
 %
 %     exp_jelfs2011('fig4');
 %
-%   See also: jelfs2011, culling2005bmld
+%   See also: jelfs2011, culling2005_bmld
 %
 %   References:  jelfs2011revision hawley2004benefit
 

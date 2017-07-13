@@ -51,7 +51,7 @@ function pmv = langendijk2002(targets,template,varargin)
 % AUTHOR : Robert Baumgartner, OEAW Acoustical Research Institute
   
   
-  definput.import={'langendijk2002comp'};
+  definput.import={'langendijk2002_comp'};
   definput.keyvals.bw=6;
   definput.keyvals.flow=2000;
   definput.keyvals.fhigh=16000;
@@ -67,13 +67,13 @@ function pmv = langendijk2002(targets,template,varargin)
   end
   
   % Filter bank
-  x = cqdft(targets,kv.fs,kv.flow,kv.fhigh,kv.bw);
-  y = cqdft(template,kv.fs,kv.flow,kv.fhigh,kv.bw);
+  x = langendijk2002_spectralanalysis(targets,kv.fs,kv.flow,kv.fhigh,kv.bw);
+  y = langendijk2002_spectralanalysis(template,kv.fs,kv.flow,kv.fhigh,kv.bw);
   
   % Comparison process
   si=zeros(size(template,2),size(targets,2),size(template,3)); % initialisation
   for ii=1:size(targets,2)
-      si(:,ii,:) = langendijk2002comp(x(:,ii,:),y,'argimport',flags,kv);
+      si(:,ii,:) = langendijk2002_comp(x(:,ii,:),y,'argimport',flags,kv);
   end
   
   % Binaural average

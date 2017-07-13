@@ -71,7 +71,7 @@
     % Figure 1 - classic real;
     figure('units','normalized','outerposition',[0 0.525 1 0.475]);
     set(gcf,'Name','gammatone, classic, real');
-    subplot(1,2,1)
+  %  subplot(1,2,1)
     hold on
     dy = 1;
     for ii = 1:nchannels
@@ -93,7 +93,8 @@
         ['#24: ' num2str(round(fc(24))) ' Hz']})
     box on
     hold off
-        
+    print(gcf,'-dpng','Gammatone')   
+       
     subplot(1,2,2)
     hold on
     dy = 1;
@@ -139,13 +140,13 @@
 %     treal = (1:N)/fs*1000;          % Time axis;
 %     
 %     %---- classic complex ----
-%     amtdisp('Classic, complex-valued, causal-phased gammtone implementation:')
+%     amt_disp('Classic, complex-valued, causal-phased gammtone implementation:')
 %     % Derive filter coefficients and filter impulse responses;
 %     [b,a] = gammatone(fc,fs,'classic','causalphase','complex');
 %     outsig1 = 2*real(ufilterbankz(b,a,insig));
 %     outsig1 = permute(outsig1,[3 2 1]);
 % 
-%     amtdisp('Classic, complex-valued, peak-phased gammtone implementation:')
+%     amt_disp('Classic, complex-valued, peak-phased gammtone implementation:')
 %     % Derive filter coefficients and filter impulse responses with option 'peakphase';
 %     [b,a] = gammatone(fc,fs,'classic','peakphase','complex');
 %     outsig2 = 2*real(ufilterbankz(b,a,insig));
@@ -295,15 +296,15 @@
     % Impulse signal;
     impulse = [1, zeros(1,8191)];
     % Filter signal;
-    [impulse_response, analyzer] = hohmann2002process(analyzer, impulse);
+    [impulse_response, analyzer] = hohmann2002_process(analyzer, impulse);
        
     % Find peak at envelope maximum for lowest channel and add one sample;
     delay_samples = find(abs(impulse_response(1,:)) == max(abs(impulse_response(1,:)))) + 1;
     
     % 
-    delay = hohmann2002delay(analyzer, delay_samples);
+    delay = hohmann2002_delay(analyzer, delay_samples);
      
-    [outsig, delay] = hohmann2002process(delay, impulse_response);
+    [outsig, delay] = hohmann2002_process(delay, impulse_response);
     
     % Figure 4;
     type1   = 'plotted as they are';   % Type of implemantion for headline;

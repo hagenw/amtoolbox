@@ -44,7 +44,7 @@
 /* #include <iostream.h> */
 
 /* #include "zilany2013_complex.hpp" */
-#include "zilany2014/complex.c"
+#include "zilany2014_complex.c"
 
 #define MAXSPIKES 1000000
 #ifndef TWOPI
@@ -271,7 +271,7 @@ double Synapse(double *ihcout, double tdres, double cf, int totalstim, int nrep,
     randInputArray[4] = mxCreateDoubleMatrix(1, 1, mxREAL);
     *mxGetPr(randInputArray[4])= spont; /* high, medium, or low */
             
-    mexCallMATLAB(1, randOutputArray, 5, randInputArray, "ffGn");
+    mexCallMATLAB(1, randOutputArray, 5, randInputArray, "zilany2014_ffGn");
     randNums = mxGetPr(randOutputArray[0]);      
     /*----------------------------------------------------------*/
     /*----- Double Exponential Adaptation ----------------------*/

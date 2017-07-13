@@ -3,7 +3,7 @@ function test_failed=test_coefgtdrnl
 %
 %  Test how to replace the coefGtDRNL function by gammatone.
 
-amtdisp(' ===============  TEST_COEFGTDRNL ================');
+amt_disp(' ===============  TEST_COEFGTDRNL ================');
 
 test_failed=0;
 

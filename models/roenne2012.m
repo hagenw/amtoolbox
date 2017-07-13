@@ -12,8 +12,8 @@ function [waveVamp, waveVlat]  = roenne2012(stim,fsstim,stim_level,varargin)
 %   stimuli (which this model is designed to simulate) has to be calibrated
 %   in peSPL acoustically. This is **not** the same as "just" having a
 %   numerical peak to peak value of the same level as the pure tone. For
-%   calibrated click, chirps and tone bursts, see |roenne2012click|,
-%   |roenne2012tonebursts| and |roenne2012chirp|.
+%   calibrated click, chirps and tone bursts, see |roenne2012_click|,
+%   |roenne2012_tonebursts| and |roenne2012_chirp|.
 %
 %   The parameter *fsstim* gives the sampling frequency of the input
 %   stimulus, and *stim_level* the level. As input is calibrated to an
@@ -75,7 +75,7 @@ end
 
 %% ABR model
 % call AN model, note that lots of extra outputs are possible
-[ANout,vFreq] = zilany2007humanized(stim_level, stim, fsstim, kv.fsmod, 'flow',kv.flow, 'fhigh',kv.fhigh);   
+[ANout,vFreq] = zilany2007(stim_level, stim, fsstim, kv.fsmod, 'flow',kv.flow, 'fhigh',kv.fhigh);   
 
 % subtract 50 due to spontaneous rate
 ANout = ANout'-50;                                            

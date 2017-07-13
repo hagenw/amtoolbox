@@ -6,7 +6,8 @@
 %
 %      Figure from Zilany et al. (2014) model
 %
-%   
+%
+%   References: zilany2009 zilany2014
 
 %Parameter Settings
 

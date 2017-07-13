@@ -297,7 +297,7 @@ function exp_gammatone(varargin)
 %
 %   References: patterson1987efficient lyon1997 hohmann2002 moore1983
 %
-%   See also: gammatone exp_hohmann2002 demo_gammatone demo_hohmann2002 hohmann2002 hohmann2002process
+%   See also: gammatone exp_hohmann2002 demo_gammatone demo_hohmann2002 hohmann2002 hohmann2002_process
 
 % AUTHOR: CK, 2014
 
@@ -484,7 +484,7 @@ function exp_gammatone(varargin)
 
    if flags.do_fig3_patterson1987
         % Input parameters
-        x=amtload('gammatone','a_from_past_uk.mat'); % Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
+        x=amt_load('gammatone','a_from_past_uk.mat'); % Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
         fs=x.fs;
         ts = 1/fs;                  % Time between sampling points in s;
         insig = x.data(:,1).';        % Extract one channel from signal;
@@ -532,7 +532,7 @@ function exp_gammatone(varargin)
 
    if flags.do_fig4_patterson1987
         % Input parameters
-        x=amtload('gammatone','a_from_past_uk.mat'); % Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
+        x=amt_load('gammatone','a_from_past_uk.mat'); % Load mat-file with vowel a in variable insig and sampling frequency in variable fs;
         fs=x.fs;
         ts = 1/fs;                  % Time between sampling points in s;
         insig = x.data(:,1).';        % Extract one channel from signal;
