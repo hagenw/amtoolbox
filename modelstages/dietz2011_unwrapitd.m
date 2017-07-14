@@ -27,7 +27,7 @@ function itd = dietz2011_unwrapitd(itd,ild,f_inst,tr)
 %% ===== Checking of input parameters ===================================
 nargmin = 3;
 nargmax = 4;
-error(nargchk(nargmin,nargmax,nargin));
+narginchk(nargmin,nargmax);
 if nargin==3
     tr = 2.5;
 end
