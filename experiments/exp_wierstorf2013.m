@@ -145,10 +145,10 @@ if flags.do_missingflag
 end;
 
 % Checking for the Sound-Field-Synthesis Toolbox
-if ~exist('SFS_start') | ~strcmp(SFS_version,'2.0.0')
+if ~exist('SFS_start') | ~strcmp(SFS_version,'2.4.0')
     error(['%s: you need to install the Sound-Field-Synthesis Toolbox.\n', ...
         'You can download it at https://github.com/sfstoolbox/sfs.\n', ...
-        'You need version 2.0.0 of the Toolbox (commit afe5c14359).'], ...
+        'You need version 2.4.0 of the Toolbox (commit ...).'], ...
         upper(mfilename));
 else
     SFS_start;
@@ -198,6 +198,7 @@ if flags.do_fig1
 %% ------ F I G U R E  3  ------------------------------------------------
 elseif flags.do_fig3
 
+    conf = SFS_config;
     % listening area
     X = [-2 2];
     Y = [-2 2];
@@ -213,37 +214,41 @@ elseif flags.do_fig3
     xs = [0 1 0];
     src = 'pw';
     % other neccessary settings
-    conf.c = 343;
-    conf.fs = 44100;
-    conf.showprogress = false;
-    conf.debug = 0;
-    conf.tmpdir = '/tmp/sfs';
-    conf.resolution = 300;
-    conf.phase = 0;
-    conf.N = 1024;
-    conf.usenormalisation = true;
-    conf.usebandpass = false;
-    conf.bandpassflow = 0;
-    conf.bandpassfhigh = 20000;
-    conf.dimension = '2.5D';
-    conf.driving_functions = 'default';
-    conf.usetapwin = true;
-    conf.tapwinlen = 0.3;
-    conf.wfs.usehpre = false;
-    conf.usefracdelay = false;
-    conf.plot.useplot = false;
-    conf.plot.usedb = false;
-    conf.plot.colormap = 'gray';
-    conf.plot.loudspeakers = true;
-    conf.plot.realloudspeakers = true;
-    conf.plot.lssize = 0.16; % m
-    conf.plot.cmd = '';
-    conf.plot.mode = 'monitor';
-    conf.plot.size = [540 404];
-    conf.plot.size_unit = 'px';
-    conf.plot.caxis = '';
-    conf.plot.usefile = false;
-    conf.plot.file = '';
+    %conf.c = 343;
+    %conf.fs = 44100;
+    %conf.t0 = 'system';
+    %conf.showprogress = false;
+    %conf.debug = false;
+    %conf.tmpdir = '/tmp/sfs';
+    %conf.resolution = 300;
+    %conf.phase = 0;
+    %conf.N = 1024;
+    %conf.usenormalisation = true;
+    %conf.usebandpass = false;
+    %conf.bandpassflow = 0;
+    %conf.bandpassfhigh = 20000;
+    %conf.dimension = '2.5D';
+    %conf.driving_functions = 'default';
+    %conf.usetapwin = true;
+    %conf.tapwinlen = 0.3;
+    %conf.wfs.usehpre = false;
+    %conf.delayline.resampling = 'none';
+    %conf.delayline.filter = 'integer';
+    %conf.delayline.filterorder = 0;
+    %conf.delayline.filternumber = 1;
+    %conf.plot.useplot = false;
+    %conf.plot.usedb = false;
+    %conf.plot.colormap = 'gray';
+    %conf.plot.loudspeakers = true;
+    %conf.plot.realloudspeakers = true;
+    %conf.plot.lssize = 0.16; % m
+    %conf.plot.cmd = '';
+    %conf.plot.mode = 'monitor';
+    %conf.plot.size = [540 404];
+    %conf.plot.size_unit = 'px';
+    %conf.plot.caxis = '';
+    %conf.plot.usefile = false;
+    %conf.plot.file = '';
 
   
     output = amt_cache('get','fig3',flags.cachemode); 
@@ -262,7 +267,7 @@ elseif flags.do_fig3
         f = 5000;
         P_c = sound_field_mono_wfs(X,Y,Z,xs,src,f,conf);
         % (d)
-        t = 212 / conf.c;
+        t = 1.5 / conf.c;
         P_d = sound_field_imp_wfs(X,Y,Z,xs,src,t,conf);
 				
 				output.P_a = P_a;
@@ -280,21 +285,21 @@ elseif flags.do_fig3
     if flags.do_plot
         % ------ Plotting ------
         % (a)
-        plot_sound_field(-output.P_a,output.xaxis,output.yaxis,output.zaxis,output.x0,conf);
+        plot_sound_field(-output.P_a,X,Y,Z,output.x0,conf);
         axis([X(1) X(2) Y(1) Y(2)]);
         colorbar;
         xlabel('x/m');
         ylabel('y/m');
         title('(a) f_{pw} = 1kHz');
         % (b)
-        plot_sound_field(-output.P_b,output.xaxis,output.yaxis,output.zaxis,output.x0,conf);
+        plot_sound_field(-output.P_b,X,Y,Z,output.x0,conf);
         axis([X(1) X(2) Y(1) Y(2)]);
         colorbar;
         xlabel('x/m');
         ylabel('y/m');
         title('(b) f_{pw} = 2kHz');
         % (c)
-        plot_sound_field(-output.P_c,output.xaxis,output.yaxis,output.zaxis,output.x0,conf);
+        plot_sound_field(-output.P_c,X,Y,Z,output.x0,conf);
         axis([X(1) X(2) Y(1) Y(2)]);
         colorbar;
         xlabel('x/m');
@@ -302,7 +307,7 @@ elseif flags.do_fig3
         title('(c) f_{pw} = 5kHz');
         % (d)
         conf.plot.usedb = 1;
-        plot_sound_field(output.P_d,output.xaxis,output.yaxis,output.zaxis,output.x0,conf);
+        plot_sound_field(output.P_d,X,Y,Z,output.x0,conf);
         axis([X(1) X(2) Y(1) Y(2)]);
         colorbar;
         xlabel('x/m');
@@ -382,12 +387,12 @@ elseif flags.do_fig8
     [phi,itd] = amt_cache('get','fig8', flags.cachemode);
     if isempty(phi)
         % Sound Field Synthesis Toolbox settings
-        conf.ir.useinterpolation = true;
-        conf.fs = 44100;
+        conf = SFS_config;
+        conf.N = 4096;
         % load HRTFs, see:
         % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
         %load(fullfile(amtbasepath,'hrtf','wierstorf2013','QU_KEMAR_anechoic_3m.mat'));
-        hrtf = SOFAload(fullfile(SOFAdbPath,'wierstorf2013','QU_KEMAR_anechoic_3m.sofa'));
+        hrtf = SOFAload(fullfile(SOFAdbPath,'wierstorf2013','qu_kemar_anechoic_3m.sofa'));
         x0 = SOFAcalculateAPV(hrtf);
         % Generate noise signal
         sig_noise = noise(44100/5,1,'white');
@@ -429,12 +434,12 @@ if flags.do_fig9
     [phi_auditory_event,phi_sound_event] = amt_cache('get', 'fig9', flags.cachemode);      
     if isempty(phi_auditory_event)
         % Sound Field Synthesis Toolbox settings
-        conf.ir.useinterpolation = true;
-        conf.fs = 44100;
+        conf = SFS_config;
+        conf.N = 4096;
         % Load lookup table
         lookup = data_wierstorf2013('itd2angle_lookuptable');
         % Load HRTFs, see:
-        hrtf = SOFAload(fullfile(SOFAdbPath,'wierstorf2013','QU_KEMAR_anechoic_3m.sofa');
+        hrtf = SOFAload(fullfile(SOFAdbPath,'wierstorf2013','qu_kemar_anechoic_3m.sofa'));
         x0 = SOFAcalculateAPV(hrtf);
         % Generate noise signal
         sig_noise = noise(44100/5,1,'white');
