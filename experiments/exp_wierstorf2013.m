@@ -144,11 +144,13 @@ if flags.do_missingflag
   error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end;
 
+% Get SFS version
+sfsver = strsplit(SFS_version,'.');
 % Checking for the Sound-Field-Synthesis Toolbox
-if ~exist('SFS_start') | ~strcmp(SFS_version,'2.4.0')
+if ~exist('SFS_start') | sfsver{1}<2 | (sfsver{1}==2 && sfsver{2}<4)
     error(['%s: you need to install the Sound-Field-Synthesis Toolbox.\n', ...
         'You can download it at https://github.com/sfstoolbox/sfs.\n', ...
-        'You need version 2.4.0 of the Toolbox (commit ...).'], ...
+        'You need version 2.4.0 or higher of the Toolbox.'], ...
         upper(mfilename));
 else
     SFS_start;

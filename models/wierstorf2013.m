@@ -66,8 +66,9 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %   For the simulation of the wave field synthesis or stereophony setup this
 %   functions depends on the Sound-Field-Synthesis Toolbox, which is available
 %   here: `<http://github.com/sfstoolbox/sfs>`_. It runs under Matlab and Octave. The
-%   revision used to generate the figures in the corresponding paper is
-%   a8914700a4.
+%   revision used to generate the figures in the corresponding paper was
+%   a8914700a4. This one uses a newer version (>=2.4), but should return very
+%   similar results.
 %
 %   See also: wierstorf2013_estimateazimuth, dietz2011, itd2angle
 %
@@ -102,13 +103,19 @@ hrtf = kv.hrtf;
 lookup = kv.lookup;
 showprogress = kv.showprogress;
 
-% Check for the Sound-Field-Synthesis Toolbox
-if ~which('SFS_start')
+
+% Get SFS version
+sfsver = strsplit(SFS_version,'.');
+% Checking for the Sound-Field-Synthesis Toolbox
+if ~exist('SFS_start') | sfsver{1}<2 | (sfsver{1}==2 && sfsver{2}<4)
     error(['%s: you need to install the Sound-Field-Synthesis Toolbox.\n', ...
         'You can download it at https://github.com/sfstoolbox/sfs.\n', ...
-        'You need version 2.0.0 of the Toolbox (commit ...).'], ...
+        'You need version 2.4.0 or higher of the Toolbox.'], ...
         upper(mfilename));
+else
+    SFS_start;
 end
+
 
 % Check if we have only one position or if we have a whole listening area
 if length(X)==1 && length(Y)==1
