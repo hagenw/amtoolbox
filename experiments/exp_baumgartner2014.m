@@ -827,7 +827,7 @@ if flags.do_fig12 || flags.do_tab1
       
       fig=figure;
 
-      plot_baumgartner2014likelistat(la(idsort),le(idsort),ci(idsort,:),lr(idsort,:))
+      plot_baumgartner2014_likelistat(la(idsort),le(idsort),ci(idsort,:),lr(idsort,:))
       ylabel({'Likelihood'},'FontSize',kv.FontSize)
       xlabel('Listener (NH)','FontSize',kv.FontSize)
       set(gca,'XLim',[0 Ns+1],'XTickLabel',NHs(idsort,3:4),...

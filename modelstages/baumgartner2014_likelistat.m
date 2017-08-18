@@ -245,7 +245,7 @@ else
 end
   
 if flags.do_plot
-  plot_baumgartner2014likelistat(la,le,ci,lr)
+  plot_baumgartner2014_likelistat(la,le,ci,lr)
 end
   
 end

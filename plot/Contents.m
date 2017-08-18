@@ -4,7 +4,7 @@
 %  Model-related plot functions
 %     PLOT_BAUMGARTNER2013 - plot probabilistic prediction matrixes
 %     PLOT_BAUMGARTNER2014 - plot probabilistic prediction matrixes
-%     PLOT_BAUMGARTNER2014LIKELISTAT - Likelihood statistics in the model
+%     plot_baumgartner2014_likelistat - Likelihood statistics in the model
 %     PLOT_JOERGENSEN2011 - Plot output of Joergensen2011 model
 %     PLOT_JOERGENSEN2013 - Plot output of Joergensen2013 model
 %     PLOT_LANGENDIJK2002 - Plot the pdf-matrices with grey colormap
