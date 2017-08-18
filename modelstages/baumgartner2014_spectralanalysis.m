@@ -1,6 +1,6 @@
 function varargout = baumgartner2014_spectralanalysis(sig,varargin)
 %baumgartner2014_spectralanalysis - Approximation of spectral analysis by auditory periphery
-%   Usage:     mp = baumgartner2014_spectralanalysis(sig)
+%   Usage:  [mp,fc] = baumgartner2014_spectralanalysis(sig)
 %
 %   Input parameters:
 %     sig     : incoming time-domain signal
