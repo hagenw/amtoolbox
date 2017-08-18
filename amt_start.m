@@ -210,8 +210,11 @@ end
 % if ~silent, disp('*** Starting SFS ***'); end
 if exist('SFS_start','file')
   SFS_start;
-  s=SFS_version; s_r='1.0.0'; % set the required version
-  if ~silent, disp(['Sound Field Synthesis Toolbox, version ' s]); end
+  s=SFS_version; s_r='2.4.0'; % set the required version
+  if ~silent
+      disp(['Sound Field Synthesis Toolbox, version ' s ...
+            '. For help, see http://matlab.sfstoolbox.org.']);
+  end
   v=sscanf(s,'%d.%d.%d'); v(4)=0;
   v_r=sscanf(s_r,'%d.%d.%d');
   if ~(v(1)>v_r(1) || (v(1)>=v_r(1) && v(2)>v_r(2)) || (v(1)>=v_r(1) && v(2)>=v_r(2) && v(3)>=v_r(3)) ),

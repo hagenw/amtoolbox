@@ -1,11 +1,11 @@
-function lookup = itd2angle_lookuptable(irs,varargin)
-%itd2angle_lookuptable generates an ITD-azimuth lookup table for the given HRTF set
-%   Usage: lookup = itd2angle_lookuptable(irs,fs,model);
-%          lookup = itd2angle_lookuptable(irs,fs);
-%          lookup = itd2angle_lookuptable(irs);
+function lookup = itd2anglelookuptable(hrtf,varargin)
+%ITD2ANGLELOOKUPTABLE generates an ITD-azimuth lookup table for the given HRTF set
+%   Usage: lookup = itd2anglelookuptable(hrtf,fs,model);
+%          lookup = itd2anglelookuptable(hrtf,fs);
+%          lookup = itd2anglelookuptable(hrtf);
 %
 %   Input parameters:
-%       irs    : HRTF data set (TU Berlin's irs format or SOFA format)
+%       hrtf   : HRTF data set (as SOFA file or struct)
 %       fs     : sampling rate, (default: 44100) / Hz
 %       model  : binaural model to use:
 %                   'dietz2011' uses the Dietz binaural model (default)
@@ -15,16 +15,13 @@ function lookup = itd2angle_lookuptable(irs,varargin)
 %       lookup : struct containing the polinomial fitting data for the
 %                ITD -> azimuth transformation, p,MU,S, see help polyfit
 %
-%   `itd2angle_lookuptable(irs)` creates a lookup table from the given IR data
+%   `itd2anglelookuptable(hrtf)` creates a lookup table from the given HRTF data
 %   set. This lookup table can be used by the dietz2011 or lindemann1986 binaural
 %   models to predict the perceived direction of arrival of an auditory event.
 %   The azimuth angle is stored in degree in the lookup table.
 %
-%   For the handling of the HRTF file format this function depends on the
-%   Sound-Field-Synthesis Toolbox, which is available here:
-%   http://github.com/sfstoolbox/sfs. It runs under Matlab and Octave. The
-%   revision used to genrate the figures in the corressponding paper is
-%   a8914700a4.
+%   For the handling of the HRTF SOFA file format see
+%   http://www.sofaconventions.org/
 %
 %   See also: dietz2011, lindemann1986, wierstorf2013
 %
@@ -54,35 +51,28 @@ end
 %% ===== Configuration ==================================================
 % Samplingrate
 fs = kv.fs;
-% time of noise used for the calculation (samples)
+% Time of noise used for the calculation (samples)
 nsamples = fs;
-% noise type to use
+% Noise type to use
 noise_type = 'white';
 % SFS Toolbox settings
-if flags.do_TUB
-  conf.ir.useinterpolation = true;
-  conf.fs = fs;
-end
+conf.ir.useinterpolation = true;
+conf.ir.useoriglength = true;
+conf.fs = fs;
+conf.c = 343;
+conf.usefracdelay = false;
 
 
 %% ===== Calculation ====================================================
-% generate noise signal
+% Generate noise signal
 sig_noise = noise(nsamples,1,noise_type);
 
 % get only the -90 to 90 degree part of the irs set
-if flags.do_TUB
-  idx = (( irs.apparent_azimuth>-pi/2 & irs.apparent_azimuth<pi/2 & ...
-      irs.apparent_elevation==0 ));
-  irs = slice_irs(irs,idx);
-  azi = irs.apparent_azimuth'./pi*180;
-else % SOFA
-  ele = 0;
-  idFrontHor = Obj.SourcePosition(:,2) == ele & ... % horizontal plane
+ele = 0;
+idFrontHor = Obj.SourcePosition(:,2) == ele & ... % horizontal plane
     (Obj.SourcePosition(:,1) >= -90 | Obj.SourcePosition(:,1) >= 270) & ... % front right
     Obj.SourcePosition(:,1) <= 90; % front left
-  azi = Obj.SourcePosition(idFrontHor,1);
-end
-
+azi = Obj.SourcePosition(idFrontHor,1);
 % iterate over azimuth angles
 nangles = length(azi);
 % create an empty mod_itd, because the lindemann model didn't use it
@@ -95,12 +85,7 @@ if flags.do_dietz2011
     ild = zeros(nangles,23);
     for ii = 1:nangles
         % generate noise coming from the given direction
-        if flags.do_TUB
-          ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance],'spherical',conf);
-          sig = auralize_ir(ir,sig_noise,1,conf);
-        else % SOFA
-          sig = SOFAspat(sig_noise,Obj,azi(ii),ele);
-        end
+        sig = SOFAspat(sig_noise,hrtf,azi(ii),ele);
         % calculate binaural parameters
         [fine, cfreqs, ild_tmp, env] = dietz2011(sig,fs);
         % unwrap ITD
@@ -119,15 +104,10 @@ elseif flags.do_lindemann1986
     ild = zeros(nangles,36);
     for ii = 1:nangles
         % generate noise coming from the given direction
-        if flags.do_TUB
-          ir = get_ir(irs,[irs.apparent_azimuth(ii) 0 irs.distance],conf);
-          sig = auralize_ir(ir,sig_noise,1,conf);
-        else % SOFA
-          sig = SOFAspat(sig_noise,irs,azi(ii),ele);
-        end
+        sig = SOFAspat(sig_noise,irs,azi(ii),ele);
         % Ten fold upsampling to have a smoother output
         %sig = resample(sig,10*fs,fs);
-        % calculate binaural parameters
+        % Calculate binaural parameters
         c_s = 0.3; % stationary inhibition
         w_f = 0; % monaural sensitivity
         M_f = 6; % decrease of monaural sensitivity

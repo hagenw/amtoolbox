@@ -54,9 +54,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %     'array',array    Array type to use, could be 'linear' or 'circle'.
 %                      Default value is 'linear'.
 %
-%     'hrtf',hrtf      HRTF database. This have to be in the TU-Berlin
-%                      mat-format, see:
-%                      https://dev.qu.tu-berlin.de/projects/measurements/wiki/IRs_file_format
+%     'hrtf',hrtf      HRTF database in SOFA format.
 %                      Default HRTF set is the 3m one from TU-Berlin measured
 %                      with the KEMAR.
 %
@@ -68,8 +66,9 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %   For the simulation of the wave field synthesis or stereophony setup this
 %   functions depends on the Sound-Field-Synthesis Toolbox, which is available
 %   here: `<http://github.com/sfstoolbox/sfs>`_. It runs under Matlab and Octave. The
-%   revision used to generate the figures in the corresponding paper is
-%   a8914700a4.
+%   revision used to generate the figures in the corresponding paper was
+%   a8914700a4. This one uses a newer version (>=2.4), but should return very
+%   similar results.
 %
 %   See also: wierstorf2013_estimateazimuth, dietz2011, itd2angle
 %
@@ -85,7 +84,7 @@ function [localization_error,perceived_direction,desired_direction,x,y,x0] = ...
 %% ===== Checking of input parameters and dependencies ===================
 nargmin = 7;
 nargmax = 17;
-error(nargchk(nargmin,nargmax,nargin));
+narginchk(nargmin,nargmax);
 if length(xs)==2 xs = [xs 0]; end
 
 definput.flags.method = {'stereo','wfs'};
@@ -104,13 +103,19 @@ hrtf = kv.hrtf;
 lookup = kv.lookup;
 showprogress = kv.showprogress;
 
-% Check for the Sound-Field-Synthesis Toolbox
-if ~which('SFS_start')
+
+% Get SFS version
+sfsver = strsplit(SFS_version,'.');
+% Checking for the Sound-Field-Synthesis Toolbox
+if ~exist('SFS_start') | sfsver{1}<2 | (sfsver{1}==2 && sfsver{2}<4)
     error(['%s: you need to install the Sound-Field-Synthesis Toolbox.\n', ...
         'You can download it at https://github.com/sfstoolbox/sfs.\n', ...
-        'You need version 1.0.0 of the Toolbox (commit ...).'], ...
+        'You need version 2.4.0 or higher of the Toolbox.'], ...
         upper(mfilename));
+else
+    SFS_start;
 end
+
 
 % Check if we have only one position or if we have a whole listening area
 if length(X)==1 && length(Y)==1
@@ -118,80 +123,52 @@ if length(X)==1 && length(Y)==1
 end
 
 
-%% ===== Configuration ===================================================
-% The following settings are all for the Sound Field Synthesis Toolbox
-conf.N = 1024;
-conf.ir.usehcomp = false;
-conf.ir.hcompfile = '';
-conf.ir.useinterpolation = true;
-conf.ir.useoriglength = false;
-conf.dimension = '2.5D';
-conf.driving_functions = 'default';
-conf.wfs.usehpre = true;
-conf.wfs.hpretype = 'FIR';
-conf.wfs.hpreflow = 50;
-conf.usetapwin = true;
-conf.tapwinlen = 0.3;
-conf.debug = false;
-conf.showprogress = false;
-conf.c = 343;
-conf.fs = 44100;
-conf.usefracdelay = 0;
-conf.fracdelay_method = '';
-conf.secondary_sources.center = [0 0 0];
-conf.secondary_sources.x0 = [];
-
-
 %% ===== Loading of additional data ======================================
-% Load default 3m TU-Berlin KEMAR HRTF from the net if no one is given to the
-% function
+% Load default 3m TU-Berlin KEMAR HRTF, see http://doi.org/10.5281/zenodo.55418
 if isempty(hrtf)
-    % load HRTFs, see:
-    % https://dev.qu.tu-berlin.de/projects/measurements/wiki/2010-11-kemar-anechoic
-%     [~,path] = download_hrtf('wierstorf2011_3m');
-    irs=amt_load('wierstorf2013', 'QU_KEMAR_anechoic_3m.mat');
-    check_irs(irs.irs);
-    hrtf = fix_irs_length(irs.irs,conf);
+    hrtf = SOFAload(fullfile(SOFAdbPath, ...
+                             'wierstorf2013', ...
+                             'qu_kemar_anechoic_3m.sofa'));
 end
 % Get sampling rate from the HRTFs
-fs = hrtf.fs;
-% Load lookup table from the AMT if no one is given to the function
+fs = hrtf.Data.SamplingRate;
+% Get lookup table for mapping of ITDs to azimuth angles
 if isempty(lookup)
-    % load lookup table to map ITD values of the model to azimuth angles.
-    % the lookup table was created using the same HRTF database
     lookup = amt_load('wierstorf2013','itd2angle_lookuptable.mat');
 end
 
 
-%% ===== Simulate the binaural ear signals ===============================
-% array geometry
+%% ===== Configuration ===================================================
+% The following settings are all for the Sound Field Synthesis Toolbox
+conf = SFS_config;
+conf.N = 4096;
 conf.secondary_sources.geometry = array;
-% center of array
-conf.secondary_sources.center = [0 0 0];
-% initialize empty array
-conf.secondary_sources.x0 = [];
-% number of loudspeakers
 conf.secondary_sources.number = number_of_speakers;
-% length of array
 conf.secondary_sources.size = L;
-% get loudspeaker positions
+
+
+%% ===== Simulate the binaural ear signals ===============================
+% Get loudspeaker positions
 x0 = secondary_source_positions(conf);
-% calculate the stop frequency for the WFS pre-equalization filter
+% Calculate the stop frequency for the WFS pre-equalization filter
 conf.wfs.hprefhigh = aliasing_frequency(x0,conf);
 
-% selection of loudspeakers for WFS
+% Selection of loudspeakers for WFS
 if flags.do_wfs && strcmpi('circle',array)
     x0 = secondary_source_selection(x0,xs,src);
 end
 
-% get a grid of the listening positions
-conf.resolution = resolution;
-[~,~,~,x,y] = xyz_grid(X,Y,0,conf);
+% Get a grid of the listening positions
+conf.resolution = resolution; % TODO: is this needed?
+x = linspace(X(1),X(end),resolution);
+y = linspace(Y(1),Y(end),resolution);
 
 % 700 ms white noise burst
 sig_noise = sig_whitenoiseburst(fs);
 for ii=1:length(x)
-    if showprogress, amt_disp([num2str(ii) ' of ' num2str(length(x))],'progress'); end
+    if showprogress
+        amt_disp([num2str(ii) ' of ' num2str(length(x))],'progress');
+    end
     for jj=1:length(y)
         X = [x(ii) y(jj) 0];
         if strcmpi('circle',array) && norm(X)>L/2
@@ -201,24 +178,27 @@ for ii=1:length(x)
         else
             desired_direction(ii,jj) = source_direction(X,phi,xs,src);
             if flags.do_stereo
-                % first loudspeaker
+                % Summation of two loudspeakers
                 ir1 = ir_point_source(X,phi,x0(1,1:3),hrtf,conf);
-                % second loudspeaker
                 ir2 = ir_point_source(X,phi,x0(2,1:3),hrtf,conf);
-                % sum of both loudspeakers
                 ir = (ir1+ir2)/2;
             else % WFS
                 conf.xref = X;
                 ir = ir_wfs(X,pi/2,xs,src,hrtf,conf);
             end
-            % convolve impulse response with noise burst
+            % Convolve impulse response with noise burst
             sig = auralize_ir(ir,sig_noise,1,conf);
-            % estimate the perceived direction
-            % this is done by calculating ITDs with the dietz2011 binaural model,
+            % Estimate the perceived direction.
+            % This is done by calculating ITDs with the dietz2011 binaural model,
             % which are then mapped to azimuth values with a lookup table
-            perceived_direction(ii,jj) = wierstorf2013_estimateazimuth(sig,lookup, ...
-                'dietz2011','no_spectral_weighting','remove_outlier');
-            localization_error(ii,jj) = perceived_direction(ii,jj)-desired_direction(ii,jj);
+            perceived_direction(ii,jj) = ...
+                wierstorf2013_estimateazimuth(sig, ...
+                                              lookup, ...
+                                              'dietz2011', ...
+                                              'no_spectral_weighting', ...
+                                              'remove_outlier');
+            localization_error(ii,jj) = ...
+                perceived_direction(ii,jj) - desired_direction(ii,jj);
         end
     end
 end
