@@ -105,7 +105,7 @@ function varargout = baumgartner2013( target,template,varargin )
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
 %% Notification
-amt_disp('Note that baumgartner2013 is a preliminary version of baumgartner2014. If you not aim to reproduce results from Baumgartner et al. (2013), we recommend to use baumgartner2014 instead.')
+amt_disp('Note that baumgartner2013 is a preliminary version of baumgartner2014. If you do not aim to reproduce results from Baumgartner et al. (2013), we recommend to use baumgartner2014 instead.')
 
 %% Check input options 
 
