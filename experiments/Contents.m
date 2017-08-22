@@ -24,6 +24,7 @@
 %       EXP_GEORGANTI2013    - Figures from Georganti et al. (2013)
 %       EXP_BAUMGARTNER2016  - Figures from Baumgartner et al. (2016)
 %       EXP_BAUMGARTNER2017  - Figures from Baumgartner et al. (2017)
+%	EXP_KELVASA2015      - Figures from Kelvasa and Dietz (2015)
 %
 %   Speech models
 %       EXP_JELFS2011        - Binaural speech intelligibility advantage

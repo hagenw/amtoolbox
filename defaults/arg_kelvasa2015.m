@@ -7,27 +7,27 @@ definput.keyvals.devicename = 'nucleus';
 
 definput.keyvals.NumOfChannels = 22;                                       % Number of electrodes
 
-definput.keyvals.vActiveElectrodes =(definput.keyvals.NumOfChannels:-1:1)';% Vector which contains the numbers of the active electrodes after processing. Initialized with all possible Electrodenumbers. 
-                                        
-definput.keyvals.NUMOFCHANNELS = ...                                       % BW:(???) Not sure why this is needed. Might allow "disabled" CI-Electrodes by placing "nan" in vActiveElectrodes? 
+definput.keyvals.vActiveElectrodes =(definput.keyvals.NumOfChannels:-1:1)';% Vector which contains the numbers of the active electrodes after processing. Initialized with all possible Electrodenumbers.
+
+definput.keyvals.NUMOFCHANNELS = ...                                       % BW:(???) Not sure why this is needed. Might allow "disabled" CI-Electrodes by placing "nan" in vActiveElectrodes?
                               length(definput.keyvals.vActiveElectrodes...
-                             (~isnan(definput.keyvals.vActiveElectrodes))); 
+                             (~isnan(definput.keyvals.vActiveElectrodes)));
 
 definput.keyvals.X_EL = 8.125:0.75:23.875;                                 % position of the electrodes (mm)
-                        
-definput.keyvals.TCL    = [100, 100, 100, 100, 100, 100, 100, 100, ...     % MAP-T-Levels (in clinical units, denotes hearing threshold with CI) 
+
+definput.keyvals.TCL    = [100, 100, 100, 100, 100, 100, 100, 100, ...     % MAP-T-Levels (in clinical units, denotes hearing threshold with CI)
                                 100, 100, 100, 100, 100, 100, 100, 100,...
                                 100, 100, 100, 100, 100, 100]';
-                           
+
 definput.keyvals.MCL    = [200, 200, 200, 200, 200, 200, 200, 200, ...     % MAP-C-Levels (in clinical units, denotes maximum loudness threshold with CI)
                                 200, 200, 200, 200, 200, 200, 200, 200, ...
                                     200, 200, 200, 200, 200, 200]';
-                             
+
 definput.keyvals.Tph    = 25e-6;                                           % rectangular pulse phase duration [s]
 
 definput.keyvals.ipg    =  8e-6;                                           % interphase gap between up- and down rectangular pulse path
 
-definput.keyvals.T_SPL  = 25.0;                                            % The dB SPL Value, which is mapped to the T-Value [threshold db SPL] 
+definput.keyvals.T_SPL  = 25.0;                                            % The dB SPL Value, which is mapped to the T-Value [threshold db SPL]
 
 definput.keyvals.C_SPL  = 65.0;                                            % The dB SPL Value, which is mapped to the C-Value [maximum loudness db SPL]
 
@@ -39,35 +39,35 @@ definput.keyvals.pps = 900;                                                % Set
 
 definput.keyvals.maxima = 8;                                               % maximal number of electrodes in n-of-m strategy
 
-definput.keyvals.indexOrg = 2;       
+definput.keyvals.indexOrg = 2;
 
-%Filter bank 
+%Filter bank
 definput.keyvals.Q_SUM = [  ones(9,1); ...                                 %Information, how to sum up the frequency bins (num. f-Bins in table below)
                             2*ones(4,1); ...
                             3*ones(2,1); ...
                             4*ones(2,1); ...
-                            5*ones(2,1); 
+                            5*ones(2,1);
                             6;7;8];
 
 definput.keyvals.vLowerFreq = [ 188  313  438  563  688  813  938 1063 ... %Upper and lower frequencies for each electrode
                                 1188 1313 1563 1813 2063 2313 2688 3063 ...
                                 3563 4063 4688 5313 6063 6938]';
-                            
-definput.keyvals.vUpperFreq = [ 313  438  563  688  813  938 1063 1188 ... 
+
+definput.keyvals.vUpperFreq = [ 313  438  563  688  813  938 1063 1188 ...
                                 1313 1563 1813 2063 2313 2688 3063 3563 ...
                                 4063 4688 5313 6063 6938 7938]';
-                            
+
 % calculate the weights for the fft from the dissertation of Brett Swanson (2008)
-W    = hann(definput.keyvals.NFFT);                                     
+W    = hann(definput.keyvals.NFFT);
 W1 = abs(fft(W));                                                          % for G(2), which is derived from W(0.5)
-W2 = abs(fft([W; zeros(definput.keyvals.NFFT,1)])); 
+W2 = abs(fft([W; zeros(definput.keyvals.NFFT,1)]));
 
 definput.keyvals.G(1) = 2/W1(1);                                           % for channels with 1 bin
 
 definput.keyvals.G(2) = 2/(sqrt(2)*W2(2));                                 % for channels with 2 bins
 
 definput.keyvals.G(3) = 2/78.38;                                           % for channels with more than 2 bins.
-                           
+
 %compression characteristics
 definput.keyvals.B = 0.0156;                                               % base level
 
@@ -80,7 +80,7 @@ definput.keyvals.alpha_c = 415.96;                                         % con
 %% Parameters for electrode nerve interface and AN model
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%Set parameters for auditory nerve model                                  
+%%Set parameters for auditory nerve model
 definput.keyvals.N_nervecells = 500;                                       % Number of simulated auditory nerve fibers
 
 definput.keyvals.X_NZ = linspace(0,35,definput.keyvals.N_nervecells)';     % position of the nerve cell on the basilar membrane (mm)
@@ -90,7 +90,7 @@ definput.keyvals.X_NZ = linspace(0,35,definput.keyvals.N_nervecells)';     % pos
 definput.keyvals.lambda = 9;                                               % constant of the spatial spread function (mm)
 
 definput.keyvals.v0 = 1;                                                   % amplitude of the spatial spread function
-                               
+
 %%Membrance capacitance
 definput.keyvals.C = 1;                                                    % (???) Value doesnt't seem to be important DK
 
@@ -99,7 +99,7 @@ definput.keyvals.V = calculate_AVF(definput.keyvals.X_EL,...
                                     definput.keyvals.X_NZ,...
                                     definput.keyvals.lambda,...
                                     definput.keyvals.v0);
-                                
+
 %%Get current output based upon CI model
 definput.keyvals.Ith0 = conversion_CL2Iamp(definput.keyvals.TCL,...
                                             definput.keyvals.devicename);
@@ -110,87 +110,87 @@ definput.keyvals.Ith0 = conversion_CL2Iamp(definput.keyvals.TCL,...
 
 %%Neural latency constants from Hamacher p. 102
 [definput.keyvals.ML50,definput.keyvals.SIGMAL50] =...
-             generateNeuralLatencyConstants(definput.keyvals.N_nervecells);                                    
+             generateNeuralLatencyConstants(definput.keyvals.N_nervecells);
 
 %Chronaxie and rheobase constants according to Hamacher pp 97-100.
 [definput.keyvals.TAUCHR,definput.keyvals.EFFIRHEO] = ...
-             generateChronaxieRheobase(definput.keyvals.N_nervecells);                                   
+             generateChronaxieRheobase(definput.keyvals.N_nervecells);
 
 %%Relative spread constants(note 1) from Hamacher p. 100
 definput.keyvals.RS0_ind = ...
-            calculateRelativeSpread(definput.keyvals.N_nervecells);         
-                                
-                                
+            calculateRelativeSpread(definput.keyvals.N_nervecells);
+
+
 %Reference current
-definput.keyvals.IREF = ...                                                %Calculates the deteministic current for threshold for a given pulse 
+definput.keyvals.IREF = ...                                                %Calculates the deteministic current for threshold for a given pulse
                           calculateDeteminsticThresholdCurrent_2(...       %with a defined phase kv.Tph
-                                     mean(definput.keyvals.EFFIRHEO),...  
+                                     mean(definput.keyvals.EFFIRHEO),...
                                      mean(definput.keyvals.TAUCHR/log(2)),...
                                      definput.keyvals.Tph);
-                                 
+
 for ii = 1:length(definput.keyvals.Ith0)                                   % (???) hier empirische anpassung des CIs ans Hörnervenmodell, dabei soll die
 definput.keyvals.V(:,ii) = definput.keyvals.V(:,ii).*...                   % Höhe von V so variiert werden, dass SR, ca, den Wert von 30 annimmt.
-                    definput.keyvals.IREF/definput.keyvals.Ith0(ii,:);     % Entspricht in etwa 30 APs. 
-end                                
+                    definput.keyvals.IREF/definput.keyvals.Ith0(ii,:);     % Entspricht in etwa 30 APs.
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Parameters for binning stages and localization models
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%Paramters for binning nervogram into time and AN rate bins  
+%Paramters for binning nervogram into time and AN rate bins
 definput.keyvals.binPos  = [ 10, 13, 16, 19, 22];                          %AN frequency band positions in mm along cochlea from apex
 
 definput.keyvals.numNeuronsInBin  = 20;                                    %number of neurons in each AN frequency band. Must be 20 for LSO model
 
-definput.keyvals.timeWindowSec = 0.2;                                      %time binning of entire input wavfile in seconds 
-  
+definput.keyvals.timeWindowSec = 0.2;                                      %time binning of entire input wavfile in seconds
+
 %Choosing and calibration of localization model
 %Signal params
 definput.keyvals.azis = 0:5:90;                                            %vector of azimuthal source locations in degrees over which to calibrate the mapping
 
 definput.keyvals.HRTFfile = 'Kayser2009_Anechoic.sofa';                    %Name of *.sofa file containing HRTF data
 
-definput.keyvals.HRTFelevation = 0;                                        %desired elevation used in HRTF filtering 
+definput.keyvals.HRTFelevation = 0;                                        %desired elevation used in HRTF filtering
 
-definput.keyvals.HRTFsourceDistance = 300;                                 %desired source distance used in HRTF filtering 
-    
+definput.keyvals.HRTFsourceDistance = 300;                                 %desired source distance used in HRTF filtering
+
 definput.keyvals.HRTFchannels = [1,2];                                     %desired microphone output from HRTF filtering
 
 
 %Localization model params
 definput.keyvals.localizationModelCalibWav = 'SSN.wav';                    %wavfile must be in MATLAB path
-    
-definput.keyvals.localizationModelCalibStimulusLevelDB =  55;              %in model dB 
-   
+
+definput.keyvals.localizationModelCalibStimulusLevelDB =  55;              %in model dB
+
 definput.keyvals.identifier = 'inEar';                                     %Use to identify calibrations processed with different paramters. ie BTE = behind the
-                                                                           %ear microphones.  
-                                                                         
+                                                                           %ear microphones.
+
 definput.keyvals.localizationModel =  'ResponseDifferenceAN';              %choose localization model from Kelvasa and Dietz 2015. Can be
-                                                                           %'RateLevel','ResponseDifferenceAN','MaxLikelihood'    
-                                                                           
+                                                                           %'RateLevel','ResponseDifferenceAN','MaxLikelihood'
+
 definput.keyvals.dBRange = [35:75];                                        %range in dB over which to process calibration signal to extract rate level slopes
 
-definput.keyvals.RateLevelCrvfitRange =  [35,75];                          %range in dB over which to calculate rate level slopes 
- 
+definput.keyvals.RateLevelCrvfitRange =  [35,75];                          %range in dB over which to calculate rate level slopes
+
 definput.keyvals.AziCrvfitRange =  45;                                     %range in degrees azimuth over which to calculate ILD/angle and spikeDiff/angle slopes
- 
+
 binPosInd = round(definput.keyvals.binPos.*(1/definput.keyvals.X_NZ(2)));  %compute indices of AN fibers
 if mod(definput.keyvals.numNeuronsInBin,2) == 0
     binPosInd = [binPosInd-(definput.keyvals.numNeuronsInBin/2);
                     binPosInd+(definput.keyvals.numNeuronsInBin/2)-1];
 else binPosInd = [binPosInd-floor(definput.keyvals.numNeuronsInBin/2);
                    binPosInd+floor(definput.keyvals.numNeuronsInBin/2)];
-end            
+end
 
-definput.keyvals.numBin = numel(definput.keyvals.binPos);            
+definput.keyvals.numBin = numel(definput.keyvals.binPos);
 
 for bin = 1 : definput.keyvals.numBin
                                    definput.keyvals.binPosInd(bin,:) = ...
                                    [binPosInd(1,bin):binPosInd(2,bin)];
-end  
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Check paramters 
+%% Check paramters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 check_definput(definput.keyvals);
 end
@@ -209,7 +209,7 @@ function v = calculate_AVF(x_el,x_nz,lambda,v0)
 %           v0 = constant factor of the spatial spread
 %
 % output: v = spreading function
-% 
+%
 % calculates the spreading function of an electrical field according for
 % monopolar stimulation
 %
@@ -220,26 +220,26 @@ function v = calculate_AVF(x_el,x_nz,lambda,v0)
 % Copyright (C) 2008 Stefan Fredelake, Oldenburg University
 
 v = zeros(length(x_nz),length(x_el));
-    
+
     for iElectrode = 1:length(x_el)
         v(:,iElectrode) = abs(exp(-abs(x_nz-x_el(iElectrode))/lambda));
     end
-    
+
 v  = v0 * v;
-end       
+end
 
 %%
 function [mT_ARP,mTau_RRP] = generateRefractoryConstants(N)
 
 % usage:  [mT_ARP,mTau_RRP] = generateRefractoryConstants(N)
 % input:  N   = number of neurons
-% 
+%
 % output: T_ARP   = absolute refractory phase
 %         tau_RRP = relative refractory phase time constant
-% 
+%
 % generates a random vector with absoulte and relative refractory phases.
 % both vectors are correlation with rho = 0.75
-% 
+%
 % Reference: Hamacher 2003 Ph.D.-thesis
 %
 % Author: Stefan Fredelake
@@ -247,9 +247,9 @@ function [mT_ARP,mTau_RRP] = generateRefractoryConstants(N)
 % Copyright (C) 2008 Stefan Fredelake, Oldenburg University
 
 mean_mT_ARP   = 0.7e-3; % mittlere absolute Refraktärphase
-mean_mtau_RRP = 1.6e-3; % mittlere relative Refraktätphase
+mean_mtau_RRP = 1.6e-3; % mittlere relative Refraktärphase
 
-std_mT_ARP   = 0.15 * mean_mT_ARP;      
+std_mT_ARP   = 0.15 * mean_mT_ARP;
 std_mtau_RRP = 0.15 * mean_mtau_RRP;
 
 x0   = randn(N,1);
@@ -264,7 +264,7 @@ while rho > 0.75
     index = 0;
     while index == 0
         index = round(N*rand(1));
-    end  
+    end
     x2(index) = xnew(index);
     rho = my_corr(x1,x2);
 end
@@ -279,16 +279,16 @@ function [mL50,sigmaL50] = generateNeuralLatencyConstants(N)
 
 % usage:  [mL50,sigmaL50] = generateNeuralLatency(N)
 % input:  N   = number of neurons
-% 
+%
 % output: mL50 =     random number for the calculation of the latency, each
 %                    element stands for a neuron
 %         sigmaL50 = random number for the calculation of the latency, each
 %                    element stands for a neuron
-%         
-% 
+%
+%
 % generates a random vector with numbers for the calculation of the
 % propagation latency
-% 
+%
 % Reference: Hamacher 2003 Ph.D.-thesis
 %
 % Author: Stefan Fredelake
@@ -313,7 +313,7 @@ while rho > 0.5
     index = 0;
     while index == 0
         index = round(N*rand(1));
-    end  
+    end
     x2(index) = xnew(index);
     rho = my_corr(x1,x2);
 end
@@ -321,20 +321,20 @@ end
 mL50     = x1;
 sigmaL50 = xnew;
 end
- 
+
 %%
 function [tauChr,effIRheo] = generateChronaxieRheobase(N)
 
 % usage:  [tauChr,IRheo] = generateChronaxieRheobase(N)
 % input:  N = number of neurons
-%       
+%
 % output: tauChr = chronaxie values
 %         IRheo  = effecitve rheobase values
 %
-% Generates random values for chronaxie and rheobase according to Hamacher 
+% Generates random values for chronaxie and rheobase according to Hamacher
 % pp 97-100.
-% 
-% 
+%
+%
 % Reference: Hamacher 2003 Ph.D.-thesis
 %
 % Author: Stefan Fredelake
@@ -356,12 +356,12 @@ end
 function Ith0 = calculateDeteminsticThresholdCurrent_2(IRheo,tauM,Tph)
 
 % usage:  Ith0 = calculateDeteminsticThresholdCurrent(IRheo,C,Tph)
-% input:  IRheo = the rheobase 
+% input:  IRheo = the rheobase
 %         tauM  = time constant of the membrane given with RC
 %         Tph   = phase of the stimulus
 %
 % output: Ith0 = the deterministic current for threshold
-% 
+%
 % calculates the deteministic current for threshold for a given pulse
 % with a defined phase Tph
 %
@@ -401,19 +401,19 @@ function [RS0_ind] = calculateRelativeSpread(N)
 % usage:  RS0 = calculateRelativeSpread(Tph,N)
 % input:  Tph = phase duration in seconds
 %         N   = number of neurons
-% 
+%
 % output: RS0 = relative spread accoring to Bruce et al
-% 
+%
 % calculates the relative spread accorind to Bruce et al. Note Bruce et al
-% assumes at this function is only applicable to 100us<=Tph<=5000us and 
-% bipolar stimulation. (p. 38) But Hamacher used it for lower Tph values 
+% assumes at this function is only applicable to 100us<=Tph<=5000us and
+% bipolar stimulation. (p. 38) But Hamacher used it for lower Tph values
 % and also for monopolar stimulation. (p. 79)
-% 
+%
 % Reference: Hamacher 2003 Ph.D.-thesis
 %
 % Author: Stefan Fredelake
 % Date: 02-12-2008
-% 
+%
 % RS0_ind = 0.12;   % phase duration independent part of the relative spread
 
 meanRS0_ind = 0.095; % from Hamacher p. 100
@@ -436,7 +436,7 @@ function xm = my_mean(x)
 end
 
 
-%% 
+%%
 %check ACE-Constants for sensible input
 function check_definput(kv)
 % MHL and THL should have the same length
@@ -475,9 +475,8 @@ if sum(kv.binPosInd(:)<0) > 0 || sum(kv.binPosInd(:)> kv.N_nervecells) > 0
 end
 end
 
-
-% Information about the filterbank. 
-% Chn.No. | num. f-Bins | fc, low bin | fc, upp bin  
+% Information about the filterbank.
+% Chn.No. | num. f-Bins | fc, low bin | fc, upp bin
 %      1  |           1 |         250 |         250
 %      2  |           1 |         375 |         375
 %      3  |           1 |         500 |         500

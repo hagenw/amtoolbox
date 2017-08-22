@@ -38,32 +38,8 @@ function [mappingData] = kelvasa2015calibratemapping(varargin)
 %   described in (Kelvasa & Dietz(2015)) and can therefore take several
 %   hours to process. 
 %
-%   References:
-% 
-%     Kelvasa, D., & Dietz, M. (2015). Auditory model-based sound direction
-%     estimation with bilateral cochlear implants. Trends in hearing, 
-%     19, 2331216515616378.
-%          
-%  Authors: 
-%            Daryl Kelvasa (daryl.kelvasa@uni-oldenburg.de) 2016
-%            Mathias Dietz (mdietz@uwo.ca) 2016
-%
-%
-% Copyright (C) 2009-2016 Piotr Majdak and Peter L. Søndergaard.
-% This file is part of AMToolbox version 0.9.7
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+%   References: kelvasa2015
+
 %
 %   Authors: 
 %            Daryl Kelvasa (daryl.kelvasa@uni-oldenburg.de) 2016
@@ -94,7 +70,7 @@ ltfatsetdefaults('dbspl','dboffset',71.778);
 %% Main Code
 %Initialize variables
               
-[signal, fs] = audioread(kv.localizationModelCalibWav);
+[signal, fs] = amt_load('kelvasa2015',kv.localizationModelCalibWav);
 signal = signal(1:6*fs,:);
 sigLengthSec = size(signal,1)/fs;
 signal = resample(signal,kv.FS_ACE,fs);

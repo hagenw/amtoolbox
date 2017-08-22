@@ -83,22 +83,8 @@ function [results] = kelvasa2015(insig,fs,varargin)
 %   arg_kelvasa2015anparams.m, and arg_kelvasa2015locationmodelparams.m in
 %   which thorough descriptions of the input parameters are given. 
 %
+%   References: kelvasa2015 fredelake2012 hamacher2004
 
-
-% 
-%   References:
-%   Kelvasa, D., & Dietz, M. (2015). Auditory model-based sound direction 
-%   estimation with bilateral cochlear implants. Trends in hearing, 19.
-%
-%   Fredelake, S., & Hohmann, V. (2012). Factors affecting predicted speech
-%   intelligibility with cochlear implants in an auditory model for 
-%   electrical stimulation. Hearing research, 287(1), 76-90.
-% 
-%   Hamacher, V. (2003). PhD Thesis. "Signalverarbeitungsmodelle des 
-%   elektrisch stimulierten Geh�rs."
-%
-%   References
-%   1. http://www.sciencedirect.com/science/article/pii/S016763931000097X
 %
 %   Url: http://amtoolbox.sourceforge.net/doc/experiments/exp_kelvasa2015.php
 %   See also: arg_kelvasa2015ciparams.m, arg_kelvasa2015anparams.m, 
