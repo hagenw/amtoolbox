@@ -6,6 +6,8 @@ function [dataOut] = exp_kelvasa2015(varargin)
 %
 %   Usage:
 %     [dataOut] = exp_kelvasa2015('fig8a')
+%     [dataOut] = exp_kelvasa2015('fig8a','identifier','BTE','HRTFchannels',[3,4]);
+%     [dataOut] = exp_kelvasa2015('fig8a',varargin);
 %
 %   The following flags can be specified;
 %
