@@ -192,7 +192,7 @@ xIndent = 4.5;
 yIndent = 1.9;
 
 %Needed parameters
-azis = 0:5:90;
+azis = data(1).azis;
 binPos  = [ 10, 13, 16, 19, 22];
 
 %Set plot labels
@@ -246,8 +246,8 @@ for axisInd = 1 : rows*columns
         rghtSpks = (results.SpkSumPerBin + results.SpkDiffPerBin)./2;
         lftSpks = results.SpkSumPerBin - rghtSpks;
   
-        rghtSpks = rghtSpks - repmat(rghtSpks(1,:),19,1);
-        lftSpks = lftSpks - repmat(lftSpks(1,:),19,1);
+        rghtSpks = rghtSpks - repmat(rghtSpks(1,:),size(rghtSpks,1),1);
+        lftSpks = lftSpks - repmat(lftSpks(1,:),size(rghtSpks,1),1);
 
                     
 % Plot Data

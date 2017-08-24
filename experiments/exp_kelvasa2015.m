@@ -204,7 +204,8 @@ if flags.do_fig6
         [dataOut] = amt_cache('get', savename, flags.cachemode);
         if isempty(dataOut)
 
-        signalName = 'SSN.wav'; [signal fs] = amt_load('kelvasa2015',signalName);
+        signalName = 'SSN.wav'; 
+        [signal, fs] = amt_load('kelvasa2015',signalName);
         signal = signal(1:6*fs,:);
         signal = resample(signal,kv.FS_ACE,fs);
 
@@ -216,50 +217,50 @@ if flags.do_fig6
         H = waitbar(0,'Computing data for Figure 6');
 
         for level = 1 : numel(levels)
-        for ang = 1 : numel(azis)
-            tic
+            for ang = 1 : numel(azis)
+                tic
 
-            %HRTF filter signal and choose microphone channels
-            [HRIR] = HRTFfilter(signal,azis(ang),kv,HRTF);
+                %HRTF filter signal and choose microphone channels
+                [HRIR] = HRTFfilter(signal,azis(ang),kv,HRTF);
 
-            if azis(ang) == 0
-                  temp = HRIR(:,1)./rms(HRIR(:,1));
-                  scalor = setdbspl(levels(level));
-                  scalor = rms(temp.*scalor)/rms(HRIR(:,1));
+                if azis(ang) == 0
+                      temp = HRIR(:,1)./rms(HRIR(:,1));
+                      scalor = setdbspl(levels(level));
+                      scalor = rms(temp.*scalor)/rms(HRIR(:,1));
+                end
+
+                HRIR = HRIR .* scalor;
+                sigLengthSec = (size(HRIR,1)/fs);
+
+                spikeRatePerBin = zeros(kv.numBin,2);
+
+                for chan = 1 : 2
+
+                     singChanSig = HRIR(:,chan);
+
+                     [electrodogram, vTime] = ...
+                                    kelvasa2015ciprocessing(singChanSig,...
+                                    kv.FS_ACE,'argimport',flags,kv);
+
+                      [APvec] = ...
+                                    kelvasa2015anprocessing(electrodogram,...
+                                    vTime,'argimport',flags,kv);
+
+                      [~,spikeRatePerBinT] = ...
+                                    kelvasa2015anbinning(APvec,...
+                                    sigLengthSec,'argimport',flags,kv);
+
+                      spikeRatePerBin(:,chan) =  mean(spikeRatePerBinT,2);
+                end
+
+                SpkDiffPerBin(ang,:) = spikeRatePerBin(:,2)- spikeRatePerBin(:,1);
+                SpkSumPerBin(ang,:) = spikeRatePerBin(:,2) + spikeRatePerBin(:,1);
+
+                a = toc; timeLeft = round((a*(numLoops - n))/60);
+                H = waitbar(n/numLoops,H,...
+                      ['Computing Figure 6. Time left (min):',...
+                                num2str(timeLeft)]); n = n+1;
             end
-
-            HRIR = HRIR .* scalor;
-            sigLengthSec = (size(HRIR,1)/fs);
-
-            spikeRatePerBin = zeros(kv.numBin,2);
-
-            for chan = 1 : 2
-
-                 singChanSig = HRIR(:,chan);
-
-                 [electrodogram, vTime] = ...
-                                kelvasa2015ciprocessing(singChanSig,...
-                                kv.FS_ACE,'argimport',flags,kv);
-
-                  [APvec] = ...
-                                kelvasa2015anprocessing(electrodogram,...
-                                vTime,'argimport',flags,kv);
-
-                  [~,spikeRatePerBinT] = ...
-                                kelvasa2015anbinning(APvec,...
-                                sigLengthSec,'argimport',flags,kv);
-
-                  spikeRatePerBin(:,chan) =  mean(spikeRatePerBinT,2);
-            end
-
-            SpkDiffPerBin(ang,:) = spikeRatePerBin(:,2)- spikeRatePerBin(:,1);
-            SpkSumPerBin(ang,:) = spikeRatePerBin(:,2) + spikeRatePerBin(:,1);
-
-            a = toc; timeLeft = round((a*(numLoops - n))/60);
-            H = waitbar(n/numLoops,H,...
-                  ['Computing Figure 6. Time left (min):',...
-                            num2str(timeLeft)]); n = n+1;
-        end
             dataOut(level).signalName = signalName;
             dataOut(level).levelDB = levels(level);
             dataOut(level).SpkDiffPerBin = SpkDiffPerBin;
@@ -268,6 +269,7 @@ if flags.do_fig6
          delete(H)
          amt_cache('set',savename,dataOut);
         end
+        dataOut(1).azis=azis;
         if flags.do_plot; plot_kelvasa2015(dataOut,'argimport',flags,kv); end
 end
 
