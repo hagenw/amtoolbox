@@ -114,15 +114,12 @@ definput.flags.fig = {'nofig','fig1b','fig2','fig3a','fig3b','fig3c'};
 if flags.do_nofig
   %% HRTFs
   if flags.do_hrtf
-    dataPath = fullfile(SOFAdbPath,'baumgartner2017looming');
-    fn = dir(fullfile(dataPath,'S*_eq.sofa'));
-    if isempty(fn)
-      error('RB: No files found. Check directories and AMT setup!')
-    end
+    id = amt_load('baumgartner2017looming','subjects.mat');
     out = struct('id',{},'Obj',{});
-    for ii = 1:length(fn)
-      out(ii).id = strrep(fn(ii).name,'_eq.sofa','');
-      out(ii).Obj = SOFAload(fullfile(dataPath,fn(ii).name));
+    for ii = 1:length(id.subjects)
+      out(ii).id = id.subjects{ii};
+      out(ii).Obj = SOFAload(fullfile(SOFAdbPath,'baumgartner2017looming',...
+        [id.subjects{ii},'_eq.sofa']));
     end
     varargout{1} = out;
     return
