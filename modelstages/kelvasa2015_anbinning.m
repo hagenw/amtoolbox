@@ -1,9 +1,9 @@
 function [spikeRatePerNeuron,spikeRatePerBin] = ...
-                        kelvasa2015anbinning(APvec,sigLengthSec,...
+                        kelvasa2015_anbinning(APvec,sigLengthSec,...
                                                     varargin)
 %KELVASA2015ANBINNING  AN and time binning from Kelvasa and Dietz 2015 binaural model
 %   Usage: [spikeRatePerNeuron,spikeRatePerBin] = ...
-%                        kelvasa2015anbinning(APvec,sigLengthSec);
+%                        kelvasa2015_anbinning(APvec,sigLengthSec);
 %
 %   Input parameters:
 %       APvec         : N x 2 matrix of AN spikes with Nx1 holding indices 
@@ -21,7 +21,7 @@ function [spikeRatePerNeuron,spikeRatePerBin] = ...
 %                           with N being the number of user defined AN fibe
 %                           bands and M being the number of time windows. 
 %
-%   KELVASA2015anbinning(APvec,sigLengthSec,varargin) bins auditory nerve 
+%   KELVASA2015_anbinning(APvec,sigLengthSec,varargin) bins auditory nerve 
 %   spike times over a given population of AN fibers into user defined AN 
 %   frequency bands and time bins as detailed in (Kelvasa & Dietz (2015))
 %

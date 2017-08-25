@@ -1,6 +1,6 @@
-function [APvec] = kelvasa2015anprocessing(electrodogram, vTime, varargin)
-%KELVASA2015ANPROCESSING  AN model used in Kelvasa and Dietz 2015 binaural model
-%   Usage: [APvec] = kelvasa2015anprocessing(electrodogram, vTime);
+function [APvec] = kelvasa2015_anprocessing(electrodogram, vTime, varargin)
+%KELVASA2015_ANPROCESSING  AN model used in Kelvasa and Dietz 2015 binaural model
+%   Usage: [APvec] = kelvasa2015_anprocessing(electrodogram, vTime);
 %
 %   Input parameters:
 %       electrodogram : N x M matrix of electrode current values in (microA) 
@@ -15,7 +15,7 @@ function [APvec] = kelvasa2015anprocessing(electrodogram, vTime, varargin)
 %                       of the spiking neuron and Nx2 holding corresponding
 %                       spike time in seconds. 
 %
-%   KELVASA2015anprocessing(insig,fs,varargin) computes auditory nerve
+%   KELVASA2015_anprocessing(insig,fs,varargin) computes auditory nerve
 %   spike times over a given population of AN fibers using a simulated
 %   electrode nerve interface as detailed in (Fredelake & Hohmann (2012))
 %
