@@ -43,7 +43,10 @@ definput.flags.source = {'noise','impulse'};
 [flags,kv]=ltfatarghelper({'Obj','C','flow','fhigh'},definput,varargin);
 
 %% Spectral contrast manipulation
-if not(isempty(kv.Obj)) %flags.do_hrtf
+if flags.do_hrtf
+  if isempty(kv.Obj)
+    error('Missing reference HRTF.')
+  end
   
   out = kv.Obj;
   fs = kv.Obj.Data.SamplingRate;
@@ -111,8 +114,8 @@ if flags.do_exp1 || flags.do_exp2
       Obj = sig_baumgartner2017looming(hrtf(ss).Obj,C(ii),kv.flow,kv.fhigh);
       idpos = Obj.SourcePosition(:,1) == azi{ss} & Obj.SourcePosition(:,2) == 0;
       stim(ss).IR{ii} = squeeze(shiftdim(Obj.Data.IR(idpos,:,:),2));
-      stim(ss).short{ii} = SpExCue_SOFAspat(short,Obj,azi{ss},0);
-      stim(ss).long{ii} = SpExCue_SOFAspat(long,Obj,azi{ss},0);
+      stim(ss).short{ii} = SOFAspat(short,Obj,azi{ss},0);
+      stim(ss).long{ii} = SOFAspat(long,Obj,azi{ss},0);
     end
 
     % Band-pass filtering
