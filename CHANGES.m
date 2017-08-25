@@ -1,5 +1,11 @@
 %Changes throughout the release history of the AMT
 %   
+%   Version 0.9.9 (X.9.2017)
+%   =========================
+% 
+%   - data_baumgartner2017 provided
+%   - kelavas2015 improved (appears in the code and documentation now)
+%
 %   Version 0.9.8 (12.7.2017)
 %   =========================
 % 

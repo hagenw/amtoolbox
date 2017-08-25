@@ -1,5 +1,5 @@
 function out = sig_baumgartner2017looming(varargin)
-% sig_baumgartner2017looming - flattens magnitude spectra of HRTFs.
+% sig_baumgartner2017looming - flattens magnitude spectra of HRTFs
 %
 %   Usage:  Obj = sig_baumgartner2017looming(Obj,C,flow,fhigh)
 %           stim = sig_baumgartner2017looming(exp)

@@ -35,36 +35,8 @@ function plot_kelvasa2015(data,varargin)
 %
 %     'fig12'    Reproduce Fig. 12.
 %
+%   References: kelvasa2015
 
-
-
-%   References:
-%       Kelvasa, D., & Dietz, M. (2015). Auditory model-based sound 
-%       direction estimation with bilateral cochlear implants. Trends in
-%       hearing, 19, 2331216515616378.
-%     
-%     References
-%     
-%   1. http://tia.sagepub.com/content/19/2331216515616378.full.pdf+html
-%     
-%   Url: http://amtoolbox.sourceforge.net/doc/experiments/plot_kelvasa2015.php
-%
-% Copyright (C) 2009-2016 Piotr Majdak and Peter L. Søndergaard.
-% This file is part of AMToolbox version 0.9.7
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-%
 %   Authors: 
 %            Daryl Kelvasa (daryl.kelvasa@uni-oldenburg.de) 2016
 %            Mathias Dietz (mdietz@uwo.ca) 2016
@@ -220,7 +192,7 @@ xIndent = 4.5;
 yIndent = 1.9;
 
 %Needed parameters
-azis = 0:5:90;
+azis = data(1).azis;
 binPos  = [ 10, 13, 16, 19, 22];
 
 %Set plot labels
@@ -274,8 +246,8 @@ for axisInd = 1 : rows*columns
         rghtSpks = (results.SpkSumPerBin + results.SpkDiffPerBin)./2;
         lftSpks = results.SpkSumPerBin - rghtSpks;
   
-        rghtSpks = rghtSpks - repmat(rghtSpks(1,:),19,1);
-        lftSpks = lftSpks - repmat(lftSpks(1,:),19,1);
+        rghtSpks = rghtSpks - repmat(rghtSpks(1,:),size(rghtSpks,1),1);
+        lftSpks = lftSpks - repmat(lftSpks(1,:),size(rghtSpks,1),1);
 
                     
 % Plot Data

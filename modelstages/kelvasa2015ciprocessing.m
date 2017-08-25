@@ -20,16 +20,8 @@ function [electrodogram, vTime] = ...
 %   CI signal processing strategy for an input signal using user defined 
 %   parameters. 
 %
-%   References:
-%      
-%     Fredelake, S., & Hohmann, V. (2012). Factors affecting predicted speech 
-%     intelligibility with cochlear implants in an auditory model for electrical 
-%     stimulation. Hearing research, 287(1), 76-90.
-%
-%     Swanson, B. A. (2008). Pitch perception with cochlear implants
-%     (PhD thesis). Faculty of Medicine, Dentistry & Health
-%     Sciences, Otolaryngology Eye and Ear Hospital, The
-%     University of Melbourne.
+%   References: fredelake2012 swanson2008 
+
 %     
 %     Laneau, J. (2005). When the deaf listen to music�pitch perception
 %     with cochlear implants (Doctoral dissertation, Ph D dissertation).
@@ -40,23 +32,6 @@ function [electrodogram, vTime] = ...
 %            Daryl Kelvasa (daryl.kelvasa@uni-oldenburg.de) 2016
 %            Mathias Dietz (mdietz@uwo.ca) 2016
 %            Stefan Fredelake
-%
-%
-% Copyright (C) 2009-2016 Piotr Majdak and Peter L. Søndergaard.
-% This file is part of AMToolbox version 0.9.7
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Check input paramters 

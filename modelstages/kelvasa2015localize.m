@@ -75,12 +75,8 @@ function [ANbinPredictions, weightedPredictions, mappingData] = ...
 %   map bilateral spike rate differences to a predicted azimuithal 
 %   source angle.
 %
-%   References:
-% 
-%     Kelvasa, D., & Dietz, M. (2015). Auditory model-based sound direction
-%     estimation with bilateral cochlear implants. Trends in hearing, 
-%     19, 2331216515616378.
-%          
+%   References: kelvasa2015
+          
 %   Authors: 
 %            Daryl Kelvasa (daryl.kelvasa@uni-oldenburg.de) 2016
 %            Mathias Dietz (mdietz@uwo.ca) 2016
@@ -88,24 +84,6 @@ function [ANbinPredictions, weightedPredictions, mappingData] = ...
 % Copyright (C) 2016   AG Medizinische Physik,
 %                      Universitaet Oldenburg, Germany
 %                      http://www.physik.uni-oldenburg.de/docs/medi
-%
-%
-% Copyright (C) 2009-2016 Piotr Majdak and Peter L. Søndergaard.
-% This file is part of AMToolbox version 0.9.7
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Check input paramters
 if nargin<4
@@ -224,12 +202,12 @@ function mappingData = computeRateLevelMapping(mappingData,kv)
                 bandwidth_hz = 24.7*(4.37*ILDcentFreq(bin)*0.001 + 1);
      
                 %Implement gammatone filter
-                filter = hohmann2002filter(kv.FS_ACE, ILDcentFreq(bin),...
+                filter = hohmann2002_filter(kv.FS_ACE, ILDcentFreq(bin),...
                     bandwidth_hz, attenuation_db, filter_order);
                 
-                [filtSigA, ~] = hohmann2002process(filter,  HRTFsig(:,1));
+                [filtSigA, ~] = hohmann2002_process(filter,  HRTFsig(:,1));
               
-                [filtSigB, ~] = hohmann2002process(filter,  HRTFsig(:,1));
+                [filtSigB, ~] = hohmann2002_process(filter,  HRTFsig(:,1));
     
                 %Compute ILD
                 ILD(bin,ang) = 20*log10(rms(real(filtSigB))) - ...

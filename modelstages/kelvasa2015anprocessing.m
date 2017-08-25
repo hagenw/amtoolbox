@@ -19,42 +19,14 @@ function [APvec] = kelvasa2015anprocessing(electrodogram, vTime, varargin)
 %   spike times over a given population of AN fibers using a simulated
 %   electrode nerve interface as detailed in (Fredelake & Hohmann (2012))
 %
-%   References:
-% 
-%     Kelvasa, D., & Dietz, M. (2015). Auditory model-based sound direction
-%     estimation with bilateral cochlear implants. Trends in hearing, 
-%     19, 2331216515616378.
-%       
-%     Fredelake, S., & Hohmann, V. (2012). Factors affecting predicted speech 
-%     intelligibility with cochlear implants in an auditory model for electrical 
-%     stimulation. Hearing research, 287(1), 76-90.
-%
-%     Hamacher, V. (2004). Signalverarbeitungsmodelle des elektrisch stimulierten
-%     Geh�rs. Ph.D. thesis, RWTH Aachen. Wissenschaftsverlag Mainz in Aachen, 1.
-%     Edition.
+%   References: kelvasa2015 fredelake2012 hamacher2004
+
 %          
 %   Authors: 
 %            Daryl Kelvasa (daryl.kelvasa@uni-oldenburg.de) 2016
 %            Mathias Dietz (mdietz@uwo.ca) 2016
 %            Stefan Fredelake
 %
-%
-% Copyright (C) 2009-2016 Piotr Majdak and Peter L. Søndergaard.
-% This file is part of AMToolbox version 0.9.7
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Get Model Parameters
 definput.import={'kelvasa2015'};
