@@ -1,10 +1,10 @@
 function varargout = data_baumgartner2017looming( varargin )
-%data_baumgartner2017looming - Results from Baumgartner et al. (2017) 
+%data_baumgartner2017looming - Results from Baumgartner et al. (2017)
 %
 %   Usage: data = data_baumgartner2017looming(dataFlag,measure)
 %          data = data_baumgartner2017looming(fig)
 %
-%   `data_baumgartner2017looming` provides individually measured HRTFs and 
+%   `data_baumgartner2017looming` provides individually measured HRTFs and
 %   experimental results from Baumgartner et al. (2017). Use the `fig`
 %   flag to obtain data shown in figures from Baumgartner et al. (2017).
 %
@@ -14,7 +14,7 @@ function varargout = data_baumgartner2017looming( varargin )
 %     'hrtf'   HRTFs used in all experiments.
 %     'pretest' Behavioral results of pre-test.
 %     'exp1'    Behavioral or ERP results of Exp. I. Default.
-%     'exp2'    Behavioral results of Exp. II. 
+%     'exp2'    Behavioral results of Exp. II.
 %
 %   The `measure` flag may be one of:
 %
@@ -25,33 +25,33 @@ function varargout = data_baumgartner2017looming( varargin )
 %
 %   The `fig` flag may be one of:
 %
-%     'fig1b'     Effect of spectral contrast manipulation according to 
-%                 factor C on magnitude responses of listener-specific 
-%                 stimuli of Exp. I (B, Top) as well as their frequency-specific 
-%                 and overall loudness changes relative to C = 1. Shaded 
-%                 areas denote ±1 standard error of the mean (SEM; N = 15). 
-%                 Note that changes in overall loudness oppose the intended 
-%                 effect of contrast switch. 
-%     'fig2'      Behavioral responses were more consistent for sounds 
-%                 perceived as approaching compared to sounds perceived as 
-%                 receding if instantaneous spectral changes were presented 
-%                 in continuous stimuli. Mean behavioral responses in the 
-%                 3?AFC motion discrimination task of Exp. I (fist figure; N = 15) 
-%                 and the 2?AFC motion discrimination task of Exp. II 
-%                 (second figure; N = 13). Results of Exp. II are separated 
-%                 between trials presenting instantaneous but continuous 
-%                 (Left; as in Exp. I) and discontinuous (Right) spectral 
-%                 contrast switches. Decreasing spectral contrast switches 
-%                 (orange lines) were predominantly perceived as approaching 
-%                 (orange triangles), increasing spectral contrast switches 
-%                 (green lines) as receding (green triangles), and constant 
-%                 spectral contrasts (no lines) as static (gray squares). 
-%                 Statistical analyses focused on these predominant response 
-%                 associations. Values reflect mean ±1 SEM.
-%     'fig3a'     Extracted N1 and P2 amplitudes evoked by stimulus onset. 
-%                 Error bars reflect SEM. 
+%     'fig1b'     Effect of spectral contrast manipulation according to
+%                 factor C on magnitude responses of listener-specific
+%                 stimuli of Exp. I (B, Top) as well as their frequency-specific
+%                 and overall loudness changes relative to C = 1. Shaded
+%                 areas denote Â±1 standard error of the mean (SEM; N = 15).
+%                 Note that changes in overall loudness oppose the intended
+%                 effect of contrast switch.
+%     'fig2'      Behavioral responses were more consistent for sounds
+%                 perceived as approaching compared to sounds perceived as
+%                 receding if instantaneous spectral changes were presented
+%                 in continuous stimuli. Mean behavioral responses in the
+%                 3?AFC motion discrimination task of Exp. I (fist figure; N = 15)
+%                 and the 2?AFC motion discrimination task of Exp. II
+%                 (second figure; N = 13). Results of Exp. II are separated
+%                 between trials presenting instantaneous but continuous
+%                 (Left; as in Exp. I) and discontinuous (Right) spectral
+%                 contrast switches. Decreasing spectral contrast switches
+%                 (orange lines) were predominantly perceived as approaching
+%                 (orange triangles), increasing spectral contrast switches
+%                 (green lines) as receding (green triangles), and constant
+%                 spectral contrasts (no lines) as static (gray squares).
+%                 Statistical analyses focused on these predominant response
+%                 associations. Values reflect mean Â±1 SEM.
+%     'fig3a'     Extracted N1 and P2 amplitudes evoked by stimulus onset.
+%                 Error bars reflect SEM.
 %     'fig3b'     Extracted N1 and P2 amplitudes evoked by stimulus switch.
-%                 Error bars reflect SEM. 
+%                 Error bars reflect SEM.
 %
 %   Additional flags may be:
 %
@@ -63,17 +63,17 @@ function varargout = data_baumgartner2017looming( varargin )
 %     'switch'  To use switch-ERPs. Default.
 %
 %   Output parameters:
-%     data    : structure that contains either HRTFs (`id`, and `Obj`) or 
-%               experimental results including raw and averaged data 
+%     data    : structure that contains either HRTFs (`id`, and `Obj`) or
+%               experimental results including raw and averaged data
 %               (`rawData`,`data`, opional `meta` information).
 %               Statisitcs (`stat`) and figure handles (`fig`) are
 %               provided if requested.
 %
-%   Requirements: 
+%   Requirements:
 %   -------------
 %
 %   1) SOFA API v0.4.3 or higher from http://sourceforge.net/projects/sofacoustics for Matlab (in e.g. thirdparty/SOFA)
-% 
+%
 %   2) Data in hrtf/baumgartner2017looming and auxdata/baumgartner2017looming (downloaded on the fly)
 %
 %   3) Statistics Toolbox for Matlab (for some fig)
@@ -166,7 +166,7 @@ if flags.do_nofig
           RTall(ss,cc,2,iISI) = prctile(RT(Iappr),RTprctile);
 
           Iconst = E(idc) == 0;
-          pResp(ss,cc,3,iISI) = sum(Iconst) / N; 
+          pResp(ss,cc,3,iISI) = sum(Iconst) / N;
           RTall(ss,cc,3,iISI) = prctile(RT(Iconst),RTprctile);
         end
       end
@@ -219,7 +219,7 @@ if flags.do_nofig
     if flags.do_stat
       % ANOVA
       pc = reshape(cat(2,meas(:,1:3,1,:),meas(:,4:6,2,:)),Nsubj,[]); % percent correct
-      DV = array2table(pc); 
+      DV = array2table(pc);
       contrast = strrep(condLabelPlot(1:3),'\leftrightarrow','-');
       contrast = repmat(contrast,[2*nISI,1]);
       direction = cell(6,1);
@@ -290,7 +290,7 @@ if flags.do_nofig
           for ii = 1:length(idx)
             hC(rr,ii) = plot(x(idx{ii})+dx2(rr),y(idx{ii}),lineStyle{ii});
             hold on
-            hR(rr,ii) = errorbar(x(idx{ii})+dx2(rr),y(idx{ii}),l(idx{ii}),u(idx{ii}),symb(rr)); 
+            hR(rr,ii) = errorbar(x(idx{ii})+dx2(rr),y(idx{ii}),l(idx{ii}),u(idx{ii}),symb(rr));
             set(hC(rr,ii),'Color',colorC(ii,:))
           end
           set(hR(rr,:),'MarkerFaceColor',colorR(rr,:),'Color',colorR(rr,:))
@@ -388,7 +388,7 @@ if flags.do_nofig
         u = seResp(1,:,rr);
         for ii = 1:length(idx)
           h(rr,ii) = errorbar(x+dx(ii),y(idx{ii}),l(idx{ii}),u(idx{ii}),...
-            [symb(rr),lineStyle{ii}]); 
+            [symb(rr),lineStyle{ii}]);
           hold on
         end
         set(h(rr,1),'MarkerFaceColor','w','Color',color(rr,:))
@@ -396,7 +396,7 @@ if flags.do_nofig
 
         set(gca,'XTick',x,'XLim',x([1,3])+[-1,1])
         set(gca,'XTickLabel',condLabel)
-        ylabel('Cz potential (µV)')
+        ylabel('Cz potential (uV)')
         xlabel(XLabel)
       end
       set(gca,'YLim',YLim,'YMinorTick','on')
@@ -407,9 +407,9 @@ end
 
 %% Fig. 1B
 if flags.do_fig1b
-  
+
   stim = sig_baumgartner2017looming( 'exp1');
-  
+
   %% Top panel: Transfer characterisitcs
   fs = stim(1).fs;
   Nfft = 2^10;
@@ -430,7 +430,7 @@ if flags.do_fig1b
     end
   end
   mag = mag-3; % arbitrary adjustment to set ipsi. C=0 at 0 dB
-  
+
   if flags.do_plot
     XLim = [800,17e3];
     YLim = [-34,12];
@@ -456,25 +456,25 @@ if flags.do_fig1b
     ylabel('Magnitude (dB)')
     xlabel('Frequency (Hz)')
   end
-  
+
   out.magnitudeResponse.data = permute(mag,[1,3,4,2]);
   out.magnitudeResponse.meta.dim = 'freq_channel_subject_C';
   out.magnitudeResponse.meta.freq = freq;
   out.magnitudeResponse.meta.channel = {'ipsi','contra'};
   out.magnitudeResponse.meta.subject = cat(1,stim.ID);
   out.magnitudeResponse.meta.C = 0:0.5:1;
-  
+
   %% Bottom panels: Loudness predictions
   % The following loudness predictions were performed with the
   % LoudnessToolbox 1.2 provided by Genesis (http://genesis-acoustics.com);
-  % models used: 
-  %   M1: Loudness_ISO532B_from_sound (calculated but not shown) 
+  % models used:
+  %   M1: Loudness_ISO532B_from_sound (calculated but not shown)
   %   M2: Loudness_ANSI_S34_2007 (used for publication);
-  % Data dimensions: 
+  % Data dimensions:
   %   subject (1:15) x C (0:.5:1) x model (M1,M2) [x channel (ipsi,contra)];
   %   frequency (M1:BarkAxis; M2:fc) x channel (ipsi,contra)
-  L = amt_load('baumgartner2017looming','specificLoudness.mat'); 
-  
+  L = amt_load('baumgartner2017looming','specificLoudness.mat');
+
   % Difference to reference
   dLL_specif = cell(3,1);
   for ss = 1:length(stim)
@@ -484,7 +484,7 @@ if flags.do_fig1b
     end
   end
   dLoudnessLevel = L.loudnessLevel(:,1:2,:,:) - repmat(L.loudnessLevel(:,3,:,:),[1,2,1,1]);
-  
+
   if flags.do_plot
     out.fig(2) = figure;
     YLim = [-9,13];
@@ -504,7 +504,7 @@ if flags.do_fig1b
     ylabel('Loudness level difference to C=1 (phon)')
     xlabel('Frequency (Hz)')
   end
-  
+
   out.specificLoudnessLevelDiff.data = cat(4,dLL_specif{:});
   out.specificLoudnessLevelDiff.meta.dim = 'freq_channel_subject_C';
   out.specificLoudnessLevelDiff.meta.freq = L.fc;
@@ -523,13 +523,13 @@ if flags.do_fig1b
     ylabel('Loudness level difference to C=1 (phon)')
     xlabel('Spectral contrast (C)')
   end
-  
+
   out.loudnessLevelDiff.data = permute(dLoudnessLevelP,[4,1,2,3]);
   out.loudnessLevelDiff.meta.dim = 'channel_subject_C';
   out.loudnessLevelDiff.meta.channel = {'ipsi','contra'};
   out.loudnessLevelDiff.meta.subject = cat(1,stim.ID);
   out.loudnessLevelDiff.meta.C = [0,0.5];
-  
+
 end
 
 %% Fig. 2
@@ -568,7 +568,7 @@ end
 function varargout=shadedErrorBar(x,y,errBar,lineProps,transparent)
 % function H=shadedErrorBar(x,y,errBar,lineProps,transparent)
 %
-% Purpose 
+% Purpose
 % Makes a 2-d line plot with a pretty shaded error bar made
 % using patch. Error bar color is chosen automatically.
 %
@@ -584,45 +584,45 @@ function varargout=shadedErrorBar(x,y,errBar,lineProps,transparent)
 %          statistic the line should be and the second defines the
 %          error bar.
 % lineProps - [optional,'-k' by default] defines the properties of
-%             the data line. e.g.:    
+%             the data line. e.g.:
 %             'or-', or {'-or','markerfacecolor',[1,0.2,0.2]}
 % transparent - [optional, 0 by default] if ==1 the shaded error
 %               bar is made transparent, which forces the renderer
 %               to be openGl. However, if this is saved as .eps the
 %               resulting file will contain a raster not a vector
-%               image. 
+%               image.
 %
 % Outputs
-% H - a structure of handles to the generated plot objects.     
+% H - a structure of handles to the generated plot objects.
 %
 %
 % Examples
 % y=randn(30,80); x=1:size(y,2);
 % shadedErrorBar(x,mean(y,1),std(y),'g');
-% shadedErrorBar(x,y,{@median,@std},{'r-o','markerfacecolor','r'});    
-% shadedErrorBar([],y,{@median,@std},{'r-o','markerfacecolor','r'});    
+% shadedErrorBar(x,y,{@median,@std},{'r-o','markerfacecolor','r'});
+% shadedErrorBar([],y,{@median,@std},{'r-o','markerfacecolor','r'});
 %
 % Overlay two transparent lines
 % y=randn(30,80)*10; x=(1:size(y,2))-40;
-% shadedErrorBar(x,y,{@mean,@std},'-r',1); 
+% shadedErrorBar(x,y,{@mean,@std},'-r',1);
 % hold on
 % y=ones(30,1)*x; y=y+0.06*y.^2+randn(size(y))*10;
-% shadedErrorBar(x,y,{@mean,@std},'-b',1); 
+% shadedErrorBar(x,y,{@mean,@std},'-b',1);
 % hold off
 %
 %
 % Rob Campbell - November 2009
 
 
-    
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
-% Error checking    
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Error checking
 narginchk(3,5)
 
 
 %Process y using function handles if needed to make the error bar
 %dynamically
-if iscell(errBar) 
+if iscell(errBar)
     fun1=errBar{1};
     fun2=errBar{2};
     errBar=fun2(y);
@@ -664,8 +664,8 @@ if nargin<5, transparent=0; end
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
-% Plot to get the parameters of the line 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Plot to get the parameters of the line
 H.mainLine=plot(x,y,lineProps{:});
 
 
@@ -688,7 +688,7 @@ else
     set(gcf,'renderer','painters')
 end
 
-    
+
 %Calculate the error bars
 uE=y+errBar(1,:);
 lE=y-errBar(2,:);
@@ -713,7 +713,7 @@ H.patch=patch(xP,yP,1,'facecolor',patchColor,...
               'facealpha',faceAlpha);
 
 
-%Make pretty edges around the patch. 
+%Make pretty edges around the patch.
 H.edge(1)=plot(x,lE,'-','color',edgeColor);
 H.edge(2)=plot(x,uE,'-','color',edgeColor);
 

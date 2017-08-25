@@ -1,8 +1,8 @@
-function lookup = itd2anglelookuptable(hrtf,varargin)
-%ITD2ANGLELOOKUPTABLE generates an ITD-azimuth lookup table for the given HRTF set
-%   Usage: lookup = itd2anglelookuptable(hrtf,fs,model);
-%          lookup = itd2anglelookuptable(hrtf,fs);
-%          lookup = itd2anglelookuptable(hrtf);
+function lookup = itd2angle_lookuptable(hrtf,varargin)
+%ITD2ANGLE_LOOKUPTABLE generates an ITD-azimuth lookup table for the given HRTF set
+%   Usage: lookup = itd2angle_lookuptable(hrtf,fs,model);
+%          lookup = itd2angle_lookuptable(hrtf,fs);
+%          lookup = itd2angle_lookuptable(hrtf);
 %
 %   Input parameters:
 %       hrtf   : HRTF data set (as SOFA file or struct)
@@ -15,7 +15,7 @@ function lookup = itd2anglelookuptable(hrtf,varargin)
 %       lookup : struct containing the polinomial fitting data for the
 %                ITD -> azimuth transformation, p,MU,S, see help polyfit
 %
-%   `itd2anglelookuptable(hrtf)` creates a lookup table from the given HRTF data
+%   `itd2angle_lookuptable(hrtf)` creates a lookup table from the given HRTF data
 %   set. This lookup table can be used by the dietz2011 or lindemann1986 binaural
 %   models to predict the perceived direction of arrival of an auditory event.
 %   The azimuth angle is stored in degree in the lookup table.
