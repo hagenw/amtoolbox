@@ -173,7 +173,7 @@ if (flags.do_exp1 || flags.do_exp2) && ~verLessThan('matlab','8.2')
     out = rmfield(out,'discont');
   end
   
-  elseif (flags.do_judgment || flags.do_rt) && verLessThan('matlab','8.2')
+  elseif (flags.do_exp1 || flags.do_exp2) && verLessThan('matlab','8.2')
     amt_disp('Matlab Version 8.2 or newer needed.');
     out = [];
 end
