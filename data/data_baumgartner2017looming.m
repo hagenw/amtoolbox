@@ -126,7 +126,7 @@ if flags.do_nofig
   end
 
   %% Behavioral Results
-  if flags.do_judgment || flags.do_rt
+  if (flags.do_judgment || flags.do_rt) && ~verLessThan('matlab','8.2')
 
     raw=amt_load('baumgartner2017looming',[flags.expirement,'.mat']);
     Nsubj = height(raw.data);
@@ -309,6 +309,10 @@ if flags.do_nofig
       stimulus = {'C increase','C decrease','C constat'};
       legend([hC(1,:)';hR(:,1)],[stimulus(1:size(hC,2)),response],'Location','eastoutside')
     end
+    
+    elseif (flags.do_judgment || flags.do_rt) && verLessThan('matlab','8.2')
+        amt_disp('Matlab Version 8.2 or newer needed.');
+        out = [];
   end
 
   %% Physiological Results
@@ -403,7 +407,7 @@ if flags.do_nofig
 end
 
 %% Fig. 1B
-if flags.do_fig1b
+if flags.do_fig1b && ~verLessThan('matlab','8.2')
 
   stim = sig_baumgartner2017looming( 'exp1');
 
@@ -526,7 +530,10 @@ if flags.do_fig1b
   out.loudnessLevelDiff.meta.channel = {'ipsi','contra'};
   out.loudnessLevelDiff.meta.subject = cat(1,stim.ID);
   out.loudnessLevelDiff.meta.C = [0,0.5];
-
+  
+  elseif flags.do_fig1b && verLessThan('matlab','8.2')
+    amt_disp('Matlab Version 8.2 or newer needed.');
+    out = [];
 end
 
 %% Fig. 2
