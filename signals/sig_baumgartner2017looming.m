@@ -76,7 +76,7 @@ if flags.do_hrtf
 end
 
 %% Stimuli from Exp. I % II
-if flags.do_exp1 || flags.do_exp2
+if (flags.do_exp1 || flags.do_exp2) && ~verLessThan('matlab','8.2')
   
   % Individual data
   data = data_baumgartner2017looming(flags.experiment); % for ID and azimuth
@@ -173,6 +173,9 @@ if flags.do_exp1 || flags.do_exp2
     out = rmfield(out,'discont');
   end
   
+  elseif (flags.do_exp1 || flags.do_exp2) && verLessThan('matlab','8.2')
+    amt_disp('Matlab Version 8.2 or newer needed.');
+    out = [];
 end
 
 end
