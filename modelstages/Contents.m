@@ -80,3 +80,9 @@
 %     baumgartner2016_gradientextraction - Extraction of positive spectral gradients
 %     baumgartner2016_comparisonprocess - Comparison with direction-specific templates
 %
+%  Cochlear-implant localization model
+%     kelvasa2015_anbinning - AN and time binning from Kelvasa and Dietz 2015 binaural model
+%     kelvasa2015_anprocessing -  AN model used in Kelvasa and Dietz 2015 binaural model
+%     kelvasa2015_calibratemapping - Produces necessary mappings for localization model
+%     kelvasa2015_ciprocessing - CI ACE processing strategy used in Kelvasa and Dietz 2015 binaural model
+%     kelvasa2015_localize - uses calibration data to map bilateral spike rate differences to an azimuthal angle

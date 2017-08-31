@@ -1,7 +1,6 @@
 function [electrodogram, vTime] = ...
             kelvasa2015_ciprocessing(insig,fs,varargin)
-%KELVASA2015_CIPROCESSING  CI ACE processing strategy used in 
-%                         Kelvasa and Dietz 2015 binaural model
+%KELVASA2015_CIPROCESSING CI ACE processing strategy used in Kelvasa and Dietz 2015 binaural model
 %   Usage: [electrodogram, vTime] = kelvasa2015aceprocessing(insig,fs);
 %
 %   Input parameters:

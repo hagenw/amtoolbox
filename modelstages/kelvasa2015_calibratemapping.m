@@ -7,14 +7,15 @@ function [mappingData] = kelvasa2015_calibratemapping(varargin)
 %                       this is not included, default paramters are loaded.
 %
 %   The output structure "mappingData" has the following fields:
-% 
-%        calibHRTFsig                 : NxMxS matrix of signal levels in 
+%        calibHRTFsig                 : 
+%                                       NxMxS matrix of signal levels in 
 %                                       which N is the range of azimuthal 
 %                                       angles overwhich the signal was 
 %                                       computed, M is the number of time 
 %                                       samples,and S are audio channels.
 % 
-%        calSpikeDiffPerNeuronPerAzi  : NxMxS matrix of chan2 - chan1 spike
+%        calSpikeDiffPerNeuronPerAzi  : 
+%                                       NxMxS matrix of chan2 - chan1 spike
 %                                       rate differences in spikes/sec in 
 %                                       which N is the range of azimuthal
 %                                       angles overwhich the signal was 
@@ -22,12 +23,14 @@ function [mappingData] = kelvasa2015_calibratemapping(varargin)
 %                                       simulated AN fibers, and S is the 
 %                                       number of time bins.
 %                                       
-%        calSpikeRatePerNeuronPerLevel: NxM matrix of spike rates in 
+%        calSpikeRatePerNeuronPerLevel: 
+%                                       NxM matrix of spike rates in 
 %                                       spikes/sec in which N is a range of
 %                                       signal levels in dB SPL and M is 
 %                                       the number of simulated AN fibers
 %
-%        calParameters                : structure of model paramters used in
+%        calParameters                : 
+%                                       structure of model paramters used in
 %                                       processing calibration stimulus
 % 
 % 

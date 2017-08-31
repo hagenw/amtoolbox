@@ -1,11 +1,9 @@
 function [ANbinPredictions, weightedPredictions, mappingData] = ...
             kelvasa2015_localize(mappingData, SpkDiffPerBin,...
                                     SpkSumPerBin, varargin)
-%KELVASA2015_LOCALIZE uses calibration data to map bilateral spike rate 
-%                       differences to an azimuthal angle. 
+%KELVASA2015_LOCALIZE uses calibration data to map bilateral spike rate differences to an azimuthal angle
 %   Usage: [ANbinPredictions, weightedPredictions, mappingData] = ...
-%                        kelvasa2015_localize(mappingData, SpkDiffPerBin,...
-%                                             SpkSumPerBin);
+%           kelvasa2015_localize(mappingData, SpkDiffPerBin, SpkSumPerBin, varargin)
 %
 %   Input parameters:
 %       mappingData    : Structure containing the necessary data to map 
@@ -32,40 +30,48 @@ function [ANbinPredictions, weightedPredictions, mappingData] = ...
 %                            predictions in degrees with M being the number
 %                            of time windows.
 %
-%     Fields added to "mappingData":
-%         RateLevelPerBin    : N x M matrix of monaural spike rates in 
+%   Fields added to "mappingData":
+%         RateLevelPerBin    : 
+%                              N x M matrix of monaural spike rates in 
 %                              spikes/sec with N being the number of user 
 %                              defined AN frequency bands and M being the 
 %                              range of signal levels in dB SPL over which
 %                              the calibration signal was processed.
 % 
-%         ILDcentFreq        : 1 x N vector of center frequencies in Hz used 
+%         ILDcentFreq        : 
+%                              1 x N vector of center frequencies in Hz used 
 %                              in CI processing that correspond to the N user 
 %                              defined AN frequency bands.
 % 
-%         ILD                : N x M matrix of interaural level differences in
+%         ILD                : 
+%                              N x M matrix of interaural level differences in
 %                              dB SPL for each of the the N user defined AN 
 %                              frequency bands over the M azimuthal angles for 
 %                              which the signal was processed.
 %                              
-%         IldAngSlope       : 1 x N vector of linear regression slopes in 
+%         IldAngSlope       : 
+%                             1 x N vector of linear regression slopes in 
 %                             dB/degree  for each of the the N user defined AN 
 %                             frequency bands.
 %                             
-%         RateLevelSlope    : 1 x N vector of linear regression slopes in 
+%         RateLevelSlope    : 
+%                             1 x N vector of linear regression slopes in 
 %                             spike Rate/dB  for each of the the N user defined 
 %                             AN frequency bands.
 %                             
-%         spkDiffAziSlopes  : 1 x N vector of linear regression slopes in 
+%         spkDiffAziSlopes  : 
+%                             1 x N vector of linear regression slopes in 
 %                             bilateral spike rate differences /dB  for each 
 %                             of the the N user defined AN frequency bands.
 %                             
-%         Avg               : M x N vector of spike rate difference averages
+%         Avg               : 
+%                             M x N vector of spike rate difference averages
 %                             over all time bins where N are user defined AN 
 %                             frequency bands and M are the range of azimuthal 
 %                             angles over which the signal was processed.
 %                               
-%         covariance        : M x N vector of spike rate difference covariances
+%         covariance        : 
+%                             M x N vector of spike rate difference covariances
 %                             over all time bins where N are user defined AN 
 %                             frequency bands and M are the range of azimuthal 
 %                             angles over which the signal was processed.
