@@ -1,7 +1,7 @@
 %Changes throughout the release history of the AMT
 %   
 %   Version 0.9.9 (September 2017)
-%   =========================
+%   ==============================
 % 
 %   - data_baumgartner2017 provided
 %   - data_baumgartner2017looming provided)
