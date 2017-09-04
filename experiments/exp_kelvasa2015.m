@@ -36,37 +36,39 @@ function [dataOut] = exp_kelvasa2015(varargin)
 %
 %   To display Fig. 5 use :::
 %
-%     exp_kelvasa2015('fig5')
+%     exp_kelvasa2015('fig5');
 %
 %   To display Fig. 6 use :::
 %
-%     exp_kelvasa2015('fig6')
+%     exp_kelvasa2015('fig6');
 %
 %   To display Fig. 8a use :::
 %
-%     exp_kelvasa2015('fig8a')
+%     exp_kelvasa2015('fig8a');
 %
 %   To display Fig. 8b use :::
 %
-%     exp_kelvasa2015('fig8b')
+%     exp_kelvasa2015('fig8b');
 %
 %   To display Fig. 9a use :::
 %
-%     exp_kelvasa2015('fig9a')
+%     exp_kelvasa2015('fig9a');
 %
 %   To display Fig. 10 use :::
 %
-%     exp_kelvasa2015('fig10')
+%     exp_kelvasa2015('fig10');
 %
 %   To display Fig. 12 use :::
 %
-%     exp_kelvasa2015('fig12')
+%     exp_kelvasa2015('fig12');
 %
 %   References: kelvasa2015
 
 %   Authors:
 %            Daryl Kelvasa (daryl.kelvasa@uni-oldenburg.de) 2016
 %            Mathias Dietz (mdietz@uwo.ca) 2016
+%            Thomas Deppisch (thomas.deppisch@student.tugraz.at) 2017
+%            Piotr Majdak (piotr@majdak.com) 2017
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Retrieve and compute model paramters

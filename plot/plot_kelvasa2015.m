@@ -98,8 +98,9 @@ col = hsv(numel(binPos));
 col(2,:) = col(2,:) + [0.2 -0.5 0];
 
 %Generate Main Figure
-mainFig = figure('units','centimeters',...
-                        'position',[0 0 37 18.5]);
+mainFig = figure('Units','centimeters','Position',[0 0 37 18.5], ...
+    'PaperUnits','centimeters','PaperPosition',[0 0 37 18.5]);
+
 for axisInd = 1 : 12
                                 
 %Generate axis
@@ -121,7 +122,7 @@ ax(axisInd)= axes          ('Parent',mainFig,...
                             'YLim',[0 500],...
                             'Position',...
                                 [cornerX cornerY axisWidth axisHeight]);
-                           
+
                             hold(ax(axisInd),'on')           
                             axis(ax(axisInd),'manual')      
                      
@@ -211,8 +212,8 @@ col = hsv(numel(binPos));
 col(2,:) = col(2,:) + [0.2 -0.5 0];
 
 %Generate Main Figure
-mainFig = figure('units','centimeters',...
-                        'position',[0 0 38 13]);
+mainFig = figure('units','centimeters','position',[0 0 38 13],...
+    'PaperUnits','centimeters','PaperPosition',[0 0 38 13]);
 
 for axisInd = 1 : rows*columns
 %Generate axis
@@ -364,8 +365,8 @@ col = hsv(numel(binPos));
 col(2,:) = col(2,:) + [0.2 -0.5 0];
 
 %Generate Main Figure
-mainFig = figure('units','centimeters',...
-                        'position',[0 0 30 8]);
+mainFig = figure('units','centimeters','position',[0 0 30 8],...
+    'PaperUnits','centimeters','Paperposition',[0 0 30 8]);
 
 for axisInd = 1 : rows*columns
 %Generate axis
@@ -459,10 +460,10 @@ col = hsv(5);
 col(2,:) = col(2,:) + [0.2 -0.5 0];
 
 %Generate Main Figure
-% mainFig = figure('units','centimeters',...
-%                         'position',[1 1 12 28.5]);
-mainFig = figure('units','normalized',...
-                        'position',[0.05 0.05 0.5 0.9]);
+mainFig = figure('units','centimeters','position',[1 1 12 28.5],...
+    'PaperUnits','centimeters','PaperPosition',[1 1 12 28.5]);
+% mainFig = figure('units','normalized',...
+%                         'position',[0.05 0.05 0.5 0.9]);
                     
 binPlotInd = [3,5,7,13,15]; binPlotMap(binPlotInd) = [5,3,1,4,2];
 
@@ -610,8 +611,8 @@ axisLabel = {{'\fontsize{16}Continuous','Speech', '10s'},...
              {'\fontsize{16}Sp 55dB','200 ms'}};
 
 %Generate Main Figure
-mainFig = figure('units','centimeters',...
-                        'position',[0 0 17 16]);
+mainFig = figure('units','centimeters','position',[0 0 17 16],...
+    'PaperUnits','centimeters','PaperPosition',[0 0 17 16]);
                     
 for axisInd = 1 : 2: 8
  
@@ -752,8 +753,8 @@ col = hsv(5);
 col(2,:) = col(2,:) + [0.2 -0.5 0];
 
 %Generate Main Figure
-mainFig = figure('units','centimeters',...
-                        'position',[0 0 17 8]);
+mainFig = figure('units','centimeters','position',[0 0 17 8],...
+    'PaperUnits','centimeters','PaperPosition',[0 0 17 8]);
                     
 for axisInd = 1 : 2: 4
  
