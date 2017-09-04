@@ -63,8 +63,8 @@ if flags.do_hrtf
   mag = db(abs(hrtf(idf,:,:))); % HRTF magnitudes in dB
   idwf = idf(:) | circshift(idf(:),[1,0]); % include one neighbouring position for evaluation of frequency weighting
   wf = diff(freqtoerb(freq(idwf))); % frequency weighting according to differentiated ERB scale
-  wf = repmat( wf(:)/sum(wf) ,1,size(mag,2),size(mag,3));
-  meanmag = repmat(sum(wf.*mag,1),Nf,1,1);
+  wf = repmat(wf(:)/sum(wf),[1,size(mag,2),size(mag,3)]);
+  meanmag = repmat(sum(wf.*mag,1),[Nf,1,1]);
   varmag = mag - meanmag;
 
   ph = angle(hrtf);
@@ -76,12 +76,13 @@ if flags.do_hrtf
 end
 
 %% Stimuli from Exp. I % II
-if (flags.do_exp1 || flags.do_exp2) && ~verLessThan('matlab','8.2')
+if flags.do_exp1 || flags.do_exp2
   
   % Individual data
   data = data_baumgartner2017looming(flags.experiment); % for ID and azimuth
-  subj = data.rawData.ID;
-  azi = data.rawData.azimuth;
+  rawData = struct2cell(data.rawData);
+  subj = rawData(1,:);
+  azi = rawData(3,:);
   hrtf = data_baumgartner2017looming('hrtf');
   
   % Source signal
@@ -173,9 +174,6 @@ if (flags.do_exp1 || flags.do_exp2) && ~verLessThan('matlab','8.2')
     out = rmfield(out,'discont');
   end
   
-  elseif (flags.do_exp1 || flags.do_exp2) && verLessThan('matlab','8.2')
-    amt_disp('Matlab Version 8.2 or newer needed.');
-    out = [];
 end
 
 end

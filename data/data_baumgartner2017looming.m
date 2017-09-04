@@ -126,12 +126,12 @@ if flags.do_nofig
   end
 
   %% Behavioral Results
-  if (flags.do_judgment || flags.do_rt) && ~verLessThan('matlab','8.2')
+  if flags.do_judgment || flags.do_rt
 
     raw=amt_load('baumgartner2017looming',[flags.expirement,'.mat']);
-    Nsubj = height(raw.data);
+    Nsubj = length(raw.data);
 
-    ISI = unique(raw.data.ISI{1});
+    ISI = unique(raw.data(1).ISI);
     nISI = length(ISI);
     ISIlbl = {'continuous','discont.'};
 
@@ -140,15 +140,15 @@ if flags.do_nofig
     condLabelPlot = { '0\leftrightarrow1';'0\leftrightarrow.5';'.5\leftrightarrow1';...
                   'C_1=C_2'};
     response = {'receding','approaching','constant'};
-
+    
     %% Evaluate Data
     pResp = nan(Nsubj,length(conditions),length(response),nISI);
     RTall = pResp;
     for ss = 1:Nsubj
-      E = raw.data.judgment{ss};
-      C12 = raw.data.C12{ss};
-      sISI = raw.data.ISI{ss};
-      RT = raw.data.RT{ss};
+      E = raw.data(ss).judgment;
+      C12 = raw.data(ss).C12;
+      sISI = raw.data(ss).ISI;
+      RT = raw.data(ss).RT;
       for iISI = 1:nISI
         for cc = 1:length(conditions)
           idc = C12(:,1) == conditions{cc}(1) & C12(:,2) == conditions{cc}(2) & sISI(:) == ISI(iISI);
@@ -156,15 +156,15 @@ if flags.do_nofig
 
           Irecede = E(idc) > 0;
           pResp(ss,cc,1,iISI) = sum(Irecede) / N;
-          RTall(ss,cc,1,iISI) = prctile(RT(Irecede),RTprctile);
+          RTall(ss,cc,1,iISI) = percentile(RT(Irecede),RTprctile);
 
           Iappr = E(idc) < 0;
           pResp(ss,cc,2,iISI) = sum(Iappr) / N;
-          RTall(ss,cc,2,iISI) = prctile(RT(Iappr),RTprctile);
+          RTall(ss,cc,2,iISI) = percentile(RT(Iappr),RTprctile);
 
           Iconst = E(idc) == 0;
           pResp(ss,cc,3,iISI) = sum(Iconst) / N;
-          RTall(ss,cc,3,iISI) = prctile(RT(Iconst),RTprctile);
+          RTall(ss,cc,3,iISI) = percentile(RT(Iconst),RTprctile);
         end
       end
     end
@@ -185,12 +185,13 @@ if flags.do_nofig
     end
 
     % outlier removal
-    ID = [raw.data.ID];
+    rawData = struct2cell(raw.data);
+    ID = rawData(1,:);
     if flags.do_exp2
       pc = reshape(cat(2,pResp(:,1:3,1,:),pResp(:,4:6,2,:)),[Nsubj,6,nISI]); % percent correct
       bias = squeeze(mean(pc(:,4:6,:) - pc(:,1:3,:),2));
       [~,outlier] = max(bias(:,2));
-      amt_disp(['Subject ' raw.data.ID(outlier) ' identified as outlier and removed from further analyses.'])
+      amt_disp(['Subject ' raw.data(outlier).ID ' identified as outlier and removed from further analyses.'])
       iNew = (1:Nsubj)~=outlier;
       ID = ID(iNew);
       meas = meas(iNew,:,:,:);
@@ -198,11 +199,11 @@ if flags.do_nofig
     end
 
     % Average constant conditions
-    meas = cat(2,meas(:,1:6,:,:),nanmean(meas(:,7:9,:,:),2));
+    meas = cat(2,meas(:,1:6,:,:),nan_mean(meas(:,7:9,:,:),2));
     conditions = [conditions(1:6);'constant'];
 
     % Standard errors of the means
-    sem = nanstd(meas)/sqrt(Nsubj);
+    sem = nan_std(meas)/sqrt(Nsubj);
 
     % Output
     out.data = meas;
@@ -213,7 +214,7 @@ if flags.do_nofig
     out.meta.response = response;
     out.meta.ISI = ISI;
 
-    if flags.do_stat
+    if flags.do_stat && ~verLessThan('matlab','8.2')
       % ANOVA
       pc = reshape(cat(2,meas(:,1:3,1,:),meas(:,4:6,2,:)),Nsubj,[]); % percent correct
       DV = array2table(pc);
@@ -277,7 +278,7 @@ if flags.do_nofig
       for iisi = 1:nISI
         subplot(1,nISI,iisi)
         for rr = 1:length(response)
-          y = nanmean(meas(:,:,rr,iisi));
+          y = nan_mean(meas(:,:,rr,iisi));
           l = sem(1,:,rr,iisi);
           u = sem(1,:,rr,iisi);
           idx = {1:3;4:6;7};
@@ -309,10 +310,6 @@ if flags.do_nofig
       stimulus = {'C increase','C decrease','C constat'};
       legend([hC(1,:)';hR(:,1)],[stimulus(1:size(hC,2)),response],'Location','eastoutside')
     end
-    
-    elseif (flags.do_judgment || flags.do_rt) && verLessThan('matlab','8.2')
-        amt_disp('Matlab Version 8.2 or newer needed.');
-        out = [];
   end
 
   %% Physiological Results
@@ -407,7 +404,7 @@ if flags.do_nofig
 end
 
 %% Fig. 1B
-if flags.do_fig1b && ~verLessThan('matlab','8.2')
+if flags.do_fig1b
 
   stim = sig_baumgartner2017looming( 'exp1');
 
@@ -516,13 +513,18 @@ if flags.do_fig1b && ~verLessThan('matlab','8.2')
   % overall loudness level
   dLoudnessLevelP = dLoudnessLevel(:,:,2,:);
   if flags.do_plot
-    out.fig(3) = figure;
-    boxplot(dLoudnessLevelP(:,:),... %,{{'M1';'M1';'M2';'M2'},[0;0.5;0;.5]}
-      'Factorgap',10,'FactorSeparator',1,'Whisker',Inf,...
-      'Colors',cat(1,color{[1,2,4,5]}))
-    set(gca,'YLim',YLim)
-    ylabel('Loudness level difference to C=1 (phon)')
-    xlabel('Spectral contrast (C)')
+    try
+        out.fig(3) = figure;
+        boxplot(dLoudnessLevelP(:,:),... %,{{'M1';'M1';'M2';'M2'},[0;0.5;0;.5]}
+          'Factorgap',10,'FactorSeparator',1,'Whisker',Inf,...
+          'Colors',cat(1,color{[1,2,4,5]}))
+        set(gca,'YLim',YLim)
+        ylabel('Loudness level difference to C=1 (phon)')
+        xlabel('Spectral contrast (C)')
+    catch
+    	warning('Statistics Toolbox not available, omitting figure 3.')
+    end
+    
   end
 
   out.loudnessLevelDiff.data = permute(dLoudnessLevelP,[4,1,2,3]);
@@ -530,10 +532,7 @@ if flags.do_fig1b && ~verLessThan('matlab','8.2')
   out.loudnessLevelDiff.meta.channel = {'ipsi','contra'};
   out.loudnessLevelDiff.meta.subject = cat(1,stim.ID);
   out.loudnessLevelDiff.meta.C = [0,0.5];
-  
-  elseif flags.do_fig1b && verLessThan('matlab','8.2')
-    amt_disp('Matlab Version 8.2 or newer needed.');
-    out = [];
+
 end
 
 %% Fig. 2
@@ -731,4 +730,154 @@ if ~holdStatus, hold off, end
 if nargout==1
     varargout{1}=H;
 end
+end
+
+function prc = percentile(x,k)
+    % percentile function to replace prctile in statistics toolbox
+    % x .. data vector
+    % k .. percentage in % (k >= 1)
+    % if k is outside the range the min or max value of x gets assigned
+    
+    len = length(x);
+    if isempty(x)
+        prc = NaN;
+        return
+    end
+    if len == 1
+        prc = x; return
+    end
+    
+    y = sort(x);
+    z = 100*(0.5:1:(len-0.5))/len;
+    
+    if k<z(1)
+        prc=k(1); return
+    end
+    if k>z(end)
+        prc=z(end); return
+    end
+    
+    if isempty(find(z==k, 1))
+        prc = interp1(z,y,k);
+    else
+        prc = y(find(z==k, 1));
+    end
+end
+
+function y = nan_mean(x,dim)
+% FORMAT: Y = NANMEAN(X,DIM)
+% 
+%    Average or mean value ignoring NaNs
+%
+%    This function enhances the functionality of NANMEAN as distributed in
+%    the MATLAB Statistics Toolbox and is meant as a replacement (hence the
+%    identical name).  
+%
+%    NANMEAN(X,DIM) calculates the mean along any dimension of the N-D
+%    array X ignoring NaNs.  If DIM is omitted NANMEAN averages along the
+%    first non-singleton dimension of X.
+%
+%    Similar replacements exist for NANSTD, NANMEDIAN, NANMIN, NANMAX, and
+%    NANSUM which are all part of the NaN-suite.
+%
+%    See also MEAN
+
+    if isempty(x)
+    	y = NaN;
+    	return
+    end
+
+    if nargin < 2
+        dim = min(find(size(x)~=1));
+        if isempty(dim)
+            dim = 1;
+        end
+    end
+
+    % Replace NaNs with zeros.
+    nans = isnan(x);
+    x(isnan(x)) = 0; 
+
+    % denominator
+    count = size(x,dim) - sum(nans,dim);
+
+    % Protect against a all NaNs in one dimension
+    i = find(count==0);
+    count(i) = ones(size(i));
+    y = sum(x,dim)./count;
+    y(i) = i + NaN;
+end
+
+function y = nan_std(x,dim,flag)
+% FORMAT: Y = NANSTD(X,DIM,FLAG)
+% 
+%    Standard deviation ignoring NaNs
+%
+%    This function enhances the functionality of NANSTD as distributed in
+%    the MATLAB Statistics Toolbox and is meant as a replacement (hence the
+%    identical name).  
+%
+%    NANSTD(X,DIM) calculates the standard deviation along any dimension of
+%    the N-D array X ignoring NaNs.  
+%
+%    NANSTD(X,DIM,0) normalizes by (N-1) where N is SIZE(X,DIM).  This make
+%    NANSTD(X,DIM).^2 the best unbiased estimate of the variance if X is
+%    a sample of a normal distribution. If omitted FLAG is set to zero.
+%    
+%    NANSTD(X,DIM,1) normalizes by N and produces the square root of the
+%    second moment of the sample about the mean.
+%
+%    If DIM is omitted NANSTD calculates the standard deviation along first
+%    non-singleton dimension of X.
+%
+%    Similar replacements exist for NANMEAN, NANMEDIAN, NANMIN, NANMAX, and
+%    NANSUM which are all part of the NaN-suite.
+%
+%    See also STD
+
+
+    if isempty(x)
+        y = NaN;
+        return
+    end
+
+    if nargin < 3
+        flag = 0;
+    end
+
+    if nargin < 2
+        dim = min(find(size(x)~=1));
+    	if isempty(dim)
+            dim = 1; 
+        end	  
+    end
+
+
+    % Find NaNs in x and nanmean(x)
+    nans = isnan(x);
+    avg = nan_mean(x,dim);
+
+    % create array indicating number of element 
+    % of x in dimension DIM (needed for subtraction of mean)
+    tile = ones(1,max(ndims(x),dim));
+    tile(dim) = size(x,dim);
+
+    % remove mean
+    x = x - repmat(avg,tile);
+
+    count = size(x,dim) - sum(nans,dim);
+
+    % Replace NaNs with zeros.
+    x(isnan(x)) = 0; 
+
+
+    % Protect against a  all NaNs in one dimension
+    i = find(count==0);
+
+    if flag == 0
+    	y = sqrt(sum(x.*x,dim)./max(count-1,1));
+    else
+    	y = sqrt(sum(x.*x,dim)./max(count,1));
+    end
+    y(i) = i + NaN;
 end
