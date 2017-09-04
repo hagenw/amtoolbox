@@ -59,9 +59,9 @@ switch(obj.type)
       warning('fast computation not available');
     end
     number_of_bands = length(obj.center_frequencies_hz);
-    outsig = zeros(number_of_bands, length(insig));
+    outsig = zeros(number_of_bands, size(insig,2));
     for band = 1:number_of_bands
-      [outsig(band,:), obj.filters(band)] = hohmann2002_process(obj.filters(band), insig );
+      [outsig(band,:), obj.filters(band)] = hohmann2002_process(obj.filters(band), insig(min(band,size(insig,1)),:) );
     end
     
   case 'gfb_Delay'
