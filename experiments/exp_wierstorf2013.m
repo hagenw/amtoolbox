@@ -5,10 +5,9 @@ function output = exp_wierstorf2013(varargin)
 %   `exp_wierstorf2013(flag)` reproduces the results for the figure given
 %   by *flag* from the Wierstorf (2013) paper. It will also plot the
 %   results.  The format of its output depends on the chosen figure.
-%   Note that the original figures in the paper are not plotted with Matlab, but
-%   with gnuplot and may look a little bit different.
 %
-%   The Sound-Field-Synthesis Toolbox version 2.4.0 or higher is required.
+%   `exp_wierstorf2013` requires the Sound-Field-Synthesis Toolbox version 2.4.0 or higher.
+%
 %
 %   The following flags can be specified;
 %
@@ -126,6 +125,9 @@ function output = exp_wierstorf2013(varargin)
 %
 %     exp_wierstorf2013('fig12b');
 %
+%   The figures in the Wierstorf et al. (2013) were plotted with gnuplot and SFS revision
+%   a8914700a4. The appearance of figures presented here may be different.
+%
 %   References: wierstorf2013
 
 %   AUTHOR: Hagen Wierstorf
@@ -170,7 +172,7 @@ if flags.do_fig1
     src = 'ps';
     % Intra-loudspeaker distance on the stereo setup
     L = 2;
-  
+
     output = amt_cache('get','fig1',flags.cachemode);
     if isempty(output),
         [loc_error,aud_event,~,xaxis,yaxis,x0] = ...
@@ -218,8 +220,8 @@ elseif flags.do_fig3
     % disable WFS pre-equalization filter for cleaner plot
     conf.wfs.usehpre = false;
 
-  
-    output = amt_cache('get','fig3',flags.cachemode); 
+
+    output = amt_cache('get','fig3',flags.cachemode);
     if isempty(output)
         % get secondary sources and tapering window for plotting
         x0 = secondary_source_positions(conf);
@@ -237,7 +239,7 @@ elseif flags.do_fig3
         % (d)
         t = 1.5 / conf.c;
         P_d = sound_field_imp_wfs(X,Y,Z,xs,src,t,conf);
-                
+
                 output.P_a = P_a;
                 output.P_b = P_b;
                 output.P_c = P_c;
@@ -397,7 +399,7 @@ end;
 %% ------ F I G U R E  9 -------------------------------------------------
 if flags.do_fig9
 
-    [phi_auditory_event,phi_sound_event] = amt_cache('get', 'fig9', flags.cachemode);      
+    [phi_auditory_event,phi_sound_event] = amt_cache('get', 'fig9', flags.cachemode);
     if isempty(phi_auditory_event)
         % Sound Field Synthesis Toolbox settings
         conf = SFS_config;
@@ -562,8 +564,8 @@ if flags.do_fig11a
     src = 'ps';
     % array size
     L = 2.85;
-  
-    output = amt_cache('get', 'fig11a', flags.cachemode);      
+
+    output = amt_cache('get', 'fig11a', flags.cachemode);
     if isempty(output)
         amt_disp('Warning: this will take a long time!','progress');
         hrtf = SOFAload(fullfile(SOFAdbPath, ...
@@ -614,7 +616,7 @@ if flags.do_fig11a
                           'nls',15, ...
                           'hrtf',hrtf, ...
                           'array','linear');
-                                
+
         output.loc_error_3 = loc_error_3;
         output.loc_error_8 = loc_error_8;
         output.loc_error_15 = loc_error_15;
@@ -698,7 +700,7 @@ if flags.do_fig11b
     src = 'pw';
     % array size
     L = 2.85;
-  
+
     output = amt_cache('get', 'fig11b', flags.cachemode);
     if isempty(output)
         amt_disp('Warning: this will take a long time!','progress');
@@ -764,7 +766,7 @@ if flags.do_fig11b
         output.yaxis_31 = yaxis_31;
         output.xaxis_135 = xaxis_135;
         output.yaxis_135 = yaxis_135;
-        
+
         amt_cache('set', 'fig11b', output);
     end;
 
@@ -834,8 +836,8 @@ if flags.do_fig12a
     src = 'ps';
     % array size
     L = 3;
-  
-    output = amt_cache('get', 'fig12a', flags.cachemode);      
+
+    output = amt_cache('get', 'fig12a', flags.cachemode);
     if isempty(output)
         amt_disp('Warning: this will take a long time!','progress');
         hrtf = SOFAload(fullfile(SOFAdbPath, ...
@@ -971,7 +973,7 @@ if flags.do_fig12b
     % array size
     L = 3;
 
-    output = amt_cache('get', 'fig12b', flags.cachemode);      
+    output = amt_cache('get', 'fig12b', flags.cachemode);
     if isempty(output)
         amt_disp('Warning: this will take a long time!','progress');
         hrtf = SOFAload(fullfile(SOFAdbPath, ...
