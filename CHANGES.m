@@ -1,10 +1,12 @@
 %Changes throughout the release history of the AMT
 %   
-%   Version 0.9.9 (X.9.2017)
+%   Version 0.9.9 (September 2017)
 %   =========================
 % 
 %   - data_baumgartner2017 provided
+%   - data_baumgartner2017looming provided)
 %   - kelavas2015 improved (appears in the code and documentation now)
+%   - bug #78 fixed: hohmann2002_process did not work for multiband input signals.
 %
 %   Version 0.9.8 (12.7.2017)
 %   =========================
