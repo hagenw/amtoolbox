@@ -93,8 +93,4 @@ function [results] = moore1997(inSig,fs)
     specLoud(eL<=10^10 & eL>tQ) = specLoud2(eL<=10^10 & eL>tQ);
     specLoud(eL>10^10) = specLoud3(eL>10^10);
 
-    %% monaural/binaural loudness (= instantaneous loudness), short term loudness (STL), long term loudness (LTL)
-    results.monauralLoudness = sum(specLoud) * erbStep;     % integrate over the erbs
-    results.binauralLoudness = 2*results.monauralLoudness;  % integrate moore2007 model (Modeling binaural loudness) for better results
-
-end
+    %% monaural/binaural loudness (= instantaneous loudness), short term loudness (STL), l

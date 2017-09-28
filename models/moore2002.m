@@ -169,18 +169,4 @@ function [results] = moore2002(inSig,fs)
         else
             STL(ii) = rSTL*results.binauralLoudness(ii)+(1-rSTL)*STL(ii-1);
         end
-        if STL(ii)>LTL(ii-1)
-            LTL(ii) = aLTL*STL(ii)+(1-aLTL)*LTL(ii-1);
-        else
-            LTL(ii) = rLTL*STL(ii)+(1-rLTL)*LTL(ii-1);
-        end
-    end
-    results.STL = STL;
-    results.LTL = LTL;
-%     figure
-%     plot(STL)
-%     figure
-%     plot(LTL)
-    
-    
-end
+        if STL(ii)
