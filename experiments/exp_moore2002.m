@@ -8,10 +8,6 @@ function [dataOut] = exp_moore2002(varargin)
 %
 %   The following flags can be specified;
 %
-%     'fig5'    Reproduce Fig. 5 of moore1997.
-%
-%     'fig8'    Reproduce Fig. 8 of moore1997.
-%
 %     'fig1'    Reproduce Fig. 1 of moore2002.
 %
 %     'fig1b'    Similar to fig1 but using 2006 revised data for middle ear
@@ -21,15 +17,15 @@ function [dataOut] = exp_moore2002(varargin)
 %
 %     'fig3'    Reproduce Fig. 3 of moore2002.
 %
-%     'fig5b'    Reproduce Fig. 5 of moore2002.
+%     'fig5'    Reproduce Fig. 5 of moore2002.
 %
 
 
 %% Retrieve and compute model paramters
     % Set flags
 
-    definput.flags.type = {'missingflag','fig5','fig8','fig1','fig1b','fig2',...
-                                           'fig3','fig5b'};
+    definput.flags.type = {'missingflag','fig1','fig1b','fig2',...
+                                           'fig3','fig5'};
 
     [flags,kv]  = ltfatarghelper({},definput,varargin);
 
@@ -39,26 +35,6 @@ function [dataOut] = exp_moore2002(varargin)
            definput.flags.type{end})];
            error('%s: You must specify one of the following flags: %s.',...
                  upper(mfilename),flagnames);
-    end
-
-
-
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %% Figure 5
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    if flags.do_fig5
-        fs = 32000;
-        t = linspace(0,1,fs);
-        inSig = sin(2*pi*1000*t).';
-        results = moore2002(inSig,fs);
-        semilogx(results.eLdB(500,:))
-    end
-
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %% Figure 8
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    if flags.do_fig8
-
     end
 
 
@@ -106,7 +82,7 @@ function [dataOut] = exp_moore2002(varargin)
 
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %% Figure 5b (Fig. 5 of moore2002)
+    %% Figure 5
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if flags.do_fig5b
 

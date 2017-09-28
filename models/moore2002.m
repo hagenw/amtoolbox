@@ -123,7 +123,7 @@ function [results] = moore2002(inSig,fs)
         eL(ii,:) = sum(squeeze(e(ii,:,:)),1);   % sum excitation level in each erb
     end
     results.eLdB = 10*log10(eL./(20e-6)^2);
-
+    results.erbN = erbN;
     % plot excitation pattern at some time
     % figure
     % plot(erbN,results.eLdB(50,:))
