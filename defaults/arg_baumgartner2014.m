@@ -8,7 +8,7 @@ definput.flags.settings = {'notprint','print'};
 definput.flags.cp={'fwstd','std','xcorr'};
 
 definput.keyvals.fs=48000;      % sampling rate in Hz
-definput.keyvals.S=0.5;         % listener-specific sensitivity
+definput.keyvals.S=0.7;         % listener-specific sensitivity (mean S of data_baumgartner2014 pool)
 definput.keyvals.lat=0;         % lateral angle in deg
 definput.keyvals.stim=[];
 definput.keyvals.fsstim=[];

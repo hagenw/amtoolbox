@@ -159,6 +159,7 @@ if isstruct(target) % Targets given in SOFA format
 end
 
 if isstruct(template) % Template given in SOFA format
+  fs_tem = template.Data.SamplingRate;
   [template,kv.polsamp] = extractsp( kv.lat,template );
 end
 
@@ -174,6 +175,10 @@ end
 dimtar = size(target); % for lconv dim check
 
 if not(isempty(kv.stim))
+  if not(kv.fsstim == kv.fs)
+    fsgcd = gcd(kv.fs,kv.fsstim);
+    kv.stim = resample(kv.stim,kv.fs/fsgcd,kv.fsstim/fsgcd);
+  end
   target = lconv(target,kv.stim);
 end
 
@@ -185,7 +190,7 @@ end
 %% Spectral Analysis, Eq.(2)
 
 [ireptar,fc] = baumgartner2014_spectralanalysis(target,'argimport',flags,kv);
-ireptem = baumgartner2014_spectralanalysis(template,'argimport',flags,kv);
+ireptem = baumgartner2014_spectralanalysis(template,'argimport',flags,kv,'fs',fs_tem);
 
 
 %% Positive spectral gradient extraction, Eq.(3)

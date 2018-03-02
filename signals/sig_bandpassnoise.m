@@ -1,7 +1,7 @@
 function outsig = sig_bandpassnoise(fc,fs,dur,l,bw)
 %sig_bandpassnoise  Generates a bandpass-noise-type masker
 %
-%   Usage:   outsig = sig_bandpassnoise(fs,fc,dur,l,bw)
+%   Usage:   outsig = sig_bandpassnoise(fc,fs,dur,l,bw)
 %
 %   `outsig = sig_bandpassnoise(fc,fs,dur,l,bw)` generates a bandpass-noise
 %   masker with duration `dur` (in sec), overall level `l` (in dB SPL) and
