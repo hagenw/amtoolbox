@@ -82,7 +82,7 @@ if flags.do_pool || flags.do_baseline
              
     for ii = 1:length(data)
       
-      data(ii).S = 0.5; % default sensitivity
+      data(ii).S = kv.S; % default sensitivity
       
       data(ii).Obj = SOFAload(...
         fullfile(SOFAdbPath,'baumgartner2014',...

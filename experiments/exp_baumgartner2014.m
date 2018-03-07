@@ -75,6 +75,7 @@ function varargout = exp_baumgartner2014(varargin)
 %               Horizontal lines represent 25th, 50th, and 75th percentiles, 
 %               the whiskers represent 5th and 95th percentiles, and crosses 
 %               represent minima and maxima. Circles and squares denote mean values.
+%               Dimensions of 
 %
 %     'fig10'   Reproduce Fig.10:
 %               Effect of spectral ripples. Actual experimental results (circles) 
@@ -1892,7 +1893,7 @@ if flags.do_fig9
 
     amt_cache('set','nonindividual',qe_pool,pe_pool,pb_pool);
   end
-  varargout{1} = {qe_pool,pe_pool,pb_pool};
+  varargout{1} = struct('qe',qe_pool,'pe',pe_pool,'pb',pb_pool,'dimensions',{'listener (template)','ears (target)'});
   
   data = data_middlebrooks1999;
   
