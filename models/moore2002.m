@@ -123,7 +123,7 @@ function [results] = moore2002(inSig,fs)
         eL(ii,:) = sum(squeeze(e(ii,:,:)),1);   % sum excitation level in each erb
     end
     results.eLdB = 10*log10(eL./(20e-6)^2);
-
+    results.erbN = erbN;
     % plot excitation pattern at some time
     % figure
     % plot(erbN,results.eLdB(50,:))
@@ -172,15 +172,4 @@ function [results] = moore2002(inSig,fs)
         if STL(ii)>LTL(ii-1)
             LTL(ii) = aLTL*STL(ii)+(1-aLTL)*LTL(ii-1);
         else
-            LTL(ii) = rLTL*STL(ii)+(1-rLTL)*LTL(ii-1);
-        end
-    end
-    results.STL = STL;
-    results.LTL = LTL;
-%     figure
-%     plot(STL)
-%     figure
-%     plot(LTL)
-    
-    
-end
+            LTL(ii) = rLTL*STL(ii)+(1-rLTL)*

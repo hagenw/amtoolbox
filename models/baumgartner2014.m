@@ -32,12 +32,16 @@ function varargout = baumgartner2014( target,template,varargin )
 %               defined in *errorflag*
 %     pred    : structure with fields *p*, *rang*, *tang*
 %
+%   Description: 
+%   ------------
+%
 %   `baumgartner2014(...)` is a model for sound-source localization
 %   in sagittal planes (SPs). It bases on the comparison of internal sound 
 %   representation with a template and results in a probabilistic
 %   prediction of polar angle response.
 %
-%   `baumgartner2014` accepts the following optional parameters:
+%   Additional input parameters: 
+%   ----------------------------
 %
 %     'fs',fs        Define the sampling rate of the impulse responses. 
 %                    Default value is 48000 Hz.
@@ -121,6 +125,8 @@ function varargout = baumgartner2014( target,template,varargin )
 %   baumgartner2014_gradientextraction, baumgartner2014_comparisonprocess,
 %   baumgartner2014_similarityestimation, baumgartner2014_binauralweighting,
 %   baumgartner2014_sensorimotormapping
+%
+%   See also: baumgartner2014_pmv2ppp baumgartner2014_virtualexp 
 %
 %   References: baumgartner2014modeling lyon1997
   

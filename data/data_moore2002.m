@@ -57,7 +57,10 @@ function data = data_moore2002(varargin)
         tfMiddleInterp = interp1(fMiddle, tfMiddle, kv.fVec, 'pchip');
 
         data.tfOuterMiddle = tfOuterInterp + tfMiddleInterp;
-
+        data.tfOuter = tfOuter;
+        data.tfMiddle = tfMiddle;
+        data.fOuter = fOuter;
+        data.fMiddle = fMiddle;
     end
 
     %% Returns revised transfer function of outer and middle ear as in ANSI S3.4-2007
