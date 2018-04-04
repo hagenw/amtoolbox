@@ -63,7 +63,7 @@ function data = exp_baumgartner2017(varargin)
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
 definput.import={'amt_cache'};
-definput.flags.type = {'missingflag','boyd2012','hartmann1996','hassager2016'};
+definput.flags.type = {'missingflag','boyd2012','hartmann1996','hassager2016','baumgartner2017'};
 definput.flags.quickCheck = {'','quickCheck'};
 definput.keyvals.Sintra = 2;
 definput.keyvals.Sinter = 2;
@@ -211,34 +211,48 @@ end
 %% Boyd et al. (2012)
 if flags.do_boyd2012
   flp = [nan,6500]; % Low-pass cut-off frequency
-  ele = 0; 
+%   ele = 0; 
   azi = -30;
-  data = data_boyd2012;
+%   data = data_boyd2012;
   
+  subjects = data_boyd2012;
+  subjects = subjects([3,6,7]); % only the ones with BRIRs
+  mix = subjects(1).Resp.mix/100;
+    
   fncache = ['boyd2012_Sintra',num2str(kv.Sintra*100,'%i'),'_Sinter',num2str(kv.Sinter*100,'%i')];
   E = amt_cache('get',fncache,flags.cachemode);
   if isempty(E)
     
-    Eboyd = cat(3,[data.ITE.BB(:),data.BTE.BB(:)],[data.ITE.LP(:),data.BTE.LP(:)]);
-    mix = data.mix/100;
+%     Eboyd = cat(3,[data.ITE.BB(:),data.BTE.BB(:)],[data.ITE.LP(:),data.BTE.LP(:)]);
+    mix(1) = 1;
 
     %%
     sig = noise(50e3,1,'pink');
-    BTE = data_baumgartner2017('BTE');
-    subjects = data_baumgartner2017;
-    if flags.do_quickCheck
-      subjects = subjects(1:5);
-    end
-    fs = subjects(1).Obj.Data.SamplingRate;
+%     BTE = data_baumgartner2017('BTE');
+%     subjects = data_baumgartner2017;
+%     if flags.do_quickCheck
+%       subjects = subjects(1:5);
+%     end
+%     fs = subjects(1).Obj.Data.SamplingRate;
+    fs = subjects(1).BRIR.fs;
+    [b,a]=butter(10,2*flp(2)/fs,'low');
 
-    Ebaum = nan([size(Eboyd),length(subjects)]);
+%     Ebaum = nan([size(Eboyd),length(subjects)]);
+    Ebaum = nan([length(mix),2,2,length(subjects)]);
     Ehass = Ebaum;
+    Eboyd = Ebaum;
     for isub = 1:length(subjects)
-      ITE = subjects(isub).Obj;
+      Eboyd(:,:,:,isub) = cat(3,...
+        [subjects(isub).Resp.ITE_BB_oneT(:),subjects(isub).Resp.BTE_BB_oneT(:)],...
+        [subjects(isub).Resp.ITE_LP_oneT(:),subjects(isub).Resp.BTE_LP_oneT(:)]);
+%       ITE = subjects(isub).Obj;
+      stim{1} = lconv(sig,subjects(isub).BRIR.ITE(:,:,1));
+      stim{2} = lconv(sig,subjects(isub).BRIR.BTE(:,:,1));
+      stim{3} = lconv(sig,subjects(isub).BRIR.noHead(:,:,1));
 
       %% Unmixed stimuli
-      stim{1} = SOFAspat(sig,ITE,azi,ele);
-      stim{2} = SOFAspat(sig,BTE.Obj,azi,ele);
+%       stim{1} = SOFAspat(sig,ITE,azi,ele);
+%       stim{2} = SOFAspat(sig,BTE.Obj,azi,ele);
       template = stim{1};
 
       %% Model simulations
@@ -247,7 +261,13 @@ if flags.do_boyd2012
       for c = 1:2
         for lp = 1:2
           for m = 1:length(mix)
-            target{m,c,lp} = sig_boyd2012(stim{c},sig,mix(m),flp(lp),fs);
+%             target{m,c,lp} = sig_boyd2012(stim{c},sig,mix(m),flp(lp),fs);
+            % mixing
+            target{m,c,lp} = mix(m)*stim{c} + (1-mix(m))*stim{3};
+            % low-pass filtering
+            if lp == 2
+              target{m,c,lp} = filter(b,a,target{m,c,lp});
+            end
 % % Description in paper is ambiguous about whether broadband ILDs were
 % % adjusted to the template:
 %           temSPL = dbspl(template); 
@@ -269,7 +289,8 @@ if flags.do_boyd2012
     Ebaum = mean(Ebaum,4);
     seEhass = std(Ehass,0,4);
     Ehass = mean(Ehass,4);
-    seEboyd = 0*seEhass;
+    seEboyd = std(Eboyd,0,4);
+    Eboyd = mean(Eboyd,4);
 
     E.m = {Eboyd,Ehass,Ebaum};
     E.se = {seEboyd,seEhass,seEbaum};
@@ -285,10 +306,11 @@ if flags.do_boyd2012
   symb = {'ko','bs','rd'};
   condLbl = {'ITE / BB','BTE / BB','ITE / LP','BTE / LP'};
   hax = tight_subplot(1,4,0,[.15,.1],[.1,.05]);
+  mix = mix(2:end)*100;
   for cc = 1:length(condLbl)
     axes(hax(cc))
     for ee = 1:length(E.m)
-      h = errorbar(data.mix,E.m{ee}(:,cc),E.se{ee}(:,cc),['-',symb{ee}]);
+      h = errorbar(mix,E.m{ee}(2:end,cc),E.se{ee}(2:end,cc),['-',symb{ee}]);
       set(h,'MarkerFaceColor','w')
       hold on
     end
@@ -309,11 +331,85 @@ if flags.do_boyd2012
 %   set(leg,'Location','eastoutside','Position',get(leg,'Position')+[.1,.2,0,0])
 end
 
+if flags.do_baumgartner2017
+  
+  % Behavioral results
+  fncache = 'baumgartner2017_E_BTL';
+  data = amt_cache('get',fncache,flags.cachemode);
+  if isempty(data)
+    exp2 = data_baumgartner2017looming('exp2');
+    Nsubj = length(exp2.meta.subject);
+    iISI = exp2.meta.ISI == 0.1;
+    iresp = strcmp(exp2.meta.response,'approaching');
+    A = {1;2;3}; % arbitrary indices to define BTL model
+  %   Alabel = {'C = 0','C = 0.5','C = 1'};
+    data.C = 0:0.5:1;
+    data.subj = exp2.meta.subject;
+    data.Escore = nan(Nsubj,length(A));
+    data.BTL_chistat = nan(Nsubj,1);
+    data.azi = [exp2.rawData.azimuth];
+    M = zeros(3,3);
+    iM = [7,4,8,3,2,6];
+    for ss = 1:Nsubj
+      M(iM) = exp2.data(ss,1:6,iresp,iISI);
+      [E,tmp] = OptiPt(M,A);
+      data.BTL_chistat(ss) = tmp(1);
+      data.Escore(ss,:) = E/max(E);
+    end
+    amt_cache('set',fncache,data)
+  end
+  Nsubj = length(data.subj);
+  
+  hrtf = data_baumgartner2017looming('exp2','hrtf');
+  
+  % Modeling
+  fncache = ['baumgartner2017_Sintra',num2str(kv.Sintra*100,'%i'),'_Sinter',num2str(kv.Sinter*100,'%i')];
+  Pext = amt_cache('get',fncache,flags.cachemode);
+  if isempty(Pext)
+    
+    Pext = nan(length(data.C),Nsubj);
+    Pext = {Pext,Pext};
+    for isubj = 1:Nsubj
+      template = hrtf(ismember({hrtf.id},data.subj(isubj))).Obj;
+      for iC = 1:length(data.C)
+        target = sig_baumgartner2017looming(template,data.C(iC));
+        Pext{1}(iC,isubj) = baumgartner2017(target,template,'S',kv.Sinter,...
+          'lat',data.azi(isubj),'flow',1000,'fhigh',18e3,'interaural','c1',1,'c2',0);
+        Pext{2}(iC,isubj) = baumgartner2017(target,template,'S',kv.Sintra,...
+          'lat',data.azi(isubj),'flow',1000,'fhigh',18e3,'c1',1,'c2',0);
+      end
+      amt_disp([num2str(isubj),' of ',num2str(Nsubj),' subjects completed.'],'progress')
+    end
+    amt_cache('set',fncache,Pext);
+  end
+  
+  % MSE Evaluation
+  MSPE = mean((data.Escore - Pext{1}').^2,2);
+  MSPE(:,2) = mean((data.Escore - Pext{2}').^2,2);
+  amt_disp(['Mean squared error of interaural model: ',num2str(mean(MSPE(:,1)))])
+  amt_disp(['Mean squared error of  monaural  model: ',num2str(mean(MSPE(:,2)))])
+  
+  % Figure
+  E_all = [{data.Escore'},Pext];
+  dataLbl = {'Actual','Interaural','Monaural'};
+  symb = {'-ko','-bs','-rd'};
+  figure
+  for iE = 1:length(E_all)
+    h = errorbar(data.C,mean(E_all{iE},2),std(E_all{iE},0,2)/sqrt(Nsubj),symb{iE});
+    set(h,'MarkerFaceColor','w')
+    hold on
+  end
+  set(gca,'XTick',data.C)
+  ylabel('Externalization')
+  xlabel('Spectral contrast, C')
+  legend(dataLbl,'Location','southeast')
+  
+end
 
 
 
 
-
+end
 
 %%%%%%%%%% INTERNAL FUNCTIONS FOR VISUALIZATION %%%%%%%%%%
 function ha = tight_subplot(Nh, Nw, gap, marg_h, marg_w)
@@ -379,4 +475,141 @@ for ih = 1:Nh
 end
 end
 
+
+function [p,chistat,u,lL_eba,lL_sat,fit,cova] = OptiPt(M,A,s)
+% OptiPt parameter estimation for BTL/Pretree/EBA models
+%   p = OptiPt(M,A) estimates the parameters of a model specified
+%   in A for the paired-comparison matrix M. M is a matrix with
+%   absolute frequencies. A is a cell array.
+%
+%   [p,chistat,u] = OptiPt(M,A) estimates parameters and reports
+%   the chi2 statistic as a measure of goodness of fit. The vector
+%   of scale values is stored in u.
+%
+%   [p,chistat,u,lL_eba,lL_sat,fit,cova] = OptiPt(M,A,s) estimates
+%   parameters, checks the goodness of fit, computes the scale values,
+%   reports the log-likelihoods of the model specified in A and of the
+%   saturated model, returns the fitted values and the covariance
+%   matrix of the parameter estimates. If defined, s is the starting
+%   vector for the estimation procedure. Otherwise each starting value
+%   is set to 1/length(p).
+%   The minimization algorithm used is FMINSEARCH.
+%
+%   Examples
+%     Given the matrix M = 
+%                            0    36    35    44    25
+%                           19     0    31    37    20
+%                           20    24     0    46    24
+%                           11    18     9     0    13
+%                           30    35    31    42     0
+%
+%     A BTL model is specified by A = {[1];[2];[3];[4];[5]}
+%     Parameter estimates and the chi2 statistic are obtained by
+%       [p,chistat] = OptiPt(M,A)
+%
+%     A Pretree model is specified by A = {[1 6];[2 6];[3 7];[4 7];[5]} 
+%     A starting vector is defined by s = [2 2 3 4 4 .5 .5]
+%     Parameter estimates, the chi2 statistic, the scale values, the
+%     log-likelihoods of the Pretree model and of the saturated model,
+%     the fitted values, and the covariance matrix are obtained by
+%       [p,chistat,u,lL_eba,lL_sat,fit,cova] = OptiPt(M,A,s)
+%
+% Authors: Florian Wickelmaier (wickelmaier@web.de) and Sylvain Choisel
+% Last mod: 03/JUL/2003
+% For detailed information see Wickelmaier, F. & Schmid, C. (2004). A Matlab
+% function to estimate choice model parameters from paired-comparison data.
+% Behavior Research Methods, Instruments, and Computers, 36(1), 29-40.
+
+I = length(M);  % number of stimuli
+mmm = 0;
+for i = 1:I
+  mmm = [mmm max(A{i})];
+end
+J = max(mmm);  % number of pt parameters
+if(nargin == 2)
+  p = ones(1,J)*(1/J);  % starting values
+elseif(nargin == 3)
+  p = s;
+end
+
+for i = 1:I
+  for j = 1:I
+    diff{i,j} = setdiff(A{i},A{j});  % set difference
+  end
+end
+
+p = fminsearch(@ebalik,p,optimset('Display','iter','MaxFunEvals',10000,...
+    'MaxIter',10000),M,diff,I);  % optimized parameters
+lL_eba = -ebalik(p,M,diff,I);  % likelihood of the specified model
+
+lL_sat = 0;  % likelihood of the saturated model
+for i = 1:I-1
+  for j = i+1:I
+    lL_sat = lL_sat + M(i,j)*log(M(i,j)/(M(i,j)+M(j,i)))...
+                    + M(j,i)*log(M(j,i)/(M(i,j)+M(j,i)));
+  end
+end
+
+fit = zeros(I);  % fitted PCM
+for i = 1:I-1
+  for j = i+1:I
+    fit(i,j) = (M(i,j)+M(j,i))/(1+sum(p(diff{j,i}))/sum(p(diff{i,j})));
+    fit(j,i) = (M(i,j)+M(j,i))/(1+sum(p(diff{i,j}))/sum(p(diff{j,i})));
+  end
+end
+
+chi = 2*(lL_sat-lL_eba);
+df =  I*(I-1)/2 - (J-1);
+chistat = [chi df];  % 1-chi2cdf(chi,df)];  % goodness-of-fit statistic
+
+u = sum(p(A{1}));  % scale values
+for i = 2:I
+  u = [u sum(p(A{i}))];
+end
+
+H = hessian('ebalik',p',M,diff,I);
+C = inv([H ones(J,1); ones(1,J) 0]);
+cova = C(1:J,1:J);
+end
+
+function lL_eba = ebalik(p,M,diff,I)  % computes the likelihood
+
+if min(p)<=0  % bound search space
+  lL_eba = inf;
+  return
+end
+
+thesum = 0;
+for i = 1:I-1
+  for j = i+1:I
+    thesum = thesum + M(i,j)*log(1+sum(p(diff{j,i}))/sum(p(diff{i,j})))...
+                    + M(j,i)*log(1+sum(p(diff{i,j}))/sum(p(diff{j,i})));
+  end
+end
+lL_eba = thesum;
+end
+
+function H = hessian(f,x,varargin)  % computes numerical Hessian
+% based on a solution posted on Matlab Central by Paul L. Fackler
+
+k = size(x,1);
+fx = feval(f,x,varargin{:});
+h = eps.^(1/3)*max(abs(x),1e-2);
+xh = x+h;
+h = xh-x;
+ee = sparse(1:k,1:k,h,k,k);
+
+g = zeros(k,1);
+for i = 1:k
+  g(i) = feval(f,x+ee(:,i),varargin{:});
+end
+
+H = h*h';
+for i = 1:k
+  for j = i:k
+    H(i,j) = (feval(f,x+ee(:,i)+ee(:,j),varargin{:})-g(i)-g(j)+fx)...
+                 / H(i,j);
+    H(j,i) = H(i,j);
+  end
+end
 end

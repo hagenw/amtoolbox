@@ -64,6 +64,16 @@ function [E,varargout] = baumgartner2017( target,template,varargin )
 %     'bwcoef',bwc   Set the binaural weighting coefficient *bwc*.
 %                    Default value is 13 degrees.
 %
+%     'c1',c1        Set the scaling factor of the externalization score to *c1*.
+%                    Default value is 3.78 from Hassager et al. (2016).
+%
+%     'c2',c2        Set the offset of the externalization score to *c2*.
+%                    Default value is 1 from Hassager et al. (2016).
+%
+%     'JND',JND      Set the just noticeable difference *JND* from the 
+%                    internal template. Default value is 1.5 (dB).
+%                    
+%
 %   Requirements: 
 %   -------------
 %
@@ -86,10 +96,9 @@ definput.keyvals.tempWin = 1; % temporal integration window in sec
 definput.flags.normalize = {'regular','normalize'};
 definput.flags.cueProcessing = {'intraaural','interaural'};
 definput.flags.middleEarFilter = {'','middleEarFilter'};
-definput.keyvals.JND = 1.5;
-definput.keyvals.c1 = 3.78;
-definput.keyvals.c2 = 1;
-definput.keyvals.z1 = 0.99;
+definput.keyvals.JND = 1.5; % JND from reference
+definput.keyvals.c1 = 3.78; % scaling of externalization score
+definput.keyvals.c2 = 1; % offset of externalization score
 
 [flags,kv]=ltfatarghelper(...
   {'fs','S','lat','stim','space','do','flow','fhigh',... %'fsstim'

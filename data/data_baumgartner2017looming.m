@@ -52,6 +52,9 @@ function varargout = data_baumgartner2017looming( varargin )
 %                 Error bars reflect SEM.
 %     'fig3b'     Extracted N1 and P2 amplitudes evoked by stimulus switch.
 %                 Error bars reflect SEM.
+%     'fig3c'     Significant cluster in time and space that is distinctive 
+%                 between decreasing and increasing spectral contrasts. (no
+%                 plotting)
 %
 %   Additional flags may be:
 %
@@ -217,13 +220,16 @@ if flags.do_nofig
     if flags.do_stat && ~verLessThan('matlab','8.2')
       % ANOVA
       pc = reshape(cat(2,meas(:,1:3,1,:),meas(:,4:6,2,:)),Nsubj,[]); % percent correct
+      out.pcorrect.data = pc;
       DV = array2table(pc);
       contrast = strrep(condLabelPlot(1:3),'\leftrightarrow','-');
       contrast = repmat(contrast,[2*nISI,1]);
+      out.pcorrect.contrast = contrast;
       direction = cell(6,1);
       direction(1:3) = {'receding'};
       direction(4:6) = {'approaching'};
       direction = repmat(direction,[nISI,1]);
+      out.pcorrect.direction = direction;
       idISI = ceil((1:6*nISI)/6);
       ISInom = nominal(ISI(idISI))';
       IVs = table(contrast,direction,ISInom);

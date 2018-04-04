@@ -3,7 +3,7 @@ function varargout = exp_baumgartner2016(varargin)
 %   Usage: data = exp_baumgartner2016(flag)
 %
 %   `exp_baumgartner2016(flag)` reproduces figures of the study from 
-%   Baumgartner et al. (2014).
+%   Baumgartner et al. (2016).
 %
 %   The following flags can be specified
 %
