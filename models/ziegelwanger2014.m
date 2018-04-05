@@ -1,4 +1,4 @@
-function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0_onaxis)
+function [Obj,results]=ziegelwanger2014(Obj,varargin)
 %ZIEGELWANGER2014 Time of arrival estimates
 %   Usage: [Obj,results]=ziegelwanger2014(data,estimation,outlierDetection,model,p0_onaxis) 
 %
@@ -47,8 +47,9 @@ function [Obj,results]=ziegelwanger2014(Obj,estimation,outlierDetection,model,p0
 %
 %   References: ziegelwanger2014
 
-% AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna,
-% Austria
+% AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna, Austria
+% 2018/04/05, Robert Baumgartner: modified to incorporate ltfatarghelper
+
 
 %% ----------------------------convert to SOFA-----------------------------
 if ~isfield(Obj,'GLOBAL_Version')
@@ -56,37 +57,18 @@ if ~isfield(Obj,'GLOBAL_Version')
 end
 
 %% ----------------------------check variables-----------------------------
-if ~exist('estimation','var')
-    estimation=4;
-else if isempty(estimation)
-        estimation=4;
-    end
-end
 
-if ~exist('outlierDetection','var')
-    outlierDetection=[0.05;0.01];
-else if isempty(outlierDetection) || (isscalar(outlierDetection) && outlierDetection(1)>0)
-        outlierDetection=[0.05;0.01];
-    end
-end
-outlierDetection=prod(outlierDetection);
+% definput.import={'itdestimator'};
+definput.keyvals.estimation = 4;
+definput.keyvals.outlierDetection = [0.05;0.01];
+definput.keyvals.model=1e-6;
+definput.keyvals.p0_onaxis=[[0.0875; pi/2; 0; 0] [0.0875; -pi/2; 0; 0]];
+[flags,kv]=ltfatarghelper({'estimation','outlierDetection','model','p0_onaxis'},definput,varargin);
 
-if ~exist('model','var')
-    model=1e-6;
-else if isempty(model) || model==1
-        model=1e-6;
-    end
-end
-
-if ~exist('p0_onaxis','var')
-    p0_onaxis=[[0.0875; pi/2; 0; 0] [0.0875; -pi/2; 0; 0]];
-else if isempty(p0_onaxis)
-        p0_onaxis=[[0.0875; pi/2; 0; 0] [0.0875; -pi/2; 0; 0]];
-    end
-end
+estimation = kv.estimation;
 
 %% -------------------------initialize variables---------------------------
-p0_onaxis=transpose(p0_onaxis);
+p0_onaxis=transpose(kv.p0_onaxis);
 p_onaxis=zeros(size(p0_onaxis));
 p0_offaxis=zeros(2,7);
 p_offaxis=p0_offaxis;
@@ -140,7 +122,7 @@ else
 end
 
 %% --------------------Detect-Outliers-in-estimated-TOA--------------------
-if outlierDetection>0
+if kv.outlierDetection>0
     for ch=1:Obj.API.R
         p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/Obj.Data.SamplingRate;
         p0offset_onaxis=[0.06 pi pi/2 0.001];
@@ -151,13 +133,13 @@ if outlierDetection>0
         else
             tmp=lsqcurvefit(@ziegelwanger2014_onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
         end
-        [~,idx]=deleteoutliers(toaEst(:,ch)-ziegelwanger2014_onaxis(tmp,pos(:,1:2)*pi/180)*Obj.Data.SamplingRate,outlierDetection*Obj.API.M);
+        [~,idx]=deleteoutliers(toaEst(:,ch)-ziegelwanger2014_onaxis(tmp,pos(:,1:2)*pi/180)*Obj.Data.SamplingRate,kv.outlierDetection*Obj.API.M);
         indicator(idx,ch)=ones(length(idx),1);
     end
 end
     
 %% ----------------------Fit-Models-to-estimated-TOA-----------------------
-if model>0
+if kv.model>0
     % Fit on-axis model to outlier adjusted set of estimated TOAs
     for ch=1:Obj.API.R
         p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/Obj.Data.SamplingRate;
@@ -178,7 +160,7 @@ if model>0
     toa_onaxis=toa;
 
     % Fit off-axis model to outlier adjusted set of estimated TOAs
-    if model~=2
+    if kv.model~=2
         for ch=1:Obj.API.R
             idx=find(indicator(:,ch)==0);
             x=pos(idx,1:2)*pi/180;
@@ -189,7 +171,7 @@ if model>0
                 fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
             else
                 [p_offaxis(ch,:),performance.off_axis{ch}.resnormS,performance.off_axis{ch}.residualS,performance.off_axis{ch}.exitflag,performance.off_axis{ch}.output]=...
-                    lsqcurvefit(@ziegelwanger2014_offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',model));
+                    lsqcurvefit(@ziegelwanger2014_offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',kv.model));
                 toa(:,ch)=ziegelwanger2014_offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
             end
             performance.off_axis{ch}.resnormS=sqrt(performance.off_axis{ch}.resnormS/(Obj.API.M-sum(indicator(:,ch))));
