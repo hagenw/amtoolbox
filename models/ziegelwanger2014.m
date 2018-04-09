@@ -66,6 +66,7 @@ definput.keyvals.p0_onaxis=[[0.0875; pi/2; 0; 0] [0.0875; -pi/2; 0; 0]];
 [flags,kv]=ltfatarghelper({'estimation','outlierDetection','model','p0_onaxis'},definput,varargin);
 
 estimation = kv.estimation;
+outlierDetection = prod(kv.outlierDetection);
 
 %% -------------------------initialize variables---------------------------
 p0_onaxis=transpose(kv.p0_onaxis);
@@ -122,7 +123,7 @@ else
 end
 
 %% --------------------Detect-Outliers-in-estimated-TOA--------------------
-if kv.outlierDetection>0
+if outlierDetection>0
     for ch=1:Obj.API.R
         p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/Obj.Data.SamplingRate;
         p0offset_onaxis=[0.06 pi pi/2 0.001];
@@ -133,7 +134,7 @@ if kv.outlierDetection>0
         else
             tmp=lsqcurvefit(@ziegelwanger2014_onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
         end
-        [~,idx]=deleteoutliers(toaEst(:,ch)-ziegelwanger2014_onaxis(tmp,pos(:,1:2)*pi/180)*Obj.Data.SamplingRate,kv.outlierDetection*Obj.API.M);
+        [~,idx]=deleteoutliers(toaEst(:,ch)-ziegelwanger2014_onaxis(tmp,pos(:,1:2)*pi/180)*Obj.Data.SamplingRate,outlierDetection*Obj.API.M);
         indicator(idx,ch)=ones(length(idx),1);
     end
 end
