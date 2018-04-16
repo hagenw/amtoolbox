@@ -5,13 +5,50 @@ function [Obj,results]=ziegelwanger2014(Obj,varargin)
 %   Input parameters:
 %       Obj: SOFA object
 % 
-%       estimation: (optional) select one of the estimation methods (1: Threshold-Detection, 2: Centroid of squared IR, 3: Mean Groupdelay, 4: Minimal-Phase Cross-Correlation (Max) (default), [TOAest]: pre-estimated TOAs)
+%       estimation: (optional) select one of the estimation methods:
 %
-%       outlierDetection: (optional) detect outliers in estimated TOAs (0: off, 1: on (default values: [0.05;0.01]), [alpha r]: rejects outliers using the extreme Studentized deviance test with the significance level of ALPHA and upper bound of outlier rate R. )
+%                   Either:
+%                   (Based on the original ziegelwanger ITD estimtors)
 %
-%       model: (optional) correct estimated toa, using geometrical TOA-Model (0: TOA estimated, 1: off-axis TOA modeled (default), 2: on-axis TOA modeled)
+%                   (1: Threshold-Detection, 
+%                    2: Centroid of squared IR,
+%                    3: Mean Groupdelay,
+%                    4: Minimal-Phase Cross-Correlation (Max) (default),
+%                    [TOAest]: pre-estimated TOAs)
+%
+%                   Or:
+%                   (Based on 'itdestimator' function)
+%                   ('Threshold','Cen_e2','MaxIACCr', 'MaxIACCe', 'CenIACCr',.. 
+%                    'CenIACCe', 'CenIACC2e', 'PhminXcor','IRGD')
+%                   These have to be selected by i.e.:
+%                   ..,'estimation','Threshold',..
+%
+%                   While 4 is the standard, MaxIACCe is recommended.
+%
+%       outlierDetection: (optional) detect outliers in estimated TOAs
+%                   (0: off, 1: on (default values: [0.05;0.01]), 
+%                   [alpha r]: rejects outliers using the extreme 
+%                              Studentized deviance test with the
+%                              significance level of ALPHA and 
+%                              upper bound of outlier rate R. )
+%
+%       model: (optional) correct estimated toa, using geometrical TOA-Model
+%                   (0: TOA estimated, 
+%                    1: off-axis TOA modeled (default),
+%                    2: on-axis TOA modeled)
 %
 %       p0_onaxis: (optional) startvalues for lsqcurvefit
+%
+%       For 'itdestimator' estimation methods:
+%
+%       lowpass:    (optional) decide if a lowpass shall be applied. 
+%                   'lp' for lowpass, 'bb' for broadband
+% 
+%       upper_cutfreq: (optional) Set frequency of lowpass cutoff in Hz      
+%
+%       threshlvl: (optional) for the 'Threshold' ITD estimation method a 
+%                   threshold level can be specified in -dB
+%                   defined i.e. by: ..,'threshlvl','-30'...
 % 
 %   Output parameters:
 %       Obj: SOFA Object
@@ -49,6 +86,7 @@ function [Obj,results]=ziegelwanger2014(Obj,varargin)
 
 % AUTHOR: Harald Ziegelwanger, Acoustics Research Institute, Vienna, Austria
 % 2018/04/05, Robert Baumgartner: modified to incorporate ltfatarghelper
+% 2018/04/16, Laurin Steidle: modified to incorporate itdestimator
 
 
 %% ----------------------------convert to SOFA-----------------------------
@@ -58,12 +96,20 @@ end
 
 %% ----------------------------check variables-----------------------------
 
-% definput.import={'itdestimator'};
+definput.flags.lowpass = {'lp','bb'};
+definput.flags.peak = {'hp','fp'};
+    
 definput.keyvals.estimation = 4;
 definput.keyvals.outlierDetection = [0.05;0.01];
 definput.keyvals.model=1e-6;
 definput.keyvals.p0_onaxis=[[0.0875; pi/2; 0; 0] [0.0875; -pi/2; 0; 0]];
+
+definput.keyvals.threshlvl = -10;
+definput.keyvals.upper_cutfreq = 3000;
+
 [flags,kv]=ltfatarghelper({'estimation','outlierDetection','model','p0_onaxis'},definput,varargin);
+
+
 
 estimation = kv.estimation;
 outlierDetection = prod(kv.outlierDetection);
@@ -102,7 +148,8 @@ if isscalar(estimation)
         case 3 %---------------------------Groupdelay--------------------------
             for ii=1:Obj.API.M
                 for jj=1:Obj.API.R
-                    [Gd,F]=grpdelay(transpose(double(squeeze(hM(ii,jj,:)))),1,Obj.API.N*4,Obj.Data.SamplingRate*4);
+                    [Gd,F]=grpdelay(transpose(double(squeeze(hM(ii,jj,:)))),...
+                        1,Obj.API.N*4,Obj.Data.SamplingRate*4);
                     toaEst(ii,jj)=mean(Gd(find(F>1000):find(F>5000)));
                 end
             end
@@ -111,13 +158,18 @@ if isscalar(estimation)
             corrcoeff=zeros(Obj.API.M,Obj.API.R);
             for ii=1:Obj.API.M
                 for jj=1:Obj.API.R
-                    [c,lag]=xcorr(squeeze(hM(ii,jj,:)),squeeze(hMmin(ii,jj,:)),Obj.API.N*4-1,'none');
+                    [c,lag]=xcorr(squeeze(hM(ii,jj,:)),squeeze(hMmin(ii,jj,:)),...
+                        Obj.API.N*4-1,'none');
                     [corrcoeff(ii,jj),idx]=max(abs(c));
                     corrcoeff(ii,jj)=corrcoeff(ii,jj)/sum(hM(ii,jj,:).^2);
                     toaEst(ii,jj)=lag(idx);
                 end
             end
     end
+elseif ischar(estimation)
+    [~,toaEst] = itdestimator(Obj,estimation,flags.lowpass,flags.peak,'guesstoa');
+    toaEst = toaEst*Obj.Data.SamplingRate;
+    
 else
     toaEst=estimation;
 end
@@ -125,16 +177,21 @@ end
 %% --------------------Detect-Outliers-in-estimated-TOA--------------------
 if outlierDetection>0
     for ch=1:Obj.API.R
-        p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/Obj.Data.SamplingRate;
-        p0offset_onaxis=[0.06 pi pi/2 0.001];
-        x=pos(:,1:2)*pi/180;
-        y=toaEst(:,ch)/Obj.Data.SamplingRate;
+        p0_onaxis(ch,4) = min(toaEst(indicator(:,ch)==0,ch))/Obj.Data.SamplingRate;
+        p0offset_onaxis = [0.06 pi pi/2 0.001];
+        x               = pos(:,1:2)*pi/180;
+        y               = toaEst(:,ch)/Obj.Data.SamplingRate;
         if isoctave
-            fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
+            fprintf(strcat('Sorry! Octave is not supported.',...
+                               'This model requires MATLAB and the Optimization Toolbox!\n'))
         else
-            tmp=lsqcurvefit(@ziegelwanger2014_onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
+            tmp=lsqcurvefit(@ziegelwanger2014_onaxis,p0_onaxis(ch,:),...
+                x,y,p0_onaxis(ch,:)-p0offset_onaxis,...
+                p0_onaxis(ch,:)+p0offset_onaxis,...
+                optimset('Display','off','TolFun',1e-6));
         end
-        [~,idx]=deleteoutliers(toaEst(:,ch)-ziegelwanger2014_onaxis(tmp,pos(:,1:2)*pi/180)*Obj.Data.SamplingRate,outlierDetection*Obj.API.M);
+        outliers = toaEst(:,ch)-ziegelwanger2014_onaxis(tmp,pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
+        [~,idx]=deleteoutliers(outliers, outlierDetection*Obj.API.M);
         indicator(idx,ch)=ones(length(idx),1);
     end
 end
@@ -143,40 +200,63 @@ end
 if kv.model>0
     % Fit on-axis model to outlier adjusted set of estimated TOAs
     for ch=1:Obj.API.R
-        p0_onaxis(ch,4)=min(toaEst(indicator(:,ch)==0,ch))/Obj.Data.SamplingRate;
-        p0offset_onaxis=[0.06 pi pi/2 0.001];
-        idx=find(indicator(:,ch)==0);
-        x=pos(idx,1:2)*pi/180;
-        y=toaEst(idx,ch)/Obj.Data.SamplingRate;
+        p0_onaxis(ch,4) = min(toaEst(indicator(:,ch)==0,ch))/Obj.Data.SamplingRate;
+        p0offset_onaxis = [0.06 pi pi/2 0.001];
+        idx             = find(indicator(:,ch)==0);
+        x               = pos(idx,1:2)*pi/180;
+        y               = toaEst(idx,ch)/Obj.Data.SamplingRate;
         if isoctave
-            fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
+            fprintf(strcat('Sorry! Octave is not supported.',...
+               'This model requires MATLAB and the Optimization Toolbox!\n'))
         else
-            [p_onaxis(ch,:),performance.on_axis{ch}.resnormS,performance.on_axis{ch}.residualS,performance.on_axis{ch}.exitflag,performance.on_axis{ch}.output]=...
-                lsqcurvefit(@ziegelwanger2014_onaxis,p0_onaxis(ch,:),x,y,p0_onaxis(ch,:)-p0offset_onaxis,p0_onaxis(ch,:)+p0offset_onaxis,optimset('Display','off','TolFun',1e-6));
+            [p_onaxis(ch,:),performance.on_axis{ch}.resnormS,...
+             performance.on_axis{ch}.residualS,...
+             performance.on_axis{ch}.exitflag,...
+             performance.on_axis{ch}.output] =...
+                lsqcurvefit(@ziegelwanger2014_onaxis,p0_onaxis(ch,:),x,y,...
+                    p0_onaxis(ch,:)-p0offset_onaxis,...
+                    p0_onaxis(ch,:)+p0offset_onaxis,...
+                    optimset('Display','off','TolFun',1e-6));
             toa(:,ch)=ziegelwanger2014_onaxis(p_onaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
         end
-        performance.on_axis{ch}.resnormS=sqrt(performance.on_axis{ch}.resnormS/(Obj.API.M-sum(indicator(:,ch))));
-        performance.on_axis{ch}.resnormP=norm((toaEst(:,ch)-toa(:,ch))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);
+        performance.on_axis{ch}.resnormS = ...
+            sqrt(performance.on_axis{ch}.resnormS/(Obj.API.M-sum(indicator(:,ch))));
+        performance.on_axis{ch}.resnormP = ...
+            norm((toaEst(:,ch)-toa(:,ch))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);
     end
     toa_onaxis=toa;
 
     % Fit off-axis model to outlier adjusted set of estimated TOAs
     if kv.model~=2
         for ch=1:Obj.API.R
-            idx=find(indicator(:,ch)==0);
-            x=pos(idx,1:2)*pi/180;
-            y=toaEst(idx,ch)/Obj.Data.SamplingRate;
-            p0_offaxis(ch,:)=[mean(p_onaxis(:,1)) 0.001 -diff(p_onaxis(:,1))/2 0.001 mean(p_onaxis(:,4)) p_onaxis(ch,2) p_onaxis(ch,3)];
-            p0offset_offaxis=[abs(diff(p_onaxis(:,1))/4) 0.1 0.1 0.1 0.001 pi/4 pi/4];
+            idx = find(indicator(:,ch)==0);
+            x   = pos(idx,1:2)*pi/180;
+            y   = toaEst(idx,ch)/Obj.Data.SamplingRate;
+            p0_offaxis(ch,:) = [mean(p_onaxis(:,1)) 0.001 ...
+                                -diff(p_onaxis(:,1))/2 0.001 ...
+                                mean(p_onaxis(:,4)) ...
+                                p_onaxis(ch,2) ...
+                                p_onaxis(ch,3)];
+            p0offset_offaxis = [abs(diff(p_onaxis(:,1))/4) 0.1 0.1 0.1 0.001 pi/4 pi/4];
             if isoctave
-                fprintf('Sorry! Octave is not supported. This model requires MATLAB and the Optimization Toolbox!\n');
+                fprintf(strcat('Sorry! Octave is not supported.',...
+                               'This model requires MATLAB and the Optimization Toolbox!\n'))
             else
-                [p_offaxis(ch,:),performance.off_axis{ch}.resnormS,performance.off_axis{ch}.residualS,performance.off_axis{ch}.exitflag,performance.off_axis{ch}.output]=...
-                    lsqcurvefit(@ziegelwanger2014_offaxis,p0_offaxis(ch,:),x,y,p0_offaxis(ch,:)-p0offset_offaxis,p0_offaxis(ch,:)+p0offset_offaxis,optimset('Display','off','TolFun',kv.model));
+                [p_offaxis(ch,:),performance.off_axis{ch}.resnormS,...
+                 performance.off_axis{ch}.residualS,...
+                 performance.off_axis{ch}.exitflag,...
+                 performance.off_axis{ch}.output] = ...
+                    lsqcurvefit(@ziegelwanger2014_offaxis,...
+                        p0_offaxis(ch,:),x,y,...
+                        p0_offaxis(ch,:)-p0offset_offaxis,...
+                        p0_offaxis(ch,:)+p0offset_offaxis,...
+                        optimset('Display','off','TolFun',kv.model));
                 toa(:,ch)=ziegelwanger2014_offaxis(p_offaxis(ch,:),pos(:,1:2)*pi/180)*Obj.Data.SamplingRate;
             end
-            performance.off_axis{ch}.resnormS=sqrt(performance.off_axis{ch}.resnormS/(Obj.API.M-sum(indicator(:,ch))));
-            performance.off_axis{ch}.resnormP=norm((toaEst(:,ch)-toa(:,ch))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);
+            performance.off_axis{ch}.resnormS = ...
+                sqrt(performance.off_axis{ch}.resnormS/(Obj.API.M-sum(indicator(:,ch))));
+            performance.off_axis{ch}.resnormP = ...
+                norm((toaEst(:,ch)-toa(:,ch))/Obj.Data.SamplingRate)/sqrt(Obj.API.M);
         end
         toa_offaxis=toa;
     end
