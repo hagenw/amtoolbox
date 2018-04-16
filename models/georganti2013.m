@@ -52,7 +52,7 @@ P.freq = (P.fs/P.nFFT)*(0:(P.nFFT/2-1)); % Frequency index
 
 
 fmin_id = min(find((P.freq>P.fmin)));
-fmax_id = min(find((P.freq>P.fmax)));
+fmax_id = min(find((P.freq>=P.fmax)));
 
 difSTD=zeros(1,length(1:P.hop:length(signal)-P.hop));
 idx = 1;
@@ -60,11 +60,11 @@ idx = 1;
 for kk = 1:P.hop:length(signal)-P.hop
 
     % Calculate magnitude spectrums in dB of the left & right signals
-    leftFFT  = 20*log10(abs(fft(signal(kk:kk+P.hop-1,1))));
-    rightFFT = 20*log10(abs(fft(signal(kk:kk+P.hop-1,2))));
+    leftFFT  = 20*log10(abs(fft(signal(kk:kk+P.hop-1,1),P.nFFT)));
+    rightFFT = 20*log10(abs(fft(signal(kk:kk+P.hop-1,2),P.nFFT)));
 
     % Subtract the magnitude spectrums
-    specDIF  = leftFFT(1:end/2)-rightFFT(1:end/2);
+    specDIF  = leftFFT(1:end/2)-rightFFT(1:end/2); 
 
     % Calculate the differential standard deviation for the
     % frequency range of interest
@@ -73,5 +73,3 @@ for kk = 1:P.hop:length(signal)-P.hop
     idx = idx+1;
 
 end
-    
-
