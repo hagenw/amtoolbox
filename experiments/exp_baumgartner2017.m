@@ -210,74 +210,99 @@ end
 
 %% Boyd et al. (2012)
 if flags.do_boyd2012
+  
+  flags.do_noise = false;
+  flags.do_BSMD = false;
+  
   flp = [nan,6500]; % Low-pass cut-off frequency
-%   ele = 0; 
   azi = -30;
-%   data = data_boyd2012;
   
   subjects = data_boyd2012;
-  subjects = subjects([3,6,7]); % only the ones with BRIRs
+  subjects = subjects([1,3,4,6,7]);
+%   subjects = subjects([3,6,7]); % only the ones with BRIRs
+%   fprintf(['Note that only 3 of originally 7 listeners are simulated and compared because\n',...
+%     'the listener-specific BRIRs for the other 4 listeners are not available.\n'])
   mix = subjects(1).Resp.mix/100;
     
   fncache = ['boyd2012_Sintra',num2str(kv.Sintra*100,'%i'),'_Sinter',num2str(kv.Sinter*100,'%i')];
   E = amt_cache('get',fncache,flags.cachemode);
   if isempty(E)
     
-%     Eboyd = cat(3,[data.ITE.BB(:),data.BTE.BB(:)],[data.ITE.LP(:),data.BTE.LP(:)]);
     mix(1) = 1;
 
-    %%
-    sig = noise(50e3,1,'pink');
-%     BTE = data_baumgartner2017('BTE');
-%     subjects = data_baumgartner2017;
-%     if flags.do_quickCheck
-%       subjects = subjects(1:5);
-%     end
-%     fs = subjects(1).Obj.Data.SamplingRate;
-    fs = subjects(1).BRIR.fs;
-    [b,a]=butter(10,2*flp(2)/fs,'low');
+    if flags.do_noise
+      sig = noise(50e3,1,'pink');
+      fs = subjects(1).BRIR.fs;
+      [b,a]=butter(10,2*flp(2)/fs,'low');
+    end
 
-%     Ebaum = nan([size(Eboyd),length(subjects)]);
-    Ebaum = nan([length(mix),2,2,length(subjects)]);
-    Ehass = Ebaum;
-    Eboyd = Ebaum;
+    E.meta = {'actual','interaural','monaural'};
+    if flags.do_BSMD
+      E.meta(4) = {'BSMD'};
+    end
+    E.all = repmat({nan([length(mix),2,2,length(subjects)])},1,length(E.meta));
     for isub = 1:length(subjects)
-      Eboyd(:,:,:,isub) = cat(3,...
-        [subjects(isub).Resp.ITE_BB_oneT(:),subjects(isub).Resp.BTE_BB_oneT(:)],...
-        [subjects(isub).Resp.ITE_LP_oneT(:),subjects(isub).Resp.BTE_LP_oneT(:)]);
+      E.all{1}(:,:,:,isub) = cat(3,...
+        [subjects(isub).Resp.ITE_BB_1T(:),subjects(isub).Resp.BTE_BB_1T(:)],...
+        [subjects(isub).Resp.ITE_LP_1T(:),subjects(isub).Resp.BTE_LP_1T(:)]);
 %       ITE = subjects(isub).Obj;
-      stim{1} = lconv(sig,subjects(isub).BRIR.ITE(:,:,1));
-      stim{2} = lconv(sig,subjects(isub).BRIR.BTE(:,:,1));
-      stim{3} = lconv(sig,subjects(isub).BRIR.noHead(:,:,1));
-
-      %% Unmixed stimuli
-%       stim{1} = SOFAspat(sig,ITE,azi,ele);
-%       stim{2} = SOFAspat(sig,BTE.Obj,azi,ele);
-      template = stim{1};
+      if flags.do_noise
+        stim{1} = lconv(sig,subjects(isub).BRIR.ITE(:,:,1));
+        stim{2} = lconv(sig,subjects(isub).BRIR.BTE(:,:,1));
+        stim{3} = lconv(sig,subjects(isub).BRIR.noHead(:,:,1));
+        template = stim{1};
+        targetSet = cell(length(mix),2,2);
+      else
+        template = subjects(isub).Reference_1T;
+        targetSet = cat(3,...
+          [subjects(isub).Target.ITE_BB_1T(:),subjects(isub).Target.BTE_BB_1T(:)],...
+          [subjects(isub).Target.ITE_LP_1T(:),subjects(isub).Target.BTE_LP_1T(:)]);
+        targetSet = [repmat({template},[1,2,2]);targetSet];
+      end
 
       %% Model simulations
-      target = cell(length(mix),2,2);
+      flow = 100;
       fhigh = [16e3,flp(2)];
+            
       for c = 1:2
         for lp = 1:2
           for m = 1:length(mix)
-%             target{m,c,lp} = sig_boyd2012(stim{c},sig,mix(m),flp(lp),fs);
-            % mixing
-            target{m,c,lp} = mix(m)*stim{c} + (1-mix(m))*stim{3};
-            % low-pass filtering
-            if lp == 2
-              target{m,c,lp} = filter(b,a,target{m,c,lp});
+            if m==1 && (c~=1 || lp~=1) % same reference condition
+              for ee = 2:length(E.all)
+                E.all{ee}(m,c,lp,isub) =  E.all{ee}(m,1,1,isub);
+                targetSet{m,c,lp} = targetSet{m,1,1};
+              end
+            else
+  %             target{m,c,lp} = sig_boyd2012(stim{c},sig,mix(m),flp(lp),fs);
+              % mixing
+              if flags.do_noise
+                targetSet{m,c,lp} = mix(m)*stim{c} + (1-mix(m))*stim{3};
+                % low-pass filtering
+                if lp == 2
+                  targetSet{m,c,lp} = filter(b,a,targetSet{m,c,lp});
+                end
+              end
+              target = targetSet{m,c,lp};
+  % % Description in paper is ambiguous about whether broadband ILDs were
+  % % adjusted to the template:
+  %           temSPL = dbspl(template); 
+  %             for ch = 1:2
+  %               target{m,c,lp}(:,ch) = setdbspl(target{m,c,lp}(:,ch),temSPL(ch));
+  %             end
+              E.all{3}(m,c,lp,isub) =  baumgartner2017( target,template,...
+                'S',kv.Sintra,'flow',flow,'c1',100,'c2',0,'fhigh',fhigh(1),'lat',azi);
+              E.all{2}(m,c,lp,isub) =  baumgartner2017( target,template,...
+                'S',kv.Sinter,'flow',flow,'c1',100,'c2',0 ,'fhigh',fhigh(1),'interaural');
+
+              if flags.do_BSMD
+                geor.fs = subjects(1).fs;
+                geor.timeFr = 1;
+                geor.fmin = flow;
+                geor.fmax = fhigh(lp);
+                E.all{4}(m,c,lp,isub) = median(georganti2013(target,geor)); % median over time
+              end
+              
             end
-% % Description in paper is ambiguous about whether broadband ILDs were
-% % adjusted to the template:
-%           temSPL = dbspl(template); 
-%             for ch = 1:2
-%               target{m,c,lp}(:,ch) = setdbspl(target{m,c,lp}(:,ch),temSPL(ch));
-%             end
-            Ebaum(m,c,lp,isub) =  baumgartner2017( target{m,c,lp},template,...
-              'S',kv.Sintra,'flow',100,'c1',100,'c2',0,'fhigh',fhigh(1),'lat',azi);
-            Ehass(m,c,lp,isub) =  baumgartner2017( target{m,c,lp},template,...
-              'S',kv.Sinter,'flow',100,'c1',100,'c2',0 ,'fhigh',fhigh(1),'interaural');
           end
         end
       end
@@ -285,15 +310,14 @@ if flags.do_boyd2012
 
     end
 
-    seEbaum = std(Ebaum,0,4);
-    Ebaum = mean(Ebaum,4);
-    seEhass = std(Ehass,0,4);
-    Ehass = mean(Ehass,4);
-    seEboyd = std(Eboyd,0,4);
-    Eboyd = mean(Eboyd,4);
-
-    E.m = {Eboyd,Ehass,Ebaum};
-    E.se = {seEboyd,seEhass,seEbaum};
+    if flags.do_BSMD
+      E.all{4} = 100*E.all{4}./repmat(E.all{4}(1,1,1,:),[length(mix),2,2,1]);
+    end
+    
+    for ee = 1:length(E.all)
+      E.m{ee} = mean(E.all{ee},4);
+      E.se{ee} = std(E.all{ee},0,4);
+    end
     
     if not(flags.do_quickCheck)
       amt_cache('set',fncache,E);
@@ -301,32 +325,73 @@ if flags.do_boyd2012
   end
 
   %% Plot
-  figure
-  dataLbl = {'Actual','Interaural','Monaural'};
-  symb = {'ko','bs','rd'};
+  flags.do_plot_individual = false;
+  
+  if flags.do_BSMD && length(E.meta) > 3
+    Nee = 4;
+  else
+    Nee = 3;
+  end
+  
+  dataLbl = E.meta;%{'Actual','Interaural','Monaural'};
+  symb = {'ko','bs','rd','gh'};
   condLbl = {'ITE / BB','BTE / BB','ITE / LP','BTE / LP'};
-  hax = tight_subplot(1,4,0,[.15,.1],[.1,.05]);
   mix = mix(2:end)*100;
-  for cc = 1:length(condLbl)
-    axes(hax(cc))
-    for ee = 1:length(E.m)
-      h = errorbar(mix,E.m{ee}(2:end,cc),E.se{ee}(2:end,cc),['-',symb{ee}]);
-      set(h,'MarkerFaceColor','w')
-      hold on
+  
+  if not(flags.do_plot_individual)
+    figure
+    hax = tight_subplot(1,4,0,[.15,.1],[.1,.05]);
+    for cc = 1:length(condLbl)
+      axes(hax(cc))
+      for ee = 1:Nee
+        h = errorbar(mix,E.m{ee}(2:end,cc),E.se{ee}(2:end,cc),['-',symb{ee}]);
+        set(h,'MarkerFaceColor','w')
+        hold on
+      end
+      set(gca,'XDir','reverse')
+      xlabel('Mix (%)')
+      if cc == 1
+        ylabel('Externalization score')
+      else
+        set(gca,'YTickLabel',[])
+      end
+      title(condLbl{cc})
+      axis([-20,120,-5,105])
+      if cc == 4
+        leg = legend(dataLbl);
+        set(leg,'Box','off','Location','north')
+      end
     end
-    set(gca,'XDir','reverse')
-    xlabel('Mix (%)')
-    if cc == 1
-      ylabel('Externalization score')
-    else
-      set(gca,'YTickLabel',[])
+    
+  else % flags.do_plot_individual
+    
+    for isub = 1:size(E.all{1},4)
+      figure
+      hax = tight_subplot(1,4,0,[.15,.1],[.1,.05]);
+      for cc = 1:length(condLbl)
+        axes(hax(cc))
+        for ee = 1:Nee
+          Eisub = E.all{ee}(:,:,:,isub);
+          h = plot(mix,Eisub(2:end,cc),['-',symb{ee}]);
+          set(h,'MarkerFaceColor','w')
+          hold on
+        end
+        set(gca,'XDir','reverse')
+        xlabel('Mix (%)')
+        if cc == 1
+          ylabel('Externalization score')
+        else
+          set(gca,'YTickLabel',[])
+        end
+        title(condLbl{cc})
+        axis([-20,120,-5,105])
+        if cc == 4
+          leg = legend(dataLbl);
+          set(leg,'Box','off','Location','north')
+        end
+      end
     end
-    title(condLbl{cc})
-    axis([-20,120,-5,105])
-    if cc == 4
-      leg = legend(dataLbl);
-      set(leg,'Box','off','Location','north')
-    end
+    
   end
 %   set(leg,'Location','eastoutside','Position',get(leg,'Position')+[.1,.2,0,0])
 end
