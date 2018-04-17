@@ -1,5 +1,5 @@
-function exp_itdcomparison(varargin)
-%   Usage: exp_itdestimator(flag) 
+function demo_itdestimator(varargin)
+%   Usage: demo_itdestimator(flag) 
 %
 %   Input parameters:
 % 
@@ -7,10 +7,9 @@ function exp_itdcomparison(varargin)
 %       'clean','noisy','stim' to create the data which was used
 %                            &
 %       'fig1,fig2,..,fig9 to create the plots shown in the paper 
-
+%
 % 
-%   Purpose: 
-%   Reproduces the results and figures in the itdestimator paper.
+%   `demo_itdestimator` reproduces the results and figures of the technical report.
 %
 % 
 %   Requirements: 
@@ -21,7 +20,16 @@ function exp_itdcomparison(varargin)
 %
 %   Examples:
 %   ---------
-%       exp_itdcomparison('clean')
+%
+%   To display results for Fig.1 use :::
+%
+%     demo_itdestimator('fig1');
+%
+%   To display results for Fig.2 use :::
+%
+%     demo_itdestimator('fig2');
+%
+%   RB: CONTINUE ACCORDINGLY WITH ALL FIGURES...
 % 
 % 
 % Copyright (C) 2009-2015 Piotr Majdak and the AMT team.
@@ -44,11 +52,11 @@ function exp_itdcomparison(varargin)
 
 
     
-
-    definput.flags.wat = {'clean','noisy','stim',...
-        'fig1','fig2','fig3','fig4','fig5','fig6','fig7','fig8',};
-    definput.import={'amt_cache'}; % get the flags of amt_cache
-    [flags,~]=ltfatarghelper({},definput,varargin);
+definput.import={'amt_cache'};
+definput.flags.wat = {'clean','noisy','stim',...
+    'fig1','fig2','fig3','fig4','fig5','fig6','fig7','fig8','fig9'};
+definput.import={'amt_cache'}; % get the flags of amt_cache
+[flags,~]=ltfatarghelper({},definput,varargin);
 
 %% ---------------calculate-estimation-data-------------------------
 
@@ -139,8 +147,10 @@ function exp_itdcomparison(varargin)
                 % adds noise
                 for kk=1:Obj.API.M
                     for mm=1:Obj.API.R
-                        Obj.Data.IR(kk,mm,:) = ...
-                        awgn(squeeze(Obj.Data.IR(kk,mm,:)),noise_lvl(jj));
+                        ir_tmp = squeeze(Obj.Data.IR(kk,mm,:));
+                        Obj.Data.IR(kk,mm,:) = ir_tmp + ...
+                          setdbspl(noise(length(ir_tmp),1),dbspl(ir_tmp)-noise_lvl(jj));
+%                         awgn(squeeze(Obj.Data.IR(kk,mm,:)),noise_lvl(jj));
                     end
                 end
 
@@ -259,7 +269,7 @@ function exp_itdcomparison(varargin)
         hold off
         title(ax1,'Left ear')
         xlim(ax1,[0 3])
-        yticks([-0.03,0,0.03])
+        set(ax1,'Ytick',[-0.03,0,0.03])
         xlabel('Time (ms)')
         ylim(ax1,[-0.045 0.045])
         ylabel('Amplitude (a.u)')
@@ -273,12 +283,11 @@ function exp_itdcomparison(varargin)
         hold off
         title(ax2,'Right ear')
         xlim(ax2,[0 3])
-        yticks([-0.03,0,0.03])
+        set(ax2,'Ytick',[-0.03,0,0.03])
         xlabel('Time (ms)')
         ylim(ax2,[-0.045 0.045])
         ylabel('Amplitude (a.u.)')
         
-        RB_print(fig,[20,13],'threshold.png',15)
 
     end
 
@@ -312,7 +321,6 @@ function exp_itdcomparison(varargin)
         xlim([-1 1])
         hold off
         
-        RB_print(fig,[20,10],'crosscorr.png',15)
      end
      
 %% ---------------figure-3------------------------------------------
@@ -336,14 +344,13 @@ function exp_itdcomparison(varargin)
             plot(w,gd/fs*1e3)
             
         end
-        title( 'Examplary group delay' )
+        title( 'Exemplary group delay' )
         xlabel('Frequency (Hz)')
         ylabel('Group delay (ms)')
         xlim([500,5000])
         ylim([1.35 1.8])
         hold off
         
-        RB_print(fig,[20,10],'gd.png',15)
     end
 
 %% ---------------figure-4------------------------------------------
@@ -397,8 +404,6 @@ function exp_itdcomparison(varargin)
                 'IRGD','Dietz','Location','eastoutside') 
         hold off
         
-        RB_print(fig,[20,10],'nh.png',15)
-        
     end
 %% ---------------figure-5------------------------------------------
 % -------------------------------------------------------------------------
@@ -439,7 +444,7 @@ function exp_itdcomparison(varargin)
         set(gca,'YTick',[-90 90])
         set(gca,'xtick',1:42)
         xlim([15-1,15+14])
-        xticklabels({''})
+        set(gca,'Xticklabel',{''})
         ylabel('\phi (deg)')
         grid on
         set(gca,'GridLineStyle','--')
@@ -468,8 +473,6 @@ function exp_itdcomparison(varargin)
         set(gca,'ytick',[-10 0 10])
         grid on
         set(gca,'GridLineStyle','--')
-
-        RB_print(fig,[20,10],'heads.png',15)
         
         %set(gcf,'color',[1 1 1]) 
     end
@@ -497,7 +500,7 @@ function exp_itdcomparison(varargin)
                         [ 'Sphere_Rotation_' data.subjects{4} '.sofa']));
 
             IR = squeeze(Obj.Data.IR(777,1,:));
-            IR = IR + awgn(IR,noise_lvl(jj));
+            IR = IR + setdbspl(noise(length(IR),1),dbspl(IR)-noise_lvl(jj));%%awgn(IR,noise_lvl(jj));
 
             plot(IR)
 
@@ -509,7 +512,6 @@ function exp_itdcomparison(varargin)
         legend('SNR 20dB','SNR 30dB','SNR 40dB','Location','best')
         hold off
         
-        RB_print(fig,[20,10],'noise.png',15)
     end
     
     
@@ -517,6 +519,11 @@ function exp_itdcomparison(varargin)
 % tilted heads
 
     if flags.do_fig7
+%         msq = amt_cache('get','clean_bb_msq',flags.cachemode);
+%         if isempty(msq)
+%           msq = demo_itdestimator('clean');
+%           amt_cache('set','clean_bb_msq',msq);
+%         end
         load('clean_bb_msq.mat')
         msq_bb_clean = msq(15:15+14-1,:);
         
@@ -527,7 +534,6 @@ function exp_itdcomparison(varargin)
         colormap('lines')
         set(gca, 'YMinorGrid','on', 'YMinorGrid','on')
         
-        RB_print(fig,[20,10],'tiltedheads.png',15)
     end
     
     
@@ -599,7 +605,6 @@ function exp_itdcomparison(varargin)
         legend(handle, 'Threshold','Cen_e2','MaxIACCr', 'MaxIACCe',...
                     'CenIACCr', 'CenIACCe', 'CenIACC2e', 'PhminXcor','IRGD','Location','northeast')
         
-        RB_print(fig,[20,30],'itd_results1.png',15)
        
     end
     
@@ -634,7 +639,6 @@ function exp_itdcomparison(varargin)
         set(gca, 'XMinorGrid','on', 'XGrid','on')
         hold off
         
-        RB_print(fig,[20,10],'itd_results2.png',15)
                 
     end 
 end
