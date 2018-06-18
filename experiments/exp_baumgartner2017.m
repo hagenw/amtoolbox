@@ -34,6 +34,11 @@ function data = exp_baumgartner2017(varargin)
 %         for a better visual interpretation. The error bars are one 
 %         standard error of the mean.
 %
+%     `baumgartner2017` models experiments from Baumgartner et al. (2017). 
+%         Effect of HRTF spectral contrast manipulations on sound externalization. 
+%         Externalization scores were derived from paired comparisons via 
+%         Bradley-Terry-Luce modeling.
+%
 %   Requirements: 
 %   -------------
 %
@@ -58,11 +63,12 @@ function data = exp_baumgartner2017(varargin)
 %
 %     exp_baumgartner2017('hassager2016');
 %
-%   References: baumgartner2017externalization boyd2012 hartmann1996 hassager2016 
+%   References: baumgartner2017externalization boyd2012 hartmann1996
+%   hassager2016 baumgartner2017
    
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
-definput.import={'amt_cache'};
+definput.import={'amt_cache','baumgartner2017'};
 definput.flags.type = {'missingflag','boyd2012','hartmann1996','hassager2016','baumgartner2017'};
 definput.flags.quickCheck = {'','quickCheck'};
 definput.keyvals.Sintra = 2;
@@ -163,16 +169,18 @@ if flags.do_hartmann1996
     if flags.do_quickCheck
       data = data(1:5);
     end
-    Pext{1} = nan(length(data),length(nprime),length(exp));
-    Pext{2} = nan(length(data),length(nprime),length(exp));
+    Pext = repmat({nan(length(data),length(nprime))},2,2);
+    cueLbl = {'MSS'; 'ISS'; 'IBTIC'; 'ISLDtemSD'; 'ISLDspecSD'};
+    cues = repmat({nan(length(data),length(nprime),length(cueLbl))},2,1);
     for isub = 1:length(data)
       Obj = data(isub).Obj;
       template = sig_hartmann1996(0,'Obj',Obj,'dur',0.1);
       for ee = 1:length(exp)
         for nn = 1:length(nprime)
           target = sig_hartmann1996(nprime(nn),'Obj',Obj,'dur',0.1,exp{ee});
-          Pext{1}(isub,nn,ee) = baumgartner2017(target,template,'c1',3,'c2',0,'S',kv.Sinter,'flow',100,'fhigh',6000,'interaural');
-          Pext{2}(isub,nn,ee) = baumgartner2017(target,template,'c1',3,'c2',0,'S',kv.Sintra,'flow',100,'fhigh',6000,'lat',azi);
+          Pext{1,ee}(isub,nn) = baumgartner2017(target,template,'range',3,'offset',0,'S',kv.Sinter,'flow',100,'fhigh',6000,'tempWin',1,'interaural');
+          Pext{2,ee}(isub,nn) = baumgartner2017(target,template,'range',3,'offset',0,'S',kv.Sintra,'flow',100,'fhigh',6000,'tempWin',1,'lat',azi);
+          [~,cues{ee}(isub,nn,:)] = baumgartner2017(target,template,'S',kv.Sintra,'flow',100,'fhigh',6000,'lat',azi);
         end
       end
       amt_disp([num2str(isub),' of ',num2str(length(data)),' subjects completed.'],'progress')
@@ -182,16 +190,24 @@ if flags.do_hartmann1996
     end
   end
   
-  Ns = size(Pext{1},1);
+  figure
+  for ee = 1:length(exp)
+    subplot(1,length(exp),ee)
+    plot(nprime,squeeze(mean(cues{ee})))
+    title(exp{ee})
+    xlabel('n\prime')
+  end
+  legend(cueLbl)
   
+  Ns = size(Pext{1},1);
   figure
   for ee = 1:length(exp)
     act = data_hartmann1996(exp{ee});
     subplot(1,2,ee)
     h(1) = plot(act.avg.nprime,act.avg.Escore,'-ko');
     hold on
-    h(2) = errorbar(nprime,mean(Pext{1}(:,:,ee)),std(Pext{1}(:,:,ee))/sqrt(Ns),'-bs');
-    h(3) = errorbar(nprime,mean(Pext{2}(:,:,ee)),std(Pext{2}(:,:,ee))/sqrt(Ns),'-rd');
+    h(2) = errorbar(nprime,mean(Pext{1,ee}),std(Pext{1,ee})/sqrt(Ns),'-bs');
+    h(3) = errorbar(nprime,mean(Pext{2,ee}),std(Pext{2,ee})/sqrt(Ns),'-rd');
     set(h,'MarkerFaceColor','w')
     if ee == 1
       xlabel('n\prime (Highest harmonic with ILD = 0)')
@@ -211,15 +227,19 @@ end
 %% Boyd et al. (2012)
 if flags.do_boyd2012
   
-  flags.do_noise = false;
+  flags.do_noise = true;
   flags.do_BSMD = false;
+  flags.do_BRIR = true;
   
   flp = [nan,6500]; % Low-pass cut-off frequency
   azi = -30;
   
   subjects = data_boyd2012;
-  subjects = subjects([1,3,4,6,7]);
-%   subjects = subjects([3,6,7]); % only the ones with BRIRs
+  if flags.do_noise
+    subjects = subjects([3,6,7]); % only the ones with BRIRs
+  else
+    subjects = subjects([1,3,4,6,7]); % only the ones with stimuli
+  end
 %   fprintf(['Note that only 3 of originally 7 listeners are simulated and compared because\n',...
 %     'the listener-specific BRIRs for the other 4 listeners are not available.\n'])
   mix = subjects(1).Resp.mix/100;
@@ -289,10 +309,22 @@ if flags.do_boyd2012
   %             for ch = 1:2
   %               target{m,c,lp}(:,ch) = setdbspl(target{m,c,lp}(:,ch),temSPL(ch));
   %             end
-              E.all{3}(m,c,lp,isub) =  baumgartner2017( target,template,...
-                'S',kv.Sintra,'flow',flow,'c1',100,'c2',0,'fhigh',fhigh(1),'lat',azi);
-              E.all{2}(m,c,lp,isub) =  baumgartner2017( target,template,...
-                'S',kv.Sinter,'flow',flow,'c1',100,'c2',0 ,'fhigh',fhigh(1),'interaural');
+%   subplot(4,length(mix),m+(2*c+lp-3)*length(mix))
+% if flags.do_BRIR
+%               E.all{2}(m,c,lp,isub) =  baumgartner2017( target,subjects(isub).BRIR.ITE(:,:,1),...
+%                 'argimport',flags,kv,'fs',fs,'stim',template,...
+%                 'S',kv.Sinter,'flow',flow,'range',100,'offset',0 ,'fhigh',fhigh(1),'interaural');
+%               E.all{3}(m,c,lp,isub) =  baumgartner2017( target,subjects(isub).BRIR.ITE(:,:,1),...
+%                 'argimport',flags,kv,'fs',fs,'stim',template,...
+%                 'S',kv.Sintra,'flow',flow,'range',100,'offset',0,'fhigh',fhigh(1),'lat',azi);
+% %   hold on
+% else
+  amt_disp([num2str(mix(m)),', ',num2str(fhigh(lp)),', ',num2str(c)],'progress')
+              E.all{2}(m,c,lp,isub) =  baumgartner2017( target,template,'argimport',flags,kv,...
+                'fs',subjects(isub).fs,'S',kv.Sinter,'flow',flow,'range',100,'offset',0 ,'fhigh',fhigh(1),'interaural');
+              E.all{3}(m,c,lp,isub) =  baumgartner2017( target,template,'argimport',flags,kv,...
+                'fs',subjects(isub).fs,'S',kv.Sintra,'flow',flow,'range',100,'offset',0,'fhigh',fhigh(1),'lat',azi);
+% end
 
               if flags.do_BSMD
                 geor.fs = subjects(1).fs;
@@ -439,9 +471,9 @@ if flags.do_baumgartner2017
       for iC = 1:length(data.C)
         target = sig_baumgartner2017looming(template,data.C(iC));
         Pext{1}(iC,isubj) = baumgartner2017(target,template,'S',kv.Sinter,...
-          'lat',data.azi(isubj),'flow',1000,'fhigh',18e3,'interaural','c1',1,'c2',0);
+          'lat',data.azi(isubj),'flow',1000,'fhigh',18e3,'interaural','range',1,'offset',0);
         Pext{2}(iC,isubj) = baumgartner2017(target,template,'S',kv.Sintra,...
-          'lat',data.azi(isubj),'flow',1000,'fhigh',18e3,'c1',1,'c2',0);
+          'lat',data.azi(isubj),'flow',1000,'fhigh',18e3,'range',1,'offset',0);
       end
       amt_disp([num2str(isubj),' of ',num2str(Nsubj),' subjects completed.'],'progress')
     end

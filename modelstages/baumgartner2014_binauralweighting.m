@@ -31,7 +31,7 @@ definput.import={'baumgartner2014'};
 
 if size(simon,3) == 2
     binw = 1./(1+exp(-kv.lat/kv.bwcoef)); % weight of left ear signal with 0 <= binw <= 1
-    sibin = binw * simon(:,:,1) + (1-binw) * simon(:,:,2);
+    sibin = binw * simon(:,:,1,:,:) + (1-binw) * simon(:,:,2,:,:);
 end
 
 end

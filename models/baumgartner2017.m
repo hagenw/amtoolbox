@@ -1,6 +1,6 @@
 function [E,varargout] = baumgartner2017( target,template,varargin )
 %BAUMGARTNER2017 Model for sound externalization
-%   Usage:    [E,lat] = baumgartner2017( target,template )
+%   Usage:    [E,cues] = baumgartner2017( target,template )
 %
 %   Input parameters:
 %     target  : binaural impulse response(s) referring to the directional 
@@ -18,7 +18,7 @@ function [E,varargout] = baumgartner2017( target,template,varargin )
 %
 %   Output parameters:
 %     E       : predicted degree of externalization
-%     lat     : lateral angle as predicted by *wierstorf2013* model
+%     cues    : outcomes of individual cues 
 %
 %   `baumgartner2017(...)` is a model for sound externalization.
 %   It bases on the comparison of the intra-aural internal representation
@@ -26,6 +26,19 @@ function [E,varargout] = baumgartner2017( target,template,varargin )
 %   prediction of polar angle response.
 %
 %   `baumgartner2017` accepts the following optional parameters:
+%
+%     'cueWeights',cW  Set the weights of individual cues to determine the 
+%                      final externalization score. Cue-specific weights 
+%                      (entered as a vector) are ordered as follows: 
+%                      1. monaural spectral similarity (c.f., Baumgartner et
+%                         al., 2014). This is the default.
+%                      2. interaural spectral similarity of ILDs (c.f.,
+%                         Hassager et al., 2016)
+%                      3. spectral standard deviation of ILDs (c.f.,
+%                         Georganti et al., 2013)
+%                      4. temporal standard deviation of ILDs (c.f., Catic
+%                         et al., 2015)
+%                      5. interaural broadband time-intensity coherence
 %
 %     'fs',fs        Define the sampling rate of the impulse responses. 
 %                    Default value is 48000 Hz.
@@ -64,10 +77,10 @@ function [E,varargout] = baumgartner2017( target,template,varargin )
 %     'bwcoef',bwc   Set the binaural weighting coefficient *bwc*.
 %                    Default value is 13 degrees.
 %
-%     'c1',c1        Set the scaling factor of the externalization score to *c1*.
+%     'range',c1     Set the range factor of the externalization scores to *c1*.
 %                    Default value is 3.78 from Hassager et al. (2016).
 %
-%     'c2',c2        Set the offset of the externalization score to *c2*.
+%     'offset',c2    Set the offset of the externalization score to *c2*.
 %                    Default value is 1 from Hassager et al. (2016).
 %
 %     'JND',JND      Set the just noticeable difference *JND* from the 
@@ -84,21 +97,14 @@ function [E,varargout] = baumgartner2017( target,template,varargin )
 %   3) Circular Statistics Toolbox from http://www.mathworks.com/matlabcentral/fileexchange/10676-circular-statistics-toolbox--directional-statistics-
 %
 %
-%   See also: baumgartner2014_spectralanalysis,
-%   baumgartner2014_gradientextraction, baumgartner2014_binauralweighting
+%   See also: baumgartner2016_spectralanalysis,
+%   baumgartner2016_gradientextraction, baumgartner2014_binauralweighting
 
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
 %% Check input
 
-definput.import={'baumgartner2014','baumgartner2014_pmv2ppp','localizationerror','amt_cache'};
-definput.keyvals.tempWin = 1; % temporal integration window in sec
-definput.flags.normalize = {'regular','normalize'};
-definput.flags.cueProcessing = {'intraaural','interaural'};
-definput.flags.middleEarFilter = {'','middleEarFilter'};
-definput.keyvals.JND = 1.5; % JND from reference
-definput.keyvals.c1 = 3.78; % scaling of externalization score
-definput.keyvals.c2 = 1; % offset of externalization score
+definput.import={'baumgartner2017','baumgartner2014','baumgartner2014_pmv2ppp','localizationerror','amt_cache'};
 
 [flags,kv]=ltfatarghelper(...
   {'fs','S','lat','stim','space','do','flow','fhigh',... %'fsstim'
@@ -154,14 +160,14 @@ end
 %   return
 % end
 
-%% Middle ear filter
+%% Optional: Middle ear filtering
 if flags.do_middleEarFilter
   b=middleearfilter(kv.fs);
   target = filter(b,1,target);
   template = filter(b,1,template);
 end
 
-%% DTF filtering, Eq.(1)
+%% Optional: HRTF filtering
 
 dimtar = size(target); % for lconv dim check
 
@@ -174,88 +180,116 @@ if size(target,2) ~= dimtar(2)
   target = reshape(target,[size(target,1),dimtar(2:end)]);
 end
 
-frameLength = round((kv.tempWin*kv.fs));
-Nframes = floor(size(target,1)/frameLength);
-if Nframes == 0
-  Nframes = 1;
-  frameLength = size(target,1);
-  target = cat(1,target,zeros(frameLength-size(target,1),size(target,2),size(target,3)));
-end
-Nang = size(template,2);
-bsi = nan(Nframes,Nang);
-tem.mp = [];
-for iframe = 1:Nframes
-  idt = (1:frameLength) + (iframe-1)*frameLength;
+% frameLength = round((kv.tempWin*kv.fs));
+
+%% ITD
+tem.itd = itdestimator(shiftdim(template,1),'fs',kv.fs,'MaxIACCe');
+tar.itd = itdestimator(shiftdim(target,1),'fs',kv.fs,'MaxIACCe');
+
+%% Filterbank
+[tem.mp,fc] = baumgartner2016_spectralanalysis(template,70,'tiwin',kv.tempWin,'GT_minSPL',-100,'gammatone','redo');
+[tar.mp,fc] = baumgartner2016_spectralanalysis(target,70,'tiwin',kv.tempWin,'GT_minSPL',-100,'gammatone','redo');
+
+%% Spectral cues
+tem.psg = baumgartner2016_gradientextraction(tem.mp,fc);
+tem.ild = -diff(tem.mp,1,3);
+% ref.ild = mean(tem.ild,5);
+tar.psg = baumgartner2016_gradientextraction(tar.mp,fc);
+tar.ild = -diff(tar.mp,1,3);
+
+%% spectral SD of ISLD (Georganti et al., 2013) -> dprime possible
+% tar.sdild = std(tar.ild,0,1);
+% tem.sdild = std(tem.ild,0,1);
+% ref.sdild = std(ref.ild,0,1);
+% ISLDspecSD = mean(tar.sdild./tem.sdild,5);
+
+%% temporal SD of ISLD (Catic et al., 2015)
+ISLDtemSD = 1 - mean(std(tar.ild,0,5)./std(tem.ild,0,5));
+
+%% Interaural broadband time-intenstiy coherence (IBTIC) -> dprime possible
+IBTIC = abs(tar.itd/tem.itd - mean(tar.ild(:))/mean(tem.ild(:)));
+
+%% Spectral comparison
+
+for iSC = 1:3 % first monaural then interaural
+  if iSC == 1 % monaural spectral gradients
+    tem.nrep = tem.psg.m;
+    tar.nrep = tar.psg.m;
+  elseif iSC == 2 % interaural spectral differences
+    tem.nrep = tem.ild;
+    tar.nrep = tar.ild;
+  elseif iSC == 3 % spectral SD of interaural differences
+    tem.nrep = std(tem.ild,0,1);
+    tar.nrep = std(tar.ild,0,1);
+  end
   
-%% Spectral Analysis, Eq.(2)
-
-[tar.mp,fc] = baumgartner2014_spectralanalysis(target(idt,:,:),'argimport',flags,kv);
-if isempty(tem.mp) % integration across whole time range
-  tem.mp = baumgartner2014_spectralanalysis(template,'argimport',flags,kv);
-end
-
-
-if flags.do_intraaural
-  %% Positive spectral gradient extraction, Eq.(3)
-  if kv.do == 1 % DCN inspired feature extraction
-    nrep.tem = baumgartner2014_gradientextraction(tem.mp,fc);
-    nrep.tar = baumgartner2014_gradientextraction(tar.mp,fc);
-  else
-    nrep.tem = tem.mp;
-    nrep.tar = tar.mp;
+  % comparison with time average of spectral template
+  nrep = {tar.nrep};
+  if flags.do_dprime
+    nrep{2} = tem.nrep;
+  end
+  tem.nrep = mean(tem.nrep,5);
+  sigma = cell(length(nrep),1);
+  for inrep = 1:length(nrep)  
+    tmp = repmat(tem.nrep,[1,1,1,1,size(nrep{inrep},5)]);
+    delta = abs(tmp-repmat(nrep{inrep},[1,size(tmp,2),1,1,1]));
+    delta(delta < kv.JND) = 0; % limit minimum ILD difference according to JND
+    delta = delta./(eps+abs(tmp)); % normalization (Weber fraction)
+    sigma{inrep} = mean(delta); % average across frequency bands
+    if iSC == 1 % do_intraaural
+      sigma{inrep} = baumgartner2014_binauralweighting(sigma{inrep},'argimport',flags,kv);
+    end
   end
 
-  %% Comparison process, Eq.(4)
-%   sigma = baumgartner2017comparisonprocess(nrep.tar,nrep.tem); % based on vector product with 0s excluded (nan)
-%   sigma = mean(repmat(nrep.tar,1,Nang).*nrep.tem)./mean(nrep.tem.^2);
-  dNrep = abs(repmat(nrep.tar,1,Nang)-nrep.tem);
-  dNrep(dNrep < kv.JND) = 0;
-  sigma = mean(dNrep);
-
-  %% Similarity estimation, Eq.(5)
-  si = exp(-kv.S*sigma);
-%   si = sigma.^kv.S;
-  % si = baumgartner2014_similarityestimation(sigma,'argimport',flags,kv);
-
-  %% Binaural weighting, Eq.(6)
-  bsi(iframe,:) = baumgartner2014_binauralweighting(si,'argimport',flags,kv);
-
-  %% Normalize
-%   if flags.do_normalize
-% %     if not(exist('bsiRef','var'))
-%       sigmaRef = baumgartner2017comparisonprocess(nrep.tem,nrep.tem);
-%       siRef = sigmaRef.^kv.S;
-%       bsiRef = baumgartner2014_binauralweighting(siRef,'argimport',flags,kv);
-% %     end
-%     bsi(iframe) = bsi(iframe)/bsiRef;
-%   end
-
-else % interaural
+  % temporal integration
+  if length(sigma{1}) == 1
+    si = exp(-kv.S*sigma{1});
+  elseif flags.do_dprime % signal detection theory applied to time histograms
+  %   figure; histogram(sigma{1}); hold on ; histogram(sigma{2}); legend('target','reference')
+    allsigma = [sigma{1}(:);sigma{2}(:)];
+    msigma = mean(allsigma);
+    sdsigma = std(allsigma);
+    mzsigma(1) = mean((sigma{1}-msigma) ./ sdsigma);
+    mzsigma(2) = mean((sigma{2}-msigma) ./ sdsigma);
+    dprime = max(mzsigma(1)-mzsigma(2),0);
+    distmetric = dprime;
+  else % temporal weighting according to amount of sensory information available
+%     si = exp(-kv.S*sigma{1});
+    % figure; plot(squeeze(bsi))
+    tweight = mean(mean(abs(tar.nrep)),3); % temporal weighting
+    tweight = tweight-min(tweight,[],5); % bounded between 0
+    tweight = 2*tweight./max(tweight,[],5); % and 2
+    distmetric = sigma{1}.*tweight;
+    distmetric = mean(distmetric,5);
+  end
   
-  %% ILDs
-  tar.ild = -diff(tar.mp,1,3); % ILD = left - right
-  tem.ild = -diff(tem.mp,1,3);
-  % figure; plot(fc,tar.ild); hold on; plot(fc,tem.ild); legend('tar','tem')
-
-  %% target-template comparison -> ILD deviation
-  dILD = abs(tem.ild-repmat(tar.ild,1,Nang));
-  dILD(dILD < kv.JND) = 0; % limit minimum ILD difference according to JND
-
-  %% overall normalized ILD deviation
-  dILDnorm(iframe,:) = mean(dILD./abs(tem.ild));
+  si = distmetric;%exp(-kv.S*distmetric);
   
-  %% Externalization mapping
-  bsi(iframe,:) = exp(-kv.S*dILDnorm(iframe,:));
-
+  if iSC == 1
+    MSS = si; % monaural spectral similarity
+  elseif iSC == 2
+    ISS = si; % interaural spectral similarity
+  elseif iSC == 3
+    ISLDspecSD = si;
+  end
+  
 end
 
-%% Scaling
-bsi(iframe) = kv.c1*bsi(iframe) +kv.c2;
-
+%% Cue integration/weighting
+if flags.do_intraaural
+  kv.cueWeights = 1;
+elseif flags.do_interaural
+  kv.cueWeights = [0,1];
 end
-E = max(bsi);%min(1,max(bsi));%geomean(bsi);
+cues = [MSS; ISS; ISLDspecSD; ISLDtemSD; IBTIC];
+kv.S = postpad(kv.S(:),length(cues));
+kv.cueWeights = postpad(kv.cueWeights(:),length(cues))/sum(kv.cueWeights);
+si = exp(-kv.S.*cues);
+bsi = nansum(kv.cueWeights .* si);
+
+E = kv.range*bsi +kv.offset;%max(bsi);%min(1,max(bsi));%geomean(bsi);
 if nargout >= 2
-  varargout{1} = kv.lat;
+  varargout{1} = cues;
 end
 
   

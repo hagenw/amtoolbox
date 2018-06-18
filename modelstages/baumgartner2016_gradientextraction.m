@@ -25,20 +25,9 @@ definput.import={'baumgartner2016'};
 definput.keyvals.c2 = 1;
 [flags,kv]=ltfatarghelper({'c2'},definput,varargin);
 
-% if isempty(varargin) || not(isempty(varargin)) && not(isstruct(varargin{1}))
-%   definput.import={'baumgartner2016','amt_cache'};
-%   definput.keyvals.c2 = 1;
-%   [flags,kv]=ltfatarghelper({'c2'},definput,varargin);
-% else % kv and flags directly transfered
-%   kv = varargin{1};
-%   flags = varargin{2};
-%   kv.c2 = 1;
-% end
 
 %% Parameter Settings
-% if not(exist('c2','var'))
-  c2 = kv.c2; % inhibitory coupling between type II mpd type IV neurons
-% end
+c2 = kv.c2; % inhibitory coupling between type II mpd type IV neurons
 c4 = 1; % coupling between AN and type IV neuron
 dilatation = 1; % of tonotopical 1-ERB-spacing between type IV mpd II neurons
 
@@ -47,12 +36,11 @@ erb = audfiltbw(fc);
 %% Calculations
 Nb = size(mp,1); % # auditory bands
 dgpt2 = round(mean(erb(2:end)./diff(fc))*dilatation); % tonotopical distance between type IV mpd II neurons
-mpm = mp;
-mpsd = 2.6 * mpm.^0.34; % variability of discharge rate (May and Huang, 1997)
+mpsd = 2.6 * mp.^0.34; % variability of discharge rate (May and Huang, 1997)
 gp.m = zeros(Nb-dgpt2,size(mp,2),size(mp,3),size(mp,4),size(mp,5)); % type IV output
 gp.sd = gp.m;
 for b = 1:Nb-dgpt2
-  gp.m(b,:,:,:,:) = c4 * mpm(b+dgpt2,:,:,:,:) - c2 * mpm(b,:,:,:,:);
+  gp.m(b,:,:,:,:) = c4 * mp(b+dgpt2,:,:,:,:) - c2 * mp(b,:,:,:,:);
   gp.sd(b,:,:,:,:) = sqrt( (c4*mpsd(b+dgpt2,:,:,:,:)).^2 + (c2*mpsd(b,:,:,:,:)).^2 );
 end
 
@@ -66,7 +54,5 @@ gp.m = kv.mgs*(atan(gp.m/kv.mgs-pi/2)+pi/2);
 gp.sd = gp.sd/2; % ROUGH APPROXIMATION assuming that non-linear restriction to positive gradients halfs the rate variability
 
 gfc = fc(dgpt2+1:end);
-
-% if nargout > 1
 
 end

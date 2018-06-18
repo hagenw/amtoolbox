@@ -18,7 +18,6 @@ function sigma = baumgartner2016_comparisonprocess(tar,tem)
 
 % AUTHOR: Robert Baumgartner
 
-%% Comparison process, Eq.(4)
 
 % Unbiased statistical index of rate discrimination acc. to Eq. 1 of
 % may1997
