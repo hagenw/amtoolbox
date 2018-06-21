@@ -86,12 +86,13 @@ end
 if flags.do_hassager2016
   azi = [0,50];
   flp = 6000; % lowpass filtered noise stimuli
+  Ncues = 5;
   
   Pext_A = data_hassager2016;
   B = Pext_A.B;
   
   fncache = ['hassager2016_Sintra',num2str(kv.Sintra*100,'%i'),'_Sinter',num2str(kv.Sinter*100,'%i')];
-  Pext = amt_cache('get',fncache,flags.cachemode);
+  [Pext,cues,cueLbl] = amt_cache('get',fncache,flags.cachemode);
   if isempty(Pext)
     
     data = data_baumgartner2017;
@@ -101,6 +102,7 @@ if flags.do_hassager2016
 
     Pext = nan(length(B),length(data),length(azi));
     Pext = {Pext,Pext};
+    cues = nan(length(B),length(data),length(azi),Ncues);
     for isubj = 1:length(data)
       Obj = data(isubj).Obj;
       for iazi = 1:length(azi)
@@ -114,16 +116,60 @@ if flags.do_hassager2016
             Obj_tar = sig_hassager2016(Obj,B(iB));
             target = squeeze(shiftdim(Obj_tar.Data.IR(idazi,:,:),2));
           end
-          Pext{1}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sinter,'flow',100,'fhigh',flp,'interaural'); % Obj instead of single template
-          Pext{2}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sintra,'flow',100,'fhigh',flp,'lat',azi(iazi));
+%           Pext{1}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sinter,'flow',100,'fhigh',flp,'interaural'); % Obj instead of single template
+%           Pext{2}(iB,isubj,iazi) = baumgartner2017(target,template,'S',kv.Sintra,'flow',100,'fhigh',flp,'lat',azi(iazi));
+          [~,cues(iB,isubj,iazi,:),cueLbl] = baumgartner2017(target,template,'flow',100,'fhigh',flp,'lat',azi(iazi));
         end
       end
       amt_disp([num2str(isubj),' of ',num2str(length(data)),' subjects completed.'],'progress')
     end
      
     if not(flags.do_quickCheck)
-      amt_cache('set',fncache,Pext);
+      amt_cache('set',fncache,Pext,cues,cueLbl);
     end
+  end
+  
+  %% Cue weighting optimization procedure
+  S = ones(Ncues,1); % sensitivity to cue
+  W = zeros(size(S)); % weighting of cue
+  % optimize sensitivities
+  predCue = reshape(mean(cues,2),length(B)*length(azi),[]);
+  actual = Pext_A.rating(:);
+  Erange = 4;
+  Eoffset = 1;
+  cue2E = @(x,cue) Erange * exp(-x*cue) + Eoffset;
+  predE = predCue;
+  dE = nan(size(S));
+  for cc = 1:Ncues
+    if not(isnan(predCue(:,cc)))
+      S(cc) = fminsearch(@(x) rms(cue2E(x,predCue(:,cc))-actual),S(cc));
+    end
+    predE(:,cc) = cue2E(S(cc),predCue(:,cc));
+    dE(cc) = mean(abs( predE(:,cc) - actual )) / (Erange-Eoffset);
+  end
+  % optimize weighting
+  iE = isnan(predE);
+  predE(iE) = 0;
+  W = abs( fminsearch(@(w) rms( predE * abs(w)./sum(abs(w)) - actual ),W) );
+  W(iE(1,:)) = 0;
+  W = W/sum(W);
+  dE(end+1) = mean(abs( predE*W - actual )) / (Erange-Eoffset);
+  
+  PextLbl = [cueLbl(:,1);{'Comb.'}];
+  
+  cueTab = table([S;nan],dE,[W;nan],[cueLbl(:,2);{'Weighted combination'}],...
+    'RowNames',PextLbl,...
+    'VariableNames',{'Sensitivity','Error','Weight','Description'});
+  amtdisp(cueTab)
+
+  %% Individual data
+  Pext = cell(Ncues+1,1);
+  for cc = 1:Ncues
+    Pext{cc} = cue2E(S(cc),cues(:,:,:,cc));
+  end
+  Pext{Ncues+1} = W(1)*Pext{1};
+  for cc = 2:Ncues
+    Pext{Ncues+1} = nansum(cat(4,Pext{Ncues+1},W(cc)*Pext{cc}),4);
   end
   
   %% Plot
@@ -135,13 +181,13 @@ if flags.do_hassager2016
   Ns = size(Pext{1},2);
   
   figure 
-  symb = {'-bs','-rd'};
+  symb = {'-ko','-bs','-rd','-g<','-m>','-c^','-yh'};
   for iazi = 1:length(azi)
     subplot(1,2,iazi)
-    h(3) = plot(B,Pext_A.rating(:,iazi),'-ko');
+    h(1) = plot(B,Pext_A.rating(:,iazi),symb{1});
     hold on
-    for m = 1:2
-      h(m) = errorbar(B,mean(Pext{m}(:,:,iazi),2),std(Pext{m}(:,:,iazi),0,2)/sqrt(Ns),symb{m});
+    for m = 1:Ncues+1
+      h(m+1) = errorbar(B,mean(Pext{m}(:,:,iazi),2),std(Pext{m}(:,:,iazi),0,2)/sqrt(Ns),symb{m+1});
     end
     set(h,'MarkerFaceColor','w')
     set(gca,'XTick',BplotTicks,'XTickLabel',BplotStr,'XScale','log')
@@ -150,19 +196,22 @@ if flags.do_hassager2016
     ylabel('Mean Externalization Rating')
     title([num2str(azi(iazi)),'\circ'])
   end
-  leg = legend({'Actual','Interaural','Monaural'},'Location','southwest');
+  leg = legend([{'Actual'};PextLbl],'Location','southwest');
   set(leg,'Box','off')
+  
+  %% Output
+  data = {cueTab,Pext};
   
 end
 
 %% Hartmann & Wittenberg (1996)
 if flags.do_hartmann1996
   
-  exp = {'ILD','ISLD'};
+  cond = {'ILD','ISLD'};
   nprime = [0,1,8,14,19,22,25,38];
   
   fncache = ['hartmann1996_Sintra',num2str(kv.Sintra*100,'%i'),'_Sinter',num2str(kv.Sinter*100,'%i')];
-  Pext = amt_cache('get',fncache,flags.cachemode);
+  [Pext,cues,cueLbl] = amt_cache('get',fncache,flags.cachemode);
   if isempty(Pext)
     azi = -37;
     data = data_baumgartner2017;
@@ -170,69 +219,120 @@ if flags.do_hartmann1996
       data = data(1:5);
     end
     Pext = repmat({nan(length(data),length(nprime))},2,2);
-    cueLbl = {'MSS'; 'ISS'; 'IBTIC'; 'ISLDtemSD'; 'ISLDspecSD'};
-    cues = repmat({nan(length(data),length(nprime),length(cueLbl))},2,1);
+    cues = repmat({nan(length(data),length(nprime),5)},2,1);
     for isub = 1:length(data)
       Obj = data(isub).Obj;
       template = sig_hartmann1996(0,'Obj',Obj,'dur',0.1);
-      for ee = 1:length(exp)
+      for ee = 1:length(cond)
         for nn = 1:length(nprime)
-          target = sig_hartmann1996(nprime(nn),'Obj',Obj,'dur',0.1,exp{ee});
-          Pext{1,ee}(isub,nn) = baumgartner2017(target,template,'range',3,'offset',0,'S',kv.Sinter,'flow',100,'fhigh',6000,'tempWin',1,'interaural');
-          Pext{2,ee}(isub,nn) = baumgartner2017(target,template,'range',3,'offset',0,'S',kv.Sintra,'flow',100,'fhigh',6000,'tempWin',1,'lat',azi);
-          [~,cues{ee}(isub,nn,:)] = baumgartner2017(target,template,'S',kv.Sintra,'flow',100,'fhigh',6000,'lat',azi);
+          target = sig_hartmann1996(nprime(nn),'Obj',Obj,'dur',0.1,cond{ee});
+%           Pext{1,ee}(isub,nn) = baumgartner2017(target,template,'range',3,'offset',0,'S',kv.Sinter,'flow',100,'fhigh',6000,'tempWin',1,'interaural');
+%           Pext{2,ee}(isub,nn) = baumgartner2017(target,template,'range',3,'offset',0,'S',kv.Sintra,'flow',100,'fhigh',6000,'tempWin',1,'lat',azi);
+          [~,cues{ee}(isub,nn,:),cueLbl] = baumgartner2017(target,template,'flow',100,'fhigh',5000,'lat',azi);
         end
       end
       amt_disp([num2str(isub),' of ',num2str(length(data)),' subjects completed.'],'progress')
     end
     if not(flags.do_quickCheck)
-      amt_cache('set',fncache,Pext);
+      amt_cache('set',fncache,Pext,cues,cueLbl);
     end
   end
   
-  figure
-  for ee = 1:length(exp)
-    subplot(1,length(exp),ee)
-    plot(nprime,squeeze(mean(cues{ee})))
-    title(exp{ee})
-    xlabel('n\prime')
+  %% Cue weighting optimization procedure
+  S = ones(size(cues{1},3),1); % sensitivity to cue
+  W = zeros(size(cues{1},3),1); % weighting of cue
+  % align actual and modeled data format
+  actual = [];
+  predCue = [];
+  for ee = 1:length(cond)
+    act = data_hartmann1996(cond{ee});
+    actual = cat(1,actual,act.avg.Escore(:));
+    tmp = squeeze(mean(cues{ee},1));
+    tmp = interp1(nprime,tmp,act.avg.nprime);
+    predCue = cat(1,predCue,tmp);
   end
-  legend(cueLbl)
+  % optimize sensitivities
+  Erange = 3;
+  Eoffset = 0;
+  cue2E = @(x,cue) Erange * exp(-x*cue) + Eoffset;
+  predE = predCue;
+  dE = nan(size(S));
+  for cc = 1:length(S)
+    if not(isnan(predCue(:,cc)))
+      S(cc) = fminsearch(@(x) rms(cue2E(x,predCue(:,cc))-actual),S(cc));
+    end
+    predE(:,cc) = cue2E(S(cc),predCue(:,cc));
+    dE(cc) = mean(abs( predE(:,cc) - actual )) / (Erange-Eoffset);
+  end
+  % optimize weighting
+  iE = isnan(predE);
+  predE(iE) = 0;
+  W = abs( fminsearch(@(w) rms( predE * abs(w)./sum(abs(w)) - actual ),W) );
+  W(iE(1,:)) = 0;
+  W = W/sum(W);
+  dE(end+1) = mean(abs( predE*W - actual )) / (Erange-Eoffset);
   
+  PextLbl = [cueLbl(:,1);{'Comb.'}];
+  
+  cueTab = table([S;nan],dE,[W;nan],[cueLbl(:,2);{'Weighted combination'}],...
+    'RowNames',PextLbl,...
+    'VariableNames',{'Sensitivity','Error','Weight','Description'});
+  amtdisp(cueTab)
+
+  %% Individual data
+  Ncues = size(cues{1},3);
+  Pext = cell(Ncues+1,length(cond));
+  for ee = 1:length(cond)
+    for cc = 1:Ncues
+      Pext{cc,ee} = cue2E(S(cc),cues{ee}(:,:,cc));
+    end
+    Pext{Ncues+1,ee} = W(1)*Pext{1,ee};
+    for cc = 2:Ncues
+      Pext{Ncues+1,ee} = nansum(cat(3,Pext{Ncues+1,ee},W(cc)*Pext{cc,ee}),3);
+    end
+  end
+  
+  %% Plot
   Ns = size(Pext{1},1);
   figure
-  for ee = 1:length(exp)
-    act = data_hartmann1996(exp{ee});
+  symb = {'-ko','-bs','-rd','-g<','-m>','-c^','-yh'};
+  for ee = 1:length(cond)
+    act = data_hartmann1996(cond{ee});
     subplot(1,2,ee)
-    h(1) = plot(act.avg.nprime,act.avg.Escore,'-ko');
+    h(1) = plot(act.avg.nprime,act.avg.Escore,symb{1});
     hold on
-    h(2) = errorbar(nprime,mean(Pext{1,ee}),std(Pext{1,ee})/sqrt(Ns),'-bs');
-    h(3) = errorbar(nprime,mean(Pext{2,ee}),std(Pext{2,ee})/sqrt(Ns),'-rd');
+    for cc = 1:size(Pext,1)
+      h(cc) = errorbar(nprime,mean(Pext{cc,ee}),std(Pext{cc,ee})/sqrt(Ns),symb{cc+1});
+    end
     set(h,'MarkerFaceColor','w')
     if ee == 1
-      xlabel('n\prime (Highest harmonic with ILD = 0)')
+      xlabel('n^{\prime} (Highest harmonic with ILD = 0)')
     else
-      xlabel('n\prime (Highest harmonic with altered amplitudes)')
+      xlabel('n^{\prime} (Highest harmonic with altered amplitudes)')
     end
     ylabel('Externalization score')
-    title(exp{ee})
+    title(cond{ee})
     axis([0,39,-0.1,3.1])
-    if ee == 2
-      leg = legend('Actual','Interaural cues','Monaural cues','Location','southwest');
+    if ee == 1
+      leg = legend([{'Actual'};PextLbl],'Location','southwest');
       set(leg,'Box','off')
     end
   end
+  
+  % Output
+  data = {cueTab,Pext};
 end
 
-%% Boyd et al. (2012)
+%% Boyd et al. (2012) -----------------------------------------------------
 if flags.do_boyd2012
   
   flags.do_noise = true;
-  flags.do_BSMD = false;
+  flags.do_georganti2013 = false;
   flags.do_BRIR = true;
   
   flp = [nan,6500]; % Low-pass cut-off frequency
   azi = -30;
+  Ncues = 5;
   
   subjects = data_boyd2012;
   if flags.do_noise
@@ -245,7 +345,7 @@ if flags.do_boyd2012
   mix = subjects(1).Resp.mix/100;
     
   fncache = ['boyd2012_Sintra',num2str(kv.Sintra*100,'%i'),'_Sinter',num2str(kv.Sinter*100,'%i')];
-  E = amt_cache('get',fncache,flags.cachemode);
+  [E,cues,cueLbl] = amt_cache('get',fncache,flags.cachemode);
   if isempty(E)
     
     mix(1) = 1;
@@ -257,10 +357,11 @@ if flags.do_boyd2012
     end
 
     E.meta = {'actual','interaural','monaural'};
-    if flags.do_BSMD
+    if flags.do_georganti2013
       E.meta(4) = {'BSMD'};
     end
     E.all = repmat({nan([length(mix),2,2,length(subjects)])},1,length(E.meta));
+    cues = nan(length(mix),2,2,length(subjects),Ncues);
     for isub = 1:length(subjects)
       E.all{1}(:,:,:,isub) = cat(3,...
         [subjects(isub).Resp.ITE_BB_1T(:),subjects(isub).Resp.BTE_BB_1T(:)],...
@@ -319,14 +420,17 @@ if flags.do_boyd2012
 %                 'S',kv.Sintra,'flow',flow,'range',100,'offset',0,'fhigh',fhigh(1),'lat',azi);
 % %   hold on
 % else
-  amt_disp([num2str(mix(m)),', ',num2str(fhigh(lp)),', ',num2str(c)],'progress')
-              E.all{2}(m,c,lp,isub) =  baumgartner2017( target,template,'argimport',flags,kv,...
-                'fs',subjects(isub).fs,'S',kv.Sinter,'flow',flow,'range',100,'offset',0 ,'fhigh',fhigh(1),'interaural');
-              E.all{3}(m,c,lp,isub) =  baumgartner2017( target,template,'argimport',flags,kv,...
-                'fs',subjects(isub).fs,'S',kv.Sintra,'flow',flow,'range',100,'offset',0,'fhigh',fhigh(1),'lat',azi);
+  amt_disp([num2str(mix(m)),', ',num2str(fhigh(lp)),', ',num2str(c)],'volatile')
+%               E.all{2}(m,c,lp,isub) =  baumgartner2017( target,template,'argimport',flags,kv,...
+%                 'fs',subjects(isub).fs,'S',kv.Sinter,'flow',flow,'range',100,'offset',0 ,'fhigh',fhigh(1),'interaural');
+%               E.all{3}(m,c,lp,isub) =  baumgartner2017( target,template,'argimport',flags,kv,...
+%                 'fs',subjects(isub).fs,'S',kv.Sintra,'flow',flow,'range',100,'offset',0,'fhigh',fhigh(1),'lat',azi);
+              [~,cues(m,c,lp,isub,:),cueLbl] = baumgartner2017(target,template...
+                ,'argimport',flags,kv,'flow',flow,'fhigh',fhigh(1),'lat',azi);
+              
 % end
 
-              if flags.do_BSMD
+              if flags.do_georganti2013
                 geor.fs = subjects(1).fs;
                 geor.timeFr = 1;
                 geor.fmin = flow;
@@ -342,31 +446,76 @@ if flags.do_boyd2012
 
     end
 
-    if flags.do_BSMD
+    if flags.do_georganti2013
       E.all{4} = 100*E.all{4}./repmat(E.all{4}(1,1,1,:),[length(mix),2,2,1]);
     end
     
-    for ee = 1:length(E.all)
-      E.m{ee} = mean(E.all{ee},4);
-      E.se{ee} = std(E.all{ee},0,4);
-    end
-    
     if not(flags.do_quickCheck)
-      amt_cache('set',fncache,E);
+      amt_cache('set',fncache,E,cues,cueLbl);
     end
   end
 
+  
+  %% Cue weighting optimization procedure
+  S = ones(Ncues,1); % sensitivity to cue
+  W = zeros(size(S)); % weighting of cue
+  % optimize sensitivities
+  if flags.do_BRIR % comparison on individual basis
+    predCue = reshape(cues,[],Ncues);
+    actual = E.all{1}(:);
+  else % average comparison
+    predCue = reshape(mean(cues,4),length(mix)*2*2,[]);
+    actual = reshape(mean(E.all{1},4),[],1);
+  end
+  id = not(nansum(predCue,2)==0);
+  predCue = predCue(id,:);
+  actual = actual(id,:);
+  Erange = 100;
+  Eoffset = 0;
+  cue2E = @(x,cue) Erange * exp(-x*cue) + Eoffset;
+  predE = predCue;
+  dE = nan(size(S));
+  for cc = 1:Ncues
+    if not(isnan(predCue(:,cc)))
+      S(cc) = fminsearch(@(x) rms(cue2E(x,predCue(:,cc))-actual),S(cc));
+    end
+    predE(:,cc) = cue2E(S(cc),predCue(:,cc));
+    dE(cc) = mean(abs( predE(:,cc) - actual )) / (Erange-Eoffset);
+  end
+  % optimize weighting
+  iE = isnan(predE);
+  predE(iE) = 0;
+  W = abs( fminsearch(@(w) rms( predE * abs(w)./sum(abs(w)) - actual ),W) );
+  W(iE(1,:)) = 0;
+  W = W/sum(W);
+  dE(end+1) = mean(abs( predE*W - actual )) / (Erange-Eoffset);
+  
+  PextLbl = [cueLbl(:,1);{'Comb.'}];
+  
+  cueTab = table([S;nan],dE,[W;nan],[cueLbl(:,2);{'Weighted combination'}],...
+    'RowNames',PextLbl,...
+    'VariableNames',{'Sensitivity','Error','Weight','Description'});
+  amtdisp(cueTab)
+
+  %% Individual data
+  for cc = 1:Ncues
+    E.all{cc+1} = cue2E(S(cc),cues(:,:,:,:,cc));
+  end
+  E.all{Ncues+2} = W(1)*E.all{2};
+  for cc = 2:Ncues
+    E.all{Ncues+2} = nansum(cat(5,E.all{Ncues+2},W(cc)*E.all{cc+1}),5);
+  end
+  
+  %% Average data
+  for ee = 1:length(E.all)
+    E.m{ee} = mean(E.all{ee},4);
+    E.se{ee} = std(E.all{ee},0,4);
+  end
+  
   %% Plot
   flags.do_plot_individual = false;
   
-  if flags.do_BSMD && length(E.meta) > 3
-    Nee = 4;
-  else
-    Nee = 3;
-  end
-  
-  dataLbl = E.meta;%{'Actual','Interaural','Monaural'};
-  symb = {'ko','bs','rd','gh'};
+  symb = {'-ko','-bs','-rd','-g<','-m>','-c^','-yh'};
   condLbl = {'ITE / BB','BTE / BB','ITE / LP','BTE / LP'};
   mix = mix(2:end)*100;
   
@@ -375,8 +524,8 @@ if flags.do_boyd2012
     hax = tight_subplot(1,4,0,[.15,.1],[.1,.05]);
     for cc = 1:length(condLbl)
       axes(hax(cc))
-      for ee = 1:Nee
-        h = errorbar(mix,E.m{ee}(2:end,cc),E.se{ee}(2:end,cc),['-',symb{ee}]);
+      for ee = 1:length(E.m)
+        h = errorbar(mix,E.m{ee}(2:end,cc),E.se{ee}(2:end,cc),symb{ee});
         set(h,'MarkerFaceColor','w')
         hold on
       end
@@ -390,7 +539,7 @@ if flags.do_boyd2012
       title(condLbl{cc})
       axis([-20,120,-5,105])
       if cc == 4
-        leg = legend(dataLbl);
+        leg = legend([{'Actual'};PextLbl]);
         set(leg,'Box','off','Location','north')
       end
     end
@@ -426,6 +575,10 @@ if flags.do_boyd2012
     
   end
 %   set(leg,'Location','eastoutside','Position',get(leg,'Position')+[.1,.2,0,0])
+
+%% Output
+data = {cueTab,E};
+
 end
 
 if flags.do_baumgartner2017

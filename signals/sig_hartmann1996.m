@@ -10,7 +10,7 @@ function sig = sig_hartmann1996(varargin)
 %     f0     : Fundamental frequency. Default is 125 Hz.
 %     Obj    : HRTFs as SOFA object.
 %     azi    : Azimuth. Default is -37 deg.
-%     dur    : Duration in seconds. Default is 0.1 s.
+%     dur    : Duration in seconds. Default is 1 s.
 %     fs     : Sampling rate in Hz. Default is 48 kHz.
 %
 %   The *condition* flag may be one of:

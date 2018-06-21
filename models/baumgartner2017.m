@@ -1,6 +1,6 @@
 function [E,varargout] = baumgartner2017( target,template,varargin )
 %BAUMGARTNER2017 Model for sound externalization
-%   Usage:    [E,cues] = baumgartner2017( target,template )
+%   Usage:    [E,cues,cueLabels] = baumgartner2017( target,template )
 %
 %   Input parameters:
 %     target  : binaural impulse response(s) referring to the directional 
@@ -17,8 +17,10 @@ function [E,varargout] = baumgartner2017( target,template,varargin )
 %               Options 1 & 2 equivalent to *target*.
 %
 %   Output parameters:
-%     E       : predicted degree of externalization
-%     cues    : outcomes of individual cues 
+%     E         : predicted degree of externalization
+%     cues      : outcomes of individual cues 
+%     cueLabels : cue labels; cell array with 1st col. denoting acronyms
+%                 and 2nd col. for descriptions
 %
 %   `baumgartner2017(...)` is a model for sound externalization.
 %   It bases on the comparison of the intra-aural internal representation
@@ -187,8 +189,19 @@ tem.itd = itdestimator(shiftdim(template,1),'fs',kv.fs,'MaxIACCe');
 tar.itd = itdestimator(shiftdim(target,1),'fs',kv.fs,'MaxIACCe');
 
 %% Filterbank
-[tem.mp,fc] = baumgartner2016_spectralanalysis(template,70,'tiwin',kv.tempWin,'GT_minSPL',-100,'gammatone','redo');
-[tar.mp,fc] = baumgartner2016_spectralanalysis(target,70,'tiwin',kv.tempWin,'GT_minSPL',-100,'gammatone','redo');
+[tem.mp,fc] = baumgartner2016_spectralanalysis(template,nan,'argimport',flags,kv,'tiwin',0.005,'gammatone','redo');
+tar.mp = baumgartner2016_spectralanalysis(target,nan,'argimport',flags,kv,'tiwin',0.005,'gammatone','redo');
+
+%% temporal SD of ISLD (Catic et al., 2015)
+tem.STild = -diff(tem.mp,1,3); % short-term ILDs
+tar.STild = -diff(tar.mp,1,3);
+TVILD = 1 - mean(std(tar.STild,0,5)./std(tem.STild,0,5));
+
+%% Temporal Average
+if kv.tempWin >= 1
+  tem.mp = mean(tem.mp,5);
+  tar.mp = mean(tar.mp,5);
+end
 
 %% Spectral cues
 tem.psg = baumgartner2016_gradientextraction(tem.mp,fc);
@@ -203,11 +216,8 @@ tar.ild = -diff(tar.mp,1,3);
 % ref.sdild = std(ref.ild,0,1);
 % ISLDspecSD = mean(tar.sdild./tem.sdild,5);
 
-%% temporal SD of ISLD (Catic et al., 2015)
-ISLDtemSD = 1 - mean(std(tar.ild,0,5)./std(tem.ild,0,5));
-
 %% Interaural broadband time-intenstiy coherence (IBTIC) -> dprime possible
-IBTIC = abs(tar.itd/tem.itd - mean(tar.ild(:))/mean(tem.ild(:)));
+BITIT = abs( tar.itd/(eps+tem.itd) - mean(tar.ild(:))/(eps+mean(tem.ild(:))) );
 
 %% Spectral comparison
 
@@ -243,7 +253,7 @@ for iSC = 1:3 % first monaural then interaural
 
   % temporal integration
   if length(sigma{1}) == 1
-    si = exp(-kv.S*sigma{1});
+    distmetric = sigma{1};%exp(-kv.S*sigma{1});
   elseif flags.do_dprime % signal detection theory applied to time histograms
   %   figure; histogram(sigma{1}); hold on ; histogram(sigma{2}); legend('target','reference')
     allsigma = [sigma{1}(:);sigma{2}(:)];
@@ -270,19 +280,32 @@ for iSC = 1:3 % first monaural then interaural
   elseif iSC == 2
     ISS = si; % interaural spectral similarity
   elseif iSC == 3
-    ISLDspecSD = si;
+    SVILD = si;
   end
   
 end
 
 %% Cue integration/weighting
+
+cues = [MSS; ISS; SVILD; TVILD; BITIT];
+cueLbl = {'MSG','Monaural spectral gradients'; ...
+          'ISS','Interaural spectral shape'; ...
+          'SVILD','Spectral variance in ILD (bin. spect. mag. diff.)'; ...
+          'TVILD','Temporal variance in ILD'; ...
+          'BITIC','Broadband interaural time-intensity coherence'; ...
+         };
+
 if flags.do_intraaural
   kv.cueWeights = 1;
 elseif flags.do_interaural
   kv.cueWeights = [0,1];
 end
-cues = [MSS; ISS; ISLDspecSD; ISLDtemSD; IBTIC];
-kv.S = postpad(kv.S(:),length(cues));
+
+if isscalar(kv.S)
+  kv.S = repmat(kv.S,[length(cues),1]);
+else
+  kv.S = postpad(kv.S(:),length(cues));
+end
 kv.cueWeights = postpad(kv.cueWeights(:),length(cues))/sum(kv.cueWeights);
 si = exp(-kv.S.*cues);
 bsi = nansum(kv.cueWeights .* si);
@@ -290,6 +313,7 @@ bsi = nansum(kv.cueWeights .* si);
 E = kv.range*bsi +kv.offset;%max(bsi);%min(1,max(bsi));%geomean(bsi);
 if nargout >= 2
   varargout{1} = cues;
+  varargout{2} = cueLbl;
 end
 
   

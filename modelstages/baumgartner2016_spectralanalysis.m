@@ -19,8 +19,8 @@ function varargout = baumgartner2016_spectralanalysis(sig,spl,varargin)
 %
 %   `baumgartner2016_spectralanalysis` accepts the following optional parameters:
 %
+%     'tiwin'     Set temporal integration window in seconds. Default is Inf.
 %     'ID'        Listener's ID (important for caching).
-%
 %     'Condition' Label of experimental condition (also for caching).
 %
 %   `baumgartner2016_spectralanalysis` accepts these optional flags:
@@ -62,17 +62,19 @@ end
 cachenameprefix = [cachenameprefix 'lat' num2str(kv.lat) '_' num2str(spl) 'dB'];
 
 %% Remove pausings (at beginning and end)
-idnz = diff(mean(sig(:,:).^2,2)) ~= 0;
-sig = sig(idnz,:,:); 
-% and evaluate broadband ILD
 Nch = size(sig,3);
-if Nch == 2
-  ILD = dbspl(sig(:,:,2))./dbspl(sig(:,:,1));
-  if mean(ILD) < 1
-    chdamp = 2;
-  else
-    ILD = 1./ILD;
-    chdamp = 1;
+if not(isnan(spl))
+  idnz = diff(mean(sig(:,:).^2,2)) ~= 0;
+  sig = sig(idnz,:,:); 
+  % and evaluate broadband ILD
+  if Nch == 2
+    ILD = dbspl(sig(:,:,2))./dbspl(sig(:,:,1));
+    if mean(ILD) < 1
+      chdamp = 2;
+    else
+      ILD = 1./ILD;
+      chdamp = 1;
+    end
   end
 end
 
@@ -87,10 +89,12 @@ if flags.do_gammatone
   if isempty(mp)
     
     % Set level
-    sig(:,:,1) = setdbspl(sig(:,:,1),spl);
-    if Nch == 2
-      sig(:,:,2) = setdbspl(sig(:,:,2),spl);
-      sig(:,:,chdamp) = repmat(ILD,[size(sig,1),1]).*sig(:,:,chdamp);
+    if not(isnan(spl))
+      sig(:,:,1) = setdbspl(sig(:,:,1),spl);
+      if Nch == 2
+        sig(:,:,2) = setdbspl(sig(:,:,2),spl);
+        sig(:,:,chdamp) = repmat(ILD,[size(sig,1),1]).*sig(:,:,chdamp);
+      end
     end
 
     if flags.do_middleear
@@ -138,8 +142,10 @@ if flags.do_gammatone
   end
   
   % Limit dynamic range
-  mp = min(mp,kv.GT_maxSPL +30); % maybe +30 because dynamic range was evaluated with broadband noise (40 auditory bands)
-  mp = max(mp,kv.GT_minSPL +30);
+  if not(isnan(spl))
+    mp = min(mp,kv.GT_maxSPL +30); % +30 because dynamic range was evaluated with broadband noise (40 auditory bands)
+    mp = max(mp,kv.GT_minSPL +30);
+  end
   
 end
 
