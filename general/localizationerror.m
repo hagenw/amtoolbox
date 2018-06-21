@@ -625,8 +625,120 @@ else
     varargout{3}=par; 
   end
 end
+end
 
 function out_deg=mynpi2pi(ang_deg)
 ang=ang_deg/180*pi;
 out_rad=sign(ang).*((abs(ang)/pi)-2*ceil(((abs(ang)/pi)-1)/2))*pi;
 out_deg=out_rad*180/pi;
+end
+
+function [phi,mag]=circmean(azi,dim)
+% [PHI,MAG]=circmean(AZI,DIM)
+%
+% Calculate the average angle of AZI according
+% to the circular statistics (Batschelet, 1981).
+% 
+% For vectors, CIRCMEAN(AZI) is the mean value of the elements in AZI. For
+% matrices, CIRCMEAN(AZI) is a row vector containing the mean value of
+% each column.  For N-D arrays, CIRCMEAN(azi) is the mean value of the
+% elements along the first non-singleton dimension of AZI.
+%
+% circmean(AZI,DIM) takes the mean along the dimension DIM of AZI. 
+%
+% PHI is the average angle in deg, 0..360°
+% MAG is the magnitude showing the significance of PHI (kind of dispersion)
+%   MAG of zero shows that there is no average of AZI.
+%   MAG of one shows a highest possible significance
+%   MAG can be represented in terms of standard deviation in deg by using
+%       rad2deg(acos(MAG)*2)/2
+%
+% [PHI,MAG]=circmean(AZI,W) calculates a weighted average where each sample
+% in AZI is weighted by the corresponding entry in W.
+%
+% Piotr Majdak, 6.3.2007
+
+if isempty(azi) % no values
+  phi=NaN;
+  mag=NaN;
+  return;
+end
+
+if prod(size(azi))==1 % one value only
+  phi=azi;
+  mag=1;
+  return;
+end
+
+if ~exist('dim')  % find the dimension
+  dim = min(find(size(azi)~=1));
+  w=ones(size(azi));
+elseif prod(size(dim))~=1
+    % dim vector represents weights
+  w=dim;
+  dim = min(find(size(azi)~=1));
+end
+
+
+x=deg2rad(azi);
+
+s=mean(sin(x).*w,dim)/mean(w);
+c=mean(cos(x).*w,dim)/mean(w);
+
+y=zeros(size(s));
+for ii=1:length(s)
+  if s(ii)>0 & c(ii)>0
+    y(ii)=atan(s(ii)/c(ii));
+  elseif c(ii)<0
+    y(ii)=atan(s(ii)/c(ii))+pi;
+  elseif s(ii)<0 & c(ii)>0
+    y(ii)=atan(s(ii)/c(ii))+2*pi;
+  elseif s(ii)==0
+    y(ii)=0;
+  else
+    y(ii)=NaN;
+  end
+end
+mag=sqrt(s.*s+c.*c);
+phi=zero22pi(rad2deg(y));
+end
+
+function mag=circstd(azi,dim)
+
+% MAG=circstd(AZI,DIM)
+%
+% Calculate the standard deviation angle (in deg) of AZI (in deg) according
+% to the circular statistics (Batschelet, 1981).
+% 
+% For vectors, CIRCSTD(AZI) is the std of the elements in AZI. For
+% matrices, CIRCSTD(AZI) is a row vector containing the std of
+% each column.  For N-D arrays, CIRCSTD(azi) is the std value of the
+% elements along the first non-singleton dimension of AZI.
+%
+% CIRCSTD(AZI,DIM) takes the std along the dimension DIM of AZI. 
+%
+%
+% MAG=CIRCSTD(AZI,W) calculates a weighted std where each vector strength
+% of AZI is weighted by the corresponding entry in W.
+%
+% Piotr Majdak, 21.08.2008
+
+if isempty(azi) % no values
+  mag=NaN;
+  return;
+end
+
+if prod(size(azi))==1 % one value only
+  mag=0;
+  return;
+end
+
+if ~exist('dim')  % find the dimension
+  [phi,mag]=circmean(azi);
+elseif prod(size(dim))~=1
+  [phi,mag]=circmean(azi,dim);
+end
+
+mag=rad2deg(sqrt(2*(1-mag)));
+
+end
