@@ -18,6 +18,8 @@ function y = sig_hassager2016(x,B,fs)
 
 % AUTHOR: Robert Baumgartner, Acoustics Research Institute, Vienna, Austria
 
+flags.do_plot = false;
+
 if isstruct(x) % input: SOFA object
   Obj = x;
   fs = Obj.Data.SamplingRate;
@@ -43,6 +45,17 @@ y = ifft(YminPhase.*excessPhaseTF,Nfft);
 if exist('Obj','var') % output: SOFA object
   Obj.Data.IR = shiftdim(y,1);
   y = Obj;
+end
+
+if flags.do_plot
+  idpos = 7; % 0° azimuth for ARI HRTFs
+  for ii = 1:2
+    subplot(1,2,ii)
+    semilogx(f,20*log10(Yabs(:,idpos,ii)))
+    xlabel('Frequency (Hz)')
+    ylabel('Magnitude (dB)')
+    hold on
+  end
 end
 
 end

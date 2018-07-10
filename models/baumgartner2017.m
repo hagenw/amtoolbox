@@ -112,6 +112,8 @@ definput.import={'baumgartner2017','baumgartner2014','baumgartner2014_pmv2ppp','
   {'fs','S','lat','stim','space','do','flow','fhigh',... %'fsstim'
   'bwcoef','polsamp','rangsamp','mrsmsp','gamma'},definput,varargin);
 
+flags.do_plot = false;
+
 if not(isstruct(target)) && ismatrix(target)
   target = permute(target,[1,3,2]);
 %   warning(['Matrix dimensions of target should be: time x direction x channel/ear.' ...
@@ -192,15 +194,29 @@ tar.itd = itdestimator(shiftdim(target,1),'fs',kv.fs,'MaxIACCe');
 [tem.mp,fc] = baumgartner2016_spectralanalysis(template,nan,'argimport',flags,kv,'tiwin',0.005,'gammatone','redo');
 tar.mp = baumgartner2016_spectralanalysis(target,nan,'argimport',flags,kv,'tiwin',0.005,'gammatone','redo');
 
-%% temporal SD of ISLD (Catic et al., 2015)
-tem.STild = -diff(tem.mp,1,3); % short-term ILDs
-tar.STild = -diff(tar.mp,1,3);
-TVILD = 1 - mean(std(tar.STild,0,5)./std(tem.STild,0,5));
+%% interaural temporal SD of ILDs (Catic et al., 2015)
+MinNumTimeFrames = 20;
+if size(tem.mp,5) >= MinNumTimeFrames && size(tar.mp,5) >= MinNumTimeFrames
+  tem.STild = -diff(tem.mp,1,3); % short-term ILDs
+  tar.STild = -diff(tar.mp,1,3);
+  ITSD = 1 - mean(std(tar.STild,0,5)./std(tem.STild,0,5));
+else
+  ITSD = nan;
+end
 
-%% Temporal Average
+%% Temporal "average" -> max is most appropriate because of RMS and frequency-dependent excitation delay
 if kv.tempWin >= 1
-  tem.mp = mean(tem.mp,5);
-  tar.mp = mean(tar.mp,5);
+  tem.mp = max(tem.mp,[],5);
+  tar.mp = max(tar.mp,[],5);
+end
+if flags.do_plot
+  for ear = 1:2
+    subplot(1,2,ear)
+    semilogx(fc,squeeze(tar.mp(:,1,ear)))
+    xlabel('Frequency (Hz)')
+    ylabel('RMS magnitude (dB)')
+    hold on
+  end
 end
 
 %% Spectral cues
@@ -216,8 +232,14 @@ tar.ild = -diff(tar.mp,1,3);
 % ref.sdild = std(ref.ild,0,1);
 % ISLDspecSD = mean(tar.sdild./tem.sdild,5);
 
-%% Interaural broadband time-intenstiy coherence (IBTIC) -> dprime possible
-BITIT = abs( tar.itd/(eps+tem.itd) - mean(tar.ild(:))/(eps+mean(tem.ild(:))) );
+%% Interaural time-intenstiy coherence (ITIC) -> dprime possible
+if tar.itd == tem.itd && tem.itd == 0
+  TC = 1;
+else
+  TC = tar.itd/(eps+tem.itd);
+end
+IC = mean(tar.ild(:))/(eps+mean(tem.ild(:)));
+ITIC = abs( TC - IC );
 
 %% Spectral comparison
 
@@ -231,6 +253,7 @@ for iSC = 1:3 % first monaural then interaural
   elseif iSC == 3 % spectral SD of interaural differences
     tem.nrep = std(tem.ild,0,1);
     tar.nrep = std(tar.ild,0,1);
+    kv.JND = 0;
   end
   
   % comparison with time average of spectral template
@@ -280,19 +303,19 @@ for iSC = 1:3 % first monaural then interaural
   elseif iSC == 2
     ISS = si; % interaural spectral similarity
   elseif iSC == 3
-    SVILD = si;
+    ISSD = si;
   end
   
 end
 
 %% Cue integration/weighting
 
-cues = [MSS; ISS; SVILD; TVILD; BITIT];
-cueLbl = {'MSG','Monaural spectral gradients'; ...
-          'ISS','Interaural spectral shape'; ...
-          'SVILD','Spectral variance in ILD (bin. spect. mag. diff.)'; ...
-          'TVILD','Temporal variance in ILD'; ...
-          'BITIC','Broadband interaural time-intensity coherence'; ...
+cues = [MSS; ISS; ISSD; ITSD; ITIC];
+cueLbl = {'MSG','Monaural spectral gradients (c.f., Baumgartner et al., 2014)'; ...
+          'ISS','Interaural spectral shape (c.f., Hassager et al., 2016)'; ...
+          'ISSD','Interaural spectral standard deviation (c.f., Georganti et al., 2013)'; ...
+          'ITSD','Interaural temporal standard deviation (c.f., Catic et al., 2015)'; ...
+          'ITIC','Interaural time-intensity coherence'; ...
          };
 
 if flags.do_intraaural

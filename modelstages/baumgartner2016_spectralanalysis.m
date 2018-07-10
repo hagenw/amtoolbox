@@ -102,6 +102,8 @@ if flags.do_gammatone
         sig = lconv(sig,miearfilt(:));
     end
 
+    Lpad = round(3/kv.flow*kv.fs); % add 3 cycles of lowest freq
+    sig = postpad(sig,size(sig,1)+Lpad);
     if kv.space == 1
       [mp,fc] = auditoryfilterbank(sig(:,:),kv.fs,...
           'flow',kv.flow,'fhigh',kv.fhigh);
@@ -122,7 +124,7 @@ if flags.do_gammatone
 
     % Averaging over time (RMS)
     if flags.do_target && size(mp,1) > kv.tiwin*kv.fs
-      Lframe = kv.tiwin*kv.fs; % length of each frame
+      Lframe = round(kv.tiwin*kv.fs); % length of each frame
       Nframes = ceil(size(mp,1)/Lframe); % # frames
       mp = postpad(mp,Lframe*Nframes,0,1);
       mp = reshape(mp,[Lframe,Nframes,Nfc,size(sig,2),Nch]);
