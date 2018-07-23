@@ -1,4 +1,4 @@
-function [toa_diff,toa] = itdestimator(Obj,varargin)
+function [toa_diff,toa,IACC] = itdestimator(Obj,varargin)
 %   Usage: itd = itd_estimator(data,[mode],[threshlvl],...
 %                   [lowpass],[butterpoly],[upper_cutfreq]) 
 %
@@ -203,7 +203,7 @@ function [toa_diff,toa] = itdestimator(Obj,varargin)
             amt_disp('MaxIACCr mode \n','volatile')
             for ii=1:pos                
                 cc = xcorr(squeeze(f_ir(ii,1,:)),squeeze(f_ir(ii,2,:)));
-                [~,idx_lag] = max(abs(cc));
+                [IACC,idx_lag] = max(abs(cc));
                 toa_diff(ii) = idx_lag - Ns;                
             end
             if flags.do_guesstoa
@@ -216,7 +216,7 @@ function [toa_diff,toa] = itdestimator(Obj,varargin)
                 e_sir1 = envelope(squeeze(f_ir(ii,1,:)));
                 e_sir2 = envelope(squeeze(f_ir(ii,2,:)));
                 cc = xcorr(e_sir1,e_sir2);
-                [~,idx_lag] = max(abs(cc));
+                [IACC,idx_lag] = max(abs(cc));
                 toa_diff(ii) = idx_lag - Ns;
             end
             if flags.do_guesstoa
@@ -230,6 +230,7 @@ function [toa_diff,toa] = itdestimator(Obj,varargin)
             for ii=1:pos                
                 cc = xcorr(squeeze(f_ir(ii,1,:)),squeeze(f_ir(ii,2,:)));
                 pos_cc = abs(cc);
+                IACC = max(pos_cc);
                 toa_diff(ii) = centroid(x,pos_cc)-Ns;
             end
             if flags.do_guesstoa
@@ -244,6 +245,7 @@ function [toa_diff,toa] = itdestimator(Obj,varargin)
                 e_sir1 = envelope(squeeze(f_ir(ii,1,:)));
                 e_sir2 = envelope(squeeze(f_ir(ii,2,:)));
                 cc = xcorr(e_sir1,e_sir2);
+                IACC = max(abs(cc));
                 toa_diff(ii) = centroid(x,abs(cc))-Ns;
             end
             if flags.do_guesstoa
@@ -258,6 +260,7 @@ function [toa_diff,toa] = itdestimator(Obj,varargin)
                 e_sir1 = envelope(squeeze(f_ir(ii,1,:)));
                 e_sir2 = envelope(squeeze(f_ir(ii,2,:)));           
                 cc = xcorr(e_sir1,e_sir2).^2;
+                IACC = max(abs(cc));
                 toa_diff(ii) = centroid(x,abs(cc))-Ns;    
             end
             if flags.do_guesstoa

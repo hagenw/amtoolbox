@@ -83,13 +83,14 @@ if flags.do_missingflag
 end
 
 % Symbol order for plotting
-symb = {'-ko','-bs','-rd','-g<','-m>','-c^','-yh'};
+symb = {'-ko','-bs','-rd','-g<','-m>','-c^','-yh',':k*'};
+
+Ncues = 6;
 
 %% Hassager et al. (2016)
 if flags.do_hassager2016
   azi = [0,50];
   flp = 6000; % lowpass filtered noise stimuli
-  Ncues = 5;
   
   Pext_A = data_hassager2016;
   B = Pext_A.B;
@@ -197,7 +198,7 @@ if flags.do_hartmann1996
       data = data(1:5);
     end
     Pext = repmat({nan(length(data),length(nprime))},2,2);
-    cues = repmat({nan(length(data),length(nprime),5)},2,1);
+    cues = repmat({nan(length(data),length(nprime),Ncues)},2,1);
     for isub = 1:length(data)
       Obj = data(isub).Obj;
       template = sig_hartmann1996(0,'Obj',Obj,'dur',0.1);
@@ -242,7 +243,7 @@ if flags.do_hartmann1996
 
   %% Individual data
   dimCues = 3;
-  Ncues = size(cues{1},dimCues);
+%   Ncues = size(cues{1},dimCues);
   Pext = cell(Ncues+1,length(cond));
   for ee = 1:length(cond)
     for cc = 1:Ncues
@@ -296,7 +297,6 @@ if flags.do_boyd2012
   
   flp = [nan,6500]; % Low-pass cut-off frequency
   azi = -30;
-  Ncues = 5;
   
   subjects = data_boyd2012;
   if flags.do_noise
@@ -465,7 +465,8 @@ if flags.do_boyd2012
       else
         set(gca,'YTickLabel',[])
       end
-      title(condLbl{cc})
+%       title(condLbl{cc})
+      text(20,90,condLbl{cc})
       axis([-20,120,-5,105])
 %       if cc == 4
 %         leg = legend([{'Actual'};PextLbl]);
@@ -542,7 +543,6 @@ if flags.do_baumgartner2017
   hrtf = data_baumgartner2017looming('exp2','hrtf');
   
   % Modeling
-  Ncues = 5;
   fncache = ['baumgartner2017'];
   [Pext,cues,cueLbl] = amt_cache('get',fncache,flags.cachemode);
   if isempty(cues)
@@ -829,13 +829,17 @@ f_predErr = @(p) nanrms(p(:)-actual(:)) / (Erange-Eoffset);
 % optimize sensitivities
 Ncues = length(predCue);
 S = ones(Ncues,1); % sensitivity to cue
-W = zeros(size(S)); % weighting of cue
 Pext = cell(Ncues+1,1);
-% predE = []; % init
-dE = nan(size(S));
+dE = nan(Ncues+1,1);
+predE = nan(length(predCue{1}(:)),Ncues);
 for cc = 1:Ncues
   if not(all(isnan(predCue{cc}(:))))
     S(cc) = fminsearch(@(s) f_predErr(f_cue2E(s,predCue{cc})) ,S(cc));
+% splot = logspace(log10(S(cc))-1,log10(S(cc))+1,100);
+% for ii = 1:length(splot)
+%   Eplot(ii) = f_predErr(f_cue2E(splot(ii),predCue{cc}));
+% end
+% figure; semilogx(splot,Eplot)
   end
   
   Pext{cc} = f_cue2E(S(cc),predCue{cc});
@@ -844,12 +848,12 @@ for cc = 1:Ncues
 end
 
 % optimize weighting
-iE = isnan(predE);
-predE(iE) = 0;
-W = abs( fminsearch(@(w) f_predErr(predE * abs(w)./sum(abs(w))),W) ); %rms( predE * abs(w)./sum(abs(w)) - actual ),W) );
-W(iE(1,:)) = 0;
-W = W/sum(W);
-dE(end+1) = f_predErr(predE*W);
+W = zeros(size(S)); % weighting of cue
+isan = not(all(isnan(predE)));
+Wtmp = abs( fminsearch(@(w) f_predErr(predE(:,isan) * abs(w)./sum(abs(w))),W(isan)) ); %rms( predE * abs(w)./sum(abs(w)) - actual ),W) );
+Wtmp = Wtmp/sum(Wtmp);
+dE(cc+1) = f_predErr(predE(:,isan)*Wtmp);
+W(isan) = Wtmp;
 
 % Combined externalization score
 dimCues = ndims(Pext{1})+1;

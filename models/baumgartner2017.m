@@ -41,6 +41,7 @@ function [E,varargout] = baumgartner2017( target,template,varargin )
 %                      4. temporal standard deviation of ILDs (c.f., Catic
 %                         et al., 2015)
 %                      5. interaural broadband time-intensity coherence
+%                      6. interaural cross-correlation coefficient
 %
 %     'fs',fs        Define the sampling rate of the impulse responses. 
 %                    Default value is 48000 Hz.
@@ -186,13 +187,15 @@ end
 
 % frameLength = round((kv.tempWin*kv.fs));
 
-%% ITD
-tem.itd = itdestimator(shiftdim(template,1),'fs',kv.fs,'MaxIACCe');
-tar.itd = itdestimator(shiftdim(target,1),'fs',kv.fs,'MaxIACCe');
+%% ITD & IACC
+[tem.itd,~,tem.iacc] = itdestimator(shiftdim(template,1),'fs',kv.fs,'MaxIACCe');
+[tar.itd,~,tar.iacc] = itdestimator(shiftdim(target,1),'fs',kv.fs,'MaxIACCe');
+
+IACC = tar.iacc/tem.iacc;
 
 %% Filterbank
-[tem.mp,fc] = baumgartner2016_spectralanalysis(template,nan,'argimport',flags,kv,'tiwin',0.005,'gammatone','redo');
-tar.mp = baumgartner2016_spectralanalysis(target,nan,'argimport',flags,kv,'tiwin',0.005,'gammatone','redo');
+[tem.mp,fc] = baumgartner2016_spectralanalysis(template,70,'argimport',flags,kv,'tiwin',0.005,'gammatone','redo');
+tar.mp = baumgartner2016_spectralanalysis(target,70,'argimport',flags,kv,'tiwin',0.005,'gammatone','redo');
 
 %% interaural temporal SD of ILDs (Catic et al., 2015)
 MinNumTimeFrames = 20;
@@ -310,12 +313,13 @@ end
 
 %% Cue integration/weighting
 
-cues = [MSS; ISS; ISSD; ITSD; ITIC];
+cues = [MSS; ISS; ISSD; ITSD; ITIC; IACC];
 cueLbl = {'MSG','Monaural spectral gradients (c.f., Baumgartner et al., 2014)'; ...
           'ISS','Interaural spectral shape (c.f., Hassager et al., 2016)'; ...
           'ISSD','Interaural spectral standard deviation (c.f., Georganti et al., 2013)'; ...
           'ITSD','Interaural temporal standard deviation (c.f., Catic et al., 2015)'; ...
           'ITIC','Interaural time-intensity coherence'; ...
+          'IACC','Interaural cross correlation'; ...
          };
 
 if flags.do_intraaural

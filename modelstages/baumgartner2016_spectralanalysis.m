@@ -88,13 +88,12 @@ if flags.do_gammatone
   [mp,fc] = amt_cache('get',cachename,flags.cachemode);
   if isempty(mp)
     
-    % Set level
+    % Set level by single factor, not individually for every direction or
+    % channel (directions and channels are pooled)
     if not(isnan(spl))
-      sig(:,:,1) = setdbspl(sig(:,:,1),spl);
-      if Nch == 2
-        sig(:,:,2) = setdbspl(sig(:,:,2),spl);
-        sig(:,:,chdamp) = repmat(ILD,[size(sig,1),1]).*sig(:,:,chdamp);
-      end
+      sigsize = size(sig);
+      sig = setdbspl(sig(:),spl);
+      sig = reshape(sig,sigsize);
     end
 
     if flags.do_middleear
@@ -145,8 +144,8 @@ if flags.do_gammatone
   
   % Limit dynamic range
   if not(isnan(spl))
-    mp = min(mp,kv.GT_maxSPL +30); % +30 because dynamic range was evaluated with broadband noise (40 auditory bands)
-    mp = max(mp,kv.GT_minSPL +30);
+    mp = min(mp,kv.GT_maxSPL); % maybe +30 because dynamic range was evaluated with broadband noise (40 auditory bands)
+    mp = max(mp,kv.GT_minSPL);
   end
   
 end
