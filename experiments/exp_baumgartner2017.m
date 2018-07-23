@@ -82,10 +82,11 @@ if flags.do_missingflag
   error('%s: You must specify one of the following flags: %s.',upper(mfilename),flagnames);
 end
 
+Ncues = 6;
 % Symbol order for plotting
 symb = {'-ko','-bs','-rd','-g<','-m>','-c^','-yh',':k*'};
+colors = 0.8*[zeros(1,3);hsv(Ncues+2)];
 
-Ncues = 6;
 
 %% Hassager et al. (2016)
 if flags.do_hassager2016
@@ -160,18 +161,26 @@ if flags.do_hassager2016
   dataLbl = [{'Actual'};PextLbl];
   idleg = not(ismember(dataLbl,'ITSD'));
   figure 
+  hax = tight_subplot(1,2,0,[.15,.1],[.1,.05]);
   for iazi = 1:length(azi)
-    subplot(1,2,iazi)
-    h(1) = plot(B,Pext_A.rating(:,iazi),symb{1});
+%     subplot(1,2,iazi)
+    axes(hax(iazi))
+    h(1) = plot(B,Pext_A.rating(:,iazi),symb{1},'Color',colors(1,:));
     hold on
     for m = 1:Ncues+1
-      h(m+1) = errorbar(B,mean(Pext{m}(:,iazi,:),dimSubj),std(Pext{m}(:,iazi,:),0,dimSubj)/sqrt(Nsubj),symb{m+1});
+      dx = 1+0.02*(m - (Ncues+1)/2);
+      h(m+1) = errorbar(dx*B,mean(Pext{m}(:,iazi,:),dimSubj),std(Pext{m}(:,iazi,:),0,dimSubj)/sqrt(Nsubj),...
+        symb{m+1},'Color',colors(m+1,:));
     end
     set(h,'MarkerFaceColor','w')
     set(gca,'XTick',BplotTicks,'XTickLabel',BplotStr,'XScale','log')
     axis([BplotTicks(1)/1.5,BplotTicks(end)*1.5,0.8,5.2])
     xlabel('Bandwidth Factor [ERB]')
-    ylabel('Mean Externalization Rating')
+    if iazi==1
+      ylabel('Mean Externalization Rating')
+    else
+      set(gca,'YTickLabel',{})
+    end
     title([num2str(azi(iazi)),'\circ'])
   end
   leg = legend(h(idleg),dataLbl(idleg),'Location','southwest');
@@ -260,23 +269,28 @@ if flags.do_hartmann1996
   idleg = not(ismember(dataLbl,'ITSD'));
   Ns = size(Pext{1},1);
   figure
+  hax = tight_subplot(1,2,0,[.15,.1],[.1,.05]);
   for ee = 1:length(cond)
     act = data_hartmann1996(cond{ee});
-    subplot(1,2,ee)
-    h(1) = plot(act.avg.nprime,act.avg.Escore,symb{1});
+%     subplot(1,2,ee)
+    axes(hax(ee))
+    h(1) = plot(act.avg.nprime,act.avg.Escore,symb{1},'Color',colors(1,:));
     hold on
     for cc = 1:size(Pext,1)
       if idleg(cc+1)
-        h(cc+1) = errorbar(nprime,mean(Pext{cc,ee}),std(Pext{cc,ee})/sqrt(Ns),symb{cc+1});
+        dx = 0.1*(cc - size(Pext,1)/2);
+        h(cc+1) = errorbar(nprime+dx,mean(Pext{cc,ee}),std(Pext{cc,ee})/sqrt(Ns),...
+          symb{cc+1},'Color',colors(cc+1,:));
       end
     end
     set(h(idleg),'MarkerFaceColor','w')
     if ee == 1
       xlabel('n^{\prime} (Highest harmonic with ILD = 0)')
+      ylabel('Externalization score')
     else
       xlabel('n^{\prime} (Highest harmonic with altered amplitudes)')
+      set(gca,'YTickLabel',{})
     end
-    ylabel('Externalization score')
     title(condPlotLbl{ee})
     axis([0,39,-0.1,3.1])
     if ee == 1
@@ -447,8 +461,9 @@ if flags.do_boyd2012
     for cc = 1:length(condLbl)
       axes(hax(cc))
       for ee = 1:length(E.m)
-        dx = (length(E.m)/2 - ee)*2;
-        h = errorbar(mix+dx,E.m{ee}(2:end,cc),E.se{ee}(2:end,cc),symb{ee});
+        dx = 2*(ee - length(E.m)/2);
+        h = errorbar(mix+dx,E.m{ee}(2:end,cc),E.se{ee}(2:end,cc),...
+          symb{ee},'Color',colors(ee,:));
         set(h,'MarkerFaceColor','w')
         hold on
       end
@@ -466,12 +481,12 @@ if flags.do_boyd2012
         set(gca,'YTickLabel',[])
       end
 %       title(condLbl{cc})
-      text(20,90,condLbl{cc})
-      axis([-20,120,-5,105])
-%       if cc == 4
-%         leg = legend([{'Actual'};PextLbl]);
-%         set(leg,'Box','off','Location','eastoutside')
-%       end
+      text(100,10,condLbl{cc})
+      axis([-20,120,-15,115])
+      if cc == 4
+        leg = legend([{'Actual'};PextLbl]);
+        set(leg,'Box','off','Location','eastoutside')
+      end
     end
     
   else % flags.do_plot_individual
@@ -483,7 +498,7 @@ if flags.do_boyd2012
         axes(hax(cc))
         for ee = 1:Nee
           Eisub = E.all{ee}(:,:,:,isub);
-          h = plot(mix,Eisub(2:end,cc),['-',symb{ee}]);
+          h = plot(mix,Eisub(2:end,cc),symb{ee},'Color',colors(ee,:));
           set(h,'MarkerFaceColor','w')
           hold on
         end
@@ -593,13 +608,14 @@ if flags.do_baumgartner2017
   dataLbl = [{'Actual'};PextLbl];
   figure
   for iE = 1:length(E_all)
-    dx = 0.025*(iE - length(E_all)/2);
-    h(iE) = errorbar(data.C+dx,mean(E_all{iE},2),std(E_all{iE},0,2)/sqrt(Nsubj),symb{iE});
+    dx = 0.01*(iE - length(E_all)/2);
+    h(iE) = errorbar(data.C+dx,mean(E_all{iE},2),std(E_all{iE},0,2)/sqrt(Nsubj),...
+      symb{iE},'Color',colors(iE,:));
     set(h,'MarkerFaceColor','w')
     hold on
   end
   set(gca,'XTick',data.C)
-  axis([-0.2,1.2,-0.05,1.05])
+  axis([-0.2,1.2,-0.2,1.2])
   ylabel('Externalization')
   xlabel('Spectral contrast, C')
   idleg = not(ismember(dataLbl,'ITSD'));
