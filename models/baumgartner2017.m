@@ -191,7 +191,7 @@ end
 [tem.itd,~,tem.iacc] = itdestimator(shiftdim(template,1),'fs',kv.fs,'MaxIACCe');
 [tar.itd,~,tar.iacc] = itdestimator(shiftdim(target,1),'fs',kv.fs,'MaxIACCe');
 
-IACC = tar.iacc/tem.iacc;
+IACC = tar.iacc/tem.iacc - 1;
 
 %% Filterbank
 [tem.mp,fc] = baumgartner2016_spectralanalysis(template,70,'argimport',flags,kv,'tiwin',0.005,'gammatone','redo');
