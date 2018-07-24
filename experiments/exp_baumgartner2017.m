@@ -292,7 +292,7 @@ if flags.do_hartmann1996
       set(gca,'YTickLabel',{})
     end
     title(condPlotLbl{ee})
-    axis([0,39,-0.1,3.1])
+    axis([-2.5,42.5,-0.1,3.1])
     if ee == 1
       legend(h(idleg),dataLbl(idleg),'Location','southwest','box','off');
     end
@@ -484,8 +484,8 @@ if flags.do_boyd2012
       text(100,10,condLbl{cc})
       axis([-20,120,-15,115])
       if cc == 4
-        leg = legend([{'Actual'};PextLbl]);
-        set(leg,'Box','off','Location','eastoutside')
+%         leg = legend([{'Actual'};PextLbl]);
+%         set(leg,'Box','off','Location','eastoutside')
       end
     end
     

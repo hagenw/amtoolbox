@@ -235,15 +235,6 @@ tar.ild = -diff(tar.mp,1,3);
 % ref.sdild = std(ref.ild,0,1);
 % ISLDspecSD = mean(tar.sdild./tem.sdild,5);
 
-%% Interaural time-intenstiy coherence (ITIC) -> dprime possible
-if tar.itd == tem.itd && tem.itd == 0
-  TC = 1;
-else
-  TC = tar.itd/(eps+tem.itd);
-end
-IC = mean(tar.ild(:))/(eps+mean(tem.ild(:)));
-ITIC = abs( TC - IC );
-
 %% Spectral comparison
 
 for iSC = 1:3 % first monaural then interaural
@@ -299,17 +290,27 @@ for iSC = 1:3 % first monaural then interaural
     distmetric = mean(distmetric,5);
   end
   
-  si = distmetric;%exp(-kv.S*distmetric);
+%   si = distmetric;%exp(-kv.S*distmetric);
   
   if iSC == 1
-    MSS = si; % monaural spectral similarity
+    MSS = distmetric; % monaural spectral distance
   elseif iSC == 2
-    ISS = si; % interaural spectral similarity
+    ISS = distmetric; % interaural spectral distance
+    IC = distmetric; % for ITIC
   elseif iSC == 3
-    ISSD = si;
+    ISSD = distmetric;
   end
   
 end
+
+%% Interaural time-intenstiy coherence (ITIC) -> dprime possible
+if tar.itd == tem.itd && tem.itd == 0
+  TC = 0;
+else
+  TC = (tar.itd-tem.itd)/(eps+tem.itd);
+end
+% IC = mean(tar.ild(:))/(eps+mean(tem.ild(:)));
+ITIC = abs( TC - IC );
 
 %% Cue integration/weighting
 
